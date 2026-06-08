@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>lōcaClimb — Ride Like a Local</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<style>
+:root{--bg:#fff;--bg2:#f8f9fa;--card:#fff;--txt:#1a1a2e;--txt2:#4a4a6a;--muted:#8888aa;--accent:#2563eb;--accentL:#3b82f6;--abg:#eff6ff;--bdr:#e2e8f0;--sh:rgba(0,0,0,.08);--ok:#16a34a;--warn:#f59e0b;--err:#dc2626;--grad:linear-gradient(135deg,#2563eb,#7c3aed);--pw:480px;--hh:56px}
+.dark{--bg:#0f172a;--bg2:#1e293b;--card:#1e293b;--txt:#f1f5f9;--txt2:#94a3b8;--muted:#64748b;--abg:#1e3a5f;--bdr:#334155;--sh:rgba(0,0,0,.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);overflow:hidden;height:100vh}
+#hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);background:var(--bg);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 12px;gap:8px;z-index:1000;box-shadow:0 1px 3px var(--sh)}
+.logo{font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.logo span{font-weight:300}
+#search{flex:1;max-width:350px;padding:7px 12px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg2);color:var(--txt);font-size:13px;outline:none}
+#search:focus{border-color:var(--accent)}
+.hbtn{width:34px;height:34px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg2);color:var(--txt);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.2s}
+.hbtn:hover{background:var(--abg);border-color:var(--accent)}
+#map{position:fixed;top:var(--hh);left:0;right:0;bottom:0;z-index:1}
+#fp{position:fixed;top:var(--hh);left:-280px;width:280px;bottom:0;background:var(--bg);border-right:1px solid var(--bdr);z-index:999;transition:left .3s;padding:16px;overflow-y:auto}
+#fp.open{left:0}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
+.fg select,.fg input[type=range]{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:6px;background:var(--bg2);color:var(--txt);font-size:13px}
+.fv{font-size:12px;color:var(--txt2);margin-top:3px}
+.freset{width:100%;padding:8px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
+#dp{position:fixed;top:var(--hh);right:-520px;width:min(var(--pw),100vw);bottom:0;background:var(--bg);border-left:1px solid var(--bdr);z-index:998;transition:right .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-4px 0 20px var(--sh)}
+#dp.open{right:0}
+.dh{background:var(--grad);color:#fff;padding:20px 16px;position:relative}
+.dh .back{display:inline-flex;align-items:center;gap:4px;color:rgba(255,255,255,.8);cursor:pointer;font-size:12px;margin-bottom:8px;border:none;background:none}
+.dh .back:hover{color:#fff}
+.dh h2{font-size:20px;font-weight:700;margin-bottom:2px}
+.dh .el{font-size:14px;opacity:.9}
+.sbadge{display:inline-block;padding:2px 8px;border-radius:16px;font-size:11px;font-weight:600;margin-top:6px}
+.s-open{background:rgba(22,163,74,.2);color:#4ade80}
+.s-seasonal{background:rgba(245,158,11,.2);color:#fbbf24}
+.s-closed{background:rgba(220,38,38,.2);color:#f87171}
+.db{padding:16px}
+.st{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin:16px 0 10px;display:flex;align-items:center;gap:6px}
+.st:first-child{margin-top:0}
+.desc{font-size:13px;color:var(--txt2);line-height:1.5;margin-bottom:4px}
+.vtbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:6px}
+.vtbl th{background:var(--abg);color:var(--accent);padding:6px;text-align:center;font-weight:600;font-size:11px}
+.vtbl td{padding:5px 6px;border-bottom:1px solid var(--bdr);text-align:center}
+.vtbl td:first-child{text-align:left;color:var(--muted);font-size:11px}
+.tbadge{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600}
+.t-basso{background:rgba(22,163,74,.12);color:var(--ok)}
+.t-medio{background:rgba(245,158,11,.12);color:var(--warn)}
+.t-alto{background:rgba(220,38,38,.12);color:var(--err)}
+#eCanvas{width:100%;height:160px;border-radius:8px;background:var(--bg2)}
+.cleg{display:flex;gap:14px;margin-top:6px;font-size:11px;color:var(--txt2)}
+.cleg span::before{content:'';display:inline-block;width:14px;height:3px;margin-right:5px;vertical-align:middle;border-radius:2px}
+.l1::before{background:#2563eb}
+.l2::before{background:#f59e0b}
+.wgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wday{background:var(--bg2);border-radius:8px;padding:6px 3px;text-align:center;border:1px solid var(--bdr);transition:.15s}
+.wday:hover{transform:translateY(-2px)}
+.wday.best{border-color:var(--ok);background:rgba(22,163,74,.06)}
+.wday .dn{font-size:10px;font-weight:600;color:var(--muted)}
+.wday .de{font-size:20px;margin:3px 0}
+.wday .dt{font-size:12px;font-weight:600}
+.wday .dw{font-size:9px;color:var(--muted);margin-top:1px}
+.wday .dr{font-size:9px;color:var(--accent)}
+.bdb{background:var(--abg);border:1px solid var(--accent);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px}
+.walert{border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13px;display:flex;align-items:center;gap:8px}
+.walert.warn{background:rgba(245,158,11,.12);border:1px solid var(--warn);color:var(--warn)}
+.walert.danger{background:rgba(220,38,38,.12);border:1px solid var(--err);color:var(--err)}
+.tips{list-style:none}
+.tips li{padding:6px 0;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--txt2);display:flex;align-items:flex-start;gap:6px}
+.tips li::before{content:'\1F4A1';font-size:12px;flex-shrink:0}
+.evcard{background:var(--bg2);border:1px solid var(--ok);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.evcard .evname{font-weight:700;font-size:13px}
+.evcard .evdate{font-size:12px;color:var(--ok)}
+.evcard .evinfo{font-size:11px;color:var(--txt2);margin-top:3px}
+.evcard.soon{border-color:var(--err);background:rgba(220,38,38,.04)}
+.sunbadge{font-size:11px;padding:2px 6px;border-radius:6px;display:inline-block}
+.sun-yes{background:rgba(245,158,11,.12);color:var(--warn)}
+.sun-no{background:rgba(100,116,139,.12);color:var(--muted)}
+#bikeBtn{position:fixed;bottom:20px;left:16px;z-index:997;padding:10px 16px;background:var(--grad);color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:700;font-size:13px;box-shadow:0 4px 12px rgba(37,99,235,.3);transition:.2s}
+#bikeBtn:hover{transform:translateY(-2px)}
+#bikePnl{position:fixed;bottom:70px;left:16px;width:320px;max-height:400px;background:var(--bg);border:1px solid var(--bdr);border-radius:12px;z-index:997;padding:16px;overflow-y:auto;box-shadow:0 8px 24px var(--sh);display:none}
+#bikePnl.open{display:block}
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid var(--bdr);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pp{min-width:200px}
+.pp h3{font-size:15px;margin-bottom:3px}
+.pp .pi{font-size:12px;color:#666;margin-bottom:6px}
+.pp .pb{display:block;width:100%;padding:7px;background:var(--grad);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px}
+.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(37,99,235,.2)!important}
+.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:rgba(37,99,235,.7)!important;color:#fff!important;font-weight:600}
+.dstars{color:#f59e0b;letter-spacing:1px}
+@media(max-width:600px){:root{--pw:100vw}.logo span{display:none}.wgrid{gap:2px}.wday{padding:4px 1px}.wday .de{font-size:16px}#bikePnl{left:8px;right:8px;width:auto}}
+</style>
+</head>
+<body>
+<div id="hdr">
+<div class="logo">⛰️ lōcaClimb<span> — ride like a local</span></div>
+<input type="text" id="search" placeholder="🔍 Cerca passo o salita..." autocomplete="off">
+<button class="hbtn" id="fBtn" title="Filtri">☰</button>
+<button class="hbtn" id="osmBtn" title="Carica passi da OSM">🌍</button>
+<button class="hbtn" id="dkBtn" title="Tema scuro">🌙</button>
+</div>
+<div id="fp">
+<h3 style="margin-bottom:14px;font-size:15px;">🎯 Filtri</h3>
+<div class="fg"><label>Regione</label><select id="fReg"><option value="">Tutte</option></select></div>
+<div class="fg"><label>Difficoltà minima</label><input type="range" id="fDif" min="1" max="10" value="1"><div class="fv">Da <strong id="fDifV">1</strong> a 10</div></div>
+<div class="fg"><label>Quota minima (m)</label><input type="range" id="fAlt" min="500" max="2800" step="100" value="500"><div class="fv">Almeno <strong id="fAltV">500</strong> m</div></div>
+<div class="fg"><label>Stato</label><select id="fSta"><option value="">Tutti</option><option value="open">🟢 Aperto</option><option value="seasonal">🟡 Stagionale</option><option value="closed">🔴 Chiuso</option></select></div>
+<button class="freset" onclick="resetF()">↻ Reset</button>
+</div>
+<div id="dp">
+<div class="dh"><button class="back" onclick="closeD()">← Torna alla mappa</button><h2 id="dName"></h2><div class="el" id="dElev"></div><div id="dStat"></div></div>
+<div class="db" id="dBody"></div>
+</div>
+<button id="bikeBtn">🚴 Bike Day</button>
+<div id="bikePnl"></div>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.min.js"></script>
+<script src="passes_data.js"></script>
+<script>
+// ========== STATE ==========
+let map,markers,allM=[],routeLines=[],osmLayer=null;
+const DI=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+const wCache={};
+
+// ========== WEATHER EMOJI ==========
+function wE(c){if(c===0)return'☀️';if(c<=3)return'⛅';if(c<=48)return'🌫️';if(c<=57)return'🌦️';if(c<=67)return'🌧️';if(c<=77)return'❄️';if(c<=86)return'🌨️';if(c>=95)return'⛈️';return'🌤️';}
+
+// ========== SUN EXPOSURE ==========
+function calcSun(lat,lon,expDir){
+  if(typeof SunCalc==='undefined')return'☀️ N/D';
+  const dirMap={'Nord':[315,45],'Nord-Est':[0,90],'Est':[45,135],'Sud-Est':[90,180],'Sud':[135,225],'Sud-Ovest':[180,270],'Ovest':[225,315],'Nord-Ovest':[270,360]};
+  let range=dirMap[expDir]||[0,360];
+  const today=new Date();const y=today.getFullYear(),m=today.getMonth(),d=today.getDate();
+  let sunStart=-1,sunEnd=-1;
+  for(let h=5;h<=20;h++){
+    const dt=new Date(y,m,d,h,0);
+    const pos=SunCalc.getPosition(dt,lat,lon);
+    const alt=pos.altitude*180/Math.PI;
+    let az=(pos.azimuth*180/Math.PI+180)%360;
+    if(alt>5){
+      let inRange=false;
+      if(range[0]<range[1]){inRange=az>=range[0]&&az<=range[1];}
+      else{inRange=az>=range[0]||az<=range[1];}
+      if(inRange){if(sunStart<0)sunStart=h;sunEnd=h;}
+    }
+  }
+  if(sunStart<0)return'<span class="sunbadge sun-no">🌑 Prevalentemente in ombra</span>';
+  return'<span class="sunbadge sun-yes">☀️ Sole '+sunStart+':00 - '+sunEnd+':00</span>';
+}
+
+// ========== MAP INIT ==========
+function initMap(){
+  map=L.map('map',{center:[45.8,10.8],zoom:7,zoomControl:false});
+  const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18});
+  const cyc=L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',{attribution:'© CyclOSM',maxZoom:18});
+  const topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{attribution:'© OpenTopoMap',maxZoom:17});
+  const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'© Esri',maxZoom:18});
+  osm.addTo(map);
+  L.control.layers({'📍 OSM':osm,'🚴 CyclOSM':cyc,'⛰️ Topo':topo,'🛰️ Satellite':sat},null,{position:'topright'}).addTo(map);
+  L.control.zoom({position:'topright'}).addTo(map);
+  markers=L.markerClusterGroup({maxClusterRadius:50,showCoverageOnHover:false});
+  addPM(PASSES_DATA);map.addLayer(markers);popF();
+  map.on('click',()=>{document.getElementById('fp').classList.remove('open');});
+}
+
+// ========== MARKERS ==========
+function sCol(s){return s==='open'?'#16a34a':s==='seasonal'?'#f59e0b':'#dc2626';}
+function sLbl(s){return s==='open'?'🟢 Aperto':s==='seasonal'?'🟡 Stagionale':'🔴 Chiuso';}
+function dStars(d){const f=Math.floor(d/2),h=d%2;return'★'.repeat(f)+(h?'½':'')+'☆'.repeat(5-f-(h?1:0));}
+
+function addPM(ps){markers.clearLayers();allM=[];
+  ps.forEach(p=>{
+    const mk=L.circleMarker([p.lat,p.lon],{radius:9,fillColor:sCol(p.status),color:'#fff',weight:2,fillOpacity:.9});
+    mk.bindTooltip(p.name,{direction:'top',offset:[0,-10]});
+    const evts=getEvts(p.id);
+    const evtTag=evts.length?'<br>🚴 <b>'+evts.length+' Bike Day</b> in programma':'';
+    mk.bindPopup('<div class="pp"><h3>'+p.name+'</h3><div class="pi">⛰️ '+p.elevation+' m | '+sLbl(p.status)+'<br><span class="dstars">'+dStars(p.difficulty)+'</span> ('+p.difficulty+'/10)<br>📍 '+p.region+evtTag+'</div><button class="pb" onclick="openD(''+p.id+'')">Vedi Dettagli</button></div>');
+    mk.passData=p;markers.addLayer(mk);allM.push(mk);
+  });
+}
+
+// ========== BIKE EVENTS ==========
+function getEvts(pid){
+  if(typeof BIKE_EVENTS==='undefined')return[];
+  const now=new Date().toISOString().slice(0,10);
+  return BIKE_EVENTS.filter(e=>e.passes.includes(pid)&&e.date>=now).sort((a,b)=>a.date.localeCompare(b.date));
+}
+function allEvts(){
+  if(typeof BIKE_EVENTS==='undefined')return[];
+  const now=new Date().toISOString().slice(0,10);
+  return BIKE_EVENTS.filter(e=>e.date>=now).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,8);
+}
+function fmtDate(iso){const d=new Date(iso+'T12:00:00');return DI[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1);}
+function renderEvts(evts){
+  if(!evts.length)return'<p style="color:var(--muted);font-size:12px;">Nessun evento in programma</p>';
+  const now=new Date();
+  return evts.map(e=>{
+    const ed=new Date(e.date+'T12:00:00');const diff=Math.ceil((ed-now)/(86400000));
+    const soon=diff<=30;
+    return'<div class="evcard'+(soon?' soon':'')+'"><div class="evname">🚴 '+e.name+'</div><div class="evdate">📅 '+fmtDate(e.date)+(soon?' — <b>tra '+diff+' giorni!</b>':'')+'</div><div class="evinfo">'+(e.hours||'')+' '+(e.info||'')+'</div></div>';
+  }).join('');
+}
+
+// ========== ROUTE POLYLINES ==========
+function clearRoutes(){routeLines.forEach(l=>map.removeLayer(l));routeLines=[];}
+function drawRoutes(pass){
+  clearRoutes();
+  const colors=['#2563eb','#f59e0b'];
+  pass.versanti.forEach((v,i)=>{
+    if(v.routeCoords&&v.routeCoords.length>1){
+      const line=L.polyline(v.routeCoords,{color:colors[i]||'#888',weight:5,opacity:.8}).addTo(map);
+      routeLines.push(line);
+    }
+  });
+  if(routeLines.length){
+    const group=L.featureGroup(routeLines);
+    map.fitBounds(group.getBounds().pad(.1),{maxZoom:12});
+  }
+}
+
+// ========== DETAIL PANEL ==========
+function openD(pid){
+  const p=PASSES_DATA.find(x=>x.id===pid);if(!p)return;
+  map.closePopup();
+  document.getElementById('dName').textContent=p.name;
+  document.getElementById('dElev').textContent='⛰️ '+p.elevation+' m  •  📍 '+p.region;
+  const sd=document.getElementById('dStat');
+  sd.innerHTML='<span class="sbadge s-'+p.status+'">'+sLbl(p.status)+'</span><span style="margin-left:10px;font-size:13px;" class="dstars">'+dStars(p.difficulty)+' '+p.difficulty+'/10</span>';
+  const b=document.getElementById('dBody');let h='';
+  if(p.description)h+='<p class="desc">'+p.description+'</p>';
+  // Bike events
+  const evts=getEvts(p.id);
+  if(evts.length){h+='<div class="st">🚴 Bike Day — Chiusura al Traffico</div>'+renderEvts(evts);}
+  // Versanti
+  h+='<div class="st">⚔️ Confronto Versanti</div>';
+  if(p.versanti.length>=2){
+    const v1=p.versanti[0],v2=p.versanti[1];
+    const sun1=calcSun(p.lat,p.lon,v1.exposure),sun2=calcSun(p.lat,p.lon,v2.exposure);
+    h+='<table class="vtbl"><tr><th></th><th style="color:#2563eb">📍 '+v1.side+'</th><th style="color:#f59e0b">📍 '+v2.side+'</th></tr>';
+    h+='<tr><td>Distanza</td><td><b>'+v1.distance_km+' km</b></td><td><b>'+v2.distance_km+' km</b></td></tr>';
+    h+='<tr><td>Dislivello</td><td>'+(v1.endElevation-v1.startElevation)+' m</td><td>'+(v2.endElevation-v2.startElevation)+' m</td></tr>';
+    h+='<tr><td>Pend. media</td><td>'+v1.avgGradient+'%</td><td>'+v2.avgGradient+'%</td></tr>';
+    h+='<tr><td>Pend. max</td><td>'+v1.maxGradient+'%</td><td>'+v2.maxGradient+'%</td></tr>';
+    h+='<tr><td>Traffico</td><td><span class="tbadge t-'+v1.traffic+'">'+v1.traffic+'</span></td><td><span class="tbadge t-'+v2.traffic+'">'+v2.traffic+'</span></td></tr>';
+    h+='<tr><td>Esposizione</td><td>'+v1.exposure+'</td><td>'+v2.exposure+'</td></tr>';
+    h+='<tr><td>☀️ Sole oggi</td><td>'+sun1+'</td><td>'+sun2+'</td></tr>';
+    h+='</table>';
+  }else if(p.versanti.length===1){
+    const v=p.versanti[0];const sun=calcSun(p.lat,p.lon,v.exposure);
+    h+='<table class="vtbl"><tr><th></th><th style="color:#2563eb">📍 '+v.side+'</th></tr>';
+    h+='<tr><td>Distanza</td><td><b>'+v.distance_km+' km</b></td></tr>';
+    h+='<tr><td>Dislivello</td><td>'+(v.endElevation-v.startElevation)+' m</td></tr>';
+    h+='<tr><td>Pend. media</td><td>'+v.avgGradient+'%</td></tr>';
+    h+='<tr><td>Pend. max</td><td>'+v.maxGradient+'%</td></tr>';
+    h+='<tr><td>Traffico</td><td><span class="tbadge t-'+v.traffic+'">'+v.traffic+'</span></td></tr>';
+    h+='<tr><td>Esposizione</td><td>'+v.exposure+'</td></tr>';
+    h+='<tr><td>☀️ Sole oggi</td><td>'+sun+'</td></tr>';
+    h+='</table>';
+  }
+  // Elevation
+  h+='<div class="st">📈 Profilo Altimetrico</div><canvas id="eCanvas"></canvas>';
+  if(p.versanti.length>=2)h+='<div class="cleg"><span class="l1">'+p.versanti[0].side+'</span><span class="l2">'+p.versanti[1].side+'</span></div>';
+  // Weather
+  h+='<div class="st">🌦️ Meteo 7 Giorni</div><div id="wCont"><div style="text-align:center;padding:20px;color:var(--muted)"><div class="spinner"></div><br>Caricamento meteo...</div></div>';
+  // Tips
+  if(p.tips&&p.tips.length)h+='<div class="st">💡 Consigli</div><ul class="tips">'+p.tips.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+  b.innerHTML=h;
+  document.getElementById('dp').classList.add('open');
+  setTimeout(()=>drawElev(p),50);
+  fetchW(p.lat,p.lon,p.elevation);
+  drawRoutes(p);
+}
+
+function closeD(){document.getElementById('dp').classList.remove('open');clearRoutes();}
+
+// ========== ELEVATION PROFILE ==========
+function drawElev(pass){
+  const c=document.getElementById('eCanvas');if(!c)return;
+  const dpr=window.devicePixelRatio||1;const r=c.getBoundingClientRect();
+  c.width=r.width*dpr;c.height=r.height*dpr;
+  const ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+  const W=r.width,H=r.height,pad={t:20,r:12,b:25,l:40};
+  const dk=document.body.classList.contains('dark');
+  ctx.fillStyle=dk?'#1e293b':'#f8f9fa';ctx.fillRect(0,0,W,H);
+  let ae=[];pass.versanti.forEach(v=>{if(v.elevationProfile)ae=ae.concat(v.elevationProfile);});
+  if(!ae.length)return;
+  const mn=Math.min(...ae)-50,mx=Math.max(...ae)+50;
+  ctx.strokeStyle=dk?'#334155':'#e2e8f0';ctx.lineWidth=.5;ctx.font='9px system-ui';ctx.fillStyle=dk?'#64748b':'#94a3b8';
+  for(let i=0;i<=4;i++){
+    const y=pad.t+(H-pad.t-pad.b)*(1-i/4);const el=Math.round(mn+(mx-mn)*i/4);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(el+'m',pad.l-3,y+3);
+  }
+  const cols=['#2563eb','#f59e0b'];
+  pass.versanti.forEach((v,idx)=>{
+    if(!v.elevationProfile||v.elevationProfile.length<2)return;
+    const pr=v.elevationProfile,n=pr.length,cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+    const gr=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+    gr.addColorStop(0,cols[idx]+'40');gr.addColorStop(1,cols[idx]+'05');
+    ctx.beginPath();ctx.moveTo(pad.l,H-pad.b);
+    for(let i=0;i<n;i++){const x=pad.l+(i/(n-1))*cW;const y=pad.t+cH*(1-(pr[i]-mn)/(mx-mn));ctx.lineTo(x,y);}
+    ctx.lineTo(pad.l+cW,H-pad.b);ctx.closePath();ctx.fillStyle=gr;ctx.fill();
+    ctx.beginPath();
+    for(let i=0;i<n;i++){const x=pad.l+(i/(n-1))*cW;const y=pad.t+cH*(1-(pr[i]-mn)/(mx-mn));i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.strokeStyle=cols[idx];ctx.lineWidth=2.5;ctx.stroke();
+  });
+  ctx.fillStyle=dk?'#64748b':'#94a3b8';ctx.textAlign='center';ctx.fillText('Distanza →',W/2,H-5);
+}
+
+// ========== WEATHER ==========
+async function fetchW(lat,lon,elev){
+  const cont=document.getElementById('wCont');
+  const ck=lat.toFixed(2)+'_'+lon.toFixed(2);
+  if(wCache[ck]&&(Date.now()-wCache[ck].t<3600000)){renderW(wCache[ck].d,cont);return;}
+  try{
+    const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,windgusts_10m_max&timezone=Europe/Rome&forecast_days=7';
+    const r=await fetch(url);if(!r.ok)throw new Error('API err');
+    const d=await r.json();wCache[ck]={d,t:Date.now()};renderW(d,cont);
+  }catch(e){cont.innerHTML='<div style="text-align:center;color:var(--muted);padding:16px;">⚠️ Meteo non disponibile</div>';}
+}
+
+function renderW(data,cont){
+  const dl=data.daily;if(!dl||!dl.time){cont.innerHTML='N/D';return;}
+  let bI=0,bS=-999;const sc=[];
+  let maxWind=0;
+  for(let i=0;i<dl.time.length;i++){
+    let s=100;s-=(dl.precipitation_probability_max[i]||0)*1.2;
+    const w=dl.windspeed_10m_max[i]||0;s-=w*1.5;
+    if(w>maxWind)maxWind=w;
+    const t=dl.temperature_2m_max[i]||15;
+    if(t<8)s-=(8-t)*3;if(t>30)s-=(t-30)*3;
+    const dw=new Date(dl.time[i]).getDay();if(dw===0||dw===6)s-=10;
+    sc.push(s);if(s>bS){bS=s;bI=i;}
+  }
+  let h='<div class="wgrid">';
+  for(let i=0;i<dl.time.length;i++){
+    const dt=new Date(dl.time[i]);const dn=DI[dt.getDay()];
+    const tM=Math.round(dl.temperature_2m_max[i]),tm=Math.round(dl.temperature_2m_min[i]);
+    const wi=Math.round(dl.windspeed_10m_max[i]),ra=dl.precipitation_probability_max[i]||0;
+    h+='<div class="wday'+(i===bI?' best':'')+'"><div class="dn">'+dn+' '+dt.getDate()+'</div><div class="de">'+wE(dl.weathercode[i])+'</div><div class="dt">'+tM+'°/'+tm+'°</div><div class="dw">💨 '+wi+'km/h</div><div class="dr">💧 '+ra+'%</div></div>';
+  }
+  h+='</div>';
+  const bd=new Date(dl.time[bI]);
+  h+='<div class="bdb"><span style="font-size:20px">⭐</span><div><b>Miglior giorno: '+DI[bd.getDay()]+' '+bd.getDate()+'</b><br><small style="color:var(--muted)">Poco vento, bassa probabilità pioggia</small></div></div>';
+  // Wind alert
+  if(maxWind>=60){
+    h+='<div class="walert danger">🔴 <b>ATTENZIONE:</b> Raffiche fino a '+Math.round(maxWind)+' km/h previste. Salita sconsigliata nei giorni ventosi!</div>';
+  }else if(maxWind>=40){
+    h+='<div class="walert warn">⚠️ <b>Vento forte:</b> Raffiche fino a '+Math.round(maxWind)+' km/h. Portare abbigliamento antivento.</div>';
+  }
+  cont.innerHTML=h;
+}
+
+// ========== FILTERS ==========
+function popF(){const rr=[...new Set(PASSES_DATA.map(p=>p.region))].sort();const s=document.getElementById('fReg');rr.forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;s.appendChild(o);});}
+function applyF(){
+  const reg=document.getElementById('fReg').value,md=+document.getElementById('fDif').value,ma=+document.getElementById('fAlt').value,st=document.getElementById('fSta').value,q=document.getElementById('search').value.toLowerCase();
+  addPM(PASSES_DATA.filter(p=>{
+    if(reg&&p.region!==reg)return false;if(p.difficulty<md)return false;if(p.elevation<ma)return false;
+    if(st&&p.status!==st)return false;if(q&&!p.name.toLowerCase().includes(q))return false;return true;
+  }));
+}
+function resetF(){document.getElementById('fReg').value='';document.getElementById('fDif').value=1;document.getElementById('fAlt').value=500;document.getElementById('fSta').value='';document.getElementById('search').value='';document.getElementById('fDifV').textContent='1';document.getElementById('fAltV').textContent='500';applyF();}
+document.getElementById('fReg').addEventListener('change',applyF);
+document.getElementById('fSta').addEventListener('change',applyF);
+document.getElementById('fDif').addEventListener('input',function(){document.getElementById('fDifV').textContent=this.value;applyF();});
+document.getElementById('fAlt').addEventListener('input',function(){document.getElementById('fAltV').textContent=this.value;applyF();});
+document.getElementById('search').addEventListener('input',applyF);
+
+// ========== OSM FETCH ==========
+document.getElementById('osmBtn').addEventListener('click',async function(){
+  if(osmLayer){map.removeLayer(osmLayer);osmLayer=null;this.style.background='';return;}
+  this.textContent='⏳';
+  try{
+    const q='[out:json][timeout:30];(node["natural"="saddle"]["name"](44.0,8.5,47.0,13.5);node["mountain_pass"="yes"]["name"](44.0,8.5,47.0,13.5););out body;';
+    const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:q,headers:{'Content-Type':'text/plain'}});
+    const d=await r.json();
+    osmLayer=L.layerGroup();
+    const existing=new Set(PASSES_DATA.map(p=>p.name.toLowerCase()));
+    let count=0;
+    d.elements.forEach(el=>{
+      if(!el.tags||!el.tags.name)return;
+      if(existing.has(el.tags.name.toLowerCase()))return;
+      const mk=L.circleMarker([el.lat,el.lon],{radius:6,fillColor:'#888',color:'#fff',weight:1.5,fillOpacity:.7});
+      mk.bindPopup('<b>'+el.tags.name+'</b><br>⛰️ '+(el.tags.ele||'?')+' m<br><small style="color:#888">Da OpenStreetMap</small>');
+      osmLayer.addLayer(mk);count++;
+    });
+    osmLayer.addTo(map);
+    this.textContent='🌍';this.style.background='rgba(37,99,235,.15)';
+    console.log('✅ '+count+' passi OSM aggiunti');
+  }catch(e){alert('Errore OSM: '+e.message);this.textContent='🌍';}
+});
+
+// ========== BIKE EVENTS PANEL ==========
+document.getElementById('bikeBtn').addEventListener('click',()=>{
+  const pnl=document.getElementById('bikePnl');pnl.classList.toggle('open');
+  if(pnl.classList.contains('open')){
+    const evts=allEvts();
+    pnl.innerHTML='<h3 style="margin-bottom:10px;font-size:15px;">🚴 Prossimi Bike Day</h3>'+
+      (evts.length?renderEvts(evts):'<p style="color:var(--muted);font-size:12px;">Nessun Bike Day in programma</p>');
+  }
+});
+
+// ========== UI ==========
+document.getElementById('fBtn').addEventListener('click',()=>{document.getElementById('fp').classList.toggle('open');});
+document.getElementById('dkBtn').addEventListener('click',()=>{
+  document.body.classList.toggle('dark');
+  document.getElementById('dkBtn').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
+});
+
+// ========== INIT ==========
+initMap();
+console.log('✅ lōcaClimb v2 caricato con '+PASSES_DATA.length+' passi');
+</script>
+</body>
+</html>
