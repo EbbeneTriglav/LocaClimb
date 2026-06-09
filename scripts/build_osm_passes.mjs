@@ -1,108 +1,78 @@
 #!/usr/bin/env node
 /*
- * build_osm_passes.mjs
+ * build_osm_passes.mjs  (v2 - tiled, offline enrichment)
  * ---------------------------------------------------------------------------
- * Offline builder for locaClimb's OSM pass database (osm_passes.json).
+ * Builds osm_passes.json for locaClimb. Output is adopted as-is by adoptOsm().
  *
- * What it does (mirrors the in-browser logic in index.html so the output is
- * adopted as-is by adoptOsm() with no client-side rework):
- *   1. Query Overpass for mountain_pass nodes + the highways they sit on.
- *   2. Drop hiking-only passes (gravel-bike filter = classifyWay()).
- *   3. For each rideable pass, derive climb data (versanti): walk the road
- *      outward from the summit both ways, sample elevation (Open-Meteo),
- *      compute distance / gain / avg+max gradient / exposure / profile / track.
- *   4. Merge with any existing osm_passes.json (incremental, idempotent) and
- *      write the result back so it can be committed to the repo.
+ * Pipeline:
+ *   1. Tile the bbox into small cells. For EACH tile, ONE Overpass query that
+ *      returns pass nodes + connected highways WITH geometry+tags+node-ids.
+ *      (Small queries avoid the 504/429 that killed the single huge query.)
+ *   2. Assemble a road graph in memory. NO per-pass Overpass calls.
+ *   3. Per rideable pass: snap summit to the road, follow the road outward
+ *      across connected ways, sample terrain elevation (Open-Meteo DEM),
+ *      trim to the real climb base (where gradient flattens), build versanti.
  *
- * Node 22+ (uses global fetch). No external dependencies. 100% ASCII.
- *
- * Usage:
+ * Node 22+, no deps, 100% ASCII.
  *   node scripts/build_osm_passes.mjs [--out PATH] [--max N] [--bbox S,W,N,E]
- *                                     [--reenrich] [--min-ele M]
- *
- *   --out PATH     output file (default: osm_passes.json)
- *   --max N        max passes to ENRICH this run (rate-limit guard; default 60)
- *   --bbox ...     Overpass bounding box (default 44.0,6.5,47.5,13.5 = Alps/N.Italy)
- *   --min-ele M    minimum summit elevation in meters (default 200)
- *   --reenrich     recompute versanti even for passes already enriched
- * ---------------------------------------------------------------------------
+ *                                     [--tile DEG] [--min-ele M] [--reenrich]
  */
-
 import { readFile, writeFile } from "node:fs/promises";
 
-/* ----- config / args ----------------------------------------------------- */
-const OVERPASS = "https://overpass-api.de/api/interpreter";
+const OVERPASS_EPS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter"
+];
 const ELEV_API = "https://api.open-meteo.com/v1/elevation";
 
-function arg(name, def) {
-  const i = process.argv.indexOf(name);
-  return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : def;
-}
+const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = arg("--out", "osm_passes.json");
-const MAX_ENRICH = parseInt(arg("--max", "60"), 10);
+const MAX_ENRICH = parseInt(arg("--max", "80"), 10);
 const MIN_ELE = parseInt(arg("--min-ele", "200"), 10);
-const BBOX = arg("--bbox", "44.0,6.5,47.5,13.5");
+const TILE = parseFloat(arg("--tile", "0.6"));
+const BBOX = arg("--bbox", "44.0,6.5,47.5,13.5").split(",").map(Number);
 const REENRICH = process.argv.includes("--reenrich");
-
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/* ----- geo helpers (ported verbatim from index.html) --------------------- */
+/* ----- geo helpers -------------------------------------------------------- */
 function hav(la1, lo1, la2, lo2) {
   const R = 6371, p = Math.PI / 180;
   const dLa = (la2 - la1) * p, dLo = (lo2 - lo1) * p;
-  const x = Math.sin(dLa / 2) ** 2 +
-    Math.cos(la1 * p) * Math.cos(la2 * p) * Math.sin(dLo / 2) ** 2;
+  const x = Math.sin(dLa / 2) ** 2 + Math.cos(la1 * p) * Math.cos(la2 * p) * Math.sin(dLo / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(x));
 }
 function compass(la1, lo1, la2, lo2) {
   const p = Math.PI / 180;
   const y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p);
-  const x = Math.cos(la1 * p) * Math.sin(la2 * p) -
-    Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p);
+  const x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p);
   const br = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
-  const d = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];
-  return d[Math.round(br / 45) % 8];
+  return ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"][Math.round(br / 45) % 8];
 }
 function estDiff(distKm, gain, top) {
   if (!distKm || distKm <= 0) return 1;
   const avg = gain / (distKm * 10);
-  let d = avg * 0.85;
-  d += Math.min(distKm / 6, 2.5);
+  let d = avg * 0.85 + Math.min(distKm / 6, 2.5);
   if (avg >= 12) d += 2; else if (avg >= 9) d += 1;
   if (top >= 2000) d += 1;
   return Math.max(1, Math.min(10, Math.round(d)));
 }
 
-/* ----- gravel-bike filter (ported verbatim) ------------------------------ */
-function classifyWay(t) {
-  if (!t) return null;
+/* ----- gravel-bike filter (now excludes motorways) ----------------------- */
+const BAD_HW = { motorway: 1, motorway_link: 1, trunk_link: 0, path: 1, footway: 1, steps: 1, pedestrian: 1, bridleway: 1, corridor: 1, construction: 1, proposed: 1, raceway: 1, via_ferrata: 1 };
+function rideable(t) {
+  if (!t) return false;
   const hw = t.highway;
-  const bad = { path: 1, footway: 1, steps: 1, pedestrian: 1, bridleway: 1, corridor: 1, construction: 1, proposed: 1, raceway: 1, via_ferrata: 1 };
-  if (!hw || bad[hw]) return null;
-  if (t.bicycle === "no" || t.bicycle === "dismount") return null;
-  if (t.access === "private" || t.access === "no") return null;
-  if (t["mtb:scale"]) return null;
+  if (!hw || BAD_HW[hw]) return false;
+  if (t.motorroad === "yes") return false;
+  if (t.bicycle === "no" || t.bicycle === "dismount") return false;
+  if (t.access === "private" || t.access === "no") return false;
+  if (t["mtb:scale"]) return false;
   const bs = { sand: 1, mud: 1, rock: 1, pebblestone: 1, grass: 1 };
-  if (t.surface && bs[t.surface]) return null;
-  return { hw, surface: t.surface || "", tags: t };
+  if (t.surface && bs[t.surface]) return false;
+  return true;
 }
-/* OSM road class -> traffic scores (feriale/weekend 1-10) + truck likelihood */
-const TRAF_BASE = { cycleway: 1, track: 1, path: 1, service: 2, residential: 2, living_street: 2, unclassified: 3, tertiary: 3, tertiary_link: 3, secondary: 4, secondary_link: 4, primary: 6, primary_link: 6, trunk: 8, trunk_link: 8 };
-function computeTraffic(t, elev) {
-  const hw = (t && t.highway) || "tertiary";
-  const base = TRAF_BASE[hw] != null ? TRAF_BASE[hw] : 3;
-  // tourist/weekend spike on real climbs and bigger roads
-  const tour = (elev >= 1500 || base >= 4) ? 2 : 1;
-  const wkd = Math.min(10, base + tour);
-  // trucks from restrictions / road class
-  let trucks = "rari";
-  const mw = parseFloat(t && (t.maxweight || t.maxweightrating)) || 0;
-  if ((t && (t.hgv === "no" || t.hgv === "destination")) || (mw > 0 && mw < 7.5) || hw === "track" || hw === "cycleway") trucks = "no";
-  else if (hw === "primary" || hw === "trunk") trucks = (t && t.hgv === "yes") ? "si" : "possibili";
-  else if (hw === "secondary") trucks = "possibili";
-  return { fer: base, wkd, trucks };
-}
-function surfaceLabelFromWay(t) {
+function surfaceLabel(t) {
   if (!t) return "";
   const s = t.surface || "", hw = t.highway || "";
   if (s === "asphalt" || s === "paved" || s === "concrete") return "&#x1F6E3;&#xFE0F; Asfalto";
@@ -110,225 +80,262 @@ function surfaceLabelFromWay(t) {
   if (s) return "Fondo: " + s;
   return "";
 }
-
-/* ----- climb-derivation pipeline (ported verbatim) ----------------------- */
-function closestIdx(geom, lat, lon) {
-  let bi = -1, bd = 1e9;
-  for (let i = 0; i < geom.length; i++) {
-    const d = hav(lat, lon, geom[i].lat, geom[i].lon);
-    if (d < bd) { bd = d; bi = i; }
-  }
-  return bd < 0.4 ? bi : -1;
-}
-function collectSide(geom, idx, dir) {
-  const pts = [];
-  let dist = 0, prev = geom[idx];
-  pts.push({ lat: geom[idx].lat, lon: geom[idx].lon });
-  for (let i = idx + dir; i >= 0 && i < geom.length; i += dir) {
-    const g = geom[i];
-    dist += hav(prev.lat, prev.lon, g.lat, g.lon);
-    pts.push({ lat: g.lat, lon: g.lon });
-    prev = g;
-    if (dist >= 16) break;
-  }
-  if (pts.length > 80) {
-    const out = [], n = 80;
-    for (let k = 0; k < n; k++) out.push(pts[Math.round(k * (pts.length - 1) / (n - 1))]);
-    return out;
-  }
-  return pts;
-}
-function buildVersante(pts, elevs, topLat, topLon) {
-  if (!elevs || elevs.length !== pts.length) return null;
-  let bi = 0;
-  for (let i = 1; i < elevs.length; i++) if (elevs[i] < elevs[bi]) bi = i;
-  if (bi < 2) return null;
-  const seg = pts.slice(0, bi + 1).reverse();
-  const se = elevs.slice(0, bi + 1).reverse();
-  let dist = 0;
-  for (let i = 1; i < seg.length; i++) dist += hav(seg[i - 1].lat, seg[i - 1].lon, seg[i].lat, seg[i].lon);
-  if (dist < 1.5) return null;
-  const gain = se[se.length - 1] - se[0];
-  if (gain < 200) return null;
-  let maxg = 0;
-  for (let i = 1; i < seg.length; i++) {
-    const dd = hav(seg[i - 1].lat, seg[i - 1].lon, seg[i].lat, seg[i].lon) * 1000;
-    if (dd > 80) { const g = (se[i] - se[i - 1]) / dd * 100; if (g > maxg) maxg = g; }
-  }
-  const dir = compass(seg[0].lat, seg[0].lon, topLat, topLon);
-  const prof = [], n = Math.min(se.length, 18);
-  for (let i = 0; i < n; i++) prof.push(Math.round(se[Math.round(i * (se.length - 1) / (n - 1))]));
-  return {
-    side: "Versante " + dir,
-    startLat: seg[0].lat, startLon: seg[0].lon,
-    startElevation: Math.round(se[0]),
-    endElevation: Math.round(se[se.length - 1]),
-    distance_km: Math.round(dist * 10) / 10,
-    avgGradient: Math.round(gain / (dist * 1000) * 1000) / 10,
-    maxGradient: Math.round(maxg * 10) / 10,
-    traffic: "n/d",
-    exposure: dir,
-    elevationProfile: prof,
-    track: seg.map((s) => [s.lat, s.lon])
-  };
+const TRAF_BASE = { cycleway: 1, track: 1, service: 2, residential: 2, living_street: 2, unclassified: 3, tertiary: 3, tertiary_link: 3, secondary: 4, secondary_link: 4, primary: 6, primary_link: 6, trunk: 8 };
+function computeTraffic(t, elev) {
+  const hw = (t && t.highway) || "tertiary";
+  const base = TRAF_BASE[hw] != null ? TRAF_BASE[hw] : 3;
+  const tour = (elev >= 1500 || base >= 4) ? 2 : 1;
+  let trucks = "rari";
+  const mw = parseFloat(t && (t.maxweight || t.maxweightrating)) || 0;
+  if ((t && (t.hgv === "no" || t.hgv === "destination")) || (mw > 0 && mw < 7.5) || hw === "track" || hw === "cycleway") trucks = "no";
+  else if (hw === "primary" || hw === "trunk") trucks = (t && t.hgv === "yes") ? "si" : "possibili";
+  else if (hw === "secondary") trucks = "possibili";
+  return { fer: base, wkd: Math.min(10, base + tour), trucks };
 }
 
-/* ----- network with retry/backoff ---------------------------------------- */
-async function getJSON(url, label, tries = 4) {
-  for (let attempt = 1; attempt <= tries; attempt++) {
+/* ----- network ----------------------------------------------------------- */
+async function overpass(query, label) {
+  for (let a = 0; a < OVERPASS_EPS.length * 2; a++) {
+    const ep = OVERPASS_EPS[a % OVERPASS_EPS.length];
     try {
-      const r = await fetch(url, { headers: { "User-Agent": "locaClimb-builder/1.0 (github action)" } });
-      if (r.status === 429 || r.status === 504 || r.status === 502) throw new Error("HTTP " + r.status);
+      const r = await fetch(ep, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "locaClimb-builder/2.0" }, body: "data=" + encodeURIComponent(query) });
       if (!r.ok) throw new Error("HTTP " + r.status);
       return await r.json();
     } catch (e) {
-      const wait = Math.min(30000, 2000 * 2 ** (attempt - 1));
-      console.warn("  ! " + label + " attempt " + attempt + " failed (" + e.message + "), retry in " + (wait / 1000) + "s");
-      if (attempt === tries) throw e;
-      await sleep(wait);
+      console.warn("  ! overpass " + label + " via " + ep.split("/")[2] + " failed (" + e.message + ")");
+      await sleep(3000 + 2000 * a);
     }
   }
+  throw new Error("overpass exhausted: " + label);
 }
-function postOverpass(query) {
-  return fetch(OVERPASS, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "locaClimb-builder/1.0" },
-    body: "data=" + encodeURIComponent(query)
-  }).then((r) => { if (!r.ok) throw new Error("Overpass HTTP " + r.status); return r.json(); });
-}
-
-async function fetchElevs(pts) {
-  // Open-Meteo elevation accepts up to 100 coords per call.
+async function elevations(pts) {
   const out = [];
   for (let i = 0; i < pts.length; i += 100) {
-    const chunk = pts.slice(i, i + 100);
-    const la = chunk.map((p) => p.lat.toFixed(5)).join(",");
-    const lo = chunk.map((p) => p.lon.toFixed(5)).join(",");
-    const d = await getJSON(ELEV_API + "?latitude=" + la + "&longitude=" + lo, "elevation");
-    if (!d || !d.elevation) return null;
-    out.push(...d.elevation);
+    const c = pts.slice(i, i + 100);
+    const la = c.map((p) => p[0].toFixed(5)).join(","), lo = c.map((p) => p[1].toFixed(5)).join(",");
+    let ok = null;
+    for (let a = 0; a < 4 && !ok; a++) {
+      try { const d = await (await fetch(ELEV_API + "?latitude=" + la + "&longitude=" + lo)).json(); ok = d.elevation; }
+      catch { await sleep(2000 * (a + 1)); }
+    }
+    if (!ok) return null;
+    out.push(...ok);
     await sleep(400);
   }
   return out;
 }
 
-/* ----- enrich one pass (Overpass geom -> elevation -> versanti) ---------- */
-async function enrichPass(op) {
-  const nid = ("" + op.id).replace(/^osm-/, "");
-  if (!/^\d+$/.test(nid)) return false;
-  const q = "[out:json][timeout:25];node(" + nid + ")->.n;way(bn.n)[\"highway\"];out geom tags;";
-  const data = await postOverpass(q);
-  await sleep(1100); // be polite to Overpass between enrich calls
-  const ways = (data.elements || []).filter((e) => e.type === "way" && e.geometry && e.geometry.length > 2);
-  if (!ways.length) return false;
-  let best = null, bestLen = 0;
+/* ----- road graph + walking ---------------------------------------------- */
+// follow the road from a summit node outward across connected ways
+function buildGraph(ways) {
+  const nodeWays = new Map(); // nodeId -> [{w, idx}]
   for (const w of ways) {
-    const idx = closestIdx(w.geometry, op.lat, op.lon);
-    if (idx < 0) continue;
-    if (w.geometry.length > bestLen) { bestLen = w.geometry.length; best = { w, idx }; }
+    if (!w.nodes || !w.geometry || w.nodes.length !== w.geometry.length) continue;
+    if (!rideable(w.tags)) continue;
+    w.nodes.forEach((nid, idx) => {
+      if (!nodeWays.has(nid)) nodeWays.set(nid, []);
+      nodeWays.get(nid).push({ w, idx });
+    });
   }
-  if (!best) return false;
-  const w = best.w, idx = best.idx;
-  const surfLabel = surfaceLabelFromWay(w.tags);
-  const sidePts = [collectSide(w.geometry, idx, -1), collectSide(w.geometry, idx, 1)]
-    .filter((s) => s && s.length >= 4);
-  if (!sidePts.length) return false;
-  const vs = [];
-  for (const pts of sidePts) {
-    const ev = await fetchElevs(pts);
-    if (!ev) continue;
-    const v = buildVersante(pts, ev, op.lat, op.lon);
-    if (v) vs.push(v);
+  return nodeWays;
+}
+function sameRoad(a, b) {
+  const ta = a.tags || {}, tb = b.tags || {};
+  if (ta.ref && ta.ref === tb.ref) return 2;
+  if (ta.name && ta.name === tb.name) return 2;
+  if (ta.highway === tb.highway) return 1;
+  return 0;
+}
+function walk(startWay, startIdx, dir, nodeWays, capKm) {
+  const pts = [[startWay.geometry[startIdx].lat, startWay.geometry[startIdx].lon]];
+  const visited = new Set([startWay.id]);
+  let w = startWay, i = startIdx, d = dir, dist = 0;
+  let prev = pts[0];
+  for (let guard = 0; guard < 400; guard++) {
+    const ni = i + d;
+    if (ni < 0 || ni >= w.geometry.length) {
+      // at a way boundary -> try to continue onto a connected rideable way
+      const endNode = w.nodes[i];
+      const cand = (nodeWays.get(endNode) || []).filter((c) => !visited.has(c.w.id) && c.w.geometry.length > 1);
+      if (!cand.length) break;
+      cand.sort((x, y) => sameRoad(w, y.w) - sameRoad(w, x.w));
+      const nx = cand[0];
+      visited.add(nx.w.id);
+      w = nx.w; i = nx.idx; d = (i === 0) ? 1 : -1;
+      continue;
+    }
+    const g = w.geometry[ni];
+    dist += hav(prev[0], prev[1], g.lat, g.lon);
+    pts.push([g.lat, g.lon]);
+    prev = [g.lat, g.lon];
+    i = ni;
+    if (dist >= capKm) break;
   }
-  if (!vs.length) return false;
-  vs.sort((a, b) => b.distance_km - a.distance_km);
-  const top2 = vs.slice(0, 2);
-  op.versanti = top2;
-  op.difficulty = Math.max(...top2.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
-  op.surfaceLabel = surfLabel || op.surfaceLabel || "";
-  return true;
+  // downsample to <=110 pts
+  if (pts.length > 110) {
+    const o = [], n = 110;
+    for (let k = 0; k < n; k++) o.push(pts[Math.round(k * (pts.length - 1) / (n - 1))]);
+    return o;
+  }
+  return pts;
+}
+// trim a summit->valley point list to the real climb (valley->summit) using DEM
+function buildSide(ptsOut, elevsOut, topLat, topLon) {
+  // ptsOut/elevsOut go summit -> outward (descending hopefully). Reverse to valley->summit.
+  const pts = ptsOut.slice().reverse(), el = elevsOut.slice().reverse();
+  if (pts.length < 4) return null;
+  // cumulative distance valley->summit
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + hav(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]));
+  // find climb base: advance from valley end while forward 1km grade < 3% (flat approach)
+  let base = 0;
+  for (let i = 0; i < pts.length - 1; i++) {
+    let j = i;
+    while (j < pts.length - 1 && cum[j] - cum[i] < 1) j++;
+    const dd = cum[j] - cum[i];
+    const grade = dd > 0 ? (el[j] - el[i]) / (dd * 1000) * 100 : 0;
+    if (grade >= 3) { base = i; break; }
+    base = i;
+  }
+  const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
+  const dist = segCum[segCum.length - 1];
+  if (dist < 1.5) return null;
+  const gain = segEl[segEl.length - 1] - segEl[0];
+  if (gain < 200) return null;
+  const avg = gain / (dist * 1000) * 100;
+  if (avg < 3) return null;
+  let maxg = 0;
+  for (let i = 1; i < segPts.length; i++) {
+    const dd = (segCum[i] - segCum[i - 1]) * 1000;
+    if (dd > 80) { const g = (segEl[i] - segEl[i - 1]) / dd * 100; if (g > maxg) maxg = g; }
+  }
+  const dir = compass(segPts[0][0], segPts[0][1], topLat, topLon);
+  const n = Math.min(segEl.length, 24);
+  const prof = [];
+  for (let i = 0; i < n; i++) prof.push(Math.round(segEl[Math.round(i * (segEl.length - 1) / (n - 1))]));
+  return {
+    side: "Versante " + dir,
+    startLat: segPts[0][0], startLon: segPts[0][1],
+    startElevation: Math.round(segEl[0]), endElevation: Math.round(segEl[segEl.length - 1]),
+    distance_km: Math.round(dist * 10) / 10, avgGradient: Math.round(avg * 10) / 10, maxGradient: Math.round(maxg * 10) / 10,
+    traffic: "n/d", exposure: dir, elevationProfile: prof,
+    track: segPts.map((s) => [s[0], s[1]])
+  };
 }
 
 /* ----- main -------------------------------------------------------------- */
+function tiles([s, w, n, e], step) {
+  const out = [];
+  for (let la = s; la < n; la += step) for (let lo = w; lo < e; lo += step)
+    out.push([la, lo, Math.min(la + step, n), Math.min(lo + step, e)]);
+  return out;
+}
 async function main() {
-  console.log("locaClimb OSM builder");
-  console.log("  bbox=" + BBOX + " minEle=" + MIN_ELE + " maxEnrich=" + MAX_ENRICH + " reenrich=" + REENRICH);
-
-  // 1. load existing db (incremental)
+  console.log("locaClimb OSM builder v2  bbox=" + BBOX.join(",") + " tile=" + TILE + " maxEnrich=" + MAX_ENRICH);
   let existing = [];
   try { existing = JSON.parse(await readFile(OUT, "utf8")); } catch { existing = []; }
   const byId = new Map(existing.map((p) => [p.id, p]));
-  console.log("  loaded " + existing.length + " existing passes from " + OUT);
+  console.log("  loaded " + existing.length + " existing");
 
-  // 2. Overpass: pass nodes + connected highways
-  const q = '[out:json][timeout:120];(node["mountain_pass"="yes"](' + BBOX + ');)->.p;way(bn.p)["highway"];(.p;._;);out body;';
-  console.log("  querying Overpass for pass nodes + ways ...");
-  const data = await postOverpass(q);
-  const nodes = [], ways = [];
-  for (const el of (data.elements || [])) {
-    if (el.type === "node" && el.tags && el.tags.mountain_pass) nodes.push(el);
-    else if (el.type === "way") ways.push(el);
+  // 1. tiled fetch: nodes + connected highways with geometry
+  const cells = tiles(BBOX, TILE);
+  console.log("  fetching " + cells.length + " tiles ...");
+  const nodes = new Map(); // id -> el
+  const ways = new Map();  // id -> way
+  for (let ti = 0; ti < cells.length; ti++) {
+    const [a, b, c, d] = cells[ti];
+    const q = '[out:json][timeout:60];(node["mountain_pass"="yes"](' + a + ',' + b + ',' + c + ',' + d + ');)->.p;way(bn.p)["highway"];(.p;._;);out geom tags;';
+    try {
+      const data = await overpass(q, "tile " + (ti + 1) + "/" + cells.length);
+      for (const el of (data.elements || [])) {
+        if (el.type === "node" && el.tags && el.tags.mountain_pass) nodes.set(el.id, el);
+        else if (el.type === "way") ways.set(el.id, el);
+      }
+      process.stdout.write("  tile " + (ti + 1) + "/" + cells.length + " ok (nodes=" + nodes.size + " ways=" + ways.size + ")\r");
+    } catch (e) { console.warn("\n  ! tile " + (ti + 1) + " skipped: " + e.message); }
+    await sleep(1200);
   }
-  const wayByNode = {};
-  for (const w of ways) if (w.nodes) for (const nid of w.nodes) (wayByNode[nid] = wayByNode[nid] || []).push(w);
-  console.log("  got " + nodes.length + " pass nodes, " + ways.length + " ways");
+  console.log("\n  total: " + nodes.size + " pass nodes, " + ways.size + " ways");
+  const nodeWays = buildGraph([...ways.values()]);
 
-  // 3. filter -> rideable passes, build/refresh base records
-  let skippedHiking = 0, kept = 0;
+  // 2. filter + base records (snap summit to road, attach traffic)
+  let kept = 0, skippedHiking = 0;
   const order = [];
-  for (const el of nodes) {
+  for (const el of nodes.values()) {
     const elev = el.tags.ele ? parseInt(el.tags.ele, 10) : 0;
     if (isNaN(elev) || elev < MIN_ELE) continue;
-    const cw = wayByNode[el.id] || [];
-    let ride = null;
-    for (const c of cw) { const r = classifyWay(c.tags); if (r) { ride = r; break; } }
-    if (cw.length > 0 && !ride) { skippedHiking++; continue; }
+    if (existing.length === 0 && false) {} // placeholder
+    // skip near curated handled client-side; keep all here
+    const cw = nodeWays.get(el.id) || [];
+    let chosen = null;
+    for (const c of cw) { if (rideable(c.w.tags)) { chosen = c; break; } }
+    // also accept if pass sits very close to a rideable way even if not a vertex
+    let lat = el.lat, lon = el.lon, snapped = false;
+    if (!chosen) {
+      // search any rideable way vertex within 60m
+      let best = null, bd = 0.06;
+      for (const w of ways.values()) {
+        if (!rideable(w.tags) || !w.geometry) continue;
+        for (let i = 0; i < w.geometry.length; i++) {
+          const dd = hav(el.lat, el.lon, w.geometry[i].lat, w.geometry[i].lon);
+          if (dd < bd) { bd = dd; best = { w, idx: i }; }
+        }
+      }
+      if (best) { chosen = best; }
+    }
+    if (cw.length > 0 && !chosen) { skippedHiking++; continue; }
+    if (chosen) { lat = chosen.w.geometry[chosen.idx].lat; lon = chosen.w.geometry[chosen.idx].lon; snapped = true; }
     const id = "osm-" + el.id;
     const name = (el.tags.name || "Passo").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    const surfLabel = ride
-      ? surfaceLabelFromWay(ride.hw === "track" ? { highway: "track", surface: ride.surface } : { surface: ride.surface || "asphalt" })
-      : "";
     const prev = byId.get(id);
-    const rec = prev || { id, name, lat: el.lat, lon: el.lon, elevation: elev };
-    // refresh base fields (name/coords/elevation may have changed in OSM)
-    rec.name = name; rec.lat = el.lat; rec.lon = el.lon; rec.elevation = elev;
-    if (!rec.surfaceLabel) rec.surfaceLabel = surfLabel;
-    // traffic + trucks from the rideable way's tags
-    if (ride) {
-      const tr = computeTraffic(ride.tags, elev);
+    const rec = prev || { id, name, lat, lon, elevation: elev };
+    rec.name = name; rec.lat = lat; rec.lon = lon; rec.elevation = elev; rec.snapped = snapped;
+    rec.nodeId = el.id;
+    if (chosen) {
+      rec.surfaceLabel = surfaceLabel(chosen.w.tags) || rec.surfaceLabel || "";
+      const tr = computeTraffic(chosen.w.tags, elev);
       rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
-    } else if (rec.trafFeriale == null) {
-      rec.trafFeriale = 3; rec.trafWeekend = elev >= 1500 ? 5 : 4; rec.trucks = "rari";
-    }
+      rec._chosen = chosen; // transient, removed before write
+    } else if (rec.trafFeriale == null) { rec.trafFeriale = 3; rec.trafWeekend = elev >= 1500 ? 5 : 4; rec.trucks = "rari"; }
     byId.set(id, rec);
     order.push(id);
     kept++;
   }
-  console.log("  kept " + kept + " rideable passes, skipped " + skippedHiking + " hiking-only");
+  console.log("  kept " + kept + " rideable, skipped " + skippedHiking + " hiking-only");
 
-  // 4. enrich (only those missing versanti, unless --reenrich), capped by --max
-  const toEnrich = order.filter((id) => REENRICH || !(byId.get(id).versanti && byId.get(id).versanti.length));
-  const batch = toEnrich.slice(0, MAX_ENRICH);
-  console.log("  enriching " + batch.length + " passes (" + (toEnrich.length - batch.length) + " deferred to next run)");
+  // 3. enrich offline (no Overpass): walk road graph + DEM elevation
+  const todo = order.filter((id) => REENRICH || !(byId.get(id).versanti && byId.get(id).versanti.length));
+  const batch = todo.slice(0, MAX_ENRICH);
+  console.log("  enriching " + batch.length + " (" + (todo.length - batch.length) + " deferred)");
   let ok = 0, fail = 0;
   for (let i = 0; i < batch.length; i++) {
-    const op = byId.get(batch[i]);
-    process.stdout.write("  [" + (i + 1) + "/" + batch.length + "] " + op.name + " (" + op.elevation + "m) ... ");
+    const rec = byId.get(batch[i]);
+    process.stdout.write("  [" + (i + 1) + "/" + batch.length + "] " + rec.name + " (" + rec.elevation + "m) ... ");
+    const ch = rec._chosen;
+    if (!ch) { fail++; console.log("no road"); continue; }
     try {
-      const done = await enrichPass(op);
-      if (done) { ok++; console.log("ok (" + op.versanti.length + " versanti, diff " + op.difficulty + ")"); }
-      else { fail++; op.enrichFailed = true; console.log("no climb data"); }
-    } catch (e) {
-      fail++; console.log("error: " + e.message);
-    }
+      const sideA = walk(ch.w, ch.idx, -1, nodeWays, 14);
+      const sideB = walk(ch.w, ch.idx, 1, nodeWays, 14);
+      const cands = [sideA, sideB].filter((s) => s && s.length >= 4);
+      const vs = [];
+      for (const pts of cands) {
+        const ev = await elevations(pts);
+        if (!ev) continue;
+        const v = buildSide(pts, ev, rec.lat, rec.lon);
+        if (v) vs.push(v);
+      }
+      if (!vs.length) { fail++; console.log("no climb data"); continue; }
+      vs.sort((a, b) => b.distance_km - a.distance_km);
+      rec.versanti = vs.slice(0, 2);
+      rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
+      ok++; console.log("ok (" + rec.versanti.length + " versanti, diff " + rec.difficulty + ")");
+    } catch (e) { fail++; console.log("err: " + e.message); }
   }
 
-  // 5. write back, sorted by elevation desc for stable diffs
-  const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
+  // 4. write (strip transient fields)
+  const result = [...byId.values()].map((r) => { const o = { ...r }; delete o._chosen; return o; }).sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
   await writeFile(OUT, JSON.stringify(result, null, 1) + "\n", "utf8");
-  const enriched = result.filter((p) => p.versanti && p.versanti.length).length;
-  console.log("DONE: " + result.length + " passes total, " + enriched + " enriched. enriched-now=" + ok + " failed-now=" + fail);
-  console.log("  wrote " + OUT);
+  const enr = result.filter((p) => p.versanti && p.versanti.length).length;
+  console.log("DONE: " + result.length + " passes, " + enr + " enriched (now +" + ok + ", fail " + fail + "). wrote " + OUT);
 }
-
 main().catch((e) => { console.error("FATAL: " + e.stack); process.exit(1); });
