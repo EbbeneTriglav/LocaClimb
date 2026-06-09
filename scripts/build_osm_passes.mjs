@@ -271,7 +271,8 @@ async function main() {
   const ways = new Map();  // id -> way
   for (let ti = 0; ti < cells.length; ti++) {
     const [a, b, c, d] = cells[ti];
-    const q = '[out:json][timeout:90];(node["mountain_pass"="yes"](' + a + ',' + b + ',' + c + ',' + d + ');)->.p;way(around.p:120)["highway"];(.p;._;);out geom tags;';
+    const HWRE = "motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service|track|cycleway"; // rideable + motorway (needed to EXCLUDE passes only on motorways)
+    const q = '[out:json][timeout:90];(node["mountain_pass"="yes"](' + a + ',' + b + ',' + c + ',' + d + ');)->.p;way(around.p:120)["highway"~"^(' + HWRE + ')$"];(.p;._;);out geom tags;';
     try {
       const data = await overpass(q, "tile " + (ti + 1) + "/" + cells.length);
       for (const el of (data.elements || [])) {
