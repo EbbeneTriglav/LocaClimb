@@ -68,8 +68,11 @@ function rideable(t) {
   if (t.bicycle === "no" || t.bicycle === "dismount") return false;
   if (t.access === "private" || t.access === "no") return false;
   if (t["mtb:scale"]) return false;
-  const bs = { sand: 1, mud: 1, rock: 1, pebblestone: 1, grass: 1 };
+  const bs = { sand: 1, mud: 1, rock: 1, pebblestone: 1, grass: 1, woodchips: 1, salt: 1 };
   if (t.surface && bs[t.surface]) return false;
+  if (t.tracktype === "grade4" || t.tracktype === "grade5") return false;
+  const bsm = { very_bad: 1, horrible: 1, very_horrible: 1, impassable: 1 };
+  if (t.smoothness && bsm[t.smoothness]) return false;
   return true;
 }
 function surfaceLabel(t) {
@@ -187,15 +190,27 @@ function buildSide(ptsOut, elevsOut, topLat, topLon) {
   // cumulative distance valley->summit
   const cum = [0];
   for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + hav(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]));
-  // find climb base: advance from valley end while forward 1km grade < 3% (flat approach)
+  // find climb base: the tightest valley-side start such that base->summit stays a real climb
+  // (avg grade >= 4.5% and no long flat stretch). Avoids dragging the start into the valley/town.
+  function minWindowGrade(from) {
+    let worst = 99;
+    for (let i = from; i < pts.length - 1; i++) {
+      let j = i;
+      while (j < pts.length - 1 && cum[j] - cum[i] < 1) j++;
+      const dd = cum[j] - cum[i];
+      if (dd <= 0) continue;
+      const g = (el[j] - el[i]) / (dd * 1000) * 100;
+      if (g < worst) worst = g;
+    }
+    return worst;
+  }
+  const end = pts.length - 1;
   let base = 0;
-  for (let i = 0; i < pts.length - 1; i++) {
-    let j = i;
-    while (j < pts.length - 1 && cum[j] - cum[i] < 1) j++;
-    const dd = cum[j] - cum[i];
-    const grade = dd > 0 ? (el[j] - el[i]) / (dd * 1000) * 100 : 0;
-    if (grade >= 3) { base = i; break; }
-    base = i;
+  function avgFrom(i) { const dd = cum[end] - cum[i]; return dd > 0 ? (el[end] - el[i]) / (dd * 1000) * 100 : 0; }
+  for (let thr = 4.5; thr >= 3 && base === 0; thr -= 0.75) {
+    for (let i = 0; i < end; i++) {
+      if (avgFrom(i) >= thr && minWindowGrade(i) >= 1.5) { base = i; break; }
+    }
   }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
