@@ -1,0 +1,70 @@
+name: Refresh OSM passes
+
+# Builds/updates osm_passes.json from OpenStreetMap + Open-Meteo and commits it.
+# Runs weekly, or on demand from the Actions tab.
+
+on:
+  workflow_dispatch:
+    inputs:
+      max:
+        description: "Max passes to enrich this run (rate-limit guard)"
+        required: false
+        default: "60"
+      reenrich:
+        description: "Recompute versanti for ALL passes (slow)"
+        type: boolean
+        required: false
+        default: false
+      bbox:
+        description: "Overpass bbox South,West,North,East"
+        required: false
+        default: "44.0,6.5,47.5,13.5"
+  schedule:
+    # every Monday 04:17 UTC (odd minute = lighter Overpass load)
+    - cron: "17 4 * * 1"
+
+# never run two refreshes at once
+concurrency:
+  group: osm-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build osm_passes.json
+        run: |
+          node scripts/build_osm_passes.mjs \
+            --out osm_passes.json \
+            --max "${{ github.event.inputs.max || '60' }}" \
+            --bbox "${{ github.event.inputs.bbox || '44.0,6.5,47.5,13.5' }}" \
+            ${{ (github.event.inputs.reenrich == 'true') && '--reenrich' || '' }}
+
+      - name: Bake curated routes
+        run: node scripts/bake_routes.mjs --out routes_baked.json --data passes_data.js
+
+      - name: Commit changes
+        run: |
+          git config user.name  "locaclimb-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --quiet -- osm_passes.json routes_baked.json; then
+            echo "No changes"
+            exit 0
+          fi
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('osm_passes.json')).length)")
+          ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
+          git add osm_passes.json routes_baked.json
+          git commit -m "data: refresh OSM passes (${COUNT} passes, ${ENR} enriched) + baked routes"
+          git push
