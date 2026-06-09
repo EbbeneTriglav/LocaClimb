@@ -1,204 +1,192 @@
 var BIKE_EVENTS=[
-{name:"Enjoy Stelvio - San Marco",date:"2026-05-30",passes:["san-marco"],hours:"8-15",url:"https://www.valtellina.it/it/chiusure-passi-alpini"},
-{name:"Enjoy Stelvio - Gavia",date:"2026-06-05",passes:["gavia"],hours:"8-15",url:"https://www.valtellina.it/it/chiusure-passi-alpini"},
-{name:"Sellaronda Bike Day",date:"2026-06-06",passes:["sella","pordoi","campolongo","gardena"],hours:"8:30-16",url:"https://www.sellarondabikeday.com"},
-{name:"Enjoy Stelvio - Mortirolo",date:"2026-06-09",passes:["mortirolo"],hours:"8-15",url:"https://www.valtellina.it/it/chiusure-passi-alpini"},
-{name:"Dolomites Bike Day",date:"2026-06-20",passes:["campolongo","falzarego"],hours:"8:30-15",url:"https://www.dolomitesbikeday.it"},
-{name:"Enjoy Stelvio - Spluga",date:"2026-06-28",passes:["spluga"],hours:"8-15",url:"https://www.valtellina.it/it/chiusure-passi-alpini"},
-{name:"Maratona dles Dolomites",date:"2026-07-05",passes:["campolongo","pordoi","sella","gardena","giau","falzarego"],hours:"6:30-16",url:"https://www.maratona.it"},
-{name:"Stelvio Bike Day - Cima Coppi",date:"2026-08-29",passes:["stelvio"],hours:"7-16",url:"https://www.valtellina.it/it/chiusure-passi-alpini"},
-{name:"Enjoy Stelvio - Gavia",date:"2026-08-30",passes:["gavia"],hours:"8-15",url:"https://www.valtellina.it/it/chiusure-passi-alpini"},
-{name:"Sellaronda Bike Day (autunno)",date:"2026-09-12",passes:["sella","pordoi","campolongo","gardena"],hours:"8:30-16",url:"https://www.sellarondabikeday.com"},
-{name:"Enjoy Stelvio - Stelvio",date:"2026-09-19",passes:["stelvio"],hours:"7-16",url:"https://www.valtellina.it/it/chiusure-passi-alpini"}
+{name:"Enjoy Stelvio - Passo San Marco",date:"2026-05-30",passes:["san-marco"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Enjoy Stelvio - Passo Gavia",date:"2026-06-05",passes:["gavia"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Sellaronda Bike Day",date:"2026-06-06",passes:["pordoi","sella","gardena","campolongo"],hours:"8:30-16:00",url:"https://www.sellarondabikeday.com"},
+{name:"Enjoy Stelvio - Mortirolo",date:"2026-06-09",passes:["mortirolo"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Dolomites Bike Day",date:"2026-06-20",passes:["campolongo","falzarego"],hours:"8:30-16:00",url:""},
+{name:"Enjoy Stelvio - Spluga",date:"2026-06-28",passes:["spluga"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Maratona dles Dolomites",date:"2026-07-05",passes:["campolongo","pordoi","sella","gardena","giau","falzarego"],hours:"6:30-16:30",url:"https://www.maratona.it"},
+{name:"Enjoy Stelvio - Mortirolo",date:"2026-08-28",passes:["mortirolo"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Enjoy Stelvio - Stelvio Cima Coppi",date:"2026-08-29",passes:["stelvio"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Enjoy Stelvio - Gavia",date:"2026-08-30",passes:["gavia"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"},
+{name:"Sellaronda Bike Day Autunno",date:"2026-09-12",passes:["pordoi","sella","gardena","campolongo"],hours:"8:30-16:00",url:"https://www.sellarondabikeday.com"},
+{name:"Enjoy Stelvio - Stelvio Finale",date:"2026-09-19",passes:["stelvio"],hours:"8:00-14:00",url:"https://www.enjoystelvio.it"}
 ];
+
 var PASSES_DATA=[
-{id:"stelvio",name:"Passo dello Stelvio",lat:46.5287,lon:10.4531,elevation:2758,region:"Lombardia",status:"seasonal",difficulty:10,
-description:"Il secondo passo asfaltato piu alto delle Alpi. Simbolo del Giro con 48 tornanti.",
-tips:["Partire presto per evitare moto e camper","Portare giacca antivento: in cima fa freddo","Apertura: fine maggio - inizio novembre"],
+{id:"stelvio",name:"Passo dello Stelvio",lat:46.5285,lon:10.4534,elevation:2758,region:"Lombardia/Trentino",status:"seasonal",difficulty:10,
+description:"Il passo asfaltato piu alto d'Italia. 48 tornanti iconici dal versante di Prato. Tappa leggendaria del Giro d'Italia.",
+tips:["Partire presto da Prato per evitare traffico","Portare sempre giacca antivento per la discesa","Versante Bormio piu regolare ma meno panoramico","Evitare agosto nei weekend (moto e auto)"],
 versanti:[
-{side:"Prato allo Stelvio",startElevation:911,endElevation:2758,distance_km:24.7,avgGradient:7.5,maxGradient:10.2,traffic:"alto",exposure:"Est",
-elevationProfile:[911,1050,1200,1350,1500,1650,1800,1950,2100,2250,2400,2550,2700,2758],
-routeCoords:[[46.617,10.584],[46.608,10.570],[46.598,10.555],[46.589,10.540],[46.580,10.525],[46.572,10.510],[46.565,10.498],[46.558,10.488],[46.550,10.476],[46.543,10.465],[46.535,10.456],[46.529,10.453]]},
-{side:"Bormio",startElevation:1225,endElevation:2758,distance_km:21.5,avgGradient:7.1,maxGradient:10.8,traffic:"medio",exposure:"Ovest",
-elevationProfile:[1225,1400,1575,1750,1925,2050,2175,2300,2425,2550,2650,2758],
-routeCoords:[[46.468,10.370],[46.475,10.382],[46.483,10.395],[46.490,10.407],[46.497,10.418],[46.504,10.428],[46.510,10.436],[46.516,10.443],[46.522,10.448],[46.529,10.453]]}
+{side:"Prato allo Stelvio",startLat:46.6174,startLon:10.5845,startElevation:915,endElevation:2758,distance_km:24.3,avgGradient:7.6,maxGradient:12.0,traffic:"alto",exposure:"Est",elevationProfile:[915,980,1050,1120,1200,1300,1400,1520,1640,1760,1880,2000,2100,2200,2300,2400,2500,2580,2650,2720,2758]},
+{side:"Bormio",startLat:46.4683,startLon:10.3708,startElevation:1225,endElevation:2758,distance_km:21.5,avgGradient:7.1,maxGradient:14.0,traffic:"medio",exposure:"Ovest",elevationProfile:[1225,1320,1420,1520,1620,1720,1800,1900,2000,2100,2200,2300,2400,2500,2580,2650,2720,2758]}
 ]},
-{id:"gavia",name:"Passo di Gavia",lat:46.3453,lon:10.4889,elevation:2618,region:"Lombardia",status:"seasonal",difficulty:9,
-description:"Passo epico e selvaggio con panorami mozzafiato verso Adamello e Ortles.",
-tips:["Strada stretta: attenzione in discesa","Neve possibile anche a giugno"],
+{id:"gavia",name:"Passo Gavia",lat:46.3447,lon:10.4886,elevation:2621,region:"Lombardia",status:"seasonal",difficulty:9,
+description:"Passo selvaggio e spettacolare tra Bormio e Ponte di Legno. Strada stretta con tratti sterrati storici. Protagonista del Giro 1988.",
+tips:["Versante Ponte di Legno piu impegnativo con muri fino al 16%","Neve possibile anche a giugno in quota","Pochi punti di rifornimento acqua"],
 versanti:[
-{side:"Ponte di Legno",startElevation:1258,endElevation:2618,distance_km:16.5,avgGradient:8.0,maxGradient:11.5,traffic:"basso",exposure:"Sud",
-elevationProfile:[1258,1400,1540,1680,1820,1960,2100,2200,2350,2450,2550,2618],
-routeCoords:[[46.260,10.507],[46.270,10.504],[46.280,10.500],[46.290,10.497],[46.300,10.494],[46.310,10.492],[46.320,10.490],[46.330,10.489],[46.345,10.489]]},
-{side:"Bormio",startElevation:1225,endElevation:2618,distance_km:25.0,avgGradient:5.6,maxGradient:11.2,traffic:"basso",exposure:"Nord",
-elevationProfile:[1225,1350,1450,1550,1650,1750,1850,1950,2050,2150,2250,2400,2618],
-routeCoords:[[46.468,10.370],[46.458,10.382],[46.448,10.395],[46.435,10.415],[46.420,10.435],[46.405,10.455],[46.390,10.470],[46.375,10.480],[46.360,10.486],[46.345,10.489]]}
+{side:"Ponte di Legno",startLat:46.2585,startLon:10.5080,startElevation:1258,endElevation:2621,distance_km:17.3,avgGradient:7.9,maxGradient:16.0,traffic:"basso",exposure:"Sud",elevationProfile:[1258,1380,1520,1660,1780,1900,2020,2140,2250,2350,2430,2500,2560,2600,2621]},
+{side:"Bormio",startLat:46.4683,startLon:10.3708,startElevation:1225,endElevation:2621,distance_km:25.6,avgGradient:5.4,maxGradient:14.0,traffic:"basso",exposure:"Nord",elevationProfile:[1225,1350,1450,1560,1680,1780,1880,1970,2060,2140,2220,2300,2380,2450,2520,2570,2600,2621]}
 ]},
-{id:"mortirolo",name:"Passo del Mortirolo",lat:46.2353,lon:10.3078,elevation:1852,region:"Lombardia",status:"seasonal",difficulty:10,
-description:"Una delle salite piu dure d'Europa. Monumento a Pantani sul versante di Mazzo.",
-tips:["Versante Mazzo: pendenze fino al 18%!","Pochissimo traffico: paradiso per ciclisti","Rapporti agili obbligatori"],
+{id:"mortirolo",name:"Passo del Mortirolo",lat:46.2486,lon:10.2961,elevation:1852,region:"Lombardia",status:"open",difficulty:10,
+description:"Considerato la salita piu dura d'Italia. Pendenze costanti sopra il 10% dal versante di Mazzo. Monumento a Pantani in vetta.",
+tips:["Versante Mazzo: 12km di inferno, portare rapporti agili","Poco traffico auto, strada stretta","Acqua alla fontana a meta salita","Il versante da Monno e piu pedalabile"],
 versanti:[
-{side:"Mazzo di Valtellina",startElevation:552,endElevation:1852,distance_km:12.3,avgGradient:10.6,maxGradient:18.0,traffic:"basso",exposure:"Ovest",
-elevationProfile:[552,680,830,990,1150,1300,1440,1560,1670,1760,1820,1852],
-routeCoords:[[46.216,10.257],[46.220,10.265],[46.224,10.273],[46.227,10.280],[46.229,10.287],[46.231,10.294],[46.233,10.300],[46.235,10.308]]},
-{side:"Edolo",startElevation:717,endElevation:1852,distance_km:13.8,avgGradient:8.2,maxGradient:11.6,traffic:"basso",exposure:"Nord",
-elevationProfile:[717,830,950,1060,1170,1300,1420,1530,1650,1760,1852],
-routeCoords:[[46.175,10.332],[46.183,10.328],[46.191,10.323],[46.199,10.318],[46.207,10.314],[46.215,10.311],[46.223,10.309],[46.235,10.308]]}
+{side:"Mazzo di Valtellina",startLat:46.2340,startLon:10.2440,startElevation:552,endElevation:1852,distance_km:12.4,avgGradient:10.5,maxGradient:18.0,traffic:"basso",exposure:"Nord-Est",elevationProfile:[552,680,820,960,1080,1180,1290,1400,1500,1600,1700,1780,1852]},
+{side:"Monno (Val Camonica)",startLat:46.2186,startLon:10.3440,startElevation:1065,endElevation:1852,distance_km:10.5,avgGradient:7.5,maxGradient:12.0,traffic:"basso",exposure:"Ovest",elevationProfile:[1065,1180,1280,1380,1480,1560,1640,1720,1790,1830,1852]}
 ]},
-{id:"pordoi",name:"Passo Pordoi",lat:46.4878,lon:11.8122,elevation:2239,region:"Veneto",status:"seasonal",difficulty:7,
-description:"Il passo piu alto delle Dolomiti toccato dal Giro. Panorama 360 gradi.",
-tips:["Salita regolare da entrambi i versanti","Traffico alto in estate"],
+{id:"zoncolan",name:"Monte Zoncolan",lat:46.5057,lon:12.9258,elevation:1730,region:"Friuli Venezia Giulia",status:"open",difficulty:10,
+description:"La montagna piu dura del Giro d'Italia. Il versante da Ovaro ha pendenze fino al 22%. Spettacolo puro.",
+tips:["Versante Ovaro: il piu duro con punte al 22%","Versante Sutrio piu regolare ma comunque tosto","Poca ombra nella parte finale"],
 versanti:[
-{side:"Canazei",startElevation:1465,endElevation:2239,distance_km:12.6,avgGradient:6.1,maxGradient:9.2,traffic:"alto",exposure:"Nord-Ovest",
-elevationProfile:[1465,1550,1640,1730,1830,1930,2030,2100,2170,2239],
-routeCoords:[[46.476,11.770],[46.479,11.777],[46.482,11.784],[46.484,11.791],[46.486,11.798],[46.487,11.805],[46.488,11.812]]},
-{side:"Arabba",startElevation:1602,endElevation:2239,distance_km:9.4,avgGradient:6.8,maxGradient:10.0,traffic:"alto",exposure:"Sud-Est",
-elevationProfile:[1602,1700,1800,1900,1990,2070,2150,2200,2239],
-routeCoords:[[46.497,11.874],[46.496,11.862],[46.494,11.850],[46.492,11.838],[46.490,11.826],[46.489,11.818],[46.488,11.812]]}
+{side:"Ovaro",startLat:46.4775,startLon:12.9720,startElevation:510,endElevation:1730,distance_km:10.1,avgGradient:11.9,maxGradient:22.0,traffic:"basso",exposure:"Est",elevationProfile:[510,650,800,970,1100,1200,1310,1440,1560,1660,1730]},
+{side:"Sutrio",startLat:46.5133,startLon:12.9950,startElevation:570,endElevation:1730,distance_km:13.5,avgGradient:8.5,maxGradient:14.0,traffic:"basso",exposure:"Nord-Est",elevationProfile:[570,680,790,900,1010,1120,1220,1320,1420,1520,1610,1680,1730]}
 ]},
-{id:"sella",name:"Passo Sella",lat:46.5089,lon:11.7600,elevation:2240,region:"Veneto",status:"seasonal",difficulty:7,
-description:"Parte del Sellaronda, vista iconica sul Sassolungo.",
-tips:["Vista incredibile sul Sassolungo al tramonto","Giro completo: Sella+Pordoi+Campolongo+Gardena"],
+{id:"pordoi",name:"Passo Pordoi",lat:46.4878,lon:11.8134,elevation:2239,region:"Trentino-Alto Adige",status:"seasonal",difficulty:7,
+description:"La terrazza delle Dolomiti. Punto piu alto della Maratona dles Dolomites. Panorama mozzafiato su Sella e Marmolada.",
+tips:["Salita regolare senza muri","Molto trafficato nei weekend estivi","Ottimi ristori in vetta","Perfetto per un giro dei 4 passi dolomitici"],
 versanti:[
-{side:"Canazei",startElevation:1465,endElevation:2240,distance_km:11.4,avgGradient:6.8,maxGradient:11.8,traffic:"alto",exposure:"Sud",
-elevationProfile:[1465,1560,1660,1770,1880,1980,2060,2140,2200,2240],
-routeCoords:[[46.476,11.770],[46.482,11.768],[46.488,11.766],[46.494,11.764],[46.500,11.762],[46.506,11.760],[46.509,11.760]]},
-{side:"Selva Val Gardena",startElevation:1563,endElevation:2240,distance_km:10.2,avgGradient:6.6,maxGradient:10.5,traffic:"alto",exposure:"Nord",
-elevationProfile:[1563,1660,1760,1860,1960,2060,2140,2200,2240],
-routeCoords:[[46.556,11.760],[46.548,11.759],[46.540,11.759],[46.532,11.759],[46.524,11.760],[46.516,11.760],[46.509,11.760]]}
+{side:"Canazei",startLat:46.4768,startLon:11.7706,startElevation:1465,endElevation:2239,distance_km:11.8,avgGradient:6.6,maxGradient:9.0,traffic:"alto",exposure:"Ovest",elevationProfile:[1465,1540,1620,1700,1780,1860,1940,2020,2090,2150,2200,2239]},
+{side:"Arabba",startLat:46.4967,startLon:11.8744,startElevation:1602,endElevation:2239,distance_km:9.4,avgGradient:6.8,maxGradient:10.0,traffic:"alto",exposure:"Est",elevationProfile:[1602,1680,1760,1840,1920,2000,2070,2140,2200,2239]}
 ]},
-{id:"gardena",name:"Passo Gardena",lat:46.5336,lon:11.8092,elevation:2136,region:"Veneto",status:"seasonal",difficulty:5,
-description:"Il passo piu accessibile del Sellaronda. Panorami dolci e aperti.",
-tips:["Salita corta e relativamente facile","Collegamento ideale con Sella e Pordoi"],
+{id:"sella",name:"Passo Sella",lat:46.5087,lon:11.7614,elevation:2218,region:"Trentino-Alto Adige",status:"seasonal",difficulty:7,
+description:"Uno dei 4 passi del Sellaronda. Vista spettacolare sul Sassolungo. Molto frequentato ma merita ogni pedalata.",
+tips:["Parte del Sellaronda: combinalo con Pordoi, Gardena, Campolongo","Partire presto per evitare traffico"],
 versanti:[
-{side:"Corvara",startElevation:1568,endElevation:2136,distance_km:6.0,avgGradient:9.5,maxGradient:12.0,traffic:"alto",exposure:"Sud",
-elevationProfile:[1568,1680,1790,1900,2020,2100,2136],
-routeCoords:[[46.512,11.871],[46.518,11.860],[46.524,11.848],[46.528,11.836],[46.532,11.822],[46.534,11.809]]}
+{side:"Canazei",startLat:46.4768,startLon:11.7706,startElevation:1465,endElevation:2218,distance_km:10.5,avgGradient:7.2,maxGradient:11.0,traffic:"alto",exposure:"Sud",elevationProfile:[1465,1560,1660,1760,1850,1940,2020,2090,2150,2200,2218]},
+{side:"Selva di Val Gardena",startLat:46.5556,startLon:11.7569,startElevation:1563,endElevation:2218,distance_km:7.8,avgGradient:8.4,maxGradient:12.0,traffic:"alto",exposure:"Nord",elevationProfile:[1563,1660,1760,1860,1960,2060,2140,2200,2218]}
 ]},
-{id:"campolongo",name:"Passo Campolongo",lat:46.5064,lon:11.8492,elevation:1875,region:"Veneto",status:"seasonal",difficulty:4,
-description:"Il passo piu facile del Sellaronda. Breve e dolce tra Arabba e Corvara.",
-tips:["Ottimo per principianti"],
+{id:"gardena",name:"Passo Gardena",lat:46.5333,lon:11.8100,elevation:2121,region:"Trentino-Alto Adige",status:"seasonal",difficulty:6,
+description:"Porta d'ingresso alla Val Gardena. Panorama sul Cir e Sella. Parte del giro Sellaronda.",
+tips:["Versante Corvara piu dolce e costante","In inverno e chiuso per neve"],
 versanti:[
-{side:"Arabba",startElevation:1602,endElevation:1875,distance_km:5.8,avgGradient:4.7,maxGradient:8.0,traffic:"medio",exposure:"Sud-Est",
-elevationProfile:[1602,1660,1720,1780,1830,1875],
-routeCoords:[[46.497,11.874],[46.499,11.868],[46.501,11.862],[46.503,11.856],[46.505,11.852],[46.506,11.849]]}
+{side:"Corvara",startLat:46.5397,startLon:11.8728,startElevation:1568,endElevation:2121,distance_km:8.2,avgGradient:6.7,maxGradient:9.0,traffic:"alto",exposure:"Est",elevationProfile:[1568,1640,1720,1800,1880,1960,2040,2100,2121]},
+{side:"Selva di Val Gardena",startLat:46.5556,startLon:11.7569,startElevation:1563,endElevation:2121,distance_km:10.0,avgGradient:5.6,maxGradient:8.5,traffic:"alto",exposure:"Ovest",elevationProfile:[1563,1620,1680,1740,1800,1860,1920,1980,2050,2100,2121]}
 ]},
-{id:"giau",name:"Passo Giau",lat:46.4833,lon:12.0514,elevation:2236,region:"Veneto",status:"seasonal",difficulty:8,
-description:"Uno dei passi piu scenografici delle Dolomiti. Prati fioriti, Pelmo e Civetta.",
-tips:["Muro finale al 15% da Selva di Cadore!","Poco traffico: gemma nascosta","Tramonto incredibile"],
+{id:"campolongo",name:"Passo Campolongo",lat:46.5242,lon:11.8711,elevation:1875,region:"Trentino-Alto Adige",status:"seasonal",difficulty:4,
+description:"Il piu facile dei 4 passi del Sellaronda. Ideale per riscaldarsi prima di Pordoi e Sella.",
+tips:["Salita breve e regolare, perfetta per iniziare il Sellaronda","Ottimi ristori ad Arabba"],
 versanti:[
-{side:"Selva di Cadore",startElevation:998,endElevation:2236,distance_km:15.6,avgGradient:7.9,maxGradient:15.0,traffic:"basso",exposure:"Sud-Ovest",
-elevationProfile:[998,1120,1250,1400,1550,1700,1840,1960,2070,2150,2236],
-routeCoords:[[46.443,12.031],[46.450,12.035],[46.457,12.039],[46.464,12.043],[46.470,12.046],[46.476,12.049],[46.483,12.051]]},
-{side:"Cortina",startElevation:1200,endElevation:2236,distance_km:15.8,avgGradient:6.6,maxGradient:10.3,traffic:"basso",exposure:"Nord-Est",
-elevationProfile:[1200,1350,1500,1650,1800,1940,2060,2150,2236],
-routeCoords:[[46.537,12.102],[46.528,12.093],[46.519,12.084],[46.510,12.076],[46.501,12.068],[46.492,12.060],[46.483,12.051]]}
+{side:"Corvara",startLat:46.5397,startLon:11.8728,startElevation:1568,endElevation:1875,distance_km:5.8,avgGradient:5.3,maxGradient:8.0,traffic:"medio",exposure:"Sud",elevationProfile:[1568,1620,1680,1740,1800,1850,1875]},
+{side:"Arabba",startLat:46.4967,startLon:11.8744,startElevation:1602,endElevation:1875,distance_km:5.2,avgGradient:5.3,maxGradient:7.0,traffic:"medio",exposure:"Nord",elevationProfile:[1602,1650,1700,1750,1800,1845,1875]}
 ]},
-{id:"falzarego",name:"Passo Falzarego",lat:46.5192,lon:12.0050,elevation:2105,region:"Veneto",status:"seasonal",difficulty:6,
-description:"Vista diretta sulle Tofane e il Lagazuoi. Funivia in cima.",
-tips:["Combinare con Valparola","Dolomites Bike Day 20 giugno 2026"],
+{id:"falzarego",name:"Passo Falzarego",lat:46.5186,lon:12.0067,elevation:2105,region:"Veneto",status:"seasonal",difficulty:6,
+description:"Collega Cortina con la Val Badia. Teatro della Grande Guerra. Panorama sulle Tofane e Lagazuoi.",
+tips:["Funivia Lagazuoi in vetta per panorama","Versante Cortina lungo ma costante","Combinabile con Giau per un giro epico"],
 versanti:[
-{side:"Cortina d'Ampezzo",startElevation:1224,endElevation:2105,distance_km:18.0,avgGradient:4.9,maxGradient:9.0,traffic:"medio",exposure:"Est",
-elevationProfile:[1224,1350,1480,1600,1720,1830,1930,2020,2070,2105],
-routeCoords:[[46.540,12.132],[46.536,12.116],[46.532,12.100],[46.528,12.084],[46.525,12.068],[46.523,12.052],[46.521,12.036],[46.520,12.020],[46.519,12.005]]}
+{side:"Cortina d'Ampezzo",startLat:46.5369,startLon:12.1355,startElevation:1224,endElevation:2105,distance_km:17.6,avgGradient:5.0,maxGradient:8.0,traffic:"medio",exposure:"Est",elevationProfile:[1224,1320,1400,1480,1560,1640,1720,1800,1860,1920,1980,2040,2080,2105]},
+{side:"Andraz/Arabba",startLat:46.4767,startLon:11.9550,startElevation:1428,endElevation:2105,distance_km:11.2,avgGradient:6.0,maxGradient:9.5,traffic:"medio",exposure:"Ovest",elevationProfile:[1428,1520,1610,1700,1780,1860,1930,1990,2040,2080,2105]}
 ]},
-{id:"spluga",name:"Passo dello Spluga",lat:46.5050,lon:9.3375,elevation:2113,region:"Lombardia",status:"seasonal",difficulty:8,
-description:"Confine italo-svizzero con la spettacolare gola della Via Mala.",
-tips:["La gola sul versante sud e' impressionante","Salita lunga da Chiavenna"],
+{id:"giau",name:"Passo Giau",lat:46.4831,lon:12.0522,elevation:2236,region:"Veneto",status:"seasonal",difficulty:8,
+description:"Uno dei passi piu belli delle Dolomiti. Panorama a 360 gradi. Salita impegnativa da entrambi i versanti.",
+tips:["Versante Selva di Cadore piu duro con rampe al 14%","Fotografa il panorama dalla cima","Combinabile con Falzarego"],
 versanti:[
-{side:"Chiavenna",startElevation:325,endElevation:2113,distance_km:30.0,avgGradient:6.0,maxGradient:10.0,traffic:"medio",exposure:"Sud",
-elevationProfile:[325,460,600,750,900,1050,1200,1350,1500,1650,1800,1950,2050,2113],
-routeCoords:[[46.320,9.397],[46.340,9.391],[46.360,9.384],[46.380,9.376],[46.400,9.368],[46.420,9.360],[46.440,9.352],[46.460,9.346],[46.480,9.340],[46.505,9.338]]}
+{side:"Selva di Cadore",startLat:46.4400,startLon:12.0300,startElevation:1060,endElevation:2236,distance_km:15.0,avgGradient:7.8,maxGradient:14.0,traffic:"basso",exposure:"Sud",elevationProfile:[1060,1200,1340,1480,1600,1720,1840,1940,2040,2100,2160,2200,2236]},
+{side:"Cortina d'Ampezzo",startLat:46.5369,startLon:12.1355,startElevation:1224,endElevation:2236,distance_km:19.0,avgGradient:5.3,maxGradient:10.0,traffic:"medio",exposure:"Nord-Est",elevationProfile:[1224,1340,1440,1540,1640,1740,1840,1920,2000,2060,2120,2180,2220,2236]}
 ]},
-{id:"san-marco",name:"Passo di San Marco",lat:46.0497,lon:9.6217,elevation:1992,region:"Lombardia",status:"seasonal",difficulty:8,
-description:"Val Brembana - Valtellina. Incluso nelle chiusure Enjoy Stelvio.",
-tips:["Versante Mezzoldo impegnativo","Enjoy Stelvio: 30 maggio 2026"],
+{id:"fedaia",name:"Passo Fedaia",lat:46.4572,lon:11.8692,elevation:2057,region:"Veneto/Trentino",status:"seasonal",difficulty:8,
+description:"Ai piedi della Marmolada, il ghiacciaio piu grande delle Dolomiti. Il lago in vetta e spettacolare.",
+tips:["Vista sulla Marmolada unica","Versante Canazei con tratti ripidi nella parte alta","Lago artificiale in cima: fermati!"],
 versanti:[
-{side:"Mezzoldo",startElevation:830,endElevation:1992,distance_km:13.0,avgGradient:8.9,maxGradient:14.0,traffic:"basso",exposure:"Sud",
-elevationProfile:[830,960,1100,1240,1380,1520,1660,1790,1900,1992],
-routeCoords:[[45.988,9.660],[45.996,9.654],[46.004,9.648],[46.012,9.642],[46.020,9.636],[46.028,9.630],[46.036,9.626],[46.045,9.623],[46.050,9.622]]}
+{side:"Canazei",startLat:46.4768,startLon:11.7706,startElevation:1465,endElevation:2057,distance_km:14.0,avgGradient:4.2,maxGradient:12.0,traffic:"medio",exposure:"Ovest",elevationProfile:[1465,1520,1580,1640,1680,1720,1760,1810,1860,1920,1980,2030,2057]},
+{side:"Alleghe/Caprile",startLat:46.4050,startLon:12.0189,startElevation:1000,endElevation:2057,distance_km:16.0,avgGradient:6.6,maxGradient:11.0,traffic:"basso",exposure:"Est",elevationProfile:[1000,1120,1240,1360,1480,1580,1680,1760,1840,1910,1970,2020,2057]}
 ]},
-{id:"grappa",name:"Monte Grappa",lat:45.8758,lon:11.7808,elevation:1745,region:"Veneto",status:"open",difficulty:8,
-description:"Montagna sacra della Grande Guerra. Tre versanti diversi, tutti durissimi.",
-tips:["Vento forte frequente in cima","Sacrario militare in vetta"],
+{id:"spluga",name:"Passo dello Spluga",lat:46.5045,lon:9.3300,elevation:2113,region:"Lombardia",status:"seasonal",difficulty:7,
+description:"Collega Italia e Svizzera. Strada spettacolare nella gola del Cardinello. Storia e panorami alpini.",
+tips:["La gola del Cardinello e impressionante","Versante italiano con gallerie scavate nella roccia","Confine Italia-Svizzera in vetta"],
 versanti:[
-{side:"Romano d'Ezzelino",startElevation:118,endElevation:1745,distance_km:26.0,avgGradient:6.3,maxGradient:11.0,traffic:"medio",exposure:"Sud",
-elevationProfile:[118,280,450,630,810,980,1140,1290,1420,1550,1660,1720,1745],
-routeCoords:[[45.786,11.778],[45.800,11.780],[45.814,11.781],[45.828,11.782],[45.842,11.782],[45.856,11.782],[45.868,11.781],[45.876,11.781]]}
+{side:"Chiavenna",startLat:46.3170,startLon:9.3988,startElevation:333,endElevation:2113,distance_km:30.0,avgGradient:5.9,maxGradient:10.0,traffic:"medio",exposure:"Sud",elevationProfile:[333,450,580,720,850,980,1100,1220,1340,1460,1560,1660,1760,1860,1950,2030,2080,2113]},
+{side:"Splugen (CH)",startLat:46.5498,startLon:9.3176,startElevation:1457,endElevation:2113,distance_km:9.0,avgGradient:7.3,maxGradient:10.0,traffic:"basso",exposure:"Nord",elevationProfile:[1457,1550,1650,1750,1850,1940,2020,2080,2113]}
 ]},
-{id:"manghen",name:"Passo Manghen",lat:46.1767,lon:11.4542,elevation:2047,region:"Trentino",status:"seasonal",difficulty:9,
-description:"Il passo asfaltato piu alto del Trentino. Quasi zero traffico!",
-tips:["Portare acqua sufficiente","Salita lunga e solitaria"],
+{id:"san-marco",name:"Passo San Marco",lat:46.0659,lon:9.6089,elevation:1985,region:"Lombardia",status:"seasonal",difficulty:8,
+description:"Collega Val Brembana e Valtellina. Pendenze impegnative dal versante bergamasco. Panorama sulle Orobie.",
+tips:["Versante Mezzoldo molto impegnativo","Lungo ma regolare dal versante valtellinese","Pochi servizi nelle vicinanze"],
 versanti:[
-{side:"Borgo Valsugana",startElevation:355,endElevation:2047,distance_km:23.0,avgGradient:7.4,maxGradient:10.5,traffic:"basso",exposure:"Sud",
-elevationProfile:[355,500,650,820,990,1160,1330,1500,1660,1820,1960,2047],
-routeCoords:[[46.040,11.460],[46.060,11.458],[46.080,11.456],[46.100,11.455],[46.120,11.454],[46.140,11.454],[46.160,11.454],[46.177,11.454]]}
+{side:"Mezzoldo (BG)",startLat:46.0134,startLon:9.6564,startElevation:830,endElevation:1985,distance_km:13.0,avgGradient:8.9,maxGradient:13.0,traffic:"basso",exposure:"Sud-Est",elevationProfile:[830,960,1100,1240,1370,1490,1600,1700,1790,1860,1920,1960,1985]},
+{side:"Morbegno (SO)",startLat:46.1361,startLon:9.5711,startElevation:262,endElevation:1985,distance_km:28.0,avgGradient:6.2,maxGradient:10.0,traffic:"basso",exposure:"Nord-Ovest",elevationProfile:[262,400,550,700,850,1000,1120,1240,1350,1450,1550,1640,1730,1810,1880,1940,1970,1985]}
 ]},
-{id:"presolana",name:"Passo della Presolana",lat:45.9650,lon:10.0736,elevation:1297,region:"Lombardia",status:"open",difficulty:5,
-description:"Salita panoramica con vista sulla maestosa Presolana. Dalla bergamasca.",
-tips:["Salita accessibile e panoramica"],
+{id:"grappa",name:"Monte Grappa",lat:45.8712,lon:11.7950,elevation:1745,region:"Veneto",status:"open",difficulty:8,
+description:"Montagna sacra alla Patria. Sacrario militare in vetta. Tre versanti diversi, tutti impegnativi.",
+tips:["Sacrario della Grande Guerra in vetta","Versante Romano il piu famoso e duro","Versante Semonzo con muri impossibili"],
 versanti:[
-{side:"Clusone",startElevation:648,endElevation:1297,distance_km:14.0,avgGradient:4.6,maxGradient:9.0,traffic:"medio",exposure:"Ovest",
-elevationProfile:[648,720,800,880,960,1040,1100,1160,1220,1270,1297],
-routeCoords:[[45.890,10.020],[45.905,10.030],[45.920,10.042],[45.935,10.054],[45.950,10.064],[45.960,10.072],[45.965,10.074]]}
+{side:"Romano d'Ezzelino",startLat:45.7830,startLon:11.7668,startElevation:114,endElevation:1745,distance_km:26.0,avgGradient:6.3,maxGradient:14.0,traffic:"medio",exposure:"Sud",elevationProfile:[114,260,420,580,730,870,1000,1120,1240,1350,1440,1530,1620,1700,1745]},
+{side:"Semonzo",startLat:45.8280,startLon:11.8264,startElevation:180,endElevation:1745,distance_km:20.0,avgGradient:7.8,maxGradient:17.0,traffic:"basso",exposure:"Est",elevationProfile:[180,340,510,680,860,1020,1160,1300,1420,1530,1620,1700,1745]}
 ]},
-{id:"tonale",name:"Passo del Tonale",lat:46.2603,lon:10.5867,elevation:1883,region:"Lombardia",status:"open",difficulty:4,
-description:"Passo ampio tra Val Camonica e Val di Sole. Ideale per principianti.",
-tips:["Salita lunga ma molto dolce","Collegamento per Gavia e Stelvio"],
+{id:"manghen",name:"Passo Manghen",lat:46.1760,lon:11.4478,elevation:2047,region:"Trentino-Alto Adige",status:"seasonal",difficulty:8,
+description:"Salita lunga e selvaggia in Trentino. Poco trafficata, panorami spettacolari sulla Val di Fiemme.",
+tips:["Salita molto lunga, portare provviste","Pochissimo traffico: un paradiso per ciclisti","Panorama val di Fiemme dalla cima"],
 versanti:[
-{side:"Edolo",startElevation:699,endElevation:1883,distance_km:24.0,avgGradient:4.9,maxGradient:8.0,traffic:"medio",exposure:"Ovest",
-elevationProfile:[699,780,870,960,1050,1140,1230,1320,1410,1500,1590,1680,1770,1883],
-routeCoords:[[46.175,10.332],[46.190,10.358],[46.206,10.390],[46.220,10.425],[46.234,10.465],[46.248,10.510],[46.255,10.548],[46.260,10.587]]}
+{side:"Borgo Valsugana",startLat:46.0514,startLon:11.4603,startElevation:380,endElevation:2047,distance_km:28.0,avgGradient:6.0,maxGradient:11.0,traffic:"basso",exposure:"Sud",elevationProfile:[380,500,640,780,920,1060,1190,1300,1420,1530,1640,1750,1850,1940,2010,2047]},
+{side:"Molina di Fiemme",startLat:46.2700,startLon:11.4200,startElevation:960,endElevation:2047,distance_km:18.0,avgGradient:6.0,maxGradient:10.0,traffic:"basso",exposure:"Nord",elevationProfile:[960,1060,1160,1260,1360,1460,1550,1640,1730,1810,1890,1960,2020,2047]}
 ]},
-{id:"fedaia",name:"Passo Fedaia",lat:46.4558,lon:11.8719,elevation:2057,region:"Veneto",status:"seasonal",difficulty:7,
-description:"Ai piedi della Marmolada, con il lago in cima. Muro finale!",
-tips:["Galleria sul versante Canazei: luci obbligatorie"],
+{id:"tonale",name:"Passo del Tonale",lat:46.2575,lon:10.5828,elevation:1883,region:"Lombardia/Trentino",status:"open",difficulty:4,
+description:"Passo comodo che collega Val Camonica e Val di Sole. Ottimo punto di partenza per salite piu dure come Gavia e Mortirolo.",
+tips:["Salita lunga ma mai dura","Molto trafficato: preferire giorni feriali","Base per Gavia e Mortirolo"],
 versanti:[
-{side:"Canazei",startElevation:1465,endElevation:2057,distance_km:14.0,avgGradient:4.2,maxGradient:13.1,traffic:"medio",exposure:"Ovest",
-elevationProfile:[1465,1510,1560,1620,1690,1770,1850,1930,1990,2030,2057],
-routeCoords:[[46.476,11.770],[46.474,11.790],[46.471,11.812],[46.467,11.832],[46.463,11.848],[46.460,11.858],[46.457,11.868],[46.456,11.872]]}
+{side:"Edolo (Val Camonica)",startLat:46.1780,startLon:10.3290,startElevation:690,endElevation:1883,distance_km:27.0,avgGradient:4.4,maxGradient:7.0,traffic:"alto",exposure:"Ovest",elevationProfile:[690,800,910,1020,1120,1220,1310,1400,1480,1560,1640,1720,1790,1850,1883]},
+{side:"Male (Val di Sole)",startLat:46.3529,startLon:10.9108,startElevation:737,endElevation:1883,distance_km:32.0,avgGradient:3.6,maxGradient:7.5,traffic:"alto",exposure:"Est",elevationProfile:[737,830,920,1010,1090,1170,1250,1330,1410,1490,1560,1630,1700,1760,1820,1860,1883]}
 ]},
-{id:"nivolet",name:"Colle del Nivolet",lat:45.5092,lon:7.1494,elevation:2612,region:"Piemonte",status:"seasonal",difficulty:9,
-description:"Spettacolare nel Parco del Gran Paradiso. Chiuso alle auto la domenica!",
-tips:["Chiuso al traffico la domenica in estate!","Stambecchi lungo la strada"],
+{id:"presolana",name:"Passo della Presolana",lat:45.9389,lon:10.0575,elevation:1297,region:"Lombardia",status:"open",difficulty:5,
+description:"Porta d'accesso alle Orobie bergamasche. Panorama sulla parete della Presolana. Salita gradevole.",
+tips:["Ottimo punto di partenza per escursioni","Vista sulla Presolana impressionante","Traffico moderato nei feriali"],
 versanti:[
-{side:"Ceresole Reale",startElevation:1620,endElevation:2612,distance_km:14.0,avgGradient:7.1,maxGradient:12.0,traffic:"basso",exposure:"Est",
-elevationProfile:[1620,1720,1830,1950,2080,2200,2320,2430,2530,2612],
-routeCoords:[[45.434,7.218],[45.445,7.208],[45.456,7.197],[45.467,7.185],[45.478,7.173],[45.488,7.162],[45.498,7.153],[45.509,7.149]]}
+{side:"Clusone",startLat:45.8872,startLon:9.9478,startElevation:648,endElevation:1297,distance_km:14.0,avgGradient:4.6,maxGradient:8.0,traffic:"medio",exposure:"Sud-Ovest",elevationProfile:[648,720,800,880,960,1040,1100,1160,1220,1260,1297]},
+{side:"Angolo Terme",startLat:45.8906,startLon:10.1389,startElevation:318,endElevation:1297,distance_km:22.0,avgGradient:4.5,maxGradient:9.0,traffic:"medio",exposure:"Est",elevationProfile:[318,420,530,640,750,860,950,1040,1100,1160,1220,1270,1297]}
 ]},
-{id:"finestre",name:"Colle delle Finestre",lat:45.0744,lon:7.0556,elevation:2178,region:"Piemonte",status:"seasonal",difficulty:9,
-description:"Famoso per gli 8 km finali in sterrato. Icona del Giro d'Italia.",
-tips:["Ultimi km in sterrato: gomme almeno 25mm","Vista sulla Val di Susa"],
+{id:"vivione",name:"Passo Vivione",lat:46.0367,lon:10.1833,elevation:1828,region:"Lombardia",status:"seasonal",difficulty:7,
+description:"Collega Val Camonica e Val di Scalve. Salita tranquilla e panoramica sulle Orobie.",
+tips:["Pochissimo traffico","Strada stretta nella parte alta","Combinabile con Presolana per un bel giro"],
 versanti:[
-{side:"Meana di Susa",startElevation:540,endElevation:2178,distance_km:18.5,avgGradient:8.9,maxGradient:14.0,traffic:"basso",exposure:"Nord",
-elevationProfile:[540,700,870,1040,1210,1380,1530,1680,1810,1960,2080,2178],
-routeCoords:[[45.122,7.087],[45.116,7.083],[45.110,7.079],[45.104,7.075],[45.098,7.071],[45.092,7.067],[45.086,7.063],[45.080,7.059],[45.074,7.056]]}
+{side:"Schilpario",startLat:45.9833,startLon:10.1500,startElevation:1124,endElevation:1828,distance_km:8.5,avgGradient:8.3,maxGradient:12.0,traffic:"basso",exposure:"Sud",elevationProfile:[1124,1230,1340,1450,1560,1660,1740,1800,1828]},
+{side:"Forno Allione",startLat:46.0900,startLon:10.2100,startElevation:680,endElevation:1828,distance_km:18.0,avgGradient:6.4,maxGradient:10.0,traffic:"basso",exposure:"Nord",elevationProfile:[680,800,920,1040,1160,1260,1360,1460,1540,1620,1700,1760,1800,1828]}
 ]},
-{id:"abetone",name:"Passo dell'Abetone",lat:44.1486,lon:10.6592,elevation:1388,region:"Emilia-Romagna",status:"open",difficulty:5,
-description:"Il passo appenninico classico tra Pistoia e Modena.",
-tips:["Salita lunga e dolce nella foresta"],
+{id:"rolle",name:"Passo Rolle",lat:46.2955,lon:11.7855,elevation:1984,region:"Trentino-Alto Adige",status:"open",difficulty:5,
+description:"Ai piedi delle Pale di San Martino. Salita lunga ma con pendenze moderate. Panorama dolomitico.",
+tips:["Vista sulle Pale di San Martino bellissima","Salita lunga ma mai dura","Ristori a San Martino di Castrozza"],
 versanti:[
-{side:"La Lima / Pistoia",startElevation:454,endElevation:1388,distance_km:17.0,avgGradient:5.5,maxGradient:8.0,traffic:"medio",exposure:"Sud",
-elevationProfile:[454,540,630,720,810,900,1000,1100,1190,1280,1350,1388],
-routeCoords:[[44.020,10.655],[44.040,10.656],[44.060,10.657],[44.080,10.658],[44.100,10.659],[44.120,10.659],[44.140,10.659],[44.149,10.659]]}
+{side:"Predazzo",startLat:46.3133,startLon:11.6000,startElevation:1018,endElevation:1984,distance_km:20.0,avgGradient:4.8,maxGradient:8.0,traffic:"medio",exposure:"Ovest",elevationProfile:[1018,1100,1190,1280,1370,1460,1540,1620,1700,1770,1840,1900,1950,1984]},
+{side:"Fiera di Primiero",startLat:46.1750,startLon:11.8330,startElevation:710,endElevation:1984,distance_km:22.0,avgGradient:5.8,maxGradient:10.0,traffic:"medio",exposure:"Sud-Est",elevationProfile:[710,840,960,1080,1200,1320,1420,1520,1600,1680,1760,1840,1900,1950,1984]}
 ]},
-{id:"futa",name:"Passo della Futa",lat:44.1192,lon:11.2653,elevation:903,region:"Emilia-Romagna",status:"open",difficulty:4,
-description:"Valico principale Appennino tosco-emiliano. Vecchia statale Bologna-Firenze.",
-tips:["Cimitero militare tedesco","Bellissimo in autunno"],
+{id:"croce-daune",name:"Passo Croce d'Aune",lat:46.0744,lon:11.8250,elevation:1011,region:"Veneto",status:"open",difficulty:6,
+description:"Salita storica del ciclismo veneto. Punto di partenza di molte granfondo. Panorama sulla Val Belluna.",
+tips:["Salita breve ma intensa","Punto di partenza della Sportful Dolomiti Race"],
 versanti:[
-{side:"Firenzuola",startElevation:422,endElevation:903,distance_km:12.0,avgGradient:4.0,maxGradient:8.0,traffic:"medio",exposure:"Sud",
-elevationProfile:[422,480,540,600,660,720,780,830,870,903],
-routeCoords:[[44.060,11.260],[44.072,11.262],[44.084,11.264],[44.096,11.265],[44.108,11.266],[44.119,11.265]]}
+{side:"Feltre",startLat:46.0200,startLon:11.9063,startElevation:267,endElevation:1011,distance_km:11.0,avgGradient:6.7,maxGradient:12.0,traffic:"medio",exposure:"Est",elevationProfile:[267,380,500,620,720,800,870,930,970,1000,1011]},
+{side:"Fonzaso",startLat:46.0200,startLon:11.8022,startElevation:340,endElevation:1011,distance_km:9.0,avgGradient:7.5,maxGradient:13.0,traffic:"basso",exposure:"Ovest",elevationProfile:[340,450,560,670,770,860,930,980,1011]}
 ]},
-{id:"zoncolan",name:"Monte Zoncolan",lat:46.4523,lon:12.9289,elevation:1730,region:"Friuli-Venezia Giulia",status:"open",difficulty:10,
-description:"Il Kaiser delle salite: il km piu duro d'Italia (17.6% medio)!",
-tips:["Versante ovest da Ovaro e' brutale","Panorama sulle Alpi Carniche"],
+{id:"abetone",name:"Passo dell'Abetone",lat:44.1489,lon:10.6600,elevation:1388,region:"Toscana/Emilia-Romagna",status:"open",difficulty:5,
+description:"Il valico sull'Appennino tosco-emiliano piu noto. Collega Toscana e Emilia. Frequentato dai ciclisti fiorentini.",
+tips:["Salita lunga e regolare","Centro turistico in vetta con ristori","Traffico variabile nei weekend estivi"],
 versanti:[
-{side:"Ovaro",startElevation:534,endElevation:1730,distance_km:9.8,avgGradient:12.2,maxGradient:17.6,traffic:"basso",exposure:"Ovest",
-elevationProfile:[534,680,850,1020,1180,1340,1480,1600,1700,1730],
-routeCoords:[[46.473,12.870],[46.470,12.882],[46.467,12.894],[46.463,12.905],[46.460,12.914],[46.457,12.922],[46.454,12.928],[46.452,12.929]]},
-{side:"Sutrio",startElevation:538,endElevation:1730,distance_km:13.2,avgGradient:9.1,maxGradient:15.2,traffic:"basso",exposure:"Est",
-elevationProfile:[538,650,770,890,1010,1120,1250,1380,1500,1610,1700,1730],
-routeCoords:[[46.508,12.988],[46.500,12.978],[46.492,12.968],[46.484,12.958],[46.476,12.950],[46.468,12.942],[46.460,12.936],[46.454,12.931],[46.452,12.929]]}
+{side:"San Marcello Piteglio",startLat:44.0600,startLon:10.8000,startElevation:620,endElevation:1388,distance_km:18.0,avgGradient:4.3,maxGradient:8.0,traffic:"medio",exposure:"Sud",elevationProfile:[620,720,810,900,980,1060,1130,1200,1260,1320,1360,1388]},
+{side:"Fanano (MO)",startLat:44.2047,startLon:10.7936,startElevation:640,endElevation:1388,distance_km:22.0,avgGradient:3.4,maxGradient:7.0,traffic:"basso",exposure:"Nord",elevationProfile:[640,720,790,860,930,1000,1060,1120,1180,1230,1280,1320,1360,1388]}
+]},
+{id:"cisa",name:"Passo della Cisa",lat:44.4222,lon:9.9267,elevation:1041,region:"Emilia-Romagna/Toscana",status:"open",difficulty:4,
+description:"Valico storico sull'Appennino sulla via Francigena. Collega Parma a La Spezia.",
+tips:["Salita lunga ma mai ripida","Traffico sulla SS62 variabile","Bella discesa verso la Lunigiana"],
+versanti:[
+{side:"Fornovo di Taro (PR)",startLat:44.6867,startLon:10.0967,startElevation:130,endElevation:1041,distance_km:38.0,avgGradient:2.4,maxGradient:7.0,traffic:"medio",exposure:"Nord",elevationProfile:[130,220,310,400,490,570,650,730,800,870,930,980,1020,1041]},
+{side:"Pontremoli (MS)",startLat:44.3744,startLon:9.8794,startElevation:236,endElevation:1041,distance_km:18.0,avgGradient:4.5,maxGradient:8.0,traffic:"medio",exposure:"Sud",elevationProfile:[236,340,440,540,640,730,810,880,940,990,1025,1041]}
+]},
+{id:"futa",name:"Passo della Futa",lat:44.1172,lon:11.2553,elevation:903,region:"Toscana/Emilia-Romagna",status:"open",difficulty:4,
+description:"Classico valico appenninico tra Firenze e Bologna. Percorso dalla celebre gara automobilistica Mille Miglia.",
+tips:["Salita costante e regolare","Cimitero di guerra germanico in vetta","Ottima da combinare con Passo della Raticosa"],
+versanti:[
+{side:"Firenzuola",startLat:44.1189,startLon:11.3792,startElevation:422,endElevation:903,distance_km:12.0,avgGradient:4.0,maxGradient:7.0,traffic:"medio",exposure:"Est",elevationProfile:[422,490,560,630,700,760,810,850,880,903]},
+{side:"Barberino di Mugello",startLat:44.0000,startLon:11.2400,startElevation:250,endElevation:903,distance_km:20.0,avgGradient:3.3,maxGradient:7.0,traffic:"medio",exposure:"Sud",elevationProfile:[250,340,430,510,590,660,720,770,810,850,880,903]}
+]},
+{id:"aprica",name:"Passo dell'Aprica",lat:46.1530,lon:10.1488,elevation:1175,region:"Lombardia",status:"open",difficulty:4,
+description:"Collega Val Camonica e Valtellina. Salita lunga ma agevole. Centro turistico in vetta.",
+tips:["Salita facile, ideale per principianti","Centro turistico con ristori","Traffico variabile sulla SS39"],
+versanti:[
+{side:"Edolo",startLat:46.1780,startLon:10.3290,startElevation:690,endElevation:1175,distance_km:16.0,avgGradient:3.0,maxGradient:7.0,traffic:"medio",exposure:"Ovest",elevationProfile:[690,750,810,870,930,980,1030,1070,1110,1145,1175]},
+{side:"Tresenda (Teglio)",startLat:46.1700,startLon:10.0600,startElevation:540,endElevation:1175,distance_km:12.5,avgGradient:5.1,maxGradient:9.0,traffic:"medio",exposure:"Est",elevationProfile:[540,620,710,800,890,960,1030,1080,1120,1155,1175]}
+]},
+{id:"san-pellegrino",name:"Passo San Pellegrino",lat:46.3772,lon:11.7833,elevation:1918,region:"Trentino-Alto Adige",status:"seasonal",difficulty:6,
+description:"Collega Val di Fassa e Falcade. Panorama su Civetta e Marmolada. Salita costante e piacevole.",
+tips:["Panorama bellissimo sulle Dolomiti","Ristoro e rifugio in vetta","Combinabile con Valles per un bel giro"],
+versanti:[
+{side:"Moena (Val di Fassa)",startLat:46.3764,startLon:11.6611,startElevation:1184,endElevation:1918,distance_km:14.0,avgGradient:5.2,maxGradient:9.0,traffic:"medio",exposure:"Ovest",elevationProfile:[1184,1280,1370,1450,1530,1610,1690,1760,1820,1870,1918]},
+{side:"Falcade",startLat:46.3567,startLon:11.8700,startElevation:1130,endElevation:1918,distance_km:12.0,avgGradient:6.6,maxGradient:10.0,traffic:"basso",exposure:"Est",elevationProfile:[1130,1230,1330,1430,1530,1620,1710,1790,1850,1900,1918]}
 ]}
 ];

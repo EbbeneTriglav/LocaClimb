@@ -3,75 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>locaClimb</title>
+<title>locaClimb - ride like a local</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 <style>
-:root{--bg:#f8fafc;--bg2:#fff;--txt:#1e293b;--txt2:#64748b;--ac:#2563eb;--bdr:#e2e8f0;--ok:#22c55e;--warn:#f59e0b;--err:#ef4444;--sh:0 1px 3px rgba(0,0,0,.08)}
+:root{--bg:#f8fafc;--bg2:#fff;--txt:#1e293b;--txt2:#64748b;--ac:#2563eb;--bdr:#e2e8f0;--ok:#22c55e;--warn:#f59e0b;--err:#ef4444}
 .dark{--bg:#0f172a;--bg2:#1e293b;--txt:#f1f5f9;--txt2:#94a3b8;--bdr:#334155}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt)}
-#hdr{height:56px;background:var(--bg2);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid var(--bdr);position:relative;z-index:1000}
-#hdr h1{font-size:1.15rem;color:var(--ac);cursor:pointer;white-space:nowrap}
-#hdr h1 span{font-weight:300;color:var(--txt2);font-size:.85rem}
-#search{flex:1;max-width:320px;padding:7px 14px;border:1px solid var(--bdr);border-radius:20px;background:var(--bg);color:var(--txt);font-size:.9rem;outline:none}
+#hdr{height:56px;background:var(--bg2);display:flex;align-items:center;padding:0 12px;gap:8px;border-bottom:1px solid var(--bdr);position:relative;z-index:1000}
+#hdr h1{font-size:1.1rem;color:var(--ac);cursor:pointer;white-space:nowrap}
+#hdr h1 span{font-weight:300;color:var(--txt2);font-size:.8rem}
+#search{flex:1;max-width:280px;padding:7px 14px;border:1px solid var(--bdr);border-radius:20px;background:var(--bg);color:var(--txt);font-size:.9rem;outline:none}
 #search:focus{border-color:var(--ac)}
-.btn{padding:6px 12px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg);color:var(--txt);cursor:pointer;font-size:.9rem}
+.btn{padding:5px 10px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg);color:var(--txt);cursor:pointer;font-size:.85rem}
 .btn:hover{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn.active{background:var(--ok);color:#fff;border-color:var(--ok)}
 #map{position:absolute;top:56px;left:0;right:0;bottom:0;z-index:1}
-#fp{position:fixed;top:56px;left:0;bottom:0;width:280px;background:var(--bg2);border-right:1px solid var(--bdr);padding:20px;overflow-y:auto;transform:translateX(-100%);transition:transform .3s;z-index:999}
+#fp{position:fixed;top:56px;left:0;bottom:0;width:260px;background:var(--bg2);border-right:1px solid var(--bdr);padding:16px;overflow-y:auto;transform:translateX(-100%);transition:transform .3s;z-index:999}
 #fp.open{transform:translateX(0)}
-.fg{margin-bottom:16px}
-.fg label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--txt2);margin-bottom:6px}
-.fg select,.fg input[type=range]{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:6px;background:var(--bg);color:var(--txt)}
-#dp{position:fixed;top:0;right:0;bottom:0;width:520px;background:var(--bg2);overflow-y:auto;transform:translateX(100%);transition:transform .3s ease;z-index:1001;box-shadow:-4px 0 24px rgba(0,0,0,.12)}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--txt2);margin-bottom:4px}
+.fg select,.fg input[type=range]{width:100%;padding:5px;border:1px solid var(--bdr);border-radius:6px;background:var(--bg);color:var(--txt)}
+#dp{position:fixed;top:0;right:0;bottom:0;width:520px;background:var(--bg2);overflow-y:auto;transform:translateX(100%);transition:transform .3s ease;z-index:1001;box-shadow:-4px 0 20px rgba(0,0,0,.1)}
 #dp.open{transform:translateX(0)}
-.dp-hdr{background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;padding:24px 20px}
-.dp-body{padding:20px}
-.section-title{font-size:1rem;font-weight:700;margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--ac);color:var(--ac)}
-.vtable{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:8px}
-.vtable th,.vtable td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--bdr)}
-.vtable th{background:var(--bg);font-weight:600;font-size:.8rem}
+.dp-hdr{background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;padding:20px}
+.dp-body{padding:16px}
+.section-title{font-size:.95rem;font-weight:700;margin:18px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--ac);color:var(--ac)}
+.vtable{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:6px}
+.vtable th,.vtable td{padding:7px 5px;text-align:center;border-bottom:1px solid var(--bdr)}
+.vtable th{background:var(--bg);font-weight:600;font-size:.78rem}
 .vtable td:first-child{text-align:left;font-weight:500}
-.wgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:8px 0}
-.wcard{text-align:center;padding:10px 4px;border-radius:10px;background:var(--bg);border:1px solid var(--bdr)}
+.wgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:6px 0}
+.wcard{text-align:center;padding:8px 3px;border-radius:10px;background:var(--bg);border:1px solid var(--bdr)}
 .wcard.best{border:2px solid var(--ok);background:rgba(34,197,94,.06)}
 .dark .wcard.best{background:rgba(34,197,94,.1)}
-.alert-wind{padding:12px 16px;border-radius:10px;margin:10px 0;font-size:.9rem;display:flex;align-items:center;gap:8px}
-.alert-wind.warn-bg{background:rgba(245,158,11,.12);border:1px solid var(--warn);color:#92400e}
-.alert-wind.err-bg{background:rgba(239,68,68,.12);border:1px solid var(--err);color:#991b1b}
-.dark .alert-wind.warn-bg{color:#fcd34d}
-.dark .alert-wind.err-bg{color:#fca5a5}
-.evt-card{padding:10px 14px;background:var(--bg);border-radius:8px;margin:6px 0;border-left:3px solid var(--ac);font-size:.9rem}
-.sun-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.82rem;background:rgba(245,158,11,.12);color:#854d0e}
+.alert-wind{padding:10px 14px;border-radius:10px;margin:8px 0;font-size:.85rem}
+.alert-wind.wb{background:rgba(245,158,11,.12);border:1px solid var(--warn);color:#92400e}
+.alert-wind.eb{background:rgba(239,68,68,.12);border:1px solid var(--err);color:#991b1b}
+.dark .alert-wind.wb{color:#fcd34d}.dark .alert-wind.eb{color:#fca5a5}
+.evt-card{padding:10px 12px;background:var(--bg);border-radius:8px;margin:5px 0;border-left:3px solid var(--ac);font-size:.85rem}
+.sun-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.8rem;background:rgba(245,158,11,.12);color:#854d0e}
 .dark .sun-badge{background:rgba(245,158,11,.2);color:#fcd34d}
-canvas#elev{width:100%;height:200px;display:block;border-radius:8px;margin:8px 0}
-#be-btn{position:fixed;bottom:20px;left:20px;z-index:998;padding:10px 18px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:24px;cursor:pointer;font-size:.9rem;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,.3)}
-#be-btn:hover{transform:translateY(-2px)}
-#be-panel{position:fixed;bottom:70px;left:20px;width:320px;max-height:400px;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow-y:auto;padding:16px;z-index:998;display:none}
+canvas#elev{width:100%;height:200px;display:block;border-radius:8px;margin:6px 0}
+#be-btn{position:fixed;bottom:20px;left:20px;z-index:998;padding:10px 16px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:24px;cursor:pointer;font-size:.85rem;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+#be-panel{position:fixed;bottom:68px;left:20px;width:300px;max-height:380px;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.1);overflow-y:auto;padding:14px;z-index:998;display:none}
+#rb{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:2px solid var(--ac);padding:12px 16px;z-index:1000;transform:translateY(100%);transition:transform .3s}
+#rb.open{transform:translateY(0)}
+#rb h4{margin:0 0 8px;font-size:.9rem}
+.rb-list{display:flex;gap:6px;overflow-x:auto;padding:4px 0;min-height:32px}
+.rb-item{padding:5px 10px;background:var(--ac);color:#fff;border-radius:16px;font-size:.8rem;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.rb-item .rm{cursor:pointer;opacity:.7;font-weight:700}
+.rb-item .rm:hover{opacity:1}
+.rb-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.rb-btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.82rem;color:#fff}
+.rb-btn.go{background:var(--ok)}.rb-btn.gpx{background:#7c3aed}.rb-btn.rst{background:var(--err)}
+.rb-btn:disabled{opacity:.4;cursor:default}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center}
+#modal.open{display:flex}
+.modal-box{background:var(--bg2);border-radius:16px;padding:24px;max-width:400px;width:90%;color:var(--txt)}
+.modal-box h3{margin:0 0 14px}
+.modal-box textarea,.modal-box input,.modal-box select{width:100%;padding:8px;margin:3px 0 10px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg);color:var(--txt);font-size:.9rem}
+.modal-box textarea{resize:vertical;min-height:80px}
+.route-status{position:fixed;top:64px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;padding:6px 16px;border-radius:20px;font-size:.82rem;z-index:999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.route-status.show{display:block}
 .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(37,99,235,.15)!important}
 .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:rgba(37,99,235,.6)!important;color:#fff!important;font-weight:600}
-@media(max-width:640px){#dp{width:100%}.wgrid{grid-template-columns:repeat(4,1fr)}#hdr h1 span{display:none}}
+@media(max-width:640px){#dp{width:100%}.wgrid{grid-template-columns:repeat(4,1fr)}#hdr h1 span{display:none}.rb-list{flex-wrap:wrap}}
 </style>
 </head>
 <body>
 <div id="hdr">
 <h1 onclick="map.setView([45.8,10.5],7)">&#x26F0;&#xFE0F; locaClimb <span>&#x2014; ride like a local</span></h1>
-<input type="text" id="search" placeholder="&#x1F50D; Cerca passo..." autocomplete="off">
+<input type="text" id="search" placeholder="Cerca passo..." autocomplete="off">
 <button class="btn" id="fb" title="Filtri">&#x2630;</button>
-<button class="btn" id="ob" title="Carica passi OSM">OSM</button>
+<button class="btn" id="rbb" title="Route Builder">&#x1F6A9;</button>
+<button class="btn" id="ob" title="Carica passi da OpenStreetMap">OSM</button>
 <button class="btn" id="db" title="Tema scuro">&#x1F319;</button>
 </div>
 <div id="fp">
-<h3 style="margin-bottom:16px">&#x1F3AF; Filtri</h3>
+<h3 style="margin-bottom:14px">Filtri</h3>
 <div class="fg"><label>Regione</label><select id="fr"><option value="">Tutte</option></select></div>
-<div class="fg"><label>Difficolta minima</label><input type="range" id="fd" min="1" max="10" value="1"><div style="font-size:.85rem;color:var(--txt2)">Da <b id="fdv">1</b> a 10</div></div>
+<div class="fg"><label>Difficolta min</label><input type="range" id="fd" min="1" max="10" value="1"><div style="font-size:.8rem;color:var(--txt2)">Da <b id="fdv">1</b> a 10</div></div>
 <div class="fg"><label>Stato</label><select id="fs"><option value="">Tutti</option><option value="open">Aperto</option><option value="seasonal">Stagionale</option><option value="closed">Chiuso</option></select></div>
-<button class="btn" style="width:100%;margin-top:8px" onclick="resetFilters()">&#x21BB; Reset</button>
-<button class="btn" style="width:100%;margin-top:6px" onclick="closeFP()">Chiudi</button>
+<button class="btn" style="width:100%;margin-top:6px" onclick="resetFilters()">Reset</button>
+<button class="btn" style="width:100%;margin-top:4px" onclick="closeFP()">Chiudi</button>
 </div>
 <div id="dp"></div>
+<div id="rb">
+<h4>&#x1F6A9; Route Builder <span style="font-weight:400;font-size:.8em;color:var(--txt2)">- clicca i passi sulla mappa</span></h4>
+<div class="rb-list" id="rb-list"><span style="color:var(--txt2);font-size:.85rem">Clicca sui passi per aggiungerli...</span></div>
+<div class="rb-actions">
+<button class="rb-btn go" id="rb-go" onclick="calcRoute()" disabled>Calcola Percorso</button>
+<button class="rb-btn gpx" id="rb-gpx" onclick="downloadGPX()" disabled>Scarica GPX</button>
+<button class="rb-btn rst" onclick="resetRoute()">Reset</button>
+<span id="rb-info" style="font-size:.8rem;color:var(--txt2);align-self:center"></span>
+</div>
+</div>
+<div id="modal">
+<div class="modal-box">
+<h3>&#x1F4DD; Segnala informazione</h3>
+<input type="hidden" id="rp-id">
+<div class="fg"><label>Categoria</label><select id="rp-cat"><option>Stato strada</option><option>Traffico</option><option>Chiusura</option><option>Consiglio</option><option>Errore dati</option></select></div>
+<div class="fg"><label>La tua segnalazione</label><textarea id="rp-txt" placeholder="Descrivi..."></textarea></div>
+<div class="fg"><label>Il tuo nome (opzionale)</label><input type="text" id="rp-name" placeholder="Ciclista anonimo"></div>
+<div id="rp-msg" style="display:none;padding:10px;border-radius:8px;background:rgba(34,197,94,.1);color:var(--ok);margin-bottom:10px;text-align:center;font-weight:600"></div>
+<div style="display:flex;gap:8px">
+<button class="rb-btn go" onclick="submitReport()" style="flex:1" id="rp-sub">Invia</button>
+<button class="rb-btn rst" onclick="closeModal()" style="flex:1">Annulla</button>
+</div>
+</div>
+</div>
+<div class="route-status" id="rs">Caricamento tracciato stradale...</div>
 <button id="be-btn" onclick="toggleBE()">&#x1F6B4; Bike Day</button>
 <div id="be-panel"></div>
 <div id="map"></div>
@@ -80,32 +124,24 @@ canvas#elev{width:100%;height:200px;display:block;border-radius:8px;margin:8px 0
 <script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.min.js"></script>
 <script src="passes_data.js"></script>
 <script>
-var map,markers,routeLines=[],weatherCache={};
+var map,markers,routeLines=[],weatherCache={},routeCache={};
+var rbMode=false,rbPasses=[],rbLine=null,rbRouteCoords=[];
+var osmPasses=[];
 var DAYS=["Dom","Lun","Mar","Mer","Gio","Ven","Sab"];
-var WCODES={0:"&#x2600;&#xFE0F;",1:"&#x1F324;&#xFE0F;",2:"&#x26C5;",3:"&#x2601;&#xFE0F;",45:"&#x1F32B;&#xFE0F;",48:"&#x1F32B;&#xFE0F;",51:"&#x1F326;&#xFE0F;",53:"&#x1F326;&#xFE0F;",55:"&#x1F327;&#xFE0F;",56:"&#x1F327;&#xFE0F;",57:"&#x1F327;&#xFE0F;",61:"&#x1F327;&#xFE0F;",63:"&#x1F327;&#xFE0F;",65:"&#x1F327;&#xFE0F;",66:"&#x1F327;&#xFE0F;",67:"&#x1F327;&#xFE0F;",71:"&#x1F328;&#xFE0F;",73:"&#x1F328;&#xFE0F;",75:"&#x1F328;&#xFE0F;",77:"&#x1F328;&#xFE0F;",80:"&#x1F326;&#xFE0F;",81:"&#x1F327;&#xFE0F;",82:"&#x1F327;&#xFE0F;",85:"&#x1F328;&#xFE0F;",86:"&#x1F328;&#xFE0F;",95:"&#x26C8;&#xFE0F;",96:"&#x26C8;&#xFE0F;",99:"&#x26C8;&#xFE0F;"};
-function we(c){return WCODES[c]||"&#x2601;&#xFE0F;";}
+var VCOLS=["#2563eb","#f59e0b","#10b981"];
+var WC={0:"&#x2600;&#xFE0F;",1:"&#x1F324;&#xFE0F;",2:"&#x26C5;",3:"&#x2601;&#xFE0F;",45:"&#x1F32B;&#xFE0F;",48:"&#x1F32B;&#xFE0F;",51:"&#x1F326;&#xFE0F;",53:"&#x1F326;&#xFE0F;",55:"&#x1F327;&#xFE0F;",61:"&#x1F327;&#xFE0F;",63:"&#x1F327;&#xFE0F;",65:"&#x1F327;&#xFE0F;",71:"&#x1F328;&#xFE0F;",73:"&#x1F328;&#xFE0F;",75:"&#x1F328;&#xFE0F;",80:"&#x1F326;&#xFE0F;",81:"&#x1F327;&#xFE0F;",82:"&#x1F327;&#xFE0F;",95:"&#x26C8;&#xFE0F;",96:"&#x26C8;&#xFE0F;",99:"&#x26C8;&#xFE0F;"};
+function we(c){return WC[c]||"&#x2601;&#xFE0F;";}
 function sc(s){return s==="open"?"#22c55e":s==="seasonal"?"#f59e0b":"#ef4444";}
 function sl(s){return s==="open"?"&#x1F7E2; Aperto":s==="seasonal"?"&#x1F7E1; Stagionale":"&#x1F534; Chiuso";}
-function ds(d){var s="";for(var i=0;i<10;i++){s+=(i<d?"&#x2605;":"&#x2606;");}return s;}
-
+function ds(d){var s="";for(var i=0;i<10;i++)s+=(i<d?"&#x2605;":"&#x2606;");return s;}
 function calcSun(lat,lon,exp){
   if(typeof SunCalc==="undefined")return"N/D";
   var dirs={"Nord":[315,45],"Nord-Est":[0,90],"Est":[45,135],"Sud-Est":[90,180],"Sud":[135,225],"Sud-Ovest":[180,270],"Ovest":[225,315],"Nord-Ovest":[270,360]};
   var r=dirs[exp];if(!r)return"N/D";
   var today=new Date(),st=-1,en=-1;
-  for(var h=5;h<=21;h++){
-    var dt=new Date(today.getFullYear(),today.getMonth(),today.getDate(),h,0,0);
-    var pos=SunCalc.getPosition(dt,lat,lon);
-    if(pos.altitude<=0)continue;
-    var az=(pos.azimuth*180/Math.PI+180)%360;
-    var ok=false;
-    if(r[0]>r[1]){ok=(az>=r[0]||az<=r[1]);}else{ok=(az>=r[0]&&az<=r[1]);}
-    if(ok){if(st<0)st=h;en=h;}
-  }
-  if(st<0)return"&#x1F311; In ombra";
-  return"&#x2600;&#xFE0F; Sole "+st+":00-"+en+":00";
+  for(var h=5;h<=21;h++){var dt=new Date(today.getFullYear(),today.getMonth(),today.getDate(),h,0,0);var pos=SunCalc.getPosition(dt,lat,lon);if(pos.altitude<=0)continue;var az=(pos.azimuth*180/Math.PI+180)%360;var ok=false;if(r[0]>r[1])ok=(az>=r[0]||az<=r[1]);else ok=(az>=r[0]&&az<=r[1]);if(ok){if(st<0)st=h;en=h;}}
+  if(st<0)return"&#x1F311; In ombra";return"&#x2600;&#xFE0F; "+st+":00-"+en+":00";
 }
-
 function initMap(){
   map=L.map("map",{center:[45.8,10.5],zoom:7,zoomControl:false});
   L.control.zoom({position:"topright"}).addTo(map);
@@ -115,78 +151,82 @@ function initMap(){
   var sat=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:18,attribution:"Esri"});
   osm.addTo(map);
   L.control.layers({"OSM":osm,"CyclOSM":cyc,"Topo":topo,"Satellite":sat},{},{position:"topright"}).addTo(map);
-  markers=L.markerClusterGroup({maxClusterRadius:50});
-  map.addLayer(markers);
-  addMarkers(PASSES_DATA);
-  populateRegions();
+  markers=L.markerClusterGroup({maxClusterRadius:50});map.addLayer(markers);
+  addMarkers(PASSES_DATA);populateRegions();
 }
-
-function populateRegions(){
-  var regs={};PASSES_DATA.forEach(function(p){regs[p.region]=1;});
-  var sel=document.getElementById("fr");
-  Object.keys(regs).sort().forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;sel.appendChild(o);});
-}
-
+function populateRegions(){var rs={};PASSES_DATA.forEach(function(p){rs[p.region]=1;});var sel=document.getElementById("fr");Object.keys(rs).sort().forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;sel.appendChild(o);});}
 function addMarkers(data){
   markers.clearLayers();
   data.forEach(function(p){
     var c=L.circleMarker([p.lat,p.lon],{radius:10,fillColor:sc(p.status),color:"#fff",weight:2,fillOpacity:0.9});
     var evts=getEvts(p.id);
     var evTag=evts.length>0?"<br>&#x1F6B4; <b>"+evts.length+" Bike Day!</b>":"";
-    c.bindPopup(
-      '<div style="min-width:200px"><b style="font-size:1.1em">'+p.name+'</b>'+
-      '<br>&#x26F0;&#xFE0F; '+p.elevation+' m &middot; '+sl(p.status)+
-      '<br><span style="color:#f59e0b;letter-spacing:1px">'+ds(p.difficulty)+'</span> ('+p.difficulty+'/10)'+
-      '<br>&#x1F4CD; '+p.region+evTag+
-      '<br><button onclick="openD(\''+p.id+'\')" style="margin-top:8px;padding:8px 20px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">Dettagli &#x2192;</button></div>'
-    );
+    c.bindPopup(function(){
+      return '<div style="min-width:200px"><b style="font-size:1.05em">'+p.name+'</b><br>&#x26F0;&#xFE0F; '+p.elevation+' m &middot; '+sl(p.status)+'<br><span style="color:#f59e0b;letter-spacing:1px">'+ds(p.difficulty)+'</span> ('+p.difficulty+'/10)<br>&#x1F4CD; '+p.region+evTag+'<br><button onclick="openD(\''+p.id+'\')" style="margin-top:6px;padding:7px 14px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">Dettagli</button> <button onclick="addToRoute(\''+p.id+'\')" style="margin-top:6px;padding:7px 14px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">+ Route</button></div>';
+    });
+    markers.addLayer(c);
+  });
+  // also re-add OSM passes if any
+  osmPasses.forEach(function(op){
+    var c=L.circleMarker([op.lat,op.lon],{radius:7,fillColor:"#94a3b8",color:"#fff",weight:1,fillOpacity:0.7});
+    c.bindPopup('<div><b>'+op.name+'</b><br>'+op.elevation+' m<br><i style="color:#94a3b8">da OpenStreetMap</i><br><button onclick="openOsmD('+op.lat+','+op.lon+',\''+op.name.replace(/'/g,"\\'")+'\','+op.elevation+')" style="margin-top:4px;padding:5px 12px;background:#64748b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.82rem">Meteo &amp; Mappa</button></div>');
     markers.addLayer(c);
   });
 }
+function getEvts(id){var now=new Date();return BIKE_EVENTS.filter(function(e){return e.passes.indexOf(id)>=0&&new Date(e.date)>=now;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);});}
+function clearRoutes(){routeLines.forEach(function(l){map.removeLayer(l);});routeLines=[];}
+function showRS(msg){var el=document.getElementById("rs");el.innerHTML=msg;el.classList.add("show");}
+function hideRS(){document.getElementById("rs").classList.remove("show");}
 
-function getEvts(id){
-  var now=new Date();
-  return BIKE_EVENTS.filter(function(e){return e.passes.indexOf(id)>=0&&new Date(e.date)>=now;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+/* ===== OSRM ROAD ROUTING FOR VERSANTI ===== */
+function fetchVersanteRoute(v,p,colorIdx){
+  var key=v.startLat+","+v.startLon+">"+p.lat+","+p.lon;
+  if(routeCache[key]){
+    var line=L.polyline(routeCache[key],{color:VCOLS[colorIdx],weight:5,opacity:0.85});
+    line.addTo(map);routeLines.push(line);
+    return Promise.resolve(line);
+  }
+  var url="https://router.project-osrm.org/route/v1/bike/"+v.startLon+","+v.startLat+";"+p.lon+","+p.lat+"?overview=full&geometries=geojson";
+  return fetch(url).then(function(r){return r.json();}).then(function(data){
+    if(!data.routes||!data.routes.length)throw new Error("no route");
+    var coords=data.routes[0].geometry.coordinates.map(function(c){return[c[1],c[0]];});
+    routeCache[key]=coords;
+    var line=L.polyline(coords,{color:VCOLS[colorIdx],weight:5,opacity:0.85});
+    line.addTo(map);routeLines.push(line);
+    return line;
+  }).catch(function(){
+    // fallback: straight line
+    var coords=[[v.startLat,v.startLon],[p.lat,p.lon]];
+    var line=L.polyline(coords,{color:VCOLS[colorIdx],weight:3,opacity:0.5,dashArray:"8,8"});
+    line.addTo(map);routeLines.push(line);
+    return line;
+  });
 }
 
-function clearRoutes(){routeLines.forEach(function(l){map.removeLayer(l);});routeLines=[];}
-
 function openD(id){
-  var p=PASSES_DATA.find(function(x){return x.id===id;});
-  if(!p)return;
+  var p=PASSES_DATA.find(function(x){return x.id===id;});if(!p)return;
   map.closePopup();clearRoutes();
-  var colors=["#2563eb","#f59e0b","#10b981"];
-  p.versanti.forEach(function(v,i){
-    if(v.routeCoords&&v.routeCoords.length>1){
-      var line=L.polyline(v.routeCoords,{color:colors[i],weight:5,opacity:0.8});
-      line.addTo(map);routeLines.push(line);
-    }
+  showRS("Caricamento tracciati stradali...");
+  // Fetch OSRM routes for all versanti
+  var promises=p.versanti.map(function(v,i){return fetchVersanteRoute(v,p,i);});
+  Promise.all(promises).then(function(){
+    hideRS();
+    if(routeLines.length>0)map.fitBounds(L.featureGroup(routeLines).getBounds().pad(0.15),{maxZoom:13});
+    else map.setView([p.lat,p.lon],11);
   });
-  if(routeLines.length>0){map.fitBounds(L.featureGroup(routeLines).getBounds().pad(0.2),{maxZoom:13});}
-  else{map.setView([p.lat,p.lon],11);}
-
+  // Build detail panel
   var h='<div class="dp-hdr"><div style="display:flex;justify-content:space-between;align-items:start"><div>';
-  h+='<h2 style="margin:0;font-size:1.4em">&#x26F0;&#xFE0F; '+p.name+'</h2>';
-  h+='<p style="margin:4px 0;opacity:.9">'+p.elevation+' m &middot; '+p.region+'</p>';
-  h+='<p style="margin:4px 0">'+sl(p.status)+' &middot; <span style="color:#f59e0b;letter-spacing:1px">'+ds(p.difficulty)+'</span></p>';
-  h+='</div><button onclick="closeD()" style="background:rgba(255,255,255,.2);border:none;color:#fff;font-size:1.4em;cursor:pointer;border-radius:8px;padding:4px 12px">&#x2715;</button></div></div>';
+  h+='<h2 style="margin:0;font-size:1.3em">&#x26F0;&#xFE0F; '+p.name+'</h2>';
+  h+='<p style="margin:3px 0;opacity:.9">'+p.elevation+' m &middot; '+p.region+'</p>';
+  h+='<p style="margin:3px 0">'+sl(p.status)+' &middot; <span style="color:#f59e0b">'+ds(p.difficulty)+'</span></p>';
+  h+='</div><button onclick="closeD()" style="background:rgba(255,255,255,.2);border:none;color:#fff;font-size:1.3em;cursor:pointer;border-radius:8px;padding:4px 10px">&#x2715;</button></div></div>';
   h+='<div class="dp-body">';
-  h+='<p style="color:var(--txt2);margin-bottom:16px;line-height:1.6">'+p.description+'</p>';
-
+  h+='<p style="color:var(--txt2);margin-bottom:14px;line-height:1.5">'+p.description+'</p>';
   var evts=getEvts(p.id);
-  if(evts.length>0){
-    h+='<div class="section-title">&#x1F6B4; Bike Day - Solo Bici!</div>';
-    evts.forEach(function(e){
-      var d=new Date(e.date);
-      h+='<div class="evt-card"><b>'+e.name+'</b><br>&#x1F4C5; '+d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"})+'<br>&#x23F0; '+e.hours;
-      if(e.url){h+=' &middot; <a href="'+e.url+'" target="_blank" style="color:var(--ac)">Info &#x1F517;</a>';}
-      h+='</div>';
-    });
-  }
-
+  if(evts.length>0){h+='<div class="section-title">&#x1F6B4; Bike Day - Solo Bici!</div>';evts.forEach(function(e){var d=new Date(e.date);h+='<div class="evt-card"><b>'+e.name+'</b><br>&#x1F4C5; '+d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"})+'<br>&#x23F0; '+e.hours;if(e.url)h+=' &middot; <a href="'+e.url+'" target="_blank" style="color:var(--ac)">Info</a>';h+='</div>';});}
   h+='<div class="section-title">&#x2694;&#xFE0F; Confronto Versanti</div>';
   h+='<table class="vtable"><thead><tr><th></th>';
-  p.versanti.forEach(function(v,i){h+='<th style="color:'+colors[i]+'">'+v.side+'</th>';});
+  p.versanti.forEach(function(v,i){h+='<th style="color:'+VCOLS[i]+'">&#x25CF; '+v.side+'</th>';});
   h+='</tr></thead><tbody>';
   h+='<tr><td>Distanza</td>';p.versanti.forEach(function(v){h+='<td><b>'+v.distance_km+' km</b></td>';});h+='</tr>';
   h+='<tr><td>Dislivello</td>';p.versanti.forEach(function(v){h+='<td>'+(v.endElevation-v.startElevation)+' m</td>';});h+='</tr>';
@@ -194,175 +234,138 @@ function openD(id){
   h+='<tr><td>Pend. max</td>';p.versanti.forEach(function(v){h+='<td><b>'+v.maxGradient+'%</b></td>';});h+='</tr>';
   h+='<tr><td>Traffico</td>';p.versanti.forEach(function(v){h+='<td>'+v.traffic+'</td>';});h+='</tr>';
   h+='<tr><td>Esposizione</td>';p.versanti.forEach(function(v){h+='<td>'+v.exposure+'</td>';});h+='</tr>';
-  h+='<tr><td>&#x2600;&#xFE0F; Sole</td>';
-  p.versanti.forEach(function(v){h+='<td><span class="sun-badge">'+calcSun(p.lat,p.lon,v.exposure)+'</span></td>';});
-  h+='</tr></tbody></table>';
-
-  h+='<div class="section-title">&#x1F4C8; Profilo Altimetrico</div>';
-  h+='<canvas id="elev"></canvas>';
-
-  h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div>';
-  h+='<div id="wbox" style="text-align:center;padding:20px;color:var(--txt2)">Caricamento meteo...</div>';
-
-  if(p.tips&&p.tips.length>0){
-    h+='<div class="section-title">&#x1F4A1; Consigli</div><ul style="padding-left:18px">';
-    p.tips.forEach(function(t){h+='<li style="margin:6px 0;color:var(--txt2)">'+t+'</li>';});
-    h+='</ul>';
-  }
+  h+='<tr><td>&#x2600;&#xFE0F; Sole</td>';p.versanti.forEach(function(v){h+='<td><span class="sun-badge">'+calcSun(p.lat,p.lon,v.exposure)+'</span></td>';});h+='</tr>';
+  h+='</tbody></table>';
+  h+='<div class="section-title">&#x1F4C8; Profilo Altimetrico</div><canvas id="elev"></canvas>';
+  h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div><div id="wbox" style="text-align:center;padding:16px;color:var(--txt2)">Caricamento meteo...</div>';
+  if(p.tips&&p.tips.length>0){h+='<div class="section-title">&#x1F4A1; Consigli</div><ul style="padding-left:16px">';p.tips.forEach(function(t){h+='<li style="margin:5px 0;color:var(--txt2)">'+t+'</li>';});h+='</ul>';}
+  h+='<div style="margin-top:16px;text-align:center"><button onclick="openReport(\''+p.id+'\')" class="btn" style="padding:8px 20px">&#x1F4DD; Segnala informazione</button></div>';
   h+='</div>';
-  document.getElementById("dp").innerHTML=h;
-  document.getElementById("dp").classList.add("open");
-  setTimeout(function(){drawElev(p);},80);
-  fetchW(p.lat,p.lon);
+  document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
+  setTimeout(function(){drawElev(p);},80);fetchW(p.lat,p.lon);
 }
+function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();hideRS();}
 
-function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();}
+/* ===== OSM PASS DETAIL (simplified) ===== */
+function openOsmD(lat,lon,name,elev){
+  map.closePopup();clearRoutes();
+  var h='<div class="dp-hdr"><div style="display:flex;justify-content:space-between;align-items:start"><div>';
+  h+='<h2 style="margin:0;font-size:1.3em">&#x26F0;&#xFE0F; '+name+'</h2>';
+  h+='<p style="margin:3px 0;opacity:.9">'+elev+' m &middot; da OpenStreetMap</p>';
+  h+='</div><button onclick="closeD()" style="background:rgba(255,255,255,.2);border:none;color:#fff;font-size:1.3em;cursor:pointer;border-radius:8px;padding:4px 10px">&#x2715;</button></div></div>';
+  h+='<div class="dp-body">';
+  h+='<p style="color:var(--txt2);margin-bottom:14px">Passo individuato automaticamente da OpenStreetMap. Dati di versanti non ancora disponibili.</p>';
+  h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div><div id="wbox" style="text-align:center;padding:16px;color:var(--txt2)">Caricamento meteo...</div>';
+  h+='<div style="margin-top:16px;text-align:center"><a href="https://map.project-osrm.org/?z=13&center='+lat+','+lon+'" target="_blank" class="btn" style="padding:8px 20px;text-decoration:none">&#x1F30D; Apri su OSRM Map</a></div>';
+  h+='</div>';
+  document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
+  map.setView([lat,lon],12);
+  fetchW(lat,lon);
+}
 
 function drawElev(p){
   var c=document.getElementById("elev");if(!c)return;
-  var dpr=window.devicePixelRatio||1;
-  c.width=c.offsetWidth*dpr;c.height=400;
-  var ctx=c.getContext("2d");ctx.scale(dpr,dpr);
-  var W=c.offsetWidth,H=200;
-  var allE=[];p.versanti.forEach(function(v){allE=allE.concat(v.elevationProfile);});
-  if(!allE.length)return;
+  var dpr=window.devicePixelRatio||1;c.width=c.offsetWidth*dpr;c.height=400;
+  var ctx=c.getContext("2d");ctx.scale(dpr,dpr);var W=c.offsetWidth,H=200;
+  var allE=[];p.versanti.forEach(function(v){if(v.elevationProfile)allE=allE.concat(v.elevationProfile);});if(!allE.length)return;
   var mn=Math.min.apply(null,allE)-50,mx=Math.max.apply(null,allE)+50;
-  var isDark=document.body.classList.contains("dark");
-  ctx.fillStyle=isDark?"#1e293b":"#f8fafc";ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle=isDark?"#334155":"#e2e8f0";ctx.lineWidth=0.5;
-  ctx.font="10px system-ui";ctx.fillStyle=isDark?"#64748b":"#94a3b8";
-  for(var i=0;i<=4;i++){
-    var y=15+(H-35)*(1-i/4);var el=Math.round(mn+(mx-mn)*i/4);
-    ctx.beginPath();ctx.moveTo(38,y);ctx.lineTo(W-8,y);ctx.stroke();
-    ctx.textAlign="right";ctx.fillText(el+"m",34,y+3);
-  }
-  var cols=["#2563eb","#f59e0b","#10b981"];
-  p.versanti.forEach(function(v,vi){
-    var pr=v.elevationProfile,n=pr.length;if(n<2)return;
-    ctx.beginPath();
-    for(var i=0;i<n;i++){
-      var x=38+(i/(n-1))*(W-46);var y=15+(H-35)*(1-(pr[i]-mn)/(mx-mn));
-      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle=cols[vi];ctx.lineWidth=2.5;ctx.globalAlpha=1;ctx.stroke();
-    ctx.lineTo(38+(n-1)/(n-1)*(W-46),H-20);ctx.lineTo(38,H-20);ctx.closePath();
-    ctx.globalAlpha=0.1;ctx.fillStyle=cols[vi];ctx.fill();ctx.globalAlpha=1;
-  });
-  p.versanti.forEach(function(v,vi){
-    ctx.fillStyle=cols[vi];ctx.fillRect(44+vi*150,4,12,12);
-    ctx.fillStyle=isDark?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";
-    ctx.fillText(v.side.substring(0,18),60+vi*150,14);
-  });
+  var dk=document.body.classList.contains("dark");
+  ctx.fillStyle=dk?"#1e293b":"#f8fafc";ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#64748b":"#94a3b8";
+  for(var i=0;i<=4;i++){var y=15+(H-35)*(1-i/4);var el=Math.round(mn+(mx-mn)*i/4);ctx.beginPath();ctx.moveTo(38,y);ctx.lineTo(W-8,y);ctx.stroke();ctx.textAlign="right";ctx.fillText(el+"m",34,y+3);}
+  p.versanti.forEach(function(v,vi){var pr=v.elevationProfile;if(!pr||pr.length<2)return;var n=pr.length;ctx.beginPath();for(var i=0;i<n;i++){var x=38+(i/(n-1))*(W-46);var y=15+(H-35)*(1-(pr[i]-mn)/(mx-mn));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.strokeStyle=VCOLS[vi];ctx.lineWidth=2.5;ctx.globalAlpha=1;ctx.stroke();ctx.lineTo(38+(n-1)/(n-1)*(W-46),H-20);ctx.lineTo(38,H-20);ctx.closePath();ctx.globalAlpha=0.1;ctx.fillStyle=VCOLS[vi];ctx.fill();ctx.globalAlpha=1;});
+  p.versanti.forEach(function(v,vi){ctx.fillStyle=VCOLS[vi];ctx.fillRect(44+vi*140,4,10,10);ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";ctx.fillText(v.side.substring(0,16),58+vi*140,13);});
 }
-
 function fetchW(lat,lon){
-  var k=lat.toFixed(1)+","+lon.toFixed(1);
-  if(weatherCache[k]){renderW(weatherCache[k]);return;}
+  var k=lat.toFixed(1)+","+lon.toFixed(1);if(weatherCache[k]){renderW(weatherCache[k]);return;}
   fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,weathercode&timezone=Europe/Rome&forecast_days=7")
-  .then(function(r){return r.json();})
-  .then(function(d){weatherCache[k]=d;renderW(d);})
-  .catch(function(){var e=document.getElementById("wbox");if(e)e.innerHTML="<p style='color:var(--err)'>&#x26A0; Meteo non disponibile</p>";});
+  .then(function(r){return r.json();}).then(function(d){weatherCache[k]=d;renderW(d);})
+  .catch(function(){var e=document.getElementById("wbox");if(e)e.innerHTML="<p style='color:var(--err)'>Meteo non disponibile</p>";});
 }
-
 function renderW(data){
   var el=document.getElementById("wbox");if(!el||!data.daily)return;
   var d=data.daily,h="",maxW=0,scores=[];
-  for(var i=0;i<d.time.length;i++){
-    var w=d.windspeed_10m_max[i]||0;if(w>maxW)maxW=w;
-    var s=100;s-=(d.precipitation_probability_max[i]||0)*0.6;
-    if(w>30)s-=(w-30)*2;
-    var t=d.temperature_2m_max[i]||15;if(t<8)s-=(8-t)*3;if(t>32)s-=(t-32)*4;
-    var dow=new Date(d.time[i]).getDay();if(dow===0||dow===6)s-=8;
-    scores.push(s);
-  }
+  for(var i=0;i<d.time.length;i++){var w=d.windspeed_10m_max[i]||0;if(w>maxW)maxW=w;var s=100;s-=(d.precipitation_probability_max[i]||0)*0.6;if(w>30)s-=(w-30)*2;var t=d.temperature_2m_max[i]||15;if(t<8)s-=(8-t)*3;if(t>32)s-=(t-32)*4;var dow=new Date(d.time[i]).getDay();if(dow===0||dow===6)s-=8;scores.push(s);}
   var bI=scores.indexOf(Math.max.apply(null,scores));
-  if(maxW>60)h+='<div class="alert-wind err-bg">&#x1F534; <b>ATTENZIONE:</b> Vento fino a '+Math.round(maxW)+' km/h. Salita sconsigliata!</div>';
-  else if(maxW>40)h+='<div class="alert-wind warn-bg">&#x26A0;&#xFE0F; <b>Vento forte:</b> fino a '+Math.round(maxW)+' km/h.</div>';
+  if(maxW>60)h+='<div class="alert-wind eb">&#x1F534; <b>ATTENZIONE:</b> Raffiche fino a '+Math.round(maxW)+' km/h!</div>';
+  else if(maxW>40)h+='<div class="alert-wind wb">&#x26A0;&#xFE0F; <b>Vento forte:</b> fino a '+Math.round(maxW)+' km/h</div>';
   h+='<div class="wgrid">';
-  for(var i=0;i<d.time.length;i++){
-    var dt=new Date(d.time[i]),dn=DAYS[dt.getDay()];
-    h+='<div class="wcard'+(i===bI?" best":"")+'">';
-    h+='<div style="font-weight:600;font-size:.85em">'+dn+' '+dt.getDate()+'</div>';
-    h+='<div style="font-size:1.6em;margin:4px 0">'+we(d.weathercode[i])+'</div>';
-    h+='<div style="font-weight:700">'+Math.round(d.temperature_2m_max[i])+'&#xB0;</div>';
-    h+='<div style="font-size:.8em;opacity:.6">'+Math.round(d.temperature_2m_min[i])+'&#xB0;</div>';
-    h+='<div style="font-size:.75em;margin-top:3px">&#x1F4A7;'+Math.round(d.precipitation_probability_max[i])+'%</div>';
-    h+='<div style="font-size:.75em">&#x1F4A8;'+Math.round(d.windspeed_10m_max[i])+'</div>';
-    if(i===bI)h+='<div style="font-size:.7em;color:var(--ok);font-weight:700;margin-top:3px">&#x2B50; BEST</div>';
-    h+='</div>';
-  }
-  h+='</div>';
-  var bd=new Date(d.time[bI]);
-  h+='<p style="margin-top:12px;text-align:center;font-weight:600;font-size:.95em">&#x2B50; Miglior giorno: <span style="color:var(--ok)">'+bd.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"})+'</span></p>';
+  for(var i=0;i<d.time.length;i++){var dt=new Date(d.time[i]),dn=DAYS[dt.getDay()];h+='<div class="wcard'+(i===bI?" best":"")+'"><div style="font-weight:600;font-size:.8em">'+dn+' '+dt.getDate()+'</div><div style="font-size:1.5em;margin:3px 0">'+we(d.weathercode[i])+'</div><div style="font-weight:700">'+Math.round(d.temperature_2m_max[i])+'&#xB0;</div><div style="font-size:.75em;opacity:.6">'+Math.round(d.temperature_2m_min[i])+'&#xB0;</div><div style="font-size:.7em;margin-top:2px">&#x1F4A7;'+Math.round(d.precipitation_probability_max[i])+'%</div><div style="font-size:.7em">&#x1F4A8;'+Math.round(d.windspeed_10m_max[i])+'</div>';if(i===bI)h+='<div style="font-size:.65em;color:var(--ok);font-weight:700;margin-top:2px">BEST</div>';h+='</div>';}
+  h+='</div>';var bd=new Date(d.time[bI]);
+  h+='<p style="margin-top:10px;text-align:center;font-weight:600;font-size:.9em">&#x2B50; Miglior giorno: <span style="color:var(--ok)">'+bd.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"})+'</span></p>';
   el.innerHTML=h;
 }
-
+/* ===== ROUTE BUILDER ===== */
+function toggleRB(){rbMode=!rbMode;document.getElementById("rb").classList.toggle("open",rbMode);document.getElementById("rbb").classList.toggle("active",rbMode);if(rbMode){document.getElementById("be-btn").style.display="none";}else{document.getElementById("be-btn").style.display="";resetRoute();}}
+function addToRoute(id){var p=PASSES_DATA.find(function(x){return x.id===id;});if(!p)return;rbPasses.push(p);map.closePopup();if(!rbMode)toggleRB();updateRBList();}
+function removeFromRoute(idx){rbPasses.splice(idx,1);updateRBList();}
+function updateRBList(){var el=document.getElementById("rb-list");if(!rbPasses.length){el.innerHTML='<span style="color:var(--txt2);font-size:.85rem">Clicca sui passi...</span>';document.getElementById("rb-go").disabled=true;return;}var h="";rbPasses.forEach(function(p,i){h+='<div class="rb-item">'+p.name+' <span class="rm" onclick="removeFromRoute('+i+')">&#x2715;</span></div>';});el.innerHTML=h;document.getElementById("rb-go").disabled=rbPasses.length<2;}
+function calcRoute(){
+  if(rbPasses.length<2)return;
+  var coords=rbPasses.map(function(p){return p.lon+","+p.lat;}).join(";");
+  document.getElementById("rb-go").textContent="Calcolo...";document.getElementById("rb-go").disabled=true;
+  fetch("https://router.project-osrm.org/route/v1/bike/"+coords+"?overview=full&geometries=geojson")
+  .then(function(r){return r.json();}).then(function(data){
+    if(data.code!=="Ok"||!data.routes||!data.routes.length){document.getElementById("rb-info").textContent="Percorso non trovato";document.getElementById("rb-go").textContent="Calcola Percorso";document.getElementById("rb-go").disabled=false;return;}
+    var route=data.routes[0];rbRouteCoords=route.geometry.coordinates.map(function(c){return[c[1],c[0]];});
+    if(rbLine){map.removeLayer(rbLine);}
+    rbLine=L.polyline(rbRouteCoords,{color:"#22c55e",weight:6,opacity:0.85});rbLine.addTo(map);
+    map.fitBounds(rbLine.getBounds().pad(0.1));
+    var dist=(route.distance/1000).toFixed(1);var dur=Math.round(route.duration/60);
+    document.getElementById("rb-info").innerHTML="&#x1F4CD; "+dist+" km &middot; ~"+dur+" min";
+    document.getElementById("rb-go").textContent="Calcola Percorso";document.getElementById("rb-go").disabled=false;document.getElementById("rb-gpx").disabled=false;
+  }).catch(function(){document.getElementById("rb-info").textContent="Errore OSRM";document.getElementById("rb-go").textContent="Calcola Percorso";document.getElementById("rb-go").disabled=false;});
+}
+function resetRoute(){rbPasses=[];rbRouteCoords=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;}
+function generateGPX(){var now=new Date().toISOString();var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="locaClimb">\n<metadata><name>locaClimb Route</name><time>'+now+'</time></metadata>\n';rbPasses.forEach(function(p){g+='<wpt lat="'+p.lat+'" lon="'+p.lon+'"><name>'+p.name+'</name><ele>'+p.elevation+'</ele></wpt>\n';});g+='<trk><name>'+rbPasses.map(function(p){return p.name;}).join(" - ")+'</name><trkseg>\n';rbRouteCoords.forEach(function(c){g+='<trkpt lat="'+c[0].toFixed(6)+'" lon="'+c[1].toFixed(6)+'"></trkpt>\n';});g+='</trkseg></trk>\n</gpx>';return g;}
+function downloadGPX(){var g=generateGPX();var b=new Blob([g],{type:"application/gpx+xml"});var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download="locaclimb_route.gpx";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
+/* ===== USER CONTRIBUTIONS ===== */
+function openReport(id){document.getElementById("rp-id").value=id;document.getElementById("rp-msg").style.display="none";document.getElementById("rp-txt").value="";document.getElementById("rp-name").value="";document.getElementById("rp-sub").disabled=false;document.getElementById("modal").classList.add("open");}
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+function submitReport(){var txt=document.getElementById("rp-txt").value.trim();if(!txt){document.getElementById("rp-txt").style.borderColor="var(--err)";return;}document.getElementById("rp-sub").disabled=true;var msg=document.getElementById("rp-msg");msg.innerHTML="&#x2705; Grazie! Segnalazione in revisione.";msg.style.display="block";setTimeout(closeModal,2500);}
+/* ===== FILTERS / SEARCH / DARK / OSM / EVENTS ===== */
 function openFP(){document.getElementById("fp").classList.toggle("open");}
 function closeFP(){document.getElementById("fp").classList.remove("open");}
-function applyFilters(){
-  var reg=document.getElementById("fr").value;
-  var diff=parseInt(document.getElementById("fd").value);
-  var sta=document.getElementById("fs").value;
-  var q=document.getElementById("search").value.toLowerCase();
-  var f=PASSES_DATA.filter(function(p){
-    if(reg&&p.region!==reg)return false;
-    if(p.difficulty<diff)return false;
-    if(sta&&p.status!==sta)return false;
-    if(q&&p.name.toLowerCase().indexOf(q)<0&&p.region.toLowerCase().indexOf(q)<0)return false;
-    return true;
-  });
-  addMarkers(f);
-}
-function resetFilters(){
-  document.getElementById("fr").value="";document.getElementById("fd").value="1";document.getElementById("fdv").textContent="1";document.getElementById("fs").value="";document.getElementById("search").value="";
-  addMarkers(PASSES_DATA);
-}
+function applyFilters(){var reg=document.getElementById("fr").value,diff=parseInt(document.getElementById("fd").value),sta=document.getElementById("fs").value,q=document.getElementById("search").value.toLowerCase();var f=PASSES_DATA.filter(function(p){if(reg&&p.region!==reg)return false;if(p.difficulty<diff)return false;if(sta&&p.status!==sta)return false;if(q&&p.name.toLowerCase().indexOf(q)<0&&p.region.toLowerCase().indexOf(q)<0)return false;return true;});addMarkers(f);}
+function resetFilters(){document.getElementById("fr").value="";document.getElementById("fd").value="1";document.getElementById("fdv").textContent="1";document.getElementById("fs").value="";document.getElementById("search").value="";addMarkers(PASSES_DATA);}
+function toggleBE(){var pn=document.getElementById("be-panel");pn.style.display=pn.style.display==="block"?"none":"block";if(pn.style.display!=="block")return;var now=new Date();var evts=BIKE_EVENTS.filter(function(e){return new Date(e.date)>=now;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);}).slice(0,8);var h='<h3 style="margin:0 0 10px">&#x1F6B4; Prossimi Bike Day</h3>';if(!evts.length)h+='<p style="color:var(--txt2)">Nessun evento</p>';else evts.forEach(function(e){var d=new Date(e.date);var diff=Math.ceil((d-now)/86400000);h+='<div class="evt-card"><b>'+e.name+'</b><br>'+d.toLocaleDateString("it-IT",{weekday:"short",day:"numeric",month:"long"});if(diff<=30)h+=' <b style="color:var(--err)">(tra '+diff+'gg!)</b>';h+='<br>'+e.hours+'</div>';});pn.innerHTML=h;}
 
-function toggleBE(){
-  var pn=document.getElementById("be-panel");
-  pn.style.display=pn.style.display==="block"?"none":"block";
-  if(pn.style.display!=="block")return;
-  var now=new Date();
-  var evts=BIKE_EVENTS.filter(function(e){return new Date(e.date)>=now;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);}).slice(0,8);
-  var h='<h3 style="margin:0 0 12px">&#x1F6B4; Prossimi Bike Day</h3>';
-  if(!evts.length){h+='<p style="color:var(--txt2)">Nessun evento in programma</p>';}
-  else{evts.forEach(function(e){
-    var d=new Date(e.date);
-    var diff=Math.ceil((d-now)/86400000);
-    h+='<div class="evt-card"><b>'+e.name+'</b><br>&#x1F4C5; '+d.toLocaleDateString("it-IT",{weekday:"short",day:"numeric",month:"long"});
-    if(diff<=30)h+=' <b style="color:var(--err)">(tra '+diff+'gg!)</b>';
-    h+='<br>&#x23F0; '+e.hours+'</div>';
-  });}
-  pn.innerHTML=h;
+/* ===== ENHANCED OSM AUTO-FETCH ===== */
+function fetchOSM(){
+  var btn=document.getElementById("ob");btn.textContent="Caricamento...";btn.disabled=true;
+  var q='[out:json][timeout:45];(node["mountain_pass"="yes"](44.0,6.5,47.5,13.5););out body;';
+  fetch("https://overpass-api.de/api/interpreter?data="+encodeURIComponent(q))
+  .then(function(r){return r.json();}).then(function(data){
+    var ct=0;
+    data.elements.forEach(function(el){
+      if(!el.tags||!el.tags.name)return;
+      var elev=el.tags.ele?parseInt(el.tags.ele):0;
+      if(elev<200)return;
+      // skip if already in curated data
+      if(PASSES_DATA.some(function(p){return Math.abs(p.lat-el.lat)<0.008&&Math.abs(p.lon-el.lon)<0.008;}))return;
+      // skip if already fetched
+      if(osmPasses.some(function(p){return Math.abs(p.lat-el.lat)<0.005&&Math.abs(p.lon-el.lon)<0.005;}))return;
+      var name=el.tags.name.replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+      osmPasses.push({id:"osm-"+el.id,name:name,lat:el.lat,lon:el.lon,elevation:elev});
+      var c=L.circleMarker([el.lat,el.lon],{radius:7,fillColor:"#94a3b8",color:"#fff",weight:1,fillOpacity:0.7});
+      c.bindPopup('<div><b>'+name+'</b><br>&#x26F0;&#xFE0F; '+elev+' m<br><i style="color:#94a3b8;font-size:.8em">da OpenStreetMap</i><br><button onclick="openOsmD('+el.lat+','+el.lon+',\''+name.replace(/'/g,"\\'")+'\','+elev+')" style="margin-top:4px;padding:5px 12px;background:#64748b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.82rem">Meteo</button></div>');
+      markers.addLayer(c);ct++;
+    });
+    btn.textContent="OSM (+"+ct+")";btn.disabled=false;
+  }).catch(function(){btn.textContent="OSM (err)";btn.disabled=false;});
 }
 
 document.addEventListener("DOMContentLoaded",function(){
   initMap();
   document.getElementById("fb").addEventListener("click",openFP);
-  document.getElementById("db").addEventListener("click",function(){
-    document.body.classList.toggle("dark");
-    this.textContent=document.body.classList.contains("dark")?"&#x2600;&#xFE0F;":"&#x1F319;";
-  });
-  document.getElementById("ob").addEventListener("click",function(){
-    var btn=this;btn.textContent="...";btn.disabled=true;
-    fetch("https://overpass-api.de/api/interpreter?data="+encodeURIComponent('[out:json][timeout:30];(node["mountain_pass"="yes"](44.0,8.5,47.5,13.5););out body;'))
-    .then(function(r){return r.json();})
-    .then(function(data){
-      var ct=0;
-      data.elements.forEach(function(el){
-        if(!el.tags||!el.tags.name)return;
-        if(PASSES_DATA.some(function(p){return Math.abs(p.lat-el.lat)<0.01&&Math.abs(p.lon-el.lon)<0.01;}))return;
-        var m=L.circleMarker([el.lat,el.lon],{radius:6,fillColor:"#94a3b8",color:"#fff",weight:1,fillOpacity:.6});
-        m.bindPopup("<b>"+el.tags.name+"</b><br>"+(el.tags.ele||"?")+" m<br><i style='color:#94a3b8'>da OSM</i>");
-        markers.addLayer(m);ct++;
-      });
-      btn.textContent="OSM (+"+ct+")";btn.disabled=false;
-    }).catch(function(){btn.textContent="OSM (err)";btn.disabled=false;});
-  });
+  document.getElementById("rbb").addEventListener("click",toggleRB);
+  document.getElementById("db").addEventListener("click",function(){document.body.classList.toggle("dark");});
+  document.getElementById("ob").addEventListener("click",fetchOSM);
   document.getElementById("search").addEventListener("input",applyFilters);
   document.getElementById("fr").addEventListener("change",applyFilters);
   document.getElementById("fd").addEventListener("input",function(){document.getElementById("fdv").textContent=this.value;applyFilters();});
   document.getElementById("fs").addEventListener("change",applyFilters);
+  document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
   map.on("click",function(){closeFP();});
 });
 </script>
