@@ -18,6 +18,7 @@
  *                                     [--tile DEG] [--min-ele M] [--reenrich]
  */
 import { readFile, writeFile } from "node:fs/promises";
+import vm from "node:vm";
 
 const OVERPASS_EPS = [
   "https://overpass-api.de/api/interpreter",
@@ -56,6 +57,17 @@ function estDiff(distKm, gain, top) {
   if (avg >= 12) d += 2; else if (avg >= 9) d += 1;
   if (top >= 2000) d += 1;
   return Math.max(1, Math.min(10, Math.round(d)));
+}
+// Tour-style climb category via FIETS index
+function catRank(c){return {HC:5,"1":4,"2":3,"3":2,"4":1}[c]||0;}
+function climbCat(distKm, gain, top) {
+  if (gain < 150 || distKm < 1) return null;
+  const f = (gain * gain) / (distKm * 1000 * 10) + Math.max(0, top - 1000) / 1000;
+  if (f >= 8) return "HC";
+  if (f >= 5.5) return "1";
+  if (f >= 3.5) return "2";
+  if (f >= 2) return "3";
+  return "4";
 }
 
 /* ----- gravel-bike filter (now excludes motorways) ----------------------- */
@@ -233,7 +245,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon) {
     startLat: segPts[0][0], startLon: segPts[0][1],
     startElevation: Math.round(segEl[0]), endElevation: Math.round(segEl[segEl.length - 1]),
     distance_km: Math.round(dist * 10) / 10, avgGradient: Math.round(avg * 10) / 10, maxGradient: Math.round(maxg * 10) / 10,
-    traffic: "n/d", exposure: dir, elevationProfile: prof,
+    traffic: "n/d", exposure: dir, elevationProfile: prof, cat: climbCat(Math.round(dist*10)/10, gain, segEl[segEl.length-1]),
     track: segPts.map((s) => [s[0], s[1]])
   };
 }
@@ -259,7 +271,7 @@ async function main() {
   const ways = new Map();  // id -> way
   for (let ti = 0; ti < cells.length; ti++) {
     const [a, b, c, d] = cells[ti];
-    const q = '[out:json][timeout:60];(node["mountain_pass"="yes"](' + a + ',' + b + ',' + c + ',' + d + ');)->.p;way(bn.p)["highway"];(.p;._;);out geom tags;';
+    const q = '[out:json][timeout:90];(node["mountain_pass"="yes"](' + a + ',' + b + ',' + c + ',' + d + ');)->.p;way(around.p:120)["highway"];(.p;._;);out geom tags;';
     try {
       const data = await overpass(q, "tile " + (ti + 1) + "/" + cells.length);
       for (const el of (data.elements || [])) {
@@ -268,55 +280,47 @@ async function main() {
       }
       process.stdout.write("  tile " + (ti + 1) + "/" + cells.length + " ok (nodes=" + nodes.size + " ways=" + ways.size + ")\r");
     } catch (e) { console.warn("\n  ! tile " + (ti + 1) + " skipped: " + e.message); }
-    await sleep(1200);
+    await sleep(2500);
   }
   console.log("\n  total: " + nodes.size + " pass nodes, " + ways.size + " ways");
   const nodeWays = buildGraph([...ways.values()]);
 
   // 2. filter + base records (snap summit to road, attach traffic)
   let kept = 0, skippedHiking = 0;
+  // precompute rideable ways once (snap search uses geographic gating for speed)
+  const rways = [...ways.values()].filter((w) => w.geometry && w.geometry.length > 1 && rideable(w.tags));
+  const CLASS = { primary: 6, secondary: 5, tertiary: 4, unclassified: 3, residential: 3, track: 2, cycleway: 4 };
   const order = [];
   for (const el of nodes.values()) {
     const elev = el.tags.ele ? parseInt(el.tags.ele, 10) : 0;
     if (isNaN(elev) || elev < MIN_ELE) continue;
-    if (existing.length === 0 && false) {} // placeholder
-    // skip near curated handled client-side; keep all here
-    const cw = nodeWays.get(el.id) || [];
-    let chosen = null;
-    for (const c of cw) { if (rideable(c.w.tags)) { chosen = c; break; } }
-    // also accept if pass sits very close to a rideable way even if not a vertex
-    let lat = el.lat, lon = el.lon, snapped = false;
-    if (!chosen) {
-      // search any rideable way vertex within 60m
-      let best = null, bd = 0.06;
-      for (const w of ways.values()) {
-        if (!rideable(w.tags) || !w.geometry) continue;
-        for (let i = 0; i < w.geometry.length; i++) {
-          const dd = hav(el.lat, el.lon, w.geometry[i].lat, w.geometry[i].lon);
-          if (dd < bd) { bd = dd; best = { w, idx: i }; }
-        }
+    // snap pass to nearest rideable road vertex within ~130m; among near ties prefer higher road class
+    let chosen = null, bd = 0.13;
+    for (const w of rways) {
+      // cheap bbox gate
+      if (Math.abs(w.geometry[0].lat - el.lat) > 0.03 && Math.abs(w.geometry[w.geometry.length - 1].lat - el.lat) > 0.03) continue;
+      for (let i = 0; i < w.geometry.length; i++) {
+        const dd = hav(el.lat, el.lon, w.geometry[i].lat, w.geometry[i].lon);
+        if (dd < bd - 0.02 || (dd < bd + 0.02 && chosen && (CLASS[w.tags.highway] || 0) > (CLASS[chosen.w.tags.highway] || 0))) { bd = dd; chosen = { w, idx: i }; }
       }
-      if (best) { chosen = best; }
     }
-    if (cw.length > 0 && !chosen) { skippedHiking++; continue; }
-    if (chosen) { lat = chosen.w.geometry[chosen.idx].lat; lon = chosen.w.geometry[chosen.idx].lon; snapped = true; }
+    let lat = el.lat, lon = el.lon, snapped = false;
+    if (!chosen) { skippedHiking++; continue; } // no rideable road near -> hiking/ferrata, drop
+    lat = chosen.w.geometry[chosen.idx].lat; lon = chosen.w.geometry[chosen.idx].lon; snapped = true;
     const id = "osm-" + el.id;
     const name = (el.tags.name || "Passo").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     const prev = byId.get(id);
     const rec = prev || { id, name, lat, lon, elevation: elev };
-    rec.name = name; rec.lat = lat; rec.lon = lon; rec.elevation = elev; rec.snapped = snapped;
-    rec.nodeId = el.id;
-    if (chosen) {
-      rec.surfaceLabel = surfaceLabel(chosen.w.tags) || rec.surfaceLabel || "";
-      const tr = computeTraffic(chosen.w.tags, elev);
-      rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
-      rec._chosen = chosen; // transient, removed before write
-    } else if (rec.trafFeriale == null) { rec.trafFeriale = 3; rec.trafWeekend = elev >= 1500 ? 5 : 4; rec.trucks = "rari"; }
+    rec.name = name; rec.lat = lat; rec.lon = lon; rec.elevation = elev; rec.snapped = snapped; rec.nodeId = el.id;
+    rec.surfaceLabel = surfaceLabel(chosen.w.tags) || "";
+    const tr = computeTraffic(chosen.w.tags, elev);
+    rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
+    rec._chosen = chosen;
     byId.set(id, rec);
     order.push(id);
     kept++;
   }
-  console.log("  kept " + kept + " rideable, skipped " + skippedHiking + " hiking-only");
+  console.log("  kept " + kept + " rideable, skipped " + skippedHiking + " not-on-road");
 
   // 3. enrich offline (no Overpass): walk road graph + DEM elevation
   const todo = order.filter((id) => REENRICH || !(byId.get(id).versanti && byId.get(id).versanti.length));
@@ -343,6 +347,7 @@ async function main() {
       vs.sort((a, b) => b.distance_km - a.distance_km);
       rec.versanti = vs.slice(0, 2);
       rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
+      rec.cat = rec.versanti.map((v)=>v.cat).filter(Boolean).sort((a,b)=>catRank(b)-catRank(a))[0]||null;
       ok++; console.log("ok (" + rec.versanti.length + " versanti, diff " + rec.difficulty + ")");
     } catch (e) { fail++; console.log("err: " + e.message); }
   }
@@ -352,5 +357,37 @@ async function main() {
   await writeFile(OUT, JSON.stringify(result, null, 1) + "\n", "utf8");
   const enr = result.filter((p) => p.versanti && p.versanti.length).length;
   console.log("DONE: " + result.length + " passes, " + enr + " enriched (now +" + ok + ", fail " + fail + "). wrote " + OUT);
+
+  // 5. regenerate curated passes from the same road graph (fix wrong points/profiles) -> overrides
+  if (!process.argv.includes("--no-curated")) {
+    try {
+      const code = await readFile("passes_data.js", "utf8");
+      const ctx = {}; vm.createContext(ctx); vm.runInContext(code, ctx);
+      const curated = ctx.PASSES_DATA || [];
+      const overrides = {};
+      console.log("  curated override: processing " + curated.length + " passes ...");
+      for (const p of curated) {
+        let chosen = null, bd = 0.13;
+        for (const w of rways) {
+          if (Math.abs(w.geometry[0].lat - p.lat) > 0.04 && Math.abs(w.geometry[w.geometry.length - 1].lat - p.lat) > 0.04) continue;
+          for (let i = 0; i < w.geometry.length; i++) { const dd = hav(p.lat, p.lon, w.geometry[i].lat, w.geometry[i].lon); if (dd < bd) { bd = dd; chosen = { w, idx: i }; } }
+        }
+        if (!chosen) { console.log("    - " + p.name + ": no road"); continue; }
+        const slat = chosen.w.geometry[chosen.idx].lat, slon = chosen.w.geometry[chosen.idx].lon;
+        try {
+          const sides = [walk(chosen.w, chosen.idx, -1, nodeWays, 16), walk(chosen.w, chosen.idx, 1, nodeWays, 16)].filter((s) => s && s.length >= 4);
+          const vs = [];
+          for (const pts of sides) { const ev = await elevations(pts); if (!ev) continue; const v = buildSide(pts, ev, slat, slon); if (v) vs.push(v); }
+          if (!vs.length) { console.log("    - " + p.name + ": no climb"); continue; }
+          vs.sort((a, b) => b.distance_km - a.distance_km);
+          const top = vs.slice(0, 2);
+          overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null };
+          console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
+        } catch (e) { console.log("    - " + p.name + ": " + e.message); }
+      }
+      await writeFile("curated_overrides.json", JSON.stringify(overrides, null, 1) + "\n", "utf8");
+      console.log("  wrote curated_overrides.json (" + Object.keys(overrides).length + " passes)");
+    } catch (e) { console.warn("  ! curated override skipped: " + e.message); }
+  }
 }
 main().catch((e) => { console.error("FATAL: " + e.stack); process.exit(1); });
