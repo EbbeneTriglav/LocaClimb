@@ -38856,8 +38856,8 @@
  {
   "id": "osm-457711377",
   "name": "Bocchetta di Valbona",
-  "lat": 46.0053292,
-  "lon": 9.4869023,
+  "lat": 46.0053571,
+  "lon": 9.4869357,
   "elevation": 2046,
   "surfaceLabel": "",
   "trafFeriale": 3,
@@ -49877,6 +49877,19 @@
   "nodeId": 1256098859
  },
  {
+  "id": "osm-561579881",
+  "name": "Forcella di Frasnedo",
+  "lat": 46.2111403,
+  "lon": 9.4926535,
+  "elevation": 1611,
+  "surfaceLabel": "",
+  "trafFeriale": 3,
+  "trafWeekend": 5,
+  "trucks": "rari",
+  "snapped": false,
+  "nodeId": 561579881
+ },
+ {
   "id": "osm-771801282",
   "name": "Passo Coe",
   "lat": 45.8773236,
@@ -49901,19 +49914,6 @@
   "trucks": "rari",
   "snapped": false,
   "nodeId": 2337637304
- },
- {
-  "id": "osm-561579881",
-  "name": "Forcella di Frasnedo",
-  "lat": 46.2111403,
-  "lon": 9.4926535,
-  "elevation": 1609,
-  "surfaceLabel": "",
-  "trafFeriale": 3,
-  "trafWeekend": 5,
-  "trucks": "rari",
-  "snapped": false,
-  "nodeId": 561579881
  },
  {
   "id": "osm-706628567",
@@ -54281,7 +54281,7 @@
  },
  {
   "id": "osm-403402789",
-  "name": "Forca Zouf di Fau Alto",
+  "name": "Forca Zouf di Fau",
   "lat": 46.4968855,
   "lon": 13.1658387,
   "elevation": 1392,
@@ -60868,8 +60868,8 @@
  {
   "id": "osm-1311792321",
   "name": "Kreuzbergsattel",
-  "lat": 46.7085585,
-  "lon": 13.2550516,
+  "lat": 46.7085458,
+  "lon": 13.255056,
   "elevation": 1074,
   "surfaceLabel": "",
   "trafFeriale": 3,
