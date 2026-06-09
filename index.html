@@ -164,6 +164,8 @@ function sc(s){return s==="open"?"#22c55e":s==="seasonal"?"#f59e0b":"#ef4444";}
 function sl(s){return s==="open"?"&#x1F7E2; Aperto":s==="seasonal"?"&#x1F7E1; Stagionale":"&#x1F534; Chiuso";}
 function ds(d){var s="";for(var i=0;i<10;i++)s+=(i<d?"&#x2605;":"&#x2606;");return s;}
 function diffColor(d){return d>=9?"#ef4444":d>=7?"#f97316":d>=5?"#f59e0b":"#22c55e";}
+/* gradient (%) -> color scale, used by profile + map track */
+function gradeColor(g){g=Math.abs(g);return g>=13?"#7f1d1d":g>=10?"#ef4444":g>=7?"#f97316":g>=4?"#f59e0b":"#22c55e";}
 /* ===== TRAFFIC MODEL ===== */
 var TRAF_MAP={basso:2,medio:5,alto:8};
 function trafColor(s){return s>=7?"#ef4444":s>=4?"#f59e0b":"#22c55e";}
@@ -347,7 +349,16 @@ function openOsmD(id){
 }
 function drawOsmTracks(op){
   clearRoutes();var lines=[];
-  (op.versanti||[]).forEach(function(v,i){if(v.track&&v.track.length>1){var ln=L.polyline(v.track,{color:VCOLS[i]||"#7c3aed",weight:5,opacity:0.85});ln.addTo(map);routeLines.push(ln);lines.push(ln);}});
+  (op.versanti||[]).forEach(function(v,i){
+    if(!v.track||v.track.length<2)return;
+    var pr=v.elevationProfile||[],np=pr.length,nt=v.track.length;
+    for(var t=1;t<nt;t++){
+      var g=0;
+      if(np>1){var fi=(t/(nt-1))*(np-1),lo=Math.floor(fi);if(lo>=np-1)lo=np-2;var seg=(v.distance_km*1000)/(np-1);g=(pr[lo+1]-pr[lo])/seg*100;}
+      var ln=L.polyline([v.track[t-1],v.track[t]],{color:gradeColor(g),weight:6,opacity:0.9});
+      ln.addTo(map);routeLines.push(ln);lines.push(ln);
+    }
+  });
   if(lines.length)map.fitBounds(L.featureGroup(lines).getBounds().pad(0.15),{maxZoom:13});
   else map.setView([op.lat,op.lon],12);
 }
@@ -360,7 +371,7 @@ function enrichOsmPass(op){
   if(!/^\d+$/.test(nid))return Promise.resolve(false);
   var q="[out:json][timeout:25];node("+nid+")->.n;way(bn.n)[\"highway\"];out geom tags;";
   return fetch(OVERPASS+"?data="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(data){
-    var ways=(data.elements||[]).filter(function(e){return e.type==="way"&&e.geometry&&e.geometry.length>2;});
+    var ways=(data.elements||[]).filter(function(e){return e.type==="way"&&e.geometry&&e.geometry.length>2&&rideableWay(e.tags);});
     if(!ways.length)return false;
     // pick the way whose geometry passes closest to the summit and is longest
     var best=null,bestLen=0;
@@ -386,6 +397,7 @@ function enrichOsmPass(op){
       });
   }).catch(function(){return false;});
 }
+function rideableWay(t){if(!t||!t.highway)return false;var bad={motorway:1,motorway_link:1,path:1,footway:1,steps:1,pedestrian:1,bridleway:1,raceway:1,construction:1,proposed:1};if(bad[t.highway])return false;if(t.motorroad==="yes")return false;if(t.bicycle==="no")return false;if(t.access==="private"||t.access==="no")return false;if(t["mtb:scale"])return false;return true;}
 function closestIdx(geom,lat,lon){var bi=-1,bd=1e9;for(var i=0;i<geom.length;i++){var d=hav(lat,lon,geom[i].lat,geom[i].lon);if(d<bd){bd=d;bi=i;}}return bd<0.4?bi:-1;}
 function collectSide(geom,idx,dir){
   var pts=[],dist=0,prev=geom[idx];pts.push({lat:geom[idx].lat,lon:geom[idx].lon});
@@ -419,18 +431,59 @@ function surfaceLabelFromWay(t){
   return"";
 }
 
+var elevMeta=null,elevSel=0;
 function drawElev(p){
   var c=document.getElementById("elev");if(!c)return;
-  var dpr=window.devicePixelRatio||1;c.width=c.offsetWidth*dpr;c.height=400;
-  var ctx=c.getContext("2d");ctx.scale(dpr,dpr);var W=c.offsetWidth,H=200;
-  var allE=[];p.versanti.forEach(function(v){if(v.elevationProfile)allE=allE.concat(v.elevationProfile);});if(!allE.length)return;
+  // pick the versante to detail on hover: longest by default
+  var vers=(p.versanti||[]).filter(function(v){return v.elevationProfile&&v.elevationProfile.length>1;});
+  if(!vers.length)return;
+  var allE=[];vers.forEach(function(v){allE=allE.concat(v.elevationProfile);});
   var mn=Math.min.apply(null,allE)-50,mx=Math.max.apply(null,allE)+50;
-  var dk=document.body.classList.contains("dark");
+  var maxDist=Math.max.apply(null,vers.map(function(v){return v.distance_km||10;}));
+  var series=vers.map(function(v){
+    var pr=v.elevationProfile,n=pr.length,dist=v.distance_km||10,seg=(dist*1000)/(n-1);
+    var pts=[];for(var i=0;i<n;i++){var g=i===0?0:(pr[i]-pr[i-1])/seg*100;pts.push({d:i/(n-1)*dist,e:pr[i],g:g});}
+    return {name:v.side,dist:dist,pts:pts};
+  });
+  elevMeta={c:c,mn:mn,mx:mx,maxDist:maxDist,series:series};
+  renderElev(-1);
+  c.onmousemove=function(ev){var r=c.getBoundingClientRect();renderElev((ev.clientX-r.left)/r.width);};
+  c.onmouseleave=function(){renderElev(-1);};
+  c.ontouchmove=function(ev){var r=c.getBoundingClientRect();renderElev((ev.touches[0].clientX-r.left)/r.width);ev.preventDefault();};
+}
+function renderElev(frac){
+  var m=elevMeta;if(!m)return;var c=m.c;
+  var dpr=window.devicePixelRatio||1,W=c.offsetWidth,H=200;
+  c.width=W*dpr;c.height=H*dpr;var ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+  var dk=document.body.classList.contains("dark"),PADL=40,PADR=10,PADT=14,PADB=22;
+  var plotW=W-PADL-PADR,plotH=H-PADT-PADB;
   ctx.fillStyle=dk?"#1e293b":"#f8fafc";ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#64748b":"#94a3b8";
-  for(var i=0;i<=4;i++){var y=15+(H-35)*(1-i/4);var el=Math.round(mn+(mx-mn)*i/4);ctx.beginPath();ctx.moveTo(38,y);ctx.lineTo(W-8,y);ctx.stroke();ctx.textAlign="right";ctx.fillText(el+"m",34,y+3);}
-  p.versanti.forEach(function(v,vi){var pr=v.elevationProfile;if(!pr||pr.length<2)return;var n=pr.length;ctx.beginPath();for(var i=0;i<n;i++){var x=38+(i/(n-1))*(W-46);var y=15+(H-35)*(1-(pr[i]-mn)/(mx-mn));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.strokeStyle=VCOLS[vi];ctx.lineWidth=2.5;ctx.globalAlpha=1;ctx.stroke();ctx.lineTo(W-8,H-20);ctx.lineTo(38,H-20);ctx.closePath();ctx.globalAlpha=0.1;ctx.fillStyle=VCOLS[vi];ctx.fill();ctx.globalAlpha=1;});
-  p.versanti.forEach(function(v,vi){ctx.fillStyle=VCOLS[vi];ctx.fillRect(44+vi*150,4,10,10);ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";ctx.fillText(v.side.substring(0,18),58+vi*150,13);});
+  function X(d){return PADL+(d/m.maxDist)*plotW;}
+  function Y(e){return PADT+plotH*(1-(e-m.mn)/(m.mx-m.mn));}
+  // grid + axes
+  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#64748b":"#94a3b8";ctx.textAlign="right";
+  for(var i=0;i<=4;i++){var y=PADT+plotH*(1-i/4),el=Math.round(m.mn+(m.mx-m.mn)*i/4);ctx.beginPath();ctx.moveTo(PADL,y);ctx.lineTo(W-PADR,y);ctx.stroke();ctx.fillText(el+"m",PADL-4,y+3);}
+  ctx.textAlign="center";for(var k=0;k<=Math.ceil(m.maxDist);k+=Math.max(1,Math.round(m.maxDist/6))){ctx.fillText(k+"km",X(k),H-7);}
+  // primary series = first/longest: gradient-colored area + line; others thin
+  m.series.forEach(function(s,si){
+    for(var i=1;i<s.pts.length;i++){var a=s.pts[i-1],b=s.pts[i];
+      if(si===0){ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.lineTo(X(b.d),H-PADB);ctx.lineTo(X(a.d),H-PADB);ctx.closePath();ctx.fillStyle=gradeColor(b.g);ctx.globalAlpha=0.55;ctx.fill();ctx.globalAlpha=1;}
+      ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.strokeStyle=si===0?(dk?"#e2e8f0":"#334155"):VCOLS[si];ctx.lineWidth=si===0?1.5:2;ctx.globalAlpha=si===0?0.9:0.85;ctx.stroke();ctx.globalAlpha=1;}
+  });
+  // legend
+  m.series.forEach(function(s,si){ctx.fillStyle=si===0?(dk?"#e2e8f0":"#334155"):VCOLS[si];ctx.fillRect(PADL+4+si*150,2,9,9);ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";ctx.fillText(s.name.substring(0,17),PADL+16+si*150,11);});
+  // hover crosshair + tooltip on primary series
+  if(frac>=0&&m.series[0]){
+    var s=m.series[0],d=Math.max(0,Math.min(s.dist,(frac*W-PADL)/plotW*m.maxDist));
+    var idx=Math.round(d/s.dist*(s.pts.length-1));idx=Math.max(0,Math.min(s.pts.length-1,idx));var pt=s.pts[idx];
+    var px=X(pt.d),py=Y(pt.e);
+    ctx.strokeStyle=dk?"#64748b":"#94a3b8";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(px,PADT);ctx.lineTo(px,H-PADB);ctx.stroke();
+    ctx.fillStyle=gradeColor(pt.g);ctx.beginPath();ctx.arc(px,py,4,0,7);ctx.fill();
+    var txt=pt.d.toFixed(1)+"km  "+pt.e+"m  "+(pt.g>0?"+":"")+pt.g.toFixed(1)+"%";
+    ctx.font="bold 11px system-ui";var tw=ctx.measureText(txt).width+12,tx=Math.min(W-tw-2,Math.max(2,px-tw/2));
+    ctx.fillStyle=dk?"#0f172a":"#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=1.5;ctx.beginPath();ctx.rect(tx,PADT+2,tw,18);ctx.fill();ctx.stroke();
+    ctx.fillStyle=dk?"#f1f5f9":"#1e293b";ctx.textAlign="left";ctx.fillText(txt,tx+6,PADT+15);
+  }
 }
 function fetchW(lat,lon){
   var k=lat.toFixed(1)+","+lon.toFixed(1);if(weatherCache[k]){renderW(weatherCache[k]);return;}
