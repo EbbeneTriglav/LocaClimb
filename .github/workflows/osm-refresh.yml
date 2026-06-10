@@ -60,4 +60,5 @@ jobs:
           ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
           git add osm_passes.json curated_overrides.json routes_baked.json
           git commit -m "data: PBF+DEM build (${COUNT} passes, ${ENR} enriched)"
+          git pull --rebase origin main
           git push
