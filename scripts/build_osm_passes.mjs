@@ -328,7 +328,7 @@ async function main() {
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
   async function buildVersanti(lat, lon, capKm, relax) {
-    const cands = candWays(lat, lon, 0.15, 4);
+    const cands = candWays(lat, lon, 0.3, 6);
     const vs = [];
     for (const ch of cands) {
       for (const dir of [-1, 1]) {
@@ -343,7 +343,7 @@ async function main() {
     // dedupe by compass direction: keep longest per exposure
     const byDir = new Map();
     for (const v of vs) { const k = v.exposure; if (!byDir.has(k) || v.distance_km > byDir.get(k).distance_km) byDir.set(k, v); }
-    return [...byDir.values()].sort((a, b) => b.distance_km - a.distance_km).slice(0, 3);
+    return [...byDir.values()].sort((a, b) => b.distance_km - a.distance_km).slice(0, 4);
   }
 
   let existing = [];
@@ -368,7 +368,7 @@ async function main() {
     if (!(rec.versanti && rec.versanti.length) || process.argv.includes("--reenrich")) {
       done++;
       try {
-        const vs = await buildVersanti(slat, slon, 18, false);
+        const vs = await buildVersanti(slat, slon, 24, false);
         if (vs.length) {
           rec.versanti = vs;
           rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
