@@ -1,0 +1,5 @@
+[
+ { "id": "sanluca", "name": "San Luca (Bologna)", "lat": 44.4787, "lon": 11.2992, "region": "Emilia-Romagna" },
+ { "id": "puianello", "name": "Puianello (Modena)", "lat": 44.4262, "lon": 10.9293, "region": "Emilia-Romagna" },
+ { "id": "albinea-casina", "name": "Albinea - Casina", "lat": 44.5092, "lon": 10.4977, "region": "Emilia-Romagna" }
+]
