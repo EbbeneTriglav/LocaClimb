@@ -149,7 +149,7 @@ function walk(startWay, startIdx, dir, vertexMap, capKm) {
   const pts = [[startWay.geom[startIdx][0], startWay.geom[startIdx][1]]];
   const visited = new Set([startWay.uid]);
   let w = startWay, i = startIdx, d = dir, dist = 0, prev = pts[0];
-  for (let guard = 0; guard < 600; guard++) {
+  for (let guard = 0; guard < 900; guard++) {
     const ni = i + d;
     if (ni < 0 || ni >= w.geom.length) {
       const cand = (vertexMap.get(vkey(w.geom[i][0], w.geom[i][1])) || []).filter((c) => !visited.has(c.w.uid) && c.w.geom.length > 1);
@@ -169,8 +169,9 @@ function walk(startWay, startIdx, dir, vertexMap, capKm) {
   if (pts.length > 110) { const o = [], n = 110; for (let k = 0; k < n; k++) o.push(pts[Math.round(k * (pts.length - 1) / (n - 1))]); return o; }
   return pts;
 }
+function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
 function buildSide(ptsOut, elevsOut, topLat, topLon) {
-  const pts = ptsOut.slice().reverse(), el = elevsOut.slice().reverse();
+  const pts = ptsOut.slice().reverse(), el = smooth3(elevsOut.slice().reverse());
   if (pts.length < 4) return null;
   const cum = [0];
   for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + hav(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]));
@@ -195,8 +196,13 @@ function buildSide(ptsOut, elevsOut, topLat, topLon) {
   if (gain < 200) return null;
   const avg = gain / (dist * 1000) * 100;
   if (avg < 3) return null;
-  let maxg = 0;
-  for (let i = 1; i < segPts.length; i++) { const dd = (segCum[i] - segCum[i - 1]) * 1000; if (dd > 80) { const g = (segEl[i] - segEl[i - 1]) / dd * 100; if (g > maxg) maxg = g; } }
+  let maxg = 0; // windowed (>=300m) to kill DEM noise
+  for (let i = 0; i < segPts.length - 1; i++) {
+    let j = i; while (j < segPts.length - 1 && segCum[j] - segCum[i] < 0.3) j++;
+    const dd = (segCum[j] - segCum[i]) * 1000;
+    if (dd >= 250) { const g = (segEl[j] - segEl[i]) / dd * 100; if (g > maxg) maxg = g; }
+  }
+  if (maxg < avg) maxg = avg;
   const dir = compass(segPts[0][0], segPts[0][1], topLat, topLon);
   const n = Math.min(segEl.length, 24), prof = [];
   for (let i = 0; i < n; i++) prof.push(Math.round(segEl[Math.round(i * (segEl.length - 1) / (n - 1))]));
@@ -284,12 +290,19 @@ async function main() {
     if (!wgrid.has(k)) wgrid.set(k, []);
     wgrid.get(k).push({ w, idx: i });
   }
+  const CLS = { primary:6, primary_link:6, secondary:5, secondary_link:5, tertiary:4, tertiary_link:4, unclassified:3, residential:2, living_street:2, cycleway:2, track:1, service:0 };
   function snap(lat, lon, maxKm) {
     const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
-    let best = null, bd = maxKm;
+    let best = null, bs = -1;
     for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
       const lst = wgrid.get((ci + a) + ":" + (cj + b)) || [];
-      for (const c of lst) { const dd = hav(lat, lon, c.w.geom[c.idx][0], c.w.geom[c.idx][1]); if (dd < bd) { bd = dd; best = c; } }
+      for (const c of lst) {
+        const dd = hav(lat, lon, c.w.geom[c.idx][0], c.w.geom[c.idx][1]);
+        if (dd >= maxKm) continue;
+        const cl = CLS[c.w.tags.highway] != null ? CLS[c.w.tags.highway] : 3;
+        const score = cl * 10 - dd * 20; // class first, then proximity
+        if (score > bs) { bs = score; best = c; }
+      }
     }
     return best;
   }
@@ -343,11 +356,11 @@ async function main() {
       const ctx = {}; vm.createContext(ctx); vm.runInContext(code, ctx);
       const overrides = {};
       for (const p of (ctx.PASSES_DATA || [])) {
-        const ch = snap(p.lat, p.lon, 0.13);
+        const ch = snap(p.lat, p.lon, 0.5);
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
         try {
-          const sides = [walk(ch.w, ch.idx, -1, vertexMap, 18), walk(ch.w, ch.idx, 1, vertexMap, 18)].filter((s) => s && s.length >= 4);
+          const sides = [walk(ch.w, ch.idx, -1, vertexMap, 20), walk(ch.w, ch.idx, 1, vertexMap, 20)].filter((s) => s && s.length >= 4);
           const vs = [];
           for (const pts of sides) { const ev = await elevations(pts); if (!ev) continue; const v = buildSide(pts, ev, slat, slon); if (v) vs.push(v); }
           if (!vs.length) { console.log("    - " + p.name + ": no climb"); continue; }
