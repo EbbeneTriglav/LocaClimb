@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>locaClimb - ride like a local</title>
+<title>LocaRide - ride like a local</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
@@ -60,8 +60,10 @@ canvas#relev{height:170px}
 .rstop{display:flex;align-items:center;gap:8px;font-size:.84rem;padding:5px 0;border-bottom:1px solid var(--bdr)}
 .rstop .n{flex:none;width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;text-align:center;line-height:22px;font-size:.72rem;font-weight:700}
 .wp-ic{background:#7c3aed;color:#fff;border-radius:50%;width:26px;height:26px;line-height:22px;text-align:center;font-size:.75rem;font-weight:700;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35);cursor:grab}
-.cat-pill.grv{background-image:repeating-linear-gradient(45deg,rgba(156,163,175,.85) 0 3px,transparent 3px 7px)!important;background-blend-mode:normal}
-.cat-pill{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);border-radius:6px;height:20px;min-width:24px;padding:0 5px;line-height:20px;text-align:center;font-size:.72rem;font-weight:800;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4)}
+.wordmark{font-weight:400;font-size:1.18rem;background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.2px}
+.wordmark b{font-weight:900}
+.cat-pill.grv{background-image:repeating-linear-gradient(45deg,rgba(229,231,235,.75) 0 3px,transparent 3px 8px),linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.12))!important}
+.cat-pill{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55);border-radius:8px;height:26px;min-width:32px;padding:0 7px;line-height:24px;text-align:center;font-size:.92rem;font-weight:900;letter-spacing:.3px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.35);background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.12))}
 .etog{padding:4px 9px;border:1px solid var(--bdr);border-radius:7px;background:var(--bg);color:var(--txt2);font-size:.76rem;cursor:pointer}
 .etog.active{background:var(--ac);color:#fff;border-color:var(--ac)}
 #be-btn{position:fixed;bottom:20px;left:20px;z-index:998;padding:10px 16px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:24px;cursor:pointer;font-size:.85rem;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,.3)}
@@ -94,7 +96,7 @@ canvas#relev{height:170px}
 </head>
 <body>
 <div id="hdr">
-<h1 onclick="map.setView([45.8,10.5],7)">&#x26F0;&#xFE0F; locaClimb <span>&#x2014; ride like a local</span></h1>
+<h1 onclick="map.setView([45.8,10.5],7)" style="display:flex;align-items:center;gap:7px;cursor:pointer"><svg width="28" height="28" viewBox="0 0 32 32"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M2 26 L12 8 L18 18 L22 12 L30 26 Z" fill="url(#lg1)"/><path d="M4 26 Q12 22 16 26 T28 26" stroke="#f59e0b" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="8" r="2.2" fill="#fff"/></svg><span class="wordmark">Loca<b>Ride</b></span> <span>&#x2014; ride like a local</span></h1>
 <input type="text" id="search" placeholder="Cerca passo..." autocomplete="off">
 <button class="btn" id="fb" title="Filtri">&#x2630;</button>
 <button class="btn" id="rbb" title="Route Builder">&#x1F6A9;</button>
@@ -243,7 +245,7 @@ function addMarkers(data){
   data.forEach(function(p){
     ensureCat(p);
     var c;
-    if(p.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(p)?" grv":"")+'" style="background:'+catColor(p.cat)+'">'+catLabel(p.cat)+'</div>',iconSize:[28,20],iconAnchor:[14,10]});c=L.marker([p.lat,p.lon],{icon:ic});}
+    if(p.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(p)?" grv":"")+'" style="background:'+catColor(p.cat)+'">'+catLabel(p.cat)+'</div>',iconSize:[34,26],iconAnchor:[17,13]});c=L.marker([p.lat,p.lon],{icon:ic});}
     else c=L.circleMarker([p.lat,p.lon],{radius:10,fillColor:sc(p.status),color:"#fff",weight:2,fillOpacity:0.9});
     var evts=getEvts(p.id);
     var evTag=evts.length>0?"<br>&#x1F6B4; <b>"+evts.length+" Bike Day!</b>":"";
@@ -252,14 +254,22 @@ function addMarkers(data){
     });
     markers.addLayer(c);
   });
-  if(showOsm)osmPasses.forEach(addOsmMarker);
+  if(showOsm){
+    var q=(document.getElementById("search")?document.getElementById("search").value.toLowerCase():""),
+        dmin=parseInt(document.getElementById("fd")?document.getElementById("fd").value:1)||1;
+    osmPasses.forEach(function(op){
+      if(q&&(op.name||"").toLowerCase().indexOf(q)<0)return;
+      if(dmin>1&&(op.difficulty||1)<dmin)return;
+      addOsmMarker(op);
+    });
+  }
 }
 function addOsmMarker(op){
   // show only bike-rideable passes: derived climb data OR snapped onto a rideable road
   if(!(op.versanti&&op.versanti.length)&&!op.snapped)return;
   ensureCat(op);
   var c;
-  if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(op)?" grv":"")+'" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[28,20],iconAnchor:[14,10]});c=L.marker([op.lat,op.lon],{icon:ic});}
+  if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(op)?" grv":"")+'" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[34,26],iconAnchor:[17,13]});c=L.marker([op.lat,op.lon],{icon:ic});}
   else c=L.circleMarker([op.lat,op.lon],{radius:8,fillColor:(op.versanti&&op.versanti.length?diffColor(op.difficulty||5):"#a78bfa"),color:"#fff",weight:2,fillOpacity:0.85});
   var diffTag=op.difficulty?' &middot; <span style="color:#f59e0b">'+ds(op.difficulty)+'</span>':'';
   var surfTag=op.surfaceLabel?'<br>'+op.surfaceLabel:'';
@@ -665,7 +675,7 @@ function drawRouteProfile(){
 function resetRoute(){rbStops=[];rbTrack=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;}
 function generateGPX(){
   var now=new Date().toISOString();
-  var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="locaClimb">\n<metadata><name>locaClimb Route</name><time>'+now+'</time></metadata>\n';
+  var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="LocaRide">\n<metadata><name>LocaRide Route</name><time>'+now+'</time></metadata>\n';
   rbStops.forEach(function(s){g+='<wpt lat="'+s.lat+'" lon="'+s.lon+'"><name>'+s.name+'</name>'+(s.elevation?'<ele>'+s.elevation+'</ele>':'')+'</wpt>\n';});
   g+='<trk><name>'+rbStops.map(function(s){return s.name;}).join(" - ")+'</name><trkseg>\n';
   rbTrack.forEach(function(c){g+='<trkpt lat="'+c[0].toFixed(6)+'" lon="'+c[1].toFixed(6)+'">'+(c[2]!=null?'<ele>'+Math.round(c[2])+'</ele>':'')+'</trkpt>\n';});
