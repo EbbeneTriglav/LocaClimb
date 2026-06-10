@@ -138,12 +138,15 @@ async function elevations(pts) {
 
 /* ----- graph walking + climb building -------------------------------------- */
 function vkey(lat, lon) { return lat.toFixed(6) + "," + lon.toFixed(6); }
+const HWRANK = { primary:6, primary_link:6, secondary:5, secondary_link:5, tertiary:4, tertiary_link:4, unclassified:3, residential:2, living_street:2, cycleway:2, track:1, service:0 };
 function same(a, b) {
   const ta = a.tags || {}, tb = b.tags || {};
-  if (ta.ref && ta.ref === tb.ref) return 2;
-  if (ta.name && ta.name === tb.name) return 2;
-  if (ta.highway === tb.highway) return 1;
-  return 0;
+  let sc = 0;
+  if (ta.ref && ta.ref === tb.ref) sc += 20;          // same road ref (SS38 stays SS38)
+  if (ta.name && ta.name === tb.name) sc += 14;
+  if (ta.highway === tb.highway) sc += 6;
+  sc += (HWRANK[tb.highway] != null ? HWRANK[tb.highway] : 3); // prefer bigger roads
+  return sc;
 }
 function walk(startWay, startIdx, dir, vertexMap, capKm) {
   const pts = [[startWay.geom[startIdx][0], startWay.geom[startIdx][1]]];
@@ -170,7 +173,7 @@ function walk(startWay, startIdx, dir, vertexMap, capKm) {
   return pts;
 }
 function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
-function buildSide(ptsOut, elevsOut, topLat, topLon) {
+function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   const pts = ptsOut.slice().reverse(), el = smooth3(elevsOut.slice().reverse());
   if (pts.length < 4) return null;
   const cum = [0];
@@ -195,9 +198,9 @@ function buildSide(ptsOut, elevsOut, topLat, topLon) {
   }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
-  if (dist < 1.5) return null;
+  if (dist < (relax ? 1.2 : 1.5)) return null;
   const gain = segEl[segEl.length - 1] - segEl[0];
-  if (gain < 200) return null;
+  if (gain < (relax ? 140 : 200)) return null;
   const avg = gain / (dist * 1000) * 100;
   if (avg < 3) return null;
   let maxg = 0; // windowed (>=300m) to kill DEM noise
@@ -310,6 +313,38 @@ async function main() {
     }
     return best;
   }
+  function candWays(lat, lon, radKm, maxN) {
+    const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
+    const bestBy = new Map(); // uid -> {w,idx,dd}
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+      const lst = wgrid.get((ci + a) + ":" + (cj + b)) || [];
+      for (const c of lst) {
+        const dd = hav(lat, lon, c.w.geom[c.idx][0], c.w.geom[c.idx][1]);
+        if (dd >= radKm) continue;
+        const cur = bestBy.get(c.w.uid);
+        if (!cur || dd < cur.dd) bestBy.set(c.w.uid, { w: c.w, idx: c.idx, dd });
+      }
+    }
+    return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
+  }
+  async function buildVersanti(lat, lon, capKm, relax) {
+    const cands = candWays(lat, lon, 0.15, 4);
+    const vs = [];
+    for (const ch of cands) {
+      for (const dir of [-1, 1]) {
+        const pts = walk(ch.w, ch.idx, dir, vertexMap, capKm);
+        if (!pts || pts.length < 4) continue;
+        const ev = await elevations(pts);
+        if (!ev) continue;
+        const v = buildSide(pts, ev, lat, lon, relax);
+        if (v) vs.push(v);
+      }
+    }
+    // dedupe by compass direction: keep longest per exposure
+    const byDir = new Map();
+    for (const v of vs) { const k = v.exposure; if (!byDir.has(k) || v.distance_km > byDir.get(k).distance_km) byDir.set(k, v); }
+    return [...byDir.values()].sort((a, b) => b.distance_km - a.distance_km).slice(0, 3);
+  }
 
   let existing = [];
   try { existing = JSON.parse(await readFile(OUT, "utf8")); } catch {}
@@ -333,12 +368,9 @@ async function main() {
     if (!(rec.versanti && rec.versanti.length) || process.argv.includes("--reenrich")) {
       done++;
       try {
-        const sides = [walk(ch.w, ch.idx, -1, vertexMap, 16), walk(ch.w, ch.idx, 1, vertexMap, 16)].filter((s) => s && s.length >= 4);
-        const vs = [];
-        for (const pts of sides) { const ev = await elevations(pts); if (!ev) continue; const v = buildSide(pts, ev, slat, slon); if (v) vs.push(v); }
+        const vs = await buildVersanti(slat, slon, 18, false);
         if (vs.length) {
-          vs.sort((a, b) => b.distance_km - a.distance_km);
-          rec.versanti = vs.slice(0, 2);
+          rec.versanti = vs;
           rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
           rec.cat = rec.versanti.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
           ok++;
@@ -349,6 +381,31 @@ async function main() {
     byId.set(id, rec);
   }
   console.log("  kept " + kept + ", skipped " + skipped + "; enriched ok " + ok + ", no-climb " + fail);
+
+  // extra curated climbs (no mountain_pass node): climbs_extra.json [{id,name,lat,lon,region?}]
+  try {
+    const extra = JSON.parse(await readFile("climbs_extra.json", "utf8"));
+    console.log("  extra climbs: " + extra.length);
+    for (const x of extra) {
+      const ch = snap(x.lat, x.lon, 0.5);
+      if (!ch) { console.log("    - " + x.name + ": no road"); continue; }
+      const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
+      const vs = await buildVersanti(slat, slon, 12, true);
+      if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
+      const id = "x-" + x.id;
+      const rec = byId.get(id) || { id };
+      rec.name = x.name; rec.lat = slat; rec.lon = slon;
+      rec.elevation = Math.max(...vs.map((v) => v.endElevation));
+      rec.snapped = true; rec.surfaceLabel = surfaceLabel(ch.w.tags);
+      const tr = computeTraffic(ch.w.tags, rec.elevation);
+      rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
+      rec.versanti = vs;
+      rec.difficulty = Math.max(...vs.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
+      rec.cat = vs.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
+      byId.set(id, rec);
+      console.log("    + " + x.name + ": " + vs.length + " versanti, cat " + (rec.cat || "-"));
+    }
+  } catch (e) { /* no extra file, fine */ }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
   await writeFile(OUT, JSON.stringify(result, null, 1) + "\n", "utf8");
@@ -364,12 +421,8 @@ async function main() {
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
         try {
-          const sides = [walk(ch.w, ch.idx, -1, vertexMap, 20), walk(ch.w, ch.idx, 1, vertexMap, 20)].filter((s) => s && s.length >= 4);
-          const vs = [];
-          for (const pts of sides) { const ev = await elevations(pts); if (!ev) continue; const v = buildSide(pts, ev, slat, slon); if (v) vs.push(v); }
-          if (!vs.length) { console.log("    - " + p.name + ": no climb"); continue; }
-          vs.sort((a, b) => b.distance_km - a.distance_km);
-          const top = vs.slice(0, 2);
+          const top = await buildVersanti(slat, slon, 25, false);
+          if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
           overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null };
           console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
         } catch (e) { console.log("    - " + p.name + ": " + e.message); }
