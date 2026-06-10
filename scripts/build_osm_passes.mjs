@@ -189,6 +189,10 @@ function buildSide(ptsOut, elevsOut, topLat, topLon) {
   }
   let base = 0;
   for (let thr = 4.5; thr >= 3 && base === 0; thr -= 0.75) for (let i = 0; i < end; i++) if (avgFrom(i) >= thr && minWin(i) >= 1.5) { base = i; break; }
+  if (base === 0 && avgFrom(0) < 3) { // gentle climbs (Apennines): start at the lowest point instead
+    let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i;
+    if (bi < end - 2) base = bi;
+  }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
   if (dist < 1.5) return null;
@@ -356,7 +360,7 @@ async function main() {
       const ctx = {}; vm.createContext(ctx); vm.runInContext(code, ctx);
       const overrides = {};
       for (const p of (ctx.PASSES_DATA || [])) {
-        const ch = snap(p.lat, p.lon, 0.5);
+        const ch = snap(p.lat, p.lon, 1.2);
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
         try {
