@@ -60,7 +60,8 @@ canvas#relev{height:170px}
 .rstop{display:flex;align-items:center;gap:8px;font-size:.84rem;padding:5px 0;border-bottom:1px solid var(--bdr)}
 .rstop .n{flex:none;width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;text-align:center;line-height:22px;font-size:.72rem;font-weight:700}
 .wp-ic{background:#7c3aed;color:#fff;border-radius:50%;width:26px;height:26px;line-height:22px;text-align:center;font-size:.75rem;font-weight:700;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35);cursor:grab}
-.cat-pill{color:#fff;border-radius:6px;height:20px;min-width:24px;padding:0 5px;line-height:20px;text-align:center;font-size:.72rem;font-weight:800;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4)}
+.cat-pill.grv{background-image:repeating-linear-gradient(45deg,rgba(156,163,175,.85) 0 3px,transparent 3px 7px)!important;background-blend-mode:normal}
+.cat-pill{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);border-radius:6px;height:20px;min-width:24px;padding:0 5px;line-height:20px;text-align:center;font-size:.72rem;font-weight:800;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4)}
 .etog{padding:4px 9px;border:1px solid var(--bdr);border-radius:7px;background:var(--bg);color:var(--txt2);font-size:.76rem;cursor:pointer}
 .etog.active{background:var(--ac);color:#fff;border-color:var(--ac)}
 #be-btn{position:fixed;bottom:20px;left:20px;z-index:998;padding:10px 16px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:24px;cursor:pointer;font-size:.85rem;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,.3)}
@@ -171,6 +172,19 @@ function diffColor(d){return d>=9?"#ef4444":d>=7?"#f97316":d>=5?"#f59e0b":"#22c5
 /* gradient (%) -> color scale, used by profile + map track */
 function gradeColor(g){g=Math.abs(g);return g>=13?"#7f1d1d":g>=10?"#ef4444":g>=7?"#f97316":g>=4?"#f59e0b":"#22c55e";}
 /* climb category (HC/1/2/3/4) color + pill */
+function ensureCat(p){
+  if(p.cat||!p.versanti||!p.versanti.length)return;
+  var best=null,rank={HC:5,"1":4,"2":3,"3":2,"4":1};
+  p.versanti.forEach(function(v){
+    var gain=(v.endElevation||0)-(v.startElevation||0),d=v.distance_km||0;
+    if(gain<150||d<1)return;
+    var f=gain*gain/(d*1000*10)+Math.max(0,(v.endElevation||0)-1000)/1000;
+    var c=f>=8?"HC":f>=5.5?"1":f>=3.5?"2":f>=2?"3":"4";
+    if(!best||rank[c]>rank[best])best=c;
+  });
+  if(best)p.cat=best;
+}
+function isGravel(p){return (p.surfaceLabel||"").indexOf("Sterrato")>=0;}
 function catColor(c){return {HC:"#7f1d1d","1":"#dc2626","2":"#ea580c","3":"#d97706","4":"#65a30d"}[c]||"#64748b";}
 function catLabel(c){return c==="HC"?"HC":c;}
 function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;}});applyFilters();}).catch(function(){});}
@@ -227,8 +241,9 @@ function getOsm(id){return osmPasses.find(function(x){return x.id===id;});}
 function addMarkers(data){
   markers.clearLayers();
   data.forEach(function(p){
+    ensureCat(p);
     var c;
-    if(p.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill" style="background:'+catColor(p.cat)+'">'+catLabel(p.cat)+'</div>',iconSize:[28,20],iconAnchor:[14,10]});c=L.marker([p.lat,p.lon],{icon:ic});}
+    if(p.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(p)?" grv":"")+'" style="background:'+catColor(p.cat)+'">'+catLabel(p.cat)+'</div>',iconSize:[28,20],iconAnchor:[14,10]});c=L.marker([p.lat,p.lon],{icon:ic});}
     else c=L.circleMarker([p.lat,p.lon],{radius:10,fillColor:sc(p.status),color:"#fff",weight:2,fillOpacity:0.9});
     var evts=getEvts(p.id);
     var evTag=evts.length>0?"<br>&#x1F6B4; <b>"+evts.length+" Bike Day!</b>":"";
@@ -242,8 +257,9 @@ function addMarkers(data){
 function addOsmMarker(op){
   // show only bike-rideable passes: derived climb data OR snapped onto a rideable road
   if(!(op.versanti&&op.versanti.length)&&!op.snapped)return;
+  ensureCat(op);
   var c;
-  if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[28,20],iconAnchor:[14,10]});c=L.marker([op.lat,op.lon],{icon:ic});}
+  if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(op)?" grv":"")+'" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[28,20],iconAnchor:[14,10]});c=L.marker([op.lat,op.lon],{icon:ic});}
   else c=L.circleMarker([op.lat,op.lon],{radius:8,fillColor:(op.versanti&&op.versanti.length?diffColor(op.difficulty||5):"#a78bfa"),color:"#fff",weight:2,fillOpacity:0.85});
   var diffTag=op.difficulty?' &middot; <span style="color:#f59e0b">'+ds(op.difficulty)+'</span>':'';
   var surfTag=op.surfaceLabel?'<br>'+op.surfaceLabel:'';
@@ -294,6 +310,7 @@ function openD(id){
 }
 /* shared renderer for curated + enriched OSM passes */
 function renderPassPanel(p,isOsm){
+  ensureCat(p);
   var h='<div class="dp-hdr"><div style="display:flex;justify-content:space-between;align-items:start"><div>';
   h+='<h2 style="margin:0;font-size:1.3em">&#x26F0;&#xFE0F; '+p.name+(isOsm?' <span class="osm-badge">OSM</span>':'')+'</h2>';
   h+='<p style="margin:3px 0;opacity:.9">'+p.elevation+' m &middot; '+(p.region||"da OpenStreetMap")+'</p>';
@@ -322,7 +339,7 @@ function renderPassPanel(p,isOsm){
     h+='<div class="section-title">&#x1F4C8; Profilo Altimetrico</div>';
     if(p.versanti.length>1){h+='<div id="elev-tog" style="display:flex;gap:5px;margin-bottom:5px">';h+='<button class="etog active" onclick="setElev(-1)">Entrambi</button>';p.versanti.forEach(function(v,i){h+='<button class="etog" onclick="setElev('+i+')">'+v.side.substring(0,16)+'</button>';});h+='</div>';}
     h+='<canvas id="elev"></canvas>';
-    h+='<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:.72rem;color:var(--txt2);margin:2px 0 4px">Pendenza: <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px"></span> &lt;4%</span><span><span style="display:inline-block;width:10px;height:10px;background:#f59e0b;border-radius:2px"></span> 4-7%</span><span><span style="display:inline-block;width:10px;height:10px;background:#f97316;border-radius:2px"></span> 7-10%</span><span><span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:2px"></span> 10-13%</span><span><span style="display:inline-block;width:10px;height:10px;background:#7f1d1d;border-radius:2px"></span> &gt;13%</span></div>';
+    h+='<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:.72rem;color:var(--txt2);margin:2px 0 4px">Pendenza: <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px"></span> &lt;4%</span><span><span style="display:inline-block;width:10px;height:10px;background:#f59e0b;border-radius:2px"></span> 4-7%</span><span><span style="display:inline-block;width:10px;height:10px;background:#f97316;border-radius:2px"></span> 7-10%</span><span><span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:2px"></span> 10-13%</span><span><span style="display:inline-block;width:10px;height:10px;background:#7f1d1d;border-radius:2px"></span> &gt;13%</span> <span style="margin-left:8px"><span style="display:inline-block;width:12px;height:10px;border-radius:2px;background:#94a3b8;background-image:repeating-linear-gradient(45deg,#e5e7eb 0 2px,transparent 2px 5px)"></span> sterrato</span></div>';
   }
   h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div><div id="wbox" style="text-align:center;padding:16px;color:var(--txt2)">Caricamento meteo...</div>';
   h+=stravaSection(p);
