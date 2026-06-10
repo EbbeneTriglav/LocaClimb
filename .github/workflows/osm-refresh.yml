@@ -1,29 +1,19 @@
 name: Refresh OSM passes
 
-# Builds/updates osm_passes.json from OpenStreetMap + Open-Meteo and commits it.
-# Runs weekly, or on demand from the Actions tab.
+# v3: Geofabrik PBF + osmium + Terrarium DEM. No Overpass, no rate limits.
+# Builds osm_passes.json + curated_overrides.json + routes_baked.json and commits.
 
 on:
   workflow_dispatch:
     inputs:
-      max:
-        description: "Max passes to enrich this run (rate-limit guard)"
-        required: false
-        default: "60"
       reenrich:
-        description: "Recompute versanti for ALL passes (slow)"
+        description: "Recompute versanti for ALL passes"
         type: boolean
         required: false
         default: false
-      bbox:
-        description: "Overpass bbox South,West,North,East"
-        required: false
-        default: "44.0,6.5,47.5,13.5"
   schedule:
-    # every Monday 04:17 UTC (odd minute = lighter Overpass load)
-    - cron: "17 4 1 * *"
+    - cron: "17 4 1 * *"   # monthly
 
-# never run two refreshes at once
 concurrency:
   group: osm-refresh
   cancel-in-progress: false
@@ -34,7 +24,7 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,13 +34,15 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Build osm_passes.json
+      - name: Install osmium + pngjs
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+          npm init -y >/dev/null && npm install pngjs@7 --no-audit --no-fund
+
+      - name: Build data (PBF + DEM)
         run: |
           node scripts/build_osm_passes.mjs \
             --out osm_passes.json \
-            --max "${{ github.event.inputs.max || '60' }}" \
-            --bbox "${{ github.event.inputs.bbox || '44.0,6.5,47.5,13.5' }}" \
-            --tile 1.0 \
             ${{ (github.event.inputs.reenrich == 'true') && '--reenrich' || '' }}
 
       - name: Bake curated routes
@@ -60,12 +52,12 @@ jobs:
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "actions@users.noreply.github.com"
-          if git diff --quiet -- osm_passes.json routes_baked.json; then
-            echo "No changes"
-            exit 0
+          rm -rf build_tmp node_modules package.json package-lock.json
+          if git diff --quiet -- osm_passes.json curated_overrides.json routes_baked.json; then
+            echo "No changes"; exit 0
           fi
           COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('osm_passes.json')).length)")
           ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
-          git add osm_passes.json routes_baked.json
-          git commit -m "data: refresh OSM passes (${COUNT} passes, ${ENR} enriched) + baked routes"
+          git add osm_passes.json curated_overrides.json routes_baked.json
+          git commit -m "data: PBF+DEM build (${COUNT} passes, ${ENR} enriched)"
           git push
