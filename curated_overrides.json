@@ -4,7 +4,7 @@
   "lon": 10.4533685,
   "versanti": [
    {
-    "side": "Versante Nord-Est",
+    "side": "Da Premadio",
     "startLat": 46.5095604,
     "startLon": 10.390125,
     "startElevation": 1856,
@@ -13,7 +13,7 @@
     "avgGradient": 7.7,
     "maxGradient": 14.6,
     "traffic": "n/d",
-    "exposure": "Nord-Est",
+    "exposure": "Sud-Ovest",
     "elevationProfile": [
      1856,
      1903,
@@ -485,7 +485,7 @@
     ]
    },
    {
-    "side": "Versante Ovest",
+    "side": "Da Trafoi",
     "startLat": 46.533749,
     "startLon": 10.4868259,
     "startElevation": 2145,
@@ -494,7 +494,7 @@
     "avgGradient": 8.6,
     "maxGradient": 13.2,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      2145,
      2161,
@@ -974,7 +974,7 @@
   "lon": 10.4892822,
   "versanti": [
    {
-    "side": "Versante Sud-Est",
+    "side": "Da San Nicolò",
     "startLat": 46.4613527,
     "startLon": 10.4172091,
     "startElevation": 1335,
@@ -983,7 +983,7 @@
     "avgGradient": 6.1,
     "maxGradient": 14,
     "traffic": "n/d",
-    "exposure": "Sud-Est",
+    "exposure": "Nord-Ovest",
     "elevationProfile": [
      1335,
      1350,
@@ -1443,7 +1443,7 @@
     ]
    },
    {
-    "side": "Versante Nord",
+    "side": "Da Ponte di Legno",
     "startLat": 46.287237,
     "startLon": 10.5175718,
     "startElevation": 1435,
@@ -1452,7 +1452,7 @@
     "avgGradient": 8.7,
     "maxGradient": 15.6,
     "traffic": "n/d",
-    "exposure": "Nord",
+    "exposure": "Sud",
     "elevationProfile": [
      1435,
      1456,
@@ -1924,7 +1924,7 @@
     ]
    },
    {
-    "side": "Versante Sud",
+    "side": "Da Santa Caterina Valfurva",
     "startLat": 46.4145454,
     "startLon": 10.4890074,
     "startElevation": 1741,
@@ -1933,7 +1933,7 @@
     "avgGradient": 6.6,
     "maxGradient": 13.6,
     "traffic": "n/d",
-    "exposure": "Sud",
+    "exposure": "Nord",
     "elevationProfile": [
      1741,
      1756,
@@ -2309,7 +2309,7 @@
   "lon": 10.2960158,
   "versanti": [
    {
-    "side": "Versante Sud",
+    "side": "Da Tiolo",
     "startLat": 46.3098474,
     "startLon": 10.2970758,
     "startElevation": 732,
@@ -2318,7 +2318,7 @@
     "avgGradient": 9.1,
     "maxGradient": 22.3,
     "traffic": "n/d",
-    "exposure": "Sud",
+    "exposure": "Nord",
     "elevationProfile": [
      732,
      763,
@@ -2710,7 +2710,7 @@
   "lon": 12.9274609,
   "versanti": [
    {
-    "side": "Versante Est",
+    "side": "Da Ovaro / Davâr",
     "startLat": 46.4902146,
     "startLon": 12.8750959,
     "startElevation": 664,
@@ -2719,7 +2719,7 @@
     "avgGradient": 13.1,
     "maxGradient": 23.3,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      664,
      684,
@@ -3191,7 +3191,7 @@
     ]
    },
    {
-    "side": "Versante Sud-Ovest",
+    "side": "Da Zovello / Zuviel",
     "startLat": 46.5132695,
     "startLon": 12.952502,
     "startElevation": 1303,
@@ -3200,7 +3200,7 @@
     "avgGradient": 11,
     "maxGradient": 20.3,
     "traffic": "n/d",
-    "exposure": "Sud-Ovest",
+    "exposure": "Nord-Est",
     "elevationProfile": [
      1303,
      1303,
@@ -3680,7 +3680,7 @@
   "lon": 11.8135345,
   "versanti": [
    {
-    "side": "Versante Ovest",
+    "side": "Da Livinallongo del Col di Lana",
     "startLat": 46.4959176,
     "startLon": 11.9216028,
     "startElevation": 1449,
@@ -3689,7 +3689,7 @@
     "avgGradient": 6.5,
     "maxGradient": 11.4,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      1449,
      1471,
@@ -4077,7 +4077,7 @@
   "lon": 11.761432,
   "versanti": [
    {
-    "side": "Versante Sud",
+    "side": "Da Santa Crestina - Santa Cristina - Sankt Christina",
     "startLat": 46.5575767,
     "startLon": 11.7323535,
     "startElevation": 1445,
@@ -4086,7 +4086,7 @@
     "avgGradient": 6.5,
     "maxGradient": 14.4,
     "traffic": "n/d",
-    "exposure": "Sud",
+    "exposure": "Nord",
     "elevationProfile": [
      1445,
      1479,
@@ -4558,7 +4558,7 @@
     ]
    },
    {
-    "side": "Versante Nord-Ovest",
+    "side": "Da Canazei - Cianacei",
     "startLat": 46.495296,
     "startLon": 11.7870659,
     "startElevation": 1823,
@@ -4567,7 +4567,7 @@
     "avgGradient": 5.2,
     "maxGradient": 13.7,
     "traffic": "n/d",
-    "exposure": "Nord-Ovest",
+    "exposure": "Sud-Est",
     "elevationProfile": [
      1823,
      1838,
@@ -4907,7 +4907,7 @@
   "lon": 11.8025659,
   "versanti": [
    {
-    "side": "Versante Ovest",
+    "side": "Da Calfosch - Kolfuschg - Colfosco",
     "startLat": 46.5508412,
     "startLon": 11.8579029,
     "startElevation": 1580,
@@ -4916,7 +4916,7 @@
     "avgGradient": 4.6,
     "maxGradient": 13.4,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      1580,
      1626,
@@ -5396,7 +5396,356 @@
   "lon": 11.8741352,
   "versanti": [
    {
-    "side": "Versante Sud",
+    "side": "Da Pieve",
+    "startLat": 46.4800588,
+    "startLon": 11.9787881,
+    "startElevation": 1425,
+    "endElevation": 1844,
+    "distance_km": 14.1,
+    "avgGradient": 3,
+    "maxGradient": 11.5,
+    "traffic": "n/d",
+    "exposure": "Sud-Est",
+    "elevationProfile": [
+     1425,
+     1444,
+     1454,
+     1458,
+     1458,
+     1483,
+     1480,
+     1464,
+     1462,
+     1456,
+     1489,
+     1502,
+     1539,
+     1585,
+     1595,
+     1610,
+     1650,
+     1674,
+     1698,
+     1759,
+     1816,
+     1832,
+     1860,
+     1844
+    ],
+    "cat": "3",
+    "track": [
+     [
+      46.4800588,
+      11.9787881
+     ],
+     [
+      46.4801314,
+      11.9776914
+     ],
+     [
+      46.4797537,
+      11.9765916
+     ],
+     [
+      46.4792162,
+      11.9761088
+     ],
+     [
+      46.4781792,
+      11.9745692
+     ],
+     [
+      46.4775871,
+      11.9745585
+     ],
+     [
+      46.4768024,
+      11.9734468
+     ],
+     [
+      46.4764477,
+      11.9718984
+     ],
+     [
+      46.4761475,
+      11.9696554
+     ],
+     [
+      46.4758004,
+      11.9671918
+     ],
+     [
+      46.47587,
+      11.9650656
+     ],
+     [
+      46.4767997,
+      11.9628167
+     ],
+     [
+      46.4784491,
+      11.9605405
+     ],
+     [
+      46.4806466,
+      11.9559692
+     ],
+     [
+      46.481271,
+      11.9553289
+     ],
+     [
+      46.4821845,
+      11.9553762
+     ],
+     [
+      46.4822467,
+      11.9551134
+     ],
+     [
+      46.4816347,
+      11.9543466
+     ],
+     [
+      46.4816502,
+      11.9535411
+     ],
+     [
+      46.4823663,
+      11.9524221
+     ],
+     [
+      46.4832574,
+      11.9518346
+     ],
+     [
+      46.4839924,
+      11.9494382
+     ],
+     [
+      46.4858108,
+      11.9458413
+     ],
+     [
+      46.4878055,
+      11.942239
+     ],
+     [
+      46.4913638,
+      11.9360327
+     ],
+     [
+      46.4926468,
+      11.934645
+     ],
+     [
+      46.4945787,
+      11.9298397
+     ],
+     [
+      46.4959176,
+      11.9216028
+     ],
+     [
+      46.4964315,
+      11.9197056
+     ],
+     [
+      46.4967916,
+      11.9195383
+     ],
+     [
+      46.4974072,
+      11.9202316
+     ],
+     [
+      46.497807,
+      11.9192299
+     ],
+     [
+      46.4977373,
+      11.9150213
+     ],
+     [
+      46.4985594,
+      11.9103617
+     ],
+     [
+      46.4983434,
+      11.9080967
+     ],
+     [
+      46.497063,
+      11.9059991
+     ],
+     [
+      46.4972447,
+      11.9036638
+     ],
+     [
+      46.4985122,
+      11.9020313
+     ],
+     [
+      46.4987117,
+      11.8995934
+     ],
+     [
+      46.4981944,
+      11.8949992
+     ],
+     [
+      46.4976116,
+      11.8917453
+     ],
+     [
+      46.4976059,
+      11.8888635
+     ],
+     [
+      46.4986788,
+      11.8851105
+     ],
+     [
+      46.4988976,
+      11.8813691
+     ],
+     [
+      46.4987386,
+      11.8766928
+     ],
+     [
+      46.4981893,
+      11.8756289
+     ],
+     [
+      46.4977585,
+      11.8754821
+     ],
+     [
+      46.4977121,
+      11.8752072
+     ],
+     [
+      46.4978945,
+      11.8744672
+     ],
+     [
+      46.4985212,
+      11.8745734
+     ],
+     [
+      46.4993185,
+      11.8753696
+     ],
+     [
+      46.4993289,
+      11.8766905
+     ],
+     [
+      46.4996135,
+      11.8796154
+     ],
+     [
+      46.5002503,
+      11.882992
+     ],
+     [
+      46.5006815,
+      11.8845304
+     ],
+     [
+      46.5006429,
+      11.8854967
+     ],
+     [
+      46.5009377,
+      11.8847741
+     ],
+     [
+      46.5011357,
+      11.8842919
+     ],
+     [
+      46.5012163,
+      11.8856047
+     ],
+     [
+      46.5014126,
+      11.8875248
+     ],
+     [
+      46.5014649,
+      11.8869118
+     ],
+     [
+      46.5020098,
+      11.8846428
+     ],
+     [
+      46.5019647,
+      11.8789968
+     ],
+     [
+      46.5028836,
+      11.8771528
+     ],
+     [
+      46.5035344,
+      11.8773097
+     ],
+     [
+      46.5062204,
+      11.8776953
+     ],
+     [
+      46.5077718,
+      11.8769481
+     ],
+     [
+      46.5070739,
+      11.8775881
+     ],
+     [
+      46.5074655,
+      11.8779057
+     ],
+     [
+      46.5080627,
+      11.8771544
+     ],
+     [
+      46.5085106,
+      11.8766547
+     ],
+     [
+      46.5088919,
+      11.8764312
+     ],
+     [
+      46.5095286,
+      11.8764635
+     ],
+     [
+      46.5134435,
+      11.8727851
+     ],
+     [
+      46.5174103,
+      11.8728193
+     ],
+     [
+      46.5199517,
+      11.8738033
+     ],
+     [
+      46.5217129,
+      11.8741352
+     ]
+    ]
+   },
+   {
+    "side": "Da Corvara - Corvara in Badia",
     "startLat": 46.5521474,
     "startLon": 11.8741412,
     "startElevation": 1523,
@@ -5405,7 +5754,7 @@
     "avgGradient": 5.8,
     "maxGradient": 14.6,
     "traffic": "n/d",
-    "exposure": "Sud",
+    "exposure": "Nord",
     "elevationProfile": [
      1523,
      1538,
@@ -5885,7 +6234,7 @@
   "lon": 12.0071977,
   "versanti": [
    {
-    "side": "Versante Est",
+    "side": "Da Arabba",
     "startLat": 46.4977552,
     "startLon": 11.9154165,
     "startElevation": 1480,
@@ -5894,7 +6243,7 @@
     "avgGradient": 3.7,
     "maxGradient": 10.6,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      1480,
      1456,
@@ -6366,7 +6715,7 @@
     ]
    },
    {
-    "side": "Versante Ovest",
+    "side": "Da Cortina d'Ampezzo",
     "startLat": 46.5397734,
     "startLon": 12.1316747,
     "startElevation": 1197,
@@ -6375,7 +6724,7 @@
     "avgGradient": 5.8,
     "maxGradient": 19.6,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      1197,
      1218,
@@ -6847,7 +7196,7 @@
     ]
    },
    {
-    "side": "Versante Sud-Est",
+    "side": "Da San Ćiascian - St. Kassian - San Cassiano",
     "startLat": 46.5693407,
     "startLon": 11.935472,
     "startElevation": 1528,
@@ -6856,7 +7205,7 @@
     "avgGradient": 4.9,
     "maxGradient": 12.3,
     "traffic": "n/d",
-    "exposure": "Sud-Est",
+    "exposure": "Nord-Ovest",
     "elevationProfile": [
      1528,
      1535,
@@ -7328,7 +7677,7 @@
     ]
    },
    {
-    "side": "Versante Nord-Est",
+    "side": "Da Pieve",
     "startLat": 46.4775317,
     "startLon": 11.9745076,
     "startElevation": 1437,
@@ -7337,7 +7686,7 @@
     "avgGradient": 5.9,
     "maxGradient": 12.8,
     "traffic": "n/d",
-    "exposure": "Nord-Est",
+    "exposure": "Sud-Ovest",
     "elevationProfile": [
      1437,
      1433,
@@ -7697,7 +8046,7 @@
   "lon": 12.0529628,
   "versanti": [
    {
-    "side": "Versante Sud-Ovest",
+    "side": "Da Cortina d'Ampezzo",
     "startLat": 46.5402236,
     "startLon": 12.1297703,
     "startElevation": 1204,
@@ -7706,7 +8055,7 @@
     "avgGradient": 6.8,
     "maxGradient": 15.2,
     "traffic": "n/d",
-    "exposure": "Sud-Ovest",
+    "exposure": "Nord-Est",
     "elevationProfile": [
      1204,
      1250,
@@ -8178,7 +8527,7 @@
     ]
    },
    {
-    "side": "Versante Nord",
+    "side": "Da Selva di Cadore",
     "startLat": 46.4514176,
     "startLon": 12.0346784,
     "startElevation": 1337,
@@ -8187,7 +8536,7 @@
     "avgGradient": 9,
     "maxGradient": 16.6,
     "traffic": "n/d",
-    "exposure": "Nord",
+    "exposure": "Sud",
     "elevationProfile": [
      1337,
      1353,
@@ -8607,7 +8956,7 @@
     ]
    },
    {
-    "side": "Versante Sud-Ovest",
+    "side": "Da Cortina d'Ampezzo",
     "startLat": 46.5172921,
     "startLon": 12.1005335,
     "startElevation": 1520,
@@ -8616,7 +8965,7 @@
     "avgGradient": 8.2,
     "maxGradient": 15.6,
     "traffic": "n/d",
-    "exposure": "Sud-Ovest",
+    "exposure": "Nord-Est",
     "elevationProfile": [
      1520,
      1531,
@@ -8936,7 +9285,7 @@
   "lon": 11.8746225,
   "versanti": [
    {
-    "side": "Versante Ovest",
+    "side": "Da Rocca Pietore",
     "startLat": 46.4371016,
     "startLon": 11.9819549,
     "startElevation": 1056,
@@ -8945,7 +9294,7 @@
     "avgGradient": 7.2,
     "maxGradient": 18.9,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      1056,
      1116,
@@ -9417,7 +9766,7 @@
     ]
    },
    {
-    "side": "Versante Est",
+    "side": "Da Canazei - Cianacei",
     "startLat": 46.4723319,
     "startLon": 11.7769716,
     "startElevation": 1448,
@@ -9426,7 +9775,7 @@
     "avgGradient": 5.3,
     "maxGradient": 15.3,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      1448,
      1461,
@@ -9710,7 +10059,7 @@
   "lon": 9.3304582,
   "versanti": [
    {
-    "side": "Versante Nord",
+    "side": "Da Madesimo",
     "startLat": 46.4224204,
     "startLon": 9.3444302,
     "startElevation": 1314,
@@ -9719,7 +10068,7 @@
     "avgGradient": 5.9,
     "maxGradient": 15.5,
     "traffic": "n/d",
-    "exposure": "Nord",
+    "exposure": "Sud",
     "elevationProfile": [
      1314,
      1333,
@@ -10191,7 +10540,7 @@
     ]
    },
    {
-    "side": "Versante Nord-Ovest",
+    "side": "Versante Sud-Est",
     "startLat": 46.4874915,
     "startLon": 9.3475806,
     "startElevation": 1902,
@@ -10200,7 +10549,7 @@
     "avgGradient": 6.1,
     "maxGradient": 11.7,
     "traffic": "n/d",
-    "exposure": "Nord-Ovest",
+    "exposure": "Sud-Est",
     "elevationProfile": [
      1902,
      1902,
@@ -10372,7 +10721,7 @@
   "lon": 9.6174355,
   "versanti": [
    {
-    "side": "Versante Nord-Ovest",
+    "side": "Da Mezzoldo",
     "startLat": 46.0149008,
     "startLon": 9.6636781,
     "startElevation": 995,
@@ -10381,7 +10730,7 @@
     "avgGradient": 4.1,
     "maxGradient": 15.6,
     "traffic": "n/d",
-    "exposure": "Nord-Ovest",
+    "exposure": "Sud-Est",
     "elevationProfile": [
      995,
      1125,
@@ -10861,7 +11210,7 @@
   "lon": 11.7946716,
   "versanti": [
    {
-    "side": "Versante Sud",
+    "side": "Da Arten",
     "startLat": 45.9969961,
     "startLon": 11.8210557,
     "startElevation": 444,
@@ -10870,7 +11219,7 @@
     "avgGradient": 5.2,
     "maxGradient": 13,
     "traffic": "n/d",
-    "exposure": "Sud",
+    "exposure": "Nord",
     "elevationProfile": [
      444,
      579,
@@ -11342,7 +11691,7 @@
     ]
    },
    {
-    "side": "Versante Nord-Est",
+    "side": "Da Solagna",
     "startLat": 45.8456158,
     "startLon": 11.7446963,
     "startElevation": 1022,
@@ -11351,7 +11700,7 @@
     "avgGradient": 6,
     "maxGradient": 12.3,
     "traffic": "n/d",
-    "exposure": "Nord-Est",
+    "exposure": "Sud-Ovest",
     "elevationProfile": [
      1022,
      1029,
@@ -11759,7 +12108,7 @@
   "lon": 11.4442857,
   "versanti": [
    {
-    "side": "Versante Sud",
+    "side": "Da Molina di Fiemme",
     "startLat": 46.2711333,
     "startLon": 11.4137097,
     "startElevation": 813,
@@ -11768,7 +12117,7 @@
     "avgGradient": 7.1,
     "maxGradient": 19.2,
     "traffic": "n/d",
-    "exposure": "Sud",
+    "exposure": "Nord",
     "elevationProfile": [
      813,
      811,
@@ -12240,7 +12589,7 @@
     ]
    },
    {
-    "side": "Versante Nord-Ovest",
+    "side": "Da Samone",
     "startLat": 46.1100959,
     "startLon": 11.4984963,
     "startElevation": 947,
@@ -12249,7 +12598,7 @@
     "avgGradient": 8.3,
     "maxGradient": 16.4,
     "traffic": "n/d",
-    "exposure": "Nord-Ovest",
+    "exposure": "Sud-Est",
     "elevationProfile": [
      947,
      1005,
@@ -12729,7 +13078,7 @@
   "lon": 10.5822439,
   "versanti": [
    {
-    "side": "Versante Ovest",
+    "side": "Da Mezzana",
     "startLat": 46.3173595,
     "startLon": 10.7959586,
     "startElevation": 944,
@@ -12738,7 +13087,7 @@
     "avgGradient": 4.8,
     "maxGradient": 13.8,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      944,
      922,
@@ -13210,7 +13559,7 @@
     ]
    },
    {
-    "side": "Versante Est",
+    "side": "Da Temù",
     "startLat": 46.2494249,
     "startLon": 10.4643032,
     "startElevation": 1136,
@@ -13219,7 +13568,7 @@
     "avgGradient": 5.1,
     "maxGradient": 14.2,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      1136,
      1158,
@@ -13694,12 +14043,898 @@
   "difficulty": 7,
   "cat": "2"
  },
+ "presolana": {
+  "lat": 45.9292123,
+  "lon": 10.0990239,
+  "versanti": [
+   {
+    "side": "Da Fino del Monte",
+    "startLat": 45.8915293,
+    "startLon": 10.0001386,
+    "startElevation": 668,
+    "endElevation": 1302,
+    "distance_km": 10.4,
+    "avgGradient": 6.1,
+    "maxGradient": 12.1,
+    "traffic": "n/d",
+    "exposure": "Sud-Ovest",
+    "elevationProfile": [
+     668,
+     728,
+     741,
+     745,
+     761,
+     770,
+     777,
+     787,
+     830,
+     861,
+     873,
+     882,
+     898,
+     941,
+     978,
+     1021,
+     1078,
+     1123,
+     1146,
+     1171,
+     1212,
+     1244,
+     1282,
+     1302
+    ],
+    "cat": "2",
+    "track": [
+     [
+      45.8915293,
+      10.0001386
+     ],
+     [
+      45.891475,
+      10.0005111
+     ],
+     [
+      45.8919215,
+      10.0020653
+     ],
+     [
+      45.8925926,
+      10.002333
+     ],
+     [
+      45.8942271,
+      10.0023905
+     ],
+     [
+      45.8960661,
+      10.0033209
+     ],
+     [
+      45.8965847,
+      10.003465
+     ],
+     [
+      45.8968619,
+      10.0035092
+     ],
+     [
+      45.8969798,
+      10.0036441
+     ],
+     [
+      45.8970253,
+      10.0039035
+     ],
+     [
+      45.8958463,
+      10.005266
+     ],
+     [
+      45.8952902,
+      10.0061485
+     ],
+     [
+      45.8952565,
+      10.0069746
+     ],
+     [
+      45.895586,
+      10.0078343
+     ],
+     [
+      45.896301,
+      10.0094114
+     ],
+     [
+      45.8966972,
+      10.0104897
+     ],
+     [
+      45.8968395,
+      10.0111264
+     ],
+     [
+      45.8969851,
+      10.0119404
+     ],
+     [
+      45.8971074,
+      10.0126043
+     ],
+     [
+      45.8972605,
+      10.0134679
+     ],
+     [
+      45.8974546,
+      10.0145824
+     ],
+     [
+      45.8975899,
+      10.0153388
+     ],
+     [
+      45.897687,
+      10.0159315
+     ],
+     [
+      45.8977943,
+      10.0165485
+     ],
+     [
+      45.8979268,
+      10.0168866
+     ],
+     [
+      45.898123,
+      10.0170948
+     ],
+     [
+      45.8985805,
+      10.0172595
+     ],
+     [
+      45.89927,
+      10.0174332
+     ],
+     [
+      45.8995651,
+      10.0177648
+     ],
+     [
+      45.8995349,
+      10.0182157
+     ],
+     [
+      45.8994265,
+      10.018603
+     ],
+     [
+      45.8994097,
+      10.0189114
+     ],
+     [
+      45.8996185,
+      10.0193345
+     ],
+     [
+      45.9004363,
+      10.0204767
+     ],
+     [
+      45.9011213,
+      10.0214866
+     ],
+     [
+      45.9015265,
+      10.0224456
+     ],
+     [
+      45.9026074,
+      10.0252227
+     ],
+     [
+      45.9031262,
+      10.0265555
+     ],
+     [
+      45.904432,
+      10.0298327
+     ],
+     [
+      45.9051856,
+      10.0313749
+     ],
+     [
+      45.9058015,
+      10.0320117
+     ],
+     [
+      45.9060889,
+      10.0320847
+     ],
+     [
+      45.9062894,
+      10.0323164
+     ],
+     [
+      45.9065098,
+      10.0329544
+     ],
+     [
+      45.9067282,
+      10.0335643
+     ],
+     [
+      45.9070513,
+      10.0341911
+     ],
+     [
+      45.907304,
+      10.0346
+     ],
+     [
+      45.9076989,
+      10.0353813
+     ],
+     [
+      45.9081821,
+      10.0363036
+     ],
+     [
+      45.9085305,
+      10.0367517
+     ],
+     [
+      45.9090983,
+      10.0373673
+     ],
+     [
+      45.9099972,
+      10.0383214
+     ],
+     [
+      45.9106569,
+      10.0392526
+     ],
+     [
+      45.9108616,
+      10.0405313
+     ],
+     [
+      45.9116342,
+      10.0426528
+     ],
+     [
+      45.9119519,
+      10.0432079
+     ],
+     [
+      45.9124738,
+      10.0439269
+     ],
+     [
+      45.9130793,
+      10.0449796
+     ],
+     [
+      45.9134883,
+      10.0461915
+     ],
+     [
+      45.91365,
+      10.0489758
+     ],
+     [
+      45.9138891,
+      10.0506234
+     ],
+     [
+      45.9139385,
+      10.0520728
+     ],
+     [
+      45.9139933,
+      10.0535388
+     ],
+     [
+      45.9142269,
+      10.0549053
+     ],
+     [
+      45.9149645,
+      10.0562588
+     ],
+     [
+      45.9159428,
+      10.0573166
+     ],
+     [
+      45.9164889,
+      10.0574283
+     ],
+     [
+      45.9171329,
+      10.0576907
+     ],
+     [
+      45.9177455,
+      10.0585964
+     ],
+     [
+      45.9180872,
+      10.0600572
+     ],
+     [
+      45.9186151,
+      10.0602801
+     ],
+     [
+      45.9193854,
+      10.0614088
+     ],
+     [
+      45.9206206,
+      10.0632022
+     ],
+     [
+      45.9214849,
+      10.0641083
+     ],
+     [
+      45.9221563,
+      10.0653437
+     ],
+     [
+      45.923,
+      10.0673101
+     ],
+     [
+      45.9241569,
+      10.0690858
+     ],
+     [
+      45.9240934,
+      10.0700959
+     ],
+     [
+      45.9239981,
+      10.0713399
+     ],
+     [
+      45.9245403,
+      10.0716519
+     ],
+     [
+      45.925298,
+      10.0710761
+     ],
+     [
+      45.925445,
+      10.0701707
+     ],
+     [
+      45.9255942,
+      10.0708338
+     ],
+     [
+      45.9259963,
+      10.0717098
+     ],
+     [
+      45.9268251,
+      10.0730592
+     ],
+     [
+      45.9268484,
+      10.0738551
+     ],
+     [
+      45.9272006,
+      10.0746082
+     ],
+     [
+      45.9279891,
+      10.0760683
+     ],
+     [
+      45.9282309,
+      10.0763551
+     ],
+     [
+      45.9283114,
+      10.0757765
+     ],
+     [
+      45.9285994,
+      10.0745664
+     ],
+     [
+      45.9288088,
+      10.0755554
+     ],
+     [
+      45.9296007,
+      10.0772817
+     ],
+     [
+      45.9305973,
+      10.0786054
+     ],
+     [
+      45.9311979,
+      10.079792
+     ],
+     [
+      45.93152,
+      10.0804738
+     ],
+     [
+      45.9315513,
+      10.0813472
+     ],
+     [
+      45.9320123,
+      10.0822799
+     ],
+     [
+      45.932102,
+      10.0836384
+     ],
+     [
+      45.9318504,
+      10.0845417
+     ],
+     [
+      45.9315139,
+      10.0858471
+     ],
+     [
+      45.9311172,
+      10.0868732
+     ],
+     [
+      45.9309242,
+      10.0883639
+     ],
+     [
+      45.9305802,
+      10.0896353
+     ],
+     [
+      45.9300051,
+      10.0922804
+     ],
+     [
+      45.9297054,
+      10.0933546
+     ],
+     [
+      45.9296277,
+      10.0944361
+     ],
+     [
+      45.9292586,
+      10.096133
+     ],
+     [
+      45.9290397,
+      10.0975068
+     ],
+     [
+      45.9292123,
+      10.0990239
+     ]
+    ]
+   },
+   {
+    "side": "Da Azzone",
+    "startLat": 45.9708676,
+    "startLon": 10.1088827,
+    "startElevation": 743,
+    "endElevation": 1302,
+    "distance_km": 8.3,
+    "avgGradient": 6.8,
+    "maxGradient": 17.9,
+    "traffic": "n/d",
+    "exposure": "Nord",
+    "elevationProfile": [
+     743,
+     750,
+     769,
+     792,
+     812,
+     835,
+     885,
+     898,
+     910,
+     916,
+     935,
+     943,
+     981,
+     1000,
+     1047,
+     1061,
+     1098,
+     1135,
+     1163,
+     1188,
+     1236,
+     1242,
+     1258,
+     1302
+    ],
+    "cat": "2",
+    "track": [
+     [
+      45.9708676,
+      10.1088827
+     ],
+     [
+      45.9727963,
+      10.1067621
+     ],
+     [
+      45.9739942,
+      10.1047099
+     ],
+     [
+      45.9748347,
+      10.1042715
+     ],
+     [
+      45.9762072,
+      10.1026883
+     ],
+     [
+      45.9753815,
+      10.1032367
+     ],
+     [
+      45.9743394,
+      10.1039727
+     ],
+     [
+      45.9734041,
+      10.1043623
+     ],
+     [
+      45.9726719,
+      10.1060839
+     ],
+     [
+      45.9718102,
+      10.1067653
+     ],
+     [
+      45.9710267,
+      10.1077468
+     ],
+     [
+      45.9701477,
+      10.1083649
+     ],
+     [
+      45.969069,
+      10.1077642
+     ],
+     [
+      45.968294,
+      10.1073986
+     ],
+     [
+      45.9667238,
+      10.1073576
+     ],
+     [
+      45.9655913,
+      10.1076657
+     ],
+     [
+      45.964096,
+      10.1077892
+     ],
+     [
+      45.9634489,
+      10.1066036
+     ],
+     [
+      45.9624914,
+      10.1066618
+     ],
+     [
+      45.9618192,
+      10.1079452
+     ],
+     [
+      45.960462,
+      10.1080977
+     ],
+     [
+      45.9587202,
+      10.1064716
+     ],
+     [
+      45.9576617,
+      10.1051096
+     ],
+     [
+      45.9572078,
+      10.1048841
+     ],
+     [
+      45.9568035,
+      10.1052338
+     ],
+     [
+      45.9558684,
+      10.1054258
+     ],
+     [
+      45.9549777,
+      10.1058363
+     ],
+     [
+      45.9543473,
+      10.1046801
+     ],
+     [
+      45.9537543,
+      10.1041086
+     ],
+     [
+      45.9531463,
+      10.1034275
+     ],
+     [
+      45.9526158,
+      10.102574
+     ],
+     [
+      45.9521994,
+      10.1018977
+     ],
+     [
+      45.9523289,
+      10.1007302
+     ],
+     [
+      45.9523447,
+      10.0998506
+     ],
+     [
+      45.9526015,
+      10.0993242
+     ],
+     [
+      45.9525488,
+      10.0990799
+     ],
+     [
+      45.9523086,
+      10.0990976
+     ],
+     [
+      45.9517941,
+      10.0992455
+     ],
+     [
+      45.9514573,
+      10.0991791
+     ],
+     [
+      45.9508827,
+      10.0994935
+     ],
+     [
+      45.9506761,
+      10.1003894
+     ],
+     [
+      45.949715,
+      10.1004665
+     ],
+     [
+      45.9489946,
+      10.0996641
+     ],
+     [
+      45.9487908,
+      10.0989586
+     ],
+     [
+      45.9481357,
+      10.098286
+     ],
+     [
+      45.9474915,
+      10.0974266
+     ],
+     [
+      45.9469583,
+      10.0971822
+     ],
+     [
+      45.9464058,
+      10.097081
+     ],
+     [
+      45.9458347,
+      10.0965585
+     ],
+     [
+      45.9453127,
+      10.0965562
+     ],
+     [
+      45.9448068,
+      10.0962834
+     ],
+     [
+      45.944292,
+      10.0960055
+     ],
+     [
+      45.9436897,
+      10.0959323
+     ],
+     [
+      45.9431474,
+      10.09617
+     ],
+     [
+      45.942447,
+      10.0963591
+     ],
+     [
+      45.9417694,
+      10.0963081
+     ],
+     [
+      45.9412933,
+      10.0963432
+     ],
+     [
+      45.9409038,
+      10.0969187
+     ],
+     [
+      45.9404864,
+      10.0975762
+     ],
+     [
+      45.9397227,
+      10.0977817
+     ],
+     [
+      45.9389963,
+      10.0988352
+     ],
+     [
+      45.9381306,
+      10.0993088
+     ],
+     [
+      45.9373011,
+      10.0996328
+     ],
+     [
+      45.9365863,
+      10.0999207
+     ],
+     [
+      45.9360857,
+      10.1001553
+     ],
+     [
+      45.9365399,
+      10.0996424
+     ],
+     [
+      45.9374364,
+      10.0986224
+     ],
+     [
+      45.938,
+      10.0982515
+     ],
+     [
+      45.9380406,
+      10.0980863
+     ],
+     [
+      45.9372545,
+      10.0980759
+     ],
+     [
+      45.9356825,
+      10.0987318
+     ],
+     [
+      45.9354151,
+      10.0987047
+     ],
+     [
+      45.935911,
+      10.0980832
+     ],
+     [
+      45.9350406,
+      10.0987226
+     ],
+     [
+      45.9344856,
+      10.0984032
+     ],
+     [
+      45.933622,
+      10.098641
+     ],
+     [
+      45.9327618,
+      10.0997169
+     ],
+     [
+      45.9320001,
+      10.1009824
+     ],
+     [
+      45.9314828,
+      10.1011568
+     ],
+     [
+      45.9314489,
+      10.1021349
+     ],
+     [
+      45.9313513,
+      10.1016993
+     ],
+     [
+      45.9313326,
+      10.1007627
+     ],
+     [
+      45.9311331,
+      10.1007767
+     ],
+     [
+      45.9309231,
+      10.1021446
+     ],
+     [
+      45.9308155,
+      10.1018382
+     ],
+     [
+      45.9308334,
+      10.1010971
+     ],
+     [
+      45.9303616,
+      10.1020555
+     ],
+     [
+      45.9299268,
+      10.1016896
+     ],
+     [
+      45.9292123,
+      10.0990239
+     ]
+    ]
+   }
+  ],
+  "difficulty": 7,
+  "cat": "2"
+ },
  "vivione": {
   "lat": 46.0342863,
   "lon": 10.195597,
   "versanti": [
    {
-    "side": "Versante Sud-Ovest",
+    "side": "Da Paisco",
     "startLat": 46.0909645,
     "startLon": 10.3105509,
     "startElevation": 538,
@@ -13708,7 +14943,7 @@
     "avgGradient": 7.1,
     "maxGradient": 17.9,
     "traffic": "n/d",
-    "exposure": "Sud-Ovest",
+    "exposure": "Nord-Est",
     "elevationProfile": [
      538,
      598,
@@ -14180,7 +15415,7 @@
     ]
    },
    {
-    "side": "Versante Nord-Est",
+    "side": "Da Vilmaggiore",
     "startLat": 45.9972472,
     "startLon": 10.1072029,
     "startElevation": 906,
@@ -14189,7 +15424,7 @@
     "avgGradient": 5.6,
     "maxGradient": 17.5,
     "traffic": "n/d",
-    "exposure": "Nord-Est",
+    "exposure": "Sud-Ovest",
     "elevationProfile": [
      906,
      938,
@@ -14669,7 +15904,7 @@
   "lon": 11.7854811,
   "versanti": [
    {
-    "side": "Versante Nord",
+    "side": "Da San Martino di Castrozza",
     "startLat": 46.2277424,
     "startLon": 11.8084705,
     "startElevation": 1147,
@@ -14678,7 +15913,7 @@
     "avgGradient": 6.1,
     "maxGradient": 12.9,
     "traffic": "n/d",
-    "exposure": "Nord",
+    "exposure": "Sud",
     "elevationProfile": [
      1147,
      1195,
@@ -15150,7 +16385,7 @@
     ]
    },
    {
-    "side": "Versante Est",
+    "side": "Da Paneveggio",
     "startLat": 46.3009592,
     "startLon": 11.716861,
     "startElevation": 1480,
@@ -15159,7 +16394,7 @@
     "avgGradient": 5.3,
     "maxGradient": 10.7,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      1480,
      1477,
@@ -15443,7 +16678,7 @@
   "lon": 11.8233134,
   "versanti": [
    {
-    "side": "Versante Nord-Ovest",
+    "side": "Da Feltre",
     "startLat": 46.0229265,
     "startLon": 11.9210509,
     "startElevation": 291,
@@ -15452,7 +16687,7 @@
     "avgGradient": 4.2,
     "maxGradient": 13.8,
     "traffic": "n/d",
-    "exposure": "Nord-Ovest",
+    "exposure": "Sud-Est",
     "elevationProfile": [
      291,
      284,
@@ -15924,7 +17159,7 @@
     ]
    },
    {
-    "side": "Versante Est",
+    "side": "Da Zorzoi",
     "startLat": 46.0603312,
     "startLon": 11.7635196,
     "startElevation": 422,
@@ -15933,7 +17168,7 @@
     "avgGradient": 5.1,
     "maxGradient": 15.9,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      422,
      452,
@@ -16317,7 +17552,7 @@
   "lon": 10.6543388,
   "versanti": [
    {
-    "side": "Versante Nord-Ovest",
+    "side": "Da Cutigliano",
     "startLat": 44.1039125,
     "startLon": 10.7426224,
     "startElevation": 671,
@@ -16326,7 +17561,7 @@
     "avgGradient": 4.9,
     "maxGradient": 12.6,
     "traffic": "n/d",
-    "exposure": "Nord-Ovest",
+    "exposure": "Sud-Est",
     "elevationProfile": [
      671,
      706,
@@ -16798,7 +18033,7 @@
     ]
    },
    {
-    "side": "Versante Sud-Est",
+    "side": "Da Pievepelago",
     "startLat": 44.2021997,
     "startLon": 10.6149982,
     "startElevation": 774,
@@ -16807,7 +18042,7 @@
     "avgGradient": 5.6,
     "maxGradient": 10.6,
     "traffic": "n/d",
-    "exposure": "Sud-Est",
+    "exposure": "Nord-Ovest",
     "elevationProfile": [
      774,
      775,
@@ -17119,7 +18354,7 @@
   "lon": 10.1487928,
   "versanti": [
    {
-    "side": "Versante Est",
+    "side": "Da Chiuro",
     "startLat": 46.1648741,
     "startLon": 9.9923213,
     "startElevation": 356,
@@ -17128,7 +18363,7 @@
     "avgGradient": 4.2,
     "maxGradient": 12.9,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      356,
      368,
@@ -17600,7 +18835,7 @@
     ]
    },
    {
-    "side": "Versante Ovest",
+    "side": "Da Edolo",
     "startLat": 46.1804431,
     "startLon": 10.3310264,
     "startElevation": 692,
@@ -17609,7 +18844,7 @@
     "avgGradient": 3.2,
     "maxGradient": 7.8,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      692,
      697,
@@ -17973,7 +19208,7 @@
   "lon": 11.7826374,
   "versanti": [
    {
-    "side": "Versante Ovest",
+    "side": "Da Canale d'Agordo",
     "startLat": 46.3620868,
     "startLon": 11.9134121,
     "startElevation": 1003,
@@ -17982,7 +19217,7 @@
     "avgGradient": 6.4,
     "maxGradient": 16,
     "traffic": "n/d",
-    "exposure": "Ovest",
+    "exposure": "Est",
     "elevationProfile": [
      1003,
      1064,
@@ -18454,7 +19689,7 @@
     ]
    },
    {
-    "side": "Versante Est",
+    "side": "Da Moena",
     "startLat": 46.3643141,
     "startLon": 11.648029,
     "startElevation": 1139,
@@ -18463,7 +19698,7 @@
     "avgGradient": 6.2,
     "maxGradient": 13.5,
     "traffic": "n/d",
-    "exposure": "Est",
+    "exposure": "Ovest",
     "elevationProfile": [
      1139,
      1139,
