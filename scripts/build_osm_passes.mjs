@@ -202,7 +202,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   const gain = segEl[segEl.length - 1] - segEl[0];
   if (gain < (relax ? 140 : 200)) return null;
   const avg = gain / (dist * 1000) * 100;
-  if (avg < 3) return null;
+  if (avg < (relax ? 2 : 2.5)) return null;
   let maxg = 0; // windowed (>=300m) to kill DEM noise
   for (let i = 0; i < segPts.length - 1; i++) {
     let j = i; while (j < segPts.length - 1 && segCum[j] - segCum[i] < 0.3) j++;
@@ -210,7 +210,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     if (dd >= 250) { const g = (segEl[j] - segEl[i]) / dd * 100; if (g > maxg) maxg = g; }
   }
   if (maxg < avg) maxg = avg;
-  const dir = compass(segPts[0][0], segPts[0][1], topLat, topLon);
+  const dir = compass(topLat, topLon, segPts[0][0], segPts[0][1]); // slope aspect: direction the versante faces
   const n = Math.min(segEl.length, 24), prof = [];
   for (let i = 0; i < n; i++) prof.push(Math.round(segEl[Math.round(i * (segEl.length - 1) / (n - 1))]));
   return { side: "Versante " + dir, startLat: segPts[0][0], startLon: segPts[0][1], startElevation: Math.round(segEl[0]), endElevation: Math.round(segEl[segEl.length - 1]), distance_km: Math.round(dist * 10) / 10, avgGradient: Math.round(avg * 10) / 10, maxGradient: Math.round(maxg * 10) / 10, traffic: "n/d", exposure: dir, elevationProfile: prof, cat: climbCat(Math.round(dist * 10) / 10, gain, segEl[segEl.length - 1]), track: segPts.map((s) => [s[0], s[1]]) };
@@ -250,18 +250,32 @@ async function main() {
     for (let i = 0; i < PBF_URLS.length; i++) { const f = WORK + "/part" + i + ".osm.pbf"; await download(PBF_URLS[i], f); parts.push(f); }
     console.log("  osmium merge+filter ...");
     osmium(["merge", ...parts, "-o", WORK + "/merged.osm.pbf", "--overwrite"]);
-    osmium(["tags-filter", WORK + "/merged.osm.pbf", "n/mountain_pass=yes", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
+    osmium(["tags-filter", WORK + "/merged.osm.pbf", "n/mountain_pass=yes", "n/place=town", "n/place=village", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
     console.log("  osmium export ...");
     osmium(["export", WORK + "/filtered.osm.pbf", "-f", "geojsonseq", "-a", "type,id", "-o", seqFile, "--overwrite"]);
   }
 
   console.log("  stream 1/2: pass nodes ...");
-  const passes = [];
+  const passes = [], places = [];
   await streamSeq(seqFile, (f) => {
-    if (f.geometry && f.geometry.type === "Point" && f.properties && f.properties.mountain_pass === "yes") {
+    if (!f.geometry || f.geometry.type !== "Point" || !f.properties) return;
+    if (f.properties.mountain_pass === "yes") {
       passes.push({ oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
+    } else if ((f.properties.place === "town" || f.properties.place === "village") && f.properties.name) {
+      places.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties.name });
     }
   });
+  console.log("  places (towns/villages): " + places.length);
+  const plgrid = new Map();
+  for (const t of places) { const k = Math.floor(t.lat / 0.05) + ":" + Math.floor(t.lon / 0.05); if (!plgrid.has(k)) plgrid.set(k, []); plgrid.get(k).push(t); }
+  global.nearestPlace = function (lat, lon) {
+    const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
+    let best = null, bd = 4;
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+      for (const t of (plgrid.get((ci + a) + ":" + (cj + b)) || [])) { const dd = hav(lat, lon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } }
+    }
+    return best;
+  };
   console.log("  passes found: " + passes.length);
   let extraClimbs = [];
   try { extraClimbs = JSON.parse(await readFile("climbs_extra.json", "utf8")); } catch {}
@@ -352,6 +366,7 @@ async function main() {
       if (!dup) out.push(v);
       if (out.length >= 4) break;
     }
+    for (const v of out) { const t = global.nearestPlace ? global.nearestPlace(v.startLat, v.startLon) : null; if (t) v.side = "Da " + t.name; }
     return out;
   }
 
@@ -425,8 +440,14 @@ async function main() {
       const code = await readFile("passes_data.js", "utf8");
       const ctx = {}; vm.createContext(ctx); vm.runInContext(code, ctx);
       const overrides = {};
+      const norm = (n) => (n || "").toLowerCase().replace(/passo |colle |col |della |dello |del |di |monte /g, "").trim();
       for (const p of (ctx.PASSES_DATA || [])) {
-        const ch = snap(p.lat, p.lon, 1.2);
+        let ch = snap(p.lat, p.lon, 1.2);
+        if (!ch) { // fallback: locate by OSM pass node with matching name
+          const key = norm(p.name);
+          const hit = key && passes.find((el) => norm(el.tags.name).indexOf(key) >= 0);
+          if (hit) ch = snap(hit.lat, hit.lon, 0.5);
+        }
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
         try {
