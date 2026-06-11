@@ -263,8 +263,11 @@ async function main() {
     }
   });
   console.log("  passes found: " + passes.length);
+  let extraClimbs = [];
+  try { extraClimbs = JSON.parse(await readFile("climbs_extra.json", "utf8")); } catch {}
   const cellOf = (lat, lon) => Math.floor(lat / 0.05) + ":" + Math.floor(lon / 0.05);
   const pgrid = new Set(passes.map((p) => cellOf(p.lat, p.lon)));
+  for (const x of extraClimbs) pgrid.add(cellOf(x.lat, x.lon)); // keep roads near extra climbs too
   function nearPass(lat, lon) {
     const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
     for (let a = -2; a <= 2; a++) for (let b = -2; b <= 2; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
@@ -340,10 +343,16 @@ async function main() {
         if (v) vs.push(v);
       }
     }
-    // dedupe by compass direction: keep longest per exposure
-    const byDir = new Map();
-    for (const v of vs) { const k = v.exposure; if (!byDir.has(k) || v.distance_km > byDir.get(k).distance_km) byDir.set(k, v); }
-    return [...byDir.values()].sort((a, b) => b.distance_km - a.distance_km).slice(0, 4);
+    // dedupe: two versanti whose bases are <2.5km apart are the same side -> keep the longer
+    vs.sort((a, b) => b.distance_km - a.distance_km);
+    const out = [];
+    for (const v of vs) {
+      let dup = false;
+      for (const u of out) if (hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.5) { dup = true; break; }
+      if (!dup) out.push(v);
+      if (out.length >= 4) break;
+    }
+    return out;
   }
 
   let existing = [];
@@ -354,7 +363,7 @@ async function main() {
   for (const el of passes) {
     if (done >= MAX_ENRICH) break;
     if (!el.ele || el.ele < MIN_ELE) { skipped++; continue; }
-    const ch = snap(el.lat, el.lon, 0.13);
+    const ch = snap(el.lat, el.lon, 0.3);
     if (!ch) { skipped++; continue; }
     kept++;
     const id = "osm-" + el.oid;
@@ -384,7 +393,7 @@ async function main() {
 
   // extra curated climbs (no mountain_pass node): climbs_extra.json [{id,name,lat,lon,region?}]
   try {
-    const extra = JSON.parse(await readFile("climbs_extra.json", "utf8"));
+    const extra = extraClimbs;
     console.log("  extra climbs: " + extra.length);
     for (const x of extra) {
       const ch = snap(x.lat, x.lon, 0.5);
