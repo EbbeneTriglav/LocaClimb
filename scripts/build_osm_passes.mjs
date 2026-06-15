@@ -250,24 +250,28 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
 /* ----- IO ------------------------------------------------------------------- */
 async function download(url, dest) {
   try { await access(dest); console.log("  cached " + dest); return; } catch {}
-  // try primary URL then OSM.fr mirror, each with backoff retries
-  const mirror = url.replace("https://download.geofabrik.de/europe/italy/", "https://download.openstreetmap.fr/extracts/europe/italy/").replace("-latest.osm.pbf", ".osm.pbf");
-  const urls = mirror !== url ? [url, mirror] : [url];
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const u = urls[attempt % urls.length];
+  // region key e.g. "nord-ovest"
+  const region = url.split("/").pop().replace("-latest.osm.pbf", "");
+  const candidates = [
+    "https://download.geofabrik.de/europe/italy/" + region + "-latest.osm.pbf",
+    "https://download.openstreetmap.fr/extracts/europe/italy/" + region.replace(/-/g, "_") + ".osm.pbf",
+    "https://download.openstreetmap.fr/extracts/europe/italy/" + region + ".osm.pbf"
+  ];
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const u = candidates[attempt % candidates.length];
     try {
       console.log("  downloading " + u + (attempt ? " (try " + (attempt + 1) + ")" : ""));
-      const r = await fetch(u);
+      const r = await fetch(u, { redirect: "follow" });
       if (!r.ok) throw new Error("HTTP " + r.status);
       await new Promise((res, rej) => { Readable.fromWeb(r.body).pipe(createWriteStream(dest)).on("finish", res).on("error", rej); });
       return;
     } catch (e) {
-      const wait = Math.min(60000, 5000 * 2 ** Math.floor(attempt / urls.length));
-      console.warn("  ! download failed (" + e.message + "), retry in " + (wait / 1000) + "s");
+      const wait = Math.min(120000, 8000 * 2 ** Math.floor(attempt / candidates.length));
+      console.warn("  ! failed (" + e.message + "), retry in " + (wait / 1000) + "s");
       await new Promise((s) => setTimeout(s, wait));
     }
   }
-  throw new Error("download exhausted: " + url);
+  throw new Error("download exhausted: " + region);
 }
 function osmium(args) { execFileSync("osmium", args, { stdio: ["ignore", "inherit", "inherit"] }); }
 function streamSeq(file, onF) {
