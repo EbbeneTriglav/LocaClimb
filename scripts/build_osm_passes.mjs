@@ -190,11 +190,29 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     }
     return worst;
   }
-  let base = 0;
-  for (let thr = 4.5; thr >= 3 && base === 0; thr -= 0.75) for (let i = 0; i < end; i++) if (avgFrom(i) >= thr && minWin(i) >= 1.5) { base = i; break; }
-  if (base === 0 && avgFrom(0) < 3) { // gentle climbs (Apennines): start at the lowest point instead
-    let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i;
-    if (bi < end - 2) base = bi;
+  // Walk valley-ward from the summit (index end -> 0). Extend the climb downhill,
+  // tolerating short flats/false-flats; stop only at a sustained DESCENT (going further
+  // down-valley we would climb again) or a LONG flat (> FLAT_MAX km below ~1.5%).
+  const FLAT_MAX = 2.5;
+  let base = end, flatRun = 0;
+  for (let i = end - 1; i >= 0; i--) {
+    const dseg = cum[i + 1] - cum[i];
+    const grade = dseg > 0 ? (el[i + 1] - el[i]) / (dseg * 1000) * 100 : 0; // >0 means el rises toward summit = real climb
+    if (grade >= 1.5) { base = i; flatRun = 0; }          // still climbing -> extend
+    else if (grade > -1.5) {                               // flat / false-flat
+      flatRun += dseg;
+      if (flatRun > FLAT_MAX) break;                       // too long a plateau -> stop here
+      base = i;                                            // tentatively include, may be trimmed below
+    } else break;                                          // real descent -> valley reached
+  }
+  // trim any trailing flat we tentatively included
+  while (base < end - 1) {
+    let j = base; while (j < end && cum[j] - cum[base] < 0.5) j++;
+    const g = (el[j] - el[base]) / ((cum[j] - cum[base]) * 1000) * 100;
+    if (g < 1.0) base++; else break;
+  }
+  if (base >= end - 1) { // nothing climby found -> fall back to lowest point
+    let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi;
   }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
