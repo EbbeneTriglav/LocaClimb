@@ -62,6 +62,11 @@ function estDiff(distKm, gain, top) {
   if (top >= 2000) d += 1;
   return Math.max(1, Math.min(10, Math.round(d)));
 }
+function nameTokens(n) {
+  return (n || "").toLowerCase()
+    .replace(/passo|colle|col|della|dello|del|di|monte|giogo|sella|forcella/g, " ")
+    .split(/[^a-zaeiou']+/i).map((t) => t.trim()).filter((t) => t.length > 3);
+}
 function catRank(c) { return { HC: 5, "1": 4, "2": 3, "3": 2, "4": 1 }[c] || 0; }
 function climbCat(distKm, gain, top) {
   if (gain < 150 || distKm < 1) return null;
@@ -138,6 +143,12 @@ async function elevations(pts) {
 
 /* ----- graph walking + climb building -------------------------------------- */
 function vkey(lat, lon) { return lat.toFixed(6) + "," + lon.toFixed(6); }
+function anchorBonus(w, anchor) {
+  if (!anchor) return 0;
+  const t = w.tags || {}, s = ((t.ref || "") + " " + (t.name || "") + " " + (t["name:it"] || "")).toLowerCase();
+  for (const tok of anchor) if (tok.length > 3 && s.indexOf(tok) >= 0) return 40; // road named after the pass -> follow it
+  return 0;
+}
 const HWRANK = { primary:6, primary_link:6, secondary:5, secondary_link:5, tertiary:4, tertiary_link:4, unclassified:3, residential:2, living_street:2, cycleway:2, track:1, service:0 };
 function same(a, b) {
   const ta = a.tags || {}, tb = b.tags || {};
@@ -148,7 +159,7 @@ function same(a, b) {
   sc += (HWRANK[tb.highway] != null ? HWRANK[tb.highway] : 3); // prefer bigger roads
   return sc;
 }
-function walk(startWay, startIdx, dir, vertexMap, capKm) {
+function walk(startWay, startIdx, dir, vertexMap, capKm, anchor) {
   const pts = [[startWay.geom[startIdx][0], startWay.geom[startIdx][1]]];
   const visited = new Set([startWay.uid]);
   let w = startWay, i = startIdx, d = dir, dist = 0, prev = pts[0];
@@ -157,7 +168,7 @@ function walk(startWay, startIdx, dir, vertexMap, capKm) {
     if (ni < 0 || ni >= w.geom.length) {
       const cand = (vertexMap.get(vkey(w.geom[i][0], w.geom[i][1])) || []).filter((c) => !visited.has(c.w.uid) && c.w.geom.length > 1);
       if (!cand.length) break;
-      cand.sort((x, y) => same(w, y.w) - same(w, x.w));
+      cand.sort((x, y) => (same(w, y.w) + anchorBonus(y.w, anchor)) - (same(w, x.w) + anchorBonus(x.w, anchor)));
       const nx = cand[0];
       visited.add(nx.w.uid);
       w = nx.w; i = nx.idx; d = (i === 0) ? 1 : -1;
@@ -190,30 +201,32 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     }
     return worst;
   }
-  // Walk valley-ward from the summit (index end -> 0). Extend the climb downhill,
-  // tolerating short flats/false-flats; stop only at a sustained DESCENT (going further
-  // down-valley we would climb again) or a LONG flat (> FLAT_MAX km below ~1.5%).
+  // Walk valley-ward from the summit using ~300m windows (DEM is noisy point-to-point).
+  // Extend the climb across short flats/false-flats; stop only at a sustained DESCENT
+  // or a long (> FLAT_MAX) plateau. base = farthest valid index toward the valley.
   const FLAT_MAX = 2.5;
+  function fwdGrade(i) { // grade over ~300m starting at i, toward summit
+    let j = i; while (j < end && cum[j] - cum[i] < 0.3) j++;
+    const dd = cum[j] - cum[i];
+    return dd > 0 ? (el[j] - el[i]) / (dd * 1000) * 100 : 0;
+  }
   let base = end, flatRun = 0;
   for (let i = end - 1; i >= 0; i--) {
-    const dseg = cum[i + 1] - cum[i];
-    const grade = dseg > 0 ? (el[i + 1] - el[i]) / (dseg * 1000) * 100 : 0; // >0 means el rises toward summit = real climb
-    if (grade >= 1.5) { base = i; flatRun = 0; }          // still climbing -> extend
-    else if (grade > -1.5) {                               // flat / false-flat
-      flatRun += dseg;
-      if (flatRun > FLAT_MAX) break;                       // too long a plateau -> stop here
-      base = i;                                            // tentatively include, may be trimmed below
-    } else break;                                          // real descent -> valley reached
+    const g = fwdGrade(i);
+    if (g >= 1.5) { base = i; flatRun = 0; }                 // climbing -> extend down
+    else if (g > -1.2) {                                      // flat / false-flat
+      flatRun += cum[i + 1] - cum[i];
+      if (flatRun > FLAT_MAX) break;
+      base = i;
+    } else break;                                            // real descent -> valley
   }
-  // trim any trailing flat we tentatively included
+  // trim trailing near-flat we tentatively included
   while (base < end - 1) {
     let j = base; while (j < end && cum[j] - cum[base] < 0.5) j++;
     const g = (el[j] - el[base]) / ((cum[j] - cum[base]) * 1000) * 100;
     if (g < 1.0) base++; else break;
   }
-  if (base >= end - 1) { // nothing climby found -> fall back to lowest point
-    let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi;
-  }
+  if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
   if (dist < (relax ? 1.2 : 1.5)) return null;
@@ -362,12 +375,12 @@ async function main() {
     }
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
-  async function buildVersanti(lat, lon, capKm, relax) {
+  async function buildVersanti(lat, lon, capKm, relax, anchor) {
     const cands = candWays(lat, lon, 0.3, 6);
     const vs = [];
     for (const ch of cands) {
       for (const dir of [-1, 1]) {
-        const pts = walk(ch.w, ch.idx, dir, vertexMap, capKm);
+        const pts = walk(ch.w, ch.idx, dir, vertexMap, capKm, anchor);
         if (!pts || pts.length < 4) continue;
         const ev = await elevations(pts);
         if (!ev) continue;
@@ -410,7 +423,7 @@ async function main() {
     if (!(rec.versanti && rec.versanti.length) || process.argv.includes("--reenrich")) {
       done++;
       try {
-        const vs = await buildVersanti(slat, slon, 24, false);
+        const vs = await buildVersanti(slat, slon, 24, false, nameTokens(name));
         if (vs.length) {
           rec.versanti = vs;
           rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
@@ -432,7 +445,7 @@ async function main() {
       const ch = snap(x.lat, x.lon, 0.5);
       if (!ch) { console.log("    - " + x.name + ": no road"); continue; }
       const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
-      const vs = await buildVersanti(slat, slon, 12, true);
+      const vs = await buildVersanti(slat, slon, 12, true, nameTokens(x.name));
       if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
       const id = "x-" + x.id;
       const rec = byId.get(id) || { id };
@@ -469,7 +482,7 @@ async function main() {
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
         try {
-          const top = await buildVersanti(slat, slon, 25, false);
+          const top = await buildVersanti(slat, slon, 25, false, nameTokens(p.name));
           if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
           overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null };
           console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
