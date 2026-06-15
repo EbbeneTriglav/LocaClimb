@@ -264,9 +264,14 @@ function addMarkers(data){
     });
   }
 }
+function osmDupCurated(op){
+  for(var i=0;i<PASSES_DATA.length;i++){var p=PASSES_DATA[i];
+    if(hav(op.lat,op.lon,p.lat,p.lon)<2.0)return true;}
+  return false;
+}
 function addOsmMarker(op){
-  // show only bike-rideable passes: derived climb data OR snapped onto a rideable road
   if(!(op.versanti&&op.versanti.length)&&!op.snapped)return;
+  if(osmDupCurated(op))return; // curated version wins
   ensureCat(op);
   var c;
   if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(op)?" grv":"")+'" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[34,26],iconAnchor:[17,13]});c=L.marker([op.lat,op.lon],{icon:ic});}
