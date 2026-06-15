@@ -349,11 +349,17 @@ async function main() {
   });
   console.log("  ways kept: " + ways.length);
 
+  // vertex graph: endpoints always, plus internal vertices sampled every few nodes
+  // (full per-vertex index OOMs on 1.6M ways; sampling keeps junction-continuity cheap).
   const vertexMap = new Map();
-  for (const w of ways) for (let idx = 0; idx < w.geom.length; idx++) {
-    const k = vkey(w.geom[idx][0], w.geom[idx][1]);
-    if (!vertexMap.has(k)) vertexMap.set(k, []);
-    vertexMap.get(k).push({ w, idx });
+  for (const w of ways) {
+    const last = w.geom.length - 1;
+    for (let idx = 0; idx <= last; idx++) {
+      if (idx !== 0 && idx !== last && idx % 4 !== 0) continue; // keep ends + every 4th node
+      const k = vkey(w.geom[idx][0], w.geom[idx][1]);
+      let a = vertexMap.get(k); if (!a) { a = []; vertexMap.set(k, a); }
+      a.push({ w, idx });
+    }
   }
   const wgrid = new Map();
   for (const w of ways) for (let i = 0; i < w.geom.length; i++) {
