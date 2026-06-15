@@ -395,15 +395,15 @@ async function main() {
   }
   const vertexMap = new Map();
   for (const w of ways) {
-    if (!wayNearPass(w)) continue;
-    for (let idx = 0; idx < glen(w); idx++) {
-      const k = vkey(gx(w,idx), gy(w,idx));
+    const last = glen(w) - 1;
+    for (const idx of [0, last]) {       // junctions are way endpoints in OSM topology
+      const k = vkey(gx(w, idx), gy(w, idx));
       let a = vertexMap.get(k); if (!a) { a = []; vertexMap.set(k, a); }
       a.push({ w, idx });
     }
   }
   const wgrid = new Map();
-  for (const w of ways) for (let i = 0; i < glen(w); i++) {
+  for (const w of ways) for (let i = 0; i < glen(w); i += 6) {
     const k = cellOf(gx(w,i), gy(w,i));
     if (!wgrid.has(k)) wgrid.set(k, []);
     wgrid.get(k).push({ w, idx: i });
