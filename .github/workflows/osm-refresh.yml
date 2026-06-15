@@ -41,7 +41,7 @@ jobs:
 
       - name: Build data (PBF + DEM)
         run: |
-          node scripts/build_osm_passes.mjs \
+          node --max-old-space-size=6144 scripts/build_osm_passes.mjs \
             --out osm_passes.json \
             ${{ (github.event.inputs.reenrich == 'true') && '--reenrich' || '' }}
 
