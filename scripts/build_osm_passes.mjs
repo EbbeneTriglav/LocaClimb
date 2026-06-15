@@ -204,7 +204,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   // Walk valley-ward from the summit using ~300m windows (DEM is noisy point-to-point).
   // Extend the climb across short flats/false-flats; stop only at a sustained DESCENT
   // or a long (> FLAT_MAX) plateau. base = farthest valid index toward the valley.
-  const FLAT_MAX = 2.5;
+  const FLAT_MAX = relax ? 4 : 2.5;
   function fwdGrade(i) { // grade over ~300m starting at i, toward summit
     let j = i; while (j < end && cum[j] - cum[i] < 0.3) j++;
     const dd = cum[j] - cum[i];
@@ -376,7 +376,7 @@ async function main() {
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
   async function buildVersanti(lat, lon, capKm, relax, anchor) {
-    const cands = candWays(lat, lon, 0.3, 6);
+    const cands = candWays(lat, lon, 0.5, 8);
     const vs = [];
     for (const ch of cands) {
       for (const dir of [-1, 1]) {
@@ -391,9 +391,15 @@ async function main() {
     // dedupe: two versanti whose bases are <2.5km apart are the same side -> keep the longer
     vs.sort((a, b) => b.distance_km - a.distance_km);
     const out = [];
+    function bearing(la1,lo1,la2,lo2){const p=Math.PI/180;const y=Math.sin((lo2-lo1)*p)*Math.cos(la2*p);const x=Math.cos(la1*p)*Math.sin(la2*p)-Math.sin(la1*p)*Math.cos(la2*p)*Math.cos((lo2-lo1)*p);return (Math.atan2(y,x)*180/Math.PI+360)%360;}
     for (const v of vs) {
       let dup = false;
-      for (const u of out) if (hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.5) { dup = true; break; }
+      for (const u of out) {
+        const close = hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.0;
+        const bv = bearing(lat, lon, v.startLat, v.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
+        let db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
+        if (close && db < 45) { dup = true; break; } // same side only if bases near AND same direction from summit
+      }
       if (!dup) out.push(v);
       if (out.length >= 4) break;
     }
@@ -482,7 +488,7 @@ async function main() {
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
         try {
-          const top = await buildVersanti(slat, slon, 25, false, nameTokens(p.name));
+          const top = await buildVersanti(slat, slon, 26, true, nameTokens(p.name));
           if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
           overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null };
           console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
