@@ -331,7 +331,7 @@ async function main() {
   for (const x of extraClimbs) pgrid.add(cellOf(x.lat, x.lon)); // keep roads near extra climbs too
   function nearPass(lat, lon) {
     const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
-    for (let a = -2; a <= 2; a++) for (let b = -2; b <= 2; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
     return false;
   }
 
@@ -349,13 +349,15 @@ async function main() {
   });
   console.log("  ways kept: " + ways.length);
 
-  // vertex graph: endpoints always, plus internal vertices sampled every few nodes
-  // (full per-vertex index OOMs on 1.6M ways; sampling keeps junction-continuity cheap).
+  // vertex graph: index EVERY vertex but only for ways close to a pass (full continuity, bounded memory)
+  function wayNearPass(w) {
+    for (let i = 0; i < w.geom.length; i += 5) if (nearPass(w.geom[i][0], w.geom[i][1])) return true;
+    return nearPass(w.geom[w.geom.length - 1][0], w.geom[w.geom.length - 1][1]);
+  }
   const vertexMap = new Map();
   for (const w of ways) {
-    const last = w.geom.length - 1;
-    for (let idx = 0; idx <= last; idx++) {
-      if (idx !== 0 && idx !== last && idx % 4 !== 0) continue; // keep ends + every 4th node
+    if (!wayNearPass(w)) continue;
+    for (let idx = 0; idx < w.geom.length; idx++) {
       const k = vkey(w.geom[idx][0], w.geom[idx][1]);
       let a = vertexMap.get(k); if (!a) { a = []; vertexMap.set(k, a); }
       a.push({ w, idx });
@@ -425,8 +427,16 @@ async function main() {
       if (!dup) out.push(v);
       if (out.length >= 4) break;
     }
-    for (const v of out) { const t = global.nearestPlace ? global.nearestPlace(v.startLat, v.startLon) : null; if (t) v.side = "Da " + t.name; }
-    return out;
+    for (const v of out) { const t = global.nearestPlace ? global.nearestPlace(v.startLat, v.startLon) : null; v._town = t ? t.name : null; if (t) v.side = "Da " + t.name; }
+    // collapse versanti starting from the same town -> keep the longest (same side, different short start)
+    const byTown = new Map(), finalv = [];
+    for (const v of out) {
+      if (v._town && byTown.has(v._town)) { const u = byTown.get(v._town); if (v.distance_km > u.distance_km) { finalv[finalv.indexOf(u)] = v; byTown.set(v._town, v); } continue; }
+      if (v._town) byTown.set(v._town, v);
+      finalv.push(v);
+    }
+    finalv.forEach((v) => delete v._town);
+    return finalv;
   }
 
   let existing = [];
