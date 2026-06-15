@@ -163,7 +163,7 @@ function walk(startWay, startIdx, dir, vertexMap, capKm, anchor) {
   const pts = [[startWay.geom[startIdx][0], startWay.geom[startIdx][1]]];
   const visited = new Set([startWay.uid]);
   let w = startWay, i = startIdx, d = dir, dist = 0, prev = pts[0];
-  for (let guard = 0; guard < 900; guard++) {
+  for (let guard = 0; guard < 2000; guard++) {
     const ni = i + d;
     if (ni < 0 || ni >= w.geom.length) {
       const cand = (vertexMap.get(vkey(w.geom[i][0], w.geom[i][1])) || []).filter((c) => !visited.has(c.w.uid) && c.w.geom.length > 1);
@@ -222,9 +222,9 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   }
   // trim trailing near-flat we tentatively included
   while (base < end - 1) {
-    let j = base; while (j < end && cum[j] - cum[base] < 0.5) j++;
+    let j = base; while (j < end && cum[j] - cum[base] < 0.4) j++;
     const g = (el[j] - el[base]) / ((cum[j] - cum[base]) * 1000) * 100;
-    if (g < 1.0) base++; else break;
+    if (g < 0.4) base++; else break;
   }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
@@ -350,11 +350,11 @@ async function main() {
   console.log("  ways kept: " + ways.length);
 
   const vertexMap = new Map();
-  for (const w of ways) [0, w.geom.length - 1].forEach((idx) => {
+  for (const w of ways) for (let idx = 0; idx < w.geom.length; idx++) {
     const k = vkey(w.geom[idx][0], w.geom[idx][1]);
     if (!vertexMap.has(k)) vertexMap.set(k, []);
     vertexMap.get(k).push({ w, idx });
-  });
+  }
   const wgrid = new Map();
   for (const w of ways) for (let i = 0; i < w.geom.length; i++) {
     const k = cellOf(w.geom[i][0], w.geom[i][1]);
