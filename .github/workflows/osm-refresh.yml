@@ -12,7 +12,7 @@ on:
         required: false
         default: false
   schedule:
-    - cron: "17 4 1 * *"   # monthly
+    - cron: "17 3 * * 1"   # weekly (Mon 03:17 UTC)
 
 concurrency:
   group: osm-refresh
