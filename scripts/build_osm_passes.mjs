@@ -159,14 +159,17 @@ function same(a, b) {
   sc += (HWRANK[tb.highway] != null ? HWRANK[tb.highway] : 3); // prefer bigger roads
   return sc;
 }
+function gx(w,i){return w.g[i*2];}
+function gy(w,i){return w.g[i*2+1];}
+function glen(w){return w.g.length>>1;}
 function walk(startWay, startIdx, dir, vertexMap, capKm, anchor) {
-  const pts = [[startWay.geom[startIdx][0], startWay.geom[startIdx][1]]];
+  const pts = [[gx(startWay,startIdx), gy(startWay,startIdx)]];
   const visited = new Set([startWay.uid]);
   let w = startWay, i = startIdx, d = dir, dist = 0, prev = pts[0];
   for (let guard = 0; guard < 2000; guard++) {
     const ni = i + d;
-    if (ni < 0 || ni >= w.geom.length) {
-      const cand = (vertexMap.get(vkey(w.geom[i][0], w.geom[i][1])) || []).filter((c) => !visited.has(c.w.uid) && c.w.geom.length > 1);
+    if (ni < 0 || ni >= glen(w)) {
+      const cand = (vertexMap.get(vkey(gx(w,i), gy(w,i))) || []).filter((c) => !visited.has(c.w.uid) && glen(c.w) > 1);
       if (!cand.length) break;
       cand.sort((x, y) => (same(w, y.w) + anchorBonus(y.w, anchor)) - (same(w, x.w) + anchorBonus(x.w, anchor)));
       const nx = cand[0];
@@ -174,10 +177,10 @@ function walk(startWay, startIdx, dir, vertexMap, capKm, anchor) {
       w = nx.w; i = nx.idx; d = (i === 0) ? 1 : -1;
       continue;
     }
-    const g = w.geom[ni];
-    dist += hav(prev[0], prev[1], g[0], g[1]);
-    pts.push([g[0], g[1]]);
-    prev = [g[0], g[1]]; i = ni;
+    const gla = gx(w,ni), glo = gy(w,ni);
+    dist += hav(prev[0], prev[1], gla, glo);
+    pts.push([gla, glo]);
+    prev = [gla, glo]; i = ni;
     if (dist >= capKm) break;
   }
   if (pts.length > 110) { const o = [], n = 110; for (let k = 0; k < n; k++) o.push(pts[Math.round(k * (pts.length - 1) / (n - 1))]); return o; }
@@ -345,27 +348,30 @@ async function main() {
     const mid = c[Math.floor(c.length / 2)];
     if (!nearPass(mid[1], mid[0]) && !nearPass(c[0][1], c[0][0]) && !nearPass(c[c.length - 1][1], c[c.length - 1][0])) return;
     if (!rideable(f.properties)) return;
-    ways.push({ uid: uid++, tags: f.properties, geom: c.map((q) => [q[1], q[0]]) });
+    const t = f.properties, tags = { highway: t.highway, name: t.name, ref: t.ref, surface: t.surface, tracktype: t.tracktype, smoothness: t.smoothness, hgv: t.hgv, maxweight: t.maxweight };
+    const g = new Float32Array(c.length * 2);
+    for (let k = 0; k < c.length; k++) { g[k * 2] = c[k][1]; g[k * 2 + 1] = c[k][0]; }
+    ways.push({ uid: uid++, tags, g });
   });
   console.log("  ways kept: " + ways.length);
 
   // vertex graph: index EVERY vertex but only for ways close to a pass (full continuity, bounded memory)
   function wayNearPass(w) {
-    for (let i = 0; i < w.geom.length; i += 5) if (nearPass(w.geom[i][0], w.geom[i][1])) return true;
-    return nearPass(w.geom[w.geom.length - 1][0], w.geom[w.geom.length - 1][1]);
+    for (let i = 0; i < glen(w); i += 5) if (nearPass(gx(w,i), gy(w,i))) return true;
+    return nearPass(gx(w, glen(w)-1), gy(w, glen(w)-1));
   }
   const vertexMap = new Map();
   for (const w of ways) {
     if (!wayNearPass(w)) continue;
-    for (let idx = 0; idx < w.geom.length; idx++) {
-      const k = vkey(w.geom[idx][0], w.geom[idx][1]);
+    for (let idx = 0; idx < glen(w); idx++) {
+      const k = vkey(gx(w,idx), gy(w,idx));
       let a = vertexMap.get(k); if (!a) { a = []; vertexMap.set(k, a); }
       a.push({ w, idx });
     }
   }
   const wgrid = new Map();
-  for (const w of ways) for (let i = 0; i < w.geom.length; i++) {
-    const k = cellOf(w.geom[i][0], w.geom[i][1]);
+  for (const w of ways) for (let i = 0; i < glen(w); i++) {
+    const k = cellOf(gx(w,i), gy(w,i));
     if (!wgrid.has(k)) wgrid.set(k, []);
     wgrid.get(k).push({ w, idx: i });
   }
@@ -376,7 +382,7 @@ async function main() {
     for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
       const lst = wgrid.get((ci + a) + ":" + (cj + b)) || [];
       for (const c of lst) {
-        const dd = hav(lat, lon, c.w.geom[c.idx][0], c.w.geom[c.idx][1]);
+        const dd = hav(lat, lon, gx(c.w,c.idx), gy(c.w,c.idx));
         if (dd >= maxKm) continue;
         const cl = CLS[c.w.tags.highway] != null ? CLS[c.w.tags.highway] : 3;
         const score = cl * 10 - dd * 20; // class first, then proximity
@@ -391,7 +397,7 @@ async function main() {
     for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
       const lst = wgrid.get((ci + a) + ":" + (cj + b)) || [];
       for (const c of lst) {
-        const dd = hav(lat, lon, c.w.geom[c.idx][0], c.w.geom[c.idx][1]);
+        const dd = hav(lat, lon, gx(c.w,c.idx), gy(c.w,c.idx));
         if (dd >= radKm) continue;
         const cur = bestBy.get(c.w.uid);
         if (!cur || dd < cur.dd) bestBy.set(c.w.uid, { w: c.w, idx: c.idx, dd });
@@ -452,7 +458,7 @@ async function main() {
     kept++;
     const id = "osm-" + el.oid;
     const name = (el.tags.name || "Passo").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
+    const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
     const rec = byId.get(id) || { id };
     rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
     rec.surfaceLabel = surfaceLabel(ch.w.tags);
@@ -482,7 +488,7 @@ async function main() {
     for (const x of extra) {
       const ch = snap(x.lat, x.lon, 0.5);
       if (!ch) { console.log("    - " + x.name + ": no road"); continue; }
-      const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
+      const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
       const vs = await buildVersanti(slat, slon, 12, true, nameTokens(x.name));
       if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
       const id = "x-" + x.id;
@@ -518,7 +524,7 @@ async function main() {
           if (hit) ch = snap(hit.lat, hit.lon, 0.5);
         }
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
-        const slat = ch.w.geom[ch.idx][0], slon = ch.w.geom[ch.idx][1];
+        const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
         try {
           const top = await buildVersanti(slat, slon, 26, true, nameTokens(p.name));
           if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
