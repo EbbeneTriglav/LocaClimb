@@ -118,7 +118,7 @@ async function demTile(z, x, y) {
       png = PNG.sync.read(Buffer.from(await r.arrayBuffer()));
     } catch (e) { if (a === 2) console.warn("  ! dem " + k + ": " + e.message); else await new Promise((s) => setTimeout(s, 700 * (a + 1))); }
   }
-  if (demCache.size > 8000) demCache.delete(demCache.keys().next().value);
+  if (demCache.size > 2500) demCache.delete(demCache.keys().next().value);
   demCache.set(k, png);
   return png;
 }
