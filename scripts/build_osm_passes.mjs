@@ -186,6 +186,39 @@ function walk(startWay, startIdx, dir, vertexMap, capKm, anchor) {
   if (pts.length > 110) { const o = [], n = 110; for (let k = 0; k < n; k++) o.push(pts[Math.round(k * (pts.length - 1) / (n - 1))]); return o; }
   return pts;
 }
+function walkTo(startWay, startIdx, tLat, tLon, vertexMap, capKm, anchor) {
+  // greedy target-directed walk from a base vertex toward the summit (tLat,tLon)
+  var pts = [[gx(startWay, startIdx), gy(startWay, startIdx)]];
+  var visited = new Set([startWay.uid]);
+  var w = startWay, i = startIdx, dist = 0, prev = pts[0];
+  var dToT = hav(prev[0], prev[1], tLat, tLon);
+  for (var guard = 0; guard < 4000; guard++) {
+    var bestni = -1, bestd = Infinity;
+    for (var dd = -1; dd <= 1; dd += 2) { var ni = i + dd; if (ni < 0 || ni >= glen(w)) continue; var nd = hav(gx(w, ni), gy(w, ni), tLat, tLon); if (nd < bestd) { bestd = nd; bestni = ni; } }
+    if (bestni >= 0 && bestd < dToT + 0.03) {
+      var gla = gx(w, bestni), glo = gy(w, bestni);
+      dist += hav(prev[0], prev[1], gla, glo); pts.push([gla, glo]); prev = [gla, glo]; i = bestni; dToT = bestd;
+      if (dToT < 0.25) break; if (dist > capKm) break; continue;
+    }
+    var here = vkey(gx(w, i), gy(w, i));
+    var cand = (vertexMap.get(here) || []).filter(function (c) { return !visited.has(c.w.uid) && glen(c.w) > 1; });
+    if (!cand.length) break;
+    var pick = null, pickScore = 0.0001;
+    cand.forEach(function (c) {
+      [c.idx - 1, c.idx + 1].forEach(function (x) {
+        if (x < 0 || x >= glen(c.w)) return;
+        var nd = hav(gx(c.w, x), gy(c.w, x), tLat, tLon);
+        var sc = (dToT - nd) * 100 + anchorBonus(c.w, anchor) + (HWRANK[c.w.tags.highway] || 0);
+        if (sc > pickScore) { pickScore = sc; pick = { w: c.w, idx: c.idx }; }
+      });
+    });
+    if (!pick) break;
+    visited.add(pick.w.uid); w = pick.w; i = pick.idx;
+  }
+  if (dToT > 0.4 || pts.length < 4) return null;
+  if (pts.length > 110) { var o = [], n = 110; for (var k = 0; k < n; k++) o.push(pts[Math.round(k * (pts.length - 1) / (n - 1))]); pts = o; }
+  return pts; // base(town) -> summit
+}
 function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
 function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   const pts = ptsOut.slice().reverse(), el = smooth3(elevsOut.slice().reverse());
@@ -405,43 +438,66 @@ async function main() {
     }
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
+  function bearing(la1, lo1, la2, lo2) { var p = Math.PI / 180; var y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p); var x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; }
+  function townsWithin(lat, lon, maxKm) {
+    var ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05), out = [], R = Math.ceil(maxKm / 5) + 1;
+    for (var a = -R; a <= R; a++) for (var b = -R; b <= R; b++) for (var t of (plgrid.get((ci + a) + ":" + (cj + b)) || [])) {
+      var d = hav(lat, lon, t.lat, t.lon); if (d >= 3 && d <= maxKm) out.push({ lat: t.lat, lon: t.lon, name: t.name, d: d });
+    }
+    return out;
+  }
   async function buildVersanti(lat, lon, capKm, relax, anchor) {
-    const cands = candWays(lat, lon, 0.5, 8);
-    const vs = [];
-    for (const ch of cands) {
-      for (const dir of [-1, 1]) {
-        const pts = walk(ch.w, ch.idx, dir, vertexMap, capKm, anchor);
+    var out = [];
+    // ---- geomorphological seeding: per direction, lowest base town -> route to summit ----
+    var towns = townsWithin(lat, lon, capKm);
+    var perOct = new Map(); // octant -> candidate base town (lowest elevation)
+    for (var t of towns) {
+      var oc = Math.floor(bearing(lat, lon, t.lat, t.lon) / 45);
+      var e = await elevAt(t.lat, t.lon); if (e == null) continue;
+      var cur = perOct.get(oc);
+      if (!cur || e < cur.e) perOct.set(oc, { t: t, e: e });
+    }
+    for (var entry of perOct.values()) {
+      var bt = entry.t;
+      var ch = snap(bt.lat, bt.lon, 0.6); if (!ch) continue;
+      var path = walkTo(ch.w, ch.idx, lat, lon, vertexMap, capKm + 4, anchor);
+      if (!path) continue;
+      var ev = await elevations(path); if (!ev) continue;
+      var v = buildSide(path.slice().reverse(), ev.slice().reverse(), lat, lon, relax); // summit->base for buildSide
+      if (v) { v._town = bt.name; out.push(v); }
+    }
+    // ---- fallback: if few sides found, use summit-out walk discovery ----
+    if (out.length < 2) {
+      var cands = candWays(lat, lon, 0.5, 8);
+      for (var c2 of cands) for (var dir of [-1, 1]) {
+        var pts = walk(c2.w, c2.idx, dir, vertexMap, capKm, anchor);
         if (!pts || pts.length < 4) continue;
-        const ev = await elevations(pts);
-        if (!ev) continue;
-        const v = buildSide(pts, ev, lat, lon, relax);
-        if (v) vs.push(v);
+        var ev2 = await elevations(pts); if (!ev2) continue;
+        var v2 = buildSide(pts, ev2, lat, lon, relax); if (v2) out.push(v2);
       }
     }
-    // dedupe: two versanti whose bases are <2.5km apart are the same side -> keep the longer
-    vs.sort((a, b) => b.distance_km - a.distance_km);
-    const out = [];
-    function bearing(la1,lo1,la2,lo2){const p=Math.PI/180;const y=Math.sin((lo2-lo1)*p)*Math.cos(la2*p);const x=Math.cos(la1*p)*Math.sin(la2*p)-Math.sin(la1*p)*Math.cos(la2*p)*Math.cos((lo2-lo1)*p);return (Math.atan2(y,x)*180/Math.PI+360)%360;}
-    for (const v of vs) {
-      let dup = false;
-      for (const u of out) {
-        const close = hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.0;
-        const bv = bearing(lat, lon, v.startLat, v.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
-        let db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
-        if (close && db < 45) { dup = true; break; } // same side only if bases near AND same direction from summit
+    // ---- dedupe by base proximity + direction, then by town name ----
+    out.sort(function (a, b) { return b.distance_km - a.distance_km; });
+    var kept = [];
+    for (var v of out) {
+      var dup = false;
+      for (var u of kept) {
+        var close = hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.0;
+        var bv = bearing(lat, lon, v.startLat, v.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
+        var db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
+        if (close && db < 45) { dup = true; break; }
       }
-      if (!dup) out.push(v);
-      if (out.length >= 4) break;
+      if (!dup) kept.push(v);
+      if (kept.length >= 4) break;
     }
-    for (const v of out) { const t = global.nearestPlace ? global.nearestPlace(v.startLat, v.startLon) : null; v._town = t ? t.name : null; if (t) v.side = "Da " + t.name; }
-    // collapse versanti starting from the same town -> keep the longest (same side, different short start)
-    const byTown = new Map(), finalv = [];
-    for (const v of out) {
-      if (v._town && byTown.has(v._town)) { const u = byTown.get(v._town); if (v.distance_km > u.distance_km) { finalv[finalv.indexOf(u)] = v; byTown.set(v._town, v); } continue; }
-      if (v._town) byTown.set(v._town, v);
-      finalv.push(v);
+    for (var v3 of kept) { var tn = v3._town || (global.nearestPlace ? (global.nearestPlace(v3.startLat, v3.startLon) || {}).name : null); if (tn) v3.side = "Da " + tn; v3._town = tn; }
+    var byTown = new Map(), finalv = [];
+    for (var v4 of kept) {
+      if (v4._town && byTown.has(v4._town)) { var u4 = byTown.get(v4._town); if (v4.distance_km > u4.distance_km) { finalv[finalv.indexOf(u4)] = v4; byTown.set(v4._town, v4); } continue; }
+      if (v4._town) byTown.set(v4._town, v4);
+      finalv.push(v4);
     }
-    finalv.forEach((v) => delete v._town);
+    finalv.forEach(function (v) { delete v._town; });
     return finalv;
   }
 
