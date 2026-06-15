@@ -30,7 +30,7 @@ const PBF_URLS = [
 ];
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 const DEM_Z = 12;
-const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","residential","living_street","service","track","cycleway"];
+const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link"];
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = arg("--out", "osm_passes.json");
@@ -118,7 +118,7 @@ async function demTile(z, x, y) {
       png = PNG.sync.read(Buffer.from(await r.arrayBuffer()));
     } catch (e) { if (a === 2) console.warn("  ! dem " + k + ": " + e.message); else await new Promise((s) => setTimeout(s, 700 * (a + 1))); }
   }
-  if (demCache.size > 2500) demCache.delete(demCache.keys().next().value);
+  if (demCache.size > 1500) demCache.delete(demCache.keys().next().value);
   demCache.set(k, png);
   return png;
 }
@@ -367,7 +367,7 @@ async function main() {
   for (const x of extraClimbs) pgrid.add(cellOf(x.lat, x.lon)); // keep roads near extra climbs too
   function nearPass(lat, lon) {
     const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
-    for (let a = -3; a <= 3; a++) for (let b = -3; b <= 3; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
+    for (let a = -6; a <= 6; a++) for (let b = -6; b <= 6; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
     return false;
   }
 
@@ -403,7 +403,7 @@ async function main() {
     }
   }
   const wgrid = new Map();
-  for (const w of ways) for (let i = 0; i < glen(w); i += 6) {
+  for (const w of ways) for (let i = 0; i < glen(w); i += 10) {
     const k = cellOf(gx(w,i), gy(w,i));
     if (!wgrid.has(k)) wgrid.set(k, []);
     wgrid.get(k).push({ w, idx: i });
@@ -439,47 +439,24 @@ async function main() {
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
   function bearing(la1, lo1, la2, lo2) { var p = Math.PI / 180; var y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p); var x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; }
-  function townsWithin(lat, lon, maxKm) {
-    var ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05), out = [], R = Math.ceil(maxKm / 5) + 1;
-    for (var a = -R; a <= R; a++) for (var b = -R; b <= R; b++) for (var t of (plgrid.get((ci + a) + ":" + (cj + b)) || [])) {
-      var d = hav(lat, lon, t.lat, t.lon); if (d >= 3 && d <= maxKm) out.push({ lat: t.lat, lon: t.lon, name: t.name, d: d });
-    }
-    return out;
-  }
+  // SIMPLE: take all roads near the summit, walk each direction to the buffer edge,
+  // sample DEM, trim to the real climb, dedupe by base proximity+direction, label by town.
   async function buildVersanti(lat, lon, capKm, relax, anchor) {
-    var out = [];
-    // ---- geomorphological seeding: per direction, lowest base town -> route to summit ----
-    var towns = townsWithin(lat, lon, capKm);
-    var perOct = new Map(); // octant -> candidate base town (lowest elevation)
-    for (var t of towns) {
-      var oc = Math.floor(bearing(lat, lon, t.lat, t.lon) / 45);
-      var e = await elevAt(t.lat, t.lon); if (e == null) continue;
-      var cur = perOct.get(oc);
-      if (!cur || e < cur.e) perOct.set(oc, { t: t, e: e });
-    }
-    for (var entry of perOct.values()) {
-      var bt = entry.t;
-      var ch = snap(bt.lat, bt.lon, 0.6); if (!ch) continue;
-      var path = walkTo(ch.w, ch.idx, lat, lon, vertexMap, capKm + 4, anchor);
-      if (!path) continue;
-      var ev = await elevations(path); if (!ev) continue;
-      var v = buildSide(path.slice().reverse(), ev.slice().reverse(), lat, lon, relax); // summit->base for buildSide
-      if (v) { v._town = bt.name; out.push(v); }
-    }
-    // ---- fallback: if few sides found, use summit-out walk discovery ----
-    if (out.length < 2) {
-      var cands = candWays(lat, lon, 0.5, 8);
-      for (var c2 of cands) for (var dir of [-1, 1]) {
-        var pts = walk(c2.w, c2.idx, dir, vertexMap, capKm, anchor);
+    var raw = [];
+    var cands = candWays(lat, lon, 0.6, 12); // all road branches touching the summit area
+    for (var ch of cands) {
+      for (var dir of [-1, 1]) {
+        var pts = walk(ch.w, ch.idx, dir, vertexMap, capKm, anchor);
         if (!pts || pts.length < 4) continue;
-        var ev2 = await elevations(pts); if (!ev2) continue;
-        var v2 = buildSide(pts, ev2, lat, lon, relax); if (v2) out.push(v2);
+        var ev = await elevations(pts);
+        if (!ev) continue;
+        var v = buildSide(pts, ev, lat, lon, relax);
+        if (v) raw.push(v);
       }
     }
-    // ---- dedupe by base proximity + direction, then by town name ----
-    out.sort(function (a, b) { return b.distance_km - a.distance_km; });
+    raw.sort(function (a, b) { return b.distance_km - a.distance_km; });
     var kept = [];
-    for (var v of out) {
+    for (var v of raw) {
       var dup = false;
       for (var u of kept) {
         var close = hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.0;
@@ -490,12 +467,13 @@ async function main() {
       if (!dup) kept.push(v);
       if (kept.length >= 4) break;
     }
-    for (var v3 of kept) { var tn = v3._town || (global.nearestPlace ? (global.nearestPlace(v3.startLat, v3.startLon) || {}).name : null); if (tn) v3.side = "Da " + tn; v3._town = tn; }
+    // label each side by the nearest town to its base, collapse same-town (keep longest)
+    for (var v2 of kept) { var t = global.nearestPlace ? global.nearestPlace(v2.startLat, v2.startLon) : null; v2._town = t ? t.name : null; if (t) v2.side = "Da " + t.name; }
     var byTown = new Map(), finalv = [];
-    for (var v4 of kept) {
-      if (v4._town && byTown.has(v4._town)) { var u4 = byTown.get(v4._town); if (v4.distance_km > u4.distance_km) { finalv[finalv.indexOf(u4)] = v4; byTown.set(v4._town, v4); } continue; }
-      if (v4._town) byTown.set(v4._town, v4);
-      finalv.push(v4);
+    for (var v3 of kept) {
+      if (v3._town && byTown.has(v3._town)) { var u3 = byTown.get(v3._town); if (v3.distance_km > u3.distance_km) { finalv[finalv.indexOf(u3)] = v3; byTown.set(v3._town, v3); } continue; }
+      if (v3._town) byTown.set(v3._town, v3);
+      finalv.push(v3);
     }
     finalv.forEach(function (v) { delete v._town; });
     return finalv;
@@ -524,7 +502,7 @@ async function main() {
       done++;
       if (process.argv.includes("--reenrich")) { rec.versanti = null; rec.cat = null; } // do not keep stale
       try {
-        const vs = await buildVersanti(slat, slon, 24, false, nameTokens(name));
+        const vs = await buildVersanti(slat, slon, 30, false, nameTokens(name));
         if (vs.length) {
           rec.versanti = vs;
           rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
@@ -583,7 +561,7 @@ async function main() {
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
         try {
-          const top = await buildVersanti(slat, slon, 26, true, nameTokens(p.name));
+          const top = await buildVersanti(slat, slon, 32, true, nameTokens(p.name));
           if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
           overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null };
           console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
