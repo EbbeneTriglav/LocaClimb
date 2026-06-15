@@ -118,7 +118,7 @@ async function demTile(z, x, y) {
       png = PNG.sync.read(Buffer.from(await r.arrayBuffer()));
     } catch (e) { if (a === 2) console.warn("  ! dem " + k + ": " + e.message); else await new Promise((s) => setTimeout(s, 700 * (a + 1))); }
   }
-  if (demCache.size > 1500) demCache.delete(demCache.keys().next().value);
+  if (demCache.size > 8000) demCache.delete(demCache.keys().next().value);
   demCache.set(k, png);
   return png;
 }
@@ -367,7 +367,7 @@ async function main() {
   for (const x of extraClimbs) pgrid.add(cellOf(x.lat, x.lon)); // keep roads near extra climbs too
   function nearPass(lat, lon) {
     const ci = Math.floor(lat / 0.05), cj = Math.floor(lon / 0.05);
-    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
+    for (let a = -3; a <= 3; a++) for (let b = -3; b <= 3; b++) if (pgrid.has((ci + a) + ":" + (cj + b))) return true;
     return false;
   }
 
@@ -522,6 +522,7 @@ async function main() {
     rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
     if (!(rec.versanti && rec.versanti.length) || process.argv.includes("--reenrich")) {
       done++;
+      if (process.argv.includes("--reenrich")) { rec.versanti = null; rec.cat = null; } // do not keep stale
       try {
         const vs = await buildVersanti(slat, slon, 24, false, nameTokens(name));
         if (vs.length) {
@@ -530,7 +531,7 @@ async function main() {
           rec.cat = rec.versanti.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
           ok++;
         } else fail++;
-      } catch (e) { fail++; }
+      } catch (e) { fail++; if (fail <= 8) console.log("    ! enrich error (" + rec.name + "): " + e.message); }
       if (done % 250 === 0) console.log("  ... " + done + " (ok " + ok + ", no-climb " + fail + ", dem " + demCache.size + ")");
     }
     byId.set(id, rec);
