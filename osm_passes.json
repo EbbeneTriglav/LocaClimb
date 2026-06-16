@@ -10642,7 +10642,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -11772,7 +11772,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -16307,7 +16307,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -17511,7 +17511,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -26215,7 +26215,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -28104,7 +28104,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -29876,7 +29876,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -36390,7 +36390,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -38095,7 +38095,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -39837,7 +39837,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -42676,7 +42676,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -46073,7 +46073,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -47139,7 +47139,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -48645,7 +48645,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -50895,7 +50895,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -51246,7 +51246,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -55261,7 +55261,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -56258,7 +56258,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -59510,7 +59510,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -59958,7 +59958,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -64542,7 +64542,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -66942,7 +66942,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -69117,7 +69117,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -70661,7 +70661,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -73485,7 +73485,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -75632,7 +75632,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -76637,7 +76637,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -78671,7 +78671,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -80847,7 +80847,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -81669,7 +81669,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -83685,7 +83685,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -86357,7 +86357,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -87775,7 +87775,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -91361,7 +91361,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -93370,7 +93370,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -94348,7 +94348,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -96135,7 +96135,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -97955,7 +97955,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -99083,7 +99083,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -100984,7 +100984,7 @@
   ],
   "difficulty": 7,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -102947,7 +102947,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -105471,7 +105471,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -105780,7 +105780,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -109099,7 +109099,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -110365,7 +110365,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -113320,7 +113320,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -114982,7 +114982,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -117958,7 +117958,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -119708,7 +119708,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -121520,7 +121520,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -126136,7 +126136,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -126659,7 +126659,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -128629,7 +128629,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -130122,7 +130122,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -132810,7 +132810,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -135621,7 +135621,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -136658,7 +136658,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -138885,7 +138885,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -141378,7 +141378,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -143531,7 +143531,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -146912,7 +146912,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -147970,7 +147970,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -149766,7 +149766,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -151231,7 +151231,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -152216,7 +152216,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -153141,7 +153141,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -155661,7 +155661,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -157421,7 +157421,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -159246,7 +159246,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -161286,7 +161286,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -165654,7 +165654,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -170743,7 +170743,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -171389,7 +171389,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -175916,7 +175916,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -176802,7 +176802,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -178313,7 +178313,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -182223,7 +182223,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -185143,7 +185143,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -186466,7 +186466,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -188146,7 +188146,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -189307,7 +189307,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -190140,7 +190140,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -192081,7 +192081,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -193754,7 +193754,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -197265,7 +197265,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -200899,7 +200899,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -202277,7 +202277,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -203670,7 +203670,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -204532,7 +204532,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -205530,7 +205530,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -206013,7 +206013,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -207354,7 +207354,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -212543,7 +212543,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -214765,7 +214765,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -215995,7 +215995,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -217056,7 +217056,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -219563,7 +219563,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -219883,7 +219883,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -222810,7 +222810,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -224602,7 +224602,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -226523,7 +226523,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -228249,7 +228249,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -233131,7 +233131,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -234333,7 +234333,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -235721,7 +235721,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -236503,7 +236503,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -239129,7 +239129,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -240938,7 +240938,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -241777,7 +241777,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -243982,7 +243982,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -246652,7 +246652,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -246839,7 +246839,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -248100,7 +248100,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -248698,7 +248698,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -251104,7 +251104,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -253816,7 +253816,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -256344,7 +256344,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -260162,7 +260162,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -261206,7 +261206,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -262306,7 +262306,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -263016,7 +263016,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -265392,7 +265392,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -267055,7 +267055,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -269214,7 +269214,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -273374,7 +273374,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -276045,7 +276045,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -277407,7 +277407,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -280151,7 +280151,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -281614,7 +281614,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -281953,7 +281953,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -285592,7 +285592,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -288443,7 +288443,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -290507,7 +290507,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -293157,7 +293157,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -294106,7 +294106,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -296922,7 +296922,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -297662,7 +297662,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -299244,7 +299244,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -301426,7 +301426,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -302047,7 +302047,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -304867,7 +304867,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -309385,7 +309385,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -310099,7 +310099,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -311625,7 +311625,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -314317,7 +314317,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -314991,7 +314991,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -318629,7 +318629,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -321572,7 +321572,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -324150,7 +324150,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -325818,7 +325818,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -327151,7 +327151,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -330320,7 +330320,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -334115,7 +334115,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -334667,7 +334667,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -335786,7 +335786,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -337042,7 +337042,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -338692,7 +338692,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -341221,7 +341221,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -342315,7 +342315,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -344439,7 +344439,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -345019,7 +345019,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -348771,7 +348771,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -352310,7 +352310,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -353397,7 +353397,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -354836,7 +354836,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -356985,7 +356985,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -359532,7 +359532,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -360286,7 +360286,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -361545,7 +361545,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -363432,7 +363432,7 @@
   "snapped": true,
   "nodeId": "266608825",
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -365398,7 +365398,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -365620,7 +365620,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -367525,7 +367525,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -368203,7 +368203,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -368861,7 +368861,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -369591,7 +369591,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -371371,7 +371371,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -373386,7 +373386,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -375797,7 +375797,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -379255,7 +379255,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -382901,7 +382901,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -384034,7 +384034,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -386706,7 +386706,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -388352,7 +388352,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -389909,7 +389909,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -391969,7 +391969,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -393181,7 +393181,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -394451,7 +394451,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -396731,7 +396731,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -398630,7 +398630,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -398944,7 +398944,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -399431,7 +399431,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -400216,7 +400216,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -401798,7 +401798,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -402507,7 +402507,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -404410,7 +404410,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -404970,7 +404970,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -407588,7 +407588,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -410171,7 +410171,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -411034,7 +411034,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -413090,7 +413090,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -414506,7 +414506,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -415730,7 +415730,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -417980,7 +417980,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -419017,7 +419017,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -419515,7 +419515,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -420636,7 +420636,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -423667,7 +423667,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -424854,7 +424854,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -426125,7 +426125,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -427479,7 +427479,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -428146,7 +428146,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -429320,7 +429320,7 @@
   ],
   "cat": "2",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -430267,7 +430267,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -434233,7 +434233,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -435529,7 +435529,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -439451,7 +439451,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -442088,7 +442088,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -442932,7 +442932,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -444034,7 +444034,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -444932,7 +444932,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -445689,7 +445689,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -450220,7 +450220,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -450773,7 +450773,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -452408,7 +452408,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -453532,7 +453532,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -455424,7 +455424,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -455978,7 +455978,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -458087,7 +458087,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -458850,7 +458850,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -461440,7 +461440,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -461934,7 +461934,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -462388,7 +462388,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -463869,7 +463869,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -465240,7 +465240,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -468174,7 +468174,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -469981,7 +469981,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -470627,7 +470627,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -471992,7 +471992,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -472870,7 +472870,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -475019,7 +475019,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -476332,7 +476332,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -477301,7 +477301,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -478007,7 +478007,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -479438,7 +479438,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -480135,7 +480135,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -481395,7 +481395,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -484199,7 +484199,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -485971,7 +485971,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -488047,7 +488047,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -488969,7 +488969,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -489220,7 +489220,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -489763,7 +489763,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -491555,7 +491555,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -495724,7 +495724,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -497848,7 +497848,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -500211,7 +500211,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -504225,7 +504225,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -506571,7 +506571,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -508056,7 +508056,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -509204,7 +509204,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -509526,7 +509526,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -510836,7 +510836,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -511901,7 +511901,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -513525,7 +513525,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -513823,7 +513823,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -514753,7 +514753,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -515605,7 +515605,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -516883,7 +516883,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -517742,7 +517742,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -520444,7 +520444,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -522821,7 +522821,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -524826,7 +524826,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -526047,7 +526047,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -528430,7 +528430,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -529902,7 +529902,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -532306,7 +532306,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -534186,7 +534186,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -534939,7 +534939,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -537395,7 +537395,7 @@
   ],
   "difficulty": 9,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -538516,7 +538516,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -540541,7 +540541,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -543444,7 +543444,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -544131,7 +544131,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -545988,7 +545988,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -547597,7 +547597,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -548983,7 +548983,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -551079,7 +551079,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -552536,7 +552536,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -553543,7 +553543,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -554651,7 +554651,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -555742,7 +555742,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -557250,7 +557250,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -558275,7 +558275,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -560682,7 +560682,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -564139,7 +564139,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -565628,7 +565628,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -566170,7 +566170,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -566768,7 +566768,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -567969,7 +567969,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -568894,7 +568894,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -569715,7 +569715,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -571315,7 +571315,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -572748,7 +572748,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -575384,7 +575384,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -578763,7 +578763,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -579317,7 +579317,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -581076,7 +581076,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -582569,7 +582569,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -584672,7 +584672,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -585814,7 +585814,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -587638,7 +587638,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -588688,7 +588688,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -589310,7 +589310,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -591238,7 +591238,7 @@
   "snapped": true,
   "nodeId": "264162490",
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -592291,7 +592291,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -593216,7 +593216,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -594329,7 +594329,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -595500,7 +595500,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -596098,7 +596098,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -599192,7 +599192,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -603285,7 +603285,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -604230,7 +604230,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -605203,7 +605203,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -606949,7 +606949,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -608641,7 +608641,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -610030,7 +610030,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -611140,7 +611140,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -612760,7 +612760,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -613241,7 +613241,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -614739,7 +614739,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -616247,7 +616247,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -618346,7 +618346,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -620721,7 +620721,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -621389,7 +621389,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -622899,7 +622899,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -624485,7 +624485,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -625965,7 +625965,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -626543,7 +626543,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -628240,7 +628240,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -629561,7 +629561,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -631781,7 +631781,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -632007,7 +632007,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -632402,7 +632402,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -633068,7 +633068,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -634405,7 +634405,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -634874,7 +634874,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -636766,7 +636766,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -637703,7 +637703,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -638276,7 +638276,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -639725,7 +639725,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -641334,7 +641334,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -642814,7 +642814,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -644606,7 +644606,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -645523,7 +645523,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -646843,7 +646843,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -648216,7 +648216,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -648694,7 +648694,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -650741,7 +650741,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -654031,7 +654031,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -654716,7 +654716,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -655396,7 +655396,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -655650,7 +655650,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -656315,7 +656315,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -656741,7 +656741,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -658530,7 +658530,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -659464,7 +659464,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -661949,7 +661949,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -663507,7 +663507,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -664060,7 +664060,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -665681,7 +665681,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -666590,7 +666590,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -668402,7 +668402,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -669248,7 +669248,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -670165,7 +670165,7 @@
   ],
   "cat": "4",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -670923,7 +670923,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -672009,7 +672009,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -672979,7 +672979,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -673517,7 +673517,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -674047,7 +674047,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -675061,7 +675061,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -676489,7 +676489,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -677446,7 +677446,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -678040,7 +678040,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -679847,7 +679847,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -680977,7 +680977,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -683630,7 +683630,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -684160,7 +684160,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -684944,7 +684944,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -685989,7 +685989,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -686985,7 +686985,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -688439,7 +688439,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -690603,7 +690603,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -692443,7 +692443,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -692909,7 +692909,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -693183,7 +693183,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -694291,7 +694291,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -696230,7 +696230,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -696877,7 +696877,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -698378,7 +698378,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -699899,7 +699899,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -701408,7 +701408,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -702589,7 +702589,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -703834,7 +703834,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -705788,7 +705788,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -707820,7 +707820,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -709266,7 +709266,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -709796,7 +709796,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -710666,7 +710666,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -711000,7 +711000,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -713382,7 +713382,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -714528,7 +714528,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -715144,7 +715144,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -715470,7 +715470,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -715908,7 +715908,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -716175,7 +716175,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -716919,7 +716919,7 @@
   ],
   "difficulty": 8,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -718536,7 +718536,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -719591,7 +719591,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -721536,7 +721536,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -722950,7 +722950,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -723719,7 +723719,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -724696,7 +724696,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -725393,7 +725393,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -726250,7 +726250,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -726636,7 +726636,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -727557,7 +727557,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -727962,7 +727962,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -728587,7 +728587,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -729337,7 +729337,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -731836,7 +731836,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -732804,7 +732804,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -733278,7 +733278,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -735221,7 +735221,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -735850,7 +735850,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -736563,7 +736563,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -737361,7 +737361,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -738609,7 +738609,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -739578,7 +739578,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -740750,7 +740750,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -741551,7 +741551,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -743969,7 +743969,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -744957,7 +744957,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -745480,7 +745480,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -747502,7 +747502,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -748035,7 +748035,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -749703,7 +749703,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -751998,7 +751998,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -753225,7 +753225,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -754210,7 +754210,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -756105,7 +756105,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -757961,7 +757961,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -760452,7 +760452,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -761904,7 +761904,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -762789,7 +762789,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -764033,7 +764033,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -764222,7 +764222,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -765701,7 +765701,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -766717,7 +766717,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -768565,7 +768565,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -768971,7 +768971,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -769300,7 +769300,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -769606,7 +769606,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -770012,7 +770012,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -771157,7 +771157,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -772404,7 +772404,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -772894,7 +772894,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -774681,7 +774681,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -776217,7 +776217,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -777820,7 +777820,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -780119,7 +780119,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -781843,7 +781843,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -782333,7 +782333,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -784184,7 +784184,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -786591,7 +786591,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -787347,7 +787347,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -789327,7 +789327,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -789988,7 +789988,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -790933,7 +790933,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -792001,7 +792001,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -793066,7 +793066,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -793851,7 +793851,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -795047,7 +795047,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -795876,7 +795876,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -796368,7 +796368,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -798224,7 +798224,7 @@
   "snapped": true,
   "nodeId": "253712262",
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -799568,7 +799568,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -800588,7 +800588,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -802532,7 +802532,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -803910,7 +803910,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -804731,7 +804731,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -806811,7 +806811,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -807510,7 +807510,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -808986,7 +808986,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -810705,7 +810705,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -812125,7 +812125,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -813334,7 +813334,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -813548,7 +813548,7 @@
   ],
   "cat": "3",
   "difficulty": 9,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -814074,7 +814074,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -814592,7 +814592,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -815070,7 +815070,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -815268,7 +815268,7 @@
   ],
   "cat": "2",
   "difficulty": 10,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -816200,7 +816200,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -817013,7 +817013,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -818030,7 +818030,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -820217,7 +820217,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -820483,7 +820483,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -821301,7 +821301,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -822944,7 +822944,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -825534,7 +825534,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -826099,7 +826099,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -827017,7 +827017,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -827579,7 +827579,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -827910,7 +827910,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -829265,7 +829265,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -829566,7 +829566,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -830882,7 +830882,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -831623,7 +831623,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -833640,7 +833640,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -834030,7 +834030,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -834652,7 +834652,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -836104,7 +836104,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -836936,7 +836936,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -837736,7 +837736,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -838019,7 +838019,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -838413,7 +838413,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -838938,7 +838938,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -840142,7 +840142,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -842009,7 +842009,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -842634,7 +842634,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -843008,7 +843008,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -844232,7 +844232,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -844757,7 +844757,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -845139,7 +845139,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -845824,7 +845824,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -846425,7 +846425,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -846691,7 +846691,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -847144,7 +847144,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -848971,7 +848971,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -851541,7 +851541,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -852821,7 +852821,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -855526,7 +855526,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -856682,7 +856682,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -858389,7 +858389,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -859418,7 +859418,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -860940,7 +860940,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -861170,7 +861170,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -861707,7 +861707,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -862640,7 +862640,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -863688,7 +863688,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -864541,7 +864541,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -865497,7 +865497,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -866980,7 +866980,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -867625,7 +867625,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -868403,7 +868403,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -870761,7 +870761,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -871354,7 +871354,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -872103,7 +872103,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -874141,7 +874141,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -874762,7 +874762,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -875188,7 +875188,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -875450,7 +875450,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -876606,7 +876606,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -877486,7 +877486,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -877501,477 +877501,6 @@
   "trafWeekend": 6,
   "trucks": "possibili",
   "versanti": [
-   {
-    "side": "Da Vezzano sul Crostolo",
-    "startLat": 44.586365,
-    "startLon": 10.53492,
-    "startElevation": 203,
-    "endElevation": 573,
-    "distance_km": 11.3,
-    "avgGradient": 3.3,
-    "maxGradient": 8.5,
-    "traffic": "n/d",
-    "exposure": "Nord",
-    "elevationProfile": [
-     203,
-     216,
-     224,
-     223,
-     219,
-     229,
-     235,
-     247,
-     261,
-     275,
-     278,
-     293,
-     307,
-     328,
-     345,
-     355,
-     364,
-     372,
-     378,
-     397,
-     406,
-     418,
-     452,
-     464,
-     482,
-     494,
-     516,
-     537,
-     563,
-     573
-    ],
-    "cat": "4",
-    "track": [
-     [
-      44.586365,
-      10.53492
-     ],
-     [
-      44.58567,
-      10.534195
-     ],
-     [
-      44.584866,
-      10.534746
-     ],
-     [
-      44.583839,
-      10.535237
-     ],
-     [
-      44.583023,
-      10.534822
-     ],
-     [
-      44.582214,
-      10.533756
-     ],
-     [
-      44.581532,
-      10.533448
-     ],
-     [
-      44.581448,
-      10.532151
-     ],
-     [
-      44.580681,
-      10.531218
-     ],
-     [
-      44.579815,
-      10.530849
-     ],
-     [
-      44.579048,
-      10.529337
-     ],
-     [
-      44.578392,
-      10.528361
-     ],
-     [
-      44.577446,
-      10.527884
-     ],
-     [
-      44.576473,
-      10.528126
-     ],
-     [
-      44.575726,
-      10.528991
-     ],
-     [
-      44.57473,
-      10.529343
-     ],
-     [
-      44.573151,
-      10.52882
-     ],
-     [
-      44.572475,
-      10.527806
-     ],
-     [
-      44.571579,
-      10.527574
-     ],
-     [
-      44.570309,
-      10.527388
-     ],
-     [
-      44.569454,
-      10.527928
-     ],
-     [
-      44.568546,
-      10.528459
-     ],
-     [
-      44.567635,
-      10.528543
-     ],
-     [
-      44.566532,
-      10.528657
-     ],
-     [
-      44.565483,
-      10.528744
-     ],
-     [
-      44.564575,
-      10.528837
-     ],
-     [
-      44.563339,
-      10.528695
-     ],
-     [
-      44.562416,
-      10.528436
-     ],
-     [
-      44.561169,
-      10.528514
-     ],
-     [
-      44.560253,
-      10.528689
-     ],
-     [
-      44.559238,
-      10.529218
-     ],
-     [
-      44.558296,
-      10.52972
-     ],
-     [
-      44.557236,
-      10.53027
-     ],
-     [
-      44.556351,
-      10.530447
-     ],
-     [
-      44.555065,
-      10.529837
-     ],
-     [
-      44.554115,
-      10.52967
-     ],
-     [
-      44.553135,
-      10.529796
-     ],
-     [
-      44.552223,
-      10.529998
-     ],
-     [
-      44.551445,
-      10.530699
-     ],
-     [
-      44.55051,
-      10.53055
-     ],
-     [
-      44.549702,
-      10.530184
-     ],
-     [
-      44.548893,
-      10.529702
-     ],
-     [
-      44.54858,
-      10.528713
-     ],
-     [
-      44.547764,
-      10.529042
-     ],
-     [
-      44.546913,
-      10.528284
-     ],
-     [
-      44.546761,
-      10.527016
-     ],
-     [
-      44.546024,
-      10.525998
-     ],
-     [
-      44.545185,
-      10.525507
-     ],
-     [
-      44.544403,
-      10.525007
-     ],
-     [
-      44.543736,
-      10.524063
-     ],
-     [
-      44.542831,
-      10.52275
-     ],
-     [
-      44.542049,
-      10.522172
-     ],
-     [
-      44.541626,
-      10.520956
-     ],
-     [
-      44.540646,
-      10.520889
-     ],
-     [
-      44.540146,
-      10.519827
-     ],
-     [
-      44.539291,
-      10.519415
-     ],
-     [
-      44.53828,
-      10.519933
-     ],
-     [
-      44.537453,
-      10.520336
-     ],
-     [
-      44.536449,
-      10.520189
-     ],
-     [
-      44.535633,
-      10.519731
-     ],
-     [
-      44.535206,
-      10.518677
-     ],
-     [
-      44.534309,
-      10.518443
-     ],
-     [
-      44.533646,
-      10.517575
-     ],
-     [
-      44.532879,
-      10.516836
-     ],
-     [
-      44.531975,
-      10.516474
-     ],
-     [
-      44.531029,
-      10.516644
-     ],
-     [
-      44.530109,
-      10.517103
-     ],
-     [
-      44.52919,
-      10.516961
-     ],
-     [
-      44.528595,
-      10.516068
-     ],
-     [
-      44.528622,
-      10.514876
-     ],
-     [
-      44.527748,
-      10.51427
-     ],
-     [
-      44.526894,
-      10.513462
-     ],
-     [
-      44.526245,
-      10.512321
-     ],
-     [
-      44.525269,
-      10.511487
-     ],
-     [
-      44.524456,
-      10.510807
-     ],
-     [
-      44.524269,
-      10.509421
-     ],
-     [
-      44.523548,
-      10.508442
-     ],
-     [
-      44.522663,
-      10.508709
-     ],
-     [
-      44.522129,
-      10.507769
-     ],
-     [
-      44.521229,
-      10.508052
-     ],
-     [
-      44.520329,
-      10.50781
-     ],
-     [
-      44.519619,
-      10.507119
-     ],
-     [
-      44.518627,
-      10.507167
-     ],
-     [
-      44.517776,
-      10.5065
-     ],
-     [
-      44.516949,
-      10.506489
-     ],
-     [
-      44.517479,
-      10.507546
-     ],
-     [
-      44.51667,
-      10.507974
-     ],
-     [
-      44.515968,
-      10.506977
-     ],
-     [
-      44.515491,
-      10.505982
-     ],
-     [
-      44.515255,
-      10.507202
-     ],
-     [
-      44.515526,
-      10.5083
-     ],
-     [
-      44.514614,
-      10.508151
-     ],
-     [
-      44.51421,
-      10.506983
-     ],
-     [
-      44.51368,
-      10.505935
-     ],
-     [
-      44.513203,
-      10.506176
-     ],
-     [
-      44.513206,
-      10.507373
-     ],
-     [
-      44.512741,
-      10.506314
-     ],
-     [
-      44.512695,
-      10.504971
-     ],
-     [
-      44.512154,
-      10.503994
-     ],
-     [
-      44.512852,
-      10.503623
-     ],
-     [
-      44.514442,
-      10.502087
-     ],
-     [
-      44.513561,
-      10.502231
-     ],
-     [
-      44.512585,
-      10.502237
-     ],
-     [
-      44.511894,
-      10.501307
-     ],
-     [
-      44.511391,
-      10.500408
-     ],
-     [
-      44.51077651977539,
-      10.49946117401123
-     ]
-    ]
-   },
    {
     "side": "Da Baiso",
     "startLat": 44.5135,
@@ -878438,11 +877967,338 @@
       10.49946117401123
      ]
     ]
+   },
+   {
+    "side": "Da La Vecchia",
+    "startLat": 44.553135,
+    "startLon": 10.529796,
+    "startElevation": 278,
+    "endElevation": 573,
+    "distance_km": 7.2,
+    "avgGradient": 4.1,
+    "maxGradient": 8.5,
+    "traffic": "n/d",
+    "exposure": "Nord-Est",
+    "elevationProfile": [
+     278,
+     283,
+     301,
+     307,
+     321,
+     334,
+     342,
+     351,
+     359,
+     362,
+     370,
+     372,
+     378,
+     385,
+     397,
+     406,
+     411,
+     418,
+     446,
+     454,
+     467,
+     472,
+     489,
+     494,
+     514,
+     518,
+     537,
+     553,
+     571,
+     573
+    ],
+    "cat": "4",
+    "track": [
+     [
+      44.553135,
+      10.529796
+     ],
+     [
+      44.552223,
+      10.529998
+     ],
+     [
+      44.551445,
+      10.530699
+     ],
+     [
+      44.55051,
+      10.53055
+     ],
+     [
+      44.549702,
+      10.530184
+     ],
+     [
+      44.548893,
+      10.529702
+     ],
+     [
+      44.54858,
+      10.528713
+     ],
+     [
+      44.547764,
+      10.529042
+     ],
+     [
+      44.546913,
+      10.528284
+     ],
+     [
+      44.546761,
+      10.527016
+     ],
+     [
+      44.546024,
+      10.525998
+     ],
+     [
+      44.545185,
+      10.525507
+     ],
+     [
+      44.544403,
+      10.525007
+     ],
+     [
+      44.543736,
+      10.524063
+     ],
+     [
+      44.542831,
+      10.52275
+     ],
+     [
+      44.542049,
+      10.522172
+     ],
+     [
+      44.541626,
+      10.520956
+     ],
+     [
+      44.540646,
+      10.520889
+     ],
+     [
+      44.540146,
+      10.519827
+     ],
+     [
+      44.539291,
+      10.519415
+     ],
+     [
+      44.53828,
+      10.519933
+     ],
+     [
+      44.537453,
+      10.520336
+     ],
+     [
+      44.536449,
+      10.520189
+     ],
+     [
+      44.535633,
+      10.519731
+     ],
+     [
+      44.535206,
+      10.518677
+     ],
+     [
+      44.534309,
+      10.518443
+     ],
+     [
+      44.533646,
+      10.517575
+     ],
+     [
+      44.532879,
+      10.516836
+     ],
+     [
+      44.531975,
+      10.516474
+     ],
+     [
+      44.531029,
+      10.516644
+     ],
+     [
+      44.530109,
+      10.517103
+     ],
+     [
+      44.52919,
+      10.516961
+     ],
+     [
+      44.528595,
+      10.516068
+     ],
+     [
+      44.528622,
+      10.514876
+     ],
+     [
+      44.527748,
+      10.51427
+     ],
+     [
+      44.526894,
+      10.513462
+     ],
+     [
+      44.526245,
+      10.512321
+     ],
+     [
+      44.525269,
+      10.511487
+     ],
+     [
+      44.524456,
+      10.510807
+     ],
+     [
+      44.524269,
+      10.509421
+     ],
+     [
+      44.523548,
+      10.508442
+     ],
+     [
+      44.522663,
+      10.508709
+     ],
+     [
+      44.522129,
+      10.507769
+     ],
+     [
+      44.521229,
+      10.508052
+     ],
+     [
+      44.520329,
+      10.50781
+     ],
+     [
+      44.519619,
+      10.507119
+     ],
+     [
+      44.518627,
+      10.507167
+     ],
+     [
+      44.517776,
+      10.5065
+     ],
+     [
+      44.516949,
+      10.506489
+     ],
+     [
+      44.517479,
+      10.507546
+     ],
+     [
+      44.51667,
+      10.507974
+     ],
+     [
+      44.515968,
+      10.506977
+     ],
+     [
+      44.515491,
+      10.505982
+     ],
+     [
+      44.515255,
+      10.507202
+     ],
+     [
+      44.515526,
+      10.5083
+     ],
+     [
+      44.514614,
+      10.508151
+     ],
+     [
+      44.51421,
+      10.506983
+     ],
+     [
+      44.51368,
+      10.505935
+     ],
+     [
+      44.513203,
+      10.506176
+     ],
+     [
+      44.513206,
+      10.507373
+     ],
+     [
+      44.512741,
+      10.506314
+     ],
+     [
+      44.512695,
+      10.504971
+     ],
+     [
+      44.512154,
+      10.503994
+     ],
+     [
+      44.512852,
+      10.503623
+     ],
+     [
+      44.514442,
+      10.502087
+     ],
+     [
+      44.513561,
+      10.502231
+     ],
+     [
+      44.512585,
+      10.502237
+     ],
+     [
+      44.511894,
+      10.501307
+     ],
+     [
+      44.511391,
+      10.500408
+     ],
+     [
+      44.51077651977539,
+      10.49946117401123
+     ]
+    ]
    }
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -879151,7 +879007,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -879560,7 +879416,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -879758,7 +879614,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -880024,7 +879880,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -882019,7 +881875,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -883165,7 +883021,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -883632,7 +883488,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -883874,7 +883730,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -884523,7 +884379,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -885204,7 +885060,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -886825,7 +886681,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -887467,7 +887323,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -888343,7 +888199,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -888499,7 +888355,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -889148,7 +889004,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -889950,7 +889806,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -890503,7 +890359,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -891188,7 +891044,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -892128,7 +891984,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -892805,7 +892661,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -893736,7 +893592,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -895324,7 +895180,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -895583,7 +895439,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -895944,7 +895800,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -896206,7 +896062,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -897717,7 +897573,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -898009,7 +897865,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -898628,7 +898484,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -899225,7 +899081,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -899555,7 +899411,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -899809,7 +899665,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -900780,7 +900636,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -901118,7 +900974,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -901592,7 +901448,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -902360,7 +902216,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -902834,7 +902690,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -903233,7 +903089,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -904042,7 +903898,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -904284,7 +904140,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -904578,7 +904434,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -905063,7 +904919,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -905773,7 +905629,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -906450,7 +906306,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -906890,7 +906746,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -907297,7 +907153,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -907499,7 +907355,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -908029,7 +907885,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -908231,7 +908087,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -908557,7 +908413,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -908927,7 +908783,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -909889,7 +909745,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -910961,7 +910817,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -911914,7 +911770,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -912165,7 +912021,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -912627,7 +912483,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -912887,7 +912743,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -913181,7 +913037,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -914207,7 +914063,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -914464,7 +914320,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -914702,7 +914558,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
@@ -915102,7 +914958,7 @@
   ],
   "difficulty": 3,
   "cat": "4",
-  "algo": "v3.2-basin",
+  "algo": "v3.3-valley4",
   "updatedAt": "2026-06-16"
  },
  {
