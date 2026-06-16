@@ -14500,7 +14500,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1563591658",
@@ -15392,7 +15393,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-475560453",
@@ -22014,7 +22016,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1373142516",
@@ -22601,7 +22604,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-454395096",
@@ -29424,7 +29428,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3105047584",
@@ -31118,7 +31123,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3838887411",
@@ -34242,7 +34248,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1898961551",
@@ -35607,7 +35614,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3060820463",
@@ -37194,7 +37202,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6763653232",
@@ -40738,7 +40747,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2541565400",
@@ -45823,7 +45833,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5854833012",
@@ -51349,7 +51360,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-472297610",
@@ -54698,7 +54710,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-305728537",
@@ -57008,7 +57021,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-309083930",
@@ -59636,7 +59650,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403326576",
@@ -64751,7 +64766,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-460855724",
@@ -65317,7 +65333,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4513567576",
@@ -66235,7 +66252,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1368817421",
@@ -69654,7 +69672,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3286606792",
@@ -70003,7 +70022,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1678583071",
@@ -72526,7 +72546,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-437171404",
@@ -73718,7 +73739,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-331885504",
@@ -77410,7 +77432,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-450709511",
@@ -78791,7 +78814,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1739274931",
@@ -79916,7 +79940,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1800994828",
@@ -80660,7 +80685,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-246541325",
@@ -82818,7 +82844,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-599060147",
@@ -84623,7 +84650,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-435287095",
@@ -86740,7 +86768,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-452515255",
@@ -91107,7 +91136,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2294153356",
@@ -91692,7 +91722,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-474598467",
@@ -94842,7 +94873,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1305199577",
@@ -96415,7 +96447,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-336517417",
@@ -96767,7 +96800,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3047656897",
@@ -98853,7 +98887,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1744459998",
@@ -101090,7 +101125,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-454913694",
@@ -102800,7 +102836,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1537310167",
@@ -103638,7 +103675,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-413542597",
@@ -107314,7 +107352,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-811149131",
@@ -110454,7 +110493,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-600083987",
@@ -111864,7 +111904,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1876826744",
@@ -113606,7 +113647,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-928715494",
@@ -114130,7 +114172,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403400745",
@@ -114814,7 +114857,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-938808232",
@@ -115619,7 +115663,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-616869272",
@@ -119540,7 +119585,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-291285957",
@@ -120157,7 +120203,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-312144375",
@@ -121909,7 +121956,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-304268933",
@@ -123412,7 +123460,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-402612374",
@@ -124994,7 +125043,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1698397491",
@@ -126433,7 +126483,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3562887254",
@@ -128687,7 +128738,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-881291702",
@@ -132351,7 +132403,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-561579833",
@@ -134615,7 +134668,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-488643911",
@@ -135342,7 +135396,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-341131456",
@@ -137870,7 +137925,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-520370026",
@@ -141223,7 +141279,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565422992",
@@ -142833,7 +142890,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-437563309",
@@ -146959,7 +147017,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-11114291873",
@@ -148455,7 +148514,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5817677359",
@@ -150191,7 +150251,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-299536180",
@@ -152338,7 +152399,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1880550565",
@@ -156067,7 +156129,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-287348108",
@@ -159427,7 +159490,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8670044273",
@@ -162289,7 +162353,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-742659105",
@@ -164559,7 +164624,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-798844041",
@@ -164905,7 +164971,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6001678261",
@@ -165725,7 +165792,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-527799257",
@@ -170089,7 +170157,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-503039093",
@@ -173414,7 +173483,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1408753532",
@@ -175400,7 +175470,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-266741893",
@@ -175987,7 +176058,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-742431767",
@@ -177005,7 +177077,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5191757457",
@@ -177505,7 +177578,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-286283902",
@@ -177937,7 +178011,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-523337256",
@@ -179672,7 +179747,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-568429846",
@@ -180456,7 +180532,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3390773502",
@@ -182113,7 +182190,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-402617732",
@@ -184156,7 +184234,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2597262457",
@@ -192908,7 +192987,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1375035640",
@@ -193133,7 +193213,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-315632647",
@@ -195352,7 +195433,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-323288596",
@@ -196822,7 +196904,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3095957938",
@@ -198032,7 +198115,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-577677431",
@@ -199114,7 +199198,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-276848589",
@@ -200061,7 +200146,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-633731335",
@@ -201163,7 +201249,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2185691180",
@@ -203105,7 +203192,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5817724647",
@@ -203740,7 +203828,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1338417140",
@@ -204803,7 +204892,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12549179746",
@@ -205455,7 +205545,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12331310481",
@@ -206986,7 +207077,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-577790592",
@@ -207935,7 +208027,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-414160067",
@@ -209430,7 +209523,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3246796524",
@@ -214130,7 +214224,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3280129523",
@@ -214832,7 +214927,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2337637304",
@@ -215301,7 +215397,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2108923833",
@@ -216222,7 +216319,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-774087039",
@@ -217509,7 +217607,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-795144777",
@@ -217831,7 +217930,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-80071072",
@@ -218875,7 +218975,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5250568793",
@@ -220957,7 +221058,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-11583801259",
@@ -222764,7 +222866,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8890459231",
@@ -223916,7 +224019,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1126287547",
@@ -227023,7 +227127,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-9683309653",
@@ -228018,7 +228123,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-286481874",
@@ -229132,7 +229238,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5345754027",
@@ -231448,7 +231555,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8868136531",
@@ -235065,7 +235173,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6745246902",
@@ -235598,7 +235707,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-770561128",
@@ -239333,7 +239443,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-13590662701",
@@ -239834,7 +239945,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-304627462",
@@ -241063,7 +241175,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-990207400",
@@ -241470,7 +241583,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-687139354",
@@ -242181,7 +242295,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1488360611",
@@ -243138,7 +243253,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1626728615",
@@ -243478,7 +243594,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2268417472",
@@ -245870,7 +245987,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-938403501",
@@ -247500,7 +247618,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-402547309",
@@ -247834,7 +247953,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-799554865",
@@ -249917,7 +250037,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-976632762",
@@ -250580,7 +250701,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2255303228",
@@ -251012,7 +251134,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1437437792",
@@ -253998,7 +254121,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-82602888",
@@ -257151,7 +257275,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-275378492",
@@ -258537,7 +258662,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-650038946",
@@ -261552,7 +261678,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403489973",
@@ -262713,7 +262840,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-423649264",
@@ -265292,7 +265420,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3729951248",
@@ -268845,7 +268974,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1360395894",
@@ -271002,7 +271132,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12620153406",
@@ -272216,7 +272347,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-279022653",
@@ -274223,7 +274355,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12487305746",
@@ -277940,7 +278073,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1269451270",
@@ -279451,7 +279585,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2938529479",
@@ -281469,7 +281604,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-10004093507",
@@ -284354,7 +284490,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-576115719",
@@ -284619,7 +284756,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-9195966169",
@@ -285550,7 +285688,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7592482203",
@@ -285903,7 +286042,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-310135083",
@@ -288013,7 +288153,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-736714003",
@@ -289000,7 +289141,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4114939042",
@@ -291285,7 +291427,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4579771618",
@@ -294132,7 +294275,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2909010833",
@@ -296238,7 +296382,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-11583782915",
@@ -297772,7 +297917,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1479426938",
@@ -298551,7 +298697,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1578133993",
@@ -301517,7 +301664,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-448428757",
@@ -302255,7 +302403,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1689376942",
@@ -303779,7 +303928,8 @@
    }
   ],
   "cat": "1",
-  "difficulty": 9
+  "difficulty": 9,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2599764365",
@@ -307139,7 +307289,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1160280641",
@@ -307990,7 +308141,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403585778",
@@ -308622,7 +308774,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5254587716",
@@ -313144,7 +313297,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-620149706",
@@ -315993,7 +316147,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-459975504",
@@ -316233,7 +316388,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3417314393",
@@ -317102,7 +317258,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2322517715",
@@ -317929,7 +318086,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-476652999",
@@ -318630,7 +318788,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1572489129",
@@ -318922,7 +319081,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-968542095",
@@ -319405,7 +319565,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1345993340",
@@ -321741,7 +321902,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3125723831",
@@ -323235,7 +323397,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-392259396",
@@ -324058,7 +324221,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-689260926",
@@ -324931,7 +325095,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-914337302",
@@ -325740,7 +325905,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-299223778",
@@ -328406,7 +328572,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-763618411",
@@ -329017,7 +329184,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2538243878",
@@ -329308,7 +329476,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-249584398",
@@ -332798,7 +332967,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1110616847",
@@ -333439,7 +333609,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-623926119",
@@ -335215,7 +335386,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-29868605",
@@ -336339,7 +336511,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-475015446",
@@ -340630,7 +340803,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1785656834",
@@ -341375,7 +341549,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-521636481",
@@ -342921,7 +343096,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2360706496",
@@ -346374,7 +346550,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2998402321",
@@ -348164,7 +348341,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7473992621",
@@ -349648,7 +349826,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-428939938",
@@ -351215,7 +351394,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-388405563",
@@ -353773,7 +353953,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-727276447",
@@ -355468,7 +355649,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1743055868",
@@ -356371,7 +356553,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-718835835",
@@ -357331,7 +357514,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-9212681316",
@@ -360257,7 +360441,8 @@
   "difficulty": 7,
   "snapped": true,
   "nodeId": "266608825",
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-433326676",
@@ -360974,7 +361159,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1454928277",
@@ -362525,7 +362711,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2300029197",
@@ -363610,7 +363797,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-424018412",
@@ -363863,7 +364051,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-547449663",
@@ -364207,7 +364396,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-561579830",
@@ -364863,7 +365053,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1800347589",
@@ -365291,7 +365482,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2141817613",
@@ -365748,7 +365940,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-9724675615",
@@ -366247,7 +366440,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-267919209",
@@ -368969,7 +369163,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1333654235",
@@ -369521,7 +369716,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1724211009",
@@ -370421,7 +370617,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-563326949",
@@ -370986,7 +371183,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403395117",
@@ -372338,7 +372536,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4107413102",
@@ -372822,7 +373021,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-372926776",
@@ -374672,7 +374872,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-558561046",
@@ -376198,7 +376399,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1221399095",
@@ -376765,7 +376967,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-533769212",
@@ -378695,7 +378898,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1751093949",
@@ -379135,7 +379339,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1640238379",
@@ -381200,7 +381405,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-845290261",
@@ -382740,7 +382946,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-13474228827",
@@ -383286,7 +383493,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1173037121",
@@ -383682,7 +383890,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2929823401",
@@ -384896,7 +385105,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-440621541",
@@ -386120,7 +386330,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-409017080",
@@ -389885,7 +390096,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-428940589",
@@ -391738,7 +391950,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2293620189",
@@ -394373,7 +394586,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-299227750",
@@ -395670,7 +395884,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1765344655",
@@ -396155,7 +396370,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-566129396",
@@ -396571,7 +396787,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403401942",
@@ -397572,7 +397789,8 @@
   "difficulty": 7,
   "snapped": true,
   "nodeId": "262464234",
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-835164252",
@@ -397808,7 +398026,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1445617183",
@@ -399305,7 +399524,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2940945845",
@@ -401867,7 +402087,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-415831310",
@@ -403107,7 +403328,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6402468325",
@@ -404048,7 +404270,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1695810144",
@@ -404964,7 +405187,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565423055",
@@ -405977,7 +406201,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-564914208",
@@ -407051,7 +407276,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1130228502",
@@ -409788,7 +410014,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1358137284",
@@ -410235,7 +410462,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-420807365",
@@ -411161,7 +411389,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4857729790",
@@ -413292,7 +413521,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-401289411",
@@ -414210,7 +414440,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-270970730",
@@ -414722,7 +414953,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1386472043",
@@ -415133,7 +415365,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3226458224",
@@ -415612,7 +415845,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1558256429",
@@ -416433,7 +416667,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1588903562",
@@ -418038,7 +418273,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-333784019",
@@ -420175,7 +420411,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1995558900",
@@ -421091,7 +421328,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2196595210",
@@ -422153,7 +422391,8 @@
    }
   ],
   "cat": "2",
-  "difficulty": 7
+  "difficulty": 7,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5254588463",
@@ -423662,7 +423901,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585339336",
@@ -426475,7 +426715,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-857588812",
@@ -427270,7 +427511,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-292754303",
@@ -428338,7 +428580,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-494017733",
@@ -430761,7 +431004,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-540951503",
@@ -431603,7 +431847,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2421143345",
@@ -431877,7 +432122,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3765044184",
@@ -433821,7 +434067,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2135925907",
@@ -434580,7 +434827,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1168470581",
@@ -440776,7 +441024,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2463286362",
@@ -441391,7 +441640,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2108037345",
@@ -442728,7 +442978,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1589707950",
@@ -443867,7 +444118,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-944089218",
@@ -444982,7 +445234,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1389240929",
@@ -445789,7 +446042,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2074828375",
@@ -448598,7 +448852,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-564914206",
@@ -451368,7 +451623,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5115316146",
@@ -452106,7 +452362,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-401447209",
@@ -452378,7 +452635,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-939293323",
@@ -454238,7 +454496,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1264784239",
@@ -458286,7 +458545,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-472419680",
@@ -459017,7 +459277,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2037937921",
@@ -459888,7 +460149,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3623255560",
@@ -462874,7 +463136,8 @@
    }
   ],
   "cat": "2",
-  "difficulty": 6
+  "difficulty": 6,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-850634402",
@@ -465556,7 +465819,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2439729418",
@@ -466836,7 +467100,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-547273613",
@@ -467771,7 +468036,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1743055238",
@@ -468030,7 +468296,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-330007979",
@@ -469521,7 +469788,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4799761859",
@@ -472425,7 +472693,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6594665786",
@@ -473028,7 +473297,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565432589",
@@ -473726,7 +473996,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1502719071",
@@ -474846,7 +475117,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2797601601",
@@ -475701,7 +475973,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2920791587",
@@ -478353,7 +478626,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3101868712",
@@ -478749,7 +479023,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-563326955",
@@ -479126,7 +479401,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6856704222",
@@ -479636,7 +479912,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12726228903",
@@ -484355,7 +484632,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2730266143",
@@ -484667,7 +484945,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2815824183",
@@ -488149,7 +488428,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4772443524",
@@ -491011,7 +491291,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-229465510",
@@ -493173,7 +493454,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-769226660",
@@ -495717,7 +495999,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-257096916",
@@ -496768,7 +497051,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-416801510",
@@ -497461,7 +497745,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-249686628",
@@ -500342,7 +500627,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-268484985",
@@ -501323,7 +501609,8 @@
    }
   ],
   "cat": "2",
-  "difficulty": 7
+  "difficulty": 7,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3040975502",
@@ -502770,7 +503057,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7630241427",
@@ -503014,7 +503302,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7141035869",
@@ -504949,7 +505238,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-416809004",
@@ -507048,7 +507338,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1464293805",
@@ -507412,7 +507703,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1637513778",
@@ -510651,7 +510943,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2468735838",
@@ -511501,7 +511794,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2643860685",
@@ -512511,7 +512805,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-619353333",
@@ -513755,7 +514050,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1612040599",
@@ -515503,7 +515799,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 5
+  "difficulty": 5,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7628739972",
@@ -515919,7 +516216,8 @@
    }
   ],
   "cat": "2",
-  "difficulty": 7
+  "difficulty": 7,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-331633524",
@@ -516806,7 +517104,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2556120526",
@@ -517222,7 +517521,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-536453874",
@@ -517643,7 +517943,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-581299315",
@@ -518578,7 +518879,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1557530993",
@@ -520611,7 +520913,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-909342928",
@@ -522451,7 +522754,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4693488768",
@@ -526356,7 +526660,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565423000",
@@ -527588,7 +527893,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-593877212",
@@ -528311,7 +528617,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3517215702",
@@ -530879,7 +531186,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-663243887",
@@ -533644,7 +533952,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-983213695",
@@ -534472,7 +534781,8 @@
    }
   ],
   "difficulty": 4,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2889573738",
@@ -536869,7 +537179,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1894318615",
@@ -539728,7 +540039,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1011690497",
@@ -540339,7 +540651,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2331212297",
@@ -542030,7 +542343,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-307927004",
@@ -542823,7 +543137,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-529473020",
@@ -543752,7 +544067,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1589703180",
@@ -546455,7 +546771,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-563785486",
@@ -547166,7 +547483,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-101514389",
@@ -547746,7 +548064,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2053397968",
@@ -549325,7 +549644,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2507610095",
@@ -550701,7 +551021,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-559964560",
@@ -551864,7 +552185,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-731817794",
@@ -553291,7 +553613,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1269622930",
@@ -553797,7 +554120,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1070818416",
@@ -554903,7 +555227,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1303454798",
@@ -555708,7 +556033,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-692281745",
@@ -556760,7 +557086,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12299699321",
@@ -557931,7 +558258,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1194602571",
@@ -562443,7 +562771,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-848929578",
@@ -564717,7 +565046,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1793776884",
@@ -567071,7 +567401,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-263454442",
@@ -568777,7 +569108,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "HC"
+  "cat": "HC",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-491479249",
@@ -569746,7 +570078,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-268263629",
@@ -571117,7 +571450,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1253092680",
@@ -571936,7 +572270,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-932301653",
@@ -572259,7 +572594,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-302653352",
@@ -573122,7 +573458,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403494141",
@@ -574094,7 +574431,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-694273039",
@@ -575944,7 +576282,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2443647966",
@@ -578904,7 +579243,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-364519444",
@@ -580577,7 +580917,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-258324864",
@@ -580986,7 +581327,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1350763197",
@@ -585093,7 +585435,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4952453831",
@@ -585564,7 +585907,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-588469132",
@@ -586492,7 +586836,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-339488732",
@@ -589543,7 +589888,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-534255980",
@@ -590977,7 +591323,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-910892286",
@@ -591779,7 +592126,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3646788840",
@@ -592382,7 +592730,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2267127123",
@@ -594226,7 +594575,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2712287692",
@@ -595097,7 +595447,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-264162490",
@@ -596343,7 +596694,8 @@
   "difficulty": 8,
   "snapped": true,
   "nodeId": "264162490",
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1110616046",
@@ -596959,7 +597311,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565432590",
@@ -598894,7 +599247,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-875480971",
@@ -599585,7 +599939,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1381503594",
@@ -600671,7 +601026,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1316077265",
@@ -602565,7 +602921,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2298250421",
@@ -602719,7 +603076,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-453556333",
@@ -603330,7 +603688,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-314037074",
@@ -604027,7 +604386,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4589177634",
@@ -604327,7 +604687,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1392024761",
@@ -606685,7 +607046,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-447907570",
@@ -608906,7 +609268,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-991280330",
@@ -609322,7 +609685,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-286645326",
@@ -609822,7 +610186,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-9558993903",
@@ -610070,7 +610435,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403612743",
@@ -611085,7 +611451,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-731818601",
@@ -611703,7 +612070,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-692887663",
@@ -612617,7 +612985,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2475769203",
@@ -614307,7 +614676,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-262120128",
@@ -614761,7 +615131,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-795186614",
@@ -617597,7 +617968,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3336805799",
@@ -617984,7 +618356,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2280228735",
@@ -619026,7 +619399,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1329790305",
@@ -620956,7 +621330,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-11981130692",
@@ -621400,7 +621775,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-281422923",
@@ -623047,7 +623423,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1419531102",
@@ -624971,7 +625348,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-826159882",
@@ -628165,7 +628543,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 5
+  "difficulty": 5,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-285682573",
@@ -628909,7 +629288,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-588489266",
@@ -629266,7 +629646,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-290220751",
@@ -629750,7 +630131,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1885518175",
@@ -630007,7 +630389,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1547178296",
@@ -631303,7 +631686,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-11816615115",
@@ -631870,7 +632254,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3883437903",
@@ -632854,7 +633239,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1720937228",
@@ -633441,7 +633827,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565432577",
@@ -634123,7 +634510,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4432223849",
@@ -636130,7 +636518,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-395330695",
@@ -637054,7 +637443,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-577776308",
@@ -638305,7 +638695,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1465727342",
@@ -639764,7 +640155,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3043191884",
@@ -641730,7 +642122,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6501190121",
@@ -642906,7 +643299,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-561141436",
@@ -644904,7 +645298,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-374573972",
@@ -645192,7 +645587,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1223814573",
@@ -646555,7 +646951,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1639345922",
@@ -648308,7 +648705,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1144904022",
@@ -651282,7 +651680,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-281423536",
@@ -652302,7 +652701,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1433529700",
@@ -652977,7 +653377,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1996157341",
@@ -655124,7 +655525,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8569671217",
@@ -655743,7 +656145,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-306673465",
@@ -656486,7 +656889,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1864723668",
@@ -656999,7 +657403,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-281348950",
@@ -657194,7 +657599,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1180480007",
@@ -658706,7 +659112,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8463960187",
@@ -659814,7 +660221,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-908784903",
@@ -661112,7 +661520,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-286640858",
@@ -661995,7 +662404,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-404731493",
@@ -662287,7 +662697,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-412123407",
@@ -662519,7 +662930,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1928547834",
@@ -663631,7 +664043,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-539521814",
@@ -665170,7 +665583,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-545032377",
@@ -665793,7 +666207,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 7
+  "difficulty": 7,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7904490117",
@@ -665977,7 +666392,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4759491281",
@@ -667484,7 +667900,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1163619573",
@@ -670067,7 +670484,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6982327478",
@@ -670320,7 +670738,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585134875",
@@ -670608,7 +671027,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-403371562",
@@ -671284,7 +671704,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-559990147",
@@ -673321,7 +673742,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-392242203",
@@ -673840,7 +674262,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-919848054",
@@ -676006,7 +676429,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-300442527",
@@ -676422,7 +676846,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-286645517",
@@ -677803,7 +678228,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5304547031",
@@ -679786,7 +680212,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2986009348",
@@ -681950,7 +682377,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 7
+  "difficulty": 7,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12592590599",
@@ -684265,7 +684693,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-544544937",
@@ -685330,7 +685759,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2584193836",
@@ -686014,7 +686444,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-485949105",
@@ -687582,7 +688013,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1263201279",
@@ -688935,7 +689367,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1806417973",
@@ -689195,7 +689628,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2140591318",
@@ -689487,7 +689921,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-300971042",
@@ -690163,7 +690598,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-301159888",
@@ -690942,7 +691378,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1213979825",
@@ -691298,7 +691735,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4282729021",
@@ -691622,7 +692060,8 @@
    }
   ],
   "difficulty": 4,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7575259016",
@@ -692482,7 +692921,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-768268311",
@@ -693134,7 +693574,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585339340",
@@ -693458,7 +693899,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-436161464",
@@ -693762,7 +694204,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-456025744",
@@ -695908,7 +696351,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3178969673",
@@ -696316,7 +696760,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-11571545655",
@@ -697084,7 +697529,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-291645409",
@@ -697512,7 +697958,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1194602525",
@@ -698997,7 +699444,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-302652852",
@@ -700128,7 +700576,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-452442431",
@@ -702705,7 +703154,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3876591996",
@@ -703755,7 +704205,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3434255909",
@@ -704468,7 +704919,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565423151",
@@ -705092,7 +705544,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1258126834",
@@ -705710,7 +706163,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1154427105",
@@ -706198,7 +706652,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "1"
+  "cat": "1",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7912379996",
@@ -706426,7 +706881,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2525324833",
@@ -707576,7 +708032,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12802763666",
@@ -708422,7 +708879,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-309079966",
@@ -708685,7 +709143,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1480933404",
@@ -709440,7 +709899,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-402496515",
@@ -710387,7 +710847,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3258617362",
@@ -712303,7 +712764,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-732736292",
@@ -712830,7 +713292,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12470746545",
@@ -714600,7 +715063,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1444385382",
@@ -716102,7 +716566,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5251274090",
@@ -716645,7 +717110,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-571388590",
@@ -718150,7 +718616,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1864803668",
@@ -718599,7 +719066,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-502434333",
@@ -718850,7 +719318,8 @@
    }
   ],
   "cat": "4",
-  "difficulty": 5
+  "difficulty": 5,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7856188094",
@@ -719154,7 +719623,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1447981723",
@@ -720195,7 +720665,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5552615950",
@@ -722086,7 +722557,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-412784225",
@@ -722286,7 +722758,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-718534048",
@@ -724813,7 +725286,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4587185092",
@@ -726663,7 +727137,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-564914210",
@@ -727062,7 +727537,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1373311115",
@@ -727685,7 +728161,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2291820386",
@@ -727913,7 +728390,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3149313747",
@@ -728109,7 +728587,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8392263172",
@@ -728527,7 +729006,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1088575485",
@@ -729098,7 +729578,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2012767533",
@@ -729669,7 +730150,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1178281715",
@@ -729949,7 +730431,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1125929789",
@@ -730289,7 +730772,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1185836263",
@@ -730991,7 +731475,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-415278844",
@@ -731228,7 +731713,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1817828090",
@@ -732095,7 +732581,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-510606451",
@@ -732630,7 +733117,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3358739801",
@@ -733338,7 +733826,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-257540544",
@@ -733756,7 +734245,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-296924226",
@@ -734516,7 +735006,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3043182028",
@@ -734960,7 +735451,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-29757549",
@@ -735716,7 +736208,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-694199532",
@@ -736587,7 +737080,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4596441278",
@@ -738005,7 +738499,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2587277923",
@@ -739049,7 +739544,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2318625665",
@@ -739616,7 +740112,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3791419160",
@@ -740199,7 +740696,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585562086",
@@ -741041,7 +741539,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-82552876",
@@ -741941,7 +742440,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-903175296",
@@ -742201,7 +742701,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-724671771",
@@ -742549,7 +743050,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-896732673",
@@ -742788,7 +743290,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1123902076",
@@ -743096,7 +743599,8 @@
    }
   ],
   "difficulty": 4,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-282379273",
@@ -743424,7 +743928,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-853678264",
@@ -743784,7 +744289,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-624784555",
@@ -744726,7 +745232,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2475804394",
@@ -745473,7 +745980,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1509107038",
@@ -746938,7 +747446,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1498614257",
@@ -747817,7 +748326,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1951174319",
@@ -748531,7 +749041,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1739070041",
@@ -749323,7 +749834,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4482437437",
@@ -750446,7 +750958,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-289669293",
@@ -751824,7 +752337,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-9536589861",
@@ -752173,7 +752687,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-13563455562",
@@ -753112,7 +753627,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-997420694",
@@ -753450,7 +753966,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1604293772",
@@ -754010,7 +754527,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-854724762",
@@ -754734,7 +755252,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-544545152",
@@ -755450,7 +755969,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-613028162",
@@ -756017,7 +756537,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6450408977",
@@ -757033,7 +757554,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-321948812",
@@ -758441,7 +758963,8 @@
   "difficulty": 4,
   "snapped": true,
   "nodeId": "253712262",
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2584253843",
@@ -760043,7 +760566,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1228457595",
@@ -760662,7 +761186,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-860046322",
@@ -761949,7 +762474,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-253712273",
@@ -763199,7 +763725,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2454684510",
@@ -764513,7 +765040,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-190588215",
@@ -765193,7 +765721,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-516037681",
@@ -766565,7 +767094,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2592965888",
@@ -766942,7 +767472,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12367957634",
@@ -768160,7 +768691,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1274771701",
@@ -769438,7 +769970,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12218270668",
@@ -770432,7 +770965,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-534861364",
@@ -770740,7 +771274,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-618946994",
@@ -771450,7 +771985,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 9
+  "difficulty": 9,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585544969",
@@ -773136,7 +773672,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1005401852",
@@ -774291,7 +774828,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-600070998",
@@ -775458,7 +775996,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-279122360",
@@ -775695,7 +776234,8 @@
    }
   ],
   "cat": "2",
-  "difficulty": 10
+  "difficulty": 10,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2384559613",
@@ -777760,7 +778300,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-995432662",
@@ -778191,7 +778732,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6345640148",
@@ -780153,7 +780695,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-392318722",
@@ -782443,7 +782986,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-940362285",
@@ -784708,7 +785252,8 @@
    }
   ],
   "cat": "4",
-  "difficulty": 5
+  "difficulty": 5,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-286011956",
@@ -784928,7 +785473,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3634033999",
@@ -785152,7 +785698,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-13474239649",
@@ -785609,7 +786156,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-297728888",
@@ -785825,7 +786373,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-305499388",
@@ -786338,7 +786887,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-290608146",
@@ -786594,7 +787144,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-201529069",
@@ -787194,7 +787745,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-275139620",
@@ -788643,7 +789195,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1886612271",
@@ -789089,7 +789642,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1170266355",
@@ -789263,7 +789817,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-603507033",
@@ -790194,7 +790749,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2925194980",
@@ -790618,7 +791174,8 @@
    }
   ],
   "difficulty": 4,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585339342",
@@ -793376,7 +793933,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2862781902",
@@ -794132,7 +794690,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-926883235",
@@ -794482,7 +795041,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-565422929",
@@ -796064,7 +796624,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4214326361",
@@ -796989,7 +797550,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6004526559",
@@ -797225,7 +797787,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3483753184",
@@ -799151,7 +799714,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-304926013",
@@ -799763,7 +800327,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585409040",
@@ -800056,7 +800621,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2625623878",
@@ -800595,7 +801161,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-277339014",
@@ -801272,7 +801839,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-521329703",
@@ -801476,7 +802044,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-680113340",
@@ -801817,7 +802386,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-8507804006",
@@ -802001,7 +802571,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-270998073",
@@ -803111,7 +803682,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-259991868",
@@ -803320,7 +803892,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-268830023",
@@ -803578,7 +804151,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-256244379",
@@ -804261,7 +804835,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4401025500",
@@ -804489,7 +805064,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-454290505",
@@ -804713,7 +805289,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-899412398",
@@ -805002,7 +805579,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7341405011",
@@ -806652,7 +807230,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-34094737",
@@ -806902,7 +807481,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1798411637",
@@ -807378,7 +807958,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1716345293",
@@ -807658,7 +808239,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12218270672",
@@ -808222,7 +808804,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5171999518",
@@ -808446,7 +809029,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7921967452",
@@ -808818,7 +809402,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-249374481",
@@ -809668,7 +810253,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-693497746",
@@ -809896,7 +810482,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-388092361",
@@ -810850,7 +811437,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12218270676",
@@ -811497,7 +812085,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-12218307224",
@@ -812072,7 +812661,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3923926120",
@@ -812311,7 +812901,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-465923948",
@@ -812854,7 +813445,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-301778620",
@@ -813497,7 +814089,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-619750925",
@@ -815674,7 +816267,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-436167346",
@@ -817922,7 +818516,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-372860471",
@@ -819355,7 +819950,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-250170772",
@@ -819707,7 +820303,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1238855316",
@@ -820175,7 +820772,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-608011482",
@@ -820455,7 +821053,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5144609633",
@@ -820711,7 +821310,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1734574809",
@@ -820971,7 +821571,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-855360618",
@@ -821359,7 +821960,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-244315013",
@@ -821559,7 +822161,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "x-albinea-casina",
@@ -822251,7 +822854,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585553693",
@@ -822491,7 +823095,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-6702952683",
@@ -822759,7 +823364,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4548147261",
@@ -823399,7 +824005,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1918930361",
@@ -824795,7 +825402,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3504441939",
@@ -825065,7 +825673,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-259600375",
@@ -825305,7 +825914,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2311218929",
@@ -825952,7 +826562,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4426477133",
@@ -826152,7 +826763,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7635006340",
@@ -826524,7 +827136,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585420819",
@@ -827704,7 +828317,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "2"
+  "cat": "2",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-529944927",
@@ -828200,7 +828814,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-556971900",
@@ -828635,7 +829250,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1327984277",
@@ -828789,7 +829405,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-256244738",
@@ -828997,7 +829614,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2696803755",
@@ -829405,7 +830023,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-249257992",
@@ -829629,7 +830248,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-385540764",
@@ -829969,7 +830589,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1585835510",
@@ -831099,7 +831720,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-313762407",
@@ -831391,7 +832013,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-348056059",
@@ -832263,7 +832886,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4745708493",
@@ -832606,7 +833230,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-702527062",
@@ -832896,7 +833521,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1262420006",
@@ -833918,7 +834544,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-452423924",
@@ -834302,7 +834929,8 @@
    }
   ],
   "difficulty": 4,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1745285938",
@@ -834674,7 +835302,8 @@
    }
   ],
   "cat": "4",
-  "difficulty": 4
+  "difficulty": 4,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-7724788744",
@@ -834926,7 +835555,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-4585123232",
@@ -835253,7 +835883,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1351523520",
@@ -836447,7 +837078,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-287925034",
@@ -836739,7 +837371,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-518681626",
@@ -837149,7 +837782,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-5868765802",
@@ -837691,7 +838325,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-988764087",
@@ -838550,7 +839185,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-874238996",
@@ -839553,7 +840189,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-526860693",
@@ -839795,7 +840432,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-496141535",
@@ -840210,7 +840848,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-669940679",
@@ -840410,7 +841049,8 @@
    }
   ],
   "difficulty": 10,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1110616399",
@@ -840938,7 +841578,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2804469389",
@@ -841138,7 +841779,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 8
+  "difficulty": 8,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-3908883166",
@@ -841678,7 +842320,8 @@
    }
   ],
   "cat": "4",
-  "difficulty": 5
+  "difficulty": 5,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-404240147",
@@ -842213,7 +842856,8 @@
    }
   ],
   "difficulty": 9,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-305688156",
@@ -842950,7 +843594,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-487803038",
@@ -843389,7 +844034,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-258215270",
@@ -843621,7 +844267,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1735157158",
@@ -844057,7 +844704,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1011584698",
@@ -844289,7 +844937,8 @@
    }
   ],
   "cat": "3",
-  "difficulty": 7
+  "difficulty": 7,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-285037495",
@@ -844948,7 +845597,8 @@
    }
   ],
   "difficulty": 6,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-2942678003",
@@ -845386,7 +846036,8 @@
    }
   ],
   "difficulty": 4,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-10563695383",
@@ -845678,7 +846329,8 @@
    }
   ],
   "cat": "4",
-  "difficulty": 5
+  "difficulty": 5,
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-408377076",
@@ -846882,7 +847534,8 @@
    }
   ],
   "difficulty": 5,
-  "cat": "4"
+  "cat": "4",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-942324069",
@@ -847388,7 +848041,8 @@
    }
   ],
   "difficulty": 8,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-1002353806",
@@ -847624,7 +848278,8 @@
    }
   ],
   "difficulty": 7,
-  "cat": "3"
+  "cat": "3",
+  "algo": "v3.1-valleytrim"
  },
  {
   "id": "osm-275058381",
