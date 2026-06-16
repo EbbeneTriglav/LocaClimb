@@ -436,6 +436,17 @@ async function main() {
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
   function bearing(la1, lo1, la2, lo2) { var p = Math.PI / 180; var y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p); var x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; }
+  function resampleByDist(pts, stepKm) {
+    if (pts.length < 2) return pts;
+    var out = [pts[0]], acc = 0;
+    for (var i = 1; i < pts.length; i++) {
+      acc += hav(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]);
+      if (acc >= stepKm) { out.push(pts[i]); acc = 0; }
+    }
+    if (out[out.length - 1] !== pts[pts.length - 1]) out.push(pts[pts.length - 1]);
+    if (out.length > 400) { var o = [], n = 400; for (var z = 0; z < n; z++) o.push(out[Math.round(z * (out.length - 1) / (n - 1))]); out = o; }
+    return out;
+  }
   function neighbors(key) {
     var out = [], lst = vertexMap.get(key);
     if (!lst) return out;
@@ -487,12 +498,22 @@ async function main() {
       while (k != null && guard++ < 5000) { path.push(coord.get(k)); k = parent.get(k); }
       path.reverse(); // summit -> base
       if (path.length < 4) continue;
-      if (path.length > 130) { var o = [], n = 130; for (var z = 0; z < n; z++) o.push(path[Math.round(z * (path.length - 1) / (n - 1))]); path = o; }
+      path = resampleByDist(path, 0.12); // ~1 point every 120m: faithful on hairpins, light on long climbs
       var ev = await elevations(path); if (!ev) continue;
       var v = buildSide(path, ev, lat, lon, relax); // path is summit->base; buildSide reverses internally
       if (v) raw.push(v);
     }
     raw.sort(function (a, b) { return b.distance_km - a.distance_km; });
+    function overlapFrac(a, b) { // fraction of a.track points that lie within 150m of any b.track point (sampled)
+      if (!a.track || !b.track) return 0;
+      var hit = 0, tot = 0;
+      for (var i = 0; i < a.track.length; i += 3) {
+        tot++; var pa = a.track[i], near = false;
+        for (var j = 0; j < b.track.length; j += 3) { if (hav(pa[0], pa[1], b.track[j][0], b.track[j][1]) < 0.15) { near = true; break; } }
+        if (near) hit++;
+      }
+      return tot ? hit / tot : 0;
+    }
     var kept = [];
     for (var v2 of raw) {
       var dup = false;
@@ -500,7 +521,8 @@ async function main() {
         var close = hav(v2.startLat, v2.startLon, u.startLat, u.startLon) < 2.0;
         var bv = bearing(lat, lon, v2.startLat, v2.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
         var db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
-        if (close && db < 45) { dup = true; break; }
+        var ov = Math.max(overlapFrac(v2, u), overlapFrac(u, v2));
+        if ((close && db < 45) || ov > 0.55) { dup = true; break; } // same base-direction OR mostly-shared road
       }
       if (!dup) kept.push(v2);
       if (kept.length >= 4) break;
