@@ -394,13 +394,10 @@ async function main() {
     return nearPass(gx(w, glen(w)-1), gy(w, glen(w)-1));
   }
   const vertexMap = new Map();
-  for (const w of ways) {
-    const last = glen(w) - 1;
-    for (const idx of [0, last]) {       // junctions are way endpoints in OSM topology
-      const k = vkey(gx(w, idx), gy(w, idx));
-      let a = vertexMap.get(k); if (!a) { a = []; vertexMap.set(k, a); }
-      a.push({ w, idx });
-    }
+  for (const w of ways) for (let idx = 0; idx < glen(w); idx++) {
+    const k = vkey(gx(w, idx), gy(w, idx));
+    let a = vertexMap.get(k); if (!a) { a = []; vertexMap.set(k, a); }
+    a.push({ w, idx });
   }
   const wgrid = new Map();
   for (const w of ways) for (let i = 0; i < glen(w); i += 10) {
@@ -439,41 +436,81 @@ async function main() {
     return [...bestBy.values()].sort((x, y) => x.dd - y.dd).slice(0, maxN);
   }
   function bearing(la1, lo1, la2, lo2) { var p = Math.PI / 180; var y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p); var x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; }
-  // SIMPLE: take all roads near the summit, walk each direction to the buffer edge,
-  // sample DEM, trim to the real climb, dedupe by base proximity+direction, label by town.
+  function neighbors(key) {
+    var out = [], lst = vertexMap.get(key);
+    if (!lst) return out;
+    for (var e of lst) {
+      var w = e.w, i = e.idx;
+      [i - 1, i + 1].forEach(function (j) {
+        if (j < 0 || j >= glen(w)) return;
+        var k2 = vkey(gx(w, j), gy(w, j));
+        out.push({ key: k2, seg: hav(gx(w, i), gy(w, i), gx(w, j), gy(w, j)) });
+      });
+    }
+    return out;
+  }
+  // BFS shortest road-paths from the summit over the buffer network (no branch guessing)
   async function buildVersanti(lat, lon, capKm, relax, anchor) {
-    var raw = [];
-    var cands = candWays(lat, lon, 0.6, 12); // all road branches touching the summit area
-    for (var ch of cands) {
-      for (var dir of [-1, 1]) {
-        var pts = walk(ch.w, ch.idx, dir, vertexMap, capKm, anchor);
-        if (!pts || pts.length < 4) continue;
-        var ev = await elevations(pts);
-        if (!ev) continue;
-        var v = buildSide(pts, ev, lat, lon, relax);
-        if (v) raw.push(v);
+    var ch = snap(lat, lon, 0.8);
+    if (!ch) return [];
+    var startK = vkey(gx(ch.w, ch.idx), gy(ch.w, ch.idx));
+    var startLat = gx(ch.w, ch.idx), startLon = gy(ch.w, ch.idx);
+    var dist = new Map(), parent = new Map(), coord = new Map();
+    dist.set(startK, 0); coord.set(startK, [startLat, startLon]);
+    var q = [startK], qi = 0;
+    while (qi < q.length) {
+      var c = q[qi++]; var dc = dist.get(c);
+      if (dc > capKm) continue;
+      for (var nb of neighbors(c)) {
+        var nd = dc + nb.seg;
+        if (nd > capKm) continue;
+        if (!dist.has(nb.key) || nd < dist.get(nb.key)) {
+          dist.set(nb.key, nd); parent.set(nb.key, c);
+          if (!coord.has(nb.key)) { var p2 = nb.key.split(","); coord.set(nb.key, [parseFloat(p2[0]), parseFloat(p2[1])]); }
+          q.push(nb.key);
+        }
       }
+      if (q.length > 200000) break; // safety
+    }
+    // farthest reached vertex per bearing octant = candidate base
+    var perOct = new Map();
+    dist.forEach(function (d, k) {
+      if (d < 1.5) return;
+      var ll = coord.get(k); var oc = Math.floor(bearing(lat, lon, ll[0], ll[1]) / 45);
+      var cur = perOct.get(oc);
+      if (!cur || d > cur.d) perOct.set(oc, { k: k, d: d });
+    });
+    // reconstruct each path summit->base, sample DEM, trim
+    var raw = [];
+    for (var ent of perOct.values()) {
+      var path = [], k = ent.k, guard = 0;
+      while (k != null && guard++ < 5000) { path.push(coord.get(k)); k = parent.get(k); }
+      path.reverse(); // summit -> base
+      if (path.length < 4) continue;
+      if (path.length > 130) { var o = [], n = 130; for (var z = 0; z < n; z++) o.push(path[Math.round(z * (path.length - 1) / (n - 1))]); path = o; }
+      var ev = await elevations(path); if (!ev) continue;
+      var v = buildSide(path, ev, lat, lon, relax); // path is summit->base; buildSide reverses internally
+      if (v) raw.push(v);
     }
     raw.sort(function (a, b) { return b.distance_km - a.distance_km; });
     var kept = [];
-    for (var v of raw) {
+    for (var v2 of raw) {
       var dup = false;
       for (var u of kept) {
-        var close = hav(v.startLat, v.startLon, u.startLat, u.startLon) < 2.0;
-        var bv = bearing(lat, lon, v.startLat, v.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
+        var close = hav(v2.startLat, v2.startLon, u.startLat, u.startLon) < 2.0;
+        var bv = bearing(lat, lon, v2.startLat, v2.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
         var db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
         if (close && db < 45) { dup = true; break; }
       }
-      if (!dup) kept.push(v);
+      if (!dup) kept.push(v2);
       if (kept.length >= 4) break;
     }
-    // label each side by the nearest town to its base, collapse same-town (keep longest)
-    for (var v2 of kept) { var t = global.nearestPlace ? global.nearestPlace(v2.startLat, v2.startLon) : null; v2._town = t ? t.name : null; if (t) v2.side = "Da " + t.name; }
+    for (var v3 of kept) { var t = global.nearestPlace ? global.nearestPlace(v3.startLat, v3.startLon) : null; v3._town = t ? t.name : null; if (t) v3.side = "Da " + t.name; }
     var byTown = new Map(), finalv = [];
-    for (var v3 of kept) {
-      if (v3._town && byTown.has(v3._town)) { var u3 = byTown.get(v3._town); if (v3.distance_km > u3.distance_km) { finalv[finalv.indexOf(u3)] = v3; byTown.set(v3._town, v3); } continue; }
-      if (v3._town) byTown.set(v3._town, v3);
-      finalv.push(v3);
+    for (var v4 of kept) {
+      if (v4._town && byTown.has(v4._town)) { var u4 = byTown.get(v4._town); if (v4.distance_km > u4.distance_km) { finalv[finalv.indexOf(u4)] = v4; byTown.set(v4._town, v4); } continue; }
+      if (v4._town) byTown.set(v4._town, v4);
+      finalv.push(v4);
     }
     finalv.forEach(function (v) { delete v._town; });
     return finalv;
