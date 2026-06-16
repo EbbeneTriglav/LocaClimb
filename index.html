@@ -126,6 +126,7 @@ canvas#relev{height:170px}
 <div class="fg"><label><input type="checkbox" id="fosm" checked style="width:auto;margin-right:6px">Mostra passi OSM</label></div>
 <button class="btn" style="width:100%;margin-top:6px" onclick="resetFilters()">Reset</button>
 <button class="btn" style="width:100%;margin-top:4px" onclick="closeFP()">Chiudi</button>
+<div id="dataver" style="font-size:.7rem;color:var(--txt2);margin-top:12px;text-align:center"></div>
 </div>
 <div id="dp"></div>
 <div id="rb">
@@ -207,7 +208,7 @@ function ensureCat(p){
 function isGravel(p){return (p.surfaceLabel||"").indexOf("Sterrato")>=0;}
 function catColor(c){return {HC:"#7f1d1d","1":"#dc2626","2":"#ea580c","3":"#d97706","4":"#65a30d"}[c]||"#64748b";}
 function catLabel(c){return c==="HC"?"HC":c;}
-function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;}});applyFilters();}).catch(function(){});}
+function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;}});applyFilters();setDataVersion();}).catch(function(){});}
 /* ===== TRAFFIC MODEL ===== */
 var TRAF_MAP={basso:2,medio:5,alto:8};
 function trafColor(s){return s>=7?"#ef4444":s>=4?"#f59e0b":"#22c55e";}
@@ -802,11 +803,18 @@ function toggleHeat(){
 /* prefill OSRM route cache from baked file so curated passes don't hit OSRM at runtime */
 function loadBakedRoutes(){fetch("routes_baked.json",{cache:"force-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){for(var k in o)routeCache[k]=o[k];}).catch(function(){});}
 
+function setDataVersion(){
+  var el=document.getElementById("dataver");if(!el)return;
+  var ver="";for(var i=0;i<osmPasses.length;i++){if(osmPasses[i].algo){ver=osmPasses[i].algo;break;}}
+  var mx="";osmPasses.forEach(function(p){if(p.updatedAt&&p.updatedAt>mx)mx=p.updatedAt;});
+  PASSES_DATA.forEach(function(p){if(p.updatedAt&&p.updatedAt>mx)mx=p.updatedAt;});
+  el.innerHTML="&#x1F4E6; Dati: "+(ver||"?")+(mx?" &middot; "+fmtDate(mx):"");
+}
 function adoptOsm(arr){
   if(!arr||!arr.length)return;
   // drop entries too close to curated passes
   osmPasses=arr.filter(function(op){return!PASSES_DATA.some(function(p){return Math.abs(p.lat-op.lat)<0.008&&Math.abs(p.lon-op.lon)<0.008;});});
-  applyFilters();
+  applyFilters();setDataVersion();
   var b=document.getElementById("ob");if(b)b.textContent="OSM ("+osmPasses.length+")";
 }
 function persistOsm(){try{localStorage.setItem(OSM_CACHE_KEY,JSON.stringify(osmPasses.map(stripMarker)));}catch(e){}}
