@@ -43,7 +43,11 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.1-valleytrim";
+const ALGO_VERSION = "v3.2-basin";
+const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
+const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
+// Display-name fixes for OSM passes whose tag name is not the locally-known name.
+const NAME_ALIAS = { "Passo del Lagadello": "Passo San Pellegrino in Alpe", "Passo Lagadello": "Passo San Pellegrino in Alpe" };
 const WORK = "build_tmp";
 
 /* ----- geo + scoring helpers ---------------------------------------------- */
@@ -103,11 +107,16 @@ function computeTraffic(t, elev) {
   const hw = (t && t.highway) || "tertiary";
   const base = TRAF_BASE[hw] != null ? TRAF_BASE[hw] : 3;
   const tour = (elev >= 1500 || base >= 4) ? 2 : 1;
-  let trucks = "rari";
   const mw = parseFloat(t && (t.maxweight || t.maxweightrating)) || 0;
-  if ((t && (t.hgv === "no" || t.hgv === "destination")) || (mw > 0 && mw < 7.5) || hw === "track" || hw === "cycleway") trucks = "no";
-  else if (hw === "primary") trucks = (t && t.hgv === "yes") ? "si" : "possibili";
-  else if (hw === "secondary") trucks = "possibili";
+  const hgvNo = t && (t.hgv === "no" || t.hgv === "destination" || t.hgv === "delivery");
+  let trucks;
+  // Freight only really exists on through arteries (primary SS, busier secondary SP). Minor
+  // classes, service/residential, weight-limited or hgv-restricted roads, and high mountain
+  // pass roads (dead-end-ish, local only) carry no trucks -> avoid the misleading default "rari".
+  if (hgvNo || (mw > 0 && mw < 7.5) || hw === "track" || hw === "cycleway" || hw === "service" || hw === "residential" || hw === "living_street") trucks = "no";
+  else if (hw === "primary" || hw === "primary_link") trucks = (t && (t.hgv === "yes" || t.hgv === "designated")) ? "si" : "possibili";
+  else if (hw === "secondary" || hw === "secondary_link") trucks = "possibili";
+  else trucks = (elev >= 1200) ? "no" : "rari"; // tertiary/unclassified: high pass roads -> no freight
   return { fer: base, wkd: Math.min(10, base + tour), trucks };
 }
 
@@ -243,24 +252,18 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     }
     return worst;
   }
-  // Walk valley-ward from the summit using ~300m windows (DEM is noisy point-to-point).
-  // Extend the climb across short flats/false-flats; stop only at a sustained DESCENT
-  // or a long (> FLAT_MAX) plateau. base = farthest valid index toward the valley.
-  const FLAT_MAX = relax ? 4 : 2.5;
-  function fwdGrade(i) { // grade over ~300m starting at i, toward summit
-    let j = i; while (j < end && cum[j] - cum[i] < 0.3) j++;
-    const dd = cum[j] - cum[i];
-    return dd > 0 ? (el[j] - el[i]) / (dd * 1000) * 100 : 0;
-  }
-  let base = end, flatRun = 0;
+  // --- B: basin-aware base ---------------------------------------------------
+  // The BFS path can run PAST the real valley, climb over a saddle/shoulder and drop into a
+  // neighbouring drainage (San Pellegrino: out of Castelnuovo over a shoulder, down to
+  // Gallicano -> raw endpoint = Gallicano). Walk from the summit toward the endpoint tracking
+  // the deepest valley bottom reached; stop as soon as the road climbs back > SADDLE_TOL above
+  // that bottom -> we crossed a watershed, so the real base is the bottom on the summit side.
+  // Intra-climb rollers/false-flats stay below SADDLE_TOL and don't trigger a cut.
+  const SADDLE_TOL = 80; // m; a real watershed exceeds this, normal climb undulation does not
+  let base = end, mEl = el[end];
   for (let i = end - 1; i >= 0; i--) {
-    const g = fwdGrade(i);
-    if (g >= 1.5) { base = i; flatRun = 0; }                 // climbing -> extend down
-    else if (g > -1.2) {                                      // flat / false-flat
-      flatRun += cum[i + 1] - cum[i];
-      if (flatRun > FLAT_MAX) break;
-      base = i;
-    } else break;                                            // real descent -> valley
+    if (el[i] < mEl) { mEl = el[i]; base = i; }   // deeper valley bottom in this basin
+    else if (el[i] > mEl + SADDLE_TOL) break;     // climbed over a saddle -> stop at last bottom
   }
   // trim trailing near-flat we tentatively included
   while (base < end - 1) {
@@ -504,17 +507,26 @@ async function main() {
       }
       if (q.length > 200000) break; // safety
     }
-    // farthest reached vertex per bearing octant = candidate base
-    var perOct = new Map();
+    // --- C: candidates = branch tips (graph leaves), not 1-per-octant -----------
+    // The shortest-path tree's leaves are the natural ends of each road branch, so distinct
+    // valleys in the same bearing (Castel del Piano vs Seggiano on Amiata; Piandelagotti on
+    // Radici) each surface instead of collapsing into one octant. B trims any tip that ran
+    // past the real base. An octant fallback keeps angular coverage on wide cones.
+    var parents = new Set(parent.values());
+    var leaves = [], perOct = new Map();
     dist.forEach(function (d, k) {
       if (d < 1.5) return;
-      var ll = coord.get(k); var oc = Math.floor(bearing(lat, lon, ll[0], ll[1]) / 45);
-      var cur = perOct.get(oc);
-      if (!cur || d > cur.d) perOct.set(oc, { k: k, d: d });
+      var ll = coord.get(k), oc = Math.floor(bearing(lat, lon, ll[0], ll[1]) / 45);
+      var cur = perOct.get(oc); if (!cur || d > cur.d) perOct.set(oc, { k: k, d: d });
+      if (!parents.has(k)) leaves.push({ k: k, d: d });           // branch tip
     });
+    leaves.sort(function (a, b) { return b.d - a.d; });
+    var candKeys = new Set(), cands = [];
+    for (var lf of leaves.slice(0, 14)) if (!candKeys.has(lf.k)) { candKeys.add(lf.k); cands.push(lf); }
+    for (var oe of perOct.values()) if (!candKeys.has(oe.k)) { candKeys.add(oe.k); cands.push(oe); } // fallback
     // reconstruct each path summit->base, sample DEM, trim
     var raw = [];
-    for (var ent of perOct.values()) {
+    for (var ent of cands) {
       var path = [], k = ent.k, guard = 0;
       while (k != null && guard++ < 5000) { path.push(coord.get(k)); k = parent.get(k); }
       path.reverse(); // summit -> base
@@ -546,7 +558,7 @@ async function main() {
         if ((close && db < 45) || ov > 0.55) { dup = true; break; } // same base-direction OR mostly-shared road
       }
       if (!dup) kept.push(v2);
-      if (kept.length >= 4) break;
+      if (kept.length >= 5) break;
     }
     for (var v3 of kept) { var t = global.nearestPlace ? global.nearestPlace(v3.startLat, v3.startLon) : null; v3._town = t ? t.name : null; if (t) v3.side = "Da " + t.name; }
     var byTown = new Map(), finalv = [];
@@ -571,7 +583,8 @@ async function main() {
     if (!ch) { skipped++; continue; }
     kept++;
     const id = "osm-" + el.oid;
-    const name = (el.tags.name || "Passo").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    const rawName = el.tags.name || "Passo";
+    const name = (NAME_ALIAS[rawName] || rawName).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
     const rec = byId.get(id) || { id };
     rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
@@ -588,6 +601,7 @@ async function main() {
           rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
           rec.cat = rec.versanti.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
           rec.algo = ALGO_VERSION; // stamp only on success; no-climb passes stay retryable
+          rec.updatedAt = BUILD_DATE;
           ok++;
         } else fail++;
       } catch (e) { fail++; if (fail <= 8) console.log("    ! enrich error (" + rec.name + "): " + e.message); }
@@ -617,10 +631,45 @@ async function main() {
       rec.versanti = vs;
       rec.difficulty = Math.max(...vs.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
       rec.cat = vs.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
+      rec.algo = ALGO_VERSION; rec.updatedAt = BUILD_DATE;
       byId.set(id, rec);
       console.log("    + " + x.name + ": " + vs.length + " versanti, cat " + (rec.cat || "-"));
     }
   } catch (e) { /* no extra file, fine */ }
+
+  // --- prune stale OSM orphans (nodes no longer in the current extract) -----------
+  const liveOsm = new Set(passes.map((p) => "osm-" + p.oid));
+  let pruned = 0;
+  for (const [id] of [...byId]) { if (id.indexOf("osm-") === 0 && !liveOsm.has(id)) { byId.delete(id); pruned++; } }
+  if (pruned) console.log("  pruned stale OSM orphans: " + pruned);
+
+  // --- D: cross-pass overlap dedup ------------------------------------------------
+  // Two pass nodes on the SAME road (e.g. Passo delle Radici and the lesser-known Foce di
+  // Terrarossa, both up Casoni di Profecchia) generate near-identical versanti. For each pair
+  // of summits within 4 km, a versante of the weaker (lower) OSM pass that shares > 60% of its
+  // track with a versante of the stronger one is removed; an OSM pass emptied this way is
+  // absorbed. Curated/extra (x-) climbs are never stripped. Disable with --no-crossdedup.
+  if (!NO_XDEDUP) {
+    const isOsm = (id) => String(id).indexOf("osm-") === 0;
+    const recs = [...byId.values()].filter((r) => r.versanti && r.versanti.length);
+    const grid = new Map();
+    for (const r of recs) { const k = Math.floor(r.lat / 0.05) + ":" + Math.floor(r.lon / 0.05); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(r); }
+    const near = (r) => { const ci = Math.floor(r.lat / 0.05), cj = Math.floor(r.lon / 0.05), out = []; for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (const o of (grid.get((ci + a) + ":" + (cj + b)) || [])) if (o !== r) out.push(o); return out; };
+    const trkOverlap = (va, vb) => { if (!va.track || !vb.track) return 0; let hit = 0, tot = 0; for (let i = 0; i < va.track.length; i += 4) { tot++; const pa = va.track[i]; for (let j = 0; j < vb.track.length; j += 4) if (hav(pa[0], pa[1], vb.track[j][0], vb.track[j][1]) < 0.15) { hit++; break; } } return tot ? hit / tot : 0; };
+    const weakerOf = (r, o) => { if ((r.elevation || 0) !== (o.elevation || 0)) return (r.elevation || 0) < (o.elevation || 0) ? r : o; return (r.versanti.length <= o.versanti.length) ? r : o; };
+    let removedV = 0, absorbed = 0;
+    for (const r of recs) for (const o of near(r)) {
+      if (hav(r.lat, r.lon, o.lat, o.lon) > 4) continue;
+      const weak = weakerOf(r, o), strong = weak === r ? o : r;
+      if (!isOsm(weak.id) || !weak.versanti.length) continue; // only strip OSM; never extra/curated
+      weak.versanti = weak.versanti.filter((wv) => {
+        for (const sv of strong.versanti) if (Math.max(trkOverlap(wv, sv), trkOverlap(sv, wv)) > 0.6) { removedV++; return false; }
+        return true;
+      });
+    }
+    for (const [id, r] of [...byId]) if (isOsm(id) && Array.isArray(r.versanti) && r.versanti.length === 0) { byId.delete(id); absorbed++; }
+    if (removedV || absorbed) console.log("  cross-dedup: removed " + removedV + " overlapping versanti, absorbed " + absorbed + " passes");
+  }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
   await writeFile(OUT, JSON.stringify(result, null, 1) + "\n", "utf8");
@@ -644,7 +693,7 @@ async function main() {
         try {
           const top = await buildVersanti(slat, slon, 32, true, nameTokens(p.name));
           if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
-          overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null };
+          overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null, algo: ALGO_VERSION, updatedAt: BUILD_DATE };
           console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
         } catch (e) { console.log("    - " + p.name + ": " + e.message); }
       }
