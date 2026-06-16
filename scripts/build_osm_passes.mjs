@@ -262,6 +262,21 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     const g = (el[j] - el[base]) / ((cum[j] - cum[base]) * 1000) * 100;
     if (g < 0.4) base++; else break;
   }
+  // Valley-start refinement: strip the contiguous low-gradient valley approach at the
+  // bottom so the base sits where the real climb begins, NOT at a town further down the
+  // valley (e.g. Cepina under Stelvio, or the long Serchio-valley run to Gallicano below
+  // the Pieve Fosciana ramp on Passo Radici). Advance the base upward while the forward
+  // ~600m window stays below VFLOOR%, stopping at the first sustained ramp (>= VFLOOR).
+  // It can never cut mid-climb (a real climb is >= VFLOOR from its base up) and always
+  // keeps >= VMIN_KEEP km. Generalizes the "2km / 4%" idea: Radici needs ~10km trimmed,
+  // so the floor (not a fixed cap) decides where the valley ends.
+  const VFLOOR = relax ? 3.0 : 4.0, VMIN_KEEP = 3.0, VWIN = 0.6;
+  while (base < end - 1 && (cum[end] - cum[base]) > VMIN_KEEP) {
+    let j = base; while (j < end && cum[j] - cum[base] < VWIN) j++;
+    const dd = cum[j] - cum[base]; if (dd <= 0) break;
+    const g = (el[j] - el[base]) / (dd * 1000) * 100;
+    if (g < VFLOOR) base++; else break;
+  }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
@@ -278,7 +293,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   }
   if (maxg < avg) maxg = avg;
   const dir = compass(topLat, topLon, segPts[0][0], segPts[0][1]); // slope aspect: direction the versante faces
-  const n = Math.min(segEl.length, 24), prof = [];
+  const n = Math.min(segEl.length, 30), prof = [];
   for (let i = 0; i < n; i++) prof.push(Math.round(segEl[Math.round(i * (segEl.length - 1) / (n - 1))]));
   return { side: "Versante " + dir, startLat: segPts[0][0], startLon: segPts[0][1], startElevation: Math.round(segEl[0]), endElevation: Math.round(segEl[segEl.length - 1]), distance_km: Math.round(dist * 10) / 10, avgGradient: Math.round(avg * 10) / 10, maxGradient: Math.round(maxg * 10) / 10, traffic: "n/d", exposure: dir, elevationProfile: prof, cat: climbCat(Math.round(dist * 10) / 10, gain, segEl[segEl.length - 1]), track: segPts.map((s) => [s[0], s[1]]) };
 }
@@ -498,7 +513,7 @@ async function main() {
       while (k != null && guard++ < 5000) { path.push(coord.get(k)); k = parent.get(k); }
       path.reverse(); // summit -> base
       if (path.length < 4) continue;
-      path = resampleByDist(path, 0.12); // ~1 point every 120m: faithful on hairpins, light on long climbs
+      path = resampleByDist(path, 0.10); // ~1 point every 100m: tighter on hairpins, still light on long climbs
       var ev = await elevations(path); if (!ev) continue;
       var v = buildSide(path, ev, lat, lon, relax); // path is summit->base; buildSide reverses internally
       if (v) raw.push(v);
