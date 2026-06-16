@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.2-basin";
+const ALGO_VERSION = "v3.3-valley4";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -279,7 +279,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   // It can never cut mid-climb (a real climb is >= VFLOOR from its base up) and always
   // keeps >= VMIN_KEEP km. Generalizes the "2km / 4%" idea: Radici needs ~10km trimmed,
   // so the floor (not a fixed cap) decides where the valley ends.
-  const VFLOOR = relax ? 3.0 : 4.0, VMIN_KEEP = 3.0, VWIN = 0.6;
+  const VFLOOR = 4.0, VMIN_KEEP = 3.0, VWIN = 0.6; // valley vs real-climb cut: 4% always (relax only loosens accept thresholds, not where the climb starts)
   while (base < end - 1 && (cum[end] - cum[base]) > VMIN_KEEP) {
     let j = base; while (j < end && cum[j] - cum[base] < VWIN) j++;
     const dd = cum[j] - cum[base]; if (dd <= 0) break;
