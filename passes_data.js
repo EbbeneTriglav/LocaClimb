@@ -161,13 +161,6 @@ versanti:[
 {side:"San Marcello Piteglio",startLat:44.0600,startLon:10.8000,startElevation:620,endElevation:1388,distance_km:18.0,avgGradient:4.3,maxGradient:8.0,traffic:"medio",exposure:"Sud",elevationProfile:[620,720,810,900,980,1060,1130,1200,1260,1320,1360,1388]},
 {side:"Fanano (MO)",startLat:44.2047,startLon:10.7936,startElevation:640,endElevation:1388,distance_km:22.0,avgGradient:3.4,maxGradient:7.0,traffic:"basso",exposure:"Nord",elevationProfile:[640,720,790,860,930,1000,1060,1120,1180,1230,1280,1320,1360,1388]}
 ]},
-{id:"cisa",name:"Passo della Cisa",lat:44.4222,lon:9.9267,elevation:1041,region:"Emilia-Romagna/Toscana",status:"open",difficulty:4,
-description:"Valico storico sull'Appennino sulla via Francigena. Collega Parma a La Spezia.",
-tips:["Salita lunga ma mai ripida","Traffico sulla SS62 variabile","Bella discesa verso la Lunigiana"],
-versanti:[
-{side:"Fornovo di Taro (PR)",startLat:44.6867,startLon:10.0967,startElevation:130,endElevation:1041,distance_km:38.0,avgGradient:2.4,maxGradient:7.0,traffic:"medio",exposure:"Nord",elevationProfile:[130,220,310,400,490,570,650,730,800,870,930,980,1020,1041]},
-{side:"Pontremoli (MS)",startLat:44.3744,startLon:9.8794,startElevation:236,endElevation:1041,distance_km:18.0,avgGradient:4.5,maxGradient:8.0,traffic:"medio",exposure:"Sud",elevationProfile:[236,340,440,540,640,730,810,880,940,990,1025,1041]}
-]},
 {id:"futa",name:"Passo della Futa",lat:44.1172,lon:11.2553,elevation:903,region:"Toscana/Emilia-Romagna",status:"open",difficulty:4,
 description:"Classico valico appenninico tra Firenze e Bologna. Percorso dalla celebre gara automobilistica Mille Miglia.",
 tips:["Salita costante e regolare","Cimitero di guerra germanico in vetta","Ottima da combinare con Passo della Raticosa"],
