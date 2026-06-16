@@ -38,6 +38,12 @@ const MIN_ELE = parseInt(arg("--min-ele", "200"), 10);
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
 const NO_CURATED = process.argv.includes("--no-curated");
+const REENRICH = process.argv.includes("--reenrich");
+// Bump this whenever the climb-building algorithm changes: every cached OSM pass whose
+// rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
+// runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
+// and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
+const ALGO_VERSION = "v3.1-valleytrim";
 const WORK = "build_tmp";
 
 /* ----- geo + scoring helpers ---------------------------------------------- */
@@ -572,15 +578,16 @@ async function main() {
     rec.surfaceLabel = surfaceLabel(ch.w.tags);
     const tr = computeTraffic(ch.w.tags, el.ele);
     rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
-    if (!(rec.versanti && rec.versanti.length) || process.argv.includes("--reenrich")) {
+    if (!(rec.versanti && rec.versanti.length) || rec.algo !== ALGO_VERSION || REENRICH) {
       done++;
-      if (process.argv.includes("--reenrich")) { rec.versanti = null; rec.cat = null; } // do not keep stale
+      if (REENRICH || rec.algo !== ALGO_VERSION) { rec.versanti = null; rec.cat = null; } // drop stale before rebuild
       try {
         const vs = await buildVersanti(slat, slon, 30, false, nameTokens(name));
         if (vs.length) {
           rec.versanti = vs;
           rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
           rec.cat = rec.versanti.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
+          rec.algo = ALGO_VERSION; // stamp only on success; no-climb passes stay retryable
           ok++;
         } else fail++;
       } catch (e) { fail++; if (fail <= 8) console.log("    ! enrich error (" + rec.name + "): " + e.message); }
