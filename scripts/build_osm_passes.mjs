@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.6-refguard";
+const ALGO_VERSION = "v3.7-avgfloor";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -308,6 +308,16 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
       if (cum[ti] - cum[base] > 12) break; // safety: do not wander too far up
     }
     if (hitClimb && townIdx > base) base = townIdx;
+  }
+  // Average-gradient guard (your idea): a real climb keeps a healthy average. If the base sits so
+  // low that the whole-climb average is dragged under AVG_FLOOR, trim the gentlest bottom WHILE
+  // doing so raises the average. A uniformly gentle climb is never trimmed (removing its bottom
+  // does not raise the average), so only a flatter-than-the-climb valley tail is removed.
+  var AVG_FLOOR = 4.0, AVG_WIN = 0.5;
+  function climbAvg(b) { var dd = cum[end] - cum[b]; return dd > 0 ? (el[end] - el[b]) / (dd * 1000) * 100 : 0; }
+  while (base < end - 1 && (cum[end] - cum[base]) > VMIN_KEEP && climbAvg(base) < AVG_FLOOR) {
+    var b2 = base; while (b2 < end && cum[b2] - cum[base] < AVG_WIN) b2++;
+    if (climbAvg(b2) > climbAvg(base) + 0.05) base = b2; else break;
   }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
@@ -603,7 +613,7 @@ async function main() {
         if ((close && db < 45) || ov > 0.55) { dup = true; break; } // same base-direction OR mostly-shared road
       }
       if (!dup) kept.push(v2);
-      if (kept.length >= 5) break;
+      if (kept.length >= 7) break;
     }
     for (var v3 of kept) { var t = global.nearestPlace ? global.nearestPlace(v3.startLat, v3.startLon) : null; v3._town = t ? t.name : null; if (t) v3.side = "Da " + t.name; }
     var byTown = new Map(), finalv = [];
