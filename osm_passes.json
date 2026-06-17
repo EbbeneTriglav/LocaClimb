@@ -10379,7 +10379,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -11045,7 +11045,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -15304,7 +15304,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -16508,7 +16508,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -22425,7 +22425,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -25354,7 +25354,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -27086,7 +27086,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -28587,7 +28587,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -33338,7 +33338,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -37187,7 +37187,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -38339,7 +38339,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -40008,7 +40008,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -41495,7 +41495,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -44034,7 +44034,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -46707,7 +46707,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -47613,7 +47613,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -48359,7 +48359,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -50241,7 +50241,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -50592,7 +50592,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -54163,7 +54163,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -55104,7 +55104,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -58252,7 +58252,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -58700,7 +58700,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -63176,7 +63176,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -65576,7 +65576,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -66875,7 +66875,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -68419,7 +68419,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -69738,7 +69738,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -71977,7 +71977,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -74919,7 +74919,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -75480,7 +75480,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -77531,7 +77531,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -78623,7 +78623,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -79445,7 +79445,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -81457,7 +81457,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -84072,7 +84072,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -85690,7 +85690,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -86481,7 +86481,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -88757,7 +88757,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -91295,7 +91295,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -92434,7 +92434,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -94063,7 +94063,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -94317,7 +94317,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -96048,7 +96048,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -97585,7 +97585,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -99736,7 +99736,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -101381,7 +101381,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -102844,7 +102844,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -105336,7 +105336,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -106952,7 +106952,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -110055,7 +110055,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -111189,7 +111189,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -113269,7 +113269,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -116031,7 +116031,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -117141,7 +117141,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -120117,7 +120117,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -121863,7 +121863,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -122826,7 +122826,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -124315,7 +124315,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -126283,7 +126283,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -127254,7 +127254,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -129220,11 +129220,666 @@
       10.241748809814453
      ]
     ]
+   },
+   {
+    "side": "Da Incudine",
+    "startLat": 46.21558,
+    "startLon": 10.351806,
+    "startElevation": 901,
+    "endElevation": 1820,
+    "distance_km": 17.3,
+    "avgGradient": 5.3,
+    "maxGradient": 18.6,
+    "traffic": "n/d",
+    "exposure": "Est",
+    "elevationProfile": [
+     901,
+     943,
+     986,
+     1048,
+     1083,
+     1128,
+     1173,
+     1249,
+     1372,
+     1473,
+     1544,
+     1613,
+     1673,
+     1754,
+     1815,
+     1843,
+     1877,
+     1891,
+     1893,
+     1893,
+     1886,
+     1894,
+     1891,
+     1889,
+     1912,
+     1930,
+     1931,
+     1874,
+     1831,
+     1820
+    ],
+    "cat": "1",
+    "track": [
+     [
+      46.21558,
+      10.351806
+     ],
+     [
+      46.214489,
+      10.351558
+     ],
+     [
+      46.213711,
+      10.350671
+     ],
+     [
+      46.212833,
+      10.349833
+     ],
+     [
+      46.211918,
+      10.349695
+     ],
+     [
+      46.211021,
+      10.349266
+     ],
+     [
+      46.209587,
+      10.348398
+     ],
+     [
+      46.209091,
+      10.34721
+     ],
+     [
+      46.208939,
+      10.345883
+     ],
+     [
+      46.209023,
+      10.344811
+     ],
+     [
+      46.209404,
+      10.346094
+     ],
+     [
+      46.209637,
+      10.345926
+     ],
+     [
+      46.209702,
+      10.34445
+     ],
+     [
+      46.210278,
+      10.343397
+     ],
+     [
+      46.210915,
+      10.342348
+     ],
+     [
+      46.210835,
+      10.344128
+     ],
+     [
+      46.21151,
+      10.343919
+     ],
+     [
+      46.212105,
+      10.34278
+     ],
+     [
+      46.212421,
+      10.341667
+     ],
+     [
+      46.212349,
+      10.342988
+     ],
+     [
+      46.211941,
+      10.344233
+     ],
+     [
+      46.211979,
+      10.344333
+     ],
+     [
+      46.212978,
+      10.342675
+     ],
+     [
+      46.213219,
+      10.341379
+     ],
+     [
+      46.213505,
+      10.33959
+     ],
+     [
+      46.213612,
+      10.338289
+     ],
+     [
+      46.213333,
+      10.337041
+     ],
+     [
+      46.212917,
+      10.335234
+     ],
+     [
+      46.213146,
+      10.333765
+     ],
+     [
+      46.21368,
+      10.332292
+     ],
+     [
+      46.214878,
+      10.33068
+     ],
+     [
+      46.215492,
+      10.329557
+     ],
+     [
+      46.216133,
+      10.328108
+     ],
+     [
+      46.216705,
+      10.326941
+     ],
+     [
+      46.217552,
+      10.326226
+     ],
+     [
+      46.218643,
+      10.325584
+     ],
+     [
+      46.219444,
+      10.324698
+     ],
+     [
+      46.220387,
+      10.323668
+     ],
+     [
+      46.221523,
+      10.322873
+     ],
+     [
+      46.222557,
+      10.322039
+     ],
+     [
+      46.223545,
+      10.321019
+     ],
+     [
+      46.224716,
+      10.320098
+     ],
+     [
+      46.22554,
+      10.319385
+     ],
+     [
+      46.226646,
+      10.318996
+     ],
+     [
+      46.227692,
+      10.318444
+     ],
+     [
+      46.228848,
+      10.317918
+     ],
+     [
+      46.229782,
+      10.318361
+     ],
+     [
+      46.230633,
+      10.318217
+     ],
+     [
+      46.23159,
+      10.318419
+     ],
+     [
+      46.232437,
+      10.317841
+     ],
+     [
+      46.2337,
+      10.317958
+     ],
+     [
+      46.234547,
+      10.317649
+     ],
+     [
+      46.235622,
+      10.318085
+     ],
+     [
+      46.236458,
+      10.317443
+     ],
+     [
+      46.237423,
+      10.317695
+     ],
+     [
+      46.238365,
+      10.318233
+     ],
+     [
+      46.239342,
+      10.318763
+     ],
+     [
+      46.240311,
+      10.318902
+     ],
+     [
+      46.241459,
+      10.319356
+     ],
+     [
+      46.242844,
+      10.319231
+     ],
+     [
+      46.243591,
+      10.318088
+     ],
+     [
+      46.244274,
+      10.31807
+     ],
+     [
+      46.244976,
+      10.31775
+     ],
+     [
+      46.245655,
+      10.318136
+     ],
+     [
+      46.246349,
+      10.316882
+     ],
+     [
+      46.247066,
+      10.31676
+     ],
+     [
+      46.246918,
+      10.315403
+     ],
+     [
+      46.247169,
+      10.314689
+     ],
+     [
+      46.247799,
+      10.315112
+     ],
+     [
+      46.248215,
+      10.314908
+     ],
+     [
+      46.248859,
+      10.313974
+     ],
+     [
+      46.249538,
+      10.31284
+     ],
+     [
+      46.24984,
+      10.311234
+     ],
+     [
+      46.250259,
+      10.310058
+     ],
+     [
+      46.249935,
+      10.308664
+     ],
+     [
+      46.249435,
+      10.307553
+     ],
+     [
+      46.248779,
+      10.306522
+     ],
+     [
+      46.248486,
+      10.305149
+     ],
+     [
+      46.248421,
+      10.303706
+     ],
+     [
+      46.248127,
+      10.302433
+     ],
+     [
+      46.24786,
+      10.300371
+     ],
+     [
+      46.246662,
+      10.301107
+     ],
+     [
+      46.245777,
+      10.301213
+     ],
+     [
+      46.243881,
+      10.299346
+     ],
+     [
+      46.243893,
+      10.297949
+     ],
+     [
+      46.243191,
+      10.296516
+     ],
+     [
+      46.242424,
+      10.295012
+     ],
+     [
+      46.242207,
+      10.293655
+     ],
+     [
+      46.242039,
+      10.292161
+     ],
+     [
+      46.241798,
+      10.29072
+     ],
+     [
+      46.240845,
+      10.289957
+     ],
+     [
+      46.239483,
+      10.289493
+     ],
+     [
+      46.238831,
+      10.288286
+     ],
+     [
+      46.238262,
+      10.286903
+     ],
+     [
+      46.237263,
+      10.287384
+     ],
+     [
+      46.23653,
+      10.287457
+     ],
+     [
+      46.236206,
+      10.286263
+     ],
+     [
+      46.23521,
+      10.28598
+     ],
+     [
+      46.234924,
+      10.284716
+     ],
+     [
+      46.234127,
+      10.283379
+     ],
+     [
+      46.233593,
+      10.28196
+     ],
+     [
+      46.232635,
+      10.282397
+     ],
+     [
+      46.231468,
+      10.282756
+     ],
+     [
+      46.23045,
+      10.282986
+     ],
+     [
+      46.230141,
+      10.281876
+     ],
+     [
+      46.230255,
+      10.280429
+     ],
+     [
+      46.22974,
+      10.279341
+     ],
+     [
+      46.229053,
+      10.278258
+     ],
+     [
+      46.228748,
+      10.276073
+     ],
+     [
+      46.227879,
+      10.275254
+     ],
+     [
+      46.227062,
+      10.274573
+     ],
+     [
+      46.226929,
+      10.273316
+     ],
+     [
+      46.226051,
+      10.272243
+     ],
+     [
+      46.224991,
+      10.272356
+     ],
+     [
+      46.224197,
+      10.271646
+     ],
+     [
+      46.223042,
+      10.271689
+     ],
+     [
+      46.222454,
+      10.270601
+     ],
+     [
+      46.221512,
+      10.270068
+     ],
+     [
+      46.220695,
+      10.269785
+     ],
+     [
+      46.220173,
+      10.26861
+     ],
+     [
+      46.219097,
+      10.268447
+     ],
+     [
+      46.218403,
+      10.267743
+     ],
+     [
+      46.217907,
+      10.266746
+     ],
+     [
+      46.217484,
+      10.264917
+     ],
+     [
+      46.217278,
+      10.263496
+     ],
+     [
+      46.216957,
+      10.26231
+     ],
+     [
+      46.21563,
+      10.262193
+     ],
+     [
+      46.214485,
+      10.26189
+     ],
+     [
+      46.213573,
+      10.261894
+     ],
+     [
+      46.212437,
+      10.26161
+     ],
+     [
+      46.211815,
+      10.260468
+     ],
+     [
+      46.211723,
+      10.259187
+     ],
+     [
+      46.210773,
+      10.259125
+     ],
+     [
+      46.210537,
+      10.257962
+     ],
+     [
+      46.209782,
+      10.257124
+     ],
+     [
+      46.209435,
+      10.255492
+     ],
+     [
+      46.208664,
+      10.254788
+     ],
+     [
+      46.20842,
+      10.253097
+     ],
+     [
+      46.207371,
+      10.251492
+     ],
+     [
+      46.206936,
+      10.250542
+     ],
+     [
+      46.208382,
+      10.251779
+     ],
+     [
+      46.208141,
+      10.250681
+     ],
+     [
+      46.208591,
+      10.250786
+     ],
+     [
+      46.207897,
+      10.249693
+     ],
+     [
+      46.206692,
+      10.248258
+     ],
+     [
+      46.206436,
+      10.246727
+     ],
+     [
+      46.205601,
+      10.246839
+     ],
+     [
+      46.204529,
+      10.246934
+     ],
+     [
+      46.203812,
+      10.244968
+     ],
+     [
+      46.203236,
+      10.24394
+     ],
+     [
+      46.2029,
+      10.242498
+     ],
+     [
+      46.20212936401367,
+      10.241748809814453
+     ]
+    ]
    }
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -130717,7 +131372,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -132601,7 +133256,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -133857,7 +134512,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -136827,7 +137482,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -138352,7 +139007,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -140549,7 +141204,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -143395,7 +144050,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -145136,7 +145791,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -147253,7 +147908,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -150458,7 +151113,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -150956,7 +151611,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -152420,7 +153075,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -153329,7 +153984,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -155249,7 +155904,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -155731,7 +156386,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -156312,7 +156967,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -158412,7 +159067,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -160156,7 +160811,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -160516,7 +161171,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -161745,7 +162400,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -163401,7 +164056,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -165175,7 +165830,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -165670,7 +166325,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -168047,7 +168702,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -173136,7 +173791,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -173454,7 +174109,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -176570,7 +177225,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -177128,7 +177783,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -178639,7 +179294,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -180630,7 +181285,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -183195,7 +183850,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -183573,7 +184228,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -185854,7 +186509,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -186613,7 +187268,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -187235,7 +187890,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -189006,7 +189661,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -189549,7 +190204,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -190823,7 +191478,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -192412,7 +193067,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -194688,7 +195343,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -196943,7 +197598,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -197606,7 +198261,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -198999,7 +199654,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -199393,7 +200048,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -200778,7 +201433,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -201089,7 +201744,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -201962,7 +202617,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -204581,7 +205236,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -206223,7 +206878,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -206953,7 +207608,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -207930,7 +208585,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -209774,7 +210429,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -210094,7 +210749,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -212685,7 +213340,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -213801,7 +214456,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -214855,7 +215510,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -215721,7 +216376,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -219742,7 +220397,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -220831,7 +221486,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -222158,7 +222813,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -222600,7 +223255,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -223066,7 +223721,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -224414,7 +225069,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -224944,7 +225599,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -226571,7 +227226,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -228164,7 +228819,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -228487,7 +229142,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -230692,7 +231347,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -231851,7 +232506,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -232499,7 +233154,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -233040,7 +233695,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -235177,7 +235832,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -237239,7 +237894,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -239731,7 +240386,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -240183,7 +240838,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -242371,7 +243026,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -244490,7 +245145,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -245591,7 +246246,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -246486,7 +247141,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -246984,7 +247639,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -248624,7 +249279,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -251606,7 +252261,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -253239,7 +253894,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -255418,7 +256073,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -259414,7 +260069,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -260175,7 +260830,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -261121,7 +261776,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -261795,7 +262450,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -263048,7 +263703,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -264511,7 +265166,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -264850,7 +265505,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -268457,7 +269112,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -270434,7 +271089,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -272500,7 +273155,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -274508,7 +275163,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -277154,7 +277809,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -277832,7 +278487,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -280508,7 +281163,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -281248,7 +281903,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -282406,7 +283061,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -284472,7 +285127,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -285093,7 +285748,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -285688,7 +286343,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -288179,7 +288834,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -289388,7 +290043,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -290102,7 +290757,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -290670,7 +291325,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -291819,7 +292474,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -294511,7 +295166,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -296667,7 +297322,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -297328,7 +297983,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -300339,7 +300994,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -302614,7 +303269,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -304776,7 +305431,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -306196,7 +306851,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -307101,7 +307756,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -308579,7 +309234,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -309596,7 +310251,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -311320,7 +311975,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -311872,7 +312527,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -312379,7 +313034,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -313264,7 +313919,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -316252,7 +316907,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -317889,7 +318544,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -320118,7 +320773,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -320969,7 +321624,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -321300,7 +321955,7 @@
   ],
   "cat": "2",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -322520,7 +323175,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -325353,7 +326008,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -328892,7 +329547,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -329979,7 +330634,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -331066,7 +331721,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -331468,7 +332123,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -333040,7 +333695,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -334154,7 +334809,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -335080,7 +335735,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -336481,7 +337136,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -337744,7 +338399,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -339444,7 +340099,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -340026,7 +340681,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -341497,7 +342152,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -342858,7 +343513,7 @@
   "snapped": true,
   "nodeId": "266608825",
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -343578,7 +344233,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -344283,7 +344938,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -345353,7 +346008,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -345759,7 +346414,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -346937,7 +347592,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -348046,7 +348701,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -348724,7 +349379,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -349382,7 +350037,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -350742,7 +351397,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -352351,7 +353006,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -354070,7 +354725,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -354486,7 +355141,7 @@
   ],
   "cat": "1",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -355252,7 +355907,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -356909,7 +357564,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -357745,7 +358400,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -359133,69 +359788,49 @@
    },
    {
     "side": "Da Monchio delle Corti",
-    "startLat": 44.404182,
-    "startLon": 10.122267,
-    "startElevation": 839,
+    "startLat": 44.400284,
+    "startLon": 10.118978,
+    "startElevation": 845,
     "endElevation": 1280,
-    "distance_km": 13.2,
-    "avgGradient": 3.3,
+    "distance_km": 12.7,
+    "avgGradient": 3.4,
     "maxGradient": 13.4,
     "traffic": "n/d",
     "exposure": "Nord",
     "elevationProfile": [
-     839,
-     847,
-     846,
+     845,
+     854,
      904,
      914,
      924,
      949,
      951,
      951,
-     999,
-     1030,
-     1046,
-     1076,
-     1100,
-     1126,
-     1158,
+     985,
+     1028,
+     1040,
+     1064,
+     1097,
+     1119,
+     1156,
+     1145,
      1134,
-     1133,
-     1128,
+     1127,
      1125,
-     1125,
-     1159,
-     1171,
-     1190,
-     1200,
+     1123,
+     1139,
+     1160,
+     1174,
+     1196,
      1203,
-     1224,
+     1207,
+     1227,
      1240,
      1261,
      1280
     ],
     "cat": "4",
     "track": [
-     [
-      44.404182,
-      10.122267
-     ],
-     [
-      44.403301,
-      10.122043
-     ],
-     [
-      44.402504,
-      10.121153
-     ],
-     [
-      44.401985,
-      10.120276
-     ],
-     [
-      44.401318,
-      10.119399
-     ],
      [
       44.400284,
       10.118978
@@ -360723,7 +361358,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -364189,11 +364824,514 @@
       9.653243064880371
      ]
     ]
+   },
+   {
+    "side": "Da Farini",
+    "startLat": 44.685318,
+    "startLon": 9.568657,
+    "startElevation": 490,
+    "endElevation": 1269,
+    "distance_km": 12.1,
+    "avgGradient": 6.4,
+    "maxGradient": 15.8,
+    "traffic": "n/d",
+    "exposure": "Sud-Ovest",
+    "elevationProfile": [
+     490,
+     496,
+     545,
+     568,
+     595,
+     635,
+     669,
+     699,
+     743,
+     765,
+     820,
+     863,
+     886,
+     912,
+     938,
+     948,
+     945,
+     953,
+     952,
+     951,
+     955,
+     983,
+     1035,
+     1074,
+     1109,
+     1133,
+     1178,
+     1213,
+     1245,
+     1269
+    ],
+    "cat": "2",
+    "track": [
+     [
+      44.685318,
+      9.568657
+     ],
+     [
+      44.686283,
+      9.568539
+     ],
+     [
+      44.687199,
+      9.568377
+     ],
+     [
+      44.688183,
+      9.568598
+     ],
+     [
+      44.687542,
+      9.568892
+     ],
+     [
+      44.686657,
+      9.56963
+     ],
+     [
+      44.685867,
+      9.569225
+     ],
+     [
+      44.684891,
+      9.570521
+     ],
+     [
+      44.684002,
+      9.570676
+     ],
+     [
+      44.683414,
+      9.571651
+     ],
+     [
+      44.682911,
+      9.572732
+     ],
+     [
+      44.682232,
+      9.573565
+     ],
+     [
+      44.681992,
+      9.574809
+     ],
+     [
+      44.680943,
+      9.574818
+     ],
+     [
+      44.679897,
+      9.57558
+     ],
+     [
+      44.678959,
+      9.575592
+     ],
+     [
+      44.678154,
+      9.576209
+     ],
+     [
+      44.677795,
+      9.577313
+     ],
+     [
+      44.678238,
+      9.578865
+     ],
+     [
+      44.678745,
+      9.579519
+     ],
+     [
+      44.679062,
+      9.578544
+     ],
+     [
+      44.679543,
+      9.579624
+     ],
+     [
+      44.680145,
+      9.580646
+     ],
+     [
+      44.681217,
+      9.580942
+     ],
+     [
+      44.682064,
+      9.58138
+     ],
+     [
+      44.682877,
+      9.581945
+     ],
+     [
+      44.683681,
+      9.582779
+     ],
+     [
+      44.684811,
+      9.583084
+     ],
+     [
+      44.685356,
+      9.5842
+     ],
+     [
+      44.685555,
+      9.585521
+     ],
+     [
+      44.685341,
+      9.586894
+     ],
+     [
+      44.685848,
+      9.588428
+     ],
+     [
+      44.685997,
+      9.590123
+     ],
+     [
+      44.686092,
+      9.591225
+     ],
+     [
+      44.68539,
+      9.591974
+     ],
+     [
+      44.686043,
+      9.592724
+     ],
+     [
+      44.686905,
+      9.593709
+     ],
+     [
+      44.687336,
+      9.593384
+     ],
+     [
+      44.688015,
+      9.594612
+     ],
+     [
+      44.688568,
+      9.596416
+     ],
+     [
+      44.688911,
+      9.597775
+     ],
+     [
+      44.689648,
+      9.598596
+     ],
+     [
+      44.690712,
+      9.599175
+     ],
+     [
+      44.69165,
+      9.599705
+     ],
+     [
+      44.692265,
+      9.600472
+     ],
+     [
+      44.692642,
+      9.601652
+     ],
+     [
+      44.693409,
+      9.60277
+     ],
+     [
+      44.694008,
+      9.604078
+     ],
+     [
+      44.694317,
+      9.605254
+     ],
+     [
+      44.694946,
+      9.60633
+     ],
+     [
+      44.695732,
+      9.606751
+     ],
+     [
+      44.696625,
+      9.606647
+     ],
+     [
+      44.696667,
+      9.605227
+     ],
+     [
+      44.695961,
+      9.604259
+     ],
+     [
+      44.695515,
+      9.603142
+     ],
+     [
+      44.696018,
+      9.6022
+     ],
+     [
+      44.696774,
+      9.601715
+     ],
+     [
+      44.697067,
+      9.603235
+     ],
+     [
+      44.697056,
+      9.604454
+     ],
+     [
+      44.697636,
+      9.605645
+     ],
+     [
+      44.698166,
+      9.606893
+     ],
+     [
+      44.698143,
+      9.608122
+     ],
+     [
+      44.697582,
+      9.609249
+     ],
+     [
+      44.698029,
+      9.610085
+     ],
+     [
+      44.699112,
+      9.611371
+     ],
+     [
+      44.7001,
+      9.611523
+     ],
+     [
+      44.700649,
+      9.612479
+     ],
+     [
+      44.701004,
+      9.613713
+     ],
+     [
+      44.701584,
+      9.614799
+     ],
+     [
+      44.702251,
+      9.615828
+     ],
+     [
+      44.702301,
+      9.617195
+     ],
+     [
+      44.70224,
+      9.618456
+     ],
+     [
+      44.701977,
+      9.619946
+     ],
+     [
+      44.702232,
+      9.621485
+     ],
+     [
+      44.702209,
+      9.622719
+     ],
+     [
+      44.701744,
+      9.623804
+     ],
+     [
+      44.701122,
+      9.624723
+     ],
+     [
+      44.700027,
+      9.625649
+     ],
+     [
+      44.699677,
+      9.626737
+     ],
+     [
+      44.700401,
+      9.627789
+     ],
+     [
+      44.700562,
+      9.626979
+     ],
+     [
+      44.700836,
+      9.626165
+     ],
+     [
+      44.701672,
+      9.626708
+     ],
+     [
+      44.702675,
+      9.626865
+     ],
+     [
+      44.70314,
+      9.626461
+     ],
+     [
+      44.703388,
+      9.62729
+     ],
+     [
+      44.704124,
+      9.62729
+     ],
+     [
+      44.704796,
+      9.62826
+     ],
+     [
+      44.705177,
+      9.629672
+     ],
+     [
+      44.705288,
+      9.630899
+     ],
+     [
+      44.706257,
+      9.631202
+     ],
+     [
+      44.706478,
+      9.632348
+     ],
+     [
+      44.706688,
+      9.633545
+     ],
+     [
+      44.7066,
+      9.63479
+     ],
+     [
+      44.7076,
+      9.634995
+     ],
+     [
+      44.708443,
+      9.635781
+     ],
+     [
+      44.708931,
+      9.63624
+     ],
+     [
+      44.709557,
+      9.635747
+     ],
+     [
+      44.708965,
+      9.635199
+     ],
+     [
+      44.709812,
+      9.635184
+     ],
+     [
+      44.710693,
+      9.636284
+     ],
+     [
+      44.711544,
+      9.637143
+     ],
+     [
+      44.712147,
+      9.638164
+     ],
+     [
+      44.713055,
+      9.638613
+     ],
+     [
+      44.714046,
+      9.641028
+     ],
+     [
+      44.713871,
+      9.6424
+     ],
+     [
+      44.714687,
+      9.643338
+     ],
+     [
+      44.715351,
+      9.644526
+     ],
+     [
+      44.715534,
+      9.645822
+     ],
+     [
+      44.715496,
+      9.647094
+     ],
+     [
+      44.71529,
+      9.648492
+     ],
+     [
+      44.715652,
+      9.65019
+     ],
+     [
+      44.714851,
+      9.65189
+     ],
+     [
+      44.714874267578125,
+      9.653243064880371
+     ]
+    ]
    }
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -365282,7 +366420,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -367418,7 +368556,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -369000,7 +370138,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -369670,7 +370808,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -371079,7 +372217,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -372666,7 +373804,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -373880,7 +375018,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -375093,7 +376231,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -375941,7 +377079,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -376695,7 +377833,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -377182,7 +378320,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -377731,7 +378869,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -380483,7 +381621,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -381192,7 +382330,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -382975,7 +384113,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -383842,7 +384980,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -384739,7 +385877,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -386638,7 +387776,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -387109,7 +388247,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -389149,7 +390287,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -390012,7 +391150,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -392068,7 +393206,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -393484,7 +394622,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -394520,7 +395658,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -395465,7 +396603,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -396604,7 +397742,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -397641,7 +398779,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -398083,7 +399221,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -399204,7 +400342,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -400400,7 +401538,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -401375,7 +402513,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -401938,7 +403076,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -403152,7 +404290,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -403771,7 +404909,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -404518,7 +405656,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -406008,7 +407146,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -406808,7 +407946,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -407681,7 +408819,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -409786,7 +410924,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -410310,7 +411448,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -410880,7 +412018,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -411258,7 +412396,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -411855,7 +412993,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -415606,7 +416744,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -416570,7 +417708,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -417239,7 +418377,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -417633,7 +418771,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -418470,7 +419608,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -419594,7 +420732,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -421294,7 +422432,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -422023,7 +423161,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -424598,7 +425736,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -425971,7 +427109,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -427658,7 +428796,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -428149,7 +429287,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -429415,7 +430553,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -429637,7 +430775,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -430087,7 +431225,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -430976,7 +432114,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -432164,7 +433302,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -434595,7 +435733,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -436119,7 +437257,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -436661,7 +437799,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -437099,7 +438237,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -438808,7 +439946,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -440154,7 +441292,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -441299,7 +442437,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -441808,7 +442946,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -442482,7 +443620,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -443188,7 +444326,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -444347,7 +445485,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -445044,7 +446182,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -445788,7 +446926,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -447673,7 +448811,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -448533,7 +449671,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -449538,7 +450676,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -449936,7 +451074,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -450534,7 +451672,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -452193,7 +453331,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -454348,7 +455486,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -455652,7 +456790,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -457136,7 +458274,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -457858,7 +458996,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -461226,7 +462364,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -462984,7 +464122,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -463246,7 +464384,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -464791,7 +465929,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -465939,7 +467077,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -467710,7 +468848,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -469144,7 +470282,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -470017,7 +471155,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -470863,7 +472001,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -472379,7 +473517,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -472761,7 +473899,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -473176,7 +474314,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -473771,7 +474909,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -475591,7 +476729,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -476025,7 +477163,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -477529,7 +478667,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -478253,7 +479391,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -478696,7 +479834,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -480272,7 +481410,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -482386,7 +483524,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -483144,7 +484282,7 @@
   ],
   "cat": "2",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -483966,7 +485104,7 @@
   ],
   "cat": "1",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -485618,7 +486756,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -487422,7 +488560,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -489423,11 +490561,798 @@
       7.875637054443359
      ]
     ]
+   },
+   {
+    "side": "Da Caramagnetta",
+    "startLat": 43.887718,
+    "startLon": 7.991897,
+    "startElevation": 31,
+    "endElevation": 1049,
+    "distance_km": 19.5,
+    "avgGradient": 5.2,
+    "maxGradient": 17.3,
+    "traffic": "n/d",
+    "exposure": "Sud-Est",
+    "elevationProfile": [
+     31,
+     67,
+     108,
+     134,
+     162,
+     136,
+     90,
+     90,
+     113,
+     145,
+     171,
+     227,
+     268,
+     313,
+     367,
+     418,
+     459,
+     485,
+     548,
+     612,
+     664,
+     713,
+     776,
+     800,
+     840,
+     916,
+     959,
+     994,
+     996,
+     1049
+    ],
+    "cat": "2",
+    "track": [
+     [
+      43.887718,
+      7.991897
+     ],
+     [
+      43.887154,
+      7.99099
+     ],
+     [
+      43.886833,
+      7.989753
+     ],
+     [
+      43.887505,
+      7.988648
+     ],
+     [
+      43.887981,
+      7.98713
+     ],
+     [
+      43.887756,
+      7.985631
+     ],
+     [
+      43.888233,
+      7.984295
+     ],
+     [
+      43.888294,
+      7.983042
+     ],
+     [
+      43.888851,
+      7.981727
+     ],
+     [
+      43.889206,
+      7.980496
+     ],
+     [
+      43.889606,
+      7.979383
+     ],
+     [
+      43.890133,
+      7.978475
+     ],
+     [
+      43.89106,
+      7.978722
+     ],
+     [
+      43.891689,
+      7.977979
+     ],
+     [
+      43.892509,
+      7.977523
+     ],
+     [
+      43.893307,
+      7.977976
+     ],
+     [
+      43.894241,
+      7.977237
+     ],
+     [
+      43.894527,
+      7.975965
+     ],
+     [
+      43.895088,
+      7.974902
+     ],
+     [
+      43.895939,
+      7.974238
+     ],
+     [
+      43.896633,
+      7.972826
+     ],
+     [
+      43.897316,
+      7.972299
+     ],
+     [
+      43.897785,
+      7.971223
+     ],
+     [
+      43.898674,
+      7.970305
+     ],
+     [
+      43.899292,
+      7.96926
+     ],
+     [
+      43.899384,
+      7.967947
+     ],
+     [
+      43.900021,
+      7.967036
+     ],
+     [
+      43.900055,
+      7.96576
+     ],
+     [
+      43.90033,
+      7.964751
+     ],
+     [
+      43.900875,
+      7.963989
+     ],
+     [
+      43.901455,
+      7.962978
+     ],
+     [
+      43.901875,
+      7.961952
+     ],
+     [
+      43.902115,
+      7.960915
+     ],
+     [
+      43.902256,
+      7.95983
+     ],
+     [
+      43.902657,
+      7.958746
+     ],
+     [
+      43.902821,
+      7.958428
+     ],
+     [
+      43.902721,
+      7.957403
+     ],
+     [
+      43.903534,
+      7.95627
+     ],
+     [
+      43.90427,
+      7.95551
+     ],
+     [
+      43.905231,
+      7.954879
+     ],
+     [
+      43.906151,
+      7.954427
+     ],
+     [
+      43.907028,
+      7.953953
+     ],
+     [
+      43.907558,
+      7.952967
+     ],
+     [
+      43.907925,
+      7.951557
+     ],
+     [
+      43.909153,
+      7.949719
+     ],
+     [
+      43.910004,
+      7.949016
+     ],
+     [
+      43.911057,
+      7.948985
+     ],
+     [
+      43.912956,
+      7.949073
+     ],
+     [
+      43.91412,
+      7.948151
+     ],
+     [
+      43.915047,
+      7.947339
+     ],
+     [
+      43.916008,
+      7.947537
+     ],
+     [
+      43.91687,
+      7.947177
+     ],
+     [
+      43.917912,
+      7.94682
+     ],
+     [
+      43.918877,
+      7.946088
+     ],
+     [
+      43.91954,
+      7.944697
+     ],
+     [
+      43.920525,
+      7.943587
+     ],
+     [
+      43.921741,
+      7.943646
+     ],
+     [
+      43.922638,
+      7.943652
+     ],
+     [
+      43.923389,
+      7.942888
+     ],
+     [
+      43.924385,
+      7.94208
+     ],
+     [
+      43.925392,
+      7.942369
+     ],
+     [
+      43.926254,
+      7.943009
+     ],
+     [
+      43.927048,
+      7.943714
+     ],
+     [
+      43.927967,
+      7.94421
+     ],
+     [
+      43.928978,
+      7.944459
+     ],
+     [
+      43.930012,
+      7.94452
+     ],
+     [
+      43.930557,
+      7.944115
+     ],
+     [
+      43.930912,
+      7.943364
+     ],
+     [
+      43.930244,
+      7.943112
+     ],
+     [
+      43.929623,
+      7.94293
+     ],
+     [
+      43.929256,
+      7.942429
+     ],
+     [
+      43.929783,
+      7.941702
+     ],
+     [
+      43.930664,
+      7.941826
+     ],
+     [
+      43.931484,
+      7.941498
+     ],
+     [
+      43.932358,
+      7.942056
+     ],
+     [
+      43.931774,
+      7.941246
+     ],
+     [
+      43.931187,
+      7.940253
+     ],
+     [
+      43.930599,
+      7.93941
+     ],
+     [
+      43.929592,
+      7.939285
+     ],
+     [
+      43.928692,
+      7.939245
+     ],
+     [
+      43.928051,
+      7.93857
+     ],
+     [
+      43.929012,
+      7.938415
+     ],
+     [
+      43.92989,
+      7.938021
+     ],
+     [
+      43.930763,
+      7.937247
+     ],
+     [
+      43.931744,
+      7.937363
+     ],
+     [
+      43.932381,
+      7.938337
+     ],
+     [
+      43.932827,
+      7.939288
+     ],
+     [
+      43.933422,
+      7.938471
+     ],
+     [
+      43.934151,
+      7.937941
+     ],
+     [
+      43.935062,
+      7.937914
+     ],
+     [
+      43.935963,
+      7.937377
+     ],
+     [
+      43.936398,
+      7.936216
+     ],
+     [
+      43.937233,
+      7.936687
+     ],
+     [
+      43.938053,
+      7.93685
+     ],
+     [
+      43.938946,
+      7.936551
+     ],
+     [
+      43.939438,
+      7.935406
+     ],
+     [
+      43.939896,
+      7.934402
+     ],
+     [
+      43.940853,
+      7.934041
+     ],
+     [
+      43.941742,
+      7.933251
+     ],
+     [
+      43.941628,
+      7.932604
+     ],
+     [
+      43.940735,
+      7.932725
+     ],
+     [
+      43.939793,
+      7.932608
+     ],
+     [
+      43.938789,
+      7.93274
+     ],
+     [
+      43.938549,
+      7.934038
+     ],
+     [
+      43.937992,
+      7.934085
+     ],
+     [
+      43.937149,
+      7.933491
+     ],
+     [
+      43.936283,
+      7.93305
+     ],
+     [
+      43.935318,
+      7.93351
+     ],
+     [
+      43.936024,
+      7.932692
+     ],
+     [
+      43.937027,
+      7.932554
+     ],
+     [
+      43.937832,
+      7.931865
+     ],
+     [
+      43.938267,
+      7.930788
+     ],
+     [
+      43.938663,
+      7.929153
+     ],
+     [
+      43.939247,
+      7.928061
+     ],
+     [
+      43.94022,
+      7.927329
+     ],
+     [
+      43.940872,
+      7.926425
+     ],
+     [
+      43.941826,
+      7.925826
+     ],
+     [
+      43.942795,
+      7.925684
+     ],
+     [
+      43.943413,
+      7.926598
+     ],
+     [
+      43.943962,
+      7.927765
+     ],
+     [
+      43.944725,
+      7.928278
+     ],
+     [
+      43.945301,
+      7.92725
+     ],
+     [
+      43.94558,
+      7.925562
+     ],
+     [
+      43.946438,
+      7.925066
+     ],
+     [
+      43.946938,
+      7.924016
+     ],
+     [
+      43.947727,
+      7.923398
+     ],
+     [
+      43.948704,
+      7.923347
+     ],
+     [
+      43.949326,
+      7.922963
+     ],
+     [
+      43.949787,
+      7.92182
+     ],
+     [
+      43.950581,
+      7.921359
+     ],
+     [
+      43.951138,
+      7.922272
+     ],
+     [
+      43.951977,
+      7.922917
+     ],
+     [
+      43.952854,
+      7.923191
+     ],
+     [
+      43.953663,
+      7.923173
+     ],
+     [
+      43.954578,
+      7.92261
+     ],
+     [
+      43.954704,
+      7.92153
+     ],
+     [
+      43.955048,
+      7.920362
+     ],
+     [
+      43.95562,
+      7.9194
+     ],
+     [
+      43.955425,
+      7.918144
+     ],
+     [
+      43.955742,
+      7.916934
+     ],
+     [
+      43.956364,
+      7.915702
+     ],
+     [
+      43.957306,
+      7.915362
+     ],
+     [
+      43.957741,
+      7.914418
+     ],
+     [
+      43.957912,
+      7.912988
+     ],
+     [
+      43.95816,
+      7.911784
+     ],
+     [
+      43.958698,
+      7.91081
+     ],
+     [
+      43.958958,
+      7.909681
+     ],
+     [
+      43.958801,
+      7.908384
+     ],
+     [
+      43.959091,
+      7.90718
+     ],
+     [
+      43.959393,
+      7.906056
+     ],
+     [
+      43.959797,
+      7.905298
+     ],
+     [
+      43.959484,
+      7.903737
+     ],
+     [
+      43.959248,
+      7.90245
+     ],
+     [
+      43.959515,
+      7.90131
+     ],
+     [
+      43.958824,
+      7.900434
+     ],
+     [
+      43.958805,
+      7.899103
+     ],
+     [
+      43.958549,
+      7.897878
+     ],
+     [
+      43.958298,
+      7.896522
+     ],
+     [
+      43.957558,
+      7.895419
+     ],
+     [
+      43.956894,
+      7.894231
+     ],
+     [
+      43.956135,
+      7.892624
+     ],
+     [
+      43.95573,
+      7.890786
+     ],
+     [
+      43.955494,
+      7.889549
+     ],
+     [
+      43.956097,
+      7.888654
+     ],
+     [
+      43.956875,
+      7.887945
+     ],
+     [
+      43.957668,
+      7.887214
+     ],
+     [
+      43.958366,
+      7.886386
+     ],
+     [
+      43.959152,
+      7.885718
+     ],
+     [
+      43.960056,
+      7.88558
+     ],
+     [
+      43.96085,
+      7.884969
+     ],
+     [
+      43.961674,
+      7.884206
+     ],
+     [
+      43.962502,
+      7.883177
+     ],
+     [
+      43.963264,
+      7.882085
+     ],
+     [
+      43.963772,
+      7.880823
+     ],
+     [
+      43.96468,
+      7.880669
+     ],
+     [
+      43.965134,
+      7.879463
+     ],
+     [
+      43.965446,
+      7.878043
+     ],
+     [
+      43.966133,
+      7.877162
+     ],
+     [
+      43.966938,
+      7.876186
+     ],
+     [
+      43.967793,
+      7.875996
+     ],
+     [
+      43.968777,
+      7.876017
+     ],
+     [
+      43.969635,
+      7.876421
+     ],
+     [
+      43.970451,
+      7.877044
+     ],
+     [
+      43.971203,
+      7.876428
+     ],
+     [
+      43.971778869628906,
+      7.875637054443359
+     ]
+    ]
    }
   ],
   "cat": "2",
-  "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "difficulty": 7,
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -490616,7 +492541,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -492352,7 +494277,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -493824,7 +495749,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -495044,7 +496969,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -495864,7 +497789,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -496881,7 +498806,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -497411,7 +499336,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -498507,7 +500432,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -499835,7 +501760,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -500520,7 +502445,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -501610,7 +503535,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -503099,7 +505024,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -504500,7 +506425,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -505385,7 +507310,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -506571,7 +508496,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -506761,7 +508686,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -507399,7 +509324,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -508680,7 +510605,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -509522,7 +511447,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -511502,7 +513427,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -512403,7 +514328,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -513724,7 +515649,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -514832,7 +516757,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -515923,7 +517848,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -516476,7 +518401,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -517377,7 +519302,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -518513,7 +520438,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -521411,7 +523336,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -522872,7 +524797,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -523414,7 +525339,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -523936,7 +525861,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -524590,7 +526515,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -525479,7 +527404,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -526844,7 +528769,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -527269,7 +529194,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -528278,7 +530203,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -529571,7 +531496,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -530788,7 +532713,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -532564,7 +534489,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -533497,7 +535422,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -534401,7 +536326,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -535574,7 +537499,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -537226,7 +539151,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -540162,770 +542087,11 @@
       7.876407146453857
      ]
     ]
-   },
-   {
-    "side": "Da Caramagnetta",
-    "startLat": 43.887535,
-    "startLon": 7.992102,
-    "startElevation": 32,
-    "endElevation": 986,
-    "distance_km": 18.8,
-    "avgGradient": 5.1,
-    "maxGradient": 14.4,
-    "traffic": "n/d",
-    "exposure": "Sud-Est",
-    "elevationProfile": [
-     32,
-     67,
-     103,
-     133,
-     159,
-     143,
-     93,
-     90,
-     114,
-     133,
-     164,
-     202,
-     245,
-     283,
-     334,
-     398,
-     435,
-     470,
-     509,
-     582,
-     619,
-     679,
-     718,
-     776,
-     800,
-     851,
-     916,
-     959,
-     994,
-     986
-    ],
-    "cat": "2",
-    "track": [
-     [
-      43.887535,
-      7.992102
-     ],
-     [
-      43.887154,
-      7.99099
-     ],
-     [
-      43.886833,
-      7.989753
-     ],
-     [
-      43.887505,
-      7.988648
-     ],
-     [
-      43.887981,
-      7.98713
-     ],
-     [
-      43.887756,
-      7.985631
-     ],
-     [
-      43.888233,
-      7.984295
-     ],
-     [
-      43.888294,
-      7.983042
-     ],
-     [
-      43.888851,
-      7.981727
-     ],
-     [
-      43.889206,
-      7.980496
-     ],
-     [
-      43.889606,
-      7.979383
-     ],
-     [
-      43.890133,
-      7.978475
-     ],
-     [
-      43.89106,
-      7.978722
-     ],
-     [
-      43.891689,
-      7.977979
-     ],
-     [
-      43.892509,
-      7.977523
-     ],
-     [
-      43.893307,
-      7.977976
-     ],
-     [
-      43.894241,
-      7.977237
-     ],
-     [
-      43.894527,
-      7.975965
-     ],
-     [
-      43.895088,
-      7.974902
-     ],
-     [
-      43.895939,
-      7.974238
-     ],
-     [
-      43.896633,
-      7.972826
-     ],
-     [
-      43.897316,
-      7.972299
-     ],
-     [
-      43.897785,
-      7.971223
-     ],
-     [
-      43.898674,
-      7.970305
-     ],
-     [
-      43.899292,
-      7.96926
-     ],
-     [
-      43.899384,
-      7.967947
-     ],
-     [
-      43.900021,
-      7.967036
-     ],
-     [
-      43.900055,
-      7.96576
-     ],
-     [
-      43.90033,
-      7.964751
-     ],
-     [
-      43.900875,
-      7.963989
-     ],
-     [
-      43.901455,
-      7.962978
-     ],
-     [
-      43.901875,
-      7.961952
-     ],
-     [
-      43.902115,
-      7.960915
-     ],
-     [
-      43.902256,
-      7.95983
-     ],
-     [
-      43.902657,
-      7.958746
-     ],
-     [
-      43.902821,
-      7.958428
-     ],
-     [
-      43.902721,
-      7.957403
-     ],
-     [
-      43.903534,
-      7.95627
-     ],
-     [
-      43.90427,
-      7.95551
-     ],
-     [
-      43.905231,
-      7.954879
-     ],
-     [
-      43.906151,
-      7.954427
-     ],
-     [
-      43.907028,
-      7.953953
-     ],
-     [
-      43.907558,
-      7.952967
-     ],
-     [
-      43.907925,
-      7.951557
-     ],
-     [
-      43.909153,
-      7.949719
-     ],
-     [
-      43.910004,
-      7.949016
-     ],
-     [
-      43.911057,
-      7.948985
-     ],
-     [
-      43.912956,
-      7.949073
-     ],
-     [
-      43.91412,
-      7.948151
-     ],
-     [
-      43.915047,
-      7.947339
-     ],
-     [
-      43.916008,
-      7.947537
-     ],
-     [
-      43.91687,
-      7.947177
-     ],
-     [
-      43.917912,
-      7.94682
-     ],
-     [
-      43.918877,
-      7.946088
-     ],
-     [
-      43.91954,
-      7.944697
-     ],
-     [
-      43.920525,
-      7.943587
-     ],
-     [
-      43.921741,
-      7.943646
-     ],
-     [
-      43.922638,
-      7.943652
-     ],
-     [
-      43.923389,
-      7.942888
-     ],
-     [
-      43.924385,
-      7.94208
-     ],
-     [
-      43.925392,
-      7.942369
-     ],
-     [
-      43.926254,
-      7.943009
-     ],
-     [
-      43.927048,
-      7.943714
-     ],
-     [
-      43.927967,
-      7.94421
-     ],
-     [
-      43.928978,
-      7.944459
-     ],
-     [
-      43.930012,
-      7.94452
-     ],
-     [
-      43.930557,
-      7.944115
-     ],
-     [
-      43.930912,
-      7.943364
-     ],
-     [
-      43.930244,
-      7.943112
-     ],
-     [
-      43.929623,
-      7.94293
-     ],
-     [
-      43.929256,
-      7.942429
-     ],
-     [
-      43.929783,
-      7.941702
-     ],
-     [
-      43.930664,
-      7.941826
-     ],
-     [
-      43.931484,
-      7.941498
-     ],
-     [
-      43.932358,
-      7.942056
-     ],
-     [
-      43.931774,
-      7.941246
-     ],
-     [
-      43.931187,
-      7.940253
-     ],
-     [
-      43.930599,
-      7.93941
-     ],
-     [
-      43.929592,
-      7.939285
-     ],
-     [
-      43.928692,
-      7.939245
-     ],
-     [
-      43.928051,
-      7.93857
-     ],
-     [
-      43.929012,
-      7.938415
-     ],
-     [
-      43.92989,
-      7.938021
-     ],
-     [
-      43.930763,
-      7.937247
-     ],
-     [
-      43.931744,
-      7.937363
-     ],
-     [
-      43.932381,
-      7.938337
-     ],
-     [
-      43.932827,
-      7.939288
-     ],
-     [
-      43.933422,
-      7.938471
-     ],
-     [
-      43.934151,
-      7.937941
-     ],
-     [
-      43.935062,
-      7.937914
-     ],
-     [
-      43.935963,
-      7.937377
-     ],
-     [
-      43.936398,
-      7.936216
-     ],
-     [
-      43.937233,
-      7.936687
-     ],
-     [
-      43.938053,
-      7.93685
-     ],
-     [
-      43.938946,
-      7.936551
-     ],
-     [
-      43.939438,
-      7.935406
-     ],
-     [
-      43.939896,
-      7.934402
-     ],
-     [
-      43.940853,
-      7.934041
-     ],
-     [
-      43.941742,
-      7.933251
-     ],
-     [
-      43.941628,
-      7.932604
-     ],
-     [
-      43.940735,
-      7.932725
-     ],
-     [
-      43.939793,
-      7.932608
-     ],
-     [
-      43.938789,
-      7.93274
-     ],
-     [
-      43.938549,
-      7.934038
-     ],
-     [
-      43.937992,
-      7.934085
-     ],
-     [
-      43.937149,
-      7.933491
-     ],
-     [
-      43.936283,
-      7.93305
-     ],
-     [
-      43.935318,
-      7.93351
-     ],
-     [
-      43.936024,
-      7.932692
-     ],
-     [
-      43.937027,
-      7.932554
-     ],
-     [
-      43.937832,
-      7.931865
-     ],
-     [
-      43.938267,
-      7.930788
-     ],
-     [
-      43.938663,
-      7.929153
-     ],
-     [
-      43.939247,
-      7.928061
-     ],
-     [
-      43.94022,
-      7.927329
-     ],
-     [
-      43.940872,
-      7.926425
-     ],
-     [
-      43.941826,
-      7.925826
-     ],
-     [
-      43.942795,
-      7.925684
-     ],
-     [
-      43.943413,
-      7.926598
-     ],
-     [
-      43.943962,
-      7.927765
-     ],
-     [
-      43.944725,
-      7.928278
-     ],
-     [
-      43.945301,
-      7.92725
-     ],
-     [
-      43.94558,
-      7.925562
-     ],
-     [
-      43.946438,
-      7.925066
-     ],
-     [
-      43.946938,
-      7.924016
-     ],
-     [
-      43.947727,
-      7.923398
-     ],
-     [
-      43.948704,
-      7.923347
-     ],
-     [
-      43.949326,
-      7.922963
-     ],
-     [
-      43.949787,
-      7.92182
-     ],
-     [
-      43.950581,
-      7.921359
-     ],
-     [
-      43.951138,
-      7.922272
-     ],
-     [
-      43.951977,
-      7.922917
-     ],
-     [
-      43.952854,
-      7.923191
-     ],
-     [
-      43.953663,
-      7.923173
-     ],
-     [
-      43.954578,
-      7.92261
-     ],
-     [
-      43.954704,
-      7.92153
-     ],
-     [
-      43.955048,
-      7.920362
-     ],
-     [
-      43.95562,
-      7.9194
-     ],
-     [
-      43.955425,
-      7.918144
-     ],
-     [
-      43.955742,
-      7.916934
-     ],
-     [
-      43.956364,
-      7.915702
-     ],
-     [
-      43.957306,
-      7.915362
-     ],
-     [
-      43.957741,
-      7.914418
-     ],
-     [
-      43.957912,
-      7.912988
-     ],
-     [
-      43.95816,
-      7.911784
-     ],
-     [
-      43.958698,
-      7.91081
-     ],
-     [
-      43.958958,
-      7.909681
-     ],
-     [
-      43.958801,
-      7.908384
-     ],
-     [
-      43.959091,
-      7.90718
-     ],
-     [
-      43.959393,
-      7.906056
-     ],
-     [
-      43.959797,
-      7.905298
-     ],
-     [
-      43.959484,
-      7.903737
-     ],
-     [
-      43.959248,
-      7.90245
-     ],
-     [
-      43.959515,
-      7.90131
-     ],
-     [
-      43.958824,
-      7.900434
-     ],
-     [
-      43.958805,
-      7.899103
-     ],
-     [
-      43.958549,
-      7.897878
-     ],
-     [
-      43.958298,
-      7.896522
-     ],
-     [
-      43.957558,
-      7.895419
-     ],
-     [
-      43.956894,
-      7.894231
-     ],
-     [
-      43.956135,
-      7.892624
-     ],
-     [
-      43.95573,
-      7.890786
-     ],
-     [
-      43.955494,
-      7.889549
-     ],
-     [
-      43.956097,
-      7.888654
-     ],
-     [
-      43.956875,
-      7.887945
-     ],
-     [
-      43.957668,
-      7.887214
-     ],
-     [
-      43.958366,
-      7.886386
-     ],
-     [
-      43.959152,
-      7.885718
-     ],
-     [
-      43.960056,
-      7.88558
-     ],
-     [
-      43.96085,
-      7.884969
-     ],
-     [
-      43.961674,
-      7.884206
-     ],
-     [
-      43.962502,
-      7.883177
-     ],
-     [
-      43.963448,
-      7.881849
-     ],
-     [
-      43.963966,
-      7.880718
-     ],
-     [
-      43.965027,
-      7.88004
-     ],
-     [
-      43.965343,
-      7.878582
-     ],
-     [
-      43.965889,
-      7.877398
-     ],
-     [
-      43.96672821044922,
-      7.876407146453857
-     ]
-    ]
    }
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -542306,7 +543472,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -543003,7 +544169,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -543865,7 +545031,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -544399,7 +545565,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -544873,7 +546039,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -545143,7 +546309,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -546499,7 +547665,7 @@
   "snapped": true,
   "nodeId": "264162490",
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -547368,7 +548534,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -547981,7 +549147,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -548598,7 +549764,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -549757,7 +550923,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -550147,7 +551313,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -552473,11 +553639,282 @@
       12.35243034362793
      ]
     ]
+   },
+   {
+    "side": "Da Mercato Vecchio",
+    "startLat": 43.806763,
+    "startLon": 12.365633,
+    "startElevation": 681,
+    "endElevation": 981,
+    "distance_km": 6.5,
+    "avgGradient": 4.6,
+    "maxGradient": 8.8,
+    "traffic": "n/d",
+    "exposure": "Sud",
+    "elevationProfile": [
+     681,
+     680,
+     694,
+     709,
+     713,
+     716,
+     732,
+     744,
+     751,
+     758,
+     767,
+     771,
+     757,
+     742,
+     750,
+     761,
+     771,
+     779,
+     797,
+     822,
+     844,
+     863,
+     886,
+     904,
+     920,
+     926,
+     943,
+     966,
+     977,
+     981
+    ],
+    "cat": "4",
+    "track": [
+     [
+      43.806763,
+      12.365633
+     ],
+     [
+      43.807812,
+      12.365745
+     ],
+     [
+      43.808815,
+      12.364993
+     ],
+     [
+      43.809879,
+      12.364735
+     ],
+     [
+      43.810703,
+      12.364356
+     ],
+     [
+      43.811596,
+      12.36451
+     ],
+     [
+      43.812309,
+      12.365327
+     ],
+     [
+      43.813278,
+      12.36603
+     ],
+     [
+      43.812965,
+      12.367184
+     ],
+     [
+      43.812729,
+      12.368551
+     ],
+     [
+      43.81226,
+      12.36973
+     ],
+     [
+      43.812851,
+      12.370715
+     ],
+     [
+      43.81345,
+      12.372178
+     ],
+     [
+      43.813362,
+      12.370524
+     ],
+     [
+      43.814072,
+      12.369969
+     ],
+     [
+      43.814739,
+      12.369179
+     ],
+     [
+      43.81546,
+      12.368018
+     ],
+     [
+      43.816051,
+      12.367006
+     ],
+     [
+      43.816551,
+      12.365932
+     ],
+     [
+      43.817154,
+      12.36504
+     ],
+     [
+      43.817081,
+      12.363799
+     ],
+     [
+      43.817982,
+      12.363392
+     ],
+     [
+      43.818913,
+      12.363174
+     ],
+     [
+      43.819771,
+      12.363608
+     ],
+     [
+      43.820667,
+      12.363718
+     ],
+     [
+      43.821426,
+      12.362781
+     ],
+     [
+      43.822243,
+      12.361894
+     ],
+     [
+      43.823986,
+      12.361556
+     ],
+     [
+      43.824226,
+      12.362681
+     ],
+     [
+      43.824844,
+      12.363193
+     ],
+     [
+      43.825603,
+      12.363873
+     ],
+     [
+      43.826519,
+      12.364581
+     ],
+     [
+      43.827488,
+      12.364081
+     ],
+     [
+      43.828491,
+      12.363065
+     ],
+     [
+      43.829464,
+      12.362134
+     ],
+     [
+      43.830105,
+      12.361078
+     ],
+     [
+      43.831955,
+      12.359762
+     ],
+     [
+      43.833,
+      12.358788
+     ],
+     [
+      43.833809,
+      12.358041
+     ],
+     [
+      43.83601,
+      12.357791
+     ],
+     [
+      43.837128,
+      12.358045
+     ],
+     [
+      43.838509,
+      12.358132
+     ],
+     [
+      43.839828,
+      12.356976
+     ],
+     [
+      43.839535,
+      12.355797
+     ],
+     [
+      43.840084,
+      12.354878
+     ],
+     [
+      43.84111,
+      12.35464
+     ],
+     [
+      43.841751,
+      12.355589
+     ],
+     [
+      43.842087,
+      12.354616
+     ],
+     [
+      43.842663,
+      12.353436
+     ],
+     [
+      43.842892,
+      12.352032
+     ],
+     [
+      43.843525,
+      12.350562
+     ],
+     [
+      43.844471,
+      12.351328
+     ],
+     [
+      43.845745,
+      12.351554
+     ],
+     [
+      43.846031,
+      12.352736
+     ],
+     [
+      43.846947,
+      12.352823
+     ],
+     [
+      43.847862243652344,
+      12.35243034362793
+     ]
+    ]
    }
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -554843,7 +556280,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -555109,7 +556546,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -556274,7 +557711,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -557476,7 +558913,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -558652,7 +560089,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -559546,7 +560983,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -560260,7 +561697,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -562109,7 +563546,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -563154,7 +564591,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -563871,7 +565308,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -564761,7 +566198,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -565573,7 +567010,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -566957,7 +568394,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -569332,7 +570769,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -570000,7 +571437,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -570754,7 +572191,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -571144,7 +572581,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -571957,7 +573394,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -572894,7 +574331,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -573991,7 +575428,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -574984,7 +576421,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -576026,7 +577463,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -577534,7 +578971,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -577760,7 +579197,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -578155,7 +579592,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -578641,7 +580078,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -579978,7 +581415,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -580674,7 +582111,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -582075,7 +583512,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -582612,7 +584049,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -583456,7 +584893,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -584229,7 +585666,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -585506,7 +586943,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -586152,7 +587589,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -587620,7 +589057,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -588449,7 +589886,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -589282,7 +590719,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -591265,7 +592702,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -591981,7 +593418,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -593557,7 +594994,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -595155,7 +596592,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -595507,7 +596944,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -598209,7 +599646,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -598894,7 +600331,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -599574,7 +601011,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -600200,7 +601637,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -601009,7 +602446,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -601263,7 +602700,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -601749,7 +603186,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -602482,7 +603919,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -604393,7 +605830,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -605274,7 +606711,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -607228,7 +608665,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -607803,7 +609240,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -608904,7 +610341,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -609446,7 +610883,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -610080,7 +611517,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -611177,7 +612614,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -611527,7 +612964,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -611965,7 +613402,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -612583,7 +614020,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -613301,7 +614738,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -614378,7 +615815,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -615891,7 +617328,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -616429,7 +617866,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -618517,7 +619954,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -619662,7 +621099,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -620494,7 +621931,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -621015,7 +622452,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -622020,7 +623457,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -622438,7 +623875,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -624177,7 +625614,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -625206,7 +626643,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -627383,7 +628820,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -627809,7 +629246,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -628113,7 +629550,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -629150,7 +630587,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -632011,7 +633448,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -633465,7 +634902,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -634686,7 +636123,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -635899,7 +637336,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -636189,7 +637626,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -636475,7 +637912,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -636805,7 +638242,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -637658,7 +639095,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -639346,7 +640783,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -639788,7 +641225,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -640729,7 +642166,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -641666,7 +643103,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -642779,7 +644216,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -643780,7 +645217,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -644641,7 +646078,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -645390,7 +646827,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -646291,7 +647728,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -647033,7 +648470,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -648633,7 +650070,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -650076,7 +651513,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -650901,7 +652338,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -651231,7 +652668,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -652101,7 +653538,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -653481,7 +654918,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -654753,7 +656190,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -655363,7 +656800,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -655979,7 +657416,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -656469,7 +657906,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -656795,7 +658232,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -657029,7 +658466,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -657367,7 +658804,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -657634,7 +659071,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -657947,7 +659384,7 @@
   ],
   "difficulty": 8,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -659364,7 +660801,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -660602,7 +662039,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -662032,7 +663469,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -663623,7 +665060,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -664147,7 +665584,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -664748,7 +666185,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -665277,7 +666714,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -665950,7 +667387,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -666679,7 +668116,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -667205,7 +668642,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -667531,7 +668968,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -668132,7 +669569,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -668533,7 +669970,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -669154,7 +670591,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -669492,7 +670929,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -671915,7 +673352,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -672648,7 +674085,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -673122,7 +674559,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -674505,7 +675942,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -675014,7 +676451,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -675483,7 +676920,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -675885,7 +677322,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -676211,7 +677648,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -677303,7 +678740,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -678049,7 +679486,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -678614,7 +680051,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -679207,7 +680644,7 @@
   ],
   "cat": "2",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -679856,7 +681293,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -680446,7 +681883,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -681234,7 +682671,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -681757,7 +683194,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -681791,42 +683228,42 @@
   "versanti": [
    {
     "side": "Da Arsiero",
-    "startLat": 45.80529,
-    "startLon": 11.359631,
-    "startElevation": 309,
+    "startLat": 45.800903,
+    "startLon": 11.353842,
+    "startElevation": 313,
     "endElevation": 619,
-    "distance_km": 8.7,
+    "distance_km": 8.5,
     "avgGradient": 3.6,
     "maxGradient": 13.1,
     "traffic": "n/d",
     "exposure": "Sud-Est",
     "elevationProfile": [
-     309,
-     311,
+     313,
      317,
-     344,
-     359,
-     371,
-     393,
-     420,
-     445,
-     447,
-     414,
-     404,
-     414,
-     434,
-     438,
-     416,
-     415,
-     425,
+     334,
+     354,
+     366,
+     384,
+     410,
      426,
-     433,
+     453,
+     420,
+     409,
+     406,
+     422,
+     440,
+     427,
+     413,
+     418,
+     426,
+     429,
+     435,
      437,
-     436,
-     460,
+     442,
+     463,
      477,
      483,
-     497,
+     506,
      524,
      560,
      575,
@@ -681835,24 +683272,16 @@
     "cat": "4",
     "track": [
      [
-      45.80529,
-      11.359631
+      45.800903,
+      11.353842
      ],
      [
-      45.805798,
-      11.35857
+      45.801868,
+      11.354653
      ],
      [
-      45.805119,
-      11.357487
-     ],
-     [
-      45.804363,
-      11.356777
-     ],
-     [
-      45.803368,
-      11.35584
+      45.802753,
+      11.355275
      ],
      [
       45.803452,
@@ -682155,7 +683584,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -683223,7 +684652,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -683684,7 +685113,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -684864,7 +686293,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -685896,7 +687325,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -687119,7 +688548,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -687884,7 +689313,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -688418,7 +689847,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -689579,7 +691008,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -691096,7 +692525,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -692705,7 +694134,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -693601,7 +695030,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -694210,7 +695639,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -695146,7 +696575,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -695335,7 +696764,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -696077,7 +697506,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -696750,7 +698179,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -697615,7 +699044,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -699152,7 +700581,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -699462,7 +700891,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -699703,7 +701132,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -699937,7 +701366,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -700239,7 +701668,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -701116,7 +702545,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -702147,7 +703576,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -702577,7 +704006,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -703461,7 +704890,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -704294,7 +705723,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -704492,7 +705921,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -705241,7 +706670,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -706326,7 +707755,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -707934,7 +709363,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -708268,7 +709697,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -709807,7 +711236,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -710911,7 +712340,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -712070,7 +713499,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -712607,7 +714036,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -713624,7 +715053,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -714249,7 +715678,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -714589,7 +716018,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -715306,7 +716735,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -716371,7 +717800,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -716928,7 +718357,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -718132,7 +719561,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -719133,7 +720562,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -719589,7 +721018,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -720954,7 +722383,7 @@
   "snapped": true,
   "nodeId": "253712262",
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -722274,7 +723703,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -723637,7 +725066,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -725581,7 +727010,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -726871,7 +728300,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -727377,7 +728806,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -728231,7 +729660,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -728610,7 +730039,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -729715,7 +731144,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -731242,7 +732671,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -732410,7 +733839,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -732943,7 +734372,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -733157,7 +734586,7 @@
   ],
   "cat": "3",
   "difficulty": 9,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -734190,7 +735619,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -734700,7 +736129,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -735573,7 +737002,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -735786,7 +737215,7 @@
   ],
   "cat": "2",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -736051,7 +737480,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -736724,7 +738153,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -737488,7 +738917,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -738489,7 +739918,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -740456,7 +741885,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -740722,7 +742151,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -741219,7 +742648,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -741960,7 +743389,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -742553,7 +743982,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -743078,7 +744507,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -743809,7 +745238,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -744857,7 +746286,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -746519,7 +747948,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -746715,7 +748144,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -747268,7 +748697,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -748001,7 +749430,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -749264,7 +750693,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -749654,7 +751083,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -750276,7 +751705,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -751636,7 +753065,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -751874,7 +753303,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -752706,7 +754135,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -753970,7 +755399,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -754754,7 +756183,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -754968,7 +756397,7 @@
   ],
   "cat": "2",
   "difficulty": 10,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -755238,7 +756667,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -755781,7 +757210,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -756841,7 +758270,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -758676,7 +760105,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -759193,7 +760622,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -759563,7 +760992,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -760196,7 +761625,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -760721,7 +762150,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -761103,7 +762532,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -761996,7 +763425,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -762386,7 +763815,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -762652,7 +764081,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -763105,7 +764534,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -764197,7 +765626,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -765473,7 +766902,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -766123,7 +767552,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -768441,7 +769870,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -769401,7 +770830,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -771060,7 +772489,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -771633,7 +773062,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -773067,11 +774496,234 @@
       9.263681411743164
      ]
     ]
+   },
+   {
+    "side": "Da Borgoratto Mormorolo",
+    "startLat": 44.935268,
+    "startLon": 9.230611,
+    "startElevation": 279,
+    "endElevation": 591,
+    "distance_km": 4.3,
+    "avgGradient": 7.2,
+    "maxGradient": 14.8,
+    "traffic": "n/d",
+    "exposure": "Nord-Ovest",
+    "elevationProfile": [
+     279,
+     279,
+     274,
+     277,
+     292,
+     307,
+     340,
+     352,
+     368,
+     372,
+     387,
+     398,
+     415,
+     422,
+     439,
+     448,
+     469,
+     482,
+     498,
+     500,
+     503,
+     505,
+     509,
+     514,
+     534,
+     544,
+     560,
+     568,
+     585,
+     591
+    ],
+    "cat": "3",
+    "track": [
+     [
+      44.935268,
+      9.230611
+     ],
+     [
+      44.934772,
+      9.231621
+     ],
+     [
+      44.933819,
+      9.231719
+     ],
+     [
+      44.933372,
+      9.232634
+     ],
+     [
+      44.932579,
+      9.231884
+     ],
+     [
+      44.932152,
+      9.231736
+     ],
+     [
+      44.931843,
+      9.232688
+     ],
+     [
+      44.930901,
+      9.233464
+     ],
+     [
+      44.930634,
+      9.234723
+     ],
+     [
+      44.930443,
+      9.235992
+     ],
+     [
+      44.929771,
+      9.236856
+     ],
+     [
+      44.929531,
+      9.238111
+     ],
+     [
+      44.928963,
+      9.239207
+     ],
+     [
+      44.928719,
+      9.238298
+     ],
+     [
+      44.92799,
+      9.238105
+     ],
+     [
+      44.927895,
+      9.239387
+     ],
+     [
+      44.92831,
+      9.240509
+     ],
+     [
+      44.928558,
+      9.24115
+     ],
+     [
+      44.927582,
+      9.241019
+     ],
+     [
+      44.927143,
+      9.241144
+     ],
+     [
+      44.927658,
+      9.242306
+     ],
+     [
+      44.926926,
+      9.242788
+     ],
+     [
+      44.926167,
+      9.243439
+     ],
+     [
+      44.926006,
+      9.242445
+     ],
+     [
+      44.925274,
+      9.243057
+     ],
+     [
+      44.924648,
+      9.244196
+     ],
+     [
+      44.924362,
+      9.245559
+     ],
+     [
+      44.923954,
+      9.246844
+     ],
+     [
+      44.923393,
+      9.248037
+     ],
+     [
+      44.922848,
+      9.249186
+     ],
+     [
+      44.922276,
+      9.25038
+     ],
+     [
+      44.921753,
+      9.251513
+     ],
+     [
+      44.921349,
+      9.25289
+     ],
+     [
+      44.921017,
+      9.254488
+     ],
+     [
+      44.920631,
+      9.255647
+     ],
+     [
+      44.920158,
+      9.256865
+     ],
+     [
+      44.919647,
+      9.257938
+     ],
+     [
+      44.918953,
+      9.25873
+     ],
+     [
+      44.918552,
+      9.260045
+     ],
+     [
+      44.91769,
+      9.260831
+     ],
+     [
+      44.91684,
+      9.2611
+     ],
+     [
+      44.916008,
+      9.261977
+     ],
+     [
+      44.915192,
+      9.262869
+     ],
+     [
+      44.91429901123047,
+      9.263681411743164
+     ]
+    ]
    }
   ],
-  "difficulty": 6,
-  "cat": "4",
-  "algo": "v3.6-refguard",
+  "difficulty": 7,
+  "cat": "3",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -773301,7 +774953,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -774213,7 +775865,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -774635,7 +776287,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -775208,7 +776860,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -776256,7 +777908,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -777671,7 +779323,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -778004,7 +779656,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -779311,7 +780963,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -779956,7 +781608,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -780881,7 +782533,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -781571,7 +783223,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -783322,7 +784974,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -784641,7 +786293,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -785394,7 +787046,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -786789,7 +788441,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -787410,7 +789062,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -787652,7 +789304,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -787914,7 +789566,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -789070,7 +790722,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -789591,7 +791243,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -790403,7 +792055,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -791104,7 +792756,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -791335,7 +792987,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -791601,7 +793253,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -792548,7 +794200,7 @@
   ],
   "cat": "4",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -793944,7 +795596,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -794236,7 +795888,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -794495,7 +796147,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -795156,7 +796808,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -795757,7 +797409,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -796534,7 +798186,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -797171,7 +798823,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -798118,7 +799770,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -799753,7 +801405,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -800469,7 +802121,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -800625,7 +802277,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -801083,7 +802735,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -801325,7 +802977,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -801722,7 +803374,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -802263,7 +803915,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -802720,7 +804372,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -803660,7 +805312,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -804880,7 +806532,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -805811,7 +807463,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -807399,7 +809051,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -807646,7 +809298,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -808187,7 +809839,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -808449,7 +810101,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -809577,7 +811229,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -809869,7 +811521,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -810431,7 +812083,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -810449,42 +812101,42 @@
   "versanti": [
    {
     "side": "Da Pievescola",
-    "startLat": 43.308186,
-    "startLon": 11.133184,
-    "startElevation": 266,
+    "startLat": 43.307064,
+    "startLon": 11.133793,
+    "startElevation": 264,
     "endElevation": 501,
-    "distance_km": 5.9,
-    "avgGradient": 4,
+    "distance_km": 5.8,
+    "avgGradient": 4.1,
     "maxGradient": 9.7,
     "traffic": "n/d",
     "exposure": "Ovest",
     "elevationProfile": [
-     266,
-     265,
+     264,
      275,
-     293,
+     282,
+     299,
      304,
-     306,
-     318,
+     308,
+     326,
      338,
-     346,
-     366,
+     359,
+     378,
      386,
-     397,
+     405,
      412,
      411,
-     408,
+     404,
      406,
      405,
-     401,
+     400,
      396,
-     398,
+     400,
      405,
      408,
-     412,
+     415,
      419,
      436,
-     448,
+     458,
      466,
      479,
      486,
@@ -810492,10 +812144,6 @@
     ],
     "cat": "4",
     "track": [
-     [
-      43.308186,
-      11.133184
-     ],
      [
       43.307064,
       11.133793
@@ -810693,7 +812341,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -810895,7 +812543,7 @@
   ],
   "cat": "4",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -811141,7 +812789,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -811717,7 +813365,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -812015,7 +813663,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -812491,7 +814139,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -813467,7 +815115,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -813709,7 +815357,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -814183,7 +815831,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -814438,7 +816086,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -815151,7 +816799,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -815393,7 +817041,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -815892,7 +817540,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -816370,7 +818018,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -817047,7 +818695,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -817248,7 +818896,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -817655,7 +819303,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -817857,7 +819505,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -818291,7 +819939,7 @@
   ],
   "difficulty": 9,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -818493,7 +820141,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -818819,7 +820467,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -819009,7 +820657,7 @@
   ],
   "difficulty": 9,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -819963,7 +821611,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -820696,7 +822344,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -821361,7 +823009,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -821728,7 +823376,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -821966,7 +823614,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -822244,7 +823892,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -822706,7 +824354,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -822966,7 +824614,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -823260,7 +824908,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -824210,7 +825858,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -824670,7 +826318,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -824908,7 +826556,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
@@ -825308,7 +826956,7 @@
   ],
   "difficulty": 3,
   "cat": "4",
-  "algo": "v3.6-refguard",
+  "algo": "v3.7-avgfloor",
   "updatedAt": "2026-06-17"
  },
  {
