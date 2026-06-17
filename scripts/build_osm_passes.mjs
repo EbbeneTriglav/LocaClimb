@@ -419,7 +419,7 @@ async function main() {
   let baseHints = {};
   try { baseHints = JSON.parse(await readFile("base_hints.json", "utf8")); } catch {}
   const normH = (n) => (n || "").toLowerCase().replace(/passo |del |dell'|della |di |monte |dello |colle |col /g, "").trim();
-  function hintsFor(name) { var nn = normH(name); for (var key in baseHints) { var nk = normH(key); if (nk && (nn.indexOf(nk) >= 0 || nk.indexOf(nn) >= 0)) return baseHints[key]; } return null; }
+  function hintsFor(name) { var nn = normH(name); for (var key in baseHints) { var nk = normH(key); if (nk && nn.indexOf(nk) >= 0) return baseHints[key]; } return null; } // key must be contained in the pass name (NOT the reverse), so "San Pellegrino" does not match the "...in Alpe" key
   function resolveTowns(list, sLat, sLon) {
     var out = [];
     for (var h of list) {
@@ -722,7 +722,8 @@ async function main() {
       const ch = snap(x.lat, x.lon, 0.5);
       if (!ch) { console.log("    - " + x.name + ": no road"); continue; }
       const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
-      const vs = await buildVersanti(slat, slon, 12, true, nameTokens(x.name));
+      const xtg = x.from ? resolveTowns([].concat(x.from), slat, slon) : null; // pin the historic base(s) if given
+      const vs = await buildVersanti(slat, slon, xtg ? 16 : 12, true, nameTokens(x.name), xtg);
       if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
       const id = "x-" + x.id;
       const rec = byId.get(id) || { id };
