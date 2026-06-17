@@ -1,3 +1,307 @@
 {
- "Amiata": ["Abbadia San Salvatore", "Seggiano", "Castel del Piano", "Aiole", "Bagnolo", "Piancastagnaio"]
+ "Stelvio": [
+  "Bormio",
+  "Prato allo Stelvio"
+ ],
+ "Gavia": [
+  "Bormio",
+  "Ponte di Legno"
+ ],
+ "Mortirolo": [
+  "Mazzo di Valtellina",
+  "Grosio",
+  "Monno"
+ ],
+ "Aprica": [
+  "Edolo",
+  "Tresenda"
+ ],
+ "Tonale": [
+  "Ponte di Legno",
+  "Vermiglio"
+ ],
+ "Vivione": [
+  "Schilpario",
+  "Forno Allione"
+ ],
+ "Presolana": [
+  "Clusone",
+  "Angolo Terme"
+ ],
+ "San Marco": [
+  "Morbegno",
+  "Mezzoldo"
+ ],
+ "Croce Domini": [
+  "Bagolino",
+  "Breno"
+ ],
+ "Ghisallo": [
+  "Bellagio",
+  "Asso"
+ ],
+ "Pordoi": [
+  "Canazei",
+  "Arabba"
+ ],
+ "Gardena": [
+  "Corvara",
+  "Selva di Val Gardena"
+ ],
+ "Campolongo": [
+  "Corvara",
+  "Arabba"
+ ],
+ "Falzarego": [
+  "Cortina d'Ampezzo",
+  "Andraz"
+ ],
+ "Valparola": [
+  "La Villa",
+  "Andraz"
+ ],
+ "Giau": [
+  "Selva di Cadore",
+  "Cortina d'Ampezzo"
+ ],
+ "Fedaia": [
+  "Canazei",
+  "Caprile"
+ ],
+ "Rolle": [
+  "Predazzo",
+  "Fiera di Primiero"
+ ],
+ "Costalunga": [
+  "Vigo di Fassa",
+  "Nova Levante"
+ ],
+ "Mendola": [
+  "Appiano",
+  "Sarnonico"
+ ],
+ "Palade": [
+  "Lana",
+  "Fondo"
+ ],
+ "Grappa": [
+  "Romano d'Ezzelino",
+  "Semonzo",
+  "Caupo",
+  "Possagno"
+ ],
+ "San Boldo": [
+  "Tovena",
+  "Trichiana"
+ ],
+ "Croce d'Aune": [
+  "Pedavena",
+  "Sovramonte"
+ ],
+ "Duran": [
+  "Agordo",
+  "Forno di Zoldo"
+ ],
+ "Staulanza": [
+  "Selva di Cadore",
+  "Forno di Zoldo"
+ ],
+ "Zoncolan": [
+  "Ovaro",
+  "Sutrio"
+ ],
+ "Finestre": [
+  "Susa",
+  "Sestriere"
+ ],
+ "Sestriere": [
+  "Cesana Torinese",
+  "Pragelato"
+ ],
+ "Agnello": [
+  "Pontechianale"
+ ],
+ "Fauniera": [
+  "Demonte",
+  "Pradleves",
+  "Ponte Marmora"
+ ],
+ "Sampeyre": [
+  "Sampeyre",
+  "Stroppo"
+ ],
+ "Nivolet": [
+  "Ceresole Reale"
+ ],
+ "Tenda": [
+  "Limone Piemonte"
+ ],
+ "San Carlo": [
+  "Morgex",
+  "La Thuile"
+ ],
+ "Lombarda": [
+  "Vinadio"
+ ],
+ "Amiata": [
+  "Abbadia San Salvatore",
+  "Seggiano",
+  "Castel del Piano",
+  "Aiole",
+  "Bagnolo",
+  "Piancastagnaio"
+ ],
+ "Futa": [
+  "Firenzuola",
+  "Barberino di Mugello"
+ ],
+ "Abetone": [
+  "Cutigliano",
+  "Fiumalbo"
+ ],
+ "Cisa": [
+  "Berceto",
+  "Pontremoli"
+ ],
+ "Cerreto": [
+  "Collagna",
+  "Fivizzano"
+ ],
+ "Radici": [
+  "Castelnuovo di Garfagnana",
+  "Frassinoro",
+  "Pievepelago",
+  "Sant'Anna Pelago"
+ ],
+ "San Pellegrino in Alpe": [
+  "Castelnuovo di Garfagnana",
+  "Pievepelago"
+ ],
+ "Lagastrello": [
+  "Monchio delle Corti",
+  "Comano"
+ ],
+ "Cento Croci": [
+  "Varese Ligure",
+  "Bedonia"
+ ],
+ "Turchino": [
+  "Masone",
+  "Mele"
+ ],
+ "Sellajoch": [
+  "Canazei",
+  "Selva di Val Gardena"
+ ],
+ "Erbe": [
+  "Bressanone",
+  "San Martino in Badia"
+ ],
+ "Tre Croci": [
+  "Cortina d'Ampezzo",
+  "Auronzo di Cadore"
+ ],
+ "Cibiana": [
+  "Venas di Cadore",
+  "Forno di Zoldo"
+ ],
+ "Valles": [
+  "Falcade",
+  "Paneveggio"
+ ],
+ "Brocon": [
+  "Castello Tesino",
+  "Canal San Bovo"
+ ],
+ "Manghen": [
+  "Borgo Valsugana",
+  "Molina di Fiemme"
+ ],
+ "Mauria": [
+  "Lorenzago di Cadore",
+  "Ampezzo"
+ ],
+ "Razzo": [
+  "Vigo di Cadore",
+  "Forni di Sopra"
+ ],
+ "Croce Comelico": [
+  "San Candido",
+  "Santo Stefano di Cadore"
+ ],
+ "Moncenisio": [
+  "Susa"
+ ],
+ "Faiallo": [
+  "Voltri",
+  "Sassello"
+ ],
+ "Melogno": [
+  "Finale Ligure",
+  "Calizzano"
+ ],
+ "Pradarena": [
+  "Ligonchio",
+  "Sillano"
+ ],
+ "Raticosa": [
+  "Loiano",
+  "Firenzuola"
+ ],
+ "Colla di Casaglia": [
+  "Borgo San Lorenzo",
+  "Marradi"
+ ],
+ "Muraglione": [
+  "San Godenzo",
+  "Rocca San Casciano"
+ ],
+ "Calla": [
+  "Stia",
+  "Santa Sofia"
+ ],
+ "Mandrioli": [
+  "Bagno di Romagna",
+  "Badia Prataglia"
+ ],
+ "Carpegna": [
+  "Carpegna",
+  "Pennabilli"
+ ],
+ "Viamaggio": [
+  "Pieve Santo Stefano",
+  "Badia Tedalda"
+ ],
+ "Bocca Trabaria": [
+  "Sansepolcro",
+  "Mercatello sul Metauro"
+ ],
+ "Croce Arcana": [
+  "Fanano",
+  "Cutigliano"
+ ],
+ "Carpinelli": [
+  "Castelnuovo di Garfagnana",
+  "Fivizzano"
+ ],
+ "Bocca Serriola": [
+  "Citta di Castello",
+  "Apecchio"
+ ],
+ "Scheggia": [
+  "Scheggia",
+  "Cagli"
+ ],
+ "Forca Canapine": [
+  "Norcia",
+  "Arquata del Tronto"
+ ],
+ "Forca di Presta": [
+  "Arquata del Tronto",
+  "Montegallo"
+ ],
+ "Fraele": [
+  "Premadio",
+  "Isolaccia"
+ ]
 }
