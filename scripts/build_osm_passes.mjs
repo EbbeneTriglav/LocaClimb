@@ -238,7 +238,7 @@ function walkTo(startWay, startIdx, tLat, tLon, vertexMap, capKm, anchor) {
   return pts; // base(town) -> summit
 }
 function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
-function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
+function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
   const pts = ptsOut.slice().reverse(), el = smooth3(elevsOut.slice().reverse());
   if (pts.length < 4) return null;
   const cum = [0];
@@ -310,6 +310,7 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     if (hitClimb && townIdx > base) base = townIdx;
   }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
+  if (pin) base = 0; // manual override: base is fixed at the pinned town (path start), use whole climb
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
   if (dist < (relax ? 1.2 : 1.5)) return null;
@@ -380,19 +381,22 @@ async function main() {
     for (let i = 0; i < PBF_URLS.length; i++) { const f = WORK + "/part" + i + ".osm.pbf"; await download(PBF_URLS[i], f); parts.push(f); }
     console.log("  osmium merge+filter ...");
     osmium(["merge", ...parts, "-o", WORK + "/merged.osm.pbf", "--overwrite"]);
-    osmium(["tags-filter", WORK + "/merged.osm.pbf", "n/mountain_pass=yes", "n/place=town", "n/place=village", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
+    osmium(["tags-filter", WORK + "/merged.osm.pbf", "n/mountain_pass=yes", "n/place=town", "n/place=village", "n/place=hamlet", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
     console.log("  osmium export ...");
     osmium(["export", WORK + "/filtered.osm.pbf", "-f", "geojsonseq", "-a", "type,id", "-o", seqFile, "--overwrite"]);
   }
 
   console.log("  stream 1/2: pass nodes ...");
-  const passes = [], places = [];
+  const passes = [], places = [], hintPlaces = [];
   await streamSeq(seqFile, (f) => {
     if (!f.geometry || f.geometry.type !== "Point" || !f.properties) return;
     if (f.properties.mountain_pass === "yes") {
       passes.push({ oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
     } else if ((f.properties.place === "town" || f.properties.place === "village") && f.properties.name) {
-      places.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties.name });
+      var pl = { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties.name };
+      places.push(pl); hintPlaces.push(pl);                       // town/village: used for auto-labeling AND hints
+    } else if (f.properties.place === "hamlet" && f.properties.name) {
+      hintPlaces.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties.name }); // hamlets: hint resolution only
     }
   });
   console.log("  places (towns/villages): " + places.length);
@@ -409,6 +413,24 @@ async function main() {
   console.log("  passes found: " + passes.length);
   let extraClimbs = [];
   try { extraClimbs = JSON.parse(await readFile("climbs_extra.json", "utf8")); } catch {}
+  // Manual base override: base_hints.json maps a pass name -> list of start points (town name or [lat,lon]).
+  // For a matched pass we pin those bases (path summit->town, no auto base-finding). Safety net for
+  // icon passes the heuristic mis-handles (cones like Amiata). All other passes stay automatic.
+  let baseHints = {};
+  try { baseHints = JSON.parse(await readFile("base_hints.json", "utf8")); } catch {}
+  const normH = (n) => (n || "").toLowerCase().replace(/passo |del |dell'|della |di |monte |dello |colle |col /g, "").trim();
+  function hintsFor(name) { var nn = normH(name); for (var key in baseHints) { var nk = normH(key); if (nk && (nn.indexOf(nk) >= 0 || nk.indexOf(nn) >= 0)) return baseHints[key]; } return null; }
+  function resolveTowns(list, sLat, sLon) {
+    var out = [];
+    for (var h of list) {
+      if (Array.isArray(h)) { out.push({ name: global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto", lat: h[0], lon: h[1] }); continue; }
+      var tgt = ("" + h).toLowerCase(), best = null, bd = 60;          // pick the matching town nearest the summit
+      for (var t of hintPlaces) { var tn = (t.name || "").toLowerCase(); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } } }
+      if (best) out.push({ name: h, lat: best.lat, lon: best.lon });
+      else console.log("    . hint town non trovato: " + h);
+    }
+    return out;
+  }
   const cellOf = (lat, lon) => Math.floor(lat / 0.05) + ":" + Math.floor(lon / 0.05);
   const pgrid = new Set(passes.map((p) => cellOf(p.lat, p.lon)));
   for (const x of extraClimbs) pgrid.add(cellOf(x.lat, x.lon)); // keep roads near extra climbs too
@@ -511,7 +533,7 @@ async function main() {
     return out;
   }
   // BFS shortest road-paths from the summit over the buffer network (no branch guessing)
-  async function buildVersanti(lat, lon, capKm, relax, anchor) {
+  async function buildVersanti(lat, lon, capKm, relax, anchor, targets) {
     var ch = snap(lat, lon, 0.8);
     if (!ch) return [];
     var startK = vkey(gx(ch.w, ch.idx), gy(ch.w, ch.idx));
@@ -532,6 +554,26 @@ async function main() {
         }
       }
       if (q.length > 200000) break; // safety
+    }
+    // --- manual base override: pin each requested start town -------------------
+    // For a hinted pass, build exactly the requested versanti: shortest road path summit -> town,
+    // base pinned at the town (no auto base-finding -> no overrun, no missing sides).
+    if (targets && targets.length) {
+      var pinned = [];
+      for (var tg of targets) {
+        var bestK = null, bestD = 0.8;
+        coord.forEach(function (ll, k) { var dd = hav(tg.lat, tg.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
+        if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
+        var rp = [], kk = bestK, gd = 0;
+        while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
+        if (rp.length < 4) continue;
+        var pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
+        var ev = await elevations(pth); if (!ev) continue;
+        var pv = buildSide(pth, ev, lat, lon, true, true);     // relax + pin: base fixed at the town
+        if (pv) { pv.side = "Da " + tg.name; pinned.push(pv); }
+        else console.log("    . hint " + tg.name + ": salita non valida");
+      }
+      return pinned;
     }
     // --- C: candidates = branch tips (graph leaves), not 1-per-octant -----------
     // The shortest-path tree's leaves are the natural ends of each road branch, so distinct
@@ -648,11 +690,13 @@ async function main() {
       rec.surfaceLabel = surfaceLabel(ch.w.tags);
       const tr = computeTraffic(ch.w.tags, el.ele);
       rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
-      if (!(rec.versanti && rec.versanti.length) || rec.algo !== ALGO_VERSION || REENRICH) {
+      if (!(rec.versanti && rec.versanti.length) || rec.algo !== ALGO_VERSION || REENRICH || hintsFor(name)) {
         done++;
         if (REENRICH || rec.algo !== ALGO_VERSION) { rec.versanti = null; rec.cat = null; } // drop stale before rebuild
         try {
-          const vs = await buildVersanti(slat, slon, 30, false, nameTokens(name));
+          const hl = hintsFor(name);
+          const tgs = hl ? resolveTowns(hl, slat, slon) : null;
+          const vs = await buildVersanti(slat, slon, tgs ? 38 : 30, false, nameTokens(name), tgs);
           if (vs.length) {
             rec.versanti = vs;
             rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
