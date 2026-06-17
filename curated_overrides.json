@@ -4456,7 +4456,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "gavia": {
@@ -7692,7 +7692,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "mortirolo": {
@@ -13598,7 +13598,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "zoncolan": {
@@ -15986,7 +15986,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "pordoi": {
@@ -17507,7 +17507,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "sella": {
@@ -19067,7 +19067,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "gardena": {
@@ -19980,7 +19980,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "campolongo": {
@@ -23824,7 +23824,7 @@
   ],
   "difficulty": 5,
   "cat": "2",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "falzarego": {
@@ -27163,7 +27163,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "giau": {
@@ -29203,7 +29203,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "fedaia": {
@@ -31451,7 +31451,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "spluga": {
@@ -34196,7 +34196,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "san-marco": {
@@ -38172,7 +38172,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "grappa": {
@@ -38773,7 +38773,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "manghen": {
@@ -42165,7 +42165,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "tonale": {
@@ -45597,7 +45597,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "presolana": {
@@ -46866,7 +46866,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "vivione": {
@@ -50458,7 +50458,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "rolle": {
@@ -53686,7 +53686,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "croce-daune": {
@@ -55886,7 +55886,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "abetone": {
@@ -59122,7 +59122,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "futa": {
@@ -62860,7 +62860,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "aprica": {
@@ -64716,7 +64716,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  },
  "san-pellegrino": {
@@ -66628,7 +66628,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v3.9-resample",
+  "algo": "v4.0-hintreach",
   "updatedAt": "2026-06-17"
  }
 }
