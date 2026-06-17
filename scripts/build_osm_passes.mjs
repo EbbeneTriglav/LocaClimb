@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.4-sustained";
+const ALGO_VERSION = "v3.5-refspan";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -498,11 +498,11 @@ async function main() {
     var out = [], lst = vertexMap.get(key);
     if (!lst) return out;
     for (var e of lst) {
-      var w = e.w, i = e.idx;
+      var w = e.w, i = e.idx, rf = (w.tags && (w.tags.ref || w.tags.name)) || "";
       [i - 1, i + 1].forEach(function (j) {
         if (j < 0 || j >= glen(w)) return;
         var k2 = vkey(gx(w, j), gy(w, j));
-        out.push({ key: k2, seg: hav(gx(w, i), gy(w, i), gx(w, j), gy(w, j)) });
+        out.push({ key: k2, seg: hav(gx(w, i), gy(w, i), gx(w, j), gy(w, j)), ref: rf });
       });
     }
     return out;
@@ -513,7 +513,7 @@ async function main() {
     if (!ch) return [];
     var startK = vkey(gx(ch.w, ch.idx), gy(ch.w, ch.idx));
     var startLat = gx(ch.w, ch.idx), startLon = gy(ch.w, ch.idx);
-    var dist = new Map(), parent = new Map(), coord = new Map();
+    var dist = new Map(), parent = new Map(), coord = new Map(), edgeRef = new Map();
     dist.set(startK, 0); coord.set(startK, [startLat, startLon]);
     var q = [startK], qi = 0;
     while (qi < q.length) {
@@ -523,7 +523,7 @@ async function main() {
         var nd = dc + nb.seg;
         if (nd > capKm) continue;
         if (!dist.has(nb.key) || nd < dist.get(nb.key)) {
-          dist.set(nb.key, nd); parent.set(nb.key, c);
+          dist.set(nb.key, nd); parent.set(nb.key, c); edgeRef.set(nb.key, nb.ref);
           if (!coord.has(nb.key)) { var p2 = nb.key.split(","); coord.set(nb.key, [parseFloat(p2[0]), parseFloat(p2[1])]); }
           q.push(nb.key);
         }
@@ -550,9 +550,27 @@ async function main() {
     // reconstruct each path summit->base, sample DEM, trim
     var raw = [];
     for (var ent of cands) {
-      var path = [], k = ent.k, guard = 0;
-      while (k != null && guard++ < 5000) { path.push(coord.get(k)); k = parent.get(k); }
-      path.reverse(); // summit -> base
+      var rawPath = [], rawRef = [], k = ent.k, guard = 0;
+      while (k != null && guard++ < 5000) { rawPath.push(coord.get(k)); rawRef.push(edgeRef.get(k) || ""); k = parent.get(k); }
+      if (rawPath.length < 4) continue;
+      // --- ref-span trim: a named pass road (SS300 del Gavia, SS38 ...) spans town -> summit.
+      // Keep only the contiguous summit-side stretch sharing the summit road's ref; cut where a
+      // DIFFERENT ref takes over for > 0.4km (SS300 -> SS42 at Ponte di Legno). Empty refs (gaps,
+      // links) never break continuity. No-op when the summit road is unnamed -> safe fallback,
+      // and it can only RAISE the base (gradient/town/basin in buildSide refine further up).
+      var rcum = [0]; for (var jr = 1; jr < rawPath.length; jr++) rcum.push(rcum[jr - 1] + hav(rawPath[jr - 1][0], rawPath[jr - 1][1], rawPath[jr][0], rawPath[jr][1]));
+      var rlast = rawPath.length - 1, rcnt = {};
+      for (var js = rlast - 1; js >= 0 && rcum[rlast] - rcum[js] < 1.5; js--) { if (rawRef[js]) rcnt[rawRef[js]] = (rcnt[rawRef[js]] || 0) + 1; }
+      var sumRef = "", bestc = 0; for (var rk in rcnt) if (rcnt[rk] > bestc) { bestc = rcnt[rk]; sumRef = rk; }
+      if (sumRef) {
+        var run = 0, runTop = -1, baseCut = 0;
+        for (var jt = rlast - 1; jt >= 0; jt--) {
+          if (rawRef[jt] && rawRef[jt] !== sumRef) { if (runTop < 0) runTop = jt + 1; run += rcum[jt + 1] - rcum[jt]; if (run > 0.4) { baseCut = runTop; break; } }
+          else { run = 0; runTop = -1; }
+        }
+        if (baseCut > 0) rawPath = rawPath.slice(baseCut);
+      }
+      var path = rawPath.slice().reverse(); // summit -> base
       if (path.length < 4) continue;
       path = resampleByDist(path, 0.10); // ~1 point every 100m: tighter on hairpins, still light on long climbs
       var ev = await elevations(path); if (!ev) continue;
