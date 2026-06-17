@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.9-resample";
+const ALGO_VERSION = "v4.0-hintreach";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -420,12 +420,13 @@ async function main() {
   try { baseHints = JSON.parse(await readFile("base_hints.json", "utf8")); } catch {}
   const normH = (n) => (n || "").toLowerCase().replace(/passo |del |dell'|della |di |monte |dello |colle |col /g, "").trim();
   function hintsFor(name) { var nn = normH(name); for (var key in baseHints) { var nk = normH(key); if (nk && nn.indexOf(nk) >= 0) return baseHints[key]; } return null; } // key must be contained in the pass name (NOT the reverse), so "San Pellegrino" does not match the "...in Alpe" key
+  var deacc = function (s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
   function resolveTowns(list, sLat, sLon) {
     var out = [];
     for (var h of list) {
       if (Array.isArray(h)) { out.push({ name: global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto", lat: h[0], lon: h[1] }); continue; }
-      var tgt = ("" + h).toLowerCase(), best = null, bd = 60;          // pick the matching town nearest the summit
-      for (var t of hintPlaces) { var tn = (t.name || "").toLowerCase(); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } } }
+      var tgt = deacc(h), best = null, bd = 60;          // pick the matching town nearest the summit (accent-insensitive)
+      for (var t of hintPlaces) { var tn = deacc(t.name); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } } }
       if (best) out.push({ name: h, lat: best.lat, lon: best.lon });
       else console.log("    . hint town non trovato: " + h);
     }
@@ -541,9 +542,24 @@ async function main() {
     var dist = new Map(), parent = new Map(), coord = new Map(), edgeRef = new Map();
     dist.set(startK, 0); coord.set(startK, [startLat, startLon]);
     var q = [startK], qi = 0;
+    // Pinned hints: pre-snap each target town to the nearest KEPT road (its centroid often sits on
+    // a residential/service street that HW_KEEP drops), then let the BFS STOP as soon as every
+    // target is reached. The old full-region flood hit the 200k-node safety cap before some valleys
+    // were ever expanded -> "non raggiunto" even for towns a few km away. Early-exit makes the cap
+    // a non-issue for hinted passes; the non-hinted flood keeps the original 200k bound unchanged.
+    var tgReach = (targets && targets.length) ? targets.map(function (tg) {
+      var s = snap(tg.lat, tg.lon, 2.5);
+      return { lat: s ? gx(s.w, s.idx) : tg.lat, lon: s ? gy(s.w, s.idx) : tg.lon, done: false };
+    }) : null;
+    var BFS_CAP = tgReach ? 1500000 : 200000;
     while (qi < q.length) {
       var c = q[qi++]; var dc = dist.get(c);
       if (dc > capKm) continue;
+      if (tgReach) {
+        var cc = coord.get(c), allDone = true;
+        for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 0.9) tr.done = true; if (!tr.done) allDone = false; }
+        if (allDone) break;
+      }
       for (var nb of neighbors(c)) {
         var nd = dc + nb.seg;
         if (nd > capKm) continue;
@@ -553,16 +569,17 @@ async function main() {
           q.push(nb.key);
         }
       }
-      if (q.length > 200000) break; // safety
+      if (q.length > BFS_CAP) break; // safety
     }
     // --- manual base override: pin each requested start town -------------------
     // For a hinted pass, build exactly the requested versanti: shortest road path summit -> town,
     // base pinned at the town (no auto base-finding -> no overrun, no missing sides).
     if (targets && targets.length) {
       var pinned = [];
-      for (var tg of targets) {
-        var bestK = null, bestD = 0.8;
-        coord.forEach(function (ll, k) { var dd = hav(tg.lat, tg.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
+      for (var ti2 = 0; ti2 < targets.length; ti2++) {
+        var tg = targets[ti2], aim = tgReach[ti2];
+        var bestK = null, bestD = 1.5; // was 0.8: town centroids sit off the kept road (residential dropped)
+        coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
         if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
         var rp = [], kk = bestK, gd = 0;
         while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
