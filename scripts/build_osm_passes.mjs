@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.5-refspan";
+const ALGO_VERSION = "v3.6-refguard";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -558,17 +558,21 @@ async function main() {
       // DIFFERENT ref takes over for > 0.4km (SS300 -> SS42 at Ponte di Legno). Empty refs (gaps,
       // links) never break continuity. No-op when the summit road is unnamed -> safe fallback,
       // and it can only RAISE the base (gradient/town/basin in buildSide refine further up).
+      var isMajorRef = function (r) { return /^(SS|SP|SR)\s?\d/i.test(r || ""); }; // only state/regional/provincial numbered roads
       var rcum = [0]; for (var jr = 1; jr < rawPath.length; jr++) rcum.push(rcum[jr - 1] + hav(rawPath[jr - 1][0], rawPath[jr - 1][1], rawPath[jr][0], rawPath[jr][1]));
       var rlast = rawPath.length - 1, rcnt = {};
-      for (var js = rlast - 1; js >= 0 && rcum[rlast] - rcum[js] < 1.5; js--) { if (rawRef[js]) rcnt[rawRef[js]] = (rcnt[rawRef[js]] || 0) + 1; }
+      for (var js = rlast - 1; js >= 0 && rcum[rlast] - rcum[js] < 1.5; js--) { if (isMajorRef(rawRef[js])) rcnt[rawRef[js]] = (rcnt[rawRef[js]] || 0) + 1; }
       var sumRef = "", bestc = 0; for (var rk in rcnt) if (rcnt[rk] > bestc) { bestc = rcnt[rk]; sumRef = rk; }
       if (sumRef) {
         var run = 0, runTop = -1, baseCut = 0;
         for (var jt = rlast - 1; jt >= 0; jt--) {
-          if (rawRef[jt] && rawRef[jt] !== sumRef) { if (runTop < 0) runTop = jt + 1; run += rcum[jt + 1] - rcum[jt]; if (run > 0.4) { baseCut = runTop; break; } }
+          if (isMajorRef(rawRef[jt]) && rawRef[jt] !== sumRef) { if (runTop < 0) runTop = jt + 1; run += rcum[jt + 1] - rcum[jt]; if (run > 0.4) { baseCut = runTop; break; } }
           else { run = 0; runTop = -1; }
         }
-        if (baseCut > 0) rawPath = rawPath.slice(baseCut);
+        // Apply ONLY if a substantial climb (>= 5km) remains, so a real climb whose summit ref
+        // differs from its body (Grappa, Futa) is never orphaned into a short fragment. The
+        // absolute floor (not a fraction of total) is what makes cutting a LONG valley safe.
+        if (baseCut > 0 && (rcum[rlast] - rcum[baseCut]) >= 5) rawPath = rawPath.slice(baseCut);
       }
       var path = rawPath.slice().reverse(); // summit -> base
       if (path.length < 4) continue;
