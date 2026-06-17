@@ -208,7 +208,7 @@ function ensureCat(p){
 function isGravel(p){return (p.surfaceLabel||"").indexOf("Sterrato")>=0;}
 function catColor(c){return {HC:"#7f1d1d","1":"#dc2626","2":"#ea580c","3":"#d97706","4":"#65a30d"}[c]||"#64748b";}
 function catLabel(c){return c==="HC"?"HC":c;}
-function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;}});applyFilters();setDataVersion();}).catch(function(){});}
+function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;if(ov.algo)p.algo=ov.algo;}});applyFilters();setDataVersion();}).catch(function(){});}
 /* ===== TRAFFIC MODEL ===== */
 var TRAF_MAP={basso:2,medio:5,alto:8};
 function trafColor(s){return s>=7?"#ef4444":s>=4?"#f59e0b":"#22c55e";}
@@ -374,7 +374,7 @@ function renderPassPanel(p,isOsm){
   h+='<div class="dp-body">';
   if(p.description)h+='<p style="color:var(--txt2);margin-bottom:14px;line-height:1.5">'+p.description+'</p>';
   if(isOsm)h+='<p style="font-size:.78rem;color:var(--txt2);margin-bottom:10px">&#x1F4A1; Dati stimati automaticamente da OpenStreetMap + elevazione. Possono contenere imprecisioni.</p>';
-  if(p.updatedAt)h+='<p style="font-size:.72rem;color:var(--txt2);margin:-2px 0 12px">&#x1F504; Salita aggiornata il '+fmtDate(p.updatedAt)+'</p>';
+  if(p.updatedAt||p.algo)h+='<p style="font-size:.72rem;color:var(--txt2);margin:-2px 0 12px">&#x1F504; Salita aggiornata il '+fmtDate(p.updatedAt)+(p.algo?' &middot; <b>'+p.algo+'</b>':'')+'</p>';
   var evts=getEvts(p.id);
   if(evts.length>0){h+='<div class="section-title">&#x1F6B4; Bike Day - Solo Bici!</div>';evts.forEach(function(e){var d=new Date(e.date);h+='<div class="evt-card"><b>'+e.name+'</b><br>&#x1F4C5; '+d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"})+'<br>&#x23F0; '+e.hours;if(e.url)h+=' &middot; <a href="'+e.url+'" target="_blank" style="color:var(--ac)">Info</a>';h+='</div>';});}
   if(p.versanti&&p.versanti.length){
