@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.3-valley4";
+const ALGO_VERSION = "v3.4-sustained";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -279,12 +279,32 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
   // It can never cut mid-climb (a real climb is >= VFLOOR from its base up) and always
   // keeps >= VMIN_KEEP km. Generalizes the "2km / 4%" idea: Radici needs ~10km trimmed,
   // so the floor (not a fixed cap) decides where the valley ends.
-  const VFLOOR = 4.0, VMIN_KEEP = 3.0, VWIN = 0.6; // valley vs real-climb cut: 4% always (relax only loosens accept thresholds, not where the climb starts)
+  const VFLOOR = 4.0, VMIN_KEEP = 3.0;
+  function fwdG(i, winKm) { let j = i; while (j < end && cum[j] - cum[i] < winKm) j++; const dd = cum[j] - cum[i]; return dd > 0 ? (el[j] - el[i]) / (dd * 1000) * 100 : 0; }
+  // Trim the valley approach until the SUSTAINED real climb begins. A short steep connector
+  // (>=4% over 0.6km but flat beyond) must NOT stop the trim - only a ramp that holds >=4%
+  // over BOTH 0.6km and 1.4km does. This rides through valley-floor ramps so the base lands
+  // at the town where the climb truly starts (Bormio not Cepina; Ponte di Legno not Vezza;
+  // Monno/Mazzo not Edolo) instead of anchoring far down the main valley.
   while (base < end - 1 && (cum[end] - cum[base]) > VMIN_KEEP) {
-    let j = base; while (j < end && cum[j] - cum[base] < VWIN) j++;
-    const dd = cum[j] - cum[base]; if (dd <= 0) break;
-    const g = (el[j] - el[base]) / (dd * 1000) * 100;
-    if (g < VFLOOR) base++; else break;
+    if (fwdG(base, 0.6) >= VFLOOR && fwdG(base, 1.4) >= VFLOOR) break;
+    base++;
+  }
+  // Town-anchor: walk UP from the trimmed base through the gentle valley (local grade < 4.5%
+  // over 1km) and snap the base to the HIGHEST town reached before the real climb. Encodes the
+  // local truth "a climb starts at the valley-floor town" (Ponte di Legno on Gavia, Mazzo on
+  // Mortirolo) and is robust where pure gradient fails on 3-4% main-valley floors. Only applied
+  // when a real climb (>=4.5%) actually follows, so genuinely gentle climbs are never shortened.
+  if (typeof global !== "undefined" && global.nearestPlace) {
+    var ti = base, townIdx = -1, hitClimb = false;
+    while (ti < end - 1) {
+      if (fwdG(ti, 1.0) >= 4.5) { hitClimb = true; break; }
+      var tw = global.nearestPlace(pts[ti][0], pts[ti][1]);
+      if (tw && hav(pts[ti][0], pts[ti][1], tw.lat, tw.lon) < 1.0) townIdx = ti;
+      ti++;
+      if (cum[ti] - cum[base] > 12) break; // safety: do not wander too far up
+    }
+    if (hitClimb && townIdx > base) base = townIdx;
   }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
@@ -568,6 +588,13 @@ async function main() {
       finalv.push(v4);
     }
     finalv.forEach(function (v) { delete v._town; });
+    // Drop spurious short versanti: a side far shorter than the longest is usually a fragment
+    // of a climb whose lower part is missing from the extract (e.g. Umbrail's Swiss base) or a
+    // mid-climb stub. Keep it only if it is >=40% of the longest side OR >=8km in its own right.
+    if (finalv.length > 1) {
+      var lmax = 0; finalv.forEach(function (v) { if (v.distance_km > lmax) lmax = v.distance_km; });
+      finalv = finalv.filter(function (v) { return v.distance_km >= lmax * 0.4 || v.distance_km >= 8; });
+    }
     return finalv;
   }
 
@@ -659,7 +686,7 @@ async function main() {
     const weakerOf = (r, o) => { if ((r.elevation || 0) !== (o.elevation || 0)) return (r.elevation || 0) < (o.elevation || 0) ? r : o; return (r.versanti.length <= o.versanti.length) ? r : o; };
     let removedV = 0, absorbed = 0;
     for (const r of recs) for (const o of near(r)) {
-      if (hav(r.lat, r.lon, o.lat, o.lon) > 4) continue;
+      if (hav(r.lat, r.lon, o.lat, o.lon) > 1.5) continue; // only truly adjacent summits (Radici/Foce di Terrarossa), not distinct climbs sharing a lower road
       const weak = weakerOf(r, o), strong = weak === r ? o : r;
       if (!isOsm(weak.id) || !weak.versanti.length) continue; // only strip OSM; never extra/curated
       weak.versanti = weak.versanti.filter((wv) => {
