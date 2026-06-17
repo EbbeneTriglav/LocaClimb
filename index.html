@@ -68,11 +68,13 @@ canvas#relev{height:170px}
 .etog.active{background:var(--ac);color:#fff;border-color:var(--ac)}
 #be-btn{position:fixed;bottom:20px;left:20px;z-index:998;padding:10px 16px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:24px;cursor:pointer;font-size:.85rem;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,.3)}
 #be-panel{position:fixed;bottom:68px;left:20px;width:300px;max-height:380px;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.1);overflow-y:auto;padding:14px;z-index:998;display:none}
-#rb{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:2px solid var(--ac);padding:12px 16px;z-index:1000;transform:translateY(100%);transition:transform .3s}
-#rb.open{transform:translateY(0)}
+#rb{position:fixed;top:66px;left:12px;width:332px;max-height:calc(100vh - 150px);overflow-y:auto;background:var(--bg2);border:1px solid var(--bdr);border-top:3px solid var(--ac);border-radius:14px;padding:14px 16px;z-index:1000;transform:translateX(-380px);transition:transform .28s ease;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+#rb.open{transform:translateX(0)}
 #rb h4{margin:0 0 8px;font-size:.9rem}
-.rb-list{display:flex;gap:6px;overflow-x:auto;padding:4px 0;min-height:32px}
-.rb-item{padding:5px 10px;background:var(--ac);color:#fff;border-radius:16px;font-size:.8rem;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.rb-list{display:flex;flex-direction:column;gap:6px;padding:4px 0;max-height:210px;overflow-y:auto}
+.rb-item{padding:6px 10px;background:var(--ac);color:#fff;border-radius:10px;font-size:.82rem;display:flex;align-items:center;gap:6px;justify-content:space-between}
+#rb-elev{width:100%;height:170px;margin-top:10px;border-radius:8px;background:var(--bg);display:none}
+#rb-elev.show{display:block}
 .rb-item.pt{background:#7c3aed}
 .rb-item .rm{cursor:pointer;opacity:.7;font-weight:700}
 .rb-item .rm:hover{opacity:1}
@@ -140,6 +142,7 @@ canvas#relev{height:170px}
 <span id="rb-info" style="font-size:.8rem;color:var(--txt2);align-self:center"></span>
 </div>
 <div id="rb-hint">&#x1F4A1; In modalita percorso, un clic sulla mappa aggiunge un waypoint libero (non solo passi).</div>
+<canvas id="rb-elev" title="Altimetria del percorso"></canvas>
 </div>
 <div id="modal">
 <div class="modal-box">
@@ -251,7 +254,8 @@ function initMap(){
   var topo=L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"Topo"});
   var sat=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:"Tiles &copy; Esri World Imagery"});
   osm.addTo(map);
-  L.control.layers({"OSM":osm,"CyclOSM":cyc,"Topo":topo,"Ortofoto (Esri)":sat},{},{position:"topright"}).addTo(map);
+  L.control.layers({"OSM":osm,"CyclOSM":cyc,"Topo":topo,"Ortofoto (Esri)":sat},{},{position:"topleft"}).addTo(map);
+  L.control.scale({metric:true,imperial:false,position:"bottomright"}).addTo(map);
   markers=L.markerClusterGroup({maxClusterRadius:50});map.addLayer(markers);
   addMarkers(PASSES_DATA);populateRegions();
 }
@@ -718,7 +722,12 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
   setTimeout(drawRouteProfile,80);
 }
 function drawRouteProfile(){
-  var c=document.getElementById("relev");if(!c||!rbTrack.length)return;
+  drawProfileCanvas(document.getElementById("relev"));
+  var rc=document.getElementById("rb-elev");
+  if(rc){drawProfileCanvas(rc);if(rbTrack.length)rc.classList.add("show");}
+}
+function drawProfileCanvas(c){
+  if(!c||!rbTrack.length)return;
   var dpr=window.devicePixelRatio||1;c.width=c.offsetWidth*dpr;c.height=340;
   var ctx=c.getContext("2d");ctx.scale(dpr,dpr);var W=c.offsetWidth,H=170;
   var els=rbTrack.map(function(t){return t[2];}).filter(function(v){return v!=null;});
@@ -737,7 +746,7 @@ function drawRouteProfile(){
   ctx.lineTo(W-8,H-20);ctx.lineTo(38,H-20);ctx.closePath();ctx.globalAlpha=0.12;ctx.fillStyle="#22c55e";ctx.fill();ctx.globalAlpha=1;
   ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.textAlign="right";ctx.fillText(tot.toFixed(1)+" km",W-8,H-6);
 }
-function resetRoute(){rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;}
+function resetRoute(){rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
 function generateGPX(){
   var now=new Date().toISOString();
   var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="LocaRide">\n<metadata><name>LocaRide Route</name><time>'+now+'</time></metadata>\n';
