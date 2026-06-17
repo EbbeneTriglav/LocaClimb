@@ -29,7 +29,7 @@ const PBF_URLS = [
   "https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf"
 ];
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
-const DEM_Z = 12;
+const DEM_Z = 13;
 const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link"];
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v3.8-dynavg";
+const ALGO_VERSION = "v3.9-resample";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -309,19 +309,6 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax) {
     }
     if (hitClimb && townIdx > base) base = townIdx;
   }
-  // Dynamic average-gradient base (your refinement): extending toward the valley must not drop the
-  // whole-climb average by more than TOL of its peak. A climb steepens as the base rises (valley
-  // dropped), so peakAvg is reached high up; the real base is the LOWEST point still within TOL of
-  // that peak. Self-scaling, no per-type magic number: a 7.5% climb cuts ~6.5% (Bormio not Cepina),
-  // a 4% climb tolerates ~3.5%. peakAvg ignores the noisy last < 2km near the summit.
-  var TOL = 0.13;
-  function climbAvg(b) { var dd = cum[end] - cum[b]; return dd > 0 ? (el[end] - el[b]) / (dd * 1000) * 100 : 0; }
-  var peakAvg = 0;
-  for (var bp = base; bp <= end - 1 && (cum[end] - cum[bp]) >= 2; bp++) { var a = climbAvg(bp); if (a > peakAvg) peakAvg = a; }
-  if (peakAvg > 0) {
-    var thr = peakAvg * (1 - TOL);
-    for (var bb = base; bb <= end - 1 && (cum[end] - cum[bb]) >= VMIN_KEEP; bb++) { if (climbAvg(bb) >= thr) { base = bb; break; } }
-  }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
@@ -497,14 +484,17 @@ async function main() {
   }
   function bearing(la1, lo1, la2, lo2) { var p = Math.PI / 180; var y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p); var x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; }
   function resampleByDist(pts, stepKm) {
-    if (pts.length < 2) return pts;
+    if (pts.length < 3) return pts;
     var out = [pts[0]], acc = 0;
-    for (var i = 1; i < pts.length; i++) {
+    for (var i = 1; i < pts.length - 1; i++) {
       acc += hav(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]);
-      if (acc >= stepKm) { out.push(pts[i]); acc = 0; }
+      var b1 = bearing(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]);
+      var b2 = bearing(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]);
+      var db = Math.abs(b1 - b2); if (db > 180) db = 360 - db;
+      if (db > 18 || acc >= stepKm) { out.push(pts[i]); acc = 0; } // keep corners (hairpins) + every stepKm on straights
     }
-    if (out[out.length - 1] !== pts[pts.length - 1]) out.push(pts[pts.length - 1]);
-    if (out.length > 400) { var o = [], n = 400; for (var z = 0; z < n; z++) o.push(out[Math.round(z * (out.length - 1) / (n - 1))]); out = o; }
+    out.push(pts[pts.length - 1]);
+    if (out.length > 700) { var o = [], n = 700; for (var z = 0; z < n; z++) o.push(out[Math.round(z * (out.length - 1) / (n - 1))]); out = o; }
     return out;
   }
   function neighbors(key) {
@@ -589,7 +579,7 @@ async function main() {
       }
       var path = rawPath.slice().reverse(); // summit -> base
       if (path.length < 4) continue;
-      path = resampleByDist(path, 0.10); // ~1 point every 100m: tighter on hairpins, still light on long climbs
+      path = resampleByDist(path, 0.05); // ~50m on straights, full resolution on hairpins (adaptive)
       var ev = await elevations(path); if (!ev) continue;
       var v = buildSide(path, ev, lat, lon, relax); // path is summit->base; buildSide reverses internally
       if (v) raw.push(v);
