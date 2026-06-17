@@ -34,7 +34,7 @@ const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = arg("--out", "osm_passes.json");
-const MIN_ELE = parseInt(arg("--min-ele", "200"), 10);
+const MIN_ELE = parseInt(arg("--min-ele", "130"), 10);
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
 const NO_CURATED = process.argv.includes("--no-curated");
@@ -122,20 +122,23 @@ function computeTraffic(t, elev) {
 
 /* ----- Terrarium DEM (local decode, no rate limits) ------------------------ */
 const demCache = new Map();
-async function demTile(z, x, y) {
+function demTile(z, x, y) {
   const k = z + "/" + x + "/" + y;
-  if (demCache.has(k)) return demCache.get(k);
-  let png = null;
-  for (let a = 0; a < 3 && !png; a++) {
-    try {
-      const r = await fetch(DEM_URL + "/" + k + ".png");
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      png = PNG.sync.read(Buffer.from(await r.arrayBuffer()));
-    } catch (e) { if (a === 2) console.warn("  ! dem " + k + ": " + e.message); else await new Promise((s) => setTimeout(s, 700 * (a + 1))); }
-  }
-  if (demCache.size > 1500) demCache.delete(demCache.keys().next().value);
-  demCache.set(k, png);
-  return png;
+  if (demCache.has(k)) return demCache.get(k); // returns the same in-flight promise -> no double fetch
+  const p = (async function () {
+    let png = null;
+    for (let a = 0; a < 3 && !png; a++) {
+      try {
+        const r = await fetch(DEM_URL + "/" + k + ".png");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        png = PNG.sync.read(Buffer.from(await r.arrayBuffer()));
+      } catch (e) { if (a === 2) console.warn("  ! dem " + k + ": " + e.message); else await new Promise((s) => setTimeout(s, 700 * (a + 1))); }
+    }
+    return png;
+  })();
+  if (demCache.size > 4000) demCache.delete(demCache.keys().next().value);
+  demCache.set(k, p);
+  return p;
 }
 async function elevAt(lat, lon) {
   const z = DEM_Z, n = 1 << z;
@@ -602,40 +605,44 @@ async function main() {
   try { existing = JSON.parse(await readFile(OUT, "utf8")); } catch {}
   const byId = new Map(existing.map((p) => [p.id, p]));
 
-  let kept = 0, skipped = 0, ok = 0, fail = 0, done = 0;
-  for (const el of passes) {
-    if (done >= MAX_ENRICH) break;
-    if (!el.ele || el.ele < MIN_ELE) { skipped++; continue; }
-    const ch = snap(el.lat, el.lon, 0.3);
-    if (!ch) { skipped++; continue; }
-    kept++;
-    const id = "osm-" + el.oid;
-    const rawName = el.tags.name || "Passo";
-    const name = (NAME_ALIAS[rawName] || rawName).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
-    const rec = byId.get(id) || { id };
-    rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
-    rec.surfaceLabel = surfaceLabel(ch.w.tags);
-    const tr = computeTraffic(ch.w.tags, el.ele);
-    rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
-    if (!(rec.versanti && rec.versanti.length) || rec.algo !== ALGO_VERSION || REENRICH) {
-      done++;
-      if (REENRICH || rec.algo !== ALGO_VERSION) { rec.versanti = null; rec.cat = null; } // drop stale before rebuild
-      try {
-        const vs = await buildVersanti(slat, slon, 30, false, nameTokens(name));
-        if (vs.length) {
-          rec.versanti = vs;
-          rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
-          rec.cat = rec.versanti.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
-          rec.algo = ALGO_VERSION; // stamp only on success; no-climb passes stay retryable
-          rec.updatedAt = BUILD_DATE;
-          ok++;
-        } else fail++;
-      } catch (e) { fail++; if (fail <= 8) console.log("    ! enrich error (" + rec.name + "): " + e.message); }
-      if (done % 250 === 0) console.log("  ... " + done + " (ok " + ok + ", no-climb " + fail + ", dem " + demCache.size + ")");
+  let kept = 0, skipped = 0, ok = 0, fail = 0, done = 0, pidx = 0;
+  const POOL = 8; // concurrent enrichment workers (DEM fetches are network-bound; tile cache is shared)
+  async function enrichWorker() {
+    while (pidx < passes.length && done < MAX_ENRICH) {
+      const el = passes[pidx++];
+      if (!el.ele || el.ele < MIN_ELE) { skipped++; continue; }
+      const ch = snap(el.lat, el.lon, 0.5);
+      if (!ch) { skipped++; continue; }
+      kept++;
+      const id = "osm-" + el.oid;
+      const rawName = el.tags.name || "Passo";
+      const name = (NAME_ALIAS[rawName] || rawName).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
+      const rec = byId.get(id) || { id };
+      rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
+      rec.surfaceLabel = surfaceLabel(ch.w.tags);
+      const tr = computeTraffic(ch.w.tags, el.ele);
+      rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
+      if (!(rec.versanti && rec.versanti.length) || rec.algo !== ALGO_VERSION || REENRICH) {
+        done++;
+        if (REENRICH || rec.algo !== ALGO_VERSION) { rec.versanti = null; rec.cat = null; } // drop stale before rebuild
+        try {
+          const vs = await buildVersanti(slat, slon, 30, false, nameTokens(name));
+          if (vs.length) {
+            rec.versanti = vs;
+            rec.difficulty = Math.max(...rec.versanti.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation)));
+            rec.cat = rec.versanti.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null;
+            rec.algo = ALGO_VERSION; // stamp only on success; no-climb passes stay retryable
+            rec.updatedAt = BUILD_DATE;
+            ok++;
+          } else fail++;
+        } catch (e) { fail++; if (fail <= 8) console.log("    ! enrich error (" + rec.name + "): " + e.message); }
+        if (done % 250 === 0) console.log("  ... " + done + " (ok " + ok + ", no-climb " + fail + ", dem " + demCache.size + ")");
+      }
+      byId.set(id, rec);
     }
-    byId.set(id, rec);
   }
+  await Promise.all(Array.from({ length: POOL }, function () { return enrichWorker(); }));
   console.log("  kept " + kept + ", skipped " + skipped + "; enriched ok " + ok + ", no-climb " + fail);
 
   // extra curated climbs (no mountain_pass node): climbs_extra.json [{id,name,lat,lon,region?}]
