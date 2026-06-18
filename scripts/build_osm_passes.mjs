@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.4-pinbase";
+const ALGO_VERSION = "v4.5-dijkstra";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -536,11 +536,11 @@ async function main() {
     var out = [], lst = vertexMap.get(key);
     if (!lst) return out;
     for (var e of lst) {
-      var w = e.w, i = e.idx, rf = (w.tags && (w.tags.ref || w.tags.name)) || "";
+      var w = e.w, i = e.idx, rf = (w.tags && (w.tags.ref || w.tags.name)) || "", hw = (w.tags && w.tags.highway) || "", sf = (w.tags && w.tags.surface) || "";
       [i - 1, i + 1].forEach(function (j) {
         if (j < 0 || j >= glen(w)) return;
         var k2 = vkey(gx(w, j), gy(w, j));
-        out.push({ key: k2, seg: hav(gx(w, i), gy(w, i), gx(w, j), gy(w, j)), ref: rf });
+        out.push({ key: k2, seg: hav(gx(w, i), gy(w, i), gx(w, j), gy(w, j)), ref: rf, hw: hw, surf: sf });
       });
     }
     return out;
@@ -561,35 +561,47 @@ async function main() {
     var startLat = gx(ch.w, ch.idx), startLon = gy(ch.w, ch.idx);
     var dist = new Map(), parent = new Map(), coord = new Map(), edgeRef = new Map();
     dist.set(startK, 0); coord.set(startK, [startLat, startLon]);
-    var q = [startK], qi = 0;
-    // Pinned hints: pre-snap each target town to the nearest KEPT road (its centroid often sits on
-    // a residential/service street that HW_KEEP drops), then let the BFS STOP as soon as every
-    // target is reached. The old full-region flood hit the 200k-node safety cap before some valleys
-    // were ever expanded -> "non raggiunto" even for towns a few km away. Early-exit makes the cap
-    // a non-issue for hinted passes; the non-hinted flood keeps the original 200k bound unchanged.
+    // Pinned hints: pre-snap each target town to the nearest KEPT road, then STOP as soon as every
+    // target is reached. For hinted passes we run a PROPER min-cost Dijkstra (heap) that penalises
+    // unpaved/track/minor roads, so the reconstructed path follows the official PAVED climb instead
+    // of a gravel shortcut, and parents are settled correctly (the old FIFO flood, cut early, left a
+    // non-converged tree -> twisty/wrong tracks). Non-hinted (auto) runs the same Dijkstra, pen=1.
     var tgReach = (targets && targets.length) ? targets.map(function (tg) {
       var s = snap(tg.lat, tg.lon, 2.5);
       return { lat: s ? gx(s.w, s.idx) : tg.lat, lon: s ? gy(s.w, s.idx) : tg.lon, done: false };
     }) : null;
     var BFS_CAP = tgReach ? 3000000 : 200000;
-    while (qi < q.length) {
-      var c = q[qi++]; var dc = dist.get(c);
-      if (dc > capKm) continue;
+    var heap = [[0, startK]];
+    function hpush(co, k) { heap.push([co, k]); var i = heap.length - 1; while (i > 0) { var pp = (i - 1) >> 1; if (heap[pp][0] <= heap[i][0]) break; var t = heap[pp]; heap[pp] = heap[i]; heap[i] = t; i = pp; } }
+    function hpop() { var topv = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; var i = 0, n = heap.length; for (;;) { var l = i * 2 + 1, r = l + 1, m = i; if (l < n && heap[l][0] < heap[m][0]) m = l; if (r < n && heap[r][0] < heap[m][0]) m = r; if (m === i) break; var t = heap[m]; heap[m] = heap[i]; heap[i] = t; i = m; } } return topv; }
+    var settled = new Set();
+    while (heap.length) {
+      var top = hpop(), dcost = top[0], c = top[1];
+      if (settled.has(c)) continue;
+      settled.add(c);
+      if (dcost > capKm) break; // cost bound (= distance on paved roads)
       if (tgReach) {
         var cc = coord.get(c), allDone = true;
         for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 0.3) tr.done = true; if (!tr.done) allDone = false; }
         if (allDone) break;
       }
       for (var nb of neighbors(c)) {
-        var nd = dc + nb.seg;
+        if (settled.has(nb.key)) continue;
+        var pen = 1;
+        if (tgReach) { // prefer the official paved road, avoid gravel/track/minor shortcuts
+          var sf = nb.surf, hw = nb.hw;
+          if (sf && /gravel|unpaved|compacted|fine_gravel|ground|dirt|earth|sand|pebble|grass/.test(sf)) pen += 5;
+          if (hw === "track") pen += 6; else if (hw === "service" || hw === "residential" || hw === "living_street") pen += 2; else if (hw === "unclassified") pen += 0.4;
+        }
+        var nd = dcost + nb.seg * pen;
         if (nd > capKm) continue;
         if (!dist.has(nb.key) || nd < dist.get(nb.key)) {
           dist.set(nb.key, nd); parent.set(nb.key, c); edgeRef.set(nb.key, nb.ref);
           if (!coord.has(nb.key)) { var p2 = nb.key.split(","); coord.set(nb.key, [parseFloat(p2[0]), parseFloat(p2[1])]); }
-          q.push(nb.key);
+          hpush(nd, nb.key);
         }
       }
-      if (q.length > BFS_CAP) break; // safety
+      if (settled.size > BFS_CAP) break; // safety
     }
     // --- manual base override: pin each requested start town -------------------
     // For a hinted pass, build exactly the requested versanti: shortest road path summit -> town,
@@ -598,9 +610,8 @@ async function main() {
       var pinned = [];
       for (var ti2 = 0; ti2 < targets.length; ti2++) {
         var tg = targets[ti2], aim = tgReach[ti2];
-        var bestK = null, bestScore = -1;
-        coord.forEach(function (ll, k) { if (hav(aim.lat, aim.lon, ll[0], ll[1]) < 1.2) { var sc = dist.get(k) || 0; if (sc > bestScore) { bestScore = sc; bestK = k; } } }); // furthest from summit within 1.2km of the town = valley floor
-        if (!bestK) { var bestD = 2.5; coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } }); } // fallback: nearest reached vertex
+        var bestK = null, bestD = 2.0; // nearest reached vertex to the (snapped) town; tight early-exit already put us at the valley
+        coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
         if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
         var rp = [], kk = bestK, gd = 0;
         while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
@@ -609,8 +620,19 @@ async function main() {
         var ev = await elevations(pth); if (!ev) continue;
         var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
         if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town
-        if (pv) { pv.side = "Da " + tg.name; pinned.push(pv); } // keep every requested side; duplicates are differentiated via precise coordinates, not auto-dropped
-        else console.log("    . hint " + tg.name + ": salita non valida");
+        if (!pv) { console.log("    . hint " + tg.name + ": salita non valida"); continue; }
+        pv.side = "Da " + tg.name;
+        // dedup by ORIGIN, not by track overlap: drop a side only if it starts in (nearly) the same
+        // place AND faces the same way as one already kept (true duplicate). Distinct start towns /
+        // directions (Mazzo vs Grosio vs Tovo) are kept even if they share the upper road.
+        var dup = false;
+        for (var pq of pinned) {
+          var dStart = hav(pv.startLat, pv.startLon, pq.startLat, pq.startLon);
+          var bv = bearing(lat, lon, pv.startLat, pv.startLon), bu = bearing(lat, lon, pq.startLat, pq.startLon);
+          var db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
+          if (dStart < 1.2 && db < 25) { dup = true; break; }
+        }
+        if (!dup) pinned.push(pv); else console.log("    . hint " + tg.name + ": stesso start/direzione di un altro versante, saltato");
       }
       return pinned;
     }
