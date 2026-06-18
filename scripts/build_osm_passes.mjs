@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.1-hintreach2";
+const ALGO_VERSION = "v4.2-multiname";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -393,10 +393,12 @@ async function main() {
     if (f.properties.mountain_pass === "yes") {
       passes.push({ oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
     } else if ((f.properties.place === "town" || f.properties.place === "village") && f.properties.name) {
-      var pl = { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties.name };
-      places.push(pl); hintPlaces.push(pl);                       // town/village: used for auto-labeling AND hints
+      var pr = f.properties, nv = [pr.name, pr["name:it"], pr["name:de"], pr["name:lld"], pr.alt_name].filter(Boolean);
+      var pl = { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: pr["name:it"] || pr.name, names: nv };
+      places.push(pl); hintPlaces.push(pl);                       // town/village: used for auto-labeling AND hints (match on ANY language tag)
     } else if (f.properties.place === "hamlet" && f.properties.name) {
-      hintPlaces.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties.name }); // hamlets: hint resolution only
+      var ph = f.properties;
+      hintPlaces.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: ph["name:it"] || ph.name, names: [ph.name, ph["name:it"], ph["name:de"], ph["name:lld"], ph.alt_name].filter(Boolean) }); // hamlets: hint resolution only
     }
   });
   console.log("  places (towns/villages): " + places.length);
@@ -425,10 +427,20 @@ async function main() {
     var out = [];
     for (var h of list) {
       if (Array.isArray(h)) { var nm = h[2] || (global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto"); out.push({ name: nm, lat: h[0], lon: h[1] }); continue; } // [lat,lon] or [lat,lon,"Nome"] -> exact point, name kept as label
-      var tgt = deacc(h), best = null, bd = 60;          // pick the matching town nearest the summit (accent-insensitive)
-      for (var t of hintPlaces) { var tn = deacc(t.name); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } } }
+      var tgt = deacc(h), best = null, bd = 60;          // pick the matching town nearest the summit (accent + language insensitive)
+      for (var t of hintPlaces) {
+        var hit = false, nms = t.names || [t.name];
+        for (var ni = 0; ni < nms.length; ni++) { var tn = deacc(nms[ni]); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { hit = true; break; } }
+        if (hit) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } }
+      }
       if (best) out.push({ name: h, lat: best.lat, lon: best.lon });
-      else console.log("    . hint town non trovato: " + h);
+      else {
+        // diagnostic: is there ANY node with this name (ignoring the 60km gate)? distinguishes
+        // "nome OSM diverso" (no node at all) from "passo omonimo lontano" (node exists but far -> harmless noise)
+        var nd = Infinity;
+        for (var t2 of hintPlaces) { var nms2 = t2.names || [t2.name]; for (var nj = 0; nj < nms2.length; nj++) { var tn2 = deacc(nms2[nj]); if (tn2 === tgt || tn2.indexOf(tgt) >= 0 || tgt.indexOf(tn2) >= 0) { var dd2 = hav(sLat, sLon, t2.lat, t2.lon); if (dd2 < nd) nd = dd2; break; } } }
+        console.log("    . hint town non trovato: " + h + (nd < Infinity ? " (omonimo a " + Math.round(nd) + "km -> passo errato, ignorato)" : " (nessun nodo con questo nome -> nome OSM diverso)"));
+      }
     }
     return out;
   }
@@ -559,7 +571,7 @@ async function main() {
       var s = snap(tg.lat, tg.lon, 2.5);
       return { lat: s ? gx(s.w, s.idx) : tg.lat, lon: s ? gy(s.w, s.idx) : tg.lon, done: false };
     }) : null;
-    var BFS_CAP = tgReach ? 1500000 : 200000;
+    var BFS_CAP = tgReach ? 3000000 : 200000;
     while (qi < q.length) {
       var c = q[qi++]; var dc = dist.get(c);
       if (dc > capKm) continue;
@@ -596,7 +608,16 @@ async function main() {
         var ev = await elevations(pth); if (!ev) continue;
         var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
         if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town (fixes flat/imprecise pins)
-        if (pv) { pv.side = "Da " + tg.name; pinned.push(pv); }
+        if (pv) {
+          pv.side = "Da " + tg.name;
+          var dupp = false; // a town pin can route via another side's road (Tovo down through Mazzo) -> drop the overlap
+          for (var pq of pinned) {
+            var hit = 0, tot = 0;
+            for (var ii = 0; ii < pv.track.length; ii += 3) { tot++; var pa = pv.track[ii]; for (var jj = 0; jj < pq.track.length; jj += 3) if (hav(pa[0], pa[1], pq.track[jj][0], pq.track[jj][1]) < 0.15) { hit++; break; } }
+            if (tot && hit / tot > 0.6) { dupp = true; break; }
+          }
+          if (!dupp) pinned.push(pv); else console.log("    . hint " + tg.name + ": doppione di un altro versante, saltato");
+        }
         else console.log("    . hint " + tg.name + ": salita non valida");
       }
       return pinned;
@@ -821,10 +842,17 @@ async function main() {
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
         try {
-          const top = await buildVersanti(slat, slon, 32, true, nameTokens(p.name));
+          // Use base_hints here too: a pass in BOTH passes_data and base_hints (Mortirolo, Gavia...)
+          // now gets its precise PINNED sides in the override the app actually shows, instead of the
+          // imprecise auto valley-trim. Falls back to auto when no hint resolves.
+          const chl = hintsFor(p.name);
+          let ctgs = chl ? resolveTowns(chl, slat, slon) : null;
+          if (chl && (!ctgs || !ctgs.length)) ctgs = null;
+          const useH = ctgs && ctgs.length;
+          const top = await buildVersanti(slat, slon, useH ? 38 : 32, true, nameTokens(p.name), useH ? ctgs : null);
           if (!top.length) { console.log("    - " + p.name + ": no climb"); continue; }
           overrides[p.id] = { lat: slat, lon: slon, versanti: top, difficulty: Math.max(...top.map((v) => estDiff(v.distance_km, v.endElevation - v.startElevation, v.endElevation))), cat: top.map((v) => v.cat).filter(Boolean).sort((a, b) => catRank(b) - catRank(a))[0] || null, algo: ALGO_VERSION, updatedAt: BUILD_DATE };
-          console.log("    + " + p.name + ": " + top.length + " versanti, cat " + (overrides[p.id].cat || "-"));
+          console.log("    + " + p.name + ": " + top.length + " versanti" + (useH ? " (hint)" : "") + ", cat " + (overrides[p.id].cat || "-"));
         } catch (e) { console.log("    - " + p.name + ": " + e.message); }
       }
       await writeFile("curated_overrides.json", JSON.stringify(overrides, null, 1) + "\n", "utf8");
