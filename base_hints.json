@@ -158,7 +158,12 @@
  ],
  "Abetone": [
   "Cutigliano",
-  "Fiumalbo"
+  "Fiumalbo",
+  [
+   44.17825,
+   10.652554,
+   "Via Uccelliera"
+  ]
  ],
  "Cisa": [
   "Berceto",
@@ -235,7 +240,11 @@
   "Susa"
  ],
  "Faiallo": [
-  "Voltri",
+  [
+   44.4328,
+   8.7564,
+   "Voltri"
+  ],
   "Sassello"
  ],
  "Melogno": [
