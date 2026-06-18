@@ -211,7 +211,7 @@ function ensureCat(p){
 function isGravel(p){return (p.surfaceLabel||"").indexOf("Sterrato")>=0;}
 function catColor(c){return {HC:"#7f1d1d","1":"#dc2626","2":"#ea580c","3":"#d97706","4":"#65a30d"}[c]||"#64748b";}
 function catLabel(c){return c==="HC"?"HC":c;}
-function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;if(ov.algo)p.algo=ov.algo;}});applyFilters();setDataVersion();}).catch(function(){});}
+function loadCuratedOverrides(){fetch("curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;if(ov.algo)p.algo=ov.algo;}});applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();}).catch(function(){});}
 /* ===== TRAFFIC MODEL ===== */
 var TRAF_MAP={basso:2,medio:5,alto:8};
 function trafColor(s){return s>=7?"#ef4444":s>=4?"#f59e0b":"#22c55e";}
@@ -807,7 +807,7 @@ function adoptOsm(arr){
   if(!arr||!arr.length)return;
   // drop entries too close to curated passes
   osmPasses=arr.filter(function(op){return!PASSES_DATA.some(function(p){return Math.abs(p.lat-op.lat)<0.008&&Math.abs(p.lon-op.lon)<0.008;});});
-  applyFilters();setDataVersion();
+  applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();
   var b=document.getElementById("ob");if(b)b.textContent="OSM ("+osmPasses.length+")";
 }
 function persistOsm(){try{localStorage.setItem(OSM_CACHE_KEY,JSON.stringify(osmPasses.map(stripMarker)));}catch(e){}}
@@ -876,6 +876,115 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
   map.on("click",function(e){if(rbMode){addPointToRoute(e.latlng.lat,e.latlng.lng);}else{closeFP();}});
 });
+/* ===== Manual override layer + admin/community climb editor ================= */
+function climbCat(d,g,t){if(g<150||d<1)return null;var f=(g*g)/(d*1000*10)+Math.max(0,t-1000)/1000;if(f>=8)return"HC";if(f>=5.5)return"1";if(f>=3.5)return"2";if(f>=2)return"3";return"4";}
+function catRank(c){return {HC:5,"1":4,"2":3,"3":2,"4":1}[c]||0;}
+// manual_overrides.json is human-owned and NEVER written by the build; merged LAST so it wins.
+window.MANUAL_OV=null;
+function applyManual(){
+  var ov=window.MANUAL_OV;if(!ov)return;
+  for(var id in ov){var o=ov[id];
+    if(o["new"]){
+      var ex=PASSES_DATA.filter(function(p){return p.id===id;})[0];
+      if(!ex)PASSES_DATA.push({id:id,name:o.name,lat:o.lat,lon:o.lon,elevation:o.elevation,region:o.region||"",status:o.status||"Aperto",versanti:o.versanti||[],difficulty:o.difficulty||1,cat:o.cat||null,updatedAt:o.updatedAt,manual:true});
+      else{ex.versanti=o.versanti;ex.difficulty=o.difficulty;ex.cat=o.cat;ex.lat=o.lat;ex.lon=o.lon;ex.elevation=o.elevation;ex.updatedAt=o.updatedAt;ex.manual=true;}
+    }else{
+      var hit=PASSES_DATA.filter(function(p){return p.id===id;})[0]||osmPasses.filter(function(p){return p.id===id;})[0];
+      if(hit){if(o.versanti)hit.versanti=o.versanti;if(o.difficulty)hit.difficulty=o.difficulty;if(o.cat)hit.cat=o.cat;if(o.updatedAt)hit.updatedAt=o.updatedAt;hit.manual=true;}
+    }
+  }
+  applyFilters();setDataVersion();
+}
+function loadManualOverrides(){
+  fetch("manual_enriched.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){window.MANUAL_OV=o;applyManual();})
+  .catch(function(){fetch("manual_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){window.MANUAL_OV=o;applyManual();}).catch(function(){window.MANUAL_OV=window.MANUAL_OV||{};});});
+}
+
+var ED={pass:null,isNew:false,summit:null,versanti:[],track:[],markers:[],line:null,pending:null,store:{},_await:false,_sm:null};
+var edDraw=false;
+function isAdmin(){return /admin/.test(location.hash)||/admin/.test(location.search);}
+function edClick(e){
+  if(ED._await){ED.summit={lat:e.latlng.lat,lon:e.latlng.lng};ED._await=false;if(ED._sm)map.removeLayer(ED._sm);ED._sm=L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);edMsg("Cima impostata. Etichetta il versante e premi Disegna.");return;}
+  if(edDraw)edAddPoint(e.latlng.lat,e.latlng.lng);
+}
+function edAddPoint(la,lo){ED.track.push({lat:la,lon:lo});ED.markers.push(L.circleMarker([la,lo],{radius:4,color:"#e11",weight:2,fillColor:"#fff",fillOpacity:1}).addTo(map));edRedraw();}
+function edRedraw(){if(ED.line){map.removeLayer(ED.line);ED.line=null;}if(ED.track.length>1)ED.line=L.polyline(ED.track.map(function(p){return[p.lat,p.lon];}),{color:"#e11",weight:4,dashArray:"6,6"}).addTo(map);}
+function edUndo(){if(!ED.track.length)return;ED.track.pop();var m=ED.markers.pop();if(m)map.removeLayer(m);edRedraw();}
+function edClear(){ED.track=[];ED.markers.forEach(function(m){map.removeLayer(m);});ED.markers=[];if(ED.line){map.removeLayer(ED.line);ED.line=null;}ED.pending=null;}
+function edMsg(t){var e=document.getElementById("edMsg");if(e)e.innerHTML=t;}
+function edSearchPass(){var q=this.value.toLowerCase(),box=document.getElementById("edHits");box.innerHTML="";if(q.length<2)return;PASSES_DATA.concat(osmPasses).filter(function(p){return p.name&&p.name.toLowerCase().indexOf(q)>=0;}).slice(0,8).forEach(function(p){var a=document.createElement("div");a.style.cssText="padding:4px;cursor:pointer;border-bottom:1px solid #f0f0f0";a.textContent=p.name+" ("+(p.elevation||"?")+"m)";a.onclick=function(){edSetTarget(p);box.innerHTML="";document.getElementById("edSearch").value=p.name;};box.appendChild(a);});}
+function edSetTarget(p){ED.pass=p;ED.isNew=false;ED.summit={lat:p.lat,lon:p.lon};ED.versanti=(p.versanti||[]).map(function(v){return v;});document.getElementById("edNewFields").style.display="none";document.getElementById("edTarget").innerHTML="Modifica: <b>"+p.name+"</b> &mdash; "+(p.versanti?p.versanti.length:0)+" versanti";edRenderList();map.setView([p.lat,p.lon],13);}
+function edStartNew(){ED.isNew=true;ED.pass=null;ED.versanti=[];ED.summit=null;ED._await=true;document.getElementById("edNewFields").style.display="block";document.getElementById("edTarget").innerHTML="Nuovo passo: clicca la CIMA sulla mappa (Disegna OFF).";edMsg("Clicca la cima del passo.");}
+function edDown(pts,n){if(pts.length<=n)return pts;var o=[];for(var i=0;i<n;i++)o.push(pts[Math.round(i*(pts.length-1)/(n-1))]);return o;}
+function edPreviewTrack(tr){if(ED.line){map.removeLayer(ED.line);}ED.line=L.polyline(tr.map(function(p){return[p[0],p[1]];}),{color:"#2a7",weight:5}).addTo(map);}
+function snapRoute(wps){ // wps:[{lat,lon}] base..summit -> Promise of road polyline [{lat,lon}] or null
+  var lonlats=wps.map(function(s){return s.lon.toFixed(5)+","+s.lat.toFixed(5);}).join("|");
+  return fetch(BROUTER+"?lonlats="+lonlats+"&profile=trekking&alternativeidx=0&format=geojson").then(function(r){return r.json();}).then(function(data){
+    var f=data.features&&data.features[0];if(!f)throw 0;return f.geometry.coordinates.map(function(c){return{lat:c[1],lon:c[0]};});
+  }).catch(function(){
+    var coords=wps.map(function(s){return s.lon+","+s.lat;}).join(";");
+    return fetch("https://router.project-osrm.org/route/v1/bike/"+coords+"?overview=full&geometries=geojson").then(function(r){return r.json();}).then(function(d){
+      if(!d.routes||!d.routes.length)throw 0;return d.routes[0].geometry.coordinates.map(function(c){return{lat:c[1],lon:c[0]};});
+    }).catch(function(){return null;});
+  });
+}
+function edCalc(){
+  ED.label=document.getElementById("edLabel").value.trim();ED.desc=document.getElementById("edDesc").value.trim();
+  if(ED.track.length<1){edMsg("Clicca almeno il fondovalle (partenza).");return;}
+  if(!ED.summit){edMsg("Manca la cima: seleziona un passo o clicca la cima.");return;}
+  var doSnap=document.getElementById("edSnap")&&document.getElementById("edSnap").checked;
+  var wps=ED.track.slice();wps.push({lat:ED.summit.lat,lon:ED.summit.lon});
+  edMsg(doSnap?"Aggancio strada + quote...":"Calcolo quote...");
+  (doSnap&&wps.length>=2?snapRoute(wps):Promise.resolve(null)).then(function(road){
+    var b2s=(road&&road.length>3)?edDown(road,80):wps; // snapped road OR raw anchors
+    if(doSnap&&!road)edMsg("Router non disponibile: uso i punti grezzi...");
+    var pts=b2s.slice().reverse(); // summit->base for buildVersante
+    return fetchElevs(pts).then(function(el){
+      var v=buildVersante(pts,el,ED.summit.lat,ED.summit.lon,"",null);
+      if(!v){edMsg("Salita non valida (serve &gt;200 m disl., &gt;1.5 km, e il fondo come punto piu basso).");return;}
+      if(ED.label)v.side=ED.label;v.cat=climbCat(v.distance_km,v.endElevation-v.startElevation,v.endElevation);if(ED.desc)v.note=ED.desc;v.manual=true;
+      edPreviewTrack(v.track);ED.pending=v;
+      edMsg("OK &rarr; "+v.distance_km+" km, +"+(v.endElevation-v.startElevation)+" m, media "+v.avgGradient+"%, max "+v.maxGradient+"%, cat "+(v.cat||"-")+". Premi <b>Aggiungi versante</b>.");
+    });
+  }).catch(function(){edMsg("Errore rete (quote/router), riprova.");});
+}
+function edAddVersante(){if(!ED.pending){edMsg("Prima premi Calcola.");return;}ED.versanti=ED.versanti.filter(function(v){return v.side!==ED.pending.side;});ED.versanti.push(ED.pending);edClear();document.getElementById("edLabel").value="";document.getElementById("edDesc").value="";edRenderList();edMsg("Aggiunto. Totale "+ED.versanti.length+". Ricordati di Scaricare.");}
+function edRenderList(){var box=document.getElementById("edList");if(!box)return;box.innerHTML="";ED.versanti.forEach(function(v,i){var r=document.createElement("div");r.style.cssText="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f3f3f3";r.innerHTML="<span>"+v.side+" &middot; "+v.distance_km+"km "+v.avgGradient+"%</span>";var x=document.createElement("span");x.textContent="\u2715";x.style.cssText="cursor:pointer;color:#c00;padding:0 4px";x.onclick=function(){ED.versanti.splice(i,1);edRenderList();};r.appendChild(x);box.appendChild(r);});}
+function edCommitStore(){
+  if(!ED.versanti.length){edMsg("Nessun versante da salvare.");return false;}
+  var today=new Date().toISOString().slice(0,10),id,entry;
+  if(ED.isNew){if(!ED.summit){edMsg("Manca la cima.");return false;}var nm=(document.getElementById("edName").value||"Nuovo passo").trim();id="manual-"+nm.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");entry={"new":true,name:nm,lat:ED.summit.lat,lon:ED.summit.lon,elevation:parseInt(document.getElementById("edElev").value)||Math.max.apply(null,ED.versanti.map(function(v){return v.endElevation;})),region:(document.getElementById("edRegion").value||"").trim(),status:"Aperto",versanti:ED.versanti};}
+  else{if(!ED.pass){edMsg("Seleziona un passo.");return false;}id=ED.pass.id;entry={versanti:ED.versanti};}
+  entry.difficulty=Math.max.apply(null,ED.versanti.map(function(v){return estDiff(v.distance_km,v.endElevation-v.startElevation,v.endElevation);}));
+  entry.cat=ED.versanti.map(function(v){return v.cat;}).filter(Boolean).sort(function(a,b){return catRank(b)-catRank(a);})[0]||null;entry.updatedAt=today;entry.manual=true;
+  ED.store[id]=entry;window.MANUAL_OV=ED.store;return true;
+}
+function edDownload(){if(!edCommitStore())return;var blob=new Blob([JSON.stringify(ED.store,null,1)+"\n"],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="manual_overrides.json";document.body.appendChild(a);a.click();a.remove();edMsg("Scaricato. Caricalo nel repo GitHub come gli altri file.");}
+function edOpen(){
+  var ex=document.getElementById("edPanel");if(ex){ex.style.display="block";return;}
+  ED.store=window.MANUAL_OV?JSON.parse(JSON.stringify(window.MANUAL_OV)):{};
+  var d=document.createElement("div");d.id="edPanel";
+  d.style.cssText="position:fixed;top:60px;left:10px;z-index:1200;width:300px;max-height:84vh;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);padding:12px;font:13px/1.4 system-ui,sans-serif;color:#222";
+  d.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>&#9998; Editor salite</b><span id="edClose" style="cursor:pointer;font-size:18px;padding:0 6px">&times;</span></div><input id="edSearch" placeholder="Cerca passo da modificare..." style="width:100%;box-sizing:border-box;padding:6px;border:1px solid #ccc;border-radius:6px"/><div id="edHits" style="max-height:120px;overflow:auto"></div><button id="edNew" style="width:100%;margin:8px 0;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">+ Nuovo passo</button><div id="edTarget" style="font-size:12px;color:#555;margin-bottom:8px"></div><div id="edNewFields" style="display:none;margin-bottom:8px"><input id="edName" placeholder="Nome passo" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px"><input id="edElev" placeholder="Quota m" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/><input id="edRegion" placeholder="Regione" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/></div></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><div style="font-weight:600;margin-bottom:4px">Versante</div><input id="edLabel" placeholder="Etichetta (es. Da Mazzo)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px;margin-bottom:4px"><button id="edDrawBtn" style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">&#9998; Disegna</button><button id="edUndoBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Annulla</button><button id="edClearBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Pulisci</button></div><label style="font-size:12px;display:block;margin-bottom:4px;cursor:pointer"><input type="checkbox" id="edSnap" checked/> Aggancia a strada (pochi punti)</label><div style="font-size:11px;color:#777;margin-bottom:4px">Con aggancio ON: clicca solo fondovalle + 1-2 punti sulla strada giusta. La cima si aggiunge da sola.</div><textarea id="edDesc" placeholder="Note locali (fondo, pericoli, lore...)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px;height:42px"></textarea><div style="display:flex;gap:4px;margin-bottom:6px"><button id="edCalcBtn" style="flex:1;padding:6px;border:none;background:#2a7;color:#fff;border-radius:6px;cursor:pointer">Calcola</button><button id="edAddBtn" style="flex:1;padding:6px;border:none;background:#27a;color:#fff;border-radius:6px;cursor:pointer">Aggiungi versante</button></div><div id="edMsg" style="font-size:12px;color:#444;min-height:16px;margin-bottom:6px"></div><div id="edList" style="font-size:12px;margin-bottom:8px"></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><button id="edPrev" style="width:100%;margin-bottom:6px;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">Applica in anteprima</button><button id="edDl" style="width:100%;padding:8px;border:none;background:#c60;color:#fff;border-radius:6px;cursor:pointer;font-weight:600">&#11015; Scarica manual_overrides.json</button><div style="font-size:11px;color:#777;margin-top:6px">Poi carica il file nel repo GitHub, come gli altri.</div>';
+  document.body.appendChild(d);
+  document.getElementById("edClose").onclick=function(){d.style.display="none";edDraw=false;ED._await=false;};
+  document.getElementById("edNew").onclick=edStartNew;
+  document.getElementById("edSearch").oninput=edSearchPass;
+  document.getElementById("edDrawBtn").onclick=function(){edDraw=!edDraw;this.style.background=edDraw?"#fe9":"#fff";edMsg(edDraw?"Disegno ON: clicca sulla mappa.":"");};
+  document.getElementById("edUndoBtn").onclick=edUndo;
+  document.getElementById("edClearBtn").onclick=edClear;
+  document.getElementById("edCalcBtn").onclick=edCalc;
+  document.getElementById("edAddBtn").onclick=edAddVersante;
+  document.getElementById("edPrev").onclick=function(){if(edCommitStore()){applyManual();edMsg("Anteprima applicata sulla mappa.");}};
+  document.getElementById("edDl").onclick=edDownload;
+}
+function edInit(){
+  if(typeof map==="undefined"||!map){setTimeout(edInit,300);return;}
+  map.on("click",edClick);
+  loadManualOverrides();
+  if(isAdmin()){var b=document.createElement("button");b.textContent="\u270E Editor";b.title="Editor salite (admin)";b.style.cssText="position:fixed;top:60px;left:10px;z-index:1100;padding:8px 12px;background:#c60;color:#fff;border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)";b.onclick=edOpen;document.body.appendChild(b);}
+}
+document.addEventListener("DOMContentLoaded",edInit);
 </script>
 </body>
 </html>
