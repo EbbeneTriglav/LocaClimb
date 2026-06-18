@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.5-dijkstra";
+const ALGO_VERSION = "v4.6-classpen";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -63,6 +63,21 @@ function compass(la1, lo1, la2, lo2) {
   const x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p);
   const br = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
   return ["Nord","Nord-Est","Est","Sud-Est","Sud","Sud-Ovest","Ovest","Nord-Ovest"][Math.round(br / 45) % 8];
+}
+// Min-heap (operates on a passed array) + road-quality cost penalty, shared by every Dijkstra.
+function hpush(h, co, k) { h.push([co, k]); var i = h.length - 1; while (i > 0) { var p = (i - 1) >> 1; if (h[p][0] <= h[i][0]) break; var t = h[p]; h[p] = h[i]; h[i] = t; i = p; } }
+function hpop(h) { var top = h[0], last = h.pop(); if (h.length) { h[0] = last; var i = 0, n = h.length; for (;;) { var l = i * 2 + 1, r = l + 1, m = i; if (l < n && h[l][0] < h[m][0]) m = l; if (r < n && h[r][0] < h[m][0]) m = r; if (m === i) break; var t = h[m]; h[m] = h[i]; h[i] = t; i = m; } } return top; }
+// Extra cost fraction per edge: steer pinned climbs onto the official CLASSIFIED paved road
+// (SS/SP/SR = primary/secondary/tertiary, extra 0) and away from unclassified shortcuts (e.g. the
+// "Dritta Contador" mulattiera, highway=unclassified), service/residential, tracks and unpaved.
+// Applied to COST only (not real distance), so legitimate minor-road climbs are never length-capped.
+function edgeExtra(nb) {
+  var e = 0, hw = nb.hw || "", sf = nb.surf || "";
+  if (/gravel|unpaved|compacted|fine_gravel|ground|dirt|earth|sand|pebble|grass/.test(sf)) e += 3;
+  if (hw === "track") e += 4;
+  else if (hw === "service" || hw === "residential" || hw === "living_street") e += 2.5;
+  else if (hw === "unclassified" || hw === "unclassified_link") e += 1.2;
+  return e;
 }
 function estDiff(distKm, gain, top) {
   if (!distKm || distKm <= 0) return 1;
@@ -426,6 +441,13 @@ async function main() {
   function resolveTowns(list, sLat, sLon) {
     var out = [];
     for (var h of list) {
+      if (Array.isArray(h) && Array.isArray(h[0])) { // waypoint chain: [[lat,lon],...,"Nome"] base->top
+        var wps = h.filter(function (e) { return Array.isArray(e); });
+        var nmW = null; for (var ei = 0; ei < h.length; ei++) if (typeof h[ei] === "string") nmW = h[ei];
+        if (!nmW) nmW = (global.nearestPlace && global.nearestPlace(wps[0][0], wps[0][1]) ? global.nearestPlace(wps[0][0], wps[0][1]).name : "punto");
+        out.push({ name: nmW, lat: wps[0][0], lon: wps[0][1], wp: wps });
+        continue;
+      }
       if (Array.isArray(h)) { var nm = h[2] || (global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto"); out.push({ name: nm, lat: h[0], lon: h[1] }); continue; } // [lat,lon] or [lat,lon,"Nome"] -> exact point, name kept as label
       var tgt = deacc(h), best = null, bd = 60;          // pick the matching town nearest the summit (accent + language insensitive)
       for (var t of hintPlaces) {
@@ -559,46 +581,39 @@ async function main() {
     }
     var startK = vkey(gx(ch.w, ch.idx), gy(ch.w, ch.idx));
     var startLat = gx(ch.w, ch.idx), startLon = gy(ch.w, ch.idx);
-    var dist = new Map(), parent = new Map(), coord = new Map(), edgeRef = new Map();
-    dist.set(startK, 0); coord.set(startK, [startLat, startLon]);
+    var dist = new Map(), cost = new Map(), parent = new Map(), coord = new Map(), edgeRef = new Map();
+    dist.set(startK, 0); cost.set(startK, 0); coord.set(startK, [startLat, startLon]);
     // Pinned hints: pre-snap each target town to the nearest KEPT road, then STOP as soon as every
-    // target is reached. For hinted passes we run a PROPER min-cost Dijkstra (heap) that penalises
-    // unpaved/track/minor roads, so the reconstructed path follows the official PAVED climb instead
-    // of a gravel shortcut, and parents are settled correctly (the old FIFO flood, cut early, left a
-    // non-converged tree -> twisty/wrong tracks). Non-hinted (auto) runs the same Dijkstra, pen=1.
+    // target is reached. Min-cost Dijkstra (heap) where COST adds a road-class/surface penalty (see
+    // edgeExtra) so the path follows the official CLASSIFIED paved road, while real km (dist) is kept
+    // separately for the capKm bound -> penalty steers without ever length-capping a minor-road climb.
     var tgReach = (targets && targets.length) ? targets.map(function (tg) {
       var s = snap(tg.lat, tg.lon, 2.5);
       return { lat: s ? gx(s.w, s.idx) : tg.lat, lon: s ? gy(s.w, s.idx) : tg.lon, done: false };
     }) : null;
     var BFS_CAP = tgReach ? 3000000 : 200000;
     var heap = [[0, startK]];
-    function hpush(co, k) { heap.push([co, k]); var i = heap.length - 1; while (i > 0) { var pp = (i - 1) >> 1; if (heap[pp][0] <= heap[i][0]) break; var t = heap[pp]; heap[pp] = heap[i]; heap[i] = t; i = pp; } }
-    function hpop() { var topv = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; var i = 0, n = heap.length; for (;;) { var l = i * 2 + 1, r = l + 1, m = i; if (l < n && heap[l][0] < heap[m][0]) m = l; if (r < n && heap[r][0] < heap[m][0]) m = r; if (m === i) break; var t = heap[m]; heap[m] = heap[i]; heap[i] = t; i = m; } } return topv; }
     var settled = new Set();
     while (heap.length) {
-      var top = hpop(), dcost = top[0], c = top[1];
+      var top = hpop(heap), c = top[1];
       if (settled.has(c)) continue;
       settled.add(c);
-      if (dcost > capKm) break; // cost bound (= distance on paved roads)
+      if (!tgReach && (dist.get(c) || 0) > capKm) break; // auto: pure-distance bound
       if (tgReach) {
         var cc = coord.get(c), allDone = true;
         for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 0.3) tr.done = true; if (!tr.done) allDone = false; }
         if (allDone) break;
       }
+      var dc = dist.get(c), kc = cost.get(c);
       for (var nb of neighbors(c)) {
         if (settled.has(nb.key)) continue;
-        var pen = 1;
-        if (tgReach) { // prefer the official paved road, avoid gravel/track/minor shortcuts
-          var sf = nb.surf, hw = nb.hw;
-          if (sf && /gravel|unpaved|compacted|fine_gravel|ground|dirt|earth|sand|pebble|grass/.test(sf)) pen += 5;
-          if (hw === "track") pen += 6; else if (hw === "service" || hw === "residential" || hw === "living_street") pen += 2; else if (hw === "unclassified") pen += 0.4;
-        }
-        var nd = dcost + nb.seg * pen;
-        if (nd > capKm) continue;
-        if (!dist.has(nb.key) || nd < dist.get(nb.key)) {
-          dist.set(nb.key, nd); parent.set(nb.key, c); edgeRef.set(nb.key, nb.ref);
+        var nreal = dc + nb.seg;
+        if (nreal > capKm) continue;                                  // real-km cap (never inflated)
+        var ncost = kc + nb.seg * (1 + (tgReach ? edgeExtra(nb) : 0)); // class/surface steering
+        if (!cost.has(nb.key) || ncost < cost.get(nb.key)) {
+          dist.set(nb.key, nreal); cost.set(nb.key, ncost); parent.set(nb.key, c); edgeRef.set(nb.key, nb.ref);
           if (!coord.has(nb.key)) { var p2 = nb.key.split(","); coord.set(nb.key, [parseFloat(p2[0]), parseFloat(p2[1])]); }
-          hpush(nd, nb.key);
+          hpush(heap, ncost, nb.key);
         }
       }
       if (settled.size > BFS_CAP) break; // safety
@@ -608,25 +623,77 @@ async function main() {
     // base pinned at the town (no auto base-finding -> no overrun, no missing sides).
     if (targets && targets.length) {
       var pinned = [];
+      // Point-to-point min-cost route between two coords (same class/surface penalty as the main
+      // search). Used to stitch a waypoint chain so a pinned versante follows an EXACT road the
+      // shortest path would otherwise skip (e.g. the steeper "Dritta Contador", or a Grappa side
+      // that must keep its own lower road instead of merging onto the neighbouring one).
+      function dijkstraSeg(aLat, aLon, bLat, bLon, capSeg) {
+        var sa = snap(aLat, aLon, 0.6); if (!sa) return null; // tight: a waypoint must sit ON its road, not a parallel one
+        var startK = vkey(gx(sa.w, sa.idx), gy(sa.w, sa.idx));
+        var distM = new Map([[startK, 0]]), costM = new Map([[startK, 0]]), par = new Map(), crd = new Map();
+        crd.set(startK, [gx(sa.w, sa.idx), gy(sa.w, sa.idx)]);
+        var h = [[0, startK]], seen = new Set(), goalK = null;
+        while (h.length) {
+          var t = hpop(h), c = t[1];
+          if (seen.has(c)) continue; seen.add(c);
+          var cc = crd.get(c);
+          if (hav(cc[0], cc[1], bLat, bLon) < 0.12) { goalK = c; break; }
+          var dc = distM.get(c), kc = costM.get(c);
+          if (dc > capSeg) continue;
+          for (var nb of neighbors(c)) {
+            if (seen.has(nb.key)) continue;
+            var nreal = dc + nb.seg; if (nreal > capSeg) continue;
+            var ncost = kc + nb.seg * (1 + edgeExtra(nb));
+            if (!costM.has(nb.key) || ncost < costM.get(nb.key)) {
+              distM.set(nb.key, nreal); costM.set(nb.key, ncost); par.set(nb.key, c);
+              if (!crd.has(nb.key)) { var p2 = nb.key.split(","); crd.set(nb.key, [parseFloat(p2[0]), parseFloat(p2[1])]); }
+              hpush(h, ncost, nb.key);
+            }
+          }
+          if (seen.size > 150000) break;
+        }
+        if (!goalK) return null;
+        var path = [], k = goalK; while (k != null) { path.push(crd.get(k)); k = par.get(k); }
+        return path.reverse(); // a -> b
+      }
+      function routeChain(wps) { // wps: [[lat,lon],...] base -> top; returns base -> summit, or null
+        var full = [];
+        for (var i = 0; i < wps.length - 1; i++) {
+          var hop = hav(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1]);
+          var seg = dijkstraSeg(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1], hop * 3 + 3);
+          if (!seg || seg.length < 2) return null;
+          full = full.length ? full.concat(seg.slice(1)) : seg;
+        }
+        var lw = wps[wps.length - 1];
+        var toTop = dijkstraSeg(lw[0], lw[1], lat, lon, hav(lw[0], lw[1], lat, lon) * 3 + 5);
+        if (toTop && toTop.length > 1) full = full.concat(toTop.slice(1));
+        return full;
+      }
       for (var ti2 = 0; ti2 < targets.length; ti2++) {
-        var tg = targets[ti2], aim = tgReach[ti2];
-        var bestK = null, bestD = 2.0; // nearest reached vertex to the (snapped) town; tight early-exit already put us at the valley
-        coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
-        if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
-        var rp = [], kk = bestK, gd = 0;
-        while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
-        if (rp.length < 4) continue;
-        var pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
+        var tg = targets[ti2], aim = tgReach[ti2], pth = null;
+        if (tg.wp) { // forced waypoint chain
+          var chain = routeChain(tg.wp);
+          if (!chain || chain.length < 4) { console.log("    . hint " + tg.name + ": catena waypoint non instradabile"); continue; }
+          pth = resampleByDist(chain.slice().reverse(), 0.05); // summit -> base
+        } else {
+          var bestK = null, bestD = 2.0; // nearest reached vertex to the (snapped) town
+          coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
+          if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
+          var rp = [], kk = bestK, gd = 0;
+          while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
+          if (rp.length < 4) continue;
+          pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
+        }
         var ev = await elevations(pth); if (!ev) continue;
         var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
         if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town
         if (!pv) { console.log("    . hint " + tg.name + ": salita non valida"); continue; }
         pv.side = "Da " + tg.name;
         // dedup by ORIGIN, not by track overlap: drop a side only if it starts in (nearly) the same
-        // place AND faces the same way as one already kept (true duplicate). Distinct start towns /
-        // directions (Mazzo vs Grosio vs Tovo) are kept even if they share the upper road.
+        // place AND faces the same way as one already kept. A forced waypoint side (tg.wp) is NEVER
+        // deduped - it was requested explicitly to coexist with the road it parallels.
         var dup = false;
-        for (var pq of pinned) {
+        if (!tg.wp) for (var pq of pinned) {
           var dStart = hav(pv.startLat, pv.startLon, pq.startLat, pq.startLon);
           var bv = bearing(lat, lon, pv.startLat, pv.startLon), bu = bearing(lat, lon, pq.startLat, pq.startLon);
           var db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
