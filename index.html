@@ -329,26 +329,12 @@ function hideRS(){document.getElementById("rs").classList.remove("show");}
 
 /* ===== OSRM ROAD ROUTING FOR CURATED VERSANTI ===== */
 function fetchVersanteRoute(v,p,colorIdx){
-  var key=v.startLat+","+v.startLon+">"+p.lat+","+p.lon;
-  if(routeCache[key]){
-    var line=L.polyline(routeCache[key],{color:VCOLS[colorIdx],weight:5,opacity:0.85});
-    line.addTo(map);routeLines.push(line);
-    return Promise.resolve(line);
-  }
-  var url="https://router.project-osrm.org/route/v1/bike/"+v.startLon+","+v.startLat+";"+p.lon+","+p.lat+"?overview=full&geometries=geojson";
-  return fetch(url).then(function(r){return r.json();}).then(function(data){
-    if(!data.routes||!data.routes.length)throw new Error("no route");
-    var coords=data.routes[0].geometry.coordinates.map(function(c){return[c[1],c[0]];});
-    routeCache[key]=coords;
-    var line=L.polyline(coords,{color:VCOLS[colorIdx],weight:5,opacity:0.85});
-    line.addTo(map);routeLines.push(line);
-    return line;
-  }).catch(function(){
-    var coords=[[v.startLat,v.startLon],[p.lat,p.lon]];
-    var line=L.polyline(coords,{color:VCOLS[colorIdx],weight:3,opacity:0.5,dashArray:"8,8"});
-    line.addTo(map);routeLines.push(line);
-    return line;
-  });
+  // Use the track computed by the build (the actual climbed road), NOT an OSRM re-route:
+  // OSRM picked its own road start->summit and diverged from the real climb.
+  var coords=(v.track&&v.track.length>1)?v.track:[[v.startLat,v.startLon],[p.lat,p.lon]];
+  var line=L.polyline(coords,{color:VCOLS[colorIdx],weight:5,opacity:0.85});
+  line.addTo(map);routeLines.push(line);
+  return Promise.resolve(line);
 }
 
 /* ===== CURATED PASS DETAIL ===== */
@@ -796,9 +782,7 @@ function buildTraffic(){
   var grp=L.layerGroup();
   function road(coords,lvl){if(!coords||coords.length<2)return;L.polyline(coords,{color:trafColor(lvl),weight:2.5+lvl*0.55,opacity:0.82}).addTo(grp);}
   PASSES_DATA.forEach(function(p){(p.versanti||[]).forEach(function(v){
-    var lvl=versTraffic(v,p).wkd;
-    var key=v.startLat+","+v.startLon+">"+p.lat+","+p.lon;
-    if(routeCache[key])road(routeCache[key],lvl);else if(v.track)road(v.track,lvl);
+    if(v.track)road(v.track,versTraffic(v,p).wkd);
   });});
   osmPasses.forEach(function(op){(op.versanti||[]).forEach(function(v){road(v.track,versTraffic(v,op).wkd);});});
   return grp;
