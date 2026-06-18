@@ -12,13 +12,14 @@
 .dark{--bg:#0f172a;--bg2:#1e293b;--txt:#f1f5f9;--txt2:#94a3b8;--bdr:#334155}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt)}
-#hdr{height:56px;background:var(--bg2);display:flex;align-items:center;padding:0 12px;gap:8px;border-bottom:1px solid var(--bdr);position:relative;z-index:1000}
-#hdr h1{font-size:1.1rem;color:var(--ac);cursor:pointer;white-space:nowrap}
-#hdr h1 span{font-weight:300;color:var(--txt2);font-size:.8rem}
-#search{width:100%;padding:7px 14px;border:1px solid var(--bdr);border-radius:20px;background:var(--bg);color:var(--txt);font-size:.9rem;outline:none}
-#search:focus{border-color:var(--ac)}
-.btn{padding:5px 10px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg);color:var(--txt);cursor:pointer;font-size:.85rem}
-.btn:hover{background:var(--ac);color:#fff;border-color:var(--ac)}
+#hdr{height:72px;background:var(--bg2);display:flex;align-items:center;padding:0 18px;gap:12px;border-bottom:1px solid var(--bdr);position:relative;z-index:1000;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+#hdr h1{font-size:1.35rem;color:var(--ac);cursor:pointer;white-space:nowrap}
+#hdr h1 span{font-weight:300;color:var(--txt2);font-size:.95rem}
+#search{width:100%;padding:10px 18px;border:1px solid var(--bdr);border-radius:22px;background:var(--bg);color:var(--txt);font-size:1rem;outline:none}
+#search:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border:1px solid var(--bdr);border-radius:11px;background:var(--bg);color:var(--txt);cursor:pointer;font-size:.92rem;font-weight:600;line-height:1;white-space:nowrap;transition:background .15s,box-shadow .15s,border-color .15s}
+.btn .bi{font-size:1.2rem;line-height:1}
+.btn:hover{background:var(--ac);color:#fff;border-color:var(--ac);box-shadow:0 2px 10px rgba(37,99,235,.28)}
 .btn.active{background:var(--ok);color:#fff;border-color:var(--ok)}
 #map{position:absolute;top:56px;left:0;right:0;bottom:0;z-index:1}
 #fp{position:fixed;top:56px;left:0;bottom:0;width:260px;background:var(--bg2);border-right:1px solid var(--bdr);padding:16px;overflow-y:auto;transform:translateX(-100%);transition:transform .3s;z-index:999}
@@ -60,7 +61,7 @@ canvas#relev{height:170px}
 .rstop{display:flex;align-items:center;gap:8px;font-size:.84rem;padding:5px 0;border-bottom:1px solid var(--bdr)}
 .rstop .n{flex:none;width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;text-align:center;line-height:22px;font-size:.72rem;font-weight:700}
 .wp-ic{background:#7c3aed;color:#fff;border-radius:50%;width:26px;height:26px;line-height:22px;text-align:center;font-size:.75rem;font-weight:700;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35);cursor:grab}
-.wordmark{font-weight:400;font-size:1.18rem;background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.2px}
+.wordmark{font-weight:400;font-size:1.55rem;background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.2px}
 .wordmark b{font-weight:900}
 .cat-pill.grv{background-image:repeating-linear-gradient(45deg,rgba(229,231,235,.75) 0 3px,transparent 3px 8px),linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.12))!important}
 .cat-pill{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55);border-radius:8px;height:26px;min-width:32px;padding:0 7px;line-height:24px;text-align:center;font-size:.92rem;font-weight:900;letter-spacing:.3px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.35);background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.12))}
@@ -93,7 +94,7 @@ canvas#relev{height:170px}
 .route-status.show{display:block}
 .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(37,99,235,.15)!important}
 .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:rgba(37,99,235,.6)!important;color:#fff!important;font-weight:600}
-#search-wrap{position:relative;flex:1;max-width:280px;display:flex}
+#search-wrap{position:relative;flex:1;max-width:340px;display:flex}
 #sresults{position:absolute;top:38px;left:0;right:0;background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.14);max-height:320px;overflow-y:auto;z-index:1100;display:none}
 #sresults.open{display:block}
 .sr-item{padding:8px 12px;cursor:pointer;font-size:.86rem;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -108,17 +109,19 @@ canvas#relev{height:170px}
 #traf-leg b{display:block;margin-bottom:5px}
 #traf-leg div{display:flex;align-items:center;gap:7px;margin:2px 0;color:var(--txt2)}
 #traf-leg i{width:20px;height:4px;border-radius:2px;display:inline-block}
-@media(max-width:640px){#dp{width:100%}.wgrid{grid-template-columns:repeat(4,1fr)}#hdr h1 span{display:none}.rb-list{flex-wrap:wrap}#search-wrap{max-width:none}}
+@media(max-width:860px){.btn .bl{display:none}.btn{padding:9px 11px}}
+@media(max-width:640px){#dp{width:100%}.wgrid{grid-template-columns:repeat(4,1fr)}#hdr h1 span.tag{display:none}.rb-list{flex-wrap:wrap}#search-wrap{max-width:none}.btn .bl{display:none}.btn{padding:9px 11px}.wordmark{font-size:1.3rem}}
 </style>
 </head>
 <body>
 <div id="hdr">
-<h1 onclick="map.setView([45.8,10.5],7)" style="display:flex;align-items:center;gap:7px;cursor:pointer"><svg width="28" height="28" viewBox="0 0 32 32"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M2 26 L12 8 L18 18 L22 12 L30 26 Z" fill="url(#lg1)"/><path d="M4 26 Q12 22 16 26 T28 26" stroke="#f59e0b" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="8" r="2.2" fill="#fff"/></svg><span class="wordmark">Loca<b>Ride</b></span> <span>&#x2014; ride like a local</span></h1>
+<h1 onclick="map.setView([45.8,10.5],7)" style="display:flex;align-items:center;gap:9px;cursor:pointer"><svg width="36" height="36" viewBox="0 0 32 32"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M2 26 L12 8 L18 18 L22 12 L30 26 Z" fill="url(#lg1)"/><path d="M4 26 Q12 22 16 26 T28 26" stroke="#f59e0b" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="8" r="2.2" fill="#fff"/></svg><span class="wordmark">Loca<b>Ride</b></span> <span class="tag">&#x2014; ride like a local</span></h1>
 <div id="search-wrap"><input type="text" id="search" placeholder="Cerca passo..." autocomplete="off"><div id="sresults"></div></div>
-<button class="btn" id="fb" title="Filtri">&#x2630;</button>
-<button class="btn" id="rbb" title="Route Builder">&#x1F6A9;</button>
-<button class="btn" id="tb" title="Traffico veicolare">&#x1F525;</button>
-<button class="btn" id="db" title="Tema scuro">&#x1F319;</button>
+<button class="btn" id="fb" title="Filtri"><span class="bi">&#x2630;</span><span class="bl">Filtri</span></button>
+<button class="btn" id="rbb" title="Crea percorso"><span class="bi">&#x1F6A9;</span><span class="bl">Percorso</span></button>
+<button class="btn" id="tb" title="Traffico veicolare"><span class="bi">&#x1F525;</span><span class="bl">Traffico</span></button>
+<button class="btn" id="ed" title="Editor / proponi salita"><span class="bi">&#x270E;</span><span class="bl">Editor</span></button>
+<button class="btn" id="db" title="Tema scuro"><span class="bi">&#x1F319;</span><span class="bl">Tema</span></button>
 </div>
 <div id="fp">
 <h3 style="margin-bottom:14px">Filtri</h3>
@@ -964,7 +967,7 @@ function edOpen(){
   var ex=document.getElementById("edPanel");if(ex){ex.style.display="block";return;}
   ED.store=window.MANUAL_OV?JSON.parse(JSON.stringify(window.MANUAL_OV)):{};
   var d=document.createElement("div");d.id="edPanel";
-  d.style.cssText="position:fixed;top:60px;left:10px;z-index:1200;width:300px;max-height:84vh;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);padding:12px;font:13px/1.4 system-ui,sans-serif;color:#222";
+  d.style.cssText="position:fixed;top:84px;left:10px;z-index:1200;width:300px;max-height:84vh;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);padding:12px;font:13px/1.4 system-ui,sans-serif;color:#222";
   d.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>&#9998; Editor salite</b><span id="edClose" style="cursor:pointer;font-size:18px;padding:0 6px">&times;</span></div><input id="edSearch" placeholder="Cerca passo da modificare..." style="width:100%;box-sizing:border-box;padding:6px;border:1px solid #ccc;border-radius:6px"/><div id="edHits" style="max-height:120px;overflow:auto"></div><button id="edNew" style="width:100%;margin:8px 0;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">+ Nuovo passo</button><div id="edTarget" style="font-size:12px;color:#555;margin-bottom:8px"></div><div id="edNewFields" style="display:none;margin-bottom:8px"><input id="edName" placeholder="Nome passo" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px"><input id="edElev" placeholder="Quota m" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/><input id="edRegion" placeholder="Regione" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/></div></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><div style="font-weight:600;margin-bottom:4px">Versante</div><input id="edLabel" placeholder="Etichetta (es. Da Mazzo)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px;margin-bottom:4px"><button id="edDrawBtn" style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">&#9998; Disegna</button><button id="edUndoBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Annulla</button><button id="edClearBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Pulisci</button></div><label style="font-size:12px;display:block;margin-bottom:4px;cursor:pointer"><input type="checkbox" id="edSnap" checked/> Aggancia a strada (pochi punti)</label><div style="font-size:11px;color:#777;margin-bottom:4px">Con aggancio ON: clicca solo fondovalle + 1-2 punti sulla strada giusta. La cima si aggiunge da sola.</div><textarea id="edDesc" placeholder="Note locali (fondo, pericoli, lore...)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px;height:42px"></textarea><div style="display:flex;gap:4px;margin-bottom:6px"><button id="edCalcBtn" style="flex:1;padding:6px;border:none;background:#2a7;color:#fff;border-radius:6px;cursor:pointer">Calcola</button><button id="edAddBtn" style="flex:1;padding:6px;border:none;background:#27a;color:#fff;border-radius:6px;cursor:pointer">Aggiungi versante</button></div><div id="edMsg" style="font-size:12px;color:#444;min-height:16px;margin-bottom:6px"></div><div id="edList" style="font-size:12px;margin-bottom:8px"></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><button id="edPrev" style="width:100%;margin-bottom:6px;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">Applica in anteprima</button><button id="edDl" style="width:100%;padding:8px;border:none;background:#c60;color:#fff;border-radius:6px;cursor:pointer;font-weight:600">&#11015; Scarica manual_overrides.json</button><div style="font-size:11px;color:#777;margin-top:6px">Poi carica il file nel repo GitHub, come gli altri.</div>';
   document.body.appendChild(d);
   document.getElementById("edClose").onclick=function(){d.style.display="none";edDraw=false;ED._await=false;};
@@ -982,7 +985,7 @@ function edInit(){
   if(typeof map==="undefined"||!map){setTimeout(edInit,300);return;}
   map.on("click",edClick);
   loadManualOverrides();
-  if(isAdmin()){var b=document.createElement("button");b.textContent="\u270E Editor";b.title="Editor salite (admin)";b.style.cssText="position:fixed;top:60px;left:10px;z-index:1100;padding:8px 12px;background:#c60;color:#fff;border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)";b.onclick=edOpen;document.body.appendChild(b);}
+  var eb=document.getElementById("ed");if(eb)eb.addEventListener("click",edOpen);
 }
 document.addEventListener("DOMContentLoaded",edInit);
 </script>
