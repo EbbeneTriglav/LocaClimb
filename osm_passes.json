@@ -13487,7 +13487,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -14225,7 +14225,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -20144,7 +20144,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -22220,7 +22220,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -28619,7 +28619,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -35380,7 +35380,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -38112,7 +38112,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -41261,7 +41261,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -50240,7 +50240,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -55887,7 +55887,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -57804,7 +57804,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -61026,7 +61026,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -63757,7 +63757,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -66994,7 +66994,7 @@
   ],
   "difficulty": 9,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -68532,7 +68532,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -70958,7 +70958,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -74292,7 +74292,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -74923,7 +74923,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -77480,7 +77480,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -78321,7 +78321,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -81563,7 +81563,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -92387,7 +92387,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -98551,7 +98551,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -100662,7 +100662,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -102802,7 +102802,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -104054,7 +104054,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -107588,7 +107588,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -113490,7 +113490,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -114695,7 +114695,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -117711,7 +117711,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -119212,7 +119212,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -123112,7 +123112,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -128679,7 +128679,7 @@
   ],
   "cat": "HC",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -130425,7 +130425,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -131267,7 +131267,7 @@
   ],
   "difficulty": 9,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -133947,7 +133947,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -139437,7 +139437,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -141004,7 +141004,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -143781,7 +143781,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -145711,7 +145711,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -149018,7 +149018,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -152391,7 +152391,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -157830,7 +157830,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -161151,7 +161151,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -162962,7 +162962,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -168266,7 +168266,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -171794,7 +171794,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -178689,7 +178689,7 @@
   ],
   "cat": "HC",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -180751,7 +180751,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -184463,7 +184463,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -188285,7 +188285,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -190997,7 +190997,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -194605,7 +194605,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -201717,7 +201717,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -202951,7 +202951,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -206047,7 +206047,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -207672,7 +207672,7 @@
   ],
   "cat": "1",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -213491,7 +213491,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -217028,7 +217028,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -222045,7 +222045,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -223697,7 +223697,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -226542,7 +226542,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -230675,7 +230675,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -232838,7 +232838,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -233700,7 +233700,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -237496,7 +237496,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -239205,7 +239205,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -244013,7 +244013,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -245319,7 +245319,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -246416,7 +246416,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -247845,7 +247845,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -251773,7 +251773,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -252633,7 +252633,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -254318,7 +254318,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -258790,7 +258790,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -262348,7 +262348,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -263683,7 +263683,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -267128,7 +267128,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -273833,7 +273833,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -274615,7 +274615,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -278831,7 +278831,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -279897,7 +279897,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -282492,7 +282492,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -285375,7 +285375,7 @@
   ],
   "cat": "1",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -291060,7 +291060,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -291966,7 +291966,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -297379,7 +297379,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -298938,7 +298938,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -301051,7 +301051,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -304466,7 +304466,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -305741,7 +305741,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -309562,7 +309562,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -313247,7 +313247,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -317103,7 +317103,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -319747,7 +319747,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -320982,7 +320982,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -324011,7 +324011,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -324805,7 +324805,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -328138,7 +328138,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -328829,7 +328829,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -330586,7 +330586,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -334429,7 +334429,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -336543,7 +336543,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -337862,7 +337862,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -339767,7 +339767,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -344059,7 +344059,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -344747,7 +344747,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -349378,7 +349378,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -350866,7 +350866,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -353320,7 +353320,7 @@
   ],
   "cat": "HC",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -354558,7 +354558,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -362411,7 +362411,7 @@
   ],
   "cat": "2",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -365156,7 +365156,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -367831,7 +367831,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -369761,7 +369761,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -371215,7 +371215,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -373535,7 +373535,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -374801,7 +374801,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -378363,7 +378363,7 @@
   ],
   "cat": "HC",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -380265,7 +380265,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -380896,7 +380896,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -381872,7 +381872,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -383076,7 +383076,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -384116,7 +384116,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -389009,7 +389009,7 @@
   ],
   "cat": "HC",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -394515,7 +394515,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -399331,7 +399331,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -400166,7 +400166,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -401205,7 +401205,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -406329,7 +406329,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -411452,7 +411452,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -413625,7 +413625,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -415572,7 +415572,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -416934,7 +416934,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -420514,7 +420514,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -424258,7 +424258,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -426907,7 +426907,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -431074,7 +431074,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -437479,7 +437479,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -439176,7 +439176,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -441054,7 +441054,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -442948,7 +442948,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -446129,7 +446129,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -447461,7 +447461,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -448328,7 +448328,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -453575,7 +453575,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -457372,7 +457372,7 @@
   ],
   "difficulty": 5,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -462158,7 +462158,7 @@
   ],
   "difficulty": 6,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -465506,7 +465506,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -471244,7 +471244,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -472842,7 +472842,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -479062,7 +479062,7 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -480026,7 +480026,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -482924,7 +482924,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -487758,7 +487758,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -488668,7 +488668,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -490403,7 +490403,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -493439,7 +493439,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -496128,7 +496128,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -498002,7 +498002,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -499877,7 +499877,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -501886,7 +501886,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -507366,7 +507366,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -512722,7 +512722,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -513711,7 +513711,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -520394,7 +520394,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -526489,7 +526489,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -528907,7 +528907,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -531447,7 +531447,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -533368,7 +533368,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -535578,7 +535578,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -536428,7 +536428,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -539640,7 +539640,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -540516,7 +540516,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -542882,7 +542882,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -544839,7 +544839,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -549860,7 +549860,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -553925,7 +553925,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -554612,7 +554612,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -555803,7 +555803,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -556486,7 +556486,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -558586,7 +558586,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -564955,7 +564955,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -571119,7 +571119,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -573462,7 +573462,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -575937,7 +575937,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -577191,7 +577191,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -580827,7 +580827,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -583645,7 +583645,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -584935,7 +584935,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -586825,7 +586825,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -589724,7 +589724,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -592928,7 +592928,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -594462,7 +594462,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -596785,7 +596785,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -599742,7 +599742,7 @@
   "snapped": true,
   "nodeId": "266608825",
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -602141,7 +602141,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -603958,7 +603958,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -605132,7 +605132,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -606258,7 +606258,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -609876,7 +609876,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -611753,7 +611753,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -613715,7 +613715,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -615297,7 +615297,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -618433,7 +618433,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -622246,7 +622246,7 @@
   ],
   "cat": "HC",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -626641,7 +626641,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -627693,7 +627693,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -629523,7 +629523,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -631333,7 +631333,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -632945,7 +632945,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -639439,7 +639439,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -647737,7 +647737,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -650338,7 +650338,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -655242,7 +655242,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -658184,7 +658184,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -659986,7 +659986,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -662684,7 +662684,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -665016,7 +665016,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -667842,7 +667842,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -670523,7 +670523,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -671643,7 +671643,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -674136,7 +674136,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -675011,7 +675011,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -676336,7 +676336,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -679286,7 +679286,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -680987,7 +680987,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -683670,7 +683670,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -685677,7 +685677,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -687586,7 +687586,7 @@
   ],
   "cat": "1",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -690949,7 +690949,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -692260,7 +692260,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -696988,7 +696988,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -698887,7 +698887,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -704203,7 +704203,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -707295,7 +707295,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -708923,7 +708923,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -711492,7 +711492,7 @@
   ],
   "cat": "HC",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -713463,7 +713463,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -716296,7 +716296,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -718249,7 +718249,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -721122,7 +721122,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -723263,7 +723263,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -724798,7 +724798,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -725941,7 +725941,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -729155,7 +729155,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -730290,7 +730290,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -731789,7 +731789,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -734663,7 +734663,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -735827,7 +735827,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -737984,7 +737984,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -740178,7 +740178,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -741666,7 +741666,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -743136,7 +743136,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -744206,7 +744206,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -745935,7 +745935,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -750282,7 +750282,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -751802,7 +751802,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -753167,7 +753167,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -754121,7 +754121,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -756242,7 +756242,7 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -758278,7 +758278,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -761474,7 +761474,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -763427,7 +763427,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -769178,7 +769178,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -770116,7 +770116,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -772807,7 +772807,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -774382,7 +774382,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -777340,7 +777340,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -778549,7 +778549,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -779627,7 +779627,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -781716,7 +781716,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -783924,7 +783924,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -788915,7 +788915,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -792871,7 +792871,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -794121,7 +794121,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -795267,7 +795267,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -797277,7 +797277,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -800290,7 +800290,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -801667,7 +801667,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -804533,7 +804533,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -806564,7 +806564,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -807969,7 +807969,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -810153,7 +810153,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -814574,7 +814574,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -816834,7 +816834,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -819375,7 +819375,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -820505,7 +820505,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -821999,7 +821999,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -825642,7 +825642,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -828977,7 +828977,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -832581,7 +832581,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -836145,7 +836145,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -836775,7 +836775,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -845703,7 +845703,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -847982,7 +847982,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -848540,7 +848540,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -850098,7 +850098,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -852838,7 +852838,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -857101,7 +857101,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -859383,7 +859383,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -861856,7 +861856,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -864030,7 +864030,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -867478,7 +867478,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -868436,7 +868436,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -869395,7 +869395,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -870506,7 +870506,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -872935,7 +872935,7 @@
   ],
   "cat": "1",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -873953,7 +873953,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -877497,7 +877497,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -879381,7 +879381,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -880464,7 +880464,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -884772,7 +884772,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -889178,7 +889178,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -890856,7 +890856,7 @@
   ],
   "cat": "2",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -892438,7 +892438,7 @@
   ],
   "cat": "1",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -896458,7 +896458,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -899102,7 +899102,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -901308,7 +901308,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -902601,7 +902601,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -907369,7 +907369,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -911185,7 +911185,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -913533,7 +913533,7 @@
   ],
   "cat": "1",
   "difficulty": 9,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -915161,7 +915161,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -917410,7 +917410,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -918572,7 +918572,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -922180,7 +922180,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -925404,7 +925404,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -926937,7 +926937,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -928192,7 +928192,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -932120,7 +932120,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -934381,7 +934381,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -936722,7 +936722,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -938992,7 +938992,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -939406,7 +939406,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -940416,7 +940416,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -943633,7 +943633,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -945392,7 +945392,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -949708,7 +949708,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -952145,7 +952145,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -955474,7 +955474,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -957550,7 +957550,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -959509,7 +959509,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -960614,7 +960614,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -963211,7 +963211,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -967554,7 +967554,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -972500,7 +972500,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -975581,7 +975581,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -976827,7 +976827,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -978157,7 +978157,7 @@
   ],
   "cat": "1",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -980230,7 +980230,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -982023,7 +982023,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -983312,7 +983312,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -984277,7 +984277,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -987170,7 +987170,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -990779,7 +990779,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -993960,7 +993960,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -996536,7 +996536,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -998737,7 +998737,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1000817,7 +1000817,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1003854,7 +1003854,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1006087,7 +1006087,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1015086,7 +1015086,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1016565,7 +1016565,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1018299,7 +1018299,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1019761,7 +1019761,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1021051,7 +1021051,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1021601,7 +1021601,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1024801,7 +1024801,7 @@
   "snapped": true,
   "nodeId": "264162490",
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1026358,7 +1026358,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1027567,7 +1027567,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1028264,7 +1028264,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1031259,7 +1031259,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1032509,7 +1032509,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1036924,7 +1036924,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1041962,7 +1041962,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1042456,7 +1042456,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1045217,7 +1045217,7 @@
   ],
   "difficulty": 9,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1048313,7 +1048313,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1050351,7 +1050351,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1051805,7 +1051805,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1056286,7 +1056286,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1060038,7 +1060038,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1061355,7 +1061355,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1062857,7 +1062857,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1064729,7 +1064729,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1065914,7 +1065914,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1070033,7 +1070033,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1071281,7 +1071281,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1072979,7 +1072979,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1073829,7 +1073829,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1075618,7 +1075618,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1078418,7 +1078418,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1081159,7 +1081159,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1083648,7 +1083648,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1085810,7 +1085810,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1088486,7 +1088486,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1089028,7 +1089028,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1090011,7 +1090011,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1091449,7 +1091449,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1092591,7 +1092591,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1094095,7 +1094095,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1096272,7 +1096272,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1097305,7 +1097305,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1099289,7 +1099289,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1101318,7 +1101318,7 @@
   ],
   "cat": "1",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1104487,7 +1104487,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1105421,7 +1105421,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1109165,7 +1109165,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1110826,7 +1110826,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1112831,7 +1112831,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1117290,7 +1117290,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1119150,7 +1119150,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1123722,7 +1123722,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1125788,7 +1125788,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1126541,7 +1126541,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1129828,7 +1129828,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1131445,7 +1131445,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1133077,7 +1133077,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1133939,7 +1133939,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1136479,7 +1136479,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1137425,7 +1137425,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1139006,7 +1139006,7 @@
   ],
   "difficulty": 10,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1142314,7 +1142314,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1144451,7 +1144451,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1146721,7 +1146721,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1148304,7 +1148304,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1150601,7 +1150601,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1152051,7 +1152051,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1153737,7 +1153737,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1154415,7 +1154415,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1155309,7 +1155309,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1156275,7 +1156275,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1157693,7 +1157693,7 @@
   ],
   "cat": "3",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1159459,7 +1159459,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1162296,7 +1162296,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1165985,7 +1165985,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1167255,7 +1167255,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1171199,7 +1171199,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1173680,7 +1173680,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1176212,7 +1176212,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1177421,7 +1177421,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1178151,7 +1178151,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1181063,7 +1181063,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1184304,7 +1184304,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1186883,7 +1186883,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1187953,7 +1187953,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1188557,7 +1188557,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1190954,7 +1190954,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1198455,7 +1198455,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1201697,7 +1201697,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1204098,7 +1204098,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1207043,7 +1207043,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1207841,7 +1207841,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1208435,7 +1208435,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1209057,7 +1209057,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1210890,7 +1210890,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1214994,7 +1214994,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1215776,7 +1215776,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1218485,7 +1218485,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1221266,7 +1221266,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1224234,7 +1224234,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1225152,7 +1225152,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1227541,7 +1227541,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1229362,7 +1229362,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1231439,7 +1231439,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1233325,7 +1233325,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1238073,7 +1238073,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1241292,7 +1241292,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1243153,7 +1243153,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1244083,7 +1244083,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1245676,7 +1245676,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1247865,7 +1247865,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1250953,7 +1250953,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1252127,7 +1252127,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1253195,7 +1253195,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1254513,7 +1254513,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1254843,7 +1254843,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1255513,7 +1255513,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1256235,7 +1256235,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1256754,7 +1256754,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1257515,7 +1257515,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1261360,7 +1261360,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1264102,7 +1264102,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1268599,7 +1268599,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1273046,7 +1273046,7 @@
   ],
   "cat": "4",
   "difficulty": 4,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1274414,7 +1274414,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1275683,7 +1275683,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1276724,7 +1276724,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1278017,7 +1278017,7 @@
   ],
   "cat": "2",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1279890,7 +1279890,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1280884,7 +1280884,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1281466,7 +1281466,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1282096,7 +1282096,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1282725,7 +1282725,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1283770,7 +1283770,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1284372,7 +1284372,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1288556,7 +1288556,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1290552,7 +1290552,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1291610,7 +1291610,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1294713,7 +1294713,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1295950,7 +1295950,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1296751,7 +1296751,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1297653,7 +1297653,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1298674,7 +1298674,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1300423,7 +1300423,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1301997,7 +1301997,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1303318,7 +1303318,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1304559,7 +1304559,7 @@
   ],
   "cat": "2",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1305081,7 +1305081,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1307302,7 +1307302,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1308938,7 +1308938,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1309589,7 +1309589,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1310335,7 +1310335,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1312995,7 +1312995,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1314604,7 +1314604,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1316621,7 +1316621,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1318945,7 +1318945,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1319993,7 +1319993,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1321882,7 +1321882,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1323320,7 +1323320,7 @@
   ],
   "cat": "2",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1325853,7 +1325853,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1326867,7 +1326867,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1329188,7 +1329188,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1330828,7 +1330828,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1332317,7 +1332317,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1334969,7 +1334969,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1335256,7 +1335256,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1338113,7 +1338113,7 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1340097,7 +1340097,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1343430,7 +1343430,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1344036,7 +1344036,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1344481,7 +1344481,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1344791,7 +1344791,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1345621,7 +1345621,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1346998,7 +1346998,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1348905,7 +1348905,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1350027,7 +1350027,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1353262,7 +1353262,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1354855,7 +1354855,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1355321,7 +1355321,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1357226,7 +1357226,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1359543,7 +1359543,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1363459,7 +1363459,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1364177,7 +1364177,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1367848,7 +1367848,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1370044,7 +1370044,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1372231,7 +1372231,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1373300,7 +1373300,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1375773,7 +1375773,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1377346,7 +1377346,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1378043,7 +1378043,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1379568,7 +1379568,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1381326,7 +1381326,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1382012,7 +1382012,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1384472,7 +1384472,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1386269,7 +1386269,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1387069,7 +1387069,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1389209,7 +1389209,7 @@
   "snapped": true,
   "nodeId": "253712262",
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1392993,7 +1392993,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1396532,7 +1396532,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1399101,7 +1399101,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1401147,7 +1401147,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1402411,7 +1402411,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1403314,7 +1403314,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1405767,7 +1405767,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1409502,7 +1409502,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1412058,7 +1412058,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1413127,7 +1413127,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1413597,7 +1413597,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1416234,7 +1416234,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1417380,7 +1417380,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1419533,7 +1419533,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1419874,7 +1419874,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1420355,7 +1420355,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1421380,7 +1421380,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1423440,7 +1423440,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1425877,7 +1425877,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1428764,7 +1428764,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1429374,7 +1429374,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1430451,7 +1430451,7 @@
   ],
   "difficulty": 10,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1431944,7 +1431944,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1433193,7 +1433193,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1435153,7 +1435153,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1436672,7 +1436672,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1438539,7 +1438539,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1441761,7 +1441761,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1442354,7 +1442354,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1443603,7 +1443603,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1444221,7 +1444221,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1446504,7 +1446504,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1447382,7 +1447382,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1448664,7 +1448664,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1451584,7 +1451584,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1452050,7 +1452050,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1453970,7 +1453970,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1455975,7 +1455975,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1457196,7 +1457196,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1457734,7 +1457734,7 @@
   ],
   "cat": "2",
   "difficulty": 10,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1458336,7 +1458336,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1458690,7 +1458690,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1460426,7 +1460426,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1462530,7 +1462530,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1465885,7 +1465885,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1467070,7 +1467070,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1467852,7 +1467852,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1469329,7 +1469329,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1470246,7 +1470246,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1471152,7 +1471152,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1472777,7 +1472777,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1473563,7 +1473563,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1474105,7 +1474105,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1474822,7 +1474822,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1477658,7 +1477658,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1480574,7 +1480574,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1482236,7 +1482236,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1487966,7 +1487966,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1490166,7 +1490166,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1493197,7 +1493197,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1494506,7 +1494506,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1497196,7 +1497196,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1497734,7 +1497734,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1500070,7 +1500070,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1501287,7 +1501287,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1503947,7 +1503947,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1506846,7 +1506846,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1507535,7 +1507535,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1509339,7 +1509339,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1510412,7 +1510412,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1511498,7 +1511498,7 @@
   ],
   "cat": "3",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1512992,7 +1512992,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1517187,7 +1517187,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1519287,7 +1519287,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1520800,7 +1520800,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1523799,7 +1523799,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1525100,7 +1525100,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1525574,7 +1525574,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1526084,7 +1526084,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1529076,7 +1529076,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1530089,7 +1530089,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1530882,7 +1530882,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1532351,7 +1532351,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1532774,7 +1532774,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1533332,7 +1533332,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1534468,7 +1534468,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1537137,7 +1537137,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1538512,7 +1538512,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1539031,7 +1539031,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1539605,7 +1539605,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1541174,7 +1541174,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1543111,7 +1543111,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1544500,7 +1544500,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1546411,7 +1546411,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1548080,7 +1548080,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1549316,7 +1549316,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1549710,7 +1549710,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1550508,7 +1550508,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1551078,7 +1551078,7 @@
   ],
   "cat": "3",
   "difficulty": 7,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1551823,7 +1551823,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1553220,7 +1553220,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1554205,7 +1554205,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1555405,7 +1555405,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1556838,7 +1556838,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1559349,7 +1559349,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1563453,7 +1563453,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1563896,7 +1563896,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1564643,7 +1564643,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1566571,7 +1566571,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1567123,7 +1567123,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1568387,7 +1568387,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1568877,7 +1568877,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1569319,7 +1569319,7 @@
   ],
   "cat": "4",
   "difficulty": 6,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1569841,7 +1569841,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1571520,7 +1571520,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1571998,7 +1571998,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1572858,7 +1572858,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1573764,7 +1573764,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1574862,7 +1574862,7 @@
   ],
   "difficulty": 5,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1575461,7 +1575461,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1576934,7 +1576934,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1577528,7 +1577528,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1578635,7 +1578635,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1579537,7 +1579537,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1581142,7 +1581142,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1581466,7 +1581466,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1582295,7 +1582295,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1582593,7 +1582593,7 @@
   ],
   "difficulty": 10,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1583819,7 +1583819,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1584141,7 +1584141,7 @@
   ],
   "cat": "3",
   "difficulty": 8,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1584955,7 +1584955,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1585345,7 +1585345,7 @@
   ],
   "difficulty": 8,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1586815,7 +1586815,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1587253,7 +1587253,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1588710,7 +1588710,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1589313,7 +1589313,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1589819,7 +1589819,7 @@
   ],
   "difficulty": 7,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1591061,7 +1591061,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1592003,7 +1592003,7 @@
   ],
   "difficulty": 4,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1592627,7 +1592627,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1593109,7 +1593109,7 @@
   ],
   "cat": "4",
   "difficulty": 5,
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1594659,7 +1594659,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1595795,7 +1595795,7 @@
   ],
   "difficulty": 7,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1596337,7 +1596337,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {
@@ -1597017,7 +1597017,7 @@
   ],
   "difficulty": 3,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  {

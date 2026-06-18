@@ -4784,7 +4784,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "gavia": {
@@ -7944,7 +7944,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "mortirolo": {
@@ -10750,7 +10750,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "zoncolan": {
@@ -12306,7 +12306,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "pordoi": {
@@ -13583,7 +13583,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "sella": {
@@ -15143,7 +15143,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "gardena": {
@@ -16803,7 +16803,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "falzarego": {
@@ -18615,7 +18615,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "giau": {
@@ -20979,7 +20979,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "fedaia": {
@@ -22727,7 +22727,7 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "spluga": {
@@ -24376,7 +24376,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "san-marco": {
@@ -27068,7 +27068,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "grappa": {
@@ -33394,7 +33394,7 @@
   ],
   "difficulty": 7,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "manghen": {
@@ -36722,7 +36722,7 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "tonale": {
@@ -38234,7 +38234,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "presolana": {
@@ -40594,7 +40594,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "vivione": {
@@ -41799,7 +41799,7 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "rolle": {
@@ -44927,7 +44927,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "croce-daune": {
@@ -45868,7 +45868,7 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "abetone": {
@@ -47400,7 +47400,7 @@
   ],
   "difficulty": 6,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "futa": {
@@ -49740,7 +49740,7 @@
   ],
   "difficulty": 6,
   "cat": "4",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "aprica": {
@@ -51240,7 +51240,7 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  },
  "san-pellegrino": {
@@ -53152,7 +53152,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.2-multiname",
+  "algo": "v4.3-curatedhint",
   "updatedAt": "2026-06-18"
  }
 }
