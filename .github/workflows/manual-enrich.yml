@@ -1,0 +1,45 @@
+name: Manual climbs enrich (Terrarium)
+
+# Light, separate from the heavy OSM build: no PBF, no road graph, no OOM.
+# Fires automatically whenever manual_overrides.json is pushed (e.g. uploaded via the
+# GitHub web UI from the in-app editor), or on demand from the Actions tab.
+on:
+  push:
+    paths:
+      - 'manual_overrides.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manual-enrich
+  cancel-in-progress: true
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install deps
+        run: npm install pngjs --no-save
+
+      - name: Re-enrich manual climbs on Terrarium
+        run: node scripts/enrich_manual.mjs
+
+      - name: Commit manual_enriched.json if changed
+        run: |
+          git config user.name  "locaclimb-bot"
+          git config user.email "locaclimb-bot@users.noreply.github.com"
+          git add manual_enriched.json
+          if git diff --staged --quiet; then
+            echo "manual_enriched.json unchanged, nothing to commit"
+          else
+            git commit -m "data: enrich manual climbs (Terrarium)"
+            git push
+          fi
