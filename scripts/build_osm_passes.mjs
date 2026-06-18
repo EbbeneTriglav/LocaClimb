@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.3-curatedhint";
+const ALGO_VERSION = "v4.4-pinbase";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -577,7 +577,7 @@ async function main() {
       if (dc > capKm) continue;
       if (tgReach) {
         var cc = coord.get(c), allDone = true;
-        for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 2.0) tr.done = true; if (!tr.done) allDone = false; }
+        for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 0.3) tr.done = true; if (!tr.done) allDone = false; }
         if (allDone) break;
       }
       for (var nb of neighbors(c)) {
@@ -598,8 +598,9 @@ async function main() {
       var pinned = [];
       for (var ti2 = 0; ti2 < targets.length; ti2++) {
         var tg = targets[ti2], aim = tgReach[ti2];
-        var bestK = null, bestD = 2.5; // was 0.8: town centroids sit off the kept road (residential dropped)
-        coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
+        var bestK = null, bestScore = -1;
+        coord.forEach(function (ll, k) { if (hav(aim.lat, aim.lon, ll[0], ll[1]) < 1.2) { var sc = dist.get(k) || 0; if (sc > bestScore) { bestScore = sc; bestK = k; } } }); // furthest from summit within 1.2km of the town = valley floor
+        if (!bestK) { var bestD = 2.5; coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } }); } // fallback: nearest reached vertex
         if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
         var rp = [], kk = bestK, gd = 0;
         while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
