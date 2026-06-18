@@ -608,17 +608,8 @@ async function main() {
         var pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
         var ev = await elevations(pth); if (!ev) continue;
         var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
-        if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town (fixes flat/imprecise pins)
-        if (pv) {
-          pv.side = "Da " + tg.name;
-          var dupp = false; // a town pin can route via another side's road (Tovo down through Mazzo) -> drop the overlap
-          for (var pq of pinned) {
-            var hit = 0, tot = 0;
-            for (var ii = 0; ii < pv.track.length; ii += 3) { tot++; var pa = pv.track[ii]; for (var jj = 0; jj < pq.track.length; jj += 3) if (hav(pa[0], pa[1], pq.track[jj][0], pq.track[jj][1]) < 0.15) { hit++; break; } }
-            if (tot && hit / tot > 0.6) { dupp = true; break; }
-          }
-          if (!dupp) pinned.push(pv); else console.log("    . hint " + tg.name + ": doppione di un altro versante, saltato");
-        }
+        if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town
+        if (pv) { pv.side = "Da " + tg.name; pinned.push(pv); } // keep every requested side; duplicates are differentiated via precise coordinates, not auto-dropped
         else console.log("    . hint " + tg.name + ": salita non valida");
       }
       return pinned;
