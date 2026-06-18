@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.0-hintreach";
+const ALGO_VERSION = "v4.1-hintreach2";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -424,7 +424,7 @@ async function main() {
   function resolveTowns(list, sLat, sLon) {
     var out = [];
     for (var h of list) {
-      if (Array.isArray(h)) { out.push({ name: global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto", lat: h[0], lon: h[1] }); continue; }
+      if (Array.isArray(h)) { var nm = h[2] || (global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto"); out.push({ name: nm, lat: h[0], lon: h[1] }); continue; } // [lat,lon] or [lat,lon,"Nome"] -> exact point, name kept as label
       var tgt = deacc(h), best = null, bd = 60;          // pick the matching town nearest the summit (accent-insensitive)
       for (var t of hintPlaces) { var tn = deacc(t.name); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } } }
       if (best) out.push({ name: h, lat: best.lat, lon: best.lon });
@@ -537,6 +537,14 @@ async function main() {
   async function buildVersanti(lat, lon, capKm, relax, anchor, targets) {
     var ch = snap(lat, lon, 0.8);
     if (!ch) return [];
+    // The hint key is matched by substring, so a key can hit a DIFFERENT/far pass too. Keep only
+    // targets within road range of THIS summit; if none remain, treat the pass as un-hinted (auto)
+    // instead of pinning to far towns it can never reach (the old "town non trovato"/"non raggiunto"
+    // noise on the wrong pass).
+    if (targets && targets.length) {
+      var near = targets.filter(function (t) { return hav(lat, lon, t.lat, t.lon) < capKm * 1.3; });
+      targets = near.length ? near : null;
+    }
     var startK = vkey(gx(ch.w, ch.idx), gy(ch.w, ch.idx));
     var startLat = gx(ch.w, ch.idx), startLon = gy(ch.w, ch.idx);
     var dist = new Map(), parent = new Map(), coord = new Map(), edgeRef = new Map();
@@ -557,7 +565,7 @@ async function main() {
       if (dc > capKm) continue;
       if (tgReach) {
         var cc = coord.get(c), allDone = true;
-        for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 0.9) tr.done = true; if (!tr.done) allDone = false; }
+        for (var tr of tgReach) { if (!tr.done && hav(cc[0], cc[1], tr.lat, tr.lon) < 2.0) tr.done = true; if (!tr.done) allDone = false; }
         if (allDone) break;
       }
       for (var nb of neighbors(c)) {
@@ -578,7 +586,7 @@ async function main() {
       var pinned = [];
       for (var ti2 = 0; ti2 < targets.length; ti2++) {
         var tg = targets[ti2], aim = tgReach[ti2];
-        var bestK = null, bestD = 1.5; // was 0.8: town centroids sit off the kept road (residential dropped)
+        var bestK = null, bestD = 2.5; // was 0.8: town centroids sit off the kept road (residential dropped)
         coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
         if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
         var rp = [], kk = bestK, gd = 0;
@@ -586,7 +594,8 @@ async function main() {
         if (rp.length < 4) continue;
         var pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
         var ev = await elevations(pth); if (!ev) continue;
-        var pv = buildSide(pth, ev, lat, lon, true, true);     // relax + pin: base fixed at the town
+        var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
+        if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town (fixes flat/imprecise pins)
         if (pv) { pv.side = "Da " + tg.name; pinned.push(pv); }
         else console.log("    . hint " + tg.name + ": salita non valida");
       }
