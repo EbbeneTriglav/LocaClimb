@@ -43,7 +43,7 @@ const REENRICH = process.argv.includes("--reenrich");
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.6-classpen";
+const ALGO_VERSION = "v4.7-pavedauto";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
@@ -609,7 +609,7 @@ async function main() {
         if (settled.has(nb.key)) continue;
         var nreal = dc + nb.seg;
         if (nreal > capKm) continue;                                  // real-km cap (never inflated)
-        var ncost = kc + nb.seg * (1 + (tgReach ? edgeExtra(nb) : 0)); // class/surface steering
+        var ncost = kc + nb.seg * (1 + edgeExtra(nb)); // class/surface steering on hinted AND auto -> follow paved SS/SP/SR approaches, not gravel shortcuts (real km stays in `dist`)
         if (!cost.has(nb.key) || ncost < cost.get(nb.key)) {
           dist.set(nb.key, nreal); cost.set(nb.key, ncost); parent.set(nb.key, c); edgeRef.set(nb.key, nb.ref);
           if (!coord.has(nb.key)) { var p2 = nb.key.split(","); coord.set(nb.key, [parseFloat(p2[0]), parseFloat(p2[1])]); }
@@ -773,7 +773,7 @@ async function main() {
         var bv = bearing(lat, lon, v2.startLat, v2.startLon), bu = bearing(lat, lon, u.startLat, u.startLon);
         var db = Math.abs(bv - bu); if (db > 180) db = 360 - db;
         var ov = Math.max(overlapFrac(v2, u), overlapFrac(u, v2));
-        if ((close && db < 45) || ov > 0.55) { dup = true; break; } // same base-direction OR mostly-shared road
+        if ((close && db < 45) || ov > 0.5) { dup = true; break; } // same base-direction OR >50% shared road
       }
       if (!dup) kept.push(v2);
       if (kept.length >= 7) break;
