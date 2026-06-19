@@ -4784,8 +4784,8 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "gavia": {
   "lat": 46.34410095214844,
@@ -8180,8 +8180,8 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "mortirolo": {
   "lat": 46.247379302978516,
@@ -13970,8 +13970,8 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "zoncolan": {
   "lat": 46.503265380859375,
@@ -15930,8 +15930,8 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "pordoi": {
   "lat": 46.487159729003906,
@@ -17207,8 +17207,8 @@
   ],
   "difficulty": 9,
   "cat": "1",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "sella": {
   "lat": 46.5090446472168,
@@ -18767,8 +18767,8 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "gardena": {
   "lat": 46.54124069213867,
@@ -20595,8 +20595,8 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "campolongo": {
   "lat": 46.52073669433594,
@@ -21435,8 +21435,8 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "falzarego": {
   "lat": 46.51874923706055,
@@ -23599,8 +23599,8 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "giau": {
   "lat": 46.48271942138672,
@@ -26259,8 +26259,8 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "fedaia": {
   "lat": 46.459739685058594,
@@ -28239,8 +28239,8 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "spluga": {
   "lat": 46.50468063354492,
@@ -32679,8 +32679,8 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "san-marco": {
   "lat": 46.06817626953125,
@@ -35811,8 +35811,8 @@
   ],
   "difficulty": 8,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "grappa": {
   "lat": 45.870216369628906,
@@ -44373,8 +44373,8 @@
   ],
   "difficulty": 9,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "manghen": {
   "lat": 46.17283248901367,
@@ -47861,8 +47861,8 @@
   ],
   "difficulty": 10,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "tonale": {
   "lat": 46.25807189941406,
@@ -49501,8 +49501,8 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "presolana": {
   "lat": 45.9292106628418,
@@ -52005,8 +52005,8 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "vivione": {
   "lat": 46.03484344482422,
@@ -53210,8 +53210,8 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "rolle": {
   "lat": 46.29637908935547,
@@ -56546,8 +56546,8 @@
   ],
   "difficulty": 7,
   "cat": "HC",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "croce-daune": {
   "lat": 46.07012939453125,
@@ -57487,8 +57487,8 @@
   ],
   "difficulty": 6,
   "cat": "3",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "abetone": {
   "lat": 44.14563751220703,
@@ -59339,8 +59339,8 @@
   ],
   "difficulty": 7,
   "cat": "2",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "futa": {
   "lat": 44.11820602416992,
@@ -61775,8 +61775,8 @@
   ],
   "difficulty": 5,
   "cat": "3",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "aprica": {
   "lat": 46.15343475341797,
@@ -63467,8 +63467,8 @@
   ],
   "difficulty": 8,
   "cat": "2",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  },
  "san-pellegrino": {
   "lat": 46.37858581542969,
@@ -64759,8 +64759,8 @@
     "startLon": 11.658912,
     "startElevation": 1167,
     "endElevation": 1894,
-    "distance_km": 10.7,
-    "avgGradient": 6.8,
+    "distance_km": 10.8,
+    "avgGradient": 6.7,
     "maxGradient": 13,
     "traffic": "n/d",
     "exposure": "Ovest",
@@ -64773,20 +64773,20 @@
      1255,
      1266,
      1286,
-     1298,
-     1315,
-     1337,
-     1358,
-     1376,
-     1418,
-     1444,
-     1470,
-     1499,
-     1538,
-     1567,
-     1599,
-     1634,
-     1656,
+     1300,
+     1320,
+     1343,
+     1371,
+     1394,
+     1433,
+     1439,
+     1466,
+     1494,
+     1530,
+     1565,
+     1595,
+     1622,
+     1654,
      1679,
      1707,
      1743,
@@ -65015,60 +65015,68 @@
       11.685209
      ],
      [
-      46.368477,
-      11.685299
+      46.367863,
+      11.686044
      ],
      [
-      46.368458,
-      11.685591
+      46.367424,
+      11.686715
      ],
      [
-      46.368687,
-      11.686241
+      46.367172,
+      11.68727
      ],
      [
-      46.368656,
-      11.68664
+      46.366985,
+      11.688114
      ],
      [
-      46.368542,
-      11.687308
+      46.366966,
+      11.689031
      ],
      [
-      46.368378,
-      11.688166
+      46.36697,
+      11.69004
      ],
      [
-      46.368038,
-      11.688931
+      46.366783,
+      11.690674
      ],
      [
-      46.367702,
-      11.690955
+      46.36644,
+      11.690953
      ],
      [
-      46.367195,
-      11.691899
+      46.365822,
+      11.691443
      ],
      [
-      46.366596,
-      11.692543
+      46.365597,
+      11.692102
      ],
      [
-      46.366215,
-      11.693381
+      46.365528,
+      11.692906
      ],
      [
-      46.365967,
-      11.694217
+      46.365459,
+      11.693646
      ],
      [
-      46.366058,
-      11.694999
+      46.365391,
+      11.694579
      ],
      [
-      46.366035,
-      11.695062
+      46.365425,
+      11.694732
+     ],
+     [
+      46.365498,
+      11.694846
+     ],
+     [
+      46.365925,
+      11.695028
      ],
      [
       46.365978,
@@ -65379,7 +65387,7 @@
   ],
   "difficulty": 8,
   "cat": "1",
-  "algo": "v4.6-classpen",
-  "updatedAt": "2026-06-18"
+  "algo": "v4.7-pavedauto",
+  "updatedAt": "2026-06-19"
  }
 }
