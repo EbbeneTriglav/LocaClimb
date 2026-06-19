@@ -931,6 +931,7 @@ function snapRoute(wps){ // wps:[{lat,lon}] base..summit -> Promise of road poly
     }).catch(function(){return null;});
   });
 }
+function fetchElevsBatch(pts){var c=[];for(var i=0;i<pts.length;i+=100)c.push(pts.slice(i,i+100));return Promise.all(c.map(function(ch){return fetchElevs(ch);})).then(function(res){return [].concat.apply([],res);});}
 function edCalc(){
   ED.label=document.getElementById("edLabel").value.trim();ED.desc=document.getElementById("edDesc").value.trim();
   if(ED.track.length<1){edMsg("Clicca almeno il fondovalle (partenza).");return;}
@@ -939,10 +940,10 @@ function edCalc(){
   var wps=ED.track.slice();wps.push({lat:ED.summit.lat,lon:ED.summit.lon});
   edMsg(doSnap?"Aggancio strada + quote...":"Calcolo quote...");
   (doSnap&&wps.length>=2?snapRoute(wps):Promise.resolve(null)).then(function(road){
-    var b2s=(road&&road.length>3)?edDown(road,80):wps; // snapped road OR raw anchors
+    var b2s=(road&&road.length>3)?road:wps; // FULL snapped road geometry, tornanti preserved (no downsample)
     if(doSnap&&!road)edMsg("Router non disponibile: uso i punti grezzi...");
     var pts=b2s.slice().reverse(); // summit->base for buildVersante
-    return fetchElevs(pts).then(function(el){
+    return fetchElevsBatch(pts).then(function(el){
       var v=buildVersante(pts,el,ED.summit.lat,ED.summit.lon,"",null);
       if(!v){edMsg("Salita non valida (serve &gt;200 m disl., &gt;1.5 km, e il fondo come punto piu basso).");return;}
       if(ED.label)v.side=ED.label;v.cat=climbCat(v.distance_km,v.endElevation-v.startElevation,v.endElevation);if(ED.desc)v.note=ED.desc;v.manual=true;
@@ -980,6 +981,37 @@ function edOpen(){
   document.getElementById("edAddBtn").onclick=edAddVersante;
   document.getElementById("edPrev").onclick=function(){if(edCommitStore()){applyManual();edMsg("Anteprima applicata sulla mappa.");}};
   document.getElementById("edDl").onclick=edDownload;
+  if(isAdmin())edAddGhSection(d);
+}
+function edAddGhSection(d){
+  var o=(function(){try{return sessionStorage.getItem("gh_owner");}catch(e){return null;}})()||"EbbeneTriglav";
+  var rp=(function(){try{return sessionStorage.getItem("gh_repo");}catch(e){return null;}})()||"LocaClimb";
+  var tk=(function(){try{return sessionStorage.getItem("gh_tok");}catch(e){return null;}})()||"";
+  var s=document.createElement("div");s.style.cssText="margin-top:10px;padding-top:8px;border-top:2px solid #c60";
+  s.innerHTML='<div style="font-weight:600;color:#c60;margin-bottom:4px">&#128274; Salva diretto (admin)</div>'
+    +'<div style="display:flex;gap:4px;margin-bottom:4px"><input id="ghOwner" placeholder="owner" value="'+o+'" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/><input id="ghRepo" placeholder="repo" value="'+rp+'" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/></div>'
+    +'<input id="ghTok" type="password" placeholder="token GitHub (fine-grained)" value="'+tk+'" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/>'
+    +'<button id="ghSaveBtn" style="width:100%;padding:8px;border:none;background:#c60;color:#fff;border-radius:6px;cursor:pointer;font-weight:600">&#128190; Salva su GitHub</button>'
+    +'<div style="font-size:10px;color:#999;margin-top:5px">Token fine-grained, SOLO questo repo, permesso Contents: read &amp; write. Resta solo in questa sessione. Non committarlo mai.</div>';
+  d.appendChild(s);
+  document.getElementById("ghSaveBtn").onclick=ghSave;
+}
+function ghSave(){
+  if(!edCommitStore())return;
+  var owner=document.getElementById("ghOwner").value.trim(),repo=document.getElementById("ghRepo").value.trim(),tok=document.getElementById("ghTok").value.trim();
+  if(!owner||!repo||!tok){edMsg("Inserisci owner, repo e token.");return;}
+  try{sessionStorage.setItem("gh_owner",owner);sessionStorage.setItem("gh_repo",repo);sessionStorage.setItem("gh_tok",tok);}catch(e){}
+  var api="https://api.github.com/repos/"+owner+"/"+repo+"/contents/manual_overrides.json";
+  var content=btoa(unescape(encodeURIComponent(JSON.stringify(ED.store,null,1)+"\n")));
+  edMsg("Salvataggio su GitHub...");
+  fetch(api,{headers:{Authorization:"token "+tok,Accept:"application/vnd.github+json"}}).then(function(r){return r.ok?r.json():null;}).then(function(cur){
+    var body={message:"data: edit manual climbs (in-app editor)",content:content,branch:"main"};
+    if(cur&&cur.sha)body.sha=cur.sha;
+    return fetch(api,{method:"PUT",headers:{Authorization:"token "+tok,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify(body)});
+  }).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});}).then(function(res){
+    if(res.ok)edMsg("&#10003; Salvato su GitHub. L'Action sta generando le quote Terrarium.");
+    else edMsg("Errore GitHub: "+((res.j&&res.j.message)||"controlla token e permessi Contents."));
+  }).catch(function(){edMsg("Errore rete verso GitHub.");});
 }
 function edInit(){
   if(typeof map==="undefined"||!map){setTimeout(edInit,300);return;}
