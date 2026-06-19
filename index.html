@@ -923,7 +923,7 @@ function edPreviewTrack(tr){if(ED.line){map.removeLayer(ED.line);}ED.line=L.poly
 function snapRoute(wps){ // wps:[{lat,lon}] base..summit -> Promise of road polyline [{lat,lon}] or null
   var lonlats=wps.map(function(s){return s.lon.toFixed(5)+","+s.lat.toFixed(5);}).join("|");
   return fetch(BROUTER+"?lonlats="+lonlats+"&profile=trekking&alternativeidx=0&format=geojson").then(function(r){return r.json();}).then(function(data){
-    var f=data.features&&data.features[0];if(!f)throw 0;return f.geometry.coordinates.map(function(c){return{lat:c[1],lon:c[0]};});
+    var f=data.features&&data.features[0];if(!f)throw 0;return f.geometry.coordinates.map(function(c){return{lat:c[1],lon:c[0],ele:c[2]};});
   }).catch(function(){
     var coords=wps.map(function(s){return s.lon+","+s.lat;}).join(";");
     return fetch("https://router.project-osrm.org/route/v1/bike/"+coords+"?overview=full&geometries=geojson").then(function(r){return r.json();}).then(function(d){
@@ -931,19 +931,32 @@ function snapRoute(wps){ // wps:[{lat,lon}] base..summit -> Promise of road poly
     }).catch(function(){return null;});
   });
 }
-function fetchElevsBatch(pts){var c=[];for(var i=0;i<pts.length;i+=100)c.push(pts.slice(i,i+100));return Promise.all(c.map(function(ch){return fetchElevs(ch);})).then(function(res){return [].concat.apply([],res);});}
+function edDownPts(pts,n){if(pts.length<=n)return pts;var o=[];for(var i=0;i<n;i++)o.push(pts[Math.round(i*(pts.length-1)/(n-1))]);return o;}
+function fetchElevs1(pts,tries){ // ONE open-meteo call (<=100 pts), retry on 429
+  tries=tries||0;
+  var la=pts.map(function(p){return p.lat.toFixed(5);}).join(","),lo=pts.map(function(p){return p.lon.toFixed(5);}).join(",");
+  return fetch(ELEV_API+"?latitude="+la+"&longitude="+lo).then(function(r){
+    if(r.status===429&&tries<3)return new Promise(function(res){setTimeout(res,1200*(tries+1));}).then(function(){return fetchElevs1(pts,tries+1);});
+    return r.json().then(function(d){return d.elevation;});
+  });
+}
 function edCalc(){
   ED.label=document.getElementById("edLabel").value.trim();ED.desc=document.getElementById("edDesc").value.trim();
   if(ED.track.length<1){edMsg("Clicca almeno il fondovalle (partenza).");return;}
   if(!ED.summit){edMsg("Manca la cima: seleziona un passo o clicca la cima.");return;}
   var doSnap=document.getElementById("edSnap")&&document.getElementById("edSnap").checked;
   var wps=ED.track.slice();wps.push({lat:ED.summit.lat,lon:ED.summit.lon});
-  edMsg(doSnap?"Aggancio strada + quote...":"Calcolo quote...");
+  edMsg(doSnap?"Aggancio strada...":"Calcolo quote...");
   (doSnap&&wps.length>=2?snapRoute(wps):Promise.resolve(null)).then(function(road){
-    var b2s=(road&&road.length>3)?road:wps; // FULL snapped road geometry, tornanti preserved (no downsample)
+    var b2s=(road&&road.length>3)?road:wps; // FULL snapped geometry (tornanti), or raw anchors
     if(doSnap&&!road)edMsg("Router non disponibile: uso i punti grezzi...");
-    var pts=b2s.slice().reverse(); // summit->base for buildVersante
-    return fetchElevsBatch(pts).then(function(el){
+    var pts=b2s.slice().reverse(); // summit->base
+    var haveEle=pts[0]&&pts[0].ele!=null&&!isNaN(pts[0].ele);
+    var elP;
+    if(haveEle){elP=Promise.resolve(pts.map(function(p){return p.ele;}));}        // BRouter quotes -> no open-meteo
+    else{pts=edDownPts(pts,90);elP=fetchElevs1(pts);}                              // freehand/OSRM -> 1 call, capped
+    return elP.then(function(el){
+      if(!el||el.length!==pts.length){edMsg("Quote non disponibili ora (limite richieste). Riprova tra qualche secondo.");return;}
       var v=buildVersante(pts,el,ED.summit.lat,ED.summit.lon,"",null);
       if(!v){edMsg("Salita non valida (serve &gt;200 m disl., &gt;1.5 km, e il fondo come punto piu basso).");return;}
       if(ED.label)v.side=ED.label;v.cat=climbCat(v.distance_km,v.endElevation-v.startElevation,v.endElevation);if(ED.desc)v.note=ED.desc;v.manual=true;
