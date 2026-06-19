@@ -889,7 +889,12 @@ function applyManual(){
   for(var id in ov){var o=ov[id];
     if(o["new"]){
       var ex=PASSES_DATA.filter(function(p){return p.id===id;})[0];
-      if(!ex)PASSES_DATA.push({id:id,name:o.name,lat:o.lat,lon:o.lon,elevation:o.elevation,region:o.region||"",status:o.status||"Aperto",versanti:o.versanti||[],difficulty:o.difficulty||1,cat:o.cat||null,updatedAt:o.updatedAt,manual:true});
+      if(!ex){
+        var near=null,bd=0.8; // a manual "new" pass near an existing one OVERRIDES it (no duplicate marker)
+        PASSES_DATA.concat(osmPasses).forEach(function(p){if(p.lat!=null){var dd=hav(o.lat,o.lon,p.lat,p.lon);if(dd<bd){bd=dd;near=p;}}});
+        if(near){near.versanti=o.versanti;near.difficulty=o.difficulty;near.cat=o.cat;near.updatedAt=o.updatedAt;near.manual=true;}
+        else PASSES_DATA.push({id:id,name:o.name,lat:o.lat,lon:o.lon,elevation:o.elevation,region:o.region||"",status:o.status||"Aperto",versanti:o.versanti||[],difficulty:o.difficulty||1,cat:o.cat||null,updatedAt:o.updatedAt,manual:true});
+      }
       else{ex.versanti=o.versanti;ex.difficulty=o.difficulty;ex.cat=o.cat;ex.lat=o.lat;ex.lon=o.lon;ex.elevation=o.elevation;ex.updatedAt=o.updatedAt;ex.manual=true;}
     }else{
       var hit=PASSES_DATA.filter(function(p){return p.id===id;})[0]||osmPasses.filter(function(p){return p.id===id;})[0];
