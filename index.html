@@ -128,6 +128,7 @@ canvas#relev{height:170px}
 <div class="fg"><label>Regione</label><select id="fr"><option value="">Tutte</option></select></div>
 <div class="fg"><label>Difficolta min</label><input type="range" id="fd" min="1" max="10" value="1"><div style="font-size:.8rem;color:var(--txt2)">Da <b id="fdv">1</b> a 10</div></div>
 <div class="fg"><label>Stato</label><select id="fs"><option value="">Tutti</option><option value="open">Aperto</option><option value="seasonal">Stagionale</option><option value="closed">Chiuso</option></select></div>
+<div class="fg"><label>Camion</label><select id="ftruck" onchange="applyFilters()"><option value="">Tutti</option><option value="no">Solo senza camion</option><option value="low">Pochi o nessuno</option></select></div>
 <div class="fg"><label><input type="checkbox" id="fosm" checked style="width:auto;margin-right:6px">Mostra passi OSM</label></div>
 <button class="btn" style="width:100%;margin-top:6px" onclick="resetFilters()">Reset</button>
 <button class="btn" style="width:100%;margin-top:4px" onclick="closeFP()">Chiudi</button>
@@ -527,40 +528,49 @@ function drawElev(p){
   c.onmouseleave=function(){renderElev(-1);};
   c.ontouchmove=function(ev){var r=c.getBoundingClientRect();renderElev((ev.touches[0].clientX-r.left)/r.width);ev.preventDefault();};
 }
+function niceBin(dist){var t=dist/9,steps=[0.25,0.5,1,1.5,2,2.5,5];for(var i=0;i<steps.length;i++)if(t<=steps[i])return steps[i];return 5;}
+function interpE(s,d){var pts=s.pts;if(d<=pts[0].d)return pts[0].e;if(d>=pts[pts.length-1].d)return pts[pts.length-1].e;for(var i=1;i<pts.length;i++){if(pts[i].d>=d){var a=pts[i-1],b=pts[i],t=(d-a.d)/((b.d-a.d)||1);return a.e+(b.e-a.e)*t;}}return pts[pts.length-1].e;}
+function binGradOf(bins,d){for(var i=0;i<bins.length;i++)if(d<=bins[i].d1+1e-6)return bins[i].g;return bins[bins.length-1].g;}
 function renderElev(frac){
   var m=elevMeta;if(!m)return;var c=m.c;
-  var dpr=window.devicePixelRatio||1,W=c.offsetWidth,H=200;
-  c.width=W*dpr;c.height=H*dpr;var ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
-  var dk=document.body.classList.contains("dark"),PADL=40,PADR=10,PADT=14,PADB=22;
-  var plotW=W-PADL-PADR,plotH=H-PADT-PADB;
-  ctx.fillStyle=dk?"#1e293b":"#f8fafc";ctx.fillRect(0,0,W,H);
+  var dpr=window.devicePixelRatio||1,W=c.offsetWidth,H=224;
+  c.style.height=H+"px";c.width=W*dpr;c.height=H*dpr;var ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+  var dk=document.body.classList.contains("dark"),PADL=6,PADR=46,PADT=16,PADB=42;
+  var plotW=W-PADL-PADR,plotH=H-PADT-PADB,baseY=PADT+plotH;
+  ctx.clearRect(0,0,W,H);
   function X(d){return PADL+(d/m.maxDist)*plotW;}
   function Y(e){return PADT+plotH*(1-(e-m.mn)/(m.mx-m.mn));}
-  // grid + axes
-  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#64748b":"#94a3b8";ctx.textAlign="right";
-  for(var i=0;i<=4;i++){var y=PADT+plotH*(1-i/4),el=Math.round(m.mn+(m.mx-m.mn)*i/4);ctx.beginPath();ctx.moveTo(PADL,y);ctx.lineTo(W-PADR,y);ctx.stroke();ctx.fillText(el+"m",PADL-4,y+3);}
-  ctx.textAlign="center";for(var k=0;k<=Math.ceil(m.maxDist);k+=Math.max(1,Math.round(m.maxDist/6))){ctx.fillText(k+"km",X(k),H-7);}
-  // series: if one selected -> gradient-filled; if both -> each as grade-colored line (readable)
-  var only=(typeof elevSel==="number"&&elevSel>=0)?elevSel:-1;
-  m.series.forEach(function(s,si){
-    if(only>=0&&si!==only)return;
-    var fill=(only>=0)||m.series.length===1;
-    for(var i=1;i<s.pts.length;i++){var a=s.pts[i-1],b=s.pts[i];
-      if(fill){ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.lineTo(X(b.d),H-PADB);ctx.lineTo(X(a.d),H-PADB);ctx.closePath();ctx.fillStyle=gradeColor(b.g);ctx.globalAlpha=0.6;ctx.fill();ctx.globalAlpha=1;}
-      ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.strokeStyle=fill?(dk?"#e2e8f0":"#334155"):gradeColor(b.g);ctx.lineWidth=fill?1.5:3.5;ctx.globalAlpha=0.95;ctx.stroke();ctx.globalAlpha=1;}
-  });
-  // legend
-  m.series.forEach(function(s,si){ctx.fillStyle=si===0?(dk?"#e2e8f0":"#334155"):VCOLS[si];ctx.fillRect(PADL+4+si*150,2,9,9);ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";ctx.fillText(s.name.substring(0,17),PADL+16+si*150,11);});
-  // hover crosshair + tooltip on primary series
+  var only=(typeof elevSel==="number"&&elevSel>=0)?elevSel:(m.series.length===1?0:-1);
+  if(only>=0){ // ---- Flamme Rouge style: one versante ----
+    var s=m.series[only],binKm=niceBin(s.dist),nb=Math.max(1,Math.ceil(s.dist/binKm)),bins=[];
+    for(var bi=0;bi<nb;bi++){var d0=bi*binKm,d1=Math.min(s.dist,(bi+1)*binKm),e0=interpE(s,d0),e1=interpE(s,d1);bins.push({d0:d0,d1:d1,g:(d1>d0)?(e1-e0)/((d1-d0)*1000)*100:0});}
+    for(var i=1;i<s.pts.length;i++){var a=s.pts[i-1],b=s.pts[i],bg=binGradOf(bins,(a.d+b.d)/2);ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.lineTo(X(b.d),baseY);ctx.lineTo(X(a.d),baseY);ctx.closePath();ctx.fillStyle=gradeColor(bg);ctx.fill();}
+    ctx.beginPath();for(var i=0;i<s.pts.length;i++){var pt=s.pts[i];if(i===0)ctx.moveTo(X(pt.d),Y(pt.e));else ctx.lineTo(X(pt.d),Y(pt.e));}ctx.lineTo(X(s.pts[s.pts.length-1].d),baseY);ctx.lineTo(X(0),baseY);ctx.closePath();ctx.strokeStyle=dk?"#f8fafc":"#0f172a";ctx.lineWidth=1.6;ctx.stroke();
+    // bin separators + per-segment % labels (Flamme Rouge: number under each block)
+    ctx.textAlign="center";
+    bins.forEach(function(bn){var xc=X((bn.d0+bn.d1)/2);ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(bn.d1),Y(interpE(s,bn.d1)));ctx.lineTo(X(bn.d1),baseY);ctx.stroke();
+      var lab=bn.g.toFixed(1);ctx.font="bold 10px system-ui";var tw=ctx.measureText(lab).width+6;ctx.fillStyle="rgba(255,255,255,.9)";ctx.fillRect(xc-tw/2,baseY-15,tw,13);ctx.fillStyle="#111";ctx.fillText(lab,xc,baseY-5);});
+    // bottom dark strip with distance ticks
+    ctx.fillStyle=dk?"#0b1220":"#1e293b";ctx.fillRect(0,baseY+1,W,PADB-1);ctx.fillStyle="#cbd5e1";ctx.font="10px system-ui";ctx.textAlign="center";
+    ctx.fillText("0",X(0),baseY+15);bins.forEach(function(bn){ctx.fillText((bn.d1%1===0?bn.d1:bn.d1.toFixed(1)),X(bn.d1),baseY+15);});
+    ctx.fillStyle="#64748b";ctx.font="9px system-ui";ctx.fillText("km",W-PADR+12,baseY+15);
+  } else { // ---- both versanti: grade-colored lines ----
+    m.series.forEach(function(s,si){for(var i=1;i<s.pts.length;i++){var a=s.pts[i-1],b=s.pts[i];ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.strokeStyle=gradeColor(b.g);ctx.lineWidth=3.2;ctx.globalAlpha=si?0.7:0.95;ctx.stroke();ctx.globalAlpha=1;}});
+    m.series.forEach(function(s,si){ctx.fillStyle=VCOLS[si]||"#334155";ctx.fillRect(PADL+4+si*150,2,9,9);ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";ctx.fillText(s.name.substring(0,17),PADL+16+si*150,11);});
+    ctx.textAlign="center";ctx.fillStyle=dk?"#64748b":"#94a3b8";ctx.font="10px system-ui";for(var k=0;k<=Math.ceil(m.maxDist);k+=Math.max(1,Math.round(m.maxDist/6)))ctx.fillText(k+"km",X(k),H-7);
+  }
+  // right elevation axis + gridlines
+  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#94a3b8":"#64748b";ctx.textAlign="left";
+  for(var i2=0;i2<=4;i2++){var yy=PADT+plotH*(1-i2/4),el=Math.round(m.mn+(m.mx-m.mn)*i2/4);ctx.beginPath();ctx.moveTo(PADL,yy);ctx.lineTo(W-PADR,yy);ctx.stroke();ctx.fillText(el+"m",W-PADR+3,yy+3);}
+  // hover crosshair + tooltip
   if(frac>=0&&m.series.length){
-    var s=only>=0?m.series[only]:m.series[0],d=Math.max(0,Math.min(s.dist,(frac*W-PADL)/plotW*m.maxDist));
-    var idx=Math.round(d/s.dist*(s.pts.length-1));idx=Math.max(0,Math.min(s.pts.length-1,idx));var pt=s.pts[idx];
-    var px=X(pt.d),py=Y(pt.e);
-    ctx.strokeStyle=dk?"#64748b":"#94a3b8";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(px,PADT);ctx.lineTo(px,H-PADB);ctx.stroke();
-    ctx.fillStyle=gradeColor(pt.g);ctx.beginPath();ctx.arc(px,py,4,0,7);ctx.fill();
+    var s2=only>=0?m.series[only]:m.series[0],d=Math.max(0,Math.min(s2.dist,(frac*W-PADL)/plotW*m.maxDist));
+    var idx=Math.round(d/s2.dist*(s2.pts.length-1));idx=Math.max(0,Math.min(s2.pts.length-1,idx));var pt=s2.pts[idx],px=X(pt.d),py=Y(pt.e);
+    ctx.strokeStyle=dk?"#94a3b8":"#475569";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(px,PADT);ctx.lineTo(px,baseY);ctx.stroke();
+    ctx.fillStyle="#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=2;ctx.beginPath();ctx.arc(px,py,4,0,7);ctx.fill();ctx.stroke();
     var txt=pt.d.toFixed(1)+"km  "+pt.e+"m  "+(pt.g>0?"+":"")+pt.g.toFixed(1)+"%";
-    ctx.font="bold 11px system-ui";var tw=ctx.measureText(txt).width+12,tx=Math.min(W-tw-2,Math.max(2,px-tw/2));
-    ctx.fillStyle=dk?"#0f172a":"#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=1.5;ctx.beginPath();ctx.rect(tx,PADT+2,tw,18);ctx.fill();ctx.stroke();
+    ctx.font="bold 11px system-ui";var tw2=ctx.measureText(txt).width+12,tx=Math.min(W-tw2-2,Math.max(2,px-tw2/2));
+    ctx.fillStyle=dk?"#0f172a":"#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=1.5;ctx.beginPath();ctx.rect(tx,PADT+2,tw2,18);ctx.fill();ctx.stroke();
     ctx.fillStyle=dk?"#f1f5f9":"#1e293b";ctx.textAlign="left";ctx.fillText(txt,tx+6,PADT+15);
   }
 }
@@ -754,7 +764,9 @@ function submitReport(){var txt=document.getElementById("rp-txt").value.trim();i
 /* ===== FILTERS / SEARCH / DARK / EVENTS ===== */
 function openFP(){document.getElementById("fp").classList.toggle("open");}
 function closeFP(){document.getElementById("fp").classList.remove("open");}
-function applyFilters(){var reg=document.getElementById("fr").value,diff=parseInt(document.getElementById("fd").value),sta=document.getElementById("fs").value,q=document.getElementById("search").value.toLowerCase();showOsm=document.getElementById("fosm").checked;var f=PASSES_DATA.filter(function(p){if(reg&&p.region!==reg)return false;if(p.difficulty<diff)return false;if(sta&&p.status!==sta)return false;if(q&&p.name.toLowerCase().indexOf(q)<0&&p.region.toLowerCase().indexOf(q)<0)return false;return true;});addMarkers(f);}
+function truckRank(t){return {no:0,rari:1,possibili:2,si:3}[t]||1;}
+function passTruck(p){if(!p.versanti||!p.versanti.length)return"rari";var w=0;p.versanti.forEach(function(v){w=Math.max(w,truckRank(versTraffic(v,p).trucks));});return["no","rari","possibili","si"][w];}
+function applyFilters(){var reg=document.getElementById("fr").value,diff=parseInt(document.getElementById("fd").value),sta=document.getElementById("fs").value,trk=(document.getElementById("ftruck")||{}).value||"",q=document.getElementById("search").value.toLowerCase();showOsm=document.getElementById("fosm").checked;var f=PASSES_DATA.filter(function(p){if(reg&&p.region!==reg)return false;if(p.difficulty<diff)return false;if(sta&&p.status!==sta)return false;if(trk){var lv=passTruck(p);if(trk==="no"&&lv!=="no")return false;if(trk==="low"&&(lv==="possibili"||lv==="si"))return false;}if(q&&p.name.toLowerCase().indexOf(q)<0&&p.region.toLowerCase().indexOf(q)<0)return false;return true;});addMarkers(f);}
 function resetFilters(){document.getElementById("fr").value="";document.getElementById("fd").value="1";document.getElementById("fdv").textContent="1";document.getElementById("fs").value="";document.getElementById("search").value="";document.getElementById("fosm").checked=true;showOsm=true;addMarkers(PASSES_DATA);closeSearch();}
 function closeSearch(){var b=document.getElementById("sresults");if(b){b.classList.remove("open");b.innerHTML="";}searchItems=[];}
 function searchList(q){
@@ -992,6 +1004,7 @@ function edCalc(){
       var v=buildVersante(pts,el,ED.summit.lat,ED.summit.lon,"",null);
       if(!v){edMsg("Salita non valida (serve &gt;200 m disl., &gt;1.5 km, e il fondo come punto piu basso).");return;}
       if(ED.label)v.side=ED.label;v.cat=climbCat(v.distance_km,v.endElevation-v.startElevation,v.endElevation);if(ED.desc)v.note=ED.desc;v.manual=true;
+      var tk=document.getElementById("edTruck");if(tk&&tk.value)v.trucks=tk.value;
       edPreviewTrack(v.track);ED.pending=v;
       edMsg("OK &rarr; "+v.distance_km+" km, +"+(v.endElevation-v.startElevation)+" m, media "+v.avgGradient+"%, max "+v.maxGradient+"%, cat "+(v.cat||"-")+". Premi <b>Aggiungi versante</b>.");
     });
@@ -1014,7 +1027,7 @@ function edOpen(){
   ED.store=window.MANUAL_OV?JSON.parse(JSON.stringify(window.MANUAL_OV)):{};
   var d=document.createElement("div");d.id="edPanel";
   d.style.cssText="position:fixed;top:84px;left:10px;z-index:1200;width:300px;max-height:84vh;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);padding:12px;font:13px/1.4 system-ui,sans-serif;color:#222";
-  d.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>&#9998; Editor salite</b><span id="edClose" style="cursor:pointer;font-size:18px;padding:0 6px">&times;</span></div><input id="edSearch" placeholder="Cerca passo da modificare..." style="width:100%;box-sizing:border-box;padding:6px;border:1px solid #ccc;border-radius:6px"/><div id="edHits" style="max-height:120px;overflow:auto"></div><button id="edNew" style="width:100%;margin:8px 0;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">+ Nuovo passo</button><div id="edTarget" style="font-size:12px;color:#555;margin-bottom:8px"></div><div id="edNewFields" style="display:none;margin-bottom:8px"><input id="edName" placeholder="Nome passo" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px"><input id="edElev" placeholder="Quota m" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/><input id="edRegion" placeholder="Regione" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/></div></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><div style="font-weight:600;margin-bottom:4px">Versante</div><input id="edLabel" placeholder="Etichetta (es. Da Mazzo)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px;margin-bottom:4px"><button id="edDrawBtn" style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">&#9998; Disegna</button><button id="edUndoBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Annulla</button><button id="edClearBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Pulisci</button></div><label style="font-size:12px;display:block;margin-bottom:4px;cursor:pointer"><input type="checkbox" id="edSnap" checked/> Aggancia a strada (pochi punti)</label><div style="font-size:11px;color:#777;margin-bottom:4px">Con aggancio ON: clicca solo fondovalle + 1-2 punti sulla strada giusta. La cima si aggiunge da sola.<br><b>Dopo Calcola</b>: trascina un punto per spostarlo, click destro per rimuoverlo, o aggiungine uno (Disegna) e premi di nuovo <b>Calcola</b>. Non rifai tutto.</div><textarea id="edDesc" placeholder="Note locali (fondo, pericoli, lore...)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px;height:42px"></textarea><div style="display:flex;gap:4px;margin-bottom:6px"><button id="edCalcBtn" style="flex:1;padding:6px;border:none;background:#2a7;color:#fff;border-radius:6px;cursor:pointer">Calcola</button><button id="edAddBtn" style="flex:1;padding:6px;border:none;background:#27a;color:#fff;border-radius:6px;cursor:pointer">Aggiungi versante</button></div><div id="edMsg" style="font-size:12px;color:#444;min-height:16px;margin-bottom:6px"></div><div id="edList" style="font-size:12px;margin-bottom:8px"></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><button id="edPrev" style="width:100%;margin-bottom:6px;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">Applica in anteprima</button><button id="edDl" style="width:100%;padding:8px;border:none;background:#c60;color:#fff;border-radius:6px;cursor:pointer;font-weight:600">&#11015; Scarica manual_overrides.json</button><div style="font-size:11px;color:#777;margin-top:6px">Poi carica il file nel repo GitHub, come gli altri.</div>';
+  d.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>&#9998; Editor salite</b><span id="edClose" style="cursor:pointer;font-size:18px;padding:0 6px">&times;</span></div><input id="edSearch" placeholder="Cerca passo da modificare..." style="width:100%;box-sizing:border-box;padding:6px;border:1px solid #ccc;border-radius:6px"/><div id="edHits" style="max-height:120px;overflow:auto"></div><button id="edNew" style="width:100%;margin:8px 0;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">+ Nuovo passo</button><div id="edTarget" style="font-size:12px;color:#555;margin-bottom:8px"></div><div id="edNewFields" style="display:none;margin-bottom:8px"><input id="edName" placeholder="Nome passo" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px"><input id="edElev" placeholder="Quota m" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/><input id="edRegion" placeholder="Regione" style="width:50%;box-sizing:border-box;padding:5px;border:1px solid #ccc;border-radius:6px"/></div></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><div style="font-weight:600;margin-bottom:4px">Versante</div><input id="edLabel" placeholder="Etichetta (es. Da Mazzo)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px"/><div style="display:flex;gap:4px;margin-bottom:4px"><button id="edDrawBtn" style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">&#9998; Disegna</button><button id="edUndoBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Annulla</button><button id="edClearBtn" style="padding:6px;border:1px solid #ccc;border-radius:6px;cursor:pointer">Pulisci</button></div><label style="font-size:12px;display:block;margin-bottom:4px;cursor:pointer"><input type="checkbox" id="edSnap" checked/> Aggancia a strada (pochi punti)</label><div style="font-size:11px;color:#777;margin-bottom:4px">Con aggancio ON: clicca solo fondovalle + 1-2 punti sulla strada giusta. La cima si aggiunge da sola.<br><b>Dopo Calcola</b>: trascina un punto per spostarlo, click destro per rimuoverlo, o aggiungine uno (Disegna) e premi di nuovo <b>Calcola</b>. Non rifai tutto.</div><textarea id="edDesc" placeholder="Note locali (fondo, pericoli, lore...)" style="width:100%;box-sizing:border-box;padding:5px;margin-bottom:4px;border:1px solid #ccc;border-radius:6px;height:42px"></textarea><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:12px"><span>Camion:</span><select id="edTruck" style="flex:1;padding:4px;border:1px solid #ccc;border-radius:6px"><option value="">(auto)</option><option value="no">Nessuno</option><option value="rari">Rari</option><option value="possibili">Possibili</option><option value="si">Frequenti</option></select></div><div style="display:flex;gap:4px;margin-bottom:6px"><button id="edCalcBtn" style="flex:1;padding:6px;border:none;background:#2a7;color:#fff;border-radius:6px;cursor:pointer">Calcola</button><button id="edAddBtn" style="flex:1;padding:6px;border:none;background:#27a;color:#fff;border-radius:6px;cursor:pointer">Aggiungi versante</button></div><div id="edMsg" style="font-size:12px;color:#444;min-height:16px;margin-bottom:6px"></div><div id="edList" style="font-size:12px;margin-bottom:8px"></div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"/><button id="edPrev" style="width:100%;margin-bottom:6px;padding:6px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;cursor:pointer">Applica in anteprima</button><button id="edDl" style="width:100%;padding:8px;border:none;background:#c60;color:#fff;border-radius:6px;cursor:pointer;font-weight:600">&#11015; Scarica manual_overrides.json</button><div style="font-size:11px;color:#777;margin-top:6px">Poi carica il file nel repo GitHub, come gli altri.</div>';
   document.body.appendChild(d);
   document.getElementById("edClose").onclick=function(){d.style.display="none";edDraw=false;ED._await=false;};
   document.getElementById("edNew").onclick=edStartNew;
