@@ -23,11 +23,19 @@ import vm from "node:vm";
 import { createRequire } from "node:module";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
-const PBF_URLS = [
+// PBF regions are configurable so the SAME heuristic builds any country.
+// Default = Italy north (unchanged). Override with env LC_PBF or --pbf (comma-separated Geofabrik URLs),
+// and set a per-region output with --out (e.g. osm_passes_fr.json). The frontend merges every osm_passes*.json.
+//   LC_PBF="https://download.geofabrik.de/europe/switzerland-latest.osm.pbf" node scripts/build_osm_passes.mjs --out osm_passes_ch.json
+const _arg0 = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
+const PBF_DEFAULT = [
   "https://download.geofabrik.de/europe/italy/nord-ovest-latest.osm.pbf",
   "https://download.geofabrik.de/europe/italy/nord-est-latest.osm.pbf",
   "https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf"
 ];
+const PBF_URLS = ((process.env.LC_PBF || _arg0("--pbf", "")).trim()
+  ? (process.env.LC_PBF || _arg0("--pbf", "")).split(",").map((s) => s.trim()).filter(Boolean)
+  : PBF_DEFAULT);
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 const DEM_Z = 13;
 const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link"];
@@ -349,13 +357,16 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
 /* ----- IO ------------------------------------------------------------------- */
 async function download(url, dest) {
   try { await access(dest); console.log("  cached " + dest); return; } catch {}
-  // region key e.g. "nord-ovest"
-  const region = url.split("/").pop().replace("-latest.osm.pbf", "");
-  const candidates = [
-    "https://download.geofabrik.de/europe/italy/" + region + "-latest.osm.pbf",
-    "https://download.openstreetmap.fr/extracts/europe/italy/" + region.replace(/-/g, "_") + ".osm.pbf",
-    "https://download.openstreetmap.fr/extracts/europe/italy/" + region + ".osm.pbf"
-  ];
+  // Derive an osm.fr mirror from any geofabrik URL (works for any country/region, not just italy).
+  // geofabrik:  https://download.geofabrik.de/europe/<path>-latest.osm.pbf
+  // osm.fr:     https://download.openstreetmap.fr/extracts/europe/<path>.osm.pbf
+  const candidates = [url];
+  const m = url.match(/geofabrik\.de\/(.+?)-latest\.osm\.pbf$/);
+  if (m) {
+    const path = m[1];                       // e.g. "europe/france/rhone-alpes"
+    candidates.push("https://download.openstreetmap.fr/extracts/" + path + ".osm.pbf");
+    candidates.push("https://download.openstreetmap.fr/extracts/" + path.replace(/-/g, "_") + ".osm.pbf");
+  }
   for (let attempt = 0; attempt < 10; attempt++) {
     const u = candidates[attempt % candidates.length];
     try {
