@@ -1,0 +1,76 @@
+name: OSM expand (per country)
+
+# Builds passes for one region at a time with the SAME heuristic, into a dedicated
+# osm_passes_<country>.json. Run one target per dispatch (avoids concurrent commit clashes).
+# The frontend merges every file listed in osm_regions.json.
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Region to build"
+        required: true
+        type: choice
+        options:
+          - italy-sud
+          - france-alps
+          - switzerland
+          - austria
+
+permissions:
+  contents: write
+
+concurrency:
+  group: osm-expand
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install tools
+        run: |
+          sudo apt-get update && sudo apt-get install -y osmium-tool
+          npm install pngjs --no-save
+
+      - name: Resolve target -> PBF list + output
+        id: cfg
+        run: |
+          case "${{ github.event.inputs.target }}" in
+            italy-sud)
+              echo 'pbf=https://download.geofabrik.de/europe/italy/sud-latest.osm.pbf,https://download.geofabrik.de/europe/italy/isole-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_sud.json' >> "$GITHUB_OUTPUT" ;;
+            france-alps)
+              echo 'pbf=https://download.geofabrik.de/europe/france/rhone-alpes-latest.osm.pbf,https://download.geofabrik.de/europe/france/provence-alpes-cote-d-azur-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr.json' >> "$GITHUB_OUTPUT" ;;
+            switzerland)
+              echo 'pbf=https://download.geofabrik.de/europe/switzerland-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_ch.json' >> "$GITHUB_OUTPUT" ;;
+            austria)
+              echo 'pbf=https://download.geofabrik.de/europe/austria-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_at.json' >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Build passes for ${{ github.event.inputs.target }}
+        env:
+          LC_PBF: ${{ steps.cfg.outputs.pbf }}
+        run: node --max-old-space-size=6144 scripts/build_osm_passes.mjs --out "${{ steps.cfg.outputs.out }}"
+
+      - name: Commit ${{ steps.cfg.outputs.out }}
+        run: |
+          git config user.name  "locaclimb-bot"
+          git config user.email "locaclimb-bot@users.noreply.github.com"
+          git add "${{ steps.cfg.outputs.out }}"
+          if git diff --staged --quiet; then
+            echo "no change"
+          else
+            git pull --rebase --autostash || true
+            git commit -m "data: OSM passes ${{ github.event.inputs.target }}"
+            git push
+          fi
