@@ -122,6 +122,8 @@ canvas#relev{height:170px}
 <button class="btn" id="tb" title="Traffico veicolare"><span class="bi">&#x1F525;</span><span class="bl">Traffico</span></button>
 <button class="btn" id="ed" title="Editor / proponi salita"><span class="bi">&#x270E;</span><span class="bl">Editor</span></button>
 <button class="btn" id="db" title="Tema scuro"><span class="bi">&#x1F319;</span><span class="bl">Tema</span></button>
+<button class="btn" id="acct" title="Account"><span class="bi">&#x1F464;</span><span class="bl">Accedi</span></button>
+<button class="btn" id="fountBtn" title="Fontanelle / acqua potabile" onclick="toggleFount()"><span class="bi">&#x1F4A7;</span><span class="bl">Acqua</span></button>
 </div>
 <div id="fp">
 <h3 style="margin-bottom:14px">Filtri</h3>
@@ -171,6 +173,9 @@ canvas#relev{height:170px}
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script src="passes_data.js"></script>
 <script>
 var map,markers,routeLines=[],weatherCache={},routeCache={};
@@ -359,6 +364,7 @@ function openD(id){
 }
 /* shared renderer for curated + enriched OSM passes */
 function renderPassPanel(p,isOsm){
+  CUR_PASS=p;
   ensureCat(p);
   var h='<div class="dp-hdr"><div style="display:flex;justify-content:space-between;align-items:start"><div>';
   h+='<h2 style="margin:0;font-size:1.3em">&#x26F0;&#xFE0F; '+p.name+(isOsm?' <span class="osm-badge">OSM</span>':'')+'</h2>';
@@ -390,15 +396,20 @@ function renderPassPanel(p,isOsm){
     if(p.versanti.length>1){h+='<div id="elev-tog" style="display:flex;gap:5px;margin-bottom:5px">';h+='<button class="etog active" onclick="setElev(-1)">Entrambi</button>';p.versanti.forEach(function(v,i){h+='<button class="etog" onclick="setElev('+i+')">'+v.side.substring(0,16)+'</button>';});h+='</div>';}
     h+='<canvas id="elev"></canvas>';
     h+='<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:.72rem;color:var(--txt2);margin:2px 0 4px">Pendenza: <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px"></span> &lt;4%</span><span><span style="display:inline-block;width:10px;height:10px;background:#f59e0b;border-radius:2px"></span> 4-7%</span><span><span style="display:inline-block;width:10px;height:10px;background:#f97316;border-radius:2px"></span> 7-10%</span><span><span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:2px"></span> 10-13%</span><span><span style="display:inline-block;width:10px;height:10px;background:#7f1d1d;border-radius:2px"></span> &gt;13%</span> <span style="margin-left:8px"><span style="display:inline-block;width:12px;height:10px;border-radius:2px;background:#94a3b8;background-image:repeating-linear-gradient(45deg,#e5e7eb 0 2px,transparent 2px 5px)"></span> sterrato</span></div>';
+    h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin:7px 0 2px">';
+    p.versanti.forEach(function(v,i){if(v.track&&v.track.length>1)h+='<button class="btn" style="font-size:.78rem;padding:6px 11px" onclick="exportGPX(\''+p.id+'\','+i+')">&#x2B07;&#xFE0F; GPX '+(v.side||"").replace(/'/g,"&#39;").substring(0,18)+'</button>';});
+    h+='</div>';
   }
   h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div><div id="wbox" style="text-align:center;padding:16px;color:var(--txt2)">Caricamento meteo...</div>';
   h+=stravaSection(p);
+  h+='<div class="section-title">&#x1F4F0; News &amp; Stato</div><div id="newsbox" style="padding:2px 0;color:var(--txt2);font-size:.86rem">&#8230;</div>';
+  h+='<div class="section-title">&#x2B50; Valutazioni community</div><div id="ratebox" style="padding:4px 0;color:var(--txt2);font-size:.86rem">Caricamento...</div>';
   if(p.tips&&p.tips.length>0){h+='<div class="section-title">&#x1F4A1; Consigli</div><ul style="padding-left:16px">';p.tips.forEach(function(t){h+='<li style="margin:5px 0;color:var(--txt2)">'+t+'</li>';});h+='</ul>';}
   if(!isOsm)h+='<div style="margin-top:16px;text-align:center"><button onclick="openReport(\''+p.id+'\')" class="btn" style="padding:8px 20px">&#x1F4DD; Segnala informazione</button></div>';
   h+='</div>';
   document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
   if(p.versanti&&p.versanti.length)setTimeout(function(){drawElev(p);},80);
-  fetchW(p.lat,p.lon);
+  fetchW(p.lat,p.lon);renderRatings(p);renderNews(p);
 }
 function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();hideRS();}
 
@@ -818,8 +829,25 @@ function setDataVersion(){
   PASSES_DATA.forEach(function(p){if(p.updatedAt&&p.updatedAt>mx)mx=p.updatedAt;});
   el.innerHTML="&#x1F4E6; Dati: "+(ver||"?")+(mx?" &middot; "+fmtDate(mx):"");
 }
+function versSameOrigin(a,b){if(!a||!b)return false;var d=Math.abs((a.startLat||0)-(b.startLat||0))+Math.abs((a.startLon||0)-(b.startLon||0));return d<0.02;}
+function mergeColocated(arr){
+  // Border passes: the same valico appears in two region files (e.g. Italia + Francia), each carrying
+  // only its in-country versante. Union the versanti of co-located OSM passes (<~1km) so both sides show.
+  var out=[];
+  arr.forEach(function(op){
+    var hit=null;
+    for(var i=0;i<out.length;i++){var q=out[i];if(Math.abs(q.lat-op.lat)<0.009&&Math.abs(q.lon-op.lon)<0.009){hit=q;break;}}
+    if(!hit){out.push(op);return;}
+    hit.versanti=hit.versanti||[];
+    (op.versanti||[]).forEach(function(v){if(!hit.versanti.some(function(w){return versSameOrigin(v,w);}))hit.versanti.push(v);});
+    if((op.elevation||0)>(hit.elevation||0))hit.elevation=op.elevation;
+    if(!hit.name&&op.name)hit.name=op.name;
+  });
+  return out;
+}
 function adoptOsm(arr){
   if(!arr||!arr.length)return;
+  arr=mergeColocated(arr);
   // drop entries too close to curated passes
   osmPasses=arr.filter(function(op){return!PASSES_DATA.some(function(p){return Math.abs(p.lat-op.lat)<0.008&&Math.abs(p.lon-op.lon)<0.008;});});
   applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();
@@ -885,7 +913,7 @@ function showRSBrief(msg){showRS(msg);setTimeout(hideRS,3500);}
 
 document.addEventListener("DOMContentLoaded",function(){
   initMap();
-  loadOsmBaked();loadBakedRoutes();loadCuratedOverrides();
+  loadOsmBaked();loadBakedRoutes();loadCuratedOverrides();loadNews();
   document.getElementById("fb").addEventListener("click",openFP);
   document.getElementById("rbb").addEventListener("click",toggleRB);
   document.getElementById("db").addEventListener("click",function(){document.body.classList.toggle("dark");});
@@ -1078,6 +1106,133 @@ function edInit(){
   var eb=document.getElementById("ed");if(eb)eb.addEventListener("click",edOpen);
 }
 document.addEventListener("DOMContentLoaded",edInit);
+/* ===== Accounts + community ratings (Firebase) ============================== */
+/* Incolla qui la config del tuo progetto Firebase (Console -> Impostazioni progetto -> Le tue app -> Web). */
+var FIREBASE_CONFIG={apiKey:"",authDomain:"",projectId:"",appId:""};
+var CUR_PASS=null,FB=null,FBUSER=null;
+function fbReady(){return !!(FIREBASE_CONFIG.apiKey&&window.firebase);}
+function fbInit(){
+  var b=document.getElementById("acct");if(b)b.addEventListener("click",acctOpen);
+  if(!fbReady())return;
+  try{firebase.initializeApp(FIREBASE_CONFIG);FB={auth:firebase.auth(),db:firebase.firestore()};}catch(e){return;}
+  FB.auth.onAuthStateChanged(function(u){FBUSER=u;acctUpdate();if(CUR_PASS)renderRatings(CUR_PASS);});
+}
+function acctUpdate(){var b=document.getElementById("acct");if(!b)return;var lab=b.querySelector(".bl");if(lab)lab.textContent=FBUSER?(FBUSER.displayName||"Account").substring(0,12):"Accedi";}
+function fbErr(e){var c=(e&&e.code)||"",m={"auth/email-already-in-use":"Email gia registrata.","auth/invalid-email":"Email non valida.","auth/weak-password":"Password troppo corta (min 6).","auth/wrong-password":"Password errata.","auth/user-not-found":"Utente non trovato.","auth/invalid-credential":"Credenziali errate.","auth/too-many-requests":"Troppi tentativi, riprova piu tardi."};return m[c]||((e&&e.message)||"Errore.");}
+function fbResend(){if(FBUSER)FBUSER.sendEmailVerification().then(function(){alert("Mail di conferma reinviata.");});}
+function acctOpen(){
+  if(!fbReady()){alert("Account non ancora configurato: incolla la config Firebase in index.html (variabile FIREBASE_CONFIG).");return;}
+  if(FBUSER){if(confirm("Sei loggato come "+(FBUSER.displayName||FBUSER.email)+".\nVuoi uscire?"))FB.auth.signOut();return;}
+  var ex=document.getElementById("acctModal");if(ex)ex.remove();
+  var d=document.createElement("div");d.id="acctModal";d.style.cssText="position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center";
+  d.innerHTML='<div style="background:#fff;color:#222;border-radius:12px;padding:18px;width:300px;font:14px system-ui"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b id="amTitle">Accedi</b><span id="amX" style="cursor:pointer;font-size:20px">&times;</span></div><div id="amForm"></div><div id="amMsg" style="font-size:12px;color:#555;margin-top:8px;min-height:14px"></div><div style="margin-top:8px;font-size:12px"><a href="#" id="amSwitch">Non hai un account? Registrati</a></div></div>';
+  document.body.appendChild(d);
+  document.getElementById("amX").onclick=function(){d.remove();};
+  var mode="login";
+  function draw(){var f=document.getElementById("amForm"),inp="padding:8px;border:1px solid #ccc;border-radius:7px;width:100%;box-sizing:border-box;margin-bottom:6px";
+    if(mode==="login"){f.innerHTML='<input id="amEmail" type="email" placeholder="Email" style="'+inp+'"><input id="amPass" type="password" placeholder="Password" style="'+inp+'"><button class="btn" style="width:100%" onclick="amLogin()">Accedi</button>';document.getElementById("amTitle").textContent="Accedi";document.getElementById("amSwitch").textContent="Non hai un account? Registrati";}
+    else{f.innerHTML='<input id="amUser" placeholder="Nome utente" style="'+inp+'"><input id="amEmail" type="email" placeholder="Email" style="'+inp+'"><input id="amPass" type="password" placeholder="Password (min 6)" style="'+inp+'"><button class="btn" style="width:100%" onclick="amSignup()">Registrati</button>';document.getElementById("amTitle").textContent="Registrati";document.getElementById("amSwitch").textContent="Hai gia un account? Accedi";}}
+  document.getElementById("amSwitch").onclick=function(e){e.preventDefault();mode=mode==="login"?"signup":"login";draw();};
+  draw();
+}
+function amMsg(t){var e=document.getElementById("amMsg");if(e)e.textContent=t;}
+function amLogin(){var em=document.getElementById("amEmail").value.trim(),pw=document.getElementById("amPass").value;amMsg("Accesso...");
+  FB.auth.signInWithEmailAndPassword(em,pw).then(function(cr){if(!cr.user.emailVerified){amMsg("Conferma prima la mail (controlla la posta). ");}else{var m=document.getElementById("acctModal");if(m)m.remove();}}).catch(function(e){amMsg(fbErr(e));});}
+function amSignup(){var un=document.getElementById("amUser").value.trim(),em=document.getElementById("amEmail").value.trim(),pw=document.getElementById("amPass").value;
+  if(un.length<2)return amMsg("Inserisci un nome utente.");amMsg("Registrazione...");
+  FB.auth.createUserWithEmailAndPassword(em,pw).then(function(cr){return cr.user.updateProfile({displayName:un}).then(function(){FB.db.collection("users").doc(cr.user.uid).set({username:un,email:em,createdAt:Date.now()});return cr.user.sendEmailVerification();}).then(function(){return FB.auth.signOut();});}).then(function(){amMsg("Registrato! Ti ho inviato una mail di conferma. Confermala, poi accedi.");}).catch(function(e){amMsg(fbErr(e));});}
+function axisRow(label,val,n){var pct=n?(val/5*100):0;return '<div style="display:flex;align-items:center;gap:8px;margin:2px 0;font-size:.82rem"><span style="width:78px;color:var(--txt2)">'+label+'</span><div style="flex:1;height:8px;background:var(--bdr);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#2563eb,#7c3aed)"></div></div><span style="width:26px;text-align:right">'+(n?val.toFixed(1):"-")+'</span></div>';}
+function voteSel(id,lab,inline){var s='<div style="display:flex;align-items:center;gap:6px;margin:3px 0;font-size:.82rem"><span style="width:78px">'+lab+'</span><select id="rv_'+id+'" style="flex:1;padding:3px;border:1px solid var(--bdr);border-radius:6px;background:var(--bg);color:var(--txt)">';for(var i=1;i<=5;i++)s+='<option value="'+i+'">'+i+'</option>';return s+'</select></div>';}
+function renderRatings(p){
+  var box=document.getElementById("ratebox");if(!box)return;
+  if(!fbReady()){box.innerHTML='Account/valutazioni disponibili dopo la configurazione Firebase (vedi guida).';return;}
+  if(!FB){box.innerHTML='Servizio non disponibile.';return;}
+  var pid=p.id;
+  FB.db.collection("ratings").doc(pid).get().then(function(d){
+    var a=d.exists?d.data():{n:0,eSum:0,pSum:0,tSum:0,aSum:0},n=a.n||0;
+    function av(s){return n?s/n:0;}
+    var aE=av(a.eSum),aP=av(a.pSum),aT=av(a.tSum),aA=av(a.aSum),ov=n?(aE+aP+aT+aA)/4:0;
+    var html='<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px"><b style="font-size:1.35rem;color:var(--txt)">'+(n?ov.toFixed(1):"-")+'</b><span style="color:var(--txt2)">/5 &middot; '+n+' voti</span></div>';
+    html+=axisRow("Emozione",aE,n)+axisRow("Paesaggio",aP,n)+axisRow("Traffico",aT,n)+axisRow("Asfalto",aA,n);
+    if(FBUSER&&FBUSER.emailVerified){
+      html+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bdr)"><div style="font-weight:600;margin-bottom:4px">Il tuo voto</div>'+voteSel("e","Emozione")+voteSel("p","Paesaggio")+voteSel("t","Traffico")+voteSel("a","Asfalto")+'<button class="btn" style="margin-top:6px" onclick="submitVote(\''+pid+'\')">Invia voto</button></div>';
+      box.innerHTML=html;
+      FB.db.collection("ratings").doc(pid).collection("votes").doc(FBUSER.uid).get().then(function(vd){if(vd.exists){var v=vd.data();["e","p","t","a"].forEach(function(k){var s=document.getElementById("rv_"+k);if(s&&v[k])s.value=v[k];});}});
+    } else if(FBUSER){html+='<div style="margin-top:6px;color:var(--txt2)">Conferma la mail per votare. <a href="#" onclick="fbResend();return false">Reinvia conferma</a></div>';box.innerHTML=html;}
+    else{html+='<div style="margin-top:8px"><button class="btn" onclick="acctOpen()">Accedi per votare</button></div>';box.innerHTML=html;}
+  }).catch(function(){box.innerHTML='Valutazioni non disponibili (controlla le regole Firestore).';});
+}
+function submitVote(pid){
+  if(!FB||!FBUSER)return;
+  var e=+document.getElementById("rv_e").value,p2=+document.getElementById("rv_p").value,t=+document.getElementById("rv_t").value,a=+document.getElementById("rv_a").value;
+  var passRef=FB.db.collection("ratings").doc(pid),voteRef=passRef.collection("votes").doc(FBUSER.uid);
+  FB.db.runTransaction(function(tx){return tx.get(voteRef).then(function(vs){return tx.get(passRef).then(function(ps){
+    var agg=ps.exists?ps.data():{n:0,eSum:0,pSum:0,tSum:0,aSum:0},old=vs.exists?vs.data():null;
+    if(old){agg.eSum-=old.e;agg.pSum-=old.p;agg.tSum-=old.t;agg.aSum-=old.a;agg.n-=1;}
+    agg.eSum+=e;agg.pSum+=p2;agg.tSum+=t;agg.aSum+=a;agg.n+=1;
+    tx.set(passRef,agg);tx.set(voteRef,{e:e,p:p2,t:t,a:a,by:FBUSER.displayName||"",ts:Date.now()});
+  });});}).then(function(){if(CUR_PASS)renderRatings(CUR_PASS);}).catch(function(err){alert("Errore voto: "+(err.message||err));});
+}
+document.addEventListener("DOMContentLoaded",fbInit);
+/* ===== GPX export (client-side, per versante) =============================== */
+function gpxEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function findPassAny(id){return getCurated(id)||getOsm(id);}
+function exportGPX(id,idx){
+  var p=findPassAny(id);if(!p){alert("Passo non trovato.");return;}
+  var v=(p.versanti||[])[idx];if(!v||!v.track||v.track.length<2){alert("Traccia non disponibile per questo versante.");return;}
+  var prof=v.elevationProfile||[],N=prof.length,M=v.track.length;
+  var name=(p.name||"Salita")+" - "+(v.side||("Versante "+(idx+1)));
+  var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="LocaRide" xmlns="http://www.topografix.com/GPX/1/1">\n<metadata><name>'+gpxEsc(name)+'</name></metadata>\n<trk><name>'+gpxEsc(name)+'</name><trkseg>\n';
+  for(var i=0;i<M;i++){var c=v.track[i];if(!c||c.length<2)continue;var ele=(N>1)?prof[Math.min(N-1,Math.round(i/(M-1)*(N-1)))]:null;g+='<trkpt lat="'+(+c[0]).toFixed(6)+'" lon="'+(+c[1]).toFixed(6)+'">'+(ele!=null&&isFinite(ele)?'<ele>'+Math.round(ele)+'</ele>':'')+'</trkpt>\n';}
+  g+='</trkseg></trk>\n</gpx>\n';
+  var fn=name.replace(/[^A-Za-z0-9]+/g,"_").replace(/^_|_$/g,"")+".gpx";
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([g],{type:"application/gpx+xml"}));a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},120);
+}
+/* ===== Fontanelle / drinking water from OSM via Overpass ==================== */
+var fountOn=false,fountLayer=null,fountIds={},fountTimer=null,fountIcon=null;
+function getFountIcon(){if(!fountIcon)fountIcon=L.divIcon({className:"fount-ic",html:'<div style="font-size:17px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))">&#x1F4A7;</div>',iconSize:[20,20],iconAnchor:[10,10],popupAnchor:[0,-8]});return fountIcon;}
+function toggleFount(){
+  fountOn=!fountOn;var b=document.getElementById("fountBtn");if(b)b.classList.toggle("active",fountOn);
+  if(fountOn){if(!fountLayer)fountLayer=L.layerGroup().addTo(map);map.on("moveend",fountMove);loadFountains();}
+  else{map.off("moveend",fountMove);if(fountLayer)fountLayer.clearLayers();fountIds={};}
+}
+function fountMove(){clearTimeout(fountTimer);fountTimer=setTimeout(loadFountains,600);}
+function loadFountains(){
+  if(!fountOn||!fountLayer)return;
+  if(map.getZoom()<11)return; // bbox troppo ampio: evita query pesanti su Overpass
+  var bb=map.getBounds(),box="("+bb.getSouth().toFixed(4)+","+bb.getWest().toFixed(4)+","+bb.getNorth().toFixed(4)+","+bb.getEast().toFixed(4)+")";
+  var q='[out:json][timeout:25];(node["amenity"="drinking_water"]'+box+';node["man_made"="water_tap"]["drinking_water"!="no"]'+box+';node["amenity"="fountain"]["drinking_water"="yes"]'+box+';node["natural"="spring"]["drinking_water"="yes"]'+box+';);out body;';
+  fountFetch(["https://overpass-api.de/api/interpreter","https://overpass.kumi.systems/api/interpreter"],0,q);
+}
+function fountFetch(urls,i,q){
+  if(i>=urls.length||!fountOn)return;
+  fetch(urls[i],{method:"POST",body:"data="+encodeURIComponent(q)}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+    (d.elements||[]).forEach(function(el){if(el.type!=="node"||fountIds[el.id])return;fountIds[el.id]=1;addFountain(el);});
+  }).catch(function(){fountFetch(urls,i+1,q);});
+}
+function addFountain(el){
+  if(!fountLayer)return;var t=el.tags||{},nm=t.name||"";
+  var pot=(t.drinking_water==="no")?"Non potabile":(t.drinking_water==="yes"||t.amenity==="drinking_water"?"Acqua potabile":"Potabilita non indicata");
+  var pop="&#x1F4A7; <b>"+(nm||"Fontanella")+"</b><br>"+pot+(t.operator?"<br><span style='color:#888'>"+t.operator+"</span>":"");
+  L.marker([el.lat,el.lon],{icon:getFountIcon()}).bindPopup(pop).addTo(fountLayer);
+}
+/* ===== News / Stato (curated JSON, optional automated candidates) ========== */
+var PASS_NEWS=null;
+function loadNews(){fetch("pass_news.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():{};}).then(function(d){PASS_NEWS=d||{};if(CUR_PASS)renderNews(CUR_PASS);}).catch(function(){PASS_NEWS={};});}
+function renderNews(p){
+  var box=document.getElementById("newsbox");if(!box)return;
+  if(PASS_NEWS==null){box.innerHTML="Caricamento...";return;}
+  var items=PASS_NEWS[p.id]||PASS_NEWS[p.name]||[];
+  if(!items.length){box.innerHTML='<span style="color:var(--txt2)">Nessuna novita recente.</span>';return;}
+  var html="";items.slice(0,6).forEach(function(it){
+    var d=it.date?'<span style="color:var(--txt2)">'+gpxEsc(it.date)+'</span> &middot; ':'';
+    var src=it.source?' <span style="color:#888">('+gpxEsc(it.source)+')</span>':'';
+    var t=gpxEsc(it.title||it.url||"");
+    var ttl=it.url?'<a href="'+gpxEsc(it.url)+'" target="_blank" rel="noopener noreferrer">'+t+'</a>':t;
+    html+='<div style="margin:5px 0;line-height:1.35">'+d+ttl+src+'</div>';
+  });
+  box.innerHTML=html;
+}
 </script>
 </body>
 </html>

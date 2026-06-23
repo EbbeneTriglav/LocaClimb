@@ -1,0 +1,6 @@
+{
+  "_comment": "News/stato curate per passo. Chiave = id del passo (es. 'osm-123456' o id curated) oppure nome esatto. Ogni item: {date, title, url, source}. Questo file e umano: lo modifichi tu approvando i candidati da pass_news_candidates.json.",
+  "_example": [
+    { "date": "2026-06-20", "title": "Strada riaperta dopo i lavori primaverili", "url": "https://example.com/articolo", "source": "ANSA" }
+  ]
+}
