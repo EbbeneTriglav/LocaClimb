@@ -47,6 +47,10 @@ const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
 const NO_CURATED = process.argv.includes("--no-curated");
 const REENRICH = process.argv.includes("--reenrich");
+// Optional cross-border clip: minlon,minlat,maxlon,maxlat. When set, the merged PBF is cut to this
+// box (complete_ways, so border-crossing roads stay intact) BEFORE filtering. Lets us build a border
+// corridor (Italy + neighbour) with both climb sides in-graph, without loading a whole foreign country.
+const BBOX = (process.env.LC_BBOX || arg("--bbox", "")).trim();
 // Bump this whenever the climb-building algorithm changes: every cached OSM pass whose
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
@@ -407,7 +411,13 @@ async function main() {
     for (let i = 0; i < PBF_URLS.length; i++) { const f = WORK + "/part" + i + ".osm.pbf"; await download(PBF_URLS[i], f); parts.push(f); }
     console.log("  osmium merge+filter ...");
     osmium(["merge", ...parts, "-o", WORK + "/merged.osm.pbf", "--overwrite"]);
-    osmium(["tags-filter", WORK + "/merged.osm.pbf", "n/mountain_pass=yes", "n/place=town", "n/place=village", "n/place=hamlet", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
+    let srcPbf = WORK + "/merged.osm.pbf";
+    if (BBOX) {
+      console.log("  osmium extract bbox " + BBOX + " ...");
+      osmium(["extract", "-b", BBOX, "-s", "complete_ways", srcPbf, "-o", WORK + "/clipped.osm.pbf", "--overwrite"]);
+      srcPbf = WORK + "/clipped.osm.pbf";
+    }
+    osmium(["tags-filter", srcPbf, "n/mountain_pass=yes", "n/place=town", "n/place=village", "n/place=hamlet", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
     console.log("  osmium export ...");
     osmium(["export", WORK + "/filtered.osm.pbf", "-f", "geojsonseq", "-a", "type,id", "-o", seqFile, "--overwrite"]);
   }
