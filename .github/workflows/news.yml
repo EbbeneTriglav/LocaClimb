@@ -1,0 +1,55 @@
+name: news-candidates
+
+# Fetches news/status CANDIDATES into pass_news_candidates.json (review queue).
+# It does NOT touch pass_news.json (that stays human-curated): you approve candidates.
+#
+# Setup (one time):
+#   1. Google Cloud Console -> enable "Custom Search API" -> create API key.
+#   2. programmablesearchengine.google.com -> create engine ("search the entire web") -> copy the Search engine ID (cx).
+#   3. Repo -> Settings -> Secrets and variables -> Actions -> add:
+#        GOOGLE_CSE_KEY = <api key>
+#        GOOGLE_CSE_CX  = <search engine id>
+# Free tier = 100 queries/day; LC_NEWS_MAX keeps each run under it (rotation by day).
+
+on:
+  schedule:
+    - cron: "23 4 */3 * *"   # every 3 days, 04:23 UTC
+  workflow_dispatch:
+    inputs:
+      max:
+        description: "Max passi per run (default 30)"
+        required: false
+        default: "30"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news-candidates
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Fetch news candidates
+        env:
+          GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}
+          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
+          LC_NEWS_MAX: ${{ github.event.inputs.max || '30' }}
+        run: node scripts/fetch_news.mjs
+      - name: Commit candidates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain pass_news_candidates.json)" ]; then
+            git add pass_news_candidates.json
+            git commit -m "news: aggiorna candidati [skip ci]"
+            git push
+          else
+            echo "Nessun nuovo candidato."
+          fi
