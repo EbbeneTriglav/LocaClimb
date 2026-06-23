@@ -7855,13 +7855,13 @@
   "updatedAt": "2026-06-21"
  },
  {
-  "id": "osm-11204597717",
+  "id": "osm-8263441533",
   "name": "Vado di Sole",
   "lat": 42.39517593383789,
   "lon": 13.786870956420898,
   "elevation": 1641,
   "snapped": true,
-  "nodeId": "11204597717",
+  "nodeId": "8263441533",
   "surfaceLabel": "&#x1F6E3;&#xFE0F; Asfalto",
   "trafFeriale": 4,
   "trafWeekend": 6,
@@ -9450,7 +9450,7 @@
   "cat": "HC",
   "difficulty": 8,
   "algo": "v4.7-pavedauto",
-  "updatedAt": "2026-06-21"
+  "updatedAt": "2026-06-23"
  },
  {
   "id": "osm-431411662",
@@ -51322,6 +51322,21 @@
   "difficulty": 7,
   "algo": "v4.7-pavedauto",
   "updatedAt": "2026-06-21"
+ },
+ {
+  "id": "osm-553440900",
+  "name": "Portella Dagara",
+  "lat": 37.969791412353516,
+  "lon": 14.833296775817871,
+  "elevation": 1427,
+  "snapped": true,
+  "nodeId": "553440900",
+  "surfaceLabel": "Fondo: ground",
+  "trafFeriale": 3,
+  "trafWeekend": 4,
+  "trucks": "no",
+  "versanti": null,
+  "cat": null
  },
  {
   "id": "osm-2286635232",
@@ -106154,7 +106169,7 @@
   "cat": "1",
   "difficulty": 7,
   "algo": "v4.7-pavedauto",
-  "updatedAt": "2026-06-21"
+  "updatedAt": "2026-06-23"
  },
  {
   "id": "osm-7425048553",
