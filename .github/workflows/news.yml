@@ -1,15 +1,8 @@
 name: news-candidates
 
-# Fetches news/status CANDIDATES into pass_news_candidates.json (review queue).
-# It does NOT touch pass_news.json (that stays human-curated): you approve candidates.
-#
-# Setup (one time):
-#   1. Google Cloud Console -> enable "Custom Search API" -> create API key.
-#   2. programmablesearchengine.google.com -> create engine ("search the entire web") -> copy the Search engine ID (cx).
-#   3. Repo -> Settings -> Secrets and variables -> Actions -> add:
-#        GOOGLE_CSE_KEY = <api key>
-#        GOOGLE_CSE_CX  = <search engine id>
-# Free tier = 100 queries/day; LC_NEWS_MAX keeps each run under it (rotation by day).
+# Fetches news/status CANDIDATES into pass_news_candidates.json (review queue) via the
+# GDELT DOC 2.0 API. NO API key, no daily limit. It does NOT touch pass_news.json
+# (that stays human-curated): you approve candidates and copy the good ones in.
 
 on:
   schedule:
@@ -17,9 +10,17 @@ on:
   workflow_dispatch:
     inputs:
       max:
-        description: "Max passi per run (default 30)"
+        description: "Max passi per run (default 40)"
         required: false
-        default: "30"
+        default: "40"
+      span:
+        description: "Finestra GDELT (es. 1w, 1m, 2m, 3m)"
+        required: false
+        default: "2m"
+      lang:
+        description: "Lingua fonti (italian / german)"
+        required: false
+        default: "italian"
 
 permissions:
   contents: write
@@ -36,11 +37,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Fetch news candidates
+      - name: Fetch news candidates (GDELT)
         env:
-          GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}
-          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
-          LC_NEWS_MAX: ${{ github.event.inputs.max || '30' }}
+          LC_NEWS_MAX: ${{ github.event.inputs.max || '40' }}
+          LC_NEWS_SPAN: ${{ github.event.inputs.span || '2m' }}
+          LC_NEWS_LANG: ${{ github.event.inputs.lang || 'italian' }}
         run: node scripts/fetch_news.mjs
       - name: Commit candidates
         run: |
@@ -48,7 +49,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain pass_news_candidates.json)" ]; then
             git add pass_news_candidates.json
-            git commit -m "news: aggiorna candidati [skip ci]"
+            git commit -m "news: aggiorna candidati GDELT [skip ci]"
             git push
           else
             echo "Nessun nuovo candidato."
