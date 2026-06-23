@@ -1,0 +1,83 @@
+name: osm-border
+
+# Cross-border corridor builds: load an Italy region + the adjacent country, clip to the
+# Alpine border strip (bbox), and build so BOTH climb sides are in-graph. This recovers
+# border passes (Spluga, San Bernardino, Stelvio/Umbrail, Resia, Brennero, Stalle, Monginevro,
+# Maddalena, ...) that single-country builds drop because their in-country half is too short
+# to pass the >=1.5km / >=200m thresholds.
+#
+# Output goes to osm_passes_xb_<zone>.json. Add it to osm_regions.json so the frontend merges it
+# (co-located passes are de-duplicated and their versanti unioned).
+#
+# Run ONE zone at a time (manual dispatch). The bbox clip keeps RAM/time bounded.
+
+on:
+  workflow_dispatch:
+    inputs:
+      zone:
+        description: "Corridoio di confine da costruire"
+        required: true
+        type: choice
+        options:
+          - ch-central   # IT/CH: Spluga, San Bernardino, Maloja, Bernina, Sempione, Stelvio/Umbrail, Gran S. Bernardo
+          - at-east      # IT/AT: Resia, Brennero, Vizze, Stalle, M. Croce Comelico, Pramollo
+          - fr-west      # IT/FR: Monginevro, Moncenisio, Maddalena, Agnello, Lombarde, Tenda
+
+permissions:
+  contents: write
+
+concurrency:
+  group: osm-border
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install osmium + pngjs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y osmium-tool
+          npm i pngjs
+      - name: Map zone -> PBF + bbox + out
+        id: cfg
+        run: |
+          GF=https://download.geofabrik.de/europe
+          case "${{ github.event.inputs.zone }}" in
+            ch-central)
+              echo "pbf=$GF/italy/nord-ovest-latest.osm.pbf,$GF/italy/nord-est-latest.osm.pbf,$GF/switzerland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo "bbox=7.0,45.8,10.6,46.8" >> "$GITHUB_OUTPUT"
+              echo "out=osm_passes_xb_ch.json" >> "$GITHUB_OUTPUT"
+              ;;
+            at-east)
+              echo "pbf=$GF/italy/nord-est-latest.osm.pbf,$GF/austria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo "bbox=10.3,46.4,13.5,47.15" >> "$GITHUB_OUTPUT"
+              echo "out=osm_passes_xb_at.json" >> "$GITHUB_OUTPUT"
+              ;;
+            fr-west)
+              echo "pbf=$GF/italy/nord-ovest-latest.osm.pbf,$GF/france/rhone-alpes-latest.osm.pbf,$GF/france/provence-alpes-cote-d-azur-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo "bbox=6.0,44.0,7.8,45.4" >> "$GITHUB_OUTPUT"
+              echo "out=osm_passes_xb_fr.json" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+      - name: Build border corridor
+        env:
+          LC_PBF: ${{ steps.cfg.outputs.pbf }}
+          LC_BBOX: ${{ steps.cfg.outputs.bbox }}
+        run: node scripts/build_osm_passes.mjs --out ${{ steps.cfg.outputs.out }}
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain ${{ steps.cfg.outputs.out }})" ]; then
+            git add ${{ steps.cfg.outputs.out }}
+            git commit -m "osm-border: build ${{ github.event.inputs.zone }} [skip ci]"
+            git push
+          else
+            echo "Nessuna variazione."
+          fi
