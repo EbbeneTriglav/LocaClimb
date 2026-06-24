@@ -1,8 +1,11 @@
 {
   "_meta": {
-    "updated": "2026-06-23T23:30:09.564Z",
-    "rotation_start": 2400,
-    "passes_in_run": 500,
-    "added": 0
+    "updated": "2026-06-24T00:00:59.536Z",
+    "rotation_start": 123,
+    "processed": 11,
+    "added": 0,
+    "span": "2m",
+    "lang": "italian",
+    "stopped_early": false
   }
 }
