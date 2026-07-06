@@ -53,12 +53,12 @@ jobs:
           git config user.name  "locaclimb-bot"
           git config user.email "actions@users.noreply.github.com"
           rm -rf build_tmp node_modules package.json package-lock.json
-          if git diff --quiet -- osm_passes.json curated_overrides.json routes_baked.json; then
+          if git diff --quiet -- data/osm_passes.json data/curated_overrides.json data/routes_baked.json; then
             echo "No changes"; exit 0
           fi
-          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('osm_passes.json')).length)")
-          ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
-          git add osm_passes.json curated_overrides.json routes_baked.json
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/osm_passes.json')).length)")
+          ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('data/osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
+          git add data/osm_passes.json data/curated_overrides.json data/routes_baked.json
           git commit -m "data: PBF+DEM build (${COUNT} passes, ${ENR} enriched)"
           git pull --rebase origin main
           git push

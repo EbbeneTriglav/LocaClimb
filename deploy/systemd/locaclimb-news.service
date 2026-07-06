@@ -1,0 +1,10 @@
+[Unit]
+Description=locaClimb: fetch GDELT news candidates into pass_news_candidates.json
+# VPS equivalent of .github/workflows/news.yml. That workflow keeps working
+# unchanged on GitHub Actions if you deploy there instead/as well - see deploy/systemd/README.md.
+
+[Service]
+Type=oneshot
+User=locaclimb
+EnvironmentFile=/etc/locaclimb/news.env
+ExecStart=/bin/bash %h/locaclimb/deploy/systemd/run-pipeline.sh

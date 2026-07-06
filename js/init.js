@@ -1,0 +1,21 @@
+/* Bootstrap: runs after every other js/*.js file has loaded (DOMContentLoaded handlers only). */
+document.addEventListener("DOMContentLoaded",function(){
+  wireActions();
+  initMap();
+  loadOsmBaked();loadBakedRoutes();loadCuratedOverrides();loadNews();
+  document.getElementById("fb").addEventListener("click",openFP);
+  document.getElementById("rbb").addEventListener("click",toggleRB);
+  document.getElementById("db").addEventListener("click",function(){document.body.classList.toggle("dark");});
+  document.getElementById("tb").addEventListener("click",toggleHeat);
+  document.getElementById("search").addEventListener("input",onSearchInput);
+  document.getElementById("search").addEventListener("keydown",onSearchKey);
+  document.getElementById("search").addEventListener("blur",function(){setTimeout(closeSearch,180);});
+  document.getElementById("fr").addEventListener("change",applyFilters);
+  document.getElementById("fd").addEventListener("input",function(){document.getElementById("fdv").textContent=this.value;applyFilters();});
+  document.getElementById("fs").addEventListener("change",applyFilters);
+  document.getElementById("fosm").addEventListener("change",applyFilters);
+  document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
+  map.on("click",function(e){if(rbMode){addPointToRoute(e.latlng.lat,e.latlng.lng);}else{closeFP();}});
+});
+document.addEventListener("DOMContentLoaded",edInit);
+document.addEventListener("DOMContentLoaded",fbInit);

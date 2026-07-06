@@ -13,10 +13,11 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import vm from "node:vm";
+import { dataPath } from "./lib/paths.mjs";
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
-const OUT = arg("--out", "routes_baked.json");
-const DATA = arg("--data", "passes_data.js");
+const OUT = dataPath(arg("--out", "routes_baked.json"));
+const DATA = dataPath(arg("--data", "passes_data.js"));
 const OSRM = "https://router.project-osrm.org/route/v1/bike/";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
