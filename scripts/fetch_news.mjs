@@ -18,14 +18,15 @@
  *   LC_NEWS_MINKM  - skip passes whose longest versante is shorter than this (default 2)
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { dataPath } from "./lib/paths.mjs";
 
 const MAX_PER_RUN = parseInt(process.env.LC_NEWS_MAX || "25", 10);
 const SPAN = process.env.LC_NEWS_SPAN || "2m";
-const SRC = process.env.LC_NEWS_SRC || "osm_passes.json";
+const SRC = dataPath(process.env.LC_NEWS_SRC || "osm_passes.json");
 const LANG = process.env.LC_NEWS_LANG || "italian";
 const DELAY = parseInt(process.env.LC_NEWS_DELAY || "6000", 10);
 const MINKM = parseFloat(process.env.LC_NEWS_MINKM || "2");
-const CAND_FILE = "pass_news_candidates.json";
+const CAND_FILE = dataPath("pass_news_candidates.json");
 const API = "https://api.gdeltproject.org/api/v2/doc/doc";
 const MAX_RETRY = 4, BASE_BACKOFF = 6000, BREAK_AFTER = 6; // consecutive hard-fails -> stop+save
 

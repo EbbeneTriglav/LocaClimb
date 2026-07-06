@@ -1,0 +1,14 @@
+[Unit]
+Description=locaClimb: re-enrich manual_overrides.json -> manual_enriched.json if it changed
+# manual-enrich.yml triggers on push (GitHub webhook) - systemd has no direct equivalent,
+# so this polls on a short timer instead. Harmless no-op commit-wise when nothing changed
+# (run-pipeline.sh only commits/pushes if git diff is non-empty). If server/save-api.mjs
+# is what's writing manual_overrides.json on this same VPS, you can skip this unit entirely
+# and call scripts/enrich_manual.mjs directly from save-api after each successful save
+# instead - see server/save-api.mjs's header comment.
+
+[Service]
+Type=oneshot
+User=locaclimb
+EnvironmentFile=/etc/locaclimb/manual-sync.env
+ExecStart=/bin/bash %h/locaclimb/deploy/systemd/run-pipeline.sh

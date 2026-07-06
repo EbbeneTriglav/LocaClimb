@@ -47,9 +47,11 @@ locaClimb e' un'applicazione web interattiva che raccoglie informazioni su **pas
 ## Deploy su GitHub Pages (5 minuti!)
 
 1. Crea repository su github.com/new -> nome: `locaclimb`
-2. Carica i file: `index.html`, `passes_data.js`, `README.md`
+2. Carica tutto il contenuto del repository (serve tutto: `index.html`, la cartella `js/`, la cartella `data/` con `passes_data.js` e i file `.json`, `README.md` - non e' piu' un solo file da quando la logica e' stata divisa in `js/*.js`)
 3. Settings -> Pages -> Branch: main -> Save
 4. Sito live su `https://TUO-USERNAME.github.io/locaclimb/`
+
+C'e' anche un secondo modo di fare deploy, pensato per chi preferisce un proprio VPS invece di GitHub Pages: vedi [`docs/deployment.md`](docs/deployment.md).
 
 ---
 
@@ -71,8 +73,8 @@ locaClimb e' un'applicazione web interattiva che raccoglie informazioni su **pas
 
 ## Roadmap - Fase 2
 
-- [ ] Route Builder: seleziona passi, crea loop, modifica con waypoint
-- [ ] Export GPX: scarica percorso per Garmin/Wahoo/Strava
+- [x] Route Builder: seleziona passi, crea loop, modifica con waypoint
+- [x] Export GPX: scarica percorso per Garmin/Wahoo/Strava
 - [ ] User Contributions: segnalazioni con review AI + umana
 - [ ] Traffic Score multi-layer: OSM + ANAS + crowdsourcing
 - [ ] Ensemble meteo: spread/incertezza multi-modello

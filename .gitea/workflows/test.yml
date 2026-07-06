@@ -1,0 +1,36 @@
+name: test
+
+# Runs the node:test suite + data validation on every push/PR. This exact file lives
+# at BOTH .github/workflows/test.yml and .gitea/workflows/test.yml (GitHub only reads
+# the former, Gitea Actions only reads the latter) - keep the two byte-identical, e.g.
+# `cp .github/workflows/test.yml .gitea/workflows/test.yml` after editing either.
+# See docs/deployment.md for why this repo supports two CI/deploy targets.
+#
+# Gitea Actions only runs this if the instance has Actions enabled and a runner
+# registered (server-side admin setting) - if not, this file is simply inert there.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dev tools (ad-hoc, --no-save - like pngjs for the scripts)
+        run: npm install jsdom eslint globals --no-save
+
+      - name: Lint
+        run: npx --no-install eslint js data scripts server test eslint.config.mjs
+
+      - name: Run test suite
+        run: node --test "test/*.test.mjs"
+
+      - name: Validate data files
+        run: node scripts/validate_data.mjs

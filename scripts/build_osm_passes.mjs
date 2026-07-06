@@ -21,6 +21,7 @@ import { execFileSync } from "node:child_process";
 import { Readable } from "node:stream";
 import vm from "node:vm";
 import { createRequire } from "node:module";
+import { dataPath } from "./lib/paths.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -41,7 +42,7 @@ const DEM_Z = 13;
 const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link"];
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
-const OUT = arg("--out", "osm_passes.json");
+const OUT = dataPath(arg("--out", "osm_passes.json"));
 const MIN_ELE = parseInt(arg("--min-ele", "130"), 10);
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
@@ -385,7 +386,7 @@ async function download(url, dest) {
       await new Promise((s) => setTimeout(s, wait));
     }
   }
-  throw new Error("download exhausted: " + region);
+  throw new Error("download exhausted: " + url);
 }
 function osmium(args) { execFileSync("osmium", args, { stdio: ["ignore", "inherit", "inherit"] }); }
 function streamSeq(file, onF) {
@@ -450,12 +451,12 @@ async function main() {
   };
   console.log("  passes found: " + passes.length);
   let extraClimbs = [];
-  try { extraClimbs = JSON.parse(await readFile("climbs_extra.json", "utf8")); } catch {}
+  try { extraClimbs = JSON.parse(await readFile(dataPath("climbs_extra.json"), "utf8")); } catch {}
   // Manual base override: base_hints.json maps a pass name -> list of start points (town name or [lat,lon]).
   // For a matched pass we pin those bases (path summit->town, no auto base-finding). Safety net for
   // icon passes the heuristic mis-handles (cones like Amiata). All other passes stay automatic.
   let baseHints = {};
-  try { baseHints = JSON.parse(await readFile("base_hints.json", "utf8")); } catch {}
+  try { baseHints = JSON.parse(await readFile(dataPath("base_hints.json"), "utf8")); } catch {}
   const normH = (n) => (n || "").toLowerCase().replace(/passo |del |dell'|della |di |monte |dello |colle |col /g, "").trim();
   function hintsFor(name) { var nn = normH(name); for (var key in baseHints) { var nk = normH(key); if (nk && nn.indexOf(nk) >= 0) return baseHints[key]; } return null; } // key must be contained in the pass name (NOT the reverse), so "San Pellegrino" does not match the "...in Alpe" key
   var deacc = function (s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
@@ -930,7 +931,7 @@ async function main() {
 
   if (!NO_CURATED) {
     try {
-      const code = await readFile("passes_data.js", "utf8");
+      const code = await readFile(dataPath("passes_data.js"), "utf8");
       const ctx = {}; vm.createContext(ctx); vm.runInContext(code, ctx);
       const overrides = {};
       const norm = (n) => (n || "").toLowerCase().replace(/passo |colle |col |della |dello |del |di |monte /g, "").trim();
@@ -957,7 +958,7 @@ async function main() {
           console.log("    + " + p.name + ": " + top.length + " versanti" + (useH ? " (hint)" : "") + ", cat " + (overrides[p.id].cat || "-"));
         } catch (e) { console.log("    - " + p.name + ": " + e.message); }
       }
-      await writeFile("curated_overrides.json", JSON.stringify(overrides, null, 1) + "\n", "utf8");
+      await writeFile(dataPath("curated_overrides.json"), JSON.stringify(overrides, null, 1) + "\n", "utf8");
       console.log("  wrote curated_overrides.json (" + Object.keys(overrides).length + ")");
     } catch (e) { console.warn("  ! curated skipped: " + e.message); }
   }

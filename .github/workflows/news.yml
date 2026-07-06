@@ -47,8 +47,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -n "$(git status --porcelain pass_news_candidates.json)" ]; then
-            git add pass_news_candidates.json
+          if [ -n "$(git status --porcelain data/pass_news_candidates.json)" ]; then
+            git add data/pass_news_candidates.json
             git commit -m "news: aggiorna candidati GDELT [skip ci]"
             git push
           else

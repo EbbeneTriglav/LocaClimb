@@ -1,0 +1,10 @@
+[Unit]
+Description=locaClimb: rebuild osm_passes.json + curated_overrides.json + routes_baked.json
+# VPS equivalent of .github/workflows/osm-refresh.yml. That workflow keeps working
+# unchanged on GitHub Actions if you deploy there instead/as well - see deploy/systemd/README.md.
+
+[Service]
+Type=oneshot
+User=locaclimb
+EnvironmentFile=/etc/locaclimb/osm-refresh.env
+ExecStart=/bin/bash %h/locaclimb/deploy/systemd/run-pipeline.sh

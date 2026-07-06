@@ -16,11 +16,12 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
+import { dataPath } from "./lib/paths.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
-const IN = arg("--in", "manual_overrides.json");
-const OUT = arg("--out", "manual_enriched.json");
+const IN = dataPath(arg("--in", "manual_overrides.json"));
+const OUT = dataPath(arg("--out", "manual_enriched.json"));
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 const DEM_Z = 13;
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
