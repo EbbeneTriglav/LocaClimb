@@ -79,7 +79,8 @@ function loadRouteWater(){
   var track=rbTrack.map(function(c){return[c[0],c[1]];});
   var box=bboxOfTracks([track],0.0025);
   if(!box)return;
-  fetchWater(box,function(nodes){
+  fetchWater(box,function(nodes,ok){
+    if(!ok){var rb=document.getElementById("rwaterbox");if(rb)rb.innerHTML='<span style="color:var(--txt2)">&#x26A0;&#xFE0F; Servizio acqua non raggiungibile (Overpass sovraccarico). Riprova tra poco.</span>';return;}
     var out=[];
     nodes.forEach(function(el){
       var r=distPtToTrack(el.lat,el.lon,track);

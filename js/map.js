@@ -165,29 +165,42 @@ function loadFountains(){
   showFountHint(false);
   var bb=map.getBounds(),box="("+bb.getSouth().toFixed(4)+","+bb.getWest().toFixed(4)+","+bb.getNorth().toFixed(4)+","+bb.getEast().toFixed(4)+")";
   var q='[out:json][timeout:25];(node["amenity"="drinking_water"]'+box+';node["man_made"="water_tap"]["drinking_water"!="no"]'+box+';node["amenity"="fountain"]["drinking_water"="yes"]'+box+';node["natural"="spring"]["drinking_water"="yes"]'+box+';);out body;';
-  fountFetch(WATER_MIRRORS,0,q);
+  fountFetch(shuffledMirrors(),0,q);
 }
 function fountFetch(urls,i,q){
   if(i>=urls.length||!fountOn)return;
-  fetch(urls[i],{method:"POST",body:"data="+encodeURIComponent(q)}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+  overpassPost(urls[i],q,12000).then(function(d){
     (d.elements||[]).forEach(function(el){if(el.type!=="node"||fountIds[el.id])return;fountIds[el.id]=1;addFountain(el);});
   }).catch(function(){fountFetch(urls,i+1,q);});
 }
 /* ===== SHARED WATER FETCH (fontanelle + sorgenti) for climb/route buffers ===== */
-function waterQuery(box){return '[out:json][timeout:25];(node["amenity"="drinking_water"]'+box+';node["man_made"="water_tap"]["drinking_water"!="no"]'+box+';node["amenity"="fountain"]["drinking_water"="yes"]'+box+';node["natural"="spring"]["drinking_water"!="no"]'+box+';);out body;';}
+function waterQuery(box){return '[out:json][timeout:15];(node["amenity"="drinking_water"]'+box+';node["man_made"="water_tap"]["drinking_water"!="no"]'+box+';node["amenity"="fountain"]["drinking_water"="yes"]'+box+';node["natural"="spring"]["drinking_water"!="no"]'+box+';);out body;';}
 function bboxOfTracks(tracks,padDeg){
   var mnLa=90,mxLa=-90,mnLo=180,mxLo=-180,seen=false;
   (tracks||[]).forEach(function(t){(t||[]).forEach(function(c){seen=true;if(c[0]<mnLa)mnLa=c[0];if(c[0]>mxLa)mxLa=c[0];if(c[1]<mnLo)mnLo=c[1];if(c[1]>mxLo)mxLo=c[1];});});
   if(!seen)return null;padDeg=padDeg||0.002;
   return "("+(mnLa-padDeg).toFixed(4)+","+(mnLo-padDeg).toFixed(4)+","+(mxLa+padDeg).toFixed(4)+","+(mxLo+padDeg).toFixed(4)+")";
 }
-function fetchWater(box,onNodes){
-  if(typeof fetch!=="function"){onNodes([]);return;}
-  var q=waterQuery(box);
+function overpassPost(url,q,ms){                              // POST con timeout (evita richieste appese all'infinito)
+  var ac=(typeof AbortController!=="undefined")?new AbortController():null;
+  var to=ac?setTimeout(function(){ac.abort();},ms||12000):null;
+  return fetch(url,{method:"POST",body:"data="+encodeURIComponent(q),signal:ac?ac.signal:undefined})
+    .then(function(r){if(to)clearTimeout(to);if(!r.ok)throw new Error(r.status);return r.json();})
+    .catch(function(e){if(to)clearTimeout(to);throw e;});
+}
+function shuffledMirrors(){var a=WATER_MIRRORS.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+/* cb(nodes, ok). Cache per bbox + dedup delle richieste concorrenti + fallback tra mirror CORS. */
+function fetchWater(box,cb){
+  if(waterCache[box]){cb(waterCache[box],true);return;}
+  if(waterInflight[box]){waterInflight[box].push(cb);return;}
+  waterInflight[box]=[cb];
+  function done(nodes,ok){if(ok)waterCache[box]=nodes;var cbs=waterInflight[box]||[];delete waterInflight[box];cbs.forEach(function(f){f(nodes,ok);});}
+  if(typeof fetch!=="function"){done([],false);return;}
+  var q=waterQuery(box),order=shuffledMirrors();
   (function tryUrl(i){
-    if(i>=WATER_MIRRORS.length){onNodes([]);return;}
-    fetch(WATER_MIRRORS[i],{method:"POST",body:"data="+encodeURIComponent(q)}).then(function(r){if(!r.ok)throw 0;return r.json();})
-      .then(function(d){onNodes((d.elements||[]).filter(function(e){return e.type==="node"&&e.lat!=null;}));})
+    if(i>=order.length){done([],false);return;}
+    overpassPost(order[i],q,12000)
+      .then(function(d){done((d.elements||[]).filter(function(e){return e.type==="node"&&e.lat!=null;}),true);})
       .catch(function(){tryUrl(i+1);});
   })(0);
 }

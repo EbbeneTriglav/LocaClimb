@@ -92,7 +92,7 @@ function renderPassPanel(p,isOsm){
   if(p.versanti&&p.versanti.length)loadClimbWater(p);
   fetchW(p.lat,p.lon);renderRatings(p);renderNews(p);
 }
-function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();hideRS();}
+function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();hideRS();hideElevCursor();}
 
 /* auto-discovered OSM pass with no climb data yet: minimal panel (header + notice + meteo).
    Enrichment happens offline (build_osm_passes.mjs / the OSM refresh Action), not here. */
@@ -105,7 +105,14 @@ function renderOsmStub(p){
   fetchW(p.lat,p.lon);
 }
 
-var elevMeta=null,elevSel=-1;
+var elevMeta=null,elevSel=-1,elevHoverMarker=null;
+/* map cursor synced with the elevation-profile hover */
+function showElevCursor(lat,lon){
+  if(typeof map==="undefined"||!map||!map.addLayer)return;
+  if(!elevHoverMarker){elevHoverMarker=L.marker([lat,lon],{icon:L.divIcon({className:"elev-cursor",html:'<span class="ec-ring"></span><span class="ec-dot"></span>',iconSize:[20,20],iconAnchor:[10,10]}),interactive:false,keyboard:false,zIndexOffset:1200});elevHoverMarker.addTo(map);}
+  else elevHoverMarker.setLatLng([lat,lon]);
+}
+function hideElevCursor(){if(elevHoverMarker&&map&&map.removeLayer)map.removeLayer(elevHoverMarker);elevHoverMarker=null;}
 function setElev(i){elevSel=i;var btns=document.querySelectorAll("#elev-tog .etog");for(var k=0;k<btns.length;k++)btns[k].classList.toggle("active",k===(i<0?0:i+1));renderElev(-1);highlightVersante(i);}
 function drawElev(p){
   var c=document.getElementById("elev");if(!c)return;
@@ -119,7 +126,7 @@ function drawElev(p){
   var series=vers.map(function(v){
     var pr=v.elevationProfile,n=pr.length,dist=v.distance_km||10,seg=(dist*1000)/(n-1);
     var pts=[];for(var i=0;i<n;i++){var g=i===0?0:(pr[i]-pr[i-1])/seg*100;pts.push({d:i/(n-1)*dist,e:pr[i],g:g});}
-    return {name:v.side,dist:dist,pts:pts};
+    return {name:v.side,dist:dist,pts:pts,track:v.track};
   });
   elevMeta={c:c,mn:mn,mx:mx,maxDist:maxDist,series:series};
   renderElev(-1);
@@ -134,7 +141,7 @@ function renderElev(frac){
   var m=elevMeta;if(!m)return;var c=m.c;
   var dpr=window.devicePixelRatio||1,W=c.offsetWidth,H=224;
   c.style.height=H+"px";c.width=W*dpr;c.height=H*dpr;var ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
-  var dk=document.body.classList.contains("dark"),PADL=6,PADR=46,PADT=16,PADB=42;
+  var dk=document.body.classList.contains("dark"),PADL=6,PADR=54,PADT=16,PADB=30;
   var plotW=W-PADL-PADR,plotH=H-PADT-PADB,baseY=PADT+plotH;
   ctx.clearRect(0,0,W,H);
   function rr(x,y,w,hh,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+hh,r);ctx.arcTo(x+w,y+hh,x,y+hh,r);ctx.arcTo(x,y+hh,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
@@ -165,29 +172,42 @@ function renderElev(frac){
       var xc=X((bn.d0+bn.d1)/2),lab=bn.g.toFixed(1);ctx.font="bold 10px system-ui";var tw=ctx.measureText(lab).width+8;
       ctx.fillStyle="rgba(255,255,255,.94)";rr(xc-tw/2,baseY-16,tw,13,4);ctx.fill();ctx.fillStyle=gradeColor(bn.g);ctx.fillText(lab,xc,baseY-9);});
     ctx.textBaseline="alphabetic";
-    // bottom dark strip with distance ticks
-    ctx.fillStyle=dk?"#0b1220":"#1e293b";ctx.fillRect(0,baseY+1,W,PADB-1);ctx.fillStyle="#cbd5e1";ctx.font="10px system-ui";ctx.textAlign="center";
-    ctx.fillText("0",X(0),baseY+15);bins.forEach(function(bn){ctx.fillText((bn.d1%1===0?bn.d1:bn.d1.toFixed(1)),X(bn.d1),baseY+15);});
-    ctx.fillStyle="#64748b";ctx.font="9px system-ui";ctx.fillText("km",W-PADR+12,baseY+15);
+    // distance axis: thin baseline + light ticks (no black bar)
+    ctx.strokeStyle=dk?"#334155":"#cbd5e1";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(PADL,baseY+.5);ctx.lineTo(W-PADR,baseY+.5);ctx.stroke();
+    ctx.textAlign="center";ctx.font="10px system-ui";ctx.fillStyle=dk?"#94a3b8":"#94a3b8";
+    function tick(dv){var x=X(dv);ctx.strokeStyle=dk?"#475569":"#cbd5e1";ctx.beginPath();ctx.moveTo(x,baseY+1);ctx.lineTo(x,baseY+5);ctx.stroke();ctx.fillStyle=dk?"#94a3b8":"#64748b";ctx.fillText((dv%1===0?dv:dv.toFixed(1)),x,baseY+16);}
+    tick(0);bins.forEach(function(bn){tick(bn.d1);});
+    ctx.fillStyle=dk?"#64748b":"#94a3b8";ctx.font="9px system-ui";ctx.textAlign="right";ctx.fillText("km",W-PADR,baseY+16);
   } else { // ---- both versanti: grade-colored lines ----
     m.series.forEach(function(s,si){for(var i=1;i<s.pts.length;i++){var a=s.pts[i-1],b=s.pts[i];ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.strokeStyle=gradeColor(b.g);ctx.lineWidth=3.2;ctx.globalAlpha=si?0.7:0.95;ctx.stroke();ctx.globalAlpha=1;}});
     m.series.forEach(function(s,si){ctx.fillStyle=VCOLS[si]||"#334155";ctx.fillRect(PADL+4+si*150,2,9,9);ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.font="11px system-ui";ctx.textAlign="left";ctx.fillText(s.name.substring(0,17),PADL+16+si*150,11);});
-    ctx.textAlign="center";ctx.fillStyle=dk?"#64748b":"#94a3b8";ctx.font="10px system-ui";for(var k=0;k<=Math.ceil(m.maxDist);k+=Math.max(1,Math.round(m.maxDist/6)))ctx.fillText(k+"km",X(k),H-7);
+    ctx.textAlign="center";ctx.fillStyle=dk?"#64748b":"#94a3b8";ctx.font="10px system-ui";for(var k=0;k<=Math.ceil(m.maxDist);k+=Math.max(1,Math.round(m.maxDist/6)))ctx.fillText(k+"km",X(k),baseY+16);
   }
-  // right elevation axis + gridlines
-  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#94a3b8":"#64748b";ctx.textAlign="left";
-  for(var i2=0;i2<=4;i2++){var yy=PADT+plotH*(1-i2/4),el=Math.round(m.mn+(m.mx-m.mn)*i2/4);ctx.beginPath();ctx.moveTo(PADL,yy);ctx.lineTo(W-PADR,yy);ctx.stroke();ctx.fillText(el+"m",W-PADR+3,yy+3);}
-  // hover crosshair + tooltip
+  // right elevation axis: soft gridlines + rounded chip labels (kept inside the canvas so they never clip)
+  ctx.lineWidth=1;
+  for(var i2=0;i2<=4;i2++){
+    var yy=PADT+plotH*(1-i2/4),elv=Math.round(m.mn+(m.mx-m.mn)*i2/4);
+    ctx.strokeStyle=dk?"rgba(148,163,184,.16)":"rgba(100,116,139,.14)";
+    ctx.beginPath();ctx.moveTo(PADL,yy);ctx.lineTo(W-PADR,yy);ctx.stroke();
+    var labe=elv+" m";ctx.font="600 9.5px system-ui";var lw=ctx.measureText(labe).width+8;
+    var lx=W-lw-3,ly=Math.max(PADT+1,Math.min(baseY-11,yy-5.5));
+    ctx.fillStyle=dk?"rgba(15,23,42,.85)":"rgba(255,255,255,.9)";rr(lx,ly,lw,11,3);ctx.fill();
+    ctx.strokeStyle=dk?"rgba(148,163,184,.25)":"rgba(148,163,184,.35)";ctx.lineWidth=.75;rr(lx,ly,lw,11,3);ctx.stroke();
+    ctx.fillStyle=dk?"#cbd5e1":"#475569";ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(labe,lx+4,ly+6);
+  }
+  ctx.textBaseline="alphabetic";
+  // hover crosshair + tooltip + synced map cursor
   if(frac>=0&&m.series.length){
     var s2=only>=0?m.series[only]:m.series[0],d=Math.max(0,Math.min(s2.dist,(frac*W-PADL)/plotW*m.maxDist));
     var idx=Math.round(d/s2.dist*(s2.pts.length-1));idx=Math.max(0,Math.min(s2.pts.length-1,idx));var pt=s2.pts[idx],px=X(pt.d),py=Y(pt.e);
-    ctx.strokeStyle=dk?"#94a3b8":"#475569";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(px,PADT);ctx.lineTo(px,baseY);ctx.stroke();
-    ctx.fillStyle="#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=2;ctx.beginPath();ctx.arc(px,py,4,0,7);ctx.fill();ctx.stroke();
-    var txt=pt.d.toFixed(1)+"km  "+pt.e+"m  "+(pt.g>0?"+":"")+pt.g.toFixed(1)+"%";
-    ctx.font="bold 11px system-ui";var tw2=ctx.measureText(txt).width+12,tx=Math.min(W-tw2-2,Math.max(2,px-tw2/2));
-    ctx.fillStyle=dk?"#0f172a":"#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=1.5;ctx.beginPath();ctx.rect(tx,PADT+2,tw2,18);ctx.fill();ctx.stroke();
-    ctx.fillStyle=dk?"#f1f5f9":"#1e293b";ctx.textAlign="left";ctx.fillText(txt,tx+6,PADT+15);
-  }
+    ctx.strokeStyle=dk?"#94a3b8":"#475569";ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(px,PADT);ctx.lineTo(px,baseY);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(px,py,4.5,0,7);ctx.fill();ctx.stroke();
+    var txt=pt.d.toFixed(1)+" km   "+pt.e+" m   "+(pt.g>0?"+":"")+pt.g.toFixed(1)+"%";
+    ctx.font="bold 11px system-ui";var tw2=ctx.measureText(txt).width+14,tx=Math.min(W-tw2-2,Math.max(2,px-tw2/2));
+    ctx.fillStyle=dk?"#0f172a":"#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=1.5;rr(tx,PADT+2,tw2,19,5);ctx.fill();ctx.stroke();
+    ctx.fillStyle=dk?"#f1f5f9":"#1e293b";ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(txt,tx+7,PADT+12);ctx.textBaseline="alphabetic";
+    var ll=trackPtAt(s2.track,pt.d);if(ll)showElevCursor(ll[0],ll[1]);
+  } else { hideElevCursor(); }
   // ---- water drops (fontane/sorgenti entro 100m dalla salita) ----
   if(climbWater&&climbWater.length){
     climbWater.forEach(function(w){
@@ -211,8 +231,9 @@ function loadClimbWater(p){
   var box=bboxOfTracks(vers.map(function(v){return v.track;}),0.0015);
   if(!box){setWaterBox([],vers);return;}
   var pid=p.id;
-  fetchWater(box,function(nodes){
+  fetchWater(box,function(nodes,ok){
     if(!CUR_PASS||CUR_PASS.id!==pid)return; // pannello cambiato nel frattempo
+    if(!ok){var wb=document.getElementById("waterbox");if(wb)wb.innerHTML='<span style="color:var(--txt2)">&#x26A0;&#xFE0F; Servizio acqua non raggiungibile (Overpass sovraccarico). Riprova tra poco.</span>';return;}
     var out=[];
     nodes.forEach(function(el){
       var bvi=-1,bd=1e12,bal=0;

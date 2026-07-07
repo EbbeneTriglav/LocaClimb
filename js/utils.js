@@ -63,6 +63,18 @@ function distPtToTrack(lat,lon,track){
 }
 /* proximity -> shade of blue (route builder: dark on-route, paler as it strays) */
 function waterColor(distM){return distM<=15?"#1e3a8a":distM<=30?"#2563eb":distM<=100?"#60a5fa":"#93c5fd";}
+/* coordinate [lat,lon] on a track at a given distance-from-start (km) — used to sync the map cursor with the elevation hover */
+function trackPtAt(track,dKm){
+  if(!track||!track.length)return null;
+  if(track.length<2||dKm<=0)return track[0];
+  var cum=0;
+  for(var i=1;i<track.length;i++){
+    var seg=hav(track[i-1][0],track[i-1][1],track[i][0],track[i][1]);
+    if(cum+seg>=dKm){var t=seg>0?(dKm-cum)/seg:0;return[track[i-1][0]+(track[i][0]-track[i-1][0])*t,track[i-1][1]+(track[i][1]-track[i-1][1])*t];}
+    cum+=seg;
+  }
+  return track[track.length-1];
+}
 function waterPot(t){t=t||{};if(t.drinking_water==="no")return"Non potabile";if(t.drinking_water==="yes"||t.amenity==="drinking_water")return"Acqua potabile";if(t.natural==="spring")return"Sorgente";return"Potabilita non indicata";}
 function estDiff(distKm,gain,top){if(!distKm||distKm<=0)return 1;var avg=gain/(distKm*10);var d=avg*0.85;d+=Math.min(distKm/6,2.5);if(avg>=12)d+=2;else if(avg>=9)d+=1;if(top>=2000)d+=1;return Math.max(1,Math.min(10,Math.round(d)));}
 

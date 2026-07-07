@@ -39,7 +39,8 @@ var CUR_PASS=null,FB=null,FBUSER=null;
 /* ===== Fontanelle / drinking water from OSM via Overpass ==================== */
 var fountOn=false,fountLayer=null,fountIds={},fountTimer=null,fountIcon=null;
 var MIN_FOUNT_ZOOM=12,fountHintShown=false;                 // fontanelle: solo da questo zoom in su (perf su aree vaste)
-var WATER_MIRRORS=["https://overpass-api.de/api/interpreter","https://overpass.kumi.systems/api/interpreter"];
+var WATER_MIRRORS=["https://overpass-api.de/api/interpreter","https://overpass.private.coffee/api/interpreter","https://maps.mail.ru/osm/tools/overpass/api/interpreter"];
+var waterCache={},waterInflight={};                          // bbox -> nodi (cache) / callback in attesa (dedup)
 /* Acqua su salita (buffer 100m) e su percorso (buffer 200m, colore per vicinanza) */
 var climbWaterLayer=null,climbWater=[],climbWaterIcon=null;
 var routeWaterLayer=null,routeWater=[];
