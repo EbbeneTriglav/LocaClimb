@@ -4,8 +4,17 @@ function fmtDate(s){if(!s)return"";var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s);retu
    manual editor's free-text fields) before it's concatenated into an innerHTML string. */
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 function we(c){return WC[c]||"&#x2601;&#xFE0F;";}
-function sc(s){return s==="open"?"#22c55e":s==="seasonal"?"#f59e0b":"#ef4444";}
-function sl(s){return s==="open"?"&#x1F7E2; Aperto":s==="seasonal"?"&#x1F7E1; Stagionale":"&#x1F534; Chiuso";}
+/* Normalizza lo stato: i dati usano sia chiavi EN (open/seasonal/closed) sia stringhe IT (Aperto/...) sia niente.
+   Default = "open": un passo è aperto salvo che lo si sappia chiuso (prima qualsiasi valore ignoto finiva su "Chiuso"). */
+function statusKey(s){
+  if(s==null||s==="")return"open";
+  s=(""+s).toLowerCase();
+  if(s==="closed"||s==="chiuso"||s==="chiusa"||s==="no")return"closed";
+  if(s==="seasonal"||s==="stagionale"||s==="invernale"||s==="winter")return"seasonal";
+  return"open";
+}
+function sc(s){var k=statusKey(s);return k==="open"?"#22c55e":k==="seasonal"?"#f59e0b":"#ef4444";}
+function sl(s){var k=statusKey(s);return k==="open"?"&#x1F7E2; Aperto":k==="seasonal"?"&#x1F7E1; Stagionale":"&#x1F534; Chiuso";}
 function ds(d){var s="";for(var i=0;i<10;i++)s+=(i<d?"&#x2605;":"&#x2606;");return s;}
 function diffColor(d){return d>=9?"#ef4444":d>=7?"#f97316":d>=5?"#f59e0b":"#22c55e";}
 /* gradient (%) -> color scale, used by profile + map track */
