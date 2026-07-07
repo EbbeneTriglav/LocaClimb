@@ -55,7 +55,7 @@ function addOsmMarker(op){
   c.bindPopup('<div style="min-width:190px"><b>'+esc(op.name)+'</b> <span style="color:#7c3aed;font-size:.72em;font-weight:600">OSM</span><br>&#x26F0;&#xFE0F; '+op.elevation+' m'+diffTag+surfTag+'<br><button data-act="openOsmD" data-id="'+esc(op.id)+'" style="margin-top:6px;padding:6px 13px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">Dettagli</button> <button data-act="addOsmToRoute" data-id="'+esc(op.id)+'" style="margin-top:6px;padding:6px 13px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">+ Route</button></div>');
   markers.addLayer(c);op._marker=c;
 }
-function clearRoutes(){routeLines.forEach(function(l){map.removeLayer(l);});routeLines=[];clearVers();}
+function clearRoutes(){routeLines.forEach(function(l){map.removeLayer(l);});routeLines=[];clearVers();clearClimbWater();}
 function clearVers(){versStartMarkers.forEach(function(m){map.removeLayer(m);});versStartMarkers=[];versLayers=[];}
 function regLine(i,line){if(!line)return;if(!versLayers[i])versLayers[i]={lines:[],marker:null};versLayers[i].lines.push(line);line.on("click",function(){selectVers(i);});}
 function addStartMarker(i,lat,lon){
@@ -153,21 +153,69 @@ function getFountIcon(){if(!fountIcon)fountIcon=L.divIcon({className:"fount-ic",
 function toggleFount(){
   fountOn=!fountOn;var b=document.getElementById("fountBtn");if(b)b.classList.toggle("active",fountOn);
   if(fountOn){if(!fountLayer)fountLayer=L.layerGroup().addTo(map);map.on("moveend",fountMove);loadFountains();}
-  else{map.off("moveend",fountMove);if(fountLayer)fountLayer.clearLayers();fountIds={};}
+  else{map.off("moveend",fountMove);if(fountLayer)fountLayer.clearLayers();fountIds={};showFountHint(false);}
 }
 function fountMove(){clearTimeout(fountTimer);fountTimer=setTimeout(loadFountains,600);}
+function showFountHint(on){var h=document.getElementById("fount-hint");if(h)h.classList.toggle("show",!!on);}
 function loadFountains(){
   if(!fountOn||!fountLayer)return;
-  if(map.getZoom()<11)return; // bbox troppo ampio: evita query pesanti su Overpass
+  if(map.getZoom()<MIN_FOUNT_ZOOM){ // bbox troppo ampio: niente marker (perf) + suggerimento a zoomare
+    fountLayer.clearLayers();fountIds={};showFountHint(true);return;
+  }
+  showFountHint(false);
   var bb=map.getBounds(),box="("+bb.getSouth().toFixed(4)+","+bb.getWest().toFixed(4)+","+bb.getNorth().toFixed(4)+","+bb.getEast().toFixed(4)+")";
   var q='[out:json][timeout:25];(node["amenity"="drinking_water"]'+box+';node["man_made"="water_tap"]["drinking_water"!="no"]'+box+';node["amenity"="fountain"]["drinking_water"="yes"]'+box+';node["natural"="spring"]["drinking_water"="yes"]'+box+';);out body;';
-  fountFetch(["https://overpass-api.de/api/interpreter","https://overpass.kumi.systems/api/interpreter"],0,q);
+  fountFetch(WATER_MIRRORS,0,q);
 }
 function fountFetch(urls,i,q){
   if(i>=urls.length||!fountOn)return;
   fetch(urls[i],{method:"POST",body:"data="+encodeURIComponent(q)}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
     (d.elements||[]).forEach(function(el){if(el.type!=="node"||fountIds[el.id])return;fountIds[el.id]=1;addFountain(el);});
   }).catch(function(){fountFetch(urls,i+1,q);});
+}
+/* ===== SHARED WATER FETCH (fontanelle + sorgenti) for climb/route buffers ===== */
+function waterQuery(box){return '[out:json][timeout:25];(node["amenity"="drinking_water"]'+box+';node["man_made"="water_tap"]["drinking_water"!="no"]'+box+';node["amenity"="fountain"]["drinking_water"="yes"]'+box+';node["natural"="spring"]["drinking_water"!="no"]'+box+';);out body;';}
+function bboxOfTracks(tracks,padDeg){
+  var mnLa=90,mxLa=-90,mnLo=180,mxLo=-180,seen=false;
+  (tracks||[]).forEach(function(t){(t||[]).forEach(function(c){seen=true;if(c[0]<mnLa)mnLa=c[0];if(c[0]>mxLa)mxLa=c[0];if(c[1]<mnLo)mnLo=c[1];if(c[1]>mxLo)mxLo=c[1];});});
+  if(!seen)return null;padDeg=padDeg||0.002;
+  return "("+(mnLa-padDeg).toFixed(4)+","+(mnLo-padDeg).toFixed(4)+","+(mxLa+padDeg).toFixed(4)+","+(mxLo+padDeg).toFixed(4)+")";
+}
+function fetchWater(box,onNodes){
+  if(typeof fetch!=="function"){onNodes([]);return;}
+  var q=waterQuery(box);
+  (function tryUrl(i){
+    if(i>=WATER_MIRRORS.length){onNodes([]);return;}
+    fetch(WATER_MIRRORS[i],{method:"POST",body:"data="+encodeURIComponent(q)}).then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(d){onNodes((d.elements||[]).filter(function(e){return e.type==="node"&&e.lat!=null;}));})
+      .catch(function(){tryUrl(i+1);});
+  })(0);
+}
+/* ---- Acqua sulla singola SALITA (buffer 100m, evidenziata in mappa) ---- */
+function getClimbWaterIcon(){if(!climbWaterIcon)climbWaterIcon=L.divIcon({className:"climb-water-ic",html:'<div class="cw-drop">&#x1F4A7;</div>',iconSize:[22,22],iconAnchor:[11,11],popupAnchor:[0,-9]});return climbWaterIcon;}
+function clearClimbWater(){if(climbWaterLayer&&map&&map.removeLayer)map.removeLayer(climbWaterLayer);climbWaterLayer=null;climbWater=[];}
+function drawClimbWater(){
+  if(climbWaterLayer&&map&&map.removeLayer)map.removeLayer(climbWaterLayer);
+  if(!climbWater.length){climbWaterLayer=null;return;}
+  climbWaterLayer=L.layerGroup();
+  climbWater.forEach(function(w){
+    var pop='&#x1F4A7; <b>'+esc(w.name||"Acqua")+'</b><br>'+esc(w.pot)+'<br><span style="color:#888">~'+Math.round(w.dist)+' m dalla salita</span>';
+    L.marker([w.lat,w.lon],{icon:getClimbWaterIcon(),zIndexOffset:500}).bindPopup(pop).addTo(climbWaterLayer);
+  });
+  if(map&&map.addLayer)climbWaterLayer.addTo(map);
+}
+/* ---- Acqua sul PERCORSO (buffer 200m, colore per vicinanza) ---- */
+function clearRouteWater(){if(routeWaterLayer&&map&&map.removeLayer)map.removeLayer(routeWaterLayer);routeWaterLayer=null;routeWater=[];}
+function drawRouteWater(){
+  if(routeWaterLayer&&map&&map.removeLayer)map.removeLayer(routeWaterLayer);
+  if(!routeWater.length){routeWaterLayer=null;return;}
+  routeWaterLayer=L.layerGroup();
+  routeWater.forEach(function(w){
+    var col=waterColor(w.dist);
+    var pop='&#x1F4A7; <b>'+esc(w.name||"Acqua")+'</b><br>'+esc(w.pot)+'<br><span style="color:#888">~'+Math.round(w.dist)+' m dal percorso</span>';
+    L.circleMarker([w.lat,w.lon],{radius:w.dist<=15?7:6,fillColor:col,color:"#fff",weight:2,fillOpacity:0.95,zIndexOffset:500}).bindPopup(pop).addTo(routeWaterLayer);
+  });
+  if(map&&map.addLayer)routeWaterLayer.addTo(map);
 }
 function addFountain(el){
   if(!fountLayer)return;var t=el.tags||{},nm=t.name||"";

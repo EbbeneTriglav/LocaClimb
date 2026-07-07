@@ -72,8 +72,8 @@ function buildVersante(pts,elevs,topLat,topLon,surfLabel,wtags){
 }
 function surfaceLabelFromWay(t){
   if(!t)return"";var s=t.surface||"";var hw=t.highway||"";
-  if(s==="asphalt"||s==="paved"||s==="concrete")return"&#x1F6E3;&#xFE0F; Asfalto";
-  if(s==="compacted"||s==="fine_gravel"||s==="gravel"||hw==="track")return"&#x1FAA8; Sterrato/gravel";
+  if(s==="asphalt"||s==="paved"||s==="concrete")return"\uD83D\uDEE3\uFE0F Asfalto";
+  if(s==="compacted"||s==="fine_gravel"||s==="gravel"||hw==="track")return"\uD83E\uDEA8 Sterrato/gravel";
   if(s)return"Fondo: "+s;
   return"";
 }

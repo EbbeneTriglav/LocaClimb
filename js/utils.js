@@ -42,6 +42,28 @@ function truckBadge(t){var m={no:["&#x1F6AB; No camion","#22c55e"],rari:["&#x1F6
 /* ===== GEO HELPERS ===== */
 function hav(la1,lo1,la2,lo2){var R=6371,p=Math.PI/180;var dLa=(la2-la1)*p,dLo=(lo2-lo1)*p;var x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*p)*Math.cos(la2*p)*Math.sin(dLo/2)*Math.sin(dLo/2);return 2*R*Math.asin(Math.sqrt(x));}
 function compass(la1,lo1,la2,lo2){var p=Math.PI/180;var y=Math.sin((lo2-lo1)*p)*Math.cos(la2*p);var x=Math.cos(la1*p)*Math.sin(la2*p)-Math.sin(la1*p)*Math.cos(la2*p)*Math.cos((lo2-lo1)*p);var br=(Math.atan2(y,x)*180/Math.PI+360)%360;var d=["Nord","Nord-Est","Est","Sud-Est","Sud","Sud-Ovest","Ovest","Nord-Ovest"];return d[Math.round(br/45)%8];}
+/* Point -> polyline nearest distance (meters) + distance-along the track at the projection (km).
+   Local equirectangular projection: exact enough at the <500 m scale we filter on. track = [[lat,lon],...] */
+function distPtToTrack(lat,lon,track){
+  if(!track||!track.length)return null;
+  if(track.length===1)return{distM:hav(lat,lon,track[0][0],track[0][1])*1000,along:0};
+  var p=Math.PI/180,R=6371000,c0=Math.cos(lat*p);
+  function XY(la,lo){return[R*lo*p*c0,R*la*p];}
+  var P=XY(lat,lon),best=1e18,bestAlong=0,cum=0;
+  for(var i=1;i<track.length;i++){
+    var A=track[i-1],B=track[i],segKm=hav(A[0],A[1],B[0],B[1]);
+    var a=XY(A[0],A[1]),b=XY(B[0],B[1]);
+    var vx=b[0]-a[0],vy=b[1]-a[1],wx=P[0]-a[0],wy=P[1]-a[1];
+    var L2=vx*vx+vy*vy,t=L2>0?(wx*vx+wy*vy)/L2:0;t=t<0?0:t>1?1:t;
+    var dx=P[0]-(a[0]+t*vx),dy=P[1]-(a[1]+t*vy),d=Math.sqrt(dx*dx+dy*dy);
+    if(d<best){best=d;bestAlong=cum+segKm*t;}
+    cum+=segKm;
+  }
+  return{distM:best,along:bestAlong};
+}
+/* proximity -> shade of blue (route builder: dark on-route, paler as it strays) */
+function waterColor(distM){return distM<=15?"#1e3a8a":distM<=30?"#2563eb":distM<=100?"#60a5fa":"#93c5fd";}
+function waterPot(t){t=t||{};if(t.drinking_water==="no")return"Non potabile";if(t.drinking_water==="yes"||t.amenity==="drinking_water")return"Acqua potabile";if(t.natural==="spring")return"Sorgente";return"Potabilita non indicata";}
 function estDiff(distKm,gain,top){if(!distKm||distKm<=0)return 1;var avg=gain/(distKm*10);var d=avg*0.85;d+=Math.min(distKm/6,2.5);if(avg>=12)d+=2;else if(avg>=9)d+=1;if(top>=2000)d+=1;return Math.max(1,Math.min(10,Math.round(d)));}
 
 function calcSun(lat,lon,exp){

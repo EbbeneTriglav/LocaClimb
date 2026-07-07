@@ -77,6 +77,8 @@ function renderPassPanel(p,isOsm){
     h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin:7px 0 2px">';
     p.versanti.forEach(function(v,i){if(v.track&&v.track.length>1)h+='<button class="btn" style="font-size:.78rem;padding:6px 11px" data-act="exportGPX" data-id="'+esc(p.id)+'" data-i="'+i+'">&#x2B07;&#xFE0F; GPX '+esc((v.side||"").substring(0,18))+'</button>';});
     h+='</div>';
+    h+='<div class="section-title">&#x1F4A7; Acqua sulla salita <span style="font-weight:400;font-size:.8em;color:var(--txt2)">(entro 100 m)</span></div>';
+    h+='<div id="waterbox" style="font-size:.84rem;color:var(--txt2);padding:2px 0">Ricerca fontane e sorgenti&#8230;</div>';
   }
   h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div><div id="wbox" style="text-align:center;padding:16px;color:var(--txt2)">Caricamento meteo...</div>';
   h+=stravaSection(p);
@@ -87,6 +89,7 @@ function renderPassPanel(p,isOsm){
   h+='</div>';
   document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
   if(p.versanti&&p.versanti.length)setTimeout(function(){drawElev(p);},80);
+  if(p.versanti&&p.versanti.length)loadClimbWater(p);
   fetchW(p.lat,p.lon);renderRatings(p);renderNews(p);
 }
 function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();hideRS();}
@@ -108,7 +111,7 @@ function drawElev(p){
   var c=document.getElementById("elev");if(!c)return;
   elevSel=-1;
   // pick the versante to detail on hover: longest by default
-  var vers=(p.versanti||[]).filter(function(v){return v.elevationProfile&&v.elevationProfile.length>1;});
+  var vers=profileVers(p);
   if(!vers.length)return;
   var allE=[];vers.forEach(function(v){allE=allE.concat(v.elevationProfile);});
   var mn=Math.min.apply(null,allE)-50,mx=Math.max.apply(null,allE)+50;
@@ -134,6 +137,10 @@ function renderElev(frac){
   var dk=document.body.classList.contains("dark"),PADL=6,PADR=46,PADT=16,PADB=42;
   var plotW=W-PADL-PADR,plotH=H-PADT-PADB,baseY=PADT+plotH;
   ctx.clearRect(0,0,W,H);
+  function rr(x,y,w,hh,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+hh,r);ctx.arcTo(x+w,y+hh,x,y+hh,r);ctx.arcTo(x,y+hh,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  var bgg=ctx.createLinearGradient(0,PADT,0,baseY);
+  if(dk){bgg.addColorStop(0,"#0b1220");bgg.addColorStop(1,"#101c30");}else{bgg.addColorStop(0,"#eaf2ff");bgg.addColorStop(1,"#f8fbff");}
+  ctx.fillStyle=bgg;ctx.fillRect(PADL,PADT,plotW,plotH);
   function X(d){return PADL+(d/m.maxDist)*plotW;}
   function Y(e){return PADT+plotH*(1-(e-m.mn)/(m.mx-m.mn));}
   var only=(typeof elevSel==="number"&&elevSel>=0)?elevSel:(m.series.length===1?0:-1);
@@ -141,11 +148,23 @@ function renderElev(frac){
     var s=m.series[only],binKm=niceBin(s.dist),nb=Math.max(1,Math.ceil(s.dist/binKm)),bins=[];
     for(var bi=0;bi<nb;bi++){var d0=bi*binKm,d1=Math.min(s.dist,(bi+1)*binKm),e0=interpE(s,d0),e1=interpE(s,d1);bins.push({d0:d0,d1:d1,g:(d1>d0)?(e1-e0)/((d1-d0)*1000)*100:0});}
     for(var i=1;i<s.pts.length;i++){var a=s.pts[i-1],b=s.pts[i],bg=binGradOf(bins,(a.d+b.d)/2);ctx.beginPath();ctx.moveTo(X(a.d),Y(a.e));ctx.lineTo(X(b.d),Y(b.e));ctx.lineTo(X(b.d),baseY);ctx.lineTo(X(a.d),baseY);ctx.closePath();ctx.fillStyle=gradeColor(bg);ctx.fill();}
-    ctx.beginPath();for(var i=0;i<s.pts.length;i++){var pt=s.pts[i];if(i===0)ctx.moveTo(X(pt.d),Y(pt.e));else ctx.lineTo(X(pt.d),Y(pt.e));}ctx.lineTo(X(s.pts[s.pts.length-1].d),baseY);ctx.lineTo(X(0),baseY);ctx.closePath();ctx.strokeStyle=dk?"#f8fafc":"#0f172a";ctx.lineWidth=1.6;ctx.stroke();
-    // bin separators + per-segment % labels (Flamme Rouge: number under each block)
-    ctx.textAlign="center";
-    bins.forEach(function(bn){var xc=X((bn.d0+bn.d1)/2);ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(bn.d1),Y(interpE(s,bn.d1)));ctx.lineTo(X(bn.d1),baseY);ctx.stroke();
-      var lab=bn.g.toFixed(1);ctx.font="bold 10px system-ui";var tw=ctx.measureText(lab).width+6;ctx.fillStyle="rgba(255,255,255,.9)";ctx.fillRect(xc-tw/2,baseY-15,tw,13);ctx.fillStyle="#111";ctx.fillText(lab,xc,baseY-5);});
+    // area path (reused for gloss clip + ridge)
+    function areaPath(){ctx.beginPath();for(var i=0;i<s.pts.length;i++){var pt=s.pts[i];if(i===0)ctx.moveTo(X(pt.d),Y(pt.e));else ctx.lineTo(X(pt.d),Y(pt.e));}ctx.lineTo(X(s.pts[s.pts.length-1].d),baseY);ctx.lineTo(X(0),baseY);ctx.closePath();}
+    // glossy vertical sheen over the filled area = depth
+    ctx.save();areaPath();ctx.clip();var gl=ctx.createLinearGradient(0,PADT,0,baseY);gl.addColorStop(0,"rgba(255,255,255,.30)");gl.addColorStop(.45,"rgba(255,255,255,.06)");gl.addColorStop(1,"rgba(0,0,0,.14)");ctx.fillStyle=gl;ctx.fillRect(PADL,PADT,plotW,plotH);ctx.restore();
+    // crisp ridge line with a soft drop shadow
+    ctx.beginPath();for(var i=0;i<s.pts.length;i++){var pt=s.pts[i];if(i===0)ctx.moveTo(X(pt.d),Y(pt.e));else ctx.lineTo(X(pt.d),Y(pt.e));}
+    ctx.strokeStyle=dk?"#f8fafc":"#0f172a";ctx.lineWidth=2;ctx.lineJoin="round";ctx.shadowColor="rgba(0,0,0,.28)";ctx.shadowBlur=4;ctx.shadowOffsetY=2;ctx.stroke();ctx.shadowColor="transparent";ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+    // start dot + summit flag
+    var e0p=s.pts[0],eLp=s.pts[s.pts.length-1];
+    ctx.fillStyle="#22c55e";ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.beginPath();ctx.arc(X(e0p.d),Y(e0p.e),4.5,0,7);ctx.fill();ctx.stroke();
+    var fx=X(eLp.d),fy=Y(eLp.e);ctx.strokeStyle=dk?"#f8fafc":"#0f172a";ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(fx,fy);ctx.lineTo(fx,fy-16);ctx.stroke();ctx.fillStyle="#ef4444";ctx.beginPath();ctx.moveTo(fx,fy-16);ctx.lineTo(fx+11,fy-12.5);ctx.lineTo(fx,fy-9);ctx.closePath();ctx.fill();
+    // bin separators + per-segment % labels (rounded pills)
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    bins.forEach(function(bn){ctx.strokeStyle="rgba(255,255,255,.5)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(bn.d1),Y(interpE(s,bn.d1)));ctx.lineTo(X(bn.d1),baseY);ctx.stroke();
+      var xc=X((bn.d0+bn.d1)/2),lab=bn.g.toFixed(1);ctx.font="bold 10px system-ui";var tw=ctx.measureText(lab).width+8;
+      ctx.fillStyle="rgba(255,255,255,.94)";rr(xc-tw/2,baseY-16,tw,13,4);ctx.fill();ctx.fillStyle=gradeColor(bn.g);ctx.fillText(lab,xc,baseY-9);});
+    ctx.textBaseline="alphabetic";
     // bottom dark strip with distance ticks
     ctx.fillStyle=dk?"#0b1220":"#1e293b";ctx.fillRect(0,baseY+1,W,PADB-1);ctx.fillStyle="#cbd5e1";ctx.font="10px system-ui";ctx.textAlign="center";
     ctx.fillText("0",X(0),baseY+15);bins.forEach(function(bn){ctx.fillText((bn.d1%1===0?bn.d1:bn.d1.toFixed(1)),X(bn.d1),baseY+15);});
@@ -169,6 +188,51 @@ function renderElev(frac){
     ctx.fillStyle=dk?"#0f172a":"#fff";ctx.strokeStyle=gradeColor(pt.g);ctx.lineWidth=1.5;ctx.beginPath();ctx.rect(tx,PADT+2,tw2,18);ctx.fill();ctx.stroke();
     ctx.fillStyle=dk?"#f1f5f9":"#1e293b";ctx.textAlign="left";ctx.fillText(txt,tx+6,PADT+15);
   }
+  // ---- water drops (fontane/sorgenti entro 100m dalla salita) ----
+  if(climbWater&&climbWater.length){
+    climbWater.forEach(function(w){
+      if(only>=0&&w.vi!==only)return;
+      var sr=m.series[w.vi];if(!sr)return;
+      var d=Math.min(sr.dist,Math.max(0,w.along)),e=interpE(sr,d),x=X(d),y=Y(e);
+      ctx.save();ctx.translate(x,y-11);
+      ctx.beginPath();ctx.moveTo(0,-6);ctx.bezierCurveTo(5.5,-.5,4.2,7,0,7);ctx.bezierCurveTo(-4.2,7,-5.5,-.5,0,-6);ctx.closePath();
+      ctx.fillStyle="#2563eb";ctx.strokeStyle="#fff";ctx.lineWidth=1.4;ctx.shadowColor="rgba(0,0,0,.35)";ctx.shadowBlur=3;ctx.fill();ctx.shadowBlur=0;ctx.stroke();
+      ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(0,3,1.5,0,7);ctx.fill();
+      ctx.restore();
+    });
+  }
+}
+/* versanti eligible for the profile chart (must match drawElev so water `vi` aligns with series) */
+function profileVers(p){return (p.versanti||[]).filter(function(v){return v.elevationProfile&&v.elevationProfile.length>1&&v.track&&v.track.length>1;});}
+/* Acqua entro 100 m dalla traccia di ogni versante: mappa + profilo + elenco in pannello */
+function loadClimbWater(p){
+  clearClimbWater();
+  var vers=profileVers(p);if(!vers.length){setWaterBox([],vers);return;}
+  var box=bboxOfTracks(vers.map(function(v){return v.track;}),0.0015);
+  if(!box){setWaterBox([],vers);return;}
+  var pid=p.id;
+  fetchWater(box,function(nodes){
+    if(!CUR_PASS||CUR_PASS.id!==pid)return; // pannello cambiato nel frattempo
+    var out=[];
+    nodes.forEach(function(el){
+      var bvi=-1,bd=1e12,bal=0;
+      vers.forEach(function(v,vi){var r=distPtToTrack(el.lat,el.lon,v.track);if(r&&r.distM<bd){bd=r.distM;bvi=vi;bal=r.along;}});
+      if(bvi>=0&&bd<=100)out.push({lat:el.lat,lon:el.lon,name:(el.tags&&el.tags.name)||"",pot:waterPot(el.tags),vi:bvi,along:bal,dist:bd});
+    });
+    out.sort(function(a,b){return a.vi-b.vi||a.along-b.along;});
+    climbWater=out;drawClimbWater();setWaterBox(out,vers);
+    if(elevMeta)renderElev(-1);
+  });
+}
+function setWaterBox(list,vers){
+  var box=document.getElementById("waterbox");if(!box)return;
+  if(!list.length){box.innerHTML='<span style="color:var(--txt2)">Nessuna fontana o sorgente entro 100 m dalla salita.</span>';return;}
+  var h='<div style="margin-bottom:4px"><b>'+list.length+'</b> punti acqua lungo la salita</div>';
+  list.forEach(function(w){
+    var side=(vers[w.vi]&&vers[w.vi].side)?esc(vers[w.vi].side)+' &middot; ':'';
+    h+='<div style="display:flex;align-items:center;gap:6px;margin:3px 0"><span style="color:#2563eb;font-size:1.05em">&#x1F4A7;</span><span>'+(w.name?esc(w.name)+' ':'')+'<span style="color:var(--txt2)">'+side+'km '+w.along.toFixed(1)+' &middot; '+esc(w.pot)+' &middot; ~'+Math.round(w.dist)+' m</span></span></div>';
+  });
+  box.innerHTML=h;
 }
 function fetchW(lat,lon){
   var k=lat.toFixed(1)+","+lon.toFixed(1);if(weatherCache[k]){renderW(weatherCache[k]);return;}

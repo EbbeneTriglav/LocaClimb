@@ -70,6 +70,34 @@ function finishRoute(distKm,asc,surf,hasSurf){
   document.getElementById("rb-info").innerHTML="&#x1F4CD; "+distKm.toFixed(1)+" km &middot; &#x2197;&#xFE0F; "+asc+" m";
   drawSurfaceOverlay();
   openRoutePanel(distKm,asc,surf,hasSurf);
+  loadRouteWater();
+}
+/* Acqua entro 200 m dal percorso: cerchietti in mappa + gocce nell'altimetria, colore per vicinanza. */
+function loadRouteWater(){
+  clearRouteWater();
+  if(rbTrack.length<2)return;
+  var track=rbTrack.map(function(c){return[c[0],c[1]];});
+  var box=bboxOfTracks([track],0.0025);
+  if(!box)return;
+  fetchWater(box,function(nodes){
+    var out=[];
+    nodes.forEach(function(el){
+      var r=distPtToTrack(el.lat,el.lon,track);
+      if(r&&r.distM<=200)out.push({lat:el.lat,lon:el.lon,name:(el.tags&&el.tags.name)||"",pot:waterPot(el.tags),along:r.along,dist:r.distM});
+    });
+    out.sort(function(a,b){return a.along-b.along;});
+    routeWater=out;drawRouteWater();drawRouteProfile();fillRouteWaterBox(out);
+  });
+}
+function fillRouteWaterBox(list){
+  var box=document.getElementById("rwaterbox");if(!box)return;
+  if(!list.length){box.innerHTML='<span style="color:var(--txt2)">Nessun punto acqua entro 200 m dal percorso.</span>';return;}
+  var near=list.filter(function(w){return w.dist<=30;}).length;
+  var h='<div style="margin-bottom:4px"><b>'+list.length+'</b> punti acqua &middot; '+near+' proprio sul percorso</div>';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:8px;font-size:.72rem;color:var(--txt2)">';
+  [["#1e3a8a","sul percorso"],["#2563eb","30 m"],["#60a5fa","100 m"],["#93c5fd","200 m"]].forEach(function(x){h+='<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:'+x[0]+';display:inline-block"></span>'+x[1]+'</span>';});
+  h+='</div>';
+  box.innerHTML=h;
 }
 function surfaceFromMessages(msgs){
   routeSurfSegs=[];
@@ -110,6 +138,8 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
   h+='<div class="dp-body">';
   h+='<div class="rstats"><div>Distanza<b>'+distKm.toFixed(1)+' km</b></div><div>Dislivello<b>'+asc+' m</b></div><div>Tappe<b>'+rbStops.length+'</b></div></div>';
   h+='<div class="section-title">&#x1F4C8; Altimetria</div><canvas id="relev"></canvas>';
+  h+='<div class="section-title">&#x1F4A7; Acqua sul percorso <span style="font-weight:400;font-size:.8em;color:var(--txt2)">(entro 200 m)</span></div>';
+  h+='<div id="rwaterbox" style="font-size:.8rem;color:var(--txt2);margin:2px 0">Ricerca fontane e sorgenti&#8230;</div>';
   if(hasSurf&&surf){
     h+='<div class="section-title">&#x1FAA8; Fondo Stradale</div><div class="surf-bar">';
     var cats=Object.keys(surf.acc).sort(function(a,b){return surf.acc[b]-surf.acc[a];});
@@ -148,9 +178,21 @@ function drawProfileCanvas(c){
   for(var i=0;i<rbTrack.length;i++){var e=rbTrack[i][2];if(e==null)continue;var x=38+(cum[i]/tot)*(W-46);var y=15+(H-35)*(1-(e-mn)/(mx-mn));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
   ctx.strokeStyle="#22c55e";ctx.lineWidth=2.5;ctx.stroke();
   ctx.lineTo(W-8,H-20);ctx.lineTo(38,H-20);ctx.closePath();ctx.globalAlpha=0.12;ctx.fillStyle="#22c55e";ctx.fill();ctx.globalAlpha=1;
+  // water drops along the route (color = proximity)
+  if(routeWater&&routeWater.length){
+    routeWater.forEach(function(w){
+      var al=Math.max(0,Math.min(tot,w.along)),xr=38+(al/tot)*(W-46);
+      var e=null;for(var i=0;i<rbTrack.length;i++){if(cum[i]>=al){e=rbTrack[i][2];break;}}if(e==null)e=rbTrack[rbTrack.length-1][2];
+      var yr=(e!=null)?15+(H-35)*(1-(e-mn)/(mx-mn)):(H/2);
+      ctx.save();ctx.translate(xr,yr-9);
+      ctx.beginPath();ctx.moveTo(0,-5);ctx.bezierCurveTo(4.6,0,3.6,6,0,6);ctx.bezierCurveTo(-3.6,6,-4.6,0,0,-5);ctx.closePath();
+      ctx.fillStyle=waterColor(w.dist);ctx.strokeStyle="#fff";ctx.lineWidth=1.2;ctx.shadowColor="rgba(0,0,0,.3)";ctx.shadowBlur=2.5;ctx.fill();ctx.shadowBlur=0;ctx.stroke();
+      ctx.restore();
+    });
+  }
   ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.textAlign="right";ctx.fillText(tot.toFixed(1)+" km",W-8,H-6);
 }
-function resetRoute(){rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
+function resetRoute(){rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}clearRouteWater();wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
 function generateGPX(){
   var now=new Date().toISOString();
   var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="LocaRide">\n<metadata><name>LocaRide Route</name><time>'+now+'</time></metadata>\n';
