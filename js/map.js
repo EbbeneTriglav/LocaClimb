@@ -51,7 +51,7 @@ function addOsmMarker(op){
   if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(op)?" grv":"")+'" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[34,26],iconAnchor:[17,13]});c=L.marker([op.lat,op.lon],{icon:ic});}
   else c=L.circleMarker([op.lat,op.lon],{radius:8,fillColor:(op.versanti&&op.versanti.length?diffColor(op.difficulty||5):"#a78bfa"),color:"#fff",weight:2,fillOpacity:0.85});
   var diffTag=op.difficulty?' &middot; <span style="color:#f59e0b">'+ds(op.difficulty)+'</span>':'';
-  var surfTag=op.surfaceLabel?'<br>'+esc(op.surfaceLabel):'';
+  var surfTag=op.surfaceLabel?'<br>'+esc(decodeEntities(op.surfaceLabel)):'';
   c.bindPopup('<div style="min-width:190px"><b>'+esc(op.name)+'</b> <span style="color:#7c3aed;font-size:.72em;font-weight:600">OSM</span><br>&#x26F0;&#xFE0F; '+op.elevation+' m'+diffTag+surfTag+'<br><button data-act="openOsmD" data-id="'+esc(op.id)+'" style="margin-top:6px;padding:6px 13px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">Dettagli</button> <button data-act="addOsmToRoute" data-id="'+esc(op.id)+'" style="margin-top:6px;padding:6px 13px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">+ Route</button></div>');
   markers.addLayer(c);op._marker=c;
 }

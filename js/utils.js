@@ -6,6 +6,15 @@ function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"
 function we(c){return WC[c]||"&#x2601;&#xFE0F;";}
 /* Normalizza lo stato: i dati usano sia chiavi EN (open/seasonal/closed) sia stringhe IT (Aperto/...) sia niente.
    Default = "open": un passo è aperto salvo che lo si sappia chiuso (prima qualsiasi valore ignoto finiva su "Chiuso"). */
+/* Decodifica entità numeriche (&#x1F6E3; ecc.) in caratteri reali. Sicuro perche applicato PRIMA di esc():
+   eventuali < > & prodotti vengono comunque ri-sanificati da esc(). Rende il popup immune a dati con
+   surfaceLabel ancora in formato entità (cache vecchie, file esteri non ancora ridispiegati). */
+function decodeEntities(s){
+  if(s==null)return s;
+  return(""+s)
+    .replace(/&#x([0-9a-fA-F]+);/g,function(m,h){try{return String.fromCodePoint(parseInt(h,16));}catch(e){return m;}})
+    .replace(/&#(\d+);/g,function(m,d){try{return String.fromCodePoint(parseInt(d,10));}catch(e){return m;}});
+}
 function statusKey(s){
   if(s==null||s==="")return"open";
   s=(""+s).toLowerCase();

@@ -110,6 +110,7 @@ function adoptOsm(arr){
   arr=mergeColocated(arr);
   // drop entries too close to curated passes
   osmPasses=arr.filter(function(op){return!PASSES_DATA.some(function(p){return Math.abs(p.lat-op.lat)<0.008&&Math.abs(p.lon-op.lon)<0.008;});});
+  osmPasses.forEach(function(op){if(op.surfaceLabel)op.surfaceLabel=decodeEntities(op.surfaceLabel);}); // ripulisce entità residue (cache/file esteri)
   applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();
   var b=document.getElementById("ob");if(b)b.textContent="OSM ("+osmPasses.length+")";
 }
@@ -188,7 +189,7 @@ function applyManual(){
       else{ex.versanti=o.versanti;ex.difficulty=o.difficulty;ex.cat=o.cat;ex.lat=o.lat;ex.lon=o.lon;ex.elevation=o.elevation;ex.updatedAt=o.updatedAt;ex.manual=true;}
     }else{
       var hit=PASSES_DATA.filter(function(p){return p.id===id;})[0]||osmPasses.filter(function(p){return p.id===id;})[0];
-      if(hit){if(o.versanti)hit.versanti=o.versanti;if(o.difficulty)hit.difficulty=o.difficulty;if(o.cat)hit.cat=o.cat;if(o.updatedAt)hit.updatedAt=o.updatedAt;hit.manual=true;}
+      if(hit){if(o.name)hit.name=o.name;if(o.versanti)hit.versanti=o.versanti;if(o.difficulty)hit.difficulty=o.difficulty;if(o.cat)hit.cat=o.cat;if(o.updatedAt)hit.updatedAt=o.updatedAt;hit.manual=true;}
     }
   }
   applyFilters();setDataVersion();
