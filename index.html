@@ -104,6 +104,9 @@ canvas#relev{height:170px}
 .vstart{width:24px;height:24px;border-radius:50%;color:#fff;font-weight:800;font-size:.82rem;line-height:22px;text-align:center;border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.45);cursor:pointer}
 .rb-item .mv{cursor:pointer;opacity:.65;font-weight:700;padding:0 1px}
 .rb-item .mv:hover{opacity:1}
+.climb-water-ic .cw-drop{font-size:17px;line-height:1;filter:drop-shadow(0 0 2px #fff) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+#fount-hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:998;background:var(--bg2);border:1px solid var(--bdr);border-radius:20px;padding:7px 15px;font-size:.78rem;color:var(--txt2);box-shadow:0 4px 14px rgba(0,0,0,.16);display:none}
+#fount-hint.show{display:block}
 #traf-leg{position:fixed;bottom:20px;right:14px;z-index:998;background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:9px 13px;font-size:.74rem;color:var(--txt);box-shadow:0 4px 14px rgba(0,0,0,.14);display:none}
 #traf-leg.show{display:block}
 #traf-leg b{display:block;margin-bottom:5px}
@@ -167,6 +170,7 @@ canvas#relev{height:170px}
 <div class="route-status" id="rs">Caricamento tracciato stradale...</div>
 <button id="be-btn" data-act="toggleBE">&#x1F6B4; Bike Day</button>
 <div id="be-panel"></div>
+<div id="fount-hint">&#x1F50D; Zooma per vedere le fontanelle</div>
 <div id="traf-leg"><b>&#x1F525; Traffico veicolare (weekend)</b><div><i style="background:#22c55e"></i> Basso</div><div><i style="background:#f59e0b"></i> Medio</div><div><i style="background:#ef4444"></i> Alto</div></div>
 <div id="map"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
