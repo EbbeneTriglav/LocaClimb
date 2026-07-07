@@ -118,6 +118,14 @@ canvas#relev{height:170px}
 #traf-leg i{width:20px;height:4px;border-radius:2px;display:inline-block}
 @media(max-width:860px){.btn .bl{display:none}.btn{padding:9px 11px}}
 @media(max-width:640px){#dp{width:100%}.wgrid{grid-template-columns:repeat(4,1fr)}#hdr h1 span.tag{display:none}.rb-list{flex-wrap:wrap}#search-wrap{max-width:none}.btn .bl{display:none}.btn{padding:9px 11px}.wordmark{font-size:1.3rem}}
+/* Controlli Leaflet: staccati dagli angoli e liberi dalla barra in alto (prima erano incollati al bordo e sotto l'header) */
+.leaflet-top .leaflet-control{margin-top:26px}
+.leaflet-bottom .leaflet-control{margin-bottom:20px}
+.leaflet-left .leaflet-control{margin-left:16px}
+.leaflet-right .leaflet-control{margin-right:16px}
+/* Header: su schermi stretti niente sovrapposizioni tra logo/scritte e pulsanti */
+@media(max-width:900px){#hdr h1 .tag{display:none}}
+@media(max-width:560px){#hdr h1 .wordmark{font-size:1rem}#hdr{padding:0 10px;gap:8px}}
 </style>
 </head>
 <body>
