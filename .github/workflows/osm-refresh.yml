@@ -48,17 +48,21 @@ jobs:
       - name: Bake curated routes
         run: node scripts/bake_routes.mjs --out routes_baked.json --data passes_data.js
 
+      # Marker index: what the frontend loads first so the map is populated immediately.
+      - name: Build marker index
+        run: node scripts/build_osm_index.mjs
+
       - name: Commit changes
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "actions@users.noreply.github.com"
           rm -rf build_tmp node_modules package.json package-lock.json
-          if git diff --quiet -- data/osm_passes.json data/curated_overrides.json data/routes_baked.json; then
+          if git diff --quiet -- data/osm_passes.json data/curated_overrides.json data/routes_baked.json data/osm_index.json; then
             echo "No changes"; exit 0
           fi
           COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/osm_passes.json')).length)")
           ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('data/osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
-          git add data/osm_passes.json data/curated_overrides.json data/routes_baked.json
+          git add data/osm_passes.json data/curated_overrides.json data/routes_baked.json data/osm_index.json
           git commit -m "data: PBF+DEM build (${COUNT} passes, ${ENR} enriched)"
           git pull --rebase origin main
           git push

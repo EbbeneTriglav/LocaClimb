@@ -997,6 +997,15 @@ async function main() {
     if (removedV || absorbed) console.log("  cross-dedup: removed " + removedV + " overlapping versanti, absorbed " + absorbed + " passes");
   }
 
+  // A saddle/peak candidate that yields no climb is noise: it would still get a marker (the purple
+  // "no climb data" dot) for nothing. A mountain_pass=yes node stays even without a computed climb -
+  // it is a real geographic pass. rec.src is only set on candidates, so this never touches the rest.
+  {
+    let dropped = 0;
+    for (const [id, r] of [...byId]) if (r.src && !(r.versanti && r.versanti.length)) { byId.delete(id); dropped++; }
+    if (dropped) console.log("  dropped " + dropped + " candidate(s) with no climb (saddle/peak, kept 0 versanti)");
+  }
+
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
   await writeFile(OUT, JSON.stringify(result, J5) + "\n", "utf8"); // compact + 5-decimal coords: same data, ~55% smaller download
   console.log("  wrote " + OUT + " (" + result.length + ")");

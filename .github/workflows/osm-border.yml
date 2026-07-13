@@ -70,12 +70,15 @@ jobs:
           LC_PBF: ${{ steps.cfg.outputs.pbf }}
           LC_BBOX: ${{ steps.cfg.outputs.bbox }}
         run: node scripts/build_osm_passes.mjs --out ${{ steps.cfg.outputs.out }}
+      - name: Build marker index
+        run: node scripts/build_osm_index.mjs
+
       - name: Commit result
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain data/${{ steps.cfg.outputs.out }})" ]; then
-            git add data/${{ steps.cfg.outputs.out }}
+            git add data/${{ steps.cfg.outputs.out }} data/osm_index.json
             git commit -m "osm-border: build ${{ github.event.inputs.zone }} [skip ci]"
             git push
           else

@@ -60,13 +60,18 @@ jobs:
       - name: Build passes for ${{ github.event.inputs.target }}
         env:
           LC_PBF: ${{ steps.cfg.outputs.pbf }}
-        run: node --max-old-space-size=6144 scripts/build_osm_passes.mjs --out "${{ steps.cfg.outputs.out }}"
+        # --no-curated: i passi curati sono italiani, in un PBF estero non esistono -> 25 righe di
+        #   "no road" e un curated_overrides.json a 2 voci. Quel file lo possiede solo osm-refresh.
+        run: node --max-old-space-size=6144 scripts/build_osm_passes.mjs --out "${{ steps.cfg.outputs.out }}" --no-curated
+
+      - name: Build marker index
+        run: node scripts/build_osm_index.mjs
 
       - name: Commit ${{ steps.cfg.outputs.out }}
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
-          git add "data/${{ steps.cfg.outputs.out }}"
+          git add "data/${{ steps.cfg.outputs.out }}" data/osm_index.json
           if git diff --staged --quiet; then
             echo "no change"
           else
