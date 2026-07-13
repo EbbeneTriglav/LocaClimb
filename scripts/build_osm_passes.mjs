@@ -545,11 +545,26 @@ async function main() {
         continue;
       }
       if (Array.isArray(h)) { var nm = h[2] || (global.nearestPlace && global.nearestPlace(h[0], h[1]) ? global.nearestPlace(h[0], h[1]).name : "punto"); out.push({ name: nm, lat: h[0], lon: h[1] }); continue; } // [lat,lon] or [lat,lon,"Nome"] -> exact point, name kept as label
-      var tgt = deacc(h), best = null, bd = 60;          // pick the matching town nearest the summit (accent + language insensitive)
+      // Match quality first, distance second. The old rule accepted ANY place whose name was a
+      // substring of the hint, in either direction: a hamlet called "Ca" or "Col" (there are dozens
+      // in the Dolomites) is a substring of "canazei" and, being closer to the summit, HIJACKED the
+      // target - the BFS then hunted a hamlet up a track instead of the town. Same substring-direction
+      // trap as the base_hints keys, one layer down.
+      var tgt = deacc(h), best = null, bd = 60, bs = -1;
+      var esc2 = function (x) { return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
       for (var t of hintPlaces) {
-        var hit = false, nms = t.names || [t.name];
-        for (var ni = 0; ni < nms.length; ni++) { var tn = deacc(nms[ni]); if (tn === tgt || tn.indexOf(tgt) >= 0 || tgt.indexOf(tn) >= 0) { hit = true; break; } }
-        if (hit) { var dd = hav(sLat, sLon, t.lat, t.lon); if (dd < bd) { bd = dd; best = t; } }
+        var sc2 = -1, nms = t.names || [t.name];
+        for (var ni = 0; ni < nms.length; ni++) {
+          var tn = deacc(nms[ni]); if (!tn) continue;
+          if (tn === tgt) { sc2 = 3; break; }                                              // exact
+          if (tgt.length >= 4 && tn.indexOf(tgt) >= 0) { if (sc2 < 2) sc2 = 2; continue; } // "Bormio" -> "Bormio 2000"
+          // place name inside the hint ("Prato" <- "Prato allo Stelvio"): whole word only, >=4 chars
+          if (tn.length >= 4 && new RegExp("(^|[^a-z0-9])" + esc2(tn) + "([^a-z0-9]|$)").test(tgt) && sc2 < 1) sc2 = 1;
+        }
+        if (sc2 < 0) continue;
+        var dd = hav(sLat, sLon, t.lat, t.lon);
+        if (dd > 60) continue;
+        if (sc2 > bs || (sc2 === bs && dd < bd)) { bs = sc2; bd = dd; best = t; }
       }
       if (best) out.push({ name: h, lat: best.lat, lon: best.lon });
       else {
@@ -772,9 +787,12 @@ async function main() {
           if (!chain || chain.length < 4) { console.log("    . hint " + tg.name + ": catena waypoint non instradabile"); continue; }
           pth = resampleByDist(chain.slice().reverse(), 0.05); // summit -> base
         } else {
-          var bestK = null, bestD = 2.0; // nearest reached vertex to the (snapped) town
-          coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < bestD) { bestD = dd; bestK = k; } });
-          if (!bestK) { console.log("    . hint " + tg.name + ": non raggiunto entro " + capKm + "km"); continue; }
+          var bestK = null, bestD = 2.0, nearest = Infinity; // nearest reached vertex to the (snapped) town
+          coord.forEach(function (ll, k) { var dd = hav(aim.lat, aim.lon, ll[0], ll[1]); if (dd < nearest) nearest = dd; if (dd < bestD) { bestD = dd; bestK = k; } });
+          // Say WHAT actually failed: the old text ("non raggiunto entro NNkm") named the distance cap,
+          // but the real test is "did the BFS come within 2 km of the town?". The gap below tells the
+          // two apart: ~2-4 km = threshold too tight; tens of km = wrong town resolved / broken graph.
+          if (bestK == null) { console.log("    . hint " + tg.name + " [" + aim.lat.toFixed(4) + "," + aim.lon.toFixed(4) + "]: nessun vertice entro 2 km (il piu vicino e a " + (nearest === Infinity ? "?" : nearest.toFixed(1)) + " km; BFS " + coord.size + " nodi, cap " + capKm + " km)"); continue; }
           var rp = [], kk = bestK, gd = 0;
           while (kk != null && gd++ < 8000) { rp.push(coord.get(kk)); kk = parent.get(kk); }
           if (rp.length < 4) continue;
@@ -1024,7 +1042,7 @@ async function main() {
       for (const v of vs) { const g = (v.endElevation || 0) - (v.startElevation || 0); if (g > best) best = g; }
       if (!vs.length || best < CAND_MIN_GAIN) { byId.delete(id); dropped++; }
     }
-    if (dropped) console.log("  dropped " + dropped + " candidate(s): no climb or gain < " + CAND_MIN_GAIN + " m");
+    if (dropped) console.log("  dropped " + dropped + " candidate(s)" + (CAND_MIN_GAIN > 0 ? ": no climb or gain < " + CAND_MIN_GAIN + " m" : ": no climb computed"));
   }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
@@ -1039,10 +1057,30 @@ async function main() {
       const norm = (n) => (n || "").toLowerCase().replace(/passo |colle |col |della |dello |del |di |monte /g, "").trim();
       for (const p of (ctx.PASSES_DATA || [])) {
         let ch = snap(p.lat, p.lon, 1.2);
-        if (!ch) { // fallback: locate by OSM pass node with matching name
+        // Verify the snap landed AT the pass: several curated coords are 0.5-3 km off (hand-placed),
+        // and snapping them lands mid-climb. San Marco snapped 370 m BELOW the summit, so its versanti
+        // were built to the wrong top AND the OSM twin fell outside the 2 km dedup radius -> the pass
+        // showed up twice. The DEM is the arbiter, exactly as for the saddle/peak candidates.
+        let landed = null;
+        if (ch) { landed = await elevAt(gx(ch.w, ch.idx), gy(ch.w, ch.idx)); }
+        const offPass = !ch || landed == null || !p.elevation || Math.abs(landed - p.elevation) > 60;
+        if (offPass) {
+          // Relocate onto the OSM mountain_pass node with the same name AND the same elevation.
+          // Name alone is not enough: for "Passo della Presolana" the NEAREST namesake is
+          // "Colle della Presolana" (1698 m), a different saddle; the real pass (1297 m) is 3.4 km away.
           const key = norm(p.name);
-          const hit = key && passes.find((el) => norm(el.tags.name).indexOf(key) >= 0);
-          if (hit) ch = snap(hit.lat, hit.lon, 0.5);
+          const hit = key ? passes
+            .filter((el) => el.src === "pass" && norm(el.tags.name).indexOf(key) >= 0
+                         && Math.abs((el.ele || 0) - p.elevation) <= 40 && hav(p.lat, p.lon, el.lat, el.lon) < 8)
+            .sort((a, b) => hav(p.lat, p.lon, a.lat, a.lon) - hav(p.lat, p.lon, b.lat, b.lon))[0] : null;
+          const ch2 = hit ? snap(hit.lat, hit.lon, 0.5) : null;
+          if (ch2) {
+            console.log("    ~ " + p.name + ": snap a " + (landed == null ? "?" : Math.round(landed)) + " m invece di " + p.elevation
+              + " m -> riposizionato sul nodo OSM (" + Math.round(hav(p.lat, p.lon, hit.lat, hit.lon) * 1000) + " m dalle coordinate curate)");
+            ch = ch2;
+          } else if (ch) {
+            console.log("    ! " + p.name + ": snap a " + (landed == null ? "?" : Math.round(landed)) + " m invece di " + p.elevation + " m, nessun nodo OSM omonimo alla quota giusta - coordinate curate da correggere a mano");
+          }
         }
         if (!ch) { console.log("    - " + p.name + ": no road"); continue; }
         const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
