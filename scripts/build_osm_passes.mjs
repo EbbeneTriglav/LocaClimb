@@ -39,7 +39,12 @@ const PBF_URLS = ((process.env.LC_PBF || _arg0("--pbf", "")).trim()
   : PBF_DEFAULT);
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 const DEM_Z = 13;
-const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link"];
+// "trunk" is here NOT because we want to send anyone up a superstrada, but because Italian state roads
+// switch class along the way: 13 segments of the SS38 between Bormio and the Stelvio are trunk, and
+// dropping them cut the road graph into islands (a 70-node BFS from the summit). The genuinely
+// unrideable ones carry motorroad=yes and are still rejected by rideable(); the rest are steered
+// away from by a heavy edgeExtra penalty and scored as heavy traffic. Connectivity first, preference second.
+const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link","trunk","trunk_link"];
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = dataPath(arg("--out", "osm_passes.json"));
@@ -142,6 +147,7 @@ function edgeExtra(nb) {
   var e = 0, hw = nb.hw || "", sf = nb.surf || "";
   if (/gravel|unpaved|compacted|fine_gravel|ground|dirt|earth|sand|pebble|grass/.test(sf)) e += 3;
   if (hw === "track") e += 4;
+  else if (hw === "trunk" || hw === "trunk_link") e += 5;   // present so the graph stays whole; never the preferred line
   else if (hw === "service" || hw === "residential" || hw === "living_street") e += 2.5;
   else if (hw === "unclassified" || hw === "unclassified_link") e += 1.2;
   return e;
@@ -166,12 +172,23 @@ function climbCat(distKm, gain, top) {
   if (f >= 8) return "HC"; if (f >= 5.5) return "1"; if (f >= 3.5) return "2"; if (f >= 2) return "3"; return "4";
 }
 const BAD_SURF = { sand:1, mud:1, rock:1, pebblestone:1, grass:1, woodchips:1, salt:1 };
+const PAVED_SURF = { asphalt:1, paved:1, concrete:1, "concrete:plates":1, sett:1, chipseal:1 };
+const PAVED_HW = { trunk:1, trunk_link:1, primary:1, primary_link:1, secondary:1, secondary_link:1, tertiary:1, tertiary_link:1 }; // Italian classified roads with no surface tag are asphalt
 function rideable(t) {
   if (!t || !t.highway) return false;
   if (t.motorroad === "yes") return false;
   if (t.bicycle === "no" || t.bicycle === "dismount") return false;
   if (t.access === "private" || t.access === "no") return false;
-  if (t["mtb:scale"]) return false;
+  // mtb:scale on a PAVED road is a mapping quirk - an MTB itinerary drawn over the tarmac. Two SR48
+  // segments between Pordoi and Canazei carry it, and vetoing any way that has the tag severed the
+  // road: the BFS could never leave the summit westward, so Pordoi lost its Canazei side entirely.
+  // mtb:scale=0 means "any bike can ride this" anyway. Veto only real technical trails: an unpaved
+  // way with a difficulty of 1 or more.
+  if (t["mtb:scale"]) {
+    const paved = PAVED_SURF[t.surface] || (!t.surface && PAVED_HW[t.highway]);
+    const lvl = parseInt(t["mtb:scale"], 10);
+    if (!paved && (isNaN(lvl) || lvl >= 1)) return false;
+  }
   if (t.surface && BAD_SURF[t.surface]) return false;
   if (t.tracktype === "grade4" || t.tracktype === "grade5") return false;
   if (t.smoothness && { very_bad:1, horrible:1, very_horrible:1, impassable:1 }[t.smoothness]) return false;
@@ -184,7 +201,7 @@ function surfaceLabel(t) {
   if (s) return "Fondo: " + s;
   return "";
 }
-const TRAF_BASE = { cycleway:1, track:1, service:2, residential:2, living_street:2, unclassified:3, tertiary:3, tertiary_link:3, secondary:4, secondary_link:4, primary:6, primary_link:6 };
+const TRAF_BASE = { cycleway:1, track:1, service:2, residential:2, living_street:2, unclassified:3, tertiary:3, tertiary_link:3, secondary:4, secondary_link:4, primary:6, primary_link:6, trunk:9, trunk_link:9 };
 function computeTraffic(t, elev) {
   const hw = (t && t.highway) || "tertiary";
   const base = TRAF_BASE[hw] != null ? TRAF_BASE[hw] : 3;
