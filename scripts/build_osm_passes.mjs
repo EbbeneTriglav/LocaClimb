@@ -60,8 +60,47 @@ const ALGO_VERSION = "v4.7-pavedauto";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
+// NOTE: names are stored RAW (UTF-8, apostrophes and accents intact). HTML escaping is the
+// frontend's job (esc() at render time). Encoding here produced "Passo Ucc&#39;Aidu" on screen.
 const NAME_ALIAS = { "Passo del Lagadello": "Passo San Pellegrino in Alpe", "Passo Lagadello": "Passo San Pellegrino in Alpe" };
 const WORK = "build_tmp";
+
+/* ----- climb toponyms (beyond mountain_pass=yes) ---------------------------
+ * Many real climbs are not tagged mountain_pass=yes: they are natural=saddle
+ * (sella/forcella/joch/fuorcla) or natural=peak reached by road (Zoncolan, Grappa,
+ * Mont Ventoux). We accept those nodes when their NAME carries a climb toponym in
+ * any of the languages we cover (IT / DE-AT-CH / FR / RM / SL) AND the road really
+ * reaches them (snap + DEM check in enrichWorker). Everything else is unchanged.
+ */
+const KW_WORD = new Set([
+  // Italiano
+  "passo","passi","valico","valichi","colle","colla","colletto","col","sella","selletta","sellata",
+  "forcella","forcola","forcelle","forca","bocca","bocchetta","bocchette","giogo","croce","crocetta",
+  "cima","monte","punta","foce","varco","portella","scala","piano","pian","alpe","cresta","serra","zoncolan",
+  // Francese (FR, Valle d'Aosta, CH romanda)
+  "cormet","port","pas","croix","mont","cime","puy","montee","cote","tete","plan","planche","signal","balcon",
+  // Romancio / Svizzero
+  "fuorcla","furka","forcla","piz","alp",
+  // Tedesco (AT / Sudtirolo / CH tedesca) - forme sciolte
+  "berg","alm","joch","sattel","scharte","hohe","kreuz","gipfel","horn","kogel","torl",
+  // Sloveno (confine orientale)
+  "sedlo","prelaz","vrh"
+]);
+// German/Ladin toponyms are COMPOUNDS (Timmelsjoch, Gerlospass, Katschberghohe, Hahntennjoch):
+// word-token matching misses them, so match on suffix too.
+const KW_SUFFIX = ["joch","jochl","joechl","pass","passhohe","sattel","scharte","hohe","hoehe","berg","alm","kreuz","kogel","torl","toerl","horn","bichl"];
+function deacc(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+function isClimbName(n) {
+  const toks = deacc(n).split(/[^a-z0-9]+/).filter(Boolean);
+  for (const t of toks) {
+    if (KW_WORD.has(t)) return true;
+    if (t.length >= 7) for (const s of KW_SUFFIX) if (t.endsWith(s)) return true;
+  }
+  return false;
+}
+// JSON writer: 5 decimals is ~1.1 m - plenty for a road track, and it halves the payload the
+// browser must download (Float32 coords were serialised with 17 significant digits).
+const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
 
 /* ----- geo + scoring helpers ---------------------------------------------- */
 function hav(la1, lo1, la2, lo2) {
@@ -418,17 +457,20 @@ async function main() {
       osmium(["extract", "-b", BBOX, "-s", "complete_ways", srcPbf, "-o", WORK + "/clipped.osm.pbf", "--overwrite"]);
       srcPbf = WORK + "/clipped.osm.pbf";
     }
-    osmium(["tags-filter", srcPbf, "n/mountain_pass=yes", "n/place=town", "n/place=village", "n/place=hamlet", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
+    osmium(["tags-filter", srcPbf, "n/mountain_pass=yes", "n/natural=saddle", "n/natural=peak", "n/place=town", "n/place=village", "n/place=hamlet", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
     console.log("  osmium export ...");
     osmium(["export", WORK + "/filtered.osm.pbf", "-f", "geojsonseq", "-a", "type,id", "-o", seqFile, "--overwrite"]);
   }
 
   console.log("  stream 1/2: pass nodes ...");
-  const passes = [], places = [], hintPlaces = [];
+  const passes = [], cands = [], places = [], hintPlaces = [];
   await streamSeq(seqFile, (f) => {
     if (!f.geometry || f.geometry.type !== "Point" || !f.properties) return;
     if (f.properties.mountain_pass === "yes") {
-      passes.push({ oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
+      passes.push({ src: "pass", oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
+    } else if ((f.properties.natural === "saddle" || f.properties.natural === "peak") && f.properties.name && isClimbName(f.properties.name)) {
+      // climb candidate: kept only if a road really reaches it (checked in enrichWorker)
+      cands.push({ src: f.properties.natural, oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
     } else if ((f.properties.place === "town" || f.properties.place === "village") && f.properties.name) {
       var pr = f.properties, nv = [pr.name, pr["name:it"], pr["name:de"], pr["name:lld"], pr.alt_name].filter(Boolean);
       var pl = { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: pr["name:it"] || pr.name, names: nv };
@@ -449,7 +491,24 @@ async function main() {
     }
     return best;
   };
-  console.log("  passes found: " + passes.length);
+  console.log("  passes found: " + passes.length + " (mountain_pass=yes)");
+  // Candidate saddles/peaks: drop any that duplicates a real pass node (or another candidate)
+  // within 400 m - OSM often carries both a mountain_pass node and a natural=saddle node.
+  {
+    const g = new Map(), K = (la, lo) => Math.floor(la / 0.01) + ":" + Math.floor(lo / 0.01);
+    const put = (n) => { const k = K(n.lat, n.lon); if (!g.has(k)) g.set(k, []); g.get(k).push(n); };
+    const dupe = (n) => {
+      const ci = Math.floor(n.lat / 0.01), cj = Math.floor(n.lon / 0.01);
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++)
+        for (const o of (g.get((ci + a) + ":" + (cj + b)) || [])) if (hav(n.lat, n.lon, o.lat, o.lon) < 0.4) return true;
+      return false;
+    };
+    passes.forEach(put);
+    let added = 0;
+    cands.sort((a, b) => (b.ele || 0) - (a.ele || 0)); // prefer the tagged-elevation node of a pair
+    for (const c of cands) { if (dupe(c)) continue; put(c); passes.push(c); added++; }
+    console.log("  climb candidates (saddle/peak, name-matched): " + cands.length + " -> " + added + " new");
+  }
   let extraClimbs = [];
   try { extraClimbs = JSON.parse(await readFile(dataPath("climbs_extra.json"), "utf8")); } catch {}
   // Manual base override: base_hints.json maps a pass name -> list of start points (town name or [lat,lon]).
@@ -827,16 +886,29 @@ async function main() {
   async function enrichWorker() {
     while (pidx < passes.length && done < MAX_ENRICH) {
       const el = passes[pidx++];
-      if (!el.ele || el.ele < MIN_ELE) { skipped++; continue; }
-      const ch = snap(el.lat, el.lon, 0.5);
+      const isCand = el.src === "saddle" || el.src === "peak";
+      if (!isCand && (!el.ele || el.ele < MIN_ELE)) { skipped++; continue; }
+      // Candidates snap tighter: a road 500 m from a peak passes BY it, it does not climb TO it.
+      // Snap FIRST (grid lookup, free) so the DEM is only touched for nodes that reached a road.
+      const ch = snap(el.lat, el.lon, isCand ? 0.3 : 0.5);
       if (!ch) { skipped++; continue; }
+      const slat0 = gx(ch.w,ch.idx), slon0 = gy(ch.w,ch.idx);
+      if (isCand) {
+        if (!el.ele) { const de = await elevAt(el.lat, el.lon); if (de == null) { skipped++; continue; } el.ele = Math.round(de); } // saddles/peaks often carry no ele tag
+        if (el.ele < MIN_ELE) { skipped++; continue; }
+        // The decisive filter: the snapped road point must sit AT the saddle/summit height. A road
+        // crossing 250 m below a peak is a road on its flank, not a climb to it.
+        const re = await elevAt(slat0, slon0);
+        if (re == null || Math.abs(re - el.ele) > 55) { skipped++; continue; }
+      }
       kept++;
       const id = "osm-" + el.oid;
       const rawName = el.tags.name || "Passo";
-      const name = (NAME_ALIAS[rawName] || rawName).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-      const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
+      const name = NAME_ALIAS[rawName] || rawName; // RAW: escaping happens in the frontend (esc())
+      const slat = slat0, slon = slon0;
       const rec = byId.get(id) || { id };
       rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
+      if (isCand) rec.src = el.src; // "saddle"/"peak": kept via toponym + road-reaches-summit, not mountain_pass=yes
       rec.surfaceLabel = surfaceLabel(ch.w.tags);
       const tr = computeTraffic(ch.w.tags, el.ele);
       rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
@@ -926,7 +998,7 @@ async function main() {
   }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
-  await writeFile(OUT, JSON.stringify(result, null, 1) + "\n", "utf8");
+  await writeFile(OUT, JSON.stringify(result, J5) + "\n", "utf8"); // compact + 5-decimal coords: same data, ~55% smaller download
   console.log("  wrote " + OUT + " (" + result.length + ")");
 
   if (!NO_CURATED) {
@@ -958,7 +1030,7 @@ async function main() {
           console.log("    + " + p.name + ": " + top.length + " versanti" + (useH ? " (hint)" : "") + ", cat " + (overrides[p.id].cat || "-"));
         } catch (e) { console.log("    - " + p.name + ": " + e.message); }
       }
-      await writeFile(dataPath("curated_overrides.json"), JSON.stringify(overrides, null, 1) + "\n", "utf8");
+      await writeFile(dataPath("curated_overrides.json"), JSON.stringify(overrides, J5) + "\n", "utf8");
       console.log("  wrote curated_overrides.json (" + Object.keys(overrides).length + ")");
     } catch (e) { console.warn("  ! curated skipped: " + e.message); }
   }
