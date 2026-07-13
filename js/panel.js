@@ -8,7 +8,17 @@ function stravaSection(p){
 
 /* ===== PASS DETAIL (curated + OSM share one entry) ===== */
 function openD(id){var p=getCurated(id);if(p)openPass(p,false);}
-function openOsmD(id){var op=getOsm(id);if(op)openPass(op,true);}
+function openOsmD(id){
+  var op=getOsm(id);if(!op)return;
+  // Clicked before the background hydration landed: the index says this pass HAS tracks (hasV),
+  // they just are not here yet. Wait for them instead of falling through to the "no climb" stub.
+  if(op.hasV&&!(op.versanti&&op.versanti.length)&&osmFullPending){
+    showRS("Caricamento tracciati...");
+    osmFullPending.then(function(){hideRS();var q=getOsm(id);if(q)openPass(q,true);}).catch(function(){hideRS();var q=getOsm(id);if(q)openPass(q,true);});
+    return;
+  }
+  openPass(op,true);
+}
 /* Single entry for both data sources: clear the map, draw this pass's tracks, render its
    panel. The three cases below differ genuinely (curated = routed lines, OSM = stored
    tracks, un-enriched OSM = a stub) - only the orchestration + header are shared. */
@@ -87,12 +97,12 @@ function renderPassPanel(p,isOsm){
   if(p.tips&&p.tips.length>0){h+='<div class="section-title">&#x1F4A1; Consigli</div><ul style="padding-left:16px">';p.tips.forEach(function(t){h+='<li style="margin:5px 0;color:var(--txt2)">'+esc(t)+'</li>';});h+='</ul>';}
   if(!isOsm)h+='<div style="margin-top:16px;text-align:center"><button data-act="openReport" data-id="'+esc(p.id)+'" class="btn" style="padding:8px 20px">&#x1F4DD; Segnala informazione</button></div>';
   h+='</div>';
-  document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
+  document.getElementById("dp").innerHTML=h;setPanel("dp",true);
   if(p.versanti&&p.versanti.length)setTimeout(function(){drawElev(p);},80);
   if(p.versanti&&p.versanti.length)loadClimbWater(p);
   fetchW(p.lat,p.lon);renderRatings(p);renderNews(p);
 }
-function closeD(){document.getElementById("dp").classList.remove("open");clearRoutes();hideRS();hideElevCursor();}
+function closeD(){setPanel("dp",false);clearRoutes();hideRS();hideElevCursor();}
 
 /* auto-discovered OSM pass with no climb data yet: minimal panel (header + notice + meteo).
    Enrichment happens offline (build_osm_passes.mjs / the OSM refresh Action), not here. */
@@ -100,7 +110,7 @@ function renderOsmStub(p){
   var h=passHeader(p,true,true);
   h+='<div class="dp-body"><div id="osm-enr" style="padding:12px;color:var(--txt2);font-size:.88rem">&#x2139;&#xFE0F; Dati salita non ancora disponibili per questo passo. Verranno calcolati al prossimo aggiornamento dati (GitHub Action).</div>';
   h+='<div class="section-title">&#x1F326;&#xFE0F; Meteo 7 Giorni</div><div id="wbox" style="text-align:center;padding:16px;color:var(--txt2)">Caricamento meteo...</div></div>';
-  document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
+  document.getElementById("dp").innerHTML=h;setPanel("dp",true);
   map.setView([p.lat,p.lon],12);
   fetchW(p.lat,p.lon);
 }

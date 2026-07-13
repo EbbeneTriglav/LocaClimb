@@ -1,6 +1,6 @@
 /* Route Builder v2: chain passes/waypoints into a route via BRouter/OSRM, with elevation + surface overlay. */
 /* ===== ROUTE BUILDER v2 (waypoints + Brouter elevation/surface) ===== */
-function toggleRB(){rbMode=!rbMode;document.getElementById("rb").classList.toggle("open",rbMode);document.getElementById("rbb").classList.toggle("active",rbMode);if(rbMode){document.getElementById("be-btn").style.display="none";}else{document.getElementById("be-btn").style.display="";resetRoute();}}
+function toggleRB(){rbMode=!rbMode;setPanel("rb",rbMode);document.getElementById("rbb").classList.toggle("active",rbMode);if(rbMode){document.getElementById("be-btn").style.display="none";}else{document.getElementById("be-btn").style.display="";resetRoute();}}
 function addToRoute(id){var p=getCurated(id);if(!p)return;rbStops.push({type:"pass",name:p.name,lat:p.lat,lon:p.lon,elevation:p.elevation});map.closePopup();if(!rbMode)toggleRB();updateRBList();}
 function addOsmToRoute(id){var p=getOsm(id);if(!p)return;rbStops.push({type:"pass",name:p.name,lat:p.lat,lon:p.lon,elevation:p.elevation});map.closePopup();if(!rbMode)toggleRB();updateRBList();}
 function addPointToRoute(lat,lon){rbStops.push({type:"point",name:"Punto "+(rbStops.length+1),lat:lat,lon:lon});updateRBList();}
@@ -153,7 +153,7 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
   rbStops.forEach(function(s,i){h+='<div class="rstop"><span class="n">'+(i+1)+'</span><span>'+s.name+(s.type==="point"?' <span style="color:var(--txt2);font-size:.85em">(waypoint)</span>':'')+'</span></div>';});
   h+='<div style="margin-top:16px;text-align:center"><button data-act="downloadGPX" class="btn" style="padding:8px 20px">&#x2B07;&#xFE0F; Scarica GPX</button></div>';
   h+='</div>';
-  document.getElementById("dp").innerHTML=h;document.getElementById("dp").classList.add("open");
+  document.getElementById("dp").innerHTML=h;setPanel("dp",true);
   setTimeout(drawRouteProfile,80);
 }
 function drawRouteProfile(){

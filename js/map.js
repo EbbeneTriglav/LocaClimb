@@ -9,13 +9,23 @@ function initMap(){
   osm.addTo(map);
   L.control.layers({"OSM":osm,"CyclOSM":cyc,"Topo":topo,"Ortofoto (Esri)":sat},{},{position:"topleft"}).addTo(map);
   L.control.scale({metric:true,imperial:false,position:"bottomright"}).addTo(map);
-  markers=L.markerClusterGroup({maxClusterRadius:50});map.addLayer(markers);
+  /* chunkedLoading: ~2600 OSM markers were added one at a time, blocking the main thread and
+     leaving the map visually empty until something (a zoom) forced a redraw. Bulk + chunked add
+     paints them progressively instead. removeOutsideVisibleBounds keeps panning cheap. */
+  markers=L.markerClusterGroup({maxClusterRadius:50,chunkedLoading:true,chunkInterval:120,chunkDelay:16,removeOutsideVisibleBounds:true});
+  map.addLayer(markers);
   addMarkers(PASSES_DATA);populateRegions();
+  /* The map is created on DOMContentLoaded, before the layout has necessarily settled: if the
+     container is measured at 0 height, Leaflet computes empty bounds and draws nothing until the
+     first user zoom. Re-measure once painted, and on resize. */
+  requestAnimationFrame(function(){map.invalidateSize(false);});
+  window.addEventListener("resize",function(){map.invalidateSize(false);});
 }
 function populateRegions(){var rs={};PASSES_DATA.forEach(function(p){rs[p.region]=1;});var sel=document.getElementById("fr");Object.keys(rs).sort().forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;sel.appendChild(o);});}
 
 function addMarkers(data){
   markers.clearLayers();
+  var batch=[];
   data.forEach(function(p){
     ensureCat(p);
     var c;
@@ -26,7 +36,7 @@ function addMarkers(data){
     c.bindPopup(function(){
       return '<div style="min-width:200px"><b style="font-size:1.05em">'+esc(p.name)+'</b><br>&#x26F0;&#xFE0F; '+p.elevation+' m &middot; '+sl(p.status)+'<br><span style="color:#f59e0b;letter-spacing:1px">'+ds(p.difficulty)+'</span> ('+p.difficulty+'/10)<br>&#x1F4CD; '+esc(p.region)+evTag+'<br><button data-act="openD" data-id="'+esc(p.id)+'" style="margin-top:6px;padding:7px 14px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">Dettagli</button> <button data-act="addToRoute" data-id="'+esc(p.id)+'" style="margin-top:6px;padding:7px 14px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">+ Route</button></div>';
     });
-    markers.addLayer(c);
+    batch.push(c);
   });
   if(showOsm){
     var q=(document.getElementById("search")?document.getElementById("search").value.toLowerCase():""),
@@ -34,26 +44,28 @@ function addMarkers(data){
     osmPasses.forEach(function(op){
       if(q&&(op.name||"").toLowerCase().indexOf(q)<0)return;
       if(dmin>1&&(op.difficulty||1)<dmin)return;
-      addOsmMarker(op);
+      var m=addOsmMarker(op);if(m)batch.push(m);
     });
   }
+  markers.addLayers(batch);   // single bulk insert: MarkerCluster chunks it across frames
 }
 function osmDupCurated(op){
   for(var i=0;i<PASSES_DATA.length;i++){var p=PASSES_DATA[i];
     if(hav(op.lat,op.lon,p.lat,p.lon)<2.0)return true;}
   return false;
 }
+function hasClimb(op){return!!((op.versanti&&op.versanti.length)||op.hasV);} // hasV: index-only entry, tracks still loading
 function addOsmMarker(op){
-  if(!(op.versanti&&op.versanti.length)&&!op.snapped)return;
-  if(osmDupCurated(op))return; // curated version wins
+  if(!hasClimb(op)&&!op.snapped)return null;
+  if(osmDupCurated(op))return null; // curated version wins
   ensureCat(op);
   var c;
   if(op.cat){var ic=L.divIcon({className:"",html:'<div class="cat-pill'+(isGravel(op)?" grv":"")+'" style="background:'+catColor(op.cat)+'">'+catLabel(op.cat)+'</div>',iconSize:[34,26],iconAnchor:[17,13]});c=L.marker([op.lat,op.lon],{icon:ic});}
-  else c=L.circleMarker([op.lat,op.lon],{radius:8,fillColor:(op.versanti&&op.versanti.length?diffColor(op.difficulty||5):"#a78bfa"),color:"#fff",weight:2,fillOpacity:0.85});
+  else c=L.circleMarker([op.lat,op.lon],{radius:8,fillColor:(hasClimb(op)?diffColor(op.difficulty||5):"#a78bfa"),color:"#fff",weight:2,fillOpacity:0.85});
   var diffTag=op.difficulty?' &middot; <span style="color:#f59e0b">'+ds(op.difficulty)+'</span>':'';
   var surfTag=op.surfaceLabel?'<br>'+esc(decodeEntities(op.surfaceLabel)):'';
   c.bindPopup('<div style="min-width:190px"><b>'+esc(op.name)+'</b> <span style="color:#7c3aed;font-size:.72em;font-weight:600">OSM</span><br>&#x26F0;&#xFE0F; '+op.elevation+' m'+diffTag+surfTag+'<br><button data-act="openOsmD" data-id="'+esc(op.id)+'" style="margin-top:6px;padding:6px 13px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">Dettagli</button> <button data-act="addOsmToRoute" data-id="'+esc(op.id)+'" style="margin-top:6px;padding:6px 13px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">+ Route</button></div>');
-  markers.addLayer(c);op._marker=c;
+  op._marker=c;return c;
 }
 function clearRoutes(){routeLines.forEach(function(l){map.removeLayer(l);});routeLines=[];clearVers();clearClimbWater();}
 function clearVers(){versStartMarkers.forEach(function(m){map.removeLayer(m);});versStartMarkers=[];versLayers=[];}
@@ -105,8 +117,11 @@ function drawOsmTracks(op){
 }
 
 /* ===== FILTERS / SEARCH / DARK / EVENTS ===== */
-function openFP(){document.getElementById("fp").classList.toggle("open");}
-function closeFP(){document.getElementById("fp").classList.remove("open");}
+/* Un solo punto per aprire/chiudere i pannelli: mette la classe sul pannello E su <body>, cosi'
+   il CSS puo' spostare i controlli Leaflet che il pannello coprirebbe. */
+function setPanel(id,on){var el=document.getElementById(id);if(!el)return;el.classList.toggle("open",!!on);document.body.classList.toggle(id+"-open",!!on);}
+function openFP(){setPanel("fp",!document.getElementById("fp").classList.contains("open"));}
+function closeFP(){setPanel("fp",false);}
 function applyFilters(){var reg=document.getElementById("fr").value,diff=parseInt(document.getElementById("fd").value),sta=document.getElementById("fs").value,trk=(document.getElementById("ftruck")||{}).value||"",q=document.getElementById("search").value.toLowerCase();showOsm=document.getElementById("fosm").checked;var f=PASSES_DATA.filter(function(p){if(reg&&p.region!==reg)return false;if(p.difficulty<diff)return false;if(sta&&statusKey(p.status)!==sta)return false;if(trk){var lv=passTruck(p);if(trk==="no"&&lv!=="no")return false;if(trk==="low"&&(lv==="possibili"||lv==="si"))return false;}if(q&&p.name.toLowerCase().indexOf(q)<0&&p.region.toLowerCase().indexOf(q)<0)return false;return true;});addMarkers(f);}
 function resetFilters(){document.getElementById("fr").value="";document.getElementById("fd").value="1";document.getElementById("fdv").textContent="1";document.getElementById("fs").value="";document.getElementById("search").value="";document.getElementById("fosm").checked=true;showOsm=true;addMarkers(PASSES_DATA);closeSearch();}
 function closeSearch(){var b=document.getElementById("sresults");if(b){b.classList.remove("open");b.innerHTML="";}searchItems=[];}

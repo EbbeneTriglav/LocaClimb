@@ -110,29 +110,66 @@ function adoptOsm(arr){
   arr=mergeColocated(arr);
   // drop entries too close to curated passes
   osmPasses=arr.filter(function(op){return!PASSES_DATA.some(function(p){return Math.abs(p.lat-op.lat)<0.008&&Math.abs(p.lon-op.lon)<0.008;});});
-  osmPasses.forEach(function(op){if(op.surfaceLabel)op.surfaceLabel=decodeEntities(op.surfaceLabel);}); // ripulisce entità residue (cache/file esteri)
+  osmPasses.forEach(function(op){if(op.name)op.name=decodeEntities(op.name);if(op.surfaceLabel)op.surfaceLabel=decodeEntities(op.surfaceLabel);}); // ripulisce entità residue (cache localStorage / file non ancora ricostruiti)
   applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();
   var b=document.getElementById("ob");if(b)b.textContent="OSM ("+osmPasses.length+")";
 }
 function persistOsm(){try{localStorage.setItem(OSM_CACHE_KEY,JSON.stringify(osmPasses.map(stripMarker)));}catch(e){}}
 function stripMarker(op){var o={};for(var k in op){if(k!=="_marker")o[k]=op[k];}return o;}
+/* Two-stage load.
+   1) osm_index.json (~0.4 MB): every pass, marker fields only -> the map is populated on the
+      FIRST paint. Before, nothing was drawn until ~40 MB of region files (tracks included) had
+      landed, which is why the passes only showed up "after a couple of zooms".
+   2) the region files, in the background, to fill in the versanti/tracks the detail panel needs.
+      openOsmD() awaits osmFullPending if the user gets there first.
+   cache:"no-cache" (not "no-store"): the browser revalidates with an ETag and gets a 304 on
+   reload instead of re-downloading everything. */
 function loadOsmBaked(){
-  // Multi-country: osm_regions.json lists the per-region files to merge (e.g. ["osm_passes.json",
-  // "osm_passes_sud.json","osm_passes_fr.json",...]). Missing files are skipped. No manifest -> single file.
-  fetch(DATA_DIR+"osm_regions.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(list){
+  fetch(DATA_DIR+"osm_index.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(idx){
+    if(!idx||!idx.length)throw 0;
+    adoptOsm(idx);                     // markers now
+    osmFullPending=loadOsmFull();      // tracks later
+  }).catch(function(){
+    osmFullPending=loadOsmFull();      // no index deployed yet -> old behaviour, unchanged
+  });
+}
+/* Multi-country: osm_regions.json lists the per-region files to merge. Missing files are skipped
+   (a not-yet-built osm_passes_xb_* 404 is expected). No manifest -> single file. */
+function loadOsmFull(){
+  return fetch(DATA_DIR+"osm_regions.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(list){
     if(!list||!list.length)throw 0;
-    // Per-region file: a missing/failed one yields [] and is SILENT by design - a not-yet-built
-    // osm_passes_xb_* 404 is expected (matches validate_data's warning). Total failure is caught below.
-    return Promise.all(list.map(function(f){return fetch(DATA_DIR+f,{cache:"no-store"}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];});})).then(function(parts){
-      adoptOsm([].concat.apply([],parts));
+    return Promise.all(list.map(function(f){return fetch(DATA_DIR+f,{cache:"no-cache"}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];});})).then(function(parts){
+      hydrateOsm([].concat.apply([],parts));
     });
   }).catch(function(){
-    fetch(DATA_DIR+"osm_passes.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(arr){adoptOsm(arr);}).catch(function(){
-      // manifest, single-file, and cache all failed -> the OSM layer is genuinely empty. Warn.
+    return fetch(DATA_DIR+"osm_passes.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(arr){hydrateOsm(arr);}).catch(function(){
+      if(osmPasses.length)return;      // index is up: the app works, only the tracks are missing
       try{var c=localStorage.getItem(OSM_CACHE_KEY);if(c){adoptOsm(JSON.parse(c));return;}}catch(e){}
       dataWarn("Passi OSM non caricati (rete o dati non disponibili).");
     });
   });
+}
+/* Merge the full records into the objects the markers already point at, IN PLACE: re-adopting
+   would clear and redraw every marker (and close an open popup) for no reason. */
+function hydrateOsm(arr){
+  if(!arr||!arr.length)return;
+  if(!osmPasses.length){adoptOsm(arr);osmFull=true;return;}   // index absent: full data is the source
+  var by={};osmPasses.forEach(function(p){by[p.id]=p;});
+  arr.forEach(function(full){
+    var t=by[full.id];
+    if(!t){
+      // dropped as a curated duplicate, or folded into a co-located twin by mergeColocated
+      for(var i=0;i<osmPasses.length;i++){var q=osmPasses[i];if(Math.abs(q.lat-full.lat)<0.009&&Math.abs(q.lon-full.lon)<0.009){t=q;break;}}
+      if(!t)return;
+      (full.versanti||[]).forEach(function(v){t.versanti=t.versanti||[];if(!t.versanti.some(function(w){return versSameOrigin(v,w);}))t.versanti.push(v);});
+      return;
+    }
+    for(var k in full){if(k==="_marker"||k==="lat"||k==="lon")continue;t[k]=full[k];}
+    if(t.name)t.name=decodeEntities(t.name);
+    if(t.surfaceLabel)t.surfaceLabel=decodeEntities(t.surfaceLabel);
+  });
+  osmFull=true;setDataVersion();
+  if(window.MANUAL_OV)applyManual();
 }
 function classifyWay(t){
   if(!t)return null;var hw=t.highway;
@@ -164,12 +201,12 @@ function fetchOSM(){
       for(var i=0;i<cw.length;i++){var c=classifyWay(cw[i].tags);if(c){ride=c;break;}}
       // if pass is on ways but none rideable -> hiking pass, skip
       if(cw.length>0&&!ride){skipped++;return;}
-      var name=(el.tags.name||"Passo").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+      var name=el.tags.name||"Passo"; // RAW: esc() fa l'escaping al render
       var surfLabel=ride?surfaceLabelFromWay(ride.hw==="track"?{highway:"track",surface:ride.surface}:{surface:ride.surface||"asphalt"}):"";
       var op={id:"osm-"+el.id,name:name,lat:el.lat,lon:el.lon,elevation:elev,surfaceLabel:surfLabel};
       osmPasses.push(op);added.push(op);ct++;
     });
-    added.forEach(addOsmMarker);persistOsm();
+    markers.addLayers(added.map(addOsmMarker).filter(Boolean));persistOsm();  // addOsmMarker builds the layer, the cluster group inserts it
     btn.textContent="OSM (+"+ct+")";btn.disabled=false;
     if(skipped>0)showRSBrief("&#x2705; "+ct+" salite aggiunte ("+skipped+" passi escursionistici esclusi)");
   }).catch(function(){btn.textContent="OSM (err)";btn.disabled=false;});

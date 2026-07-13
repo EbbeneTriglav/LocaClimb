@@ -5,6 +5,8 @@ var DATA_DIR="data/";
 var map,markers,routeLines=[],weatherCache={},routeCache={};
 var rbMode=false,rbStops=[],rbLine=null,rbTrack=[],wpMarkers=[];
 var osmPasses=[],osmEnrichCache={},showOsm=true;
+/* two-stage OSM load: osmFullPending resolves when the region files (tracks) are in; osmFull flags it */
+var osmFullPending=null,osmFull=false;
 var OVERPASS="https://overpass-api.de/api/interpreter";
 var ELEV_API="https://api.open-meteo.com/v1/elevation";
 var BROUTER="https://brouter.de/brouter";
