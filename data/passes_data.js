@@ -105,7 +105,7 @@ versanti:[
 {side:"Mezzoldo (BG)",startLat:46.0134,startLon:9.6564,startElevation:830,endElevation:1985,distance_km:13.0,avgGradient:8.9,maxGradient:13.0,traffic:"basso",exposure:"Sud-Est",elevationProfile:[830,960,1100,1240,1370,1490,1600,1700,1790,1860,1920,1960,1985]},
 {side:"Morbegno (SO)",startLat:46.1361,startLon:9.5711,startElevation:262,endElevation:1985,distance_km:28.0,avgGradient:6.2,maxGradient:10.0,traffic:"basso",exposure:"Nord-Ovest",elevationProfile:[262,400,550,700,850,1000,1120,1240,1350,1450,1550,1640,1730,1810,1880,1940,1970,1985]}
 ]},
-{id:"grappa",name:"Monte Grappa",lat:45.8712,lon:11.7950,elevation:1745,region:"Veneto",status:"open",difficulty:8,
+{id:"grappa",name:"Monte Grappa",lat:45.87248,lon:11.80132,elevation:1685,region:"Veneto",status:"open",difficulty:8,
 description:"Montagna sacra alla Patria. Sacrario militare in vetta. Tre versanti diversi, tutti impegnativi.",
 tips:["Sacrario della Grande Guerra in vetta","Versante Romano il piu famoso e duro","Versante Semonzo con muri impossibili"],
 versanti:[
