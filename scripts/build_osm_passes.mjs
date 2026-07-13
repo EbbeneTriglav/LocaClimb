@@ -59,6 +59,21 @@ const BBOX = (process.env.LC_BBOX || arg("--bbox", "")).trim();
 const ALGO_VERSION = "v4.7-pavedauto";
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
+// Extra gain (m) required of a name-matched saddle/peak, ON TOP of the floor buildVersanti already
+// enforces on EVERY versante (>=200 m over >=1.5 km). That floor is already "a real minor climb", so
+// the default here is 0: a candidate is kept as soon as it has one computed versante. Raise it only to
+// deliberately thin out the minor stuff (LC_CAND_MIN_GAIN=400 -> only substantial climbs). Candidates
+// with ZERO versanti are always dropped: no climb was computed, so there is nothing to show.
+// mountain_pass=yes nodes are never subject to any of this - a low valico is still a real pass.
+const CAND_MIN_GAIN = parseInt(process.env.LC_CAND_MIN_GAIN || arg("--cand-min-gain", "0"), 10);
+// What counts as a climb at all. Deliberately low: the point of the app is the minor local climbs
+// people ride to dodge traffic, not only the famous passes. 1.5 km / 125 m ~= 8% average - a real
+// little climb, not a bump. Applies to OSM passes + keyword candidates; the curated `relax` path
+// keeps its own (1.2 km / 140 m) so lowering this can never rewrite Stelvio & co.
+// NB: existing enriched records are NOT recomputed (ALGO_VERSION unchanged) - only no-climb retries
+// and brand-new candidates get the lower floor, so no pass can silently grow a spurious versante.
+const MIN_DIST_KM = parseFloat(process.env.LC_MIN_DIST || arg("--min-dist", "1.5"));
+const MIN_GAIN_M = parseInt(process.env.LC_MIN_GAIN || arg("--min-gain", "125"), 10);
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
 // NOTE: names are stored RAW (UTF-8, apostrophes and accents intact). HTML escaping is the
 // frontend's job (esc() at render time). Encoding here produced "Passo Ucc&#39;Aidu" on screen.
@@ -146,7 +161,7 @@ function nameTokens(n) {
 }
 function catRank(c) { return { HC: 5, "1": 4, "2": 3, "3": 2, "4": 1 }[c] || 0; }
 function climbCat(distKm, gain, top) {
-  if (gain < 150 || distKm < 1) return null;
+  if (gain < Math.min(150, MIN_GAIN_M) || distKm < 1) return null; // must not sit above the climb floor, or new minor climbs lose their category pill
   const f = (gain * gain) / (distKm * 1000 * 10) + Math.max(0, top - 1000) / 1000;
   if (f >= 8) return "HC"; if (f >= 5.5) return "1"; if (f >= 3.5) return "2"; if (f >= 2) return "3"; return "4";
 }
@@ -380,9 +395,9 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
   if (pin) base = 0; // manual override: base is fixed at the pinned town (path start), use whole climb
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
-  if (dist < (relax ? 1.2 : 1.5)) return null;
+  if (dist < (relax ? 1.2 : MIN_DIST_KM)) return null;
   const gain = segEl[segEl.length - 1] - segEl[0];
-  if (gain < (relax ? 140 : 200)) return null;
+  if (gain < (relax ? 140 : MIN_GAIN_M)) return null;
   const avg = gain / (dist * 1000) * 100;
   if (avg < (relax ? 2 : 2.5)) return null;
   let maxg = 0; // windowed (>=300m) to kill DEM noise
@@ -1002,8 +1017,14 @@ async function main() {
   // it is a real geographic pass. rec.src is only set on candidates, so this never touches the rest.
   {
     let dropped = 0;
-    for (const [id, r] of [...byId]) if (r.src && !(r.versanti && r.versanti.length)) { byId.delete(id); dropped++; }
-    if (dropped) console.log("  dropped " + dropped + " candidate(s) with no climb (saddle/peak, kept 0 versanti)");
+    for (const [id, r] of [...byId]) {
+      if (!r.src) continue;                                   // only ever prunes saddle/peak candidates
+      const vs = r.versanti || [];
+      let best = 0;
+      for (const v of vs) { const g = (v.endElevation || 0) - (v.startElevation || 0); if (g > best) best = g; }
+      if (!vs.length || best < CAND_MIN_GAIN) { byId.delete(id); dropped++; }
+    }
+    if (dropped) console.log("  dropped " + dropped + " candidate(s): no climb or gain < " + CAND_MIN_GAIN + " m");
   }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));

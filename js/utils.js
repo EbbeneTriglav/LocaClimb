@@ -34,7 +34,7 @@ function ensureCat(p){
   var best=null,rank={HC:5,"1":4,"2":3,"3":2,"4":1};
   p.versanti.forEach(function(v){
     var gain=(v.endElevation||0)-(v.startElevation||0),d=v.distance_km||0;
-    if(gain<150||d<1)return;
+    if(gain<125||d<1)return;
     var f=gain*gain/(d*1000*10)+Math.max(0,(v.endElevation||0)-1000)/1000;
     var c=f>=8?"HC":f>=5.5?"1":f>=3.5?"2":f>=2?"3":"4";
     if(!best||rank[c]>rank[best])best=c;
@@ -107,7 +107,7 @@ function calcSun(lat,lon,exp){
 function truckRank(t){return {no:0,rari:1,possibili:2,si:3}[t]||1;}
 function passTruck(p){if(!p.versanti||!p.versanti.length)return"rari";var w=0;p.versanti.forEach(function(v){w=Math.max(w,truckRank(versTraffic(v,p).trucks));});return["no","rari","possibili","si"][w];}
 /* ===== Manual override layer + admin/community climb editor ================= */
-function climbCat(d,g,t){if(g<150||d<1)return null;var f=(g*g)/(d*1000*10)+Math.max(0,t-1000)/1000;if(f>=8)return"HC";if(f>=5.5)return"1";if(f>=3.5)return"2";if(f>=2)return"3";return"4";}
+function climbCat(d,g,t){if(g<125||d<1)return null;var f=(g*g)/(d*1000*10)+Math.max(0,t-1000)/1000;if(f>=8)return"HC";if(f>=5.5)return"1";if(f>=3.5)return"2";if(f>=2)return"3";return"4";}
 function catRank(c){return {HC:5,"1":4,"2":3,"3":2,"4":1}[c]||0;}
 /* ===== GPX export (client-side, per versante) =============================== */
 function gpxEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
