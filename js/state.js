@@ -17,6 +17,7 @@ var SURF_COLORS={"asfalto":"#2563eb","sterrato":"#f59e0b","fondo naturale":"#b45
 var heatLayer=null,heatOn=false;
 var versLayers=[],versStartMarkers=[],trafficLayer=null;
 var searchItems=[],surfOverlay=null,routeSurfSegs=[];
+var rbHoverKm=null;   /* km sotto il cursore: tiene in sincrono altimetria <-> mappa */
 /* known Strava segment IDs per pass (passId -> {side label: segmentId}) */
 var STRAVA_SEGMENTS={stelvio:{"Prato allo Stelvio":614103,"Bormio":614115},gavia:{"Ponte di Legno":1084024},mortirolo:{"Mazzo di Valtellina":617404},zoncolan:{"Ovaro":1253584}};
 /* regions where weekend/summer car+moto traffic spikes (tourism) */

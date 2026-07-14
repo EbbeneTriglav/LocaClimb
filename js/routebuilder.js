@@ -9,9 +9,36 @@ function moveStop(i,dir){var j=i+dir;if(j<0||j>=rbStops.length)return;var t=rbSt
 function updateRBList(){
   var el=document.getElementById("rb-list");
   if(!rbStops.length){el.innerHTML='<span style="color:var(--txt2);font-size:.85rem">Clicca sui passi o sulla mappa...</span>';document.getElementById("rb-go").disabled=true;document.getElementById("rb-gpx").disabled=true;}
-  else{var h="";rbStops.forEach(function(s,i){h+='<div class="rb-item'+(s.type==="point"?" pt":"")+'"><span class="mv" data-act="moveStop" data-i="'+i+'" data-dir="-1" title="Sposta indietro">&#x25C0;</span>'+(i+1)+'. '+s.name+' <span class="mv" data-act="moveStop" data-i="'+i+'" data-dir="1" title="Sposta avanti">&#x25B6;</span> <span class="rm" data-act="removeFromRoute" data-i="'+i+'">&#x2715;</span></div>';});el.innerHTML=h;document.getElementById("rb-go").disabled=rbStops.length<2;}
+  else{var h="";rbStops.forEach(function(s,i){h+='<div class="rb-item'+(s.type==="point"?" pt":"")+'" draggable="true" data-idx="'+i+'"><span class="grip" title="Trascina per riordinare">&#x2630;</span><span class="mv" data-act="moveStop" data-i="'+i+'" data-dir="-1" title="Sposta indietro">&#x25C0;</span>'+(i+1)+'. '+s.name+' <span class="mv" data-act="moveStop" data-i="'+i+'" data-dir="1" title="Sposta avanti">&#x25B6;</span> <span class="rm" data-act="removeFromRoute" data-i="'+i+'">&#x2715;</span></div>';});el.innerHTML=h;document.getElementById("rb-go").disabled=rbStops.length<2;bindStopDrag(el);}
   drawWpMarkers();
 }
+/* Riordino per trascinamento. Le frecce restano (su mobile e per l'accessibilita' da tastiera sono
+   piu' affidabili del drag), ma con 8 tappe spostarne una in fondo a colpi di freccia e' una tortura. */
+var rbDragFrom = -1;
+function bindStopDrag(el) {
+  var items = el.querySelectorAll(".rb-item");
+  for (var i = 0; i < items.length; i++) {
+    items[i].addEventListener("dragstart", function (e) {
+      rbDragFrom = +this.getAttribute("data-idx");
+      this.classList.add("dragging");
+      if (e.dataTransfer) { e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", String(rbDragFrom)); } catch (err) { /* Safari */ } }
+    });
+    items[i].addEventListener("dragend", function () { this.classList.remove("dragging"); clearDragOver(el); });
+    items[i].addEventListener("dragover", function (e) { e.preventDefault(); if (e.dataTransfer) e.dataTransfer.dropEffect = "move"; clearDragOver(el); this.classList.add("dragover"); });
+    items[i].addEventListener("drop", function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var to = +this.getAttribute("data-idx");
+      clearDragOver(el);
+      if (rbDragFrom < 0 || to === rbDragFrom) return;
+      var moved = rbStops.splice(rbDragFrom, 1)[0];
+      rbStops.splice(to, 0, moved);
+      rbDragFrom = -1;
+      updateRBList();
+      if (rbTrack.length && rbStops.length >= 2) calcRoute();
+    });
+  }
+}
+function clearDragOver(el) { var d = el.querySelectorAll(".rb-item.dragover"); for (var i = 0; i < d.length; i++) d[i].classList.remove("dragover"); }
 function drawWpMarkers(){
   wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];
   rbStops.forEach(function(s,i){
@@ -60,7 +87,7 @@ function osrmFallback(){
     hideRS();document.getElementById("rb-info").textContent="Percorso non trovato";document.getElementById("rb-go").textContent="Calcola Percorso";document.getElementById("rb-go").disabled=false;
   });
 }
-function drawRouteLine(){if(rbLine)map.removeLayer(rbLine);rbLine=L.polyline(rbTrack.map(function(c){return[c[0],c[1]];}),{color:"#22c55e",weight:6,opacity:0.85});rbLine.addTo(map);map.fitBounds(rbLine.getBounds().pad(0.12));}
+function drawRouteLine(){if(rbLine)map.removeLayer(rbLine);rbLine=L.polyline(rbTrack.map(function(c){return[c[0],c[1]];}),{color:"#22c55e",weight:6,opacity:0.85});rbLine.addTo(map);bindRouteHover();map.fitBounds(rbLine.getBounds().pad(0.12));}
 function trackDist(t){var d=0;for(var i=1;i<t.length;i++)d+=hav(t[i-1][0],t[i-1][1],t[i][0],t[i][1]);return d;}
 function trackAscent(t){var a=0;for(var i=1;i<t.length;i++){if(t[i][2]!=null&&t[i-1][2]!=null){var dv=t[i][2]-t[i-1][2];if(dv>0)a+=dv;}}return Math.round(a);}
 function interp(t){var last=null;for(var i=0;i<t.length;i++){if(t[i][2]!=null)last=t[i][2];else t[i][2]=last;}var next=null;for(var i=t.length-1;i>=0;i--){if(t[i][2]!=null)next=t[i][2];else t[i][2]=next;}}
@@ -177,39 +204,140 @@ function drawRouteProfile(){
   var rc=document.getElementById("rb-elev");
   if(rc){drawProfileCanvas(rc);if(rbTrack.length)rc.classList.add("show");}
 }
-function drawProfileCanvas(c){
-  if(!c||!rbTrack.length)return;
-  var dpr=window.devicePixelRatio||1;c.width=c.offsetWidth*dpr;c.height=340;
-  var ctx=c.getContext("2d");ctx.scale(dpr,dpr);var W=c.offsetWidth,H=170;
-  var els=rbTrack.map(function(t){return t[2];}).filter(function(v){return v!=null;});
-  if(els.length<2){ctx.fillStyle="#94a3b8";ctx.font="12px system-ui";ctx.fillText("Altimetria non disponibile",10,80);return;}
-  var mn=Math.min.apply(null,els)-30,mx=Math.max.apply(null,els)+30;
-  var cum=[0];for(var i=1;i<rbTrack.length;i++)cum.push(cum[i-1]+hav(rbTrack[i-1][0],rbTrack[i-1][1],rbTrack[i][0],rbTrack[i][1]));
-  var tot=cum[cum.length-1]||1;
-  var dk=document.body.classList.contains("dark");
-  ctx.fillStyle=dk?"#1e293b":"#f8fafc";ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle=dk?"#334155":"#e2e8f0";ctx.lineWidth=0.5;ctx.font="10px system-ui";ctx.fillStyle=dk?"#64748b":"#94a3b8";
-  for(var i=0;i<=4;i++){var y=15+(H-35)*(1-i/4);var el=Math.round(mn+(mx-mn)*i/4);ctx.beginPath();ctx.moveTo(38,y);ctx.lineTo(W-8,y);ctx.stroke();ctx.textAlign="right";ctx.fillText(el+"m",34,y+3);}
-  if(routeSurfSegs.length){var totM=tot*1000;routeSurfSegs.forEach(function(sg){if(sg.cat==="asfalto")return;var x1=38+(Math.max(0,sg.from)/totM)*(W-46),x2=38+(Math.min(totM,sg.to)/totM)*(W-46);ctx.fillStyle=(SURF_COLORS[sg.cat]||"#b45309");ctx.globalAlpha=0.2;ctx.fillRect(x1,15,Math.max(1,x2-x1),H-35);ctx.globalAlpha=1;});}
+/* Profilo altimetrico ricampionato A PIXEL.
+   Prima disegnavamo tutti i ~5000 punti di rbTrack dentro ~450 px: due punti di BRouter distano
+   10-20 m, la loro quota SRTM e' quantizzata al metro, e 1 m di rumore su 15 m di distanza sono
+   +/-7% di pendenza fasulla. Risultato: la "peluria" che si vedeva sui tratti di fondovalle.
+   Qui si media per colonna di pixel e si liscia su 3 colonne: il rumore sparisce, la forma resta.
+   rbTrack NON viene toccato - il GPX esporta le quote vere. */
+var rbProf = null;                   // geometria + serie ricampionata, riusata dal cursore
+
+function profileSeries(W, PL, PR) {
+  var cum = [0];
+  for (var i = 1; i < rbTrack.length; i++) cum.push(cum[i - 1] + hav(rbTrack[i - 1][0], rbTrack[i - 1][1], rbTrack[i][0], rbTrack[i][1]));
+  var tot = cum[cum.length - 1] || 1, iw = Math.max(10, W - PL - PR);
+  var n = Math.round(iw), sum = new Float64Array(n), cnt = new Float64Array(n), idx = new Int32Array(n);
+  for (var i = 0; i < rbTrack.length; i++) {
+    var e = rbTrack[i][2]; if (e == null) continue;
+    var k = Math.min(n - 1, Math.floor((cum[i] / tot) * n));
+    sum[k] += e; cnt[k]++; if (!idx[k]) idx[k] = i;
+  }
+  var raw = new Float64Array(n), last = null;
+  for (var k = 0; k < n; k++) { raw[k] = cnt[k] ? sum[k] / cnt[k] : (last == null ? NaN : last); if (cnt[k]) last = raw[k]; }
+  for (var k = n - 1; k >= 0; k--) if (isNaN(raw[k]) && k < n - 1) raw[k] = raw[k + 1];
+  var sm = new Float64Array(n);      // media mobile a 3: toglie il tremolio senza smussare i passi
+  for (var k = 0; k < n; k++) { var a = raw[Math.max(0, k - 1)], b = raw[k], c2 = raw[Math.min(n - 1, k + 1)]; sm[k] = (a + b + c2) / 3; }
+  for (var k = 0; k < n; k++) if (!idx[k]) idx[k] = k ? idx[k - 1] : 0;
+  return { cum: cum, tot: tot, n: n, iw: iw, ele: sm, idx: idx };
+}
+/* Verde -> giallo -> rosso sulla pendenza: il colore dice quanto fa male, non solo dove sali. */
+function gradColor(g) {
+  if (g < -0.02) return "#38bdf8";
+  if (g < 0.02) return "#22c55e";
+  if (g < 0.05) return "#84cc16";
+  if (g < 0.08) return "#facc15";
+  if (g < 0.11) return "#f97316";
+  return "#dc2626";
+}
+function drawProfileCanvas(c) {
+  if (!c || !rbTrack.length) return;
+  var dpr = window.devicePixelRatio || 1, W = c.offsetWidth, H = 170, PL = 38, PR = 8;
+  c.width = W * dpr; c.height = H * dpr; c.style.height = H + "px";
+  var ctx = c.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var els = rbTrack.map(function (t) { return t[2]; }).filter(function (v) { return v != null; });
+  if (els.length < 2) { ctx.fillStyle = "#94a3b8"; ctx.font = "12px system-ui"; ctx.fillText("Altimetria non disponibile", 10, 80); return; }
+  var S = profileSeries(W, PL, PR);
+  var mn = Math.min.apply(null, els) - 30, mx = Math.max.apply(null, els) + 30;
+  var dk = document.body.classList.contains("dark");
+  var TOP = 15, BOT = H - 20, IH = BOT - TOP;
+  var xOf = function (k) { return PL + (k / S.n) * S.iw; };
+  var yOf = function (e) { return TOP + IH * (1 - (e - mn) / (mx - mn)); };
+  rbProf = { c: c, W: W, H: H, PL: PL, PR: PR, S: S, mn: mn, mx: mx, TOP: TOP, BOT: BOT, IH: IH, dk: dk };
+
+  ctx.fillStyle = dk ? "#1e293b" : "#f8fafc"; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = dk ? "#334155" : "#e2e8f0"; ctx.lineWidth = 0.5; ctx.font = "10px system-ui"; ctx.fillStyle = dk ? "#64748b" : "#94a3b8";
+  for (var i = 0; i <= 4; i++) { var y = TOP + IH * (1 - i / 4); var el = Math.round(mn + (mx - mn) * i / 4); ctx.beginPath(); ctx.moveTo(PL, y); ctx.lineTo(W - PR, y); ctx.stroke(); ctx.textAlign = "right"; ctx.fillText(el + "m", PL - 4, y + 3); }
+  if (routeSurfSegs.length) { var totM = S.tot * 1000; routeSurfSegs.forEach(function (sg) { if (sg.cat === "asfalto") return; var x1 = PL + (Math.max(0, sg.from) / totM) * S.iw, x2 = PL + (Math.min(totM, sg.to) / totM) * S.iw; ctx.fillStyle = (SURF_COLORS[sg.cat] || "#b45309"); ctx.globalAlpha = 0.18; ctx.fillRect(x1, TOP, Math.max(1, x2 - x1), IH); ctx.globalAlpha = 1; }); }
+
+  // riempimento a colonne colorate per pendenza (il dislivello per pixel e' gia' liscio)
+  var mPerPx = (S.tot * 1000) / S.n;
+  for (var k = 1; k < S.n; k++) {
+    var g = (S.ele[k] - S.ele[k - 1]) / mPerPx;
+    ctx.fillStyle = gradColor(g); ctx.globalAlpha = 0.5;
+    ctx.fillRect(xOf(k - 1), yOf(S.ele[k]), Math.ceil(S.iw / S.n) + 0.6, BOT - yOf(S.ele[k]));
+  }
+  ctx.globalAlpha = 1;
   ctx.beginPath();
-  for(var i=0;i<rbTrack.length;i++){var e=rbTrack[i][2];if(e==null)continue;var x=38+(cum[i]/tot)*(W-46);var y=15+(H-35)*(1-(e-mn)/(mx-mn));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
-  ctx.strokeStyle="#22c55e";ctx.lineWidth=2.5;ctx.stroke();
-  ctx.lineTo(W-8,H-20);ctx.lineTo(38,H-20);ctx.closePath();ctx.globalAlpha=0.12;ctx.fillStyle="#22c55e";ctx.fill();ctx.globalAlpha=1;
-  // water drops along the route (color = proximity)
-  if(routeWater&&routeWater.length){
-    routeWater.forEach(function(w){
-      var al=Math.max(0,Math.min(tot,w.along)),xr=38+(al/tot)*(W-46);
-      var e=null;for(var i=0;i<rbTrack.length;i++){if(cum[i]>=al){e=rbTrack[i][2];break;}}if(e==null)e=rbTrack[rbTrack.length-1][2];
-      var yr=(e!=null)?15+(H-35)*(1-(e-mn)/(mx-mn)):(H/2);
-      ctx.save();ctx.translate(xr,yr-9);
-      ctx.beginPath();ctx.moveTo(0,-5);ctx.bezierCurveTo(4.6,0,3.6,6,0,6);ctx.bezierCurveTo(-3.6,6,-4.6,0,0,-5);ctx.closePath();
-      ctx.fillStyle=waterColor(w.dist);ctx.strokeStyle="#fff";ctx.lineWidth=1.2;ctx.shadowColor="rgba(0,0,0,.3)";ctx.shadowBlur=2.5;ctx.fill();ctx.shadowBlur=0;ctx.stroke();
+  for (var k = 0; k < S.n; k++) { var x = xOf(k), y = yOf(S.ele[k]); if (!k) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+  ctx.strokeStyle = dk ? "#e2e8f0" : "#0f172a"; ctx.lineWidth = 1.4; ctx.globalAlpha = 0.55; ctx.stroke(); ctx.globalAlpha = 1;
+
+  if (routeWater && routeWater.length) {
+    routeWater.forEach(function (w) {
+      var al = Math.max(0, Math.min(S.tot, w.along)), k = Math.min(S.n - 1, Math.floor((al / S.tot) * S.n));
+      var xr = xOf(k), yr = yOf(S.ele[k]);
+      ctx.save(); ctx.translate(xr, yr - 9);
+      ctx.beginPath(); ctx.moveTo(0, -5); ctx.bezierCurveTo(4.6, 0, 3.6, 6, 0, 6); ctx.bezierCurveTo(-3.6, 6, -4.6, 0, 0, -5); ctx.closePath();
+      ctx.fillStyle = waterColor(w.dist); ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.2; ctx.shadowColor = "rgba(0,0,0,.3)"; ctx.shadowBlur = 2.5; ctx.fill(); ctx.shadowBlur = 0; ctx.stroke();
       ctx.restore();
     });
   }
-  ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.textAlign="right";ctx.fillText(tot.toFixed(1)+" km",W-8,H-6);
+  ctx.fillStyle = dk ? "#94a3b8" : "#475569"; ctx.font = "10px system-ui"; ctx.textAlign = "right"; ctx.fillText(S.tot.toFixed(1) + " km", W - PR, H - 6);
+
+  c.onmousemove = function (ev) { var r = c.getBoundingClientRect(); rbCursor((ev.clientX - r.left) / r.width * W); };
+  c.onmouseleave = function () { rbCursor(null); };
 }
-function resetRoute(){resetRideWeather();rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}clearRouteWater();wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
+/* Cursore: dal profilo alla mappa. Ridisegno il profilo (e' gia' ricampionato, costa niente) e
+   sovrappongo mirino + etichetta; in parallelo muovo il marker pulsante sulla mappa. */
+function rbCursor(px) {
+  if (!rbProf) return;
+  var P = rbProf, c = P.c, ctx = c.getContext("2d");
+  if (px == null) { hideElevCursor(); rbHoverKm = null; drawRouteProfile(); return; }
+  var k = Math.max(0, Math.min(P.S.n - 1, Math.round(((px - P.PL) / P.S.iw) * P.S.n)));
+  rbHoverKm = (k / P.S.n) * P.S.tot;
+  drawProfileOverlay(k);
+  var ti = P.S.idx[k];
+  if (rbTrack[ti]) showElevCursor(rbTrack[ti][0], rbTrack[ti][1]);
+  var other = c.id === "relev" ? document.getElementById("rb-elev") : document.getElementById("relev");
+  if (other && other.offsetWidth) drawProfileCanvasOverlayOn(other, rbHoverKm);
+}
+function drawProfileOverlay(k) {
+  var P = rbProf, ctx = P.c.getContext("2d");
+  var x = P.PL + (k / P.S.n) * P.S.iw, e = P.S.ele[k];
+  var y = P.TOP + P.IH * (1 - (e - P.mn) / (P.mx - P.mn));
+  ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(x, P.TOP); ctx.lineTo(x, P.BOT); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(x, y, 4.5, 0, 6.284); ctx.fillStyle = "#2563eb"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.fill(); ctx.stroke();
+  var km = (k / P.S.n) * P.S.tot;
+  var g = k ? (P.S.ele[k] - P.S.ele[k - 1]) / ((P.S.tot * 1000) / P.S.n) : 0;
+  var lbl = km.toFixed(1) + " km  " + Math.round(e) + " m  " + (g * 100).toFixed(1) + "%";
+  ctx.font = "600 11px system-ui"; var w = ctx.measureText(lbl).width + 12;
+  var bx = Math.max(P.PL, Math.min(P.W - P.PR - w, x - w / 2));
+  ctx.fillStyle = "rgba(15,23,42,.88)"; roundRect(ctx, bx, 0, w, 17, 5); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.textAlign = "left"; ctx.fillText(lbl, bx + 6, 12);
+}
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+/* Il secondo canvas (pannello piccolo) deve mostrare lo stesso mirino: lo ridisegna e ci sovrappone. */
+function drawProfileCanvasOverlayOn(other, km) {
+  var keep = rbProf;
+  drawProfileCanvas(other);
+  if (rbProf && km != null) drawProfileOverlay(Math.round((km / rbProf.S.tot) * rbProf.S.n));
+  rbProf = keep;
+}
+/* Cursore: dalla mappa al profilo. Muovendo il mouse sulla linea del percorso si illumina il punto
+   corrispondente dell'altimetria - l'inverso di quello che fa Strava, e nessuno lo fa. */
+function bindRouteHover() {
+  if (!rbLine) return;
+  rbLine.on("mousemove", function (e) {
+    if (!rbProf) return;
+    var r = distPtToTrack(e.latlng.lat, e.latlng.lng, rbTrack.map(function (t) { return [t[0], t[1]]; }));
+    if (!r) return;
+    var k = Math.max(0, Math.min(rbProf.S.n - 1, Math.round((r.along / rbProf.S.tot) * rbProf.S.n)));
+    drawProfileCanvas(rbProf.c); drawProfileOverlay(k);
+    showElevCursor(e.latlng.lat, e.latlng.lng);
+  });
+  rbLine.on("mouseout", function () { hideElevCursor(); drawRouteProfile(); });
+}
+function resetRoute(){resetRideWeather();rbProf=null;rbHoverKm=null;hideElevCursor();rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}clearRouteWater();wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
 function generateGPX(){
   var now=new Date().toISOString();
   var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="LocaRide">\n<metadata><name>LocaRide Route</name><time>'+now+'</time></metadata>\n';

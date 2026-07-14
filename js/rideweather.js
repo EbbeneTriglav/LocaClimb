@@ -302,7 +302,9 @@ function rwStopEmoji(k) {
   return k === "Panetteria" ? "\uD83E\uDD50" : k === "Alimentari" ? "\uD83D\uDED2" : k === "Ristorante" ? "\uD83C\uDF7D\uFE0F"
     : k === "Gelateria" ? "\uD83C\uDF66" : k === "Fast food" ? "\uD83C\uDF54" : "\u2615";
 }
-/* ETA a un dato km, interpolata dalla tabella oraria gia' calcolata per il vento. */
+/* ETA a un dato km, interpolata dalla tabella oraria gia' calcolata per il vento.
+   ATTENZIONE: distPtToTrack restituisce `along` gia' in KM (non in metri). Dividere per 1000 mandava
+   ogni ristoro al km 0.0 e ne faceva coincidere l'orario con la partenza: 115 bar tutti alle 08:00. */
 function rwEtaAt(km) {
   if (!rwData || rwData.length < 2) return null;
   if (km <= rwData[0].km) return rwData[0].t;
@@ -359,10 +361,10 @@ function drawRwStops() {
   if (!rwStops || !rwStops.length) return;
   rwStopLayer = L.layerGroup();
   rwStops.forEach(function (s) {
-    var eta = rwEtaAt(s.along / 1000), st = ohOpen(s.oh, eta);
-    var ic = L.divIcon({ className: "", iconSize: [22, 22], iconAnchor: [11, 11],
+    var eta = rwEtaAt(s.along), st = ohOpen(s.oh, eta);
+    var ic = L.divIcon({ className: "", iconSize: [18, 18], iconAnchor: [9, 9],
       html: '<div class="stop-ic' + (st === false ? " shut" : st === true ? " open" : "") + '">' + rwStopEmoji(s.kind) + "</div>" });
-    var pop = "<b>" + esc(s.name) + "</b><br>" + s.kind + " &middot; km " + (s.along / 1000).toFixed(1) + " (" + Math.round(s.dist) + " m dal percorso)";
+    var pop = "<b>" + esc(s.name) + "</b><br>" + s.kind + " &middot; km " + s.along.toFixed(1) + " (" + Math.round(s.dist) + " m dal percorso)";
     if (eta) pop += "<br>Ci arrivi verso le <b>" + rwClock(eta) + "</b>" + (st === true ? " &middot; <span style='color:#16a34a'><b>aperto</b></span>" : st === false ? " &middot; <span style='color:#dc2626'><b>chiuso</b></span>" : "");
     if (s.oh) pop += "<br><span style='color:#64748b;font-size:.85em'>" + esc(s.oh) + "</span>";
     L.marker([s.lat, s.lon], { icon: ic }).bindPopup(pop).addTo(rwStopLayer);
@@ -377,8 +379,8 @@ function fillRwStopBox(buf) {
     + (withEta ? '' : ' &middot; <span style="color:var(--txt2)">calcola il meteo per sapere a che ora ci arrivi</span>') + '</div>';
   h += '<div class="stop-list">';
   rwStops.slice(0, 40).forEach(function (s) {
-    var eta = rwEtaAt(s.along / 1000), st = ohOpen(s.oh, eta);
-    h += '<div class="stop-row"><span>' + rwStopEmoji(s.kind) + '</span><span class="km">km ' + (s.along / 1000).toFixed(1) + '</span>'
+    var eta = rwEtaAt(s.along), st = ohOpen(s.oh, eta);
+    h += '<div class="stop-row"><span>' + rwStopEmoji(s.kind) + '</span><span class="km">km ' + s.along.toFixed(1) + '</span>'
       + '<span class="nm">' + esc(s.name) + '</span>'
       + (eta ? '<span class="eta">' + rwClock(eta) + '</span>' : '')
       + (st === true ? '<span class="tag ok">aperto</span>' : st === false ? '<span class="tag no">chiuso</span>' : s.oh ? '' : '<span class="tag unk">orario ignoto</span>')
