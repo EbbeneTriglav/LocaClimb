@@ -147,7 +147,8 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
   h+='<div class="section-title">&#x1F4A8; Meteo del percorso</div>';
   h+='<div class="rw-ctl"><input type="datetime-local" id="rw-when" value="'+iso+'">';
   h+='<label>Andatura <input type="number" id="rw-speed" min="10" max="35" value="22" step="1"> km/h in piano</label>';
-  h+='<button class="btn" data-act="loadRideWeather">Calcola</button></div>';
+  h+='<button class="btn" data-act="loadRideWeather">Calcola</button>';
+  h+='<label class="rw-tg"><input type="checkbox" id="rw-arrows" data-change="toggleWindArrows" checked> Frecce in mappa</label></div>';
   h+='<div id="rwbox" style="font-size:.8rem;margin:2px 0"><span style="color:var(--txt2)">Scegli quando parti: calcolo vento, temperatura e pioggia nell\'ora in cui passerai da ogni punto.</span></div>';
   h+='<div class="section-title">&#x2615; Ristori sul percorso</div>';
   h+='<div class="rw-ctl"><label class="rw-tg"><input type="checkbox" id="rw-stops" data-change="toggleRwStops"> Mostra bar, forni e alimentari</label>';

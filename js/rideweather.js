@@ -52,17 +52,34 @@ function rwSchedule(startMs, flatKmh) {
     t += (dk / rwSpeed(g, flatKmh)) * 3600000;
     times.push(t);
   }
-  var out = [], n = Math.min(RW_MAX_PTS, Math.max(4, Math.round(total / 6)));
+  var n = Math.min(RW_MAX_PTS, Math.max(4, Math.round(total / 6)));
+  var idx = [];
   for (var k = 0; k < n; k++) {
     var target = total * k / (n - 1), i = 1;
     while (i < cum.length - 1 && cum[i] < target) i++;
-    var j = Math.max(1, Math.min(rbTrack.length - 1, i));
-    out.push({
-      km: cum[j], lat: rbTrack[j][0], lon: rbTrack[j][1], ele: rbTrack[j][2],
-      t: times[j], bearing: rwBearing(rbTrack[j - 1], rbTrack[Math.min(j + 1, rbTrack.length - 1)])
-    });
+    idx.push(Math.max(1, Math.min(rbTrack.length - 1, i)));
   }
-  return out;
+  // La CIMA e' il punto che interessa di piu' (temperatura, vento, giacca) ed e' proprio quello che un
+  // campionamento equidistante si perde: sullo Stelvio il profilo diceva 2788 m e il riquadro 2757 m.
+  // Forziamo il punto piu' alto dentro il campione, al posto del vicino piu' prossimo.
+  var hi = 1;
+  for (var i2 = 1; i2 < rbTrack.length; i2++) if (rbTrack[i2][2] != null && (rbTrack[hi][2] == null || rbTrack[i2][2] > rbTrack[hi][2])) hi = i2;
+  if (idx.indexOf(hi) < 0) {
+    var near = 0;
+    for (var k2 = 1; k2 < idx.length; k2++) if (Math.abs(cum[idx[k2]] - cum[hi]) < Math.abs(cum[idx[near]] - cum[hi])) near = k2;
+    idx[near] = hi;
+    idx.sort(function (a, b) { return a - b; });
+    // La sostituzione puo' far collidere due campioni sullo stesso punto del tracciato: due voci
+    // identiche = due orari identici = una freccia doppia sopra l'altra. Dedup.
+    idx = idx.filter(function (v, k3) { return k3 === 0 || v !== idx[k3 - 1]; });
+  }
+  return idx.map(function (j) {
+    return {
+      km: cum[j], lat: rbTrack[j][0], lon: rbTrack[j][1], ele: rbTrack[j][2],
+      t: times[j], bearing: rwBearing(rbTrack[j - 1], rbTrack[Math.min(j + 1, rbTrack.length - 1)]),
+      top: j === hi
+    };
+  });
 }
 
 /* ---------- previsione ---------- */
@@ -82,7 +99,7 @@ function loadRideWeather() {
   var lo = pts.map(function (p) { return p.lon.toFixed(4); }).join(",");
   // timezone=UTC: confrontiamo tutto in UTC, cosi' non dobbiamo inseguire l'offset locale di ogni punto
   var url = RW_API + "?latitude=" + la + "&longitude=" + lo
-    + "&hourly=temperature_2m,precipitation_probability,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
+    + "&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
     + "&timezone=UTC&forecast_days=16";
   fetch(url).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) {
     var arr = Array.isArray(d) ? d : [d];
@@ -94,6 +111,7 @@ function loadRideWeather() {
       p.dir = h.wind_direction_10m[idx];
       p.gust = h.wind_gusts_10m[idx];
       p.temp = h.temperature_2m[idx];
+      p.rh = h.relative_humidity_2m ? h.relative_humidity_2m[idx] : 60;
       p.rain = h.precipitation_probability ? h.precipitation_probability[idx] : null;
       // dir = direzione DA CUI soffia (convenzione meteo). Se coincide con la nostra rotta, e' vento in faccia.
       var rel = ((p.dir - p.bearing) + 540) % 360 - 180;     // -180..180
@@ -133,8 +151,11 @@ function windIcon(p) {
       + '<div class="wind-lb" style="border-color:' + c + '">' + s + '</div>'
   });
 }
+function toggleWindArrows() { drawWindArrows(); }
 function drawWindArrows() {
   if (rwLayer) { map.removeLayer(rwLayer); rwLayer = null; }
+  var cb = document.getElementById("rw-arrows");
+  if (cb && !cb.checked) return;   // su un percorso che ripassa dallo stesso paese le frecce si accavallano
   if (!rwData || !rwData.length) return;
   rwLayer = L.layerGroup();
   rwData.forEach(function (p) {
@@ -190,24 +211,45 @@ function fillWeatherBox(flatKmh) {
   var headKm = 0, tailKm = 0;
   for (var i = 1; i < n; i++) { var seg = arr[i].km - arr[i - 1].km; if (arr[i].kind === "head") headKm += seg; else if (arr[i].kind === "tail") tailKm += seg; }
   var end = arr[n - 1], dur = (end.t - arr[0].t) / 3600000;
-  var top = arr.reduce(function (a, p) { return (p.ele != null && (!a || p.ele > a.ele)) ? p : a; }, null);
+  var top = arr.filter(function (p) { return p.top; })[0] || arr.reduce(function (a, p) { return (p.ele != null && (!a || p.ele > a.ele)) ? p : a; }, null);
   var maxRain = arr.reduce(function (m, p) { return Math.max(m, p.rain || 0); }, 0);
   var worst = arr.reduce(function (a, p) { return (!a || p.head > a.head) ? p : a; }, null);
 
   var h = '<div class="rw-sum"><div>Arrivo<b>' + rwClock(end.t) + '</b></div><div>Durata<b>' + dur.toFixed(1) + ' h</b></div>'
     + '<div>Contrario<b>' + headKm.toFixed(0) + ' km</b></div><div>A favore<b>' + tailKm.toFixed(0) + ' km</b></div></div>';
-  if (worst && worst.head > 8) h += '<div class="rw-hint">&#x1F4A8; Tratto peggiore: <b>' + Math.round(worst.head) + ' km/h in faccia</b> al km ' + worst.km.toFixed(0) + ', verso le ' + rwClock(worst.t) + '.</div>';
+  // Soglia a 15: 8 km/h contro non e' "il tratto peggiore", e' una brezza. Un avviso che scatta sempre
+  // e' un avviso che nessuno legge piu' quando conta davvero.
+  if (worst && worst.head >= 15) h += '<div class="rw-hint">&#x1F4A8; Tratto peggiore: <b>' + Math.round(worst.head) + ' km/h in faccia</b> al km ' + worst.km.toFixed(0) + ', verso le ' + rwClock(worst.t) + '.</div>';
   if (maxRain >= 40) h += '<div class="rw-hint" style="background:#eff6ff;border-color:#bfdbfe">&#x1F327;&#xFE0F; Probabilita\' di pioggia fino al <b>' + maxRain + '%</b>.</div>';
   if (top && top.temp != null) {
-    // In vetta fa freddo E ci si butta giu' a 40-50 all'ora: la temperatura percepita e' quella che ti
-    // fa venire l'ipotermia, non quella del termometro. Formula wind chill (valida sotto i 10 gradi).
-    var v = Math.min(55, flatKmh * 2) + Math.max(0, top.head || 0);
-    var wc = (top.temp <= 10 && v > 5) ? 13.12 + 0.6215 * top.temp - 11.37 * Math.pow(v, 0.16) + 0.3965 * top.temp * Math.pow(v, 0.16) : null;
-    h += '<div class="rw-hint" style="background:#fef2f2;border-color:#fecaca">&#x1F3D4;&#xFE0F; Punto piu\' alto (' + Math.round(top.ele) + ' m, ore ' + rwClock(top.t) + '): <b>' + Math.round(top.temp) + '&deg;C</b>'
-      + (wc != null ? ', in discesa a ' + Math.round(v) + ' km/h percepirai <b>' + Math.round(wc) + '&deg;C</b> &rarr; giacca obbligatoria.' : '.') + '</div>';
+    var v = descendSpeed(top, flatKmh);
+    var ap = v ? apparentTemp(top.temp, top.rh, v) : null;
+    h += '<div class="rw-hint" style="background:#fef2f2;border-color:#fecaca">&#x1F3D4;&#xFE0F; Punto piu\' alto (' + Math.round(top.ele) + ' m, ore ' + rwClock(top.t) + '): <b>' + Math.round(top.temp) + '&deg;C</b>';
+    if (ap != null && top.temp - ap >= 4) {
+      h += ', ma in discesa a ' + Math.round(v) + ' km/h percepirai <b>' + Math.round(ap) + '&deg;C</b>';
+      h += ap <= 5 ? ' &rarr; giacca obbligatoria, rischio ipotermia.' : ap <= 12 ? ' &rarr; porta un antivento.' : '.';
+    } else h += '.';
+    h += '</div>';
   }
   h += '<div class="rw-note">I modelli meteo hanno maglie di 2-11 km e non colgono come il vento si incanala nelle valli: in quota prendi le frecce come indicazione, non come verita\'.</div>';
   b.innerHTML = h;
+}
+
+/* Quanta discesa c'e' DOPO la cima? Se il percorso finisce in vetta non ti raffreddi in discesa e
+   l'avviso non ha senso. Velocita' dell'aria = velocita' di discesa + eventuale vento contrario. */
+function descendSpeed(top, flatKmh) {
+  if (!rwData || !rwData.length) return 0;
+  var last = rwData[rwData.length - 1];
+  if (last.ele == null || top.ele == null || top.ele - last.ele < 300) return 0;
+  return Math.min(60, flatKmh * 2) + Math.max(0, top.head || 0);
+}
+/* Temperatura percepita (Steadman). A differenza del wind chill vale a QUALSIASI temperatura, non solo
+   sotto i 10 gradi - ed e' proprio il caso che serve: 14 gradi in cima allo Stelvio e poi 1900 m di
+   discesa sudato a 50 all'ora fanno percepire meno di 5 gradi. Il termometro mente. */
+function apparentTemp(ta, rh, kmh) {
+  var ws = kmh / 3.6;
+  var e = (Math.max(10, Math.min(100, rh || 60)) / 100) * 6.105 * Math.exp(17.27 * ta / (237.7 + ta));
+  return ta + 0.33 * e - 0.70 * ws - 4.0;
 }
 
 /* ================= RISTORI =================

@@ -22,6 +22,7 @@ var ACTIONS = {
   loadRideWeather: function () { loadRideWeather(); },
   toggleRwStops: function () { toggleRwStops(); },
   rwBufChanged: function () { rwBufChanged(); },
+  toggleWindArrows: function () { toggleWindArrows(); },
   submitReport: function () { submitReport(); },
   closeModal: function () { closeModal(); },
   toggleBE: function () { toggleBE(); },
