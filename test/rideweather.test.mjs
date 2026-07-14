@@ -109,3 +109,62 @@ test("gradColor: il colore segue la pendenza", () => {
   assert.notEqual(app.gradColor(0.03), app.gradColor(0.09));  // 3% e 9% non sono lo stesso dolore
   assert.equal(app.gradColor(0.15), "#dc2626");               // muro
 });
+
+test("codici WMO: temporale e neve riconosciuti", () => {
+  assert.ok(app.isStorm(95) && app.isStorm(99));
+  assert.ok(!app.isStorm(61) && !app.isStorm(80));   // pioggia normale non e' temporale
+  assert.ok(app.isSnow(73) && app.isSnow(85));
+  assert.ok(!app.isSnow(61));
+});
+
+test("skyGlyph: la pioggia batte le nuvole, il temporale batte tutto", () => {
+  assert.equal(app.skyGlyph({ code: 96, cloud: 10, mm: 0 }), "\u26A1");        // temporale anche a ciel sereno nominale
+  assert.equal(app.skyGlyph({ code: 61, cloud: 90, mm: 2 }), "\uD83C\uDF27\uFE0F");
+  assert.equal(app.skyGlyph({ code: 0, cloud: 5, mm: 0 }), "\u2600\uFE0F");
+  assert.equal(app.skyGlyph({ code: 3, cloud: 95, mm: 0 }), "\u2601\uFE0F");
+  assert.equal(app.skyGlyph({ code: 71, cloud: 80, mm: 1 }), "\u2744\uFE0F");  // neve prima di pioggia
+});
+
+test("trigger: senza orario si assume il caso peggiore (una funzione di sicurezza non deve tacere)", () => {
+  assert.equal(app.trigger(null), 1);
+  assert.equal(app.trigger(NaN), 1);
+});
+
+test("stormRisk: il CAPE da solo non basta, serve poca inibizione", () => {
+  // molta energia ma cappuccio spesso -> pomeriggio afoso e sereno, NON un allarme
+  assert.ok(app.stormRisk({ cape: 3000, cin: -200, code: 1 }) < 3);
+  // stessa energia, nessun cappuccio -> cella che esplode
+  assert.equal(app.stormRisk({ cape: 3000, cin: -20, code: 1 }), 3);
+  // il modello che dice esplicitamente "temporale" batte qualunque ragionamento sul CAPE
+  assert.equal(app.stormRisk({ cape: 0, cin: 0, code: 95 }), 3);
+  // aria stabile: nessun rischio
+  assert.equal(app.stormRisk({ cape: 200, cin: 0, code: 3 }), 0);
+  // energia moderata senza cappuccio: attenzione, non allarme
+  assert.equal(app.stormRisk({ cape: 1800, cin: -30, code: 2 }), 2);
+});
+
+test("capeLabel: soglie meteorologiche standard in J/kg", () => {
+  assert.equal(app.capeLabel(100), "trascurabile");
+  assert.equal(app.capeLabel(1500), "moderata");
+  assert.equal(app.capeLabel(3000), "forte");
+  assert.equal(app.capeLabel(4500), "estrema");
+  assert.equal(app.capeLabel(null), null);
+});
+
+test("trigger: la convezione di montagna e' termica, culmina nel pomeriggio", () => {
+  const at = (h) => app.trigger(+new Date(2026, 6, 15, h, 0));
+  assert.ok(at(6) < 0.2, "all'alba l'innesco e' quasi nullo");
+  assert.ok(at(16) >= 0.99, "il picco e' alle 16");
+  assert.ok(at(11) < at(15), "sale nel corso della mattina");
+  assert.ok(at(20) < at(16), "cala la sera");
+  assert.ok(at(22) < 0.3);
+});
+
+test("effCape/stormRisk: lo stesso CAPE non e' la stessa minaccia a ogni ora", () => {
+  const p = (h) => ({ cape: 2800, cin: -20, code: 1, t: +new Date(2026, 6, 15, h, 0) });
+  assert.equal(app.stormRisk(p(16)), 3, "2800 J/kg alle 16 = allarme");
+  assert.ok(app.stormRisk(p(9)) < 2, "gli stessi 2800 alle 9 non sono un allarme");
+  assert.ok(app.effCape(p(16)) > app.effCape(p(9)) * 4);
+  // ma un fronte all'alba deve passare comunque: il weather_code batte l'ora
+  assert.equal(app.stormRisk({ cape: 0, cin: 0, code: 95, t: +new Date(2026, 6, 15, 6, 0) }), 3);
+});
