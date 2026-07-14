@@ -99,7 +99,7 @@ function loadRideWeather() {
   var lo = pts.map(function (p) { return p.lon.toFixed(4); }).join(",");
   // timezone=UTC: confrontiamo tutto in UTC, cosi' non dobbiamo inseguire l'offset locale di ogni punto
   var url = RW_API + "?latitude=" + la + "&longitude=" + lo
-    + "&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
+    + "&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,cloud_cover,weather_code,cape,convective_inhibition,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
     + "&timezone=UTC&forecast_days=16";
   fetch(url).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) {
     var arr = Array.isArray(d) ? d : [d];
@@ -113,6 +113,11 @@ function loadRideWeather() {
       p.temp = h.temperature_2m[idx];
       p.rh = h.relative_humidity_2m ? h.relative_humidity_2m[idx] : 60;
       p.rain = h.precipitation_probability ? h.precipitation_probability[idx] : null;
+      p.mm = h.precipitation ? h.precipitation[idx] : 0;          // mm attesi in QUELL'ora: 85% di 0.2 mm e 40% di 15 mm non sono la stessa cosa
+      p.cloud = h.cloud_cover ? h.cloud_cover[idx] : null;
+      p.code = h.weather_code ? h.weather_code[idx] : null;
+      p.cape = h.cape ? h.cape[idx] : null;                       // J/kg (NON kJ): energia potenziale convettiva
+      p.cin = h.convective_inhibition ? h.convective_inhibition[idx] : null;  // J/kg, il "cappuccio" che impedisce l'innesco
       // dir = direzione DA CUI soffia (convenzione meteo). Se coincide con la nostra rotta, e' vento in faccia.
       var rel = ((p.dir - p.bearing) + 540) % 360 - 180;     // -180..180
       p.rel = rel;
@@ -121,7 +126,7 @@ function loadRideWeather() {
       p.kind = Math.abs(rel) < 50 ? "head" : Math.abs(rel) > 130 ? "tail" : "cross";
     });
     rwData = pts.filter(function (p) { return p.wind != null; });
-    drawWindArrows(); drawWindStrip(); fillWeatherBox(flat);
+    drawWindArrows(); drawWindStrip(); drawSkyStrip(); fillWeatherBox(flat);
     drawRouteProfile();
   }).catch(function () { rwMsg("Previsioni non disponibili (Open-Meteo non raggiungibile)."); });
 }
@@ -162,7 +167,9 @@ function drawWindArrows() {
     var tip = "km " + p.km.toFixed(1) + " &middot; " + rwClock(p.t) + "<br>"
       + Math.round(p.wind) + " km/h da " + compass16(p.dir) + " (raffiche " + Math.round(p.gust) + ")<br>"
       + "<b>" + rwKindLabel(p) + "</b><br>" + Math.round(p.temp) + "&deg;C"
-      + (p.rain != null ? " &middot; pioggia " + p.rain + "%" : "");
+      + (p.rain != null ? " &middot; pioggia " + p.rain + "%" : "")
+      + (p.mm > 0.05 ? " &middot; " + p.mm.toFixed(1) + " mm" : "")
+      + (p.cape >= 300 ? "<br>CAPE " + Math.round(p.cape) + " J/kg (" + capeLabel(p.cape) + ")" : "");
     L.marker([p.lat, p.lon], { icon: windIcon(p) }).bindPopup(tip).addTo(rwLayer);
   });
   rwLayer.addTo(map);
@@ -180,6 +187,105 @@ function compass16(d) {
 /* ---------- fascia vento sotto l'altimetria ----------
    Canvas separato allineato all'asse dei km del profilo: strisce colorate per componente
    testa/coda + frecce. Non tocchiamo drawProfileCanvas: resta un solo posto da capire se si rompe. */
+/* Asse condiviso dalle fasce: identico a quello del profilo, cosi' le colonne restano allineate. */
+function stripAxis(c, h) {
+  var w = c.clientWidth || 380, dpr = window.devicePixelRatio || 1;
+  c.width = w * dpr; c.height = h * dpr; c.style.height = h + "px";
+  var x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
+  var total = rwData[rwData.length - 1].km || 1, PL = 38, PR = 8, iw = w - PL - PR;
+  return { x: x, w: w, PL: PL, PR: PR, iw: iw, total: total,
+    band: function (i) {  // estremi della colonna del campione i
+      var a = i === 0 ? PL : PL + iw * (((rwData[i - 1].km + rwData[i].km) / 2) / total);
+      var b = i === rwData.length - 1 ? PL + iw : PL + iw * (((rwData[i].km + rwData[i + 1].km) / 2) / total);
+      return [a, b];
+    } };
+}
+/* ---------- CAPE: l'ingrediente, non la previsione ----------
+   CAPE = Convective Available Potential Energy, in J/kg. E' l'energia che una particella d'aria puo'
+   liberare salendo: e' il CARBURANTE del temporale. Ma il carburante non basta, serve l'innesco -
+   ed e' li' che entra la CIN (convective inhibition, il "cappuccio" di aria calda in quota che
+   soffoca la convezione). CAPE 3000 con CIN forte = pomeriggio afoso e sereno. CAPE 2500 con CIN
+   quasi nulla = cella che esplode sopra la valle.
+   Allarmare sul solo CAPE farebbe gridare al lupo meta' delle giornate estive, e un allarme che
+   suona sempre non lo legge piu' nessuno. Quindi: si guarda la COPPIA.
+   Soglie standard (J/kg): <300 trascurabile | 300-1000 debole | 1000-2500 moderato |
+   2500-4000 forte | >4000 estremo. */
+/* Innesco diurno. La convezione di montagna e' TERMICA: le serve il sole che scalda i versanti e la
+   brezza di valle che spinge l'aria verso l'alto. Lo stesso CAPE all'alba e alle 16 non e' la stessa
+   minaccia. Non mediamo il CAPE nel tempo (la media diluirebbe proprio il picco che ti ammazza):
+   lo pesiamo per la probabilita' che qualcosa lo INNESCHI in quell'ora. Curva empirica, picco alle 16. */
+var DIURNAL = [[0, 0.10], [6, 0.10], [9, 0.20], [11, 0.40], [13, 0.70], [15, 0.95], [16, 1.00], [18, 0.85], [20, 0.55], [22, 0.25], [24, 0.10]];
+function trigger(ms) {
+  // Fail-safe: senza orario si assume l'ora PEGGIORE. In una funzione di sicurezza il default
+  // sbagliato e' quello che tace, non quello che avvisa di troppo.
+  if (!ms || isNaN(ms)) return 1;
+  var d = new Date(ms), h = d.getHours() + d.getMinutes() / 60;
+  for (var i = 1; i < DIURNAL.length; i++) {
+    if (h <= DIURNAL[i][0]) {
+      var a = DIURNAL[i - 1], b = DIURNAL[i], f = (h - a[0]) / (b[0] - a[0]);
+      return a[1] + (b[1] - a[1]) * f;
+    }
+  }
+  return 0.10;
+}
+/* CAPE efficace: usato SOLO per decidere se allarmare. All'utente mostriamo il CAPE vero, che e' il
+   dato fisico; questo e' il nostro giudizio su quanto e' probabile che quell'energia venga liberata. */
+function effCape(p) { return (p.cape || 0) * trigger(p.t); }
+function capeLabel(v) {
+  if (v == null) return null;
+  return v < 300 ? "trascurabile" : v < 1000 ? "debole" : v < 2500 ? "moderata" : v < 4000 ? "forte" : "estrema";
+}
+function stormRisk(p) {
+  // Un weather_code di temporale vale a QUALUNQUE ora: i temporali frontali e notturni non sono termici,
+  // e la modulazione diurna non deve nasconderti un fronte in arrivo all'alba.
+  if (isStorm(p.code)) return 3;
+  var ec = effCape(p), cin = Math.abs(p.cin || 0);   // soglie sul CAPE EFFICACE, non su quello grezzo
+  if (ec >= 2500 && cin < 100) return 3;             // molta energia, coperchio assente, ora giusta
+  if (ec >= 1500 && cin < 75) return 2;
+  if (ec >= 1000) return 1;
+  return 0;
+}
+/* WMO weather_code: quello che serve davvero e' distinguere "cielo" da "acqua" da "PERICOLO". */
+function isStorm(c) { return c >= 95 && c <= 99; }
+function isSnow(c) { return (c >= 71 && c <= 77) || c === 85 || c === 86; }
+function skyGlyph(p) {
+  if (isStorm(p.code)) return "\u26A1";
+  if (isSnow(p.code)) return "\u2744\uFE0F";
+  if (p.mm >= 0.2) return "\uD83C\uDF27\uFE0F";
+  var cl = p.cloud == null ? 50 : p.cloud;
+  return cl < 25 ? "\u2600\uFE0F" : cl < 55 ? "\uD83C\uDF24\uFE0F" : cl < 85 ? "\u26C5" : "\u2601\uFE0F";
+}
+/* Fascia cielo: sfondo = nuvolosita', barra blu = MILLIMETRI (non la probabilita': e' l'acqua che
+   ti bagna, non la percentuale), intensita' della barra = probabilita'. Il fulmine e' rosso e grosso
+   apposta: in cresta a 2000 m un temporale non e' scomodo, e' pericoloso. */
+function drawSkyStrip() {
+  var c = document.getElementById("rsky"); if (!c || !rwData || !rwData.length) return;
+  var A = stripAxis(c, 58), x = A.x, H = 58, TOP = 14, BOT = 44;
+  for (var i = 0; i < rwData.length; i++) {
+    var p = rwData[i], b = A.band(i), cl = p.cloud == null ? 50 : p.cloud;
+    var t = cl / 100, r = Math.round(254 - 34 * t), g = Math.round(249 - 34 * t), bl = Math.round(195 + 25 * t);
+    x.fillStyle = "rgb(" + r + "," + g + "," + bl + ")"; x.globalAlpha = 0.75;
+    x.fillRect(b[0], TOP, b[1] - b[0], BOT - TOP); x.globalAlpha = 1;
+    if (p.mm > 0.05) {                                     // 5 mm/h riempie la colonna: oltre e' diluvio comunque
+      var hh = Math.min(1, p.mm / 5) * (BOT - TOP);
+      x.fillStyle = isStorm(p.code) ? "#dc2626" : "#3b82f6";
+      x.globalAlpha = 0.25 + 0.65 * ((p.rain == null ? 50 : p.rain) / 100);
+      x.fillRect(b[0], BOT - hh, b[1] - b[0], hh); x.globalAlpha = 1;
+    }
+    if (stormRisk(p) >= 2) {                                         // tratteggio rosso: qui l'atmosfera e' carica
+      x.save(); x.beginPath(); x.rect(b[0], TOP, b[1] - b[0], BOT - TOP); x.clip();
+      x.strokeStyle = "#dc2626"; x.globalAlpha = stormRisk(p) === 3 ? 0.5 : 0.25; x.lineWidth = 1.5;
+      for (var d = b[0] - (BOT - TOP); d < b[1] + 2; d += 6) { x.beginPath(); x.moveTo(d, BOT); x.lineTo(d + (BOT - TOP), TOP); x.stroke(); }
+      x.restore(); x.globalAlpha = 1;
+    }
+    x.font = "11px system-ui"; x.textAlign = "center";
+    x.fillText(skyGlyph(p), (b[0] + b[1]) / 2, TOP + 13);
+    if (p.mm >= 0.5) { x.font = "600 8px system-ui"; x.fillStyle = "#0f172a"; x.fillText(p.mm.toFixed(1), (b[0] + b[1]) / 2, BOT - 2); }
+  }
+  x.fillStyle = "#64748b"; x.font = "9px system-ui"; x.textAlign = "left"; x.fillText("cielo", 2, TOP + 12);
+  x.textAlign = "center"; x.fillText("barra blu = mm attesi in quell'ora  \u00b7  tratteggio rosso = atmosfera instabile (CAPE)", A.PL + A.iw / 2, H - 2);
+}
+
 function drawWindStrip() {
   var c = document.getElementById("rwind"); if (!c || !rwData || !rwData.length) return;
   var w = c.clientWidth || 380, h = 54, dpr = window.devicePixelRatio || 1;
@@ -213,6 +319,13 @@ function fillWeatherBox(flatKmh) {
   var end = arr[n - 1], dur = (end.t - arr[0].t) / 3600000;
   var top = arr.filter(function (p) { return p.top; })[0] || arr.reduce(function (a, p) { return (p.ele != null && (!a || p.ele > a.ele)) ? p : a; }, null);
   var maxRain = arr.reduce(function (m, p) { return Math.max(m, p.rain || 0); }, 0);
+  // Accumulo stimato: i mm sono ORARI, quindi vanno pesati per il tempo che passi in ogni tratto.
+  var mmTot = 0;
+  for (var i = 1; i < n; i++) mmTot += (arr[i].mm || 0) * ((arr[i].t - arr[i - 1].t) / 3600000);
+  var storm = arr.filter(function (p) { return isStorm(p.code); })[0];
+  var risky = arr.filter(function (p) { return stormRisk(p) >= 2; }).sort(function (a, b) { return (b.cape || 0) - (a.cape || 0); })[0];
+  var maxCape = arr.reduce(function (m, p) { return Math.max(m, p.cape || 0); }, 0);
+  var snow = arr.filter(function (p) { return isSnow(p.code); })[0];
   var worst = arr.reduce(function (a, p) { return (!a || p.head > a.head) ? p : a; }, null);
 
   var h = '<div class="rw-sum"><div>Arrivo<b>' + rwClock(end.t) + '</b></div><div>Durata<b>' + dur.toFixed(1) + ' h</b></div>'
@@ -220,7 +333,25 @@ function fillWeatherBox(flatKmh) {
   // Soglia a 15: 8 km/h contro non e' "il tratto peggiore", e' una brezza. Un avviso che scatta sempre
   // e' un avviso che nessuno legge piu' quando conta davvero.
   if (worst && worst.head >= 15) h += '<div class="rw-hint">&#x1F4A8; Tratto peggiore: <b>' + Math.round(worst.head) + ' km/h in faccia</b> al km ' + worst.km.toFixed(0) + ', verso le ' + rwClock(worst.t) + '.</div>';
-  if (maxRain >= 40) h += '<div class="rw-hint" style="background:#eff6ff;border-color:#bfdbfe">&#x1F327;&#xFE0F; Probabilita\' di pioggia fino al <b>' + maxRain + '%</b>.</div>';
+  // Il temporale viene PRIMA di tutto: non e' comfort, e' sicurezza.
+  // CAPE: instabilita' potenziale. Se e' alta, i mm del modello sono con ogni probabilita' SOTTOSTIMATI.
+  if (risky && !storm) {
+    h += '<div class="rw-hint" style="background:#fff7ed;border-color:#fdba74">&#x26A1; <b>Atmosfera instabile</b> al km ' + risky.km.toFixed(0) + ' verso le ' + rwClock(risky.t)
+      + ': CAPE <b>' + Math.round(risky.cape) + ' J/kg</b> (instabilita\' ' + capeLabel(risky.cape) + ')'
+      + (risky.cin != null ? ', inibizione ' + Math.round(Math.abs(risky.cin)) + ' J/kg' : '') + '.'
+      + (risky.mm < 3 ? ' Il modello prevede solo ' + (risky.mm || 0).toFixed(1) + ' mm, <b>ma con questa energia e\' probabilmente una sottostima</b>: una maglia di 2-11 km non risolve la singola cella, e quello che spalma su 100 km&sup2; puo\' cadere su 3 km&sup2; in venti minuti.' : '')
+      + '</div>';
+  }
+  if (storm) h += '<div class="rw-hint" style="background:#fef2f2;border-color:#fca5a5">&#x26A1; <b>Temporali previsti</b> al km ' + storm.km.toFixed(0) + ' verso le ' + rwClock(storm.t)
+    + (storm.ele > 1500 ? ' — sei a ' + Math.round(storm.ele) + ' m: in cresta il fulmine cerca il punto piu\' alto, e con la bici quel punto sei tu. Valuta di rimandare.' : '. Cerca un riparo, non un albero.') + '</div>';
+  if (snow) h += '<div class="rw-hint" style="background:#f0f9ff;border-color:#bae6fd">&#x2744;&#xFE0F; <b>Neve</b> prevista al km ' + snow.km.toFixed(0) + ' (' + Math.round(snow.ele) + ' m), verso le ' + rwClock(snow.t) + '.</div>';
+  // La percentuale da sola inganna: 85% di 0,2 mm e' una spruzzata, 40% di 15 mm ti frega la giornata.
+  if (mmTot >= 0.3 || maxRain >= 50) {
+    var sev = mmTot < 1 ? 'una spruzzata' : mmTot < 5 ? 'pioggia leggera' : mmTot < 12 ? 'pioggia vera' : 'acquazzone';
+    h += '<div class="rw-hint" style="background:#eff6ff;border-color:#bfdbfe">&#x1F327;&#xFE0F; Probabilita\' fino al <b>' + maxRain + '%</b>, accumulo stimato <b>' + mmTot.toFixed(1) + ' mm</b> sull\'intero giro &rarr; ' + sev + '.</div>';
+  } else if (maxRain >= 40) {
+    h += '<div class="rw-hint" style="background:#f8fafc;border-color:#e2e8f0">&#x1F326;&#xFE0F; Probabilita\' fino al <b>' + maxRain + '%</b> ma accumulo trascurabile (<b>' + mmTot.toFixed(1) + ' mm</b>): al massimo ti bagni la maglia.</div>';
+  }
   if (top && top.temp != null) {
     var v = descendSpeed(top, flatKmh);
     var ap = v ? apparentTemp(top.temp, top.rh, v) : null;
@@ -230,6 +361,11 @@ function fillWeatherBox(flatKmh) {
       h += ap <= 5 ? ' &rarr; giacca obbligatoria, rischio ipotermia.' : ap <= 12 ? ' &rarr; porta un antivento.' : '.';
     } else h += '.';
     h += '</div>';
+  }
+  if (maxCape >= 300) {
+    h += '<div class="rw-note"><b>CAPE</b> (picco ' + Math.round(maxCape) + ' J/kg sul percorso): l\'energia che una bolla d\'aria libera salendo. E\' il <i>carburante</i> del temporale, non il temporale.</div>';
+    h += '<div class="rw-note"><b>CIN</b> (inibizione convettiva, J/kg): il <i>coperchio</i>. E\' uno strato d\'aria piu\' calda a mezza quota che schiaccia verso il basso l\'aria del suolo e le impedisce di salire da sola. Finche\' il coperchio tiene, il CAPE resta energia inutilizzata e il cielo puo\' restare sereno anche con numeri altissimi. Se qualcosa lo rompe &mdash; il sole del pomeriggio, un versante che spinge l\'aria in alto, un fronte &mdash; l\'energia accumulata si libera tutta insieme: i temporali piu\' violenti nascono proprio cosi\'. Sotto ~50 J/kg il coperchio e\' debole, sopra ~150 J/kg raramente si rompe da solo.</div>';
+    h += '<div class="rw-note">Nel valutare il rischio pesiamo il CAPE per l\'<b>ora del giorno</b>: in montagna la convezione e\' termica, ha bisogno del sole sui versanti, e culmina nel primo pomeriggio. Lo stesso valore alle 8 del mattino e alle 16 non e\' la stessa minaccia. E\' un indizio, non una previsione.</div>';
   }
   h += '<div class="rw-note">I modelli meteo hanno maglie di 2-11 km e non colgono come il vento si incanala nelle valli: in quota prendi le frecce come indicazione, non come verita\'.</div>';
   b.innerHTML = h;

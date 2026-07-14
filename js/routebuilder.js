@@ -167,6 +167,7 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
   h+='<div class="rstats"><div>Distanza<b>'+distKm.toFixed(1)+' km</b></div><div>Dislivello<b>'+asc+' m</b></div><div>Tappe<b>'+rbStops.length+'</b></div></div>';
   h+='<div class="section-title">&#x1F4C8; Altimetria</div><canvas id="relev"></canvas>';
   h+='<canvas id="rwind"></canvas>';   // fascia vento, allineata all'asse km del profilo
+  h+='<canvas id="rsky"></canvas>';    // fascia cielo/pioggia, stesso asse
   /* Meteo di percorso: il valore non e' "che tempo fa" ma "che tempo trovi al km X quando ci passi tu",
      quindi servono ora di partenza e un'andatura. Il default e' domani alle 8. */
   var d0=new Date(Date.now()+864e5); d0.setHours(8,0,0,0);
@@ -201,6 +202,7 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
 function drawRouteProfile(){
   drawProfileCanvas(document.getElementById("relev"));
   drawWindStrip();
+  drawSkyStrip();
   var rc=document.getElementById("rb-elev");
   if(rc){drawProfileCanvas(rc);if(rbTrack.length)rc.classList.add("show");}
 }
