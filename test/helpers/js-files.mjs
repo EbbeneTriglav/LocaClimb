@@ -5,4 +5,4 @@
  * DOM/rendering tests). Add a new js/*.js file here - in its <script src> order - when you
  * add its tag to index.html, or it won't be visible to either harness.
  */
-export const JS_FILES = ["state", "utils", "data", "map", "panel", "routebuilder", "editor", "auth", "events", "init"];
+export const JS_FILES = ["state", "utils", "data", "map", "panel", "routebuilder", "rideweather", "editor", "auth", "events", "init"];
