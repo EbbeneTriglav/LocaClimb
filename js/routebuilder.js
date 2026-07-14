@@ -139,6 +139,20 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
   h+='<div class="dp-body">';
   h+='<div class="rstats"><div>Distanza<b>'+distKm.toFixed(1)+' km</b></div><div>Dislivello<b>'+asc+' m</b></div><div>Tappe<b>'+rbStops.length+'</b></div></div>';
   h+='<div class="section-title">&#x1F4C8; Altimetria</div><canvas id="relev"></canvas>';
+  h+='<canvas id="rwind"></canvas>';   // fascia vento, allineata all'asse km del profilo
+  /* Meteo di percorso: il valore non e' "che tempo fa" ma "che tempo trovi al km X quando ci passi tu",
+     quindi servono ora di partenza e un'andatura. Il default e' domani alle 8. */
+  var d0=new Date(Date.now()+864e5); d0.setHours(8,0,0,0);
+  var iso=d0.getFullYear()+'-'+('0'+(d0.getMonth()+1)).slice(-2)+'-'+('0'+d0.getDate()).slice(-2)+'T08:00';
+  h+='<div class="section-title">&#x1F4A8; Meteo del percorso</div>';
+  h+='<div class="rw-ctl"><input type="datetime-local" id="rw-when" value="'+iso+'">';
+  h+='<label>Andatura <input type="number" id="rw-speed" min="10" max="35" value="22" step="1"> km/h in piano</label>';
+  h+='<button class="btn" data-act="loadRideWeather">Calcola</button></div>';
+  h+='<div id="rwbox" style="font-size:.8rem;margin:2px 0"><span style="color:var(--txt2)">Scegli quando parti: calcolo vento, temperatura e pioggia nell\'ora in cui passerai da ogni punto.</span></div>';
+  h+='<div class="section-title">&#x2615; Ristori sul percorso</div>';
+  h+='<div class="rw-ctl"><label class="rw-tg"><input type="checkbox" id="rw-stops" data-change="toggleRwStops"> Mostra bar, forni e alimentari</label>';
+  h+='<select id="rw-buf" data-change="rwBufChanged"><option value="100">entro 100 m</option><option value="250" selected>entro 250 m</option><option value="500">entro 500 m</option></select></div>';
+  h+='<div id="rwstopbox" style="font-size:.8rem;color:var(--txt2);margin:2px 0"></div>';
   h+='<div class="section-title">&#x1F4A7; Acqua sul percorso <span style="font-weight:400;font-size:.8em;color:var(--txt2)">(entro 200 m)</span></div>';
   h+='<div id="rwaterbox" style="font-size:.8rem;color:var(--txt2);margin:2px 0">Ricerca fontane e sorgenti&#8230;</div>';
   if(hasSurf&&surf){
@@ -158,6 +172,7 @@ function openRoutePanel(distKm,asc,surf,hasSurf){
 }
 function drawRouteProfile(){
   drawProfileCanvas(document.getElementById("relev"));
+  drawWindStrip();
   var rc=document.getElementById("rb-elev");
   if(rc){drawProfileCanvas(rc);if(rbTrack.length)rc.classList.add("show");}
 }
@@ -193,7 +208,7 @@ function drawProfileCanvas(c){
   }
   ctx.fillStyle=dk?"#94a3b8":"#475569";ctx.textAlign="right";ctx.fillText(tot.toFixed(1)+" km",W-8,H-6);
 }
-function resetRoute(){rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}clearRouteWater();wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
+function resetRoute(){resetRideWeather();rbStops=[];rbTrack=[];routeSurfSegs=[];if(rbLine){map.removeLayer(rbLine);rbLine=null;}if(surfOverlay){map.removeLayer(surfOverlay);surfOverlay=null;}clearRouteWater();wpMarkers.forEach(function(m){map.removeLayer(m);});wpMarkers=[];updateRBList();document.getElementById("rb-info").innerHTML="";document.getElementById("rb-gpx").disabled=true;var rc=document.getElementById("rb-elev");if(rc)rc.classList.remove("show");}
 function generateGPX(){
   var now=new Date().toISOString();
   var g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="LocaRide">\n<metadata><name>LocaRide Route</name><time>'+now+'</time></metadata>\n';
