@@ -100,6 +100,30 @@ body.rb-open .leaflet-top.leaflet-left{transform:translateX(352px)}
 body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 @media(max-width:900px){body.dp-open .leaflet-top.leaflet-right{opacity:0;pointer-events:none;transform:none}}
 @media(max-width:640px){body.rb-open .leaflet-top.leaflet-left,body.fp-open .leaflet-top.leaflet-left{opacity:0;pointer-events:none;transform:none}#rb{width:calc(100vw - 24px)}}
+/* --- meteo di percorso + ristori --- */
+.wind-ar{width:22px;height:22px;margin:0 auto;transition:transform .2s}
+.wind-lb{font:600 9px/12px system-ui;text-align:center;background:#fff;border:1.5px solid;border-radius:6px;margin:1px auto 0;width:22px;color:#334155}
+.stop-ic{font-size:15px;line-height:20px;text-align:center;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #cbd5e1;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.stop-ic.open{border-color:#16a34a}.stop-ic.shut{border-color:#dc2626;opacity:.55}
+#rwind{width:100%;display:block;margin-top:-4px}
+.rw-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0;font-size:.8rem}
+.rw-ctl input[type=datetime-local],.rw-ctl select{padding:5px 7px;border:1px solid var(--bdr);border-radius:8px;font:inherit}
+.rw-ctl input[type=number]{width:56px;padding:5px;border:1px solid var(--bdr);border-radius:8px;font:inherit}
+.rw-ctl .btn{padding:6px 14px}
+.rw-tg{display:flex;align-items:center;gap:6px;cursor:pointer}
+.rw-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0}
+.rw-sum div{background:var(--bg);border-radius:10px;padding:6px;text-align:center;font-size:.7rem;color:var(--txt2)}
+.rw-sum b{display:block;font-size:.95rem;color:var(--txt)}
+.rw-hint{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:7px 9px;margin:5px 0;font-size:.78rem}
+.rw-note{color:var(--txt2);font-size:.7rem;margin-top:6px;line-height:1.35}
+.stop-list{display:flex;flex-direction:column;gap:2px;max-height:210px;overflow:auto}
+.stop-row{display:flex;align-items:center;gap:6px;padding:3px 5px;border-radius:6px}
+.stop-row:nth-child(odd){background:var(--bg)}
+.stop-row .km{color:var(--txt2);font-size:.72rem;min-width:52px}
+.stop-row .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stop-row .eta{font-weight:600;font-size:.75rem}
+.stop-row .tag{font-size:.65rem;padding:1px 6px;border-radius:20px}
+.stop-row .tag.ok{background:#dcfce7;color:#166534}.stop-row .tag.no{background:#fee2e2;color:#991b1b}.stop-row .tag.unk{background:#f1f5f9;color:#64748b}
 .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(37,99,235,.15)!important}
 .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:rgba(37,99,235,.6)!important;color:#fff!important;font-weight:600}
 #search-wrap{position:relative;flex:1;max-width:340px;display:flex}
@@ -207,6 +231,7 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 <script src="js/map.js"></script>
 <script src="js/panel.js"></script>
 <script src="js/routebuilder.js"></script>
+<script src="js/rideweather.js"></script>
 <script src="js/editor.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/events.js"></script>
