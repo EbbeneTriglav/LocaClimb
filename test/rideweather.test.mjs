@@ -78,3 +78,34 @@ test("compass16 e windColor: coerenti", () => {
   assert.ok(app.windColor({ kind: "head", head: 25 }).indexOf("rgb(") === 0);
   assert.equal(app.windColor({ kind: "cross", head: 0 }), "#94a3b8");
 });
+
+test("distPtToTrack restituisce KM: i ristori non finiscono tutti al km 0", () => {
+  // il bug: dividendo `along` per 1000 ogni ristoro cadeva al km 0.0 e l'ETA coincideva con la partenza
+  const track = [];
+  for (let i = 0; i <= 100; i++) track.push([45 + i * 0.002, 7]);   // ~22 km rettilinei
+  const meta = app.distPtToTrack(45.1, 7.0005, track);              // circa a meta'
+  assert.ok(meta.along > 5 && meta.along < 20, "along deve essere in km, non in metri: " + meta.along);
+  assert.ok(meta.distM < 100, "la distanza dal tracciato invece e' in metri: " + meta.distM);
+});
+
+test("profileSeries: liscia il rumore SRTM senza spostare la cima", () => {
+  const t = [];
+  for (let i = 0; i <= 400; i++) {
+    const base = 1000 + (i < 200 ? i * 4 : (400 - i) * 4);
+    t.push([45 + i * 0.0002, 7, base + (i % 2 ? 1 : -1)]);          // +/-1 m di tremolio, come SRTM
+  }
+  app.rbTrack = t;
+  const S = app.profileSeries(500, 38, 8);
+  let jumps = 0;
+  for (let k = 1; k < S.n; k++) if (Math.abs(S.ele[k] - S.ele[k - 1]) > 12) jumps++;
+  assert.equal(jumps, 0, "nessun salto assurdo fra pixel adiacenti");
+  const peak = Math.max(...S.ele);
+  assert.ok(Math.abs(peak - 1800) < 25, "la cima resta dov'era: " + peak);
+  app.rbTrack = [];
+});
+
+test("gradColor: il colore segue la pendenza", () => {
+  assert.equal(app.gradColor(-0.06), app.gradColor(-0.10));   // discesa
+  assert.notEqual(app.gradColor(0.03), app.gradColor(0.09));  // 3% e 9% non sono lo stesso dolore
+  assert.equal(app.gradColor(0.15), "#dc2626");               // muro
+});
