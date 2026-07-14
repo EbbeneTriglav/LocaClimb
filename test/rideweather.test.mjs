@@ -28,8 +28,12 @@ test("rwSchedule: ore di passaggio crescenti, salita piu' lenta della discesa", 
   const s = app.rwSchedule(start, 22);
   assert.ok(s.length >= 4);
   for (let i = 1; i < s.length; i++) assert.ok(s[i].t > s[i - 1].t, "il tempo deve avanzare");
-  const up = s.find((p) => p.km > 2 && p.km < 5), down = s[s.length - 1];
-  assert.ok(down.t > up.t);
+  // Il senso del modello: un km in salita costa piu' tempo di un km in discesa. Lo misuriamo sui
+  // minuti-per-km prima e dopo la cima, invece di sperare che un campione cada in una finestra fissa.
+  const top = s.find((p) => p.top), first = s[0], last = s[s.length - 1];
+  const minPerKmUp = (top.t - first.t) / 60000 / (top.km - first.km);
+  const minPerKmDown = (last.t - top.t) / 60000 / (last.km - top.km);
+  assert.ok(minPerKmUp > minPerKmDown * 2, "la salita deve costare almeno il doppio della discesa");
   app.rbTrack = [];
 });
 
@@ -42,6 +46,28 @@ test("ohOpen: aperto, chiuso, sintassi ignota (niente tiri a indovinare)", () =>
   assert.equal(app.ohOpen("Mo off; Tu-Su 08:00-20:00", Date.parse("2026-07-13T10:00:00")), false);     // lunedi chiuso
   assert.equal(app.ohOpen("sunrise-sunset", Date.parse("2026-07-15T10:00:00")), null);  // non gestita -> ammette di non sapere
   assert.equal(app.ohOpen("", Date.parse("2026-07-15T10:00:00")), null);
+});
+
+test("rwSchedule: la CIMA e' sempre campionata (era il bug dei 2757 vs 2788 m)", () => {
+  const t = [];
+  for (let i = 0; i <= 200; i++) t.push([45 + i * 0.0005, 7, 1000 + (i < 137 ? i * 13 : (200 - i) * 13)]); // vertice in un punto "scomodo"
+  app.rbTrack = t;
+  const s = app.rwSchedule(Date.parse("2026-07-15T08:00:00Z"), 22);
+  const trueMax = Math.max(...t.map((p) => p[2]));
+  const top = s.find((p) => p.top);
+  assert.ok(top, "un punto deve essere marcato come cima");
+  assert.equal(top.ele, trueMax, "la quota campionata deve essere il massimo vero del tracciato");
+  assert.equal(s.filter((p) => p.top).length, 1);
+  app.rbTrack = [];
+});
+
+test("apparentTemp: il termometro mente in discesa", () => {
+  const fermo = app.apparentTemp(14, 60, 0);
+  const giu = app.apparentTemp(14, 60, 50);          // 14 gradi in cima, giu' a 50 all'ora
+  assert.ok(giu < 6, "a 50 km/h 14 gradi devono percepirsi sotto i 6: era " + giu.toFixed(1));
+  assert.ok(giu < fermo - 8, "la discesa deve togliere parecchi gradi");
+  assert.ok(app.apparentTemp(4, 70, 50) < app.apparentTemp(14, 70, 50));  // monotona nella temperatura
+  assert.ok(app.apparentTemp(30, 50, 30) > 20);      // in estate non deve inventare freddo
 });
 
 test("compass16 e windColor: coerenti", () => {
