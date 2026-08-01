@@ -422,6 +422,7 @@ function rwStopFetch(urls, i, q, buf, track) {
     });
     out.sort(function (a, b2) { return a.along - b2.along; });
     rwStops = out; drawRwStops(); fillRwStopBox(buf);
+    if (typeof rwStopsThen === "function") { var _f = rwStopsThen; rwStopsThen = null; _f(); }
   }).catch(function () { rwStopFetch(urls, i + 1, q, buf, track); });
 }
 function rwStopType(t) {
