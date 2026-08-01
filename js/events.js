@@ -46,6 +46,7 @@ var ACTIONS = {
   // account / community ratings
   amLogin: function () { amLogin(); },
   amSignup: function () { amSignup(); },
+  amGoogle: function () { amGoogle(); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }
