@@ -23,5 +23,15 @@
   "bbox": null,
   "target": "portugal",
   "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_n.json": {
+  "bbox": [
+   -9.6,
+   41.4,
+   3.5,
+   44
+  ],
+  "target": "spain-nord",
+  "builtAt": "2026-08-02"
  }
 }
