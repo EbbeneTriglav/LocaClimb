@@ -13,5 +13,10 @@
   ],
   "target": "spain-baleari",
   "builtAt": "2026-08-02"
+ },
+ "osm_passes_de_by.json": {
+  "bbox": null,
+  "target": "germany-bayern",
+  "builtAt": "2026-08-02"
  }
 }
