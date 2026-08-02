@@ -2,8 +2,15 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LocaRide - ride like a local</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LocaRide">
+<meta name="description" content="Scopri passi e salite, pianifica il giro con meteo, fontanelle e ristori, esporta il GPX.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
@@ -163,6 +170,7 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 @media(max-width:900px){#hdr h1 .tag{display:none}}
 @media(max-width:560px){#hdr h1 .wordmark{font-size:1rem}#hdr{padding:0 10px;gap:8px}}
 </style>
+<link rel="stylesheet" href="css/ui.css">
 </head>
 <body>
 <div id="hdr">
@@ -254,5 +262,6 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 <script src="js/stats.js"></script>
 <script src="js/events.js"></script>
 <script src="js/init.js"></script>
+<script src="js/brand.js"></script>
 </body>
 </html>
