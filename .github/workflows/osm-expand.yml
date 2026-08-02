@@ -3,6 +3,11 @@ name: OSM expand (per country)
 # Builds passes for one region at a time with the SAME heuristic, into a dedicated
 # osm_passes_<country>.json. Run one target per dispatch (avoids concurrent commit clashes).
 # The frontend merges every file listed in osm_regions.json.
+#
+# 2026-08: estensione a Francia, Spagna, Portogallo, Germania e Balcani.
+# Struttura invariata (era gia' collaudata): si aggiungono solo voci al case,
+# il ritaglio bbox opzionale per la Spagna (estratto unico da 1,2 GB) e tre passi
+# non distruttivi in coda (riepilogo, manifest, riquadri).
 on:
   workflow_dispatch:
     inputs:
@@ -11,10 +16,53 @@ on:
         required: true
         type: choice
         options:
+          # --- collaudati ---
           - italy-sud
           - france-alps
           - switzerland
           - austria
+          # --- Francia (per regione) ---
+          - france-rhone-alpes
+          - france-paca
+          - france-midi-pyrenees
+          - france-auvergne
+          - france-languedoc
+          - france-corse
+          - france-aquitaine
+          - france-jura
+          - france-est
+          - france-centro-ovest
+          - france-nord
+          - france-bretagne-idf
+          # --- Spagna (fette che insieme coprono tutto il paese) ---
+          - spain-nord
+          - spain-centro
+          - spain-sud
+          - spain-baleari
+          - spain-canarie
+          # --- Portogallo ---
+          - portugal
+          # --- Germania (per Land) ---
+          - germany-bayern
+          - germany-baden-wuerttemberg
+          - germany-ovest
+          - germany-nrw
+          - germany-est
+          - germany-nord
+          - germany-nordest
+          # --- Balcani ---
+          - slovenia
+          - croatia
+          - romania
+          - bosnia
+          - montenegro-albania-macedonia
+          - serbia
+          - bulgaria
+      dry_run:
+        description: "Solo verifica: risolve il target e si ferma"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -26,7 +74,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 330
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
 
@@ -42,36 +90,219 @@ jobs:
       - name: Resolve target -> PBF list + output
         id: cfg
         run: |
+          GF=https://download.geofabrik.de/europe
           case "${{ github.event.inputs.target }}" in
+            # ---------- collaudati ----------
             italy-sud)
-              echo 'pbf=https://download.geofabrik.de/europe/italy/sud-latest.osm.pbf,https://download.geofabrik.de/europe/italy/isole-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo "pbf=$GF/italy/sud-latest.osm.pbf,$GF/italy/isole-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_sud.json' >> "$GITHUB_OUTPUT" ;;
             france-alps)
-              echo 'pbf=https://download.geofabrik.de/europe/france/rhone-alpes-latest.osm.pbf,https://download.geofabrik.de/europe/france/provence-alpes-cote-d-azur-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo "pbf=$GF/france/rhone-alpes-latest.osm.pbf,$GF/france/provence-alpes-cote-d-azur-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_fr.json' >> "$GITHUB_OUTPUT" ;;
             switzerland)
-              echo 'pbf=https://download.geofabrik.de/europe/switzerland-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo "pbf=$GF/switzerland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_ch.json' >> "$GITHUB_OUTPUT" ;;
             austria)
-              echo 'pbf=https://download.geofabrik.de/europe/austria-latest.osm.pbf' >> "$GITHUB_OUTPUT"
+              echo "pbf=$GF/austria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_at.json' >> "$GITHUB_OUTPUT" ;;
+
+            # ---------- Francia ----------
+            france-rhone-alpes)   # Galibier, Croix de Fer, Madeleine, Iseran
+              echo "pbf=$GF/france/rhone-alpes-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_ra.json' >> "$GITHUB_OUTPUT" ;;
+            france-paca)          # Izoard, Vars, Allos, Bonette, Ventoux
+              echo "pbf=$GF/france/provence-alpes-cote-d-azur-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_paca.json' >> "$GITHUB_OUTPUT" ;;
+            france-midi-pyrenees) # Tourmalet, Aspin, Peyresourde
+              echo "pbf=$GF/france/midi-pyrenees-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_mp.json' >> "$GITHUB_OUTPUT" ;;
+            france-auvergne)      # Massiccio Centrale
+              echo "pbf=$GF/france/auvergne-latest.osm.pbf,$GF/france/limousin-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_auv.json' >> "$GITHUB_OUTPUT" ;;
+            france-languedoc)     # Mont Lozere, Aigoual, Pirenei orientali
+              echo "pbf=$GF/france/languedoc-roussillon-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_lr.json' >> "$GITHUB_OUTPUT" ;;
+            france-corse)         # Bavella, Vergio, Vizzavona
+              echo "pbf=$GF/france/corse-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_corse.json' >> "$GITHUB_OUTPUT" ;;
+            france-aquitaine)     # Pirenei atlantici, Marie-Blanque
+              echo "pbf=$GF/france/aquitaine-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_aq.json' >> "$GITHUB_OUTPUT" ;;
+            france-jura)          # Giura, Faucille
+              echo "pbf=$GF/france/franche-comte-latest.osm.pbf,$GF/france/bourgogne-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_fcb.json' >> "$GITHUB_OUTPUT" ;;
+            france-est)           # Vosgi, Grand Ballon, Planche des Belles Filles
+              echo "pbf=$GF/france/alsace-latest.osm.pbf,$GF/france/lorraine-latest.osm.pbf,$GF/france/champagne-ardenne-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_est.json' >> "$GITHUB_OUTPUT" ;;
+            france-centro-ovest)
+              echo "pbf=$GF/france/centre-latest.osm.pbf,$GF/france/poitou-charentes-latest.osm.pbf,$GF/france/pays-de-la-loire-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_co.json' >> "$GITHUB_OUTPUT" ;;
+            france-nord)
+              echo "pbf=$GF/france/nord-pas-de-calais-latest.osm.pbf,$GF/france/picardie-latest.osm.pbf,$GF/france/haute-normandie-latest.osm.pbf,$GF/france/basse-normandie-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_nord.json' >> "$GITHUB_OUTPUT" ;;
+            france-bretagne-idf)
+              echo "pbf=$GF/france/bretagne-latest.osm.pbf,$GF/france/ile-de-france-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fr_bidf.json' >> "$GITHUB_OUTPUT" ;;
+
+            # ---------- Spagna: estratto unico, tagliato in fette ----------
+            spain-nord)           # Angliru, Picos, Pirenei, Catalogna nord
+              echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-9.6,41.4,3.5,44.0' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_es_n.json' >> "$GITHUB_OUTPUT" ;;
+            spain-centro)         # Navacerrada, Gredos, Aragona, Valencia
+              echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-9.6,38.4,3.5,41.5' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_es_c.json' >> "$GITHUB_OUTPUT" ;;
+            spain-sud)            # Sierra Nevada, Ronda, Murcia
+              echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-7.7,35.8,0.9,38.5' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_es_s.json' >> "$GITHUB_OUTPUT" ;;
+            spain-baleari)        # Sa Calobra, Puig Major
+              echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=1.1,38.6,4.4,40.2' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_es_bal.json' >> "$GITHUB_OUTPUT" ;;
+            spain-canarie)        # Teide, Masca
+              echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-18.4,27.4,-13.2,29.6' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_es_can.json' >> "$GITHUB_OUTPUT" ;;
+
+            # ---------- Portogallo (isole comprese) ----------
+            portugal)
+              echo "pbf=$GF/portugal-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_pt.json' >> "$GITHUB_OUTPUT" ;;
+
+            # ---------- Germania ----------
+            germany-bayern)       # Rossfeld, Kesselberg, Riedbergpass
+              echo "pbf=$GF/germany/bayern-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_by.json' >> "$GITHUB_OUTPUT" ;;
+            germany-baden-wuerttemberg)  # Foresta Nera, Feldberg
+              echo "pbf=$GF/germany/baden-wuerttemberg-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_bw.json' >> "$GITHUB_OUTPUT" ;;
+            germany-ovest)        # Assia, Renania-Palatinato, Saarland
+              echo "pbf=$GF/germany/hessen-latest.osm.pbf,$GF/germany/rheinland-pfalz-latest.osm.pbf,$GF/germany/saarland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_w.json' >> "$GITHUB_OUTPUT" ;;
+            germany-nrw)          # Eifel, Sauerland
+              echo "pbf=$GF/germany/nordrhein-westfalen-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_nrw.json' >> "$GITHUB_OUTPUT" ;;
+            germany-est)          # Turingia, Sassonia, Erzgebirge
+              echo "pbf=$GF/germany/thueringen-latest.osm.pbf,$GF/germany/sachsen-latest.osm.pbf,$GF/germany/sachsen-anhalt-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_e.json' >> "$GITHUB_OUTPUT" ;;
+            germany-nord)         # Harz
+              echo "pbf=$GF/germany/niedersachsen-latest.osm.pbf,$GF/germany/bremen-latest.osm.pbf,$GF/germany/hamburg-latest.osm.pbf,$GF/germany/schleswig-holstein-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_n.json' >> "$GITHUB_OUTPUT" ;;
+            germany-nordest)
+              echo "pbf=$GF/germany/brandenburg-latest.osm.pbf,$GF/germany/berlin-latest.osm.pbf,$GF/germany/mecklenburg-vorpommern-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_de_ne.json' >> "$GITHUB_OUTPUT" ;;
+
+            # ---------- Balcani ----------
+            slovenia)             # Vrsic, Mangart, Sorica
+              echo "pbf=$GF/slovenia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_si.json' >> "$GITHUB_OUTPUT" ;;
+            croatia)              # Ucka, Biokovo, Velebit
+              echo "pbf=$GF/croatia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_hr.json' >> "$GITHUB_OUTPUT" ;;
+            romania)              # Transfagarasan, Transalpina
+              echo "pbf=$GF/romania-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_ro.json' >> "$GITHUB_OUTPUT" ;;
+            bosnia)
+              echo "pbf=$GF/bosnia-herzegovina-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_ba.json' >> "$GITHUB_OUTPUT" ;;
+            montenegro-albania-macedonia)   # Kotor, Durmitor, Llogara
+              echo "pbf=$GF/montenegro-latest.osm.pbf,$GF/albania-latest.osm.pbf,$GF/macedonia-latest.osm.pbf,$GF/kosovo-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_bal_s.json' >> "$GITHUB_OUTPUT" ;;
+            serbia)
+              echo "pbf=$GF/serbia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_rs.json' >> "$GITHUB_OUTPUT" ;;
+            bulgaria)             # Shipka, Rila, Rodopi
+              echo "pbf=$GF/bulgaria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_bg.json' >> "$GITHUB_OUTPUT" ;;
+
+            *)
+              echo "Target sconosciuto: ${{ github.event.inputs.target }}"; exit 1 ;;
           esac
 
+      - name: Show plan
+        run: |
+          echo "target : ${{ github.event.inputs.target }}"
+          echo "pbf    : ${{ steps.cfg.outputs.pbf }}"
+          echo "bbox   : ${{ steps.cfg.outputs.bbox }}"
+          echo "out    : ${{ steps.cfg.outputs.out }}"
+          df -h / | tail -1
+
       - name: Build passes for ${{ github.event.inputs.target }}
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
           LC_PBF: ${{ steps.cfg.outputs.pbf }}
+          ZBBOX: ${{ steps.cfg.outputs.bbox }}
         # --no-curated: i passi curati sono italiani, in un PBF estero non esistono -> 25 righe di
         #   "no road" e un curated_overrides.json a 2 voci. Quel file lo possiede solo osm-refresh.
-        run: node --max-old-space-size=6144 scripts/build_osm_passes.mjs --out "${{ steps.cfg.outputs.out }}" --no-curated
+        # LC_BBOX viene esportato solo per i target che lo definiscono (le fette di Spagna).
+        run: |
+          if [ -n "$ZBBOX" ]; then
+            echo "Ritaglio bbox: $ZBBOX"
+            export LC_BBOX="$ZBBOX"
+          fi
+          node --max-old-space-size=6144 scripts/build_osm_passes.mjs --out "${{ steps.cfg.outputs.out }}" --no-curated
+
+      - name: Summary
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          OUTF: ${{ steps.cfg.outputs.out }}
+        run: |
+          node -e '
+            const fs=require("fs");
+            const p="data/"+process.env.OUTF;
+            if(!fs.existsSync(p)){ console.log("Nessun file prodotto: "+p); process.exit(0); }
+            const a=JSON.parse(fs.readFileSync(p,"utf8"));
+            const conV=a.filter(x=>x.versanti&&x.versanti.length).length;
+            console.log("Passi: "+a.length+" | con almeno un versante: "+conV);
+            console.log("Dimensione: "+(fs.statSync(p).size/1048576).toFixed(1)+" MB");
+            console.log("Esempi: "+a.slice(0,8).map(x=>x.name+" ("+(x.elevation||"?")+" m)").join(" | "));
+          '
+
+      # Aggiunta non distruttiva: se il file e' nuovo lo registra nel manifest che il
+      # frontend legge, cosi' non serve ricordarsi di farlo a mano.
+      - name: Add to osm_regions.json
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          OUTF: ${{ steps.cfg.outputs.out }}
+        run: |
+          node -e '
+            const fs=require("fs");
+            const p="data/osm_regions.json";
+            const l=JSON.parse(fs.readFileSync(p,"utf8"));
+            if(!l.includes(process.env.OUTF)){ l.push(process.env.OUTF); fs.writeFileSync(p, JSON.stringify(l)); console.log("aggiunto: "+process.env.OUTF); }
+            else console.log("gia present: "+process.env.OUTF);
+          '
+
+      # Riquadro geografico di ogni file: servira' al caricamento per area sulla mappa.
+      - name: Record region bbox
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          OUTF: ${{ steps.cfg.outputs.out }}
+          ZBBOX: ${{ steps.cfg.outputs.bbox }}
+          TGT: ${{ github.event.inputs.target }}
+        run: |
+          node -e '
+            const fs=require("fs");
+            const p="data/osm_regions_meta.json";
+            let m={}; try{ m=JSON.parse(fs.readFileSync(p,"utf8")); }catch(e){}
+            const bb=(process.env.ZBBOX||"").trim();
+            m[process.env.OUTF]={bbox:bb?bb.split(",").map(Number):null,target:process.env.TGT,builtAt:new Date().toISOString().slice(0,10)};
+            fs.writeFileSync(p, JSON.stringify(m,null,1));
+            console.log("riquadro registrato per "+process.env.OUTF);
+          '
 
       - name: Build marker index
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         run: node scripts/build_osm_index.mjs
 
       - name: Commit ${{ steps.cfg.outputs.out }}
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
-          git add "data/${{ steps.cfg.outputs.out }}" data/osm_index.json
+          git add "data/${{ steps.cfg.outputs.out }}" data/osm_index.json data/osm_regions.json data/osm_regions_meta.json
           if git diff --staged --quiet; then
             echo "no change"
           else
