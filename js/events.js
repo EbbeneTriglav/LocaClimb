@@ -47,6 +47,13 @@ var ACTIONS = {
   amLogin: function () { amLogin(); },
   amSignup: function () { amSignup(); },
   amGoogle: function () { amGoogle(); },
+  saveRide: function () { saveRide(); },
+  openMyRides: function () { openMyRides(); },
+  rideOpen: function (el) { rideOpen(el.getAttribute("data-i")); },
+  rideDup: function (el) { rideDup(el.getAttribute("data-i")); },
+  rideDel: function (el) { rideDel(el.getAttribute("data-i")); },
+  rideGpx: function (el) { rideGpx(el.getAttribute("data-i")); },
+  rideTcx: function (el) { rideTcx(el.getAttribute("data-i")); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }

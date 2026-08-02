@@ -174,6 +174,7 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 <button class="btn" id="ed" title="Editor / proponi salita"><span class="bi">&#x270E;</span><span class="bl">Editor</span></button>
 <button class="btn" id="db" title="Tema scuro"><span class="bi">&#x1F319;</span><span class="bl">Tema</span></button>
 <button class="btn" id="acct" title="Account"><span class="bi">&#x1F464;</span><span class="bl">Accedi</span></button>
+<button class="btn" id="myrides" title="I miei giri" data-act="openMyRides"><span class="bi">&#x1F6B5;</span><span class="bl">I miei giri</span></button>
 <button class="btn" id="fountBtn" title="Fontanelle / acqua potabile" data-act="toggleFount"><span class="bi">&#x1F4A7;</span><span class="bl">Acqua</span></button>
 </div>
 <div id="fp">
@@ -198,6 +199,12 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 <button class="rb-btn" style="background:#0891b2" data-act="pickGpx">&#x1F4C2; Importa GPX</button>
 <input type="file" id="gpx-file" accept=".gpx,application/gpx+xml" style="display:none" data-change="gpxFile">
 <button class="rb-btn gpx" id="rb-gpx-poi" data-act="downloadGPXRich" style="background:#0d9488">&#x2B07;&#xFE0F; GPX + punti utili</button>
+<button class="rb-btn" style="background:#16a34a" data-act="saveRide">&#x1F4BE; Salva giro</button>
+<button class="rb-btn" style="background:#16a34a" data-act="saveRide">&#x1F4BE; Salva giro</button>
+<button class="rb-btn" style="background:#16a34a" data-act="saveRide">&#x1F4BE; Salva giro</button>
+<button class="rb-btn" style="background:#16a34a" data-act="saveRide">&#x1F4BE; Salva giro</button>
+<button class="rb-btn" style="background:#16a34a" data-act="saveRide">&#x1F4BE; Salva giro</button>
+<button class="rb-btn" style="background:#16a34a" data-act="saveRide">&#x1F4BE; Salva giro</button>
 <button class="rb-btn rst" data-act="resetRoute">Reset</button>
 <span id="rb-info" style="font-size:.8rem;color:var(--txt2);align-self:center"></span>
 </div>
@@ -240,6 +247,7 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 <script src="js/routebuilder.js"></script>
 <script src="js/rideweather.js"></script>
 <script src="js/gpxio.js"></script>
+<script src="js/myrides.js"></script>
 <script src="js/editor.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/events.js"></script>
