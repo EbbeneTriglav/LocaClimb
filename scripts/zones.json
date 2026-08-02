@@ -1,0 +1,207 @@
+{
+  "_nota": "Zone di costruzione LocaRide - COPERTURA NAZIONALE COMPLETA. Stesso metodo usato per l'Italia: si divide il paese nei suoi estratti regionali Geofabrik e se ne costruisce uno per volta. Nessun ritaglio geografico salvo dove l'estratto e' unico e troppo grande (Spagna): li' si usano fette bbox che insieme coprono TUTTO il paese.",
+  "_uso": "Workflow osm-zones -> indicare l'id della zona. Una per volta. Priorita' 1 = piu' salite.",
+  "_campi": "pbf = estratti Geofabrik sotto /europe. bbox = opzionale, se assente si elabora l'estratto intero.",
+
+  "fr-rhone-alpes": {
+    "desc": "Francia - Rhone-Alpes: Galibier, Croix de Fer, Madeleine, Iseran, Grand Colombier",
+    "pbf": ["france/rhone-alpes"],
+    "out": "osm_passes_fr_ra.json",
+    "prio": 1
+  },
+  "fr-paca": {
+    "desc": "Francia - Provenza/Alpi Marittime: Izoard, Vars, Allos, Bonette, Ventoux",
+    "pbf": ["france/provence-alpes-cote-d-azur"],
+    "out": "osm_passes_fr_paca.json",
+    "prio": 1
+  },
+  "fr-midi-pyrenees": {
+    "desc": "Francia - Midi-Pirenei: Tourmalet, Aspin, Peyresourde, Portet",
+    "pbf": ["france/midi-pyrenees"],
+    "out": "osm_passes_fr_mp.json",
+    "prio": 1
+  },
+  "fr-auvergne-limousin": {
+    "desc": "Francia - Massiccio Centrale: Puy Mary, Pas de Peyrol, Croix Morand",
+    "pbf": ["france/auvergne", "france/limousin"],
+    "out": "osm_passes_fr_auv.json",
+    "prio": 1
+  },
+  "fr-languedoc": {
+    "desc": "Francia - Linguadoca-Rossiglione: Mont Lozere, Aigoual, Pirenei orientali",
+    "pbf": ["france/languedoc-roussillon"],
+    "out": "osm_passes_fr_lr.json",
+    "prio": 1
+  },
+  "fr-corse": {
+    "desc": "Francia - Corsica: Bavella, Vergio, Vizzavona, Sorba",
+    "pbf": ["france/corse"],
+    "out": "osm_passes_fr_corse.json",
+    "prio": 1
+  },
+  "fr-aquitaine": {
+    "desc": "Francia - Aquitania: Pirenei atlantici, Marie-Blanque, Aubisque lato ovest",
+    "pbf": ["france/aquitaine"],
+    "out": "osm_passes_fr_aq.json",
+    "prio": 2
+  },
+  "fr-franche-comte-bourgogne": {
+    "desc": "Francia - Giura e Borgogna: Faucille, Mont d'Or",
+    "pbf": ["france/franche-comte", "france/bourgogne"],
+    "out": "osm_passes_fr_fcb.json",
+    "prio": 2
+  },
+  "fr-est": {
+    "desc": "Francia - Alsazia, Lorena, Champagne: Vosgi, Grand Ballon, Planche des Belles Filles",
+    "pbf": ["france/alsace", "france/lorraine", "france/champagne-ardenne"],
+    "out": "osm_passes_fr_est.json",
+    "prio": 2
+  },
+  "fr-centro-ovest": {
+    "desc": "Francia - Centro e Ovest (collinare): Centre, Poitou-Charentes, Pays de la Loire",
+    "pbf": ["france/centre", "france/poitou-charentes", "france/pays-de-la-loire"],
+    "out": "osm_passes_fr_co.json",
+    "prio": 4
+  },
+  "fr-nord": {
+    "desc": "Francia - Nord e Normandia (pianura, resa bassa)",
+    "pbf": ["france/nord-pas-de-calais", "france/picardie", "france/haute-normandie", "france/basse-normandie"],
+    "out": "osm_passes_fr_nord.json",
+    "prio": 4
+  },
+  "fr-bretagne-idf": {
+    "desc": "Francia - Bretagna e Ile-de-France (pianura, resa bassa)",
+    "pbf": ["france/bretagne", "france/ile-de-france"],
+    "out": "osm_passes_fr_bidf.json",
+    "prio": 4
+  },
+
+  "es-nord": {
+    "desc": "Spagna nord: Galizia, Asturie (Angliru), Cantabria, Paesi Baschi, Navarra, Pirenei, Catalogna nord",
+    "pbf": ["spain"],
+    "bbox": "-9.6,41.4,3.5,44.0",
+    "out": "osm_passes_es_n.json",
+    "prio": 1
+  },
+  "es-centro": {
+    "desc": "Spagna centro: Castiglia, Madrid (Navacerrada), Aragona, Catalogna sud, Valencia",
+    "pbf": ["spain"],
+    "bbox": "-9.6,38.4,3.5,41.5",
+    "out": "osm_passes_es_c.json",
+    "prio": 1
+  },
+  "es-sud": {
+    "desc": "Spagna sud: Andalusia (Sierra Nevada, Ronda), Murcia, Alicante",
+    "pbf": ["spain"],
+    "bbox": "-7.7,35.8,0.9,38.5",
+    "out": "osm_passes_es_s.json",
+    "prio": 1
+  },
+  "es-baleari": {
+    "desc": "Spagna - Baleari: Sa Calobra, Puig Major, Serra de Tramuntana",
+    "pbf": ["spain"],
+    "bbox": "1.1,38.6,4.4,40.2",
+    "out": "osm_passes_es_bal.json",
+    "prio": 1
+  },
+  "es-canarie": {
+    "desc": "Spagna - Canarie: Teide, Masca, Pico de las Nieves",
+    "pbf": ["spain"],
+    "bbox": "-18.4,27.4,-13.2,29.6",
+    "out": "osm_passes_es_can.json",
+    "prio": 2
+  },
+
+  "pt-portogallo": {
+    "desc": "Portogallo intero, isole comprese: Serra da Estrela, Geres, Madeira, Azzorre",
+    "pbf": ["portugal"],
+    "out": "osm_passes_pt.json",
+    "prio": 1
+  },
+
+  "de-bayern": {
+    "desc": "Germania - Baviera: Rossfeld, Kesselberg, Riedbergpass, Sudelfeld, Alpi bavaresi",
+    "pbf": ["germany/bayern"],
+    "out": "osm_passes_de_by.json",
+    "prio": 1
+  },
+  "de-baden-wuerttemberg": {
+    "desc": "Germania - Baden-Wurttemberg: Foresta Nera, Feldberg, Schauinsland, Kandel",
+    "pbf": ["germany/baden-wuerttemberg"],
+    "out": "osm_passes_de_bw.json",
+    "prio": 1
+  },
+  "de-ovest": {
+    "desc": "Germania ovest: Assia, Renania-Palatinato, Saarland (Taunus, Hunsruck, Eifel sud)",
+    "pbf": ["germany/hessen", "germany/rheinland-pfalz", "germany/saarland"],
+    "out": "osm_passes_de_w.json",
+    "prio": 2
+  },
+  "de-nrw": {
+    "desc": "Germania - Renania Settentrionale-Vestfalia: Eifel, Sauerland, Bergisches Land",
+    "pbf": ["germany/nordrhein-westfalen"],
+    "out": "osm_passes_de_nrw.json",
+    "prio": 2
+  },
+  "de-est": {
+    "desc": "Germania est: Turingia, Sassonia, Sassonia-Anhalt (Erzgebirge, Turingia, Harz sud)",
+    "pbf": ["germany/thueringen", "germany/sachsen", "germany/sachsen-anhalt"],
+    "out": "osm_passes_de_e.json",
+    "prio": 2
+  },
+  "de-nord": {
+    "desc": "Germania nord: Bassa Sassonia (Harz), Brema, Amburgo, Schleswig-Holstein",
+    "pbf": ["germany/niedersachsen", "germany/bremen", "germany/hamburg", "germany/schleswig-holstein"],
+    "out": "osm_passes_de_n.json",
+    "prio": 3
+  },
+  "de-nordest": {
+    "desc": "Germania nord-est: Brandeburgo, Berlino, Meclemburgo (pianura, resa bassa)",
+    "pbf": ["germany/brandenburg", "germany/berlin", "germany/mecklenburg-vorpommern"],
+    "out": "osm_passes_de_ne.json",
+    "prio": 4
+  },
+
+  "si-slovenia": {
+    "desc": "Slovenia: Vrsic, Mangart, Sorica, Kobarid, Pohorje",
+    "pbf": ["slovenia"],
+    "out": "osm_passes_si.json",
+    "prio": 1
+  },
+  "hr-croazia": {
+    "desc": "Croazia: Ucka, Biokovo (Sveti Jure), Velebit, Istria",
+    "pbf": ["croatia"],
+    "out": "osm_passes_hr.json",
+    "prio": 1
+  },
+  "ro-romania": {
+    "desc": "Romania: Transfagarasan, Transalpina, Carpazi",
+    "pbf": ["romania"],
+    "out": "osm_passes_ro.json",
+    "prio": 1
+  },
+  "ba-bosnia": {
+    "desc": "Bosnia ed Erzegovina: Bjelasnica, Vlasic, Prenj",
+    "pbf": ["bosnia-herzegovina"],
+    "out": "osm_passes_ba.json",
+    "prio": 2
+  },
+  "me-al-mk-xk": {
+    "desc": "Montenegro (Kotor, Durmitor), Albania, Macedonia del Nord, Kosovo",
+    "pbf": ["montenegro", "albania", "macedonia", "kosovo"],
+    "out": "osm_passes_bal_s.json",
+    "prio": 2
+  },
+  "rs-serbia": {
+    "desc": "Serbia: Zlatibor, Kopaonik, Divcibare",
+    "pbf": ["serbia"],
+    "out": "osm_passes_rs.json",
+    "prio": 2
+  },
+  "bg-bulgaria": {
+    "desc": "Bulgaria: Shipka, Rila, Pirin, Rodopi",
+    "pbf": ["bulgaria"],
+    "out": "osm_passes_bg.json",
+    "prio": 2
+  }
+}
