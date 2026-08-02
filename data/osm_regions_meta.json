@@ -48,5 +48,15 @@
   "bbox": null,
   "target": "france-midi-pyrenees",
   "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_c.json": {
+  "bbox": [
+   -9.6,
+   38.4,
+   3.5,
+   41.5
+  ],
+  "target": "spain-centro",
+  "builtAt": "2026-08-02"
  }
 }
