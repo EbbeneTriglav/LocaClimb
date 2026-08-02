@@ -104,11 +104,32 @@ const KW_WORD = new Set([
   // Tedesco (AT / Sudtirolo / CH tedesca) - forme sciolte
   "berg","alm","joch","sattel","scharte","hohe","kreuz","gipfel","horn","kogel","torl",
   // Sloveno (confine orientale)
-  "sedlo","prelaz","vrh"
+  "sedlo","prelaz","vrh",
+  // Spagnolo / castigliano
+  "puerto","alto","collado","portillo","portilla","pico","pena","cuesta","subida","mirador",
+  "morro","cabeza","majada","cerro","loma","risco","canada","altu","corredoria",
+  // Catalano / Baleari
+  "coll","collada","puig","turo","cim","serrat","alt","alcada",
+  // Basco / Navarra
+  "gaina","gain","lepoa","mendi","tontorra","aldapa",
+  // Galiziano
+  "chan","pena","cruces",
+  // Portoghese
+  "portela","cume","garganta","miradouro","senhora","penha","alto",
+  // Croato / Sloveno / Bosniaco / Serbo / Montenegrino
+  "prijevoj","prevoj","planina","brdo","glava","klanac","greben","prevalac",
+  // Rumeno
+  "pasul","saua","seaua","curmatura","varful","virful","muntele","culmea","dealul","transalpina",
+  // Albanese
+  "qafa","qafe","qaf","maja","mali",
+  // Bulgaro / Macedone (traslitterati)
+  "prohod","vrah","rid","preval",
+  // Inglese: e' la lingua dei tag name:en / int_name, quelli che salvano i nomi in cirillico
+  "pass","peak","mount","summit","gap","ridge","hill",
 ]);
 // German/Ladin toponyms are COMPOUNDS (Timmelsjoch, Gerlospass, Katschberghohe, Hahntennjoch):
 // word-token matching misses them, so match on suffix too.
-const KW_SUFFIX = ["joch","jochl","joechl","pass","passhohe","sattel","scharte","hohe","hoehe","berg","alm","kreuz","kogel","torl","toerl","horn","bichl"];
+const KW_SUFFIX = ["joch","jochl","joechl","pass","passhohe","sattel","scharte","hohe","hoehe","berg","alm","kreuz","kogel","torl","toerl","horn","bichl","spitze","spitz","steig","kopf","eck","warte","blick","prevoj","prijevoj"];
 function deacc(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 function isClimbName(n) {
   const toks = deacc(n).split(/[^a-z0-9]+/).filter(Boolean);
@@ -118,6 +139,17 @@ function isClimbName(n) {
   }
   return false;
 }
+/* Il nome principale non basta fuori dall'area latina: in Bulgaria, Serbia e
+   Macedonia del Nord e' scritto in cirillico e isClimbName(), che lavora su
+   caratteri latini, non troverebbe mai un toponimo. Proviamo quindi anche i nomi
+   alternativi che OSM porta con se'. */
+function anyClimbName(pr) {
+  const names = [pr.name, pr["name:en"], pr.int_name, pr["name:latin"], pr.alt_name,
+                 pr["name:it"], pr["name:de"], pr["name:fr"], pr["name:es"]];
+  for (const n of names) if (n && isClimbName(n)) return true;
+  return false;
+}
+
 // JSON writer: 5 decimals is ~1.1 m - plenty for a road track, and it halves the payload the
 // browser must download (Float32 coords were serialised with 17 significant digits).
 const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
@@ -500,7 +532,7 @@ async function main() {
     if (!f.geometry || f.geometry.type !== "Point" || !f.properties) return;
     if (f.properties.mountain_pass === "yes") {
       passes.push({ src: "pass", oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
-    } else if ((f.properties.natural === "saddle" || f.properties.natural === "peak") && f.properties.name && isClimbName(f.properties.name)) {
+    } else if ((f.properties.natural === "saddle" || f.properties.natural === "peak") && f.properties.name && anyClimbName(f.properties)) {
       // climb candidate: kept only if a road really reaches it (checked in enrichWorker)
       cands.push({ src: f.properties.natural, oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
     } else if ((f.properties.place === "town" || f.properties.place === "village") && f.properties.name) {
