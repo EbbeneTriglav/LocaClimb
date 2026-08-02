@@ -73,6 +73,8 @@ var ACTIONS = {
   openRoadbook: function () { openRoadbook(); },
   openMyStats: function () { openMyStats(); },
   toggleLang: function () { toggleLang(); },
+  fbLogout: function () { fbLogout(); },
+  profileOpen: function () { profileOpen(); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }
