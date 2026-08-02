@@ -57,6 +57,15 @@ var ACTIONS = {
   openMyReviews: function () { openMyReviews(); },
   revEdit: function (el) { revEdit(el.getAttribute("data-i")); },
   revDel: function (el) { revDel(el.getAttribute("data-i")); },
+  rideShare: function (el) { rideShare(el.getAttribute("data-i")); },
+  shareClose: function () { shareClose(); },
+  shareCopy: function () { shareCopy(); },
+  shareWa: function () { shareWa(); },
+  shareTg: function () { shareTg(); },
+  shareNative: function () { shareNative(); },
+  shareStop: function (el) { shareStop(el.getAttribute("data-i")); },
+  sharedCopyMine: function () { sharedCopyMine(); },
+  sharedBannerClose: function () { sharedBannerClose(); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }
