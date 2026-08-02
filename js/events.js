@@ -54,6 +54,9 @@ var ACTIONS = {
   rideDel: function (el) { rideDel(el.getAttribute("data-i")); },
   rideGpx: function (el) { rideGpx(el.getAttribute("data-i")); },
   rideTcx: function (el) { rideTcx(el.getAttribute("data-i")); },
+  openMyReviews: function () { openMyReviews(); },
+  revEdit: function (el) { revEdit(el.getAttribute("data-i")); },
+  revDel: function (el) { revDel(el.getAttribute("data-i")); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }
