@@ -58,5 +58,15 @@
   ],
   "target": "spain-centro",
   "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_can.json": {
+  "bbox": [
+   -18.4,
+   27.4,
+   -13.2,
+   29.6
+  ],
+  "target": "spain-canarie",
+  "builtAt": "2026-08-02"
  }
 }
