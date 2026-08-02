@@ -72,6 +72,7 @@ var ACTIONS = {
   cardShare: function () { cardShare(); },
   openRoadbook: function () { openRoadbook(); },
   openMyStats: function () { openMyStats(); },
+  toggleLang: function () { toggleLang(); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }
