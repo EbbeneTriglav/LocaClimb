@@ -17,9 +17,45 @@ on:
   workflow_dispatch:
     inputs:
       zone:
-        description: "Id zona (vedi scripts/zones.json), es. fr-pyrenees"
+        description: "Zona da costruire (ordinate per priorita')"
         required: true
-        type: string
+        type: choice
+        options:
+          # --- priorita' 1: piu' salite ---
+          - fr-rhone-alpes
+          - fr-paca
+          - fr-midi-pyrenees
+          - fr-auvergne-limousin
+          - fr-languedoc
+          - fr-corse
+          - es-nord
+          - es-centro
+          - es-sud
+          - es-baleari
+          - pt-portogallo
+          - de-bayern
+          - de-baden-wuerttemberg
+          - si-slovenia
+          - hr-croazia
+          - ro-romania
+          # --- priorita' 2 ---
+          - fr-aquitaine
+          - fr-franche-comte-bourgogne
+          - fr-est
+          - es-canarie
+          - de-ovest
+          - de-nrw
+          - de-est
+          - ba-bosnia
+          - me-al-mk-xk
+          - rs-serbia
+          - bg-bulgaria
+          # --- priorita' 3-4: pianura o salite brevi ---
+          - de-nord
+          - fr-centro-ovest
+          - fr-nord
+          - fr-bretagne-idf
+          - de-nordest
       dry_run:
         description: "Solo verifica: scarica e ritaglia, senza costruire ne' committare"
         required: false
