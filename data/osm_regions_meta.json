@@ -43,5 +43,10 @@
   ],
   "target": "spain-sud",
   "builtAt": "2026-08-02"
+ },
+ "osm_passes_fr_mp.json": {
+  "bbox": null,
+  "target": "france-midi-pyrenees",
+  "builtAt": "2026-08-02"
  }
 }
