@@ -70,6 +70,7 @@ var ACTIONS = {
   cardClose: function () { cardClose(); },
   cardDownload: function () { cardDownload(); },
   cardShare: function () { cardShare(); },
+  openRoadbook: function () { openRoadbook(); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
   acctOpen: function () { acctOpen(); }
