@@ -88,5 +88,10 @@
   "bbox": null,
   "target": "serbia",
   "builtAt": "2026-08-03"
+ },
+ "osm_passes_fr_auv.json": {
+  "bbox": null,
+  "target": "france-auvergne",
+  "builtAt": "2026-08-03"
  }
 }
