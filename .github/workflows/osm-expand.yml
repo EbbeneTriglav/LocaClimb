@@ -58,6 +58,23 @@ on:
           - montenegro-albania-macedonia
           - serbia
           - bulgaria
+          # --- VALICHI DI CONFINE: due paesi in un solo grafo, entrambi i versanti ---
+          - confine-it-ch
+          - confine-it-at
+          - confine-it-fr
+          - confine-it-si
+          - confine-fr-es
+          - confine-fr-ch
+          - confine-fr-de
+          - confine-de-at
+          - confine-de-ch
+          - confine-at-si
+          - confine-si-hr
+          - confine-hr-ba
+          - confine-ba-me-rs
+          - confine-me-al
+          - confine-es-pt
+          - confine-ro-rs
       dry_run:
         description: "Solo verifica: risolve il target e si ferma"
         required: false
@@ -216,6 +233,75 @@ jobs:
             bulgaria)             # Shipka, Rila, Rodopi
               echo "pbf=$GF/bulgaria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_bg.json' >> "$GITHUB_OUTPUT" ;;
+
+            # ---------- VALICHI DI CONFINE ----------
+            # Si caricano i due paesi confinanti e si ritaglia la fascia di frontiera:
+            # cosi' il grafo stradale contiene ENTRAMBI i versanti e la salita non viene
+            # scartata perche' la meta' in-paese e' troppo corta (>=1,5 km / >=200 m).
+            confine-it-ch)        # Spluga, San Bernardino, Maloja, Bernina, Sempione, Umbrail
+              echo "pbf=$GF/italy/nord-ovest-latest.osm.pbf,$GF/italy/nord-est-latest.osm.pbf,$GF/switzerland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=7.0,45.8,10.6,46.8' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_ch.json' >> "$GITHUB_OUTPUT" ;;
+            confine-it-at)        # Rombo/Timmelsjoch, Resia, Brennero, Vizze, Stalle, Croce Comelico
+              echo "pbf=$GF/italy/nord-est-latest.osm.pbf,$GF/austria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=10.3,46.4,13.5,47.15' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_at.json' >> "$GITHUB_OUTPUT" ;;
+            confine-it-fr)        # Monginevro, Moncenisio, Maddalena, Agnello, Lombarda, Tenda
+              echo "pbf=$GF/italy/nord-ovest-latest.osm.pbf,$GF/france/rhone-alpes-latest.osm.pbf,$GF/france/provence-alpes-cote-d-azur-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=6.0,44.0,7.8,45.4' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_fr.json' >> "$GITHUB_OUTPUT" ;;
+            confine-it-si)        # Predil, Vrsic lato italiano, Collio
+              echo "pbf=$GF/italy/nord-est-latest.osm.pbf,$GF/slovenia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=13.2,45.6,14.3,46.6' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_itsi.json' >> "$GITHUB_OUTPUT" ;;
+            confine-fr-es)        # Pirenei: Portalet, Somport, Envalira, Ares
+              echo "pbf=$GF/france/midi-pyrenees-latest.osm.pbf,$GF/france/aquitaine-latest.osm.pbf,$GF/france/languedoc-roussillon-latest.osm.pbf,$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-1.9,42.2,3.3,43.4' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_fres.json' >> "$GITHUB_OUTPUT" ;;
+            confine-fr-ch)        # Giura e Lemano: Faucille, Marchairuz, Jougne
+              echo "pbf=$GF/france/franche-comte-latest.osm.pbf,$GF/france/rhone-alpes-latest.osm.pbf,$GF/switzerland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=5.8,45.8,7.2,47.6' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_frch.json' >> "$GITHUB_OUTPUT" ;;
+            confine-fr-de)        # Vosgi e Foresta Nera lungo il Reno
+              echo "pbf=$GF/france/alsace-latest.osm.pbf,$GF/germany/baden-wuerttemberg-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=7.2,47.4,8.6,49.1' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_frde.json' >> "$GITHUB_OUTPUT" ;;
+            confine-de-at)        # Alpi bavaresi: Riedberg, Hahntenn, Fern, Achenpass
+              echo "pbf=$GF/germany/bayern-latest.osm.pbf,$GF/austria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=9.9,47.2,13.3,48.0' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_deat.json' >> "$GITHUB_OUTPUT" ;;
+            confine-de-ch)        # Foresta Nera meridionale / Sciaffusa
+              echo "pbf=$GF/germany/baden-wuerttemberg-latest.osm.pbf,$GF/switzerland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=7.5,47.3,9.9,48.1' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_dech.json' >> "$GITHUB_OUTPUT" ;;
+            confine-at-si)        # Caravanche: Loibl/Ljubelj, Wurzen/Korensko, Seeberg
+              echo "pbf=$GF/austria-latest.osm.pbf,$GF/slovenia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=13.2,46.3,16.3,46.95' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_atsi.json' >> "$GITHUB_OUTPUT" ;;
+            confine-si-hr)        # Istria e Gorski Kotar
+              echo "pbf=$GF/slovenia-latest.osm.pbf,$GF/croatia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=13.4,45.2,16.7,46.4' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_sihr.json' >> "$GITHUB_OUTPUT" ;;
+            confine-hr-ba)        # Dinariche: Velebit interno, Livno, Grahovo
+              echo "pbf=$GF/croatia-latest.osm.pbf,$GF/bosnia-herzegovina-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=15.6,42.5,19.2,45.4' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_hrba.json' >> "$GITHUB_OUTPUT" ;;
+            confine-ba-me-rs)     # Durmitor, Tara, Zlatibor
+              echo "pbf=$GF/bosnia-herzegovina-latest.osm.pbf,$GF/montenegro-latest.osm.pbf,$GF/serbia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=17.9,42.2,20.8,44.8' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_bamers.json' >> "$GITHUB_OUTPUT" ;;
+            confine-me-al)        # Prokletije, Llogara, Kotor interno
+              echo "pbf=$GF/montenegro-latest.osm.pbf,$GF/albania-latest.osm.pbf,$GF/kosovo-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=18.9,41.7,20.8,42.9' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_meal.json' >> "$GITHUB_OUTPUT" ;;
+            confine-es-pt)        # Geres/Xures, Sanabria, Serra da Estrela nord
+              echo "pbf=$GF/spain-latest.osm.pbf,$GF/portugal-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-9.0,39.3,-6.1,42.3' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_espt.json' >> "$GITHUB_OUTPUT" ;;
+            confine-ro-rs)        # Porte di Ferro / Danubio
+              echo "pbf=$GF/romania-latest.osm.pbf,$GF/serbia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=20.9,44.2,23.2,45.6' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_xb_rors.json' >> "$GITHUB_OUTPUT" ;;
 
             *)
               echo "Target sconosciuto: ${{ github.event.inputs.target }}"; exit 1 ;;
