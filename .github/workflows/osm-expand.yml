@@ -388,11 +388,17 @@ jobs:
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
+          # ORDINE IMPORTANTE: prima ci si allinea al remoto, POI si mette in stage.
+          # Facendo il pull DOPO il git add, l'autostash mette da parte i file appena
+          # aggiunti e li riapplica come modifiche NON in stage: il commit successivo
+          # non trova nulla da committare e il passo fallisce con exit 1, buttando via
+          # ore di elaborazione. Succede solo quando il pull scarica davvero qualcosa,
+          # per questo il difetto era rimasto nascosto a lungo.
+          git pull --rebase --autostash || true
           git add "data/${{ steps.cfg.outputs.out }}" data/osm_index.json data/osm_regions.json data/osm_regions_meta.json
           if git diff --staged --quiet; then
-            echo "no change"
+            echo "Nessuna variazione da committare."
           else
-            git pull --rebase --autostash || true
             git commit -m "data: OSM passes ${{ github.event.inputs.target }}"
-            git push
+            git push || { echo "push respinto: riprovo dopo un nuovo allineamento"; git pull --rebase --autostash || true; git push; }
           fi
