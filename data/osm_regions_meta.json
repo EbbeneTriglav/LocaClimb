@@ -93,5 +93,10 @@
   "bbox": null,
   "target": "france-auvergne",
   "builtAt": "2026-08-03"
+ },
+ "osm_passes_ro.json": {
+  "bbox": null,
+  "target": "romania",
+  "builtAt": "2026-08-03"
  }
 }
