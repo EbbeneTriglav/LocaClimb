@@ -44,7 +44,7 @@ const DEM_Z = 13;
 // dropping them cut the road graph into islands (a 70-node BFS from the summit). The genuinely
 // unrideable ones carry motorroad=yes and are still rejected by rideable(); the rest are steered
 // away from by a heavy edgeExtra penalty and scored as heavy traffic. Connectivity first, preference second.
-const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link","trunk","trunk_link"];
+const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link","trunk","trunk_link","residential","living_street","road"];
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = dataPath(arg("--out", "osm_passes.json"));
