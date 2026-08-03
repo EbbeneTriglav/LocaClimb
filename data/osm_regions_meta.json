@@ -73,5 +73,10 @@
   "bbox": null,
   "target": "france-corse",
   "builtAt": "2026-08-03"
+ },
+ "osm_passes_hr.json": {
+  "bbox": null,
+  "target": "croatia",
+  "builtAt": "2026-08-03"
  }
 }
