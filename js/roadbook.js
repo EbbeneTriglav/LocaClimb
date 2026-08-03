@@ -1,17 +1,19 @@
 /* ===========================================================================
-   LocaRide - Roadbook stampabile (versione 3)
+   LocaRide - Roadbook stampabile (versione 4)
    ---------------------------------------------------------------------------
-   Novita' rispetto alla v2:
-   - blocco PARTENZA con data, ora e andatura scelte
-   - SOLE: alba/tramonto, e per ogni ora se lo avrai in faccia, di spalle o
-     laterale; avviso se arrivi dopo il tramonto
-   - VENTO con direzione in lettere e raffiche
-   - TOPONIMI: i paesi attraversati, cosi' il foglio non e' muto tra un passo e l'altro
-   - PUNTI UTILI selezionati secondo la modalita' scelta (tutti / essenziali /
-     solo acqua / nessuno) invece di elencarne 115
-   - stima di energia e liquidi come informazione per preparare le tasche
+   COSA CAMBIA E PERCHE'
+   Nella v3 avevo aggiunto i paesi attraversati ma tolto le sezioni dedicate ad
+   Acqua e Ristori: il risultato era che 5 fontanelle e 3 bar finivano annegati in
+   17 righe di frazioni, e sembravano spariti. Qui:
+     - tornano le SEZIONI DEDICATE ad acqua e ristori, con i km in chiaro;
+     - i toponimi sono DIRADATI (uno ogni ~4 km, solo quelli vicini al percorso e
+       privilegiando i centri piu' importanti);
+     - il profilo altimetrico porta le ETICHETTE dei passi e dei paesi principali;
+     - c'e' una MAPPA PLANIMETRICA vettoriale con scala, nord, passi, acqua e ristori.
 
-   Il PDF continua a farlo il browser ("Stampa -> Salva come PDF").
+   La mappa e' disegnata in vettoriale e non usa tessere: sarebbe un problema in
+   stampa (immagini esterne che il browser blocca o stampa sgranate) e servirebbero
+   una dozzina di richieste. Cosi' e' nitida a qualsiasi ingrandimento.
    =========================================================================== */
 
 function rbkNum(v, d) { return (v == null || isNaN(v)) ? "-" : (+v).toFixed(d == null ? 1 : d); }
@@ -29,16 +31,46 @@ function rbkCompass(d) {
   var n = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSO", "SO", "OSO", "O", "ONO", "NO", "NNO"];
   return n[Math.round(((d % 360) / 22.5)) % 16];
 }
+function rbkCum() {
+  var cum = [0];
+  for (var i = 1; i < rbTrack.length; i++) cum.push(cum[i - 1] + hav(rbTrack[i - 1][0], rbTrack[i - 1][1], rbTrack[i][0], rbTrack[i][1]));
+  return cum;
+}
 
-/* --------------------------- profilo altimetrico --------------------------- */
-function rbkProfileSvg(w, h, sel) {
+/* ------------------------- toponimi: pochi e utili ------------------------- */
+/* 17 frazioni in fila non sono un aiuto, sono rumore che nasconde le fontanelle.
+   Si tiene un riferimento ogni ~4 km, solo entro 450 m dal percorso, preferendo
+   il centro piu' importante (citta' > paese > frazione). */
+function rbkPlaces() {
+  if (typeof routePlaces === "undefined" || !routePlaces) return [];
+  var rank = { city: 3, town: 2, village: 1, hamlet: 0 };
+  var f = routePlaces.filter(function (p) { return p.dist <= 450; })
+    .sort(function (a, b) { return a.along - b.along; });
+  var out = [];
+  f.forEach(function (p) {
+    var prev = out[out.length - 1];
+    if (prev && (p.along - prev.along) < 4) {
+      // troppo vicino al precedente: tiene il piu' importante, a parita' il piu' vicino
+      var rp = rank[p.place] || 0, rq = rank[prev.place] || 0;
+      if (rp > rq || (rp === rq && p.dist < prev.dist)) out[out.length - 1] = p;
+      return;
+    }
+    out.push(p);
+  });
+  return out;
+}
+function rbkPlaceLabel(p) {
+  return p.place === "city" ? "citta'" : p.place === "town" ? "paese" : "frazione";
+}
+
+/* ------------------------- profilo con le etichette ------------------------ */
+function rbkProfileSvg(w, h, sel, places) {
   var els = rbTrack.map(function (t) { return t[2]; }).filter(function (v) { return v != null; });
   if (els.length < 2) return "";
   var mn = Math.min.apply(null, els), mx = Math.max.apply(null, els), rng = Math.max(1, mx - mn);
-  var cum = [0];
-  for (var i = 1; i < rbTrack.length; i++) cum.push(cum[i - 1] + hav(rbTrack[i - 1][0], rbTrack[i - 1][1], rbTrack[i][0], rbTrack[i][1]));
-  var tot = cum[cum.length - 1] || 1;
-  var TOP = 16, BOT = h - 16, IH = BOT - TOP;
+  var cum = rbkCum(), tot = cum[cum.length - 1] || 1;
+  var LAB = 62;                        // fascia in alto per i nomi
+  var TOP = LAB, BOT = h - 30, IH = BOT - TOP;
   var n = 240, pts = [];
   for (var k = 0; k < n; k++) {
     var idx = Math.round(k * (rbTrack.length - 1) / (n - 1));
@@ -48,6 +80,11 @@ function rbkProfileSvg(w, h, sel) {
   }
   var Y = function (e) { return BOT - ((e - mn) / rng) * IH; };
   var X = function (km) { return (Math.max(0, Math.min(tot, km)) / tot) * w; };
+  var eleAt = function (km) {
+    var i = 0; while (i < cum.length - 1 && cum[i] < km) i++;
+    return rbTrack[i] && rbTrack[i][2] != null ? rbTrack[i][2] : mn;
+  };
+
   var area = "M0," + BOT + " " + pts.map(function (p) { return "L" + p[0].toFixed(1) + "," + Y(p[1]).toFixed(1); }).join(" ") + " L" + w + "," + BOT + " Z";
   var line = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + "," + Y(p[1]).toFixed(1); }).join(" ");
 
@@ -60,22 +97,131 @@ function rbkProfileSvg(w, h, sel) {
   var step = tot > 120 ? 20 : tot > 60 ? 10 : tot > 25 ? 5 : 2, ticks = "";
   for (var km = step; km < tot; km += step) {
     ticks += '<line x1="' + X(km).toFixed(1) + '" y1="' + BOT + '" x2="' + X(km).toFixed(1) + '" y2="' + (BOT + 3) + '" stroke="#cbd5e1" stroke-width="0.6"/>'
-      + '<text x="' + X(km).toFixed(1) + '" y="' + (h - 4) + '" font-size="7" fill="#94a3b8" text-anchor="middle">' + km + '</text>';
+      + '<text x="' + X(km).toFixed(1) + '" y="' + (BOT + 12) + '" font-size="7.5" fill="#94a3b8" text-anchor="middle">' + km + '</text>';
   }
-  var marks = "";
+
+  /* Etichette in alto: prima i passi/tappe (importanti), poi i paesi se resta
+     spazio. Si scarta chi cadrebbe addosso all'etichetta precedente. */
+  var labels = [];
+  (rbStops || []).forEach(function (s, i) {
+    var km = rbkStopKm(s);
+    if (km == null) return;
+    labels.push({ km: km, name: s.name || ("Tappa " + (i + 1)), major: s.type !== "point" });
+  });
+  (places || []).forEach(function (p) { labels.push({ km: p.along, name: p.name, major: false }); });
+  labels.sort(function (a, b) { return a.km - b.km; });
+  var placed = [], lastX = -999;
+  labels.forEach(function (l) {
+    var x = X(l.km);
+    if (x - lastX < 13 && !l.major) return;          // troppo vicine: il paese cede il posto
+    if (x - lastX < 9) return;
+    placed.push(l); lastX = x;
+  });
+
+  var lab = "";
+  placed.forEach(function (l) {
+    var x = X(l.km), ey = Y(eleAt(l.km));
+    var col = l.major ? "#7c3aed" : "#64748b";
+    var nome = l.name.length > 22 ? l.name.slice(0, 21) + "…" : l.name;
+    lab += '<line x1="' + x.toFixed(1) + '" y1="' + (LAB - 4) + '" x2="' + x.toFixed(1) + '" y2="' + ey.toFixed(1) + '" stroke="' + col + '" stroke-width="0.7" stroke-dasharray="2,2" opacity="0.65"/>'
+      + '<circle cx="' + x.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="' + (l.major ? 2.6 : 1.8) + '" fill="' + col + '"/>'
+      + '<text transform="rotate(-90 ' + x.toFixed(1) + ' ' + (LAB - 7) + ')" x="' + x.toFixed(1) + '" y="' + (LAB - 7) + '" '
+      + 'font-size="' + (l.major ? 8.5 : 7.5) + '" fill="' + col + '" font-weight="' + (l.major ? 700 : 400) + '">' + rbkEsc(nome) + '</text>';
+  });
+
+  /* Servizi: fascia sotto il profilo, con il km sotto ogni segno. */
+  var svc = "";
   (sel && sel.water ? sel.water : []).forEach(function (wp) {
-    marks += '<circle cx="' + X(wp.along).toFixed(1) + '" cy="' + (TOP - 6) + '" r="2.8" fill="#2563eb"/>';
+    var x = X(wp.along);
+    svc += '<circle cx="' + x.toFixed(1) + '" cy="' + (BOT + 20) + '" r="3.2" fill="#2563eb"/>'
+      + '<text x="' + x.toFixed(1) + '" y="' + (BOT + 29) + '" font-size="6.5" fill="#2563eb" text-anchor="middle">' + wp.along.toFixed(0) + '</text>';
   });
   (sel && sel.food ? sel.food : []).forEach(function (st) {
-    marks += '<rect x="' + (X(st.along) - 2.4).toFixed(1) + '" y="' + (TOP - 13) + '" width="4.8" height="4.8" rx="1" fill="#ea580c"/>';
+    var x = X(st.along);
+    svc += '<rect x="' + (x - 3).toFixed(1) + '" y="' + (BOT + 17) + '" width="6" height="6" rx="1.2" fill="#ea580c"/>'
+      + '<text x="' + x.toFixed(1) + '" y="' + (BOT + 29) + '" font-size="6.5" fill="#ea580c" text-anchor="middle">' + st.along.toFixed(0) + '</text>';
   });
-  return '<svg width="100%" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" style="display:block">'
+
+  return '<svg width="100%" viewBox="0 0 ' + w + ' ' + (h + 4) + '" style="display:block">'
     + grid + ticks
     + '<path d="' + area + '" fill="#dbeafe"/>'
-    + '<path d="' + line + '" fill="none" stroke="#2563eb" stroke-width="1.3"/>'
-    + marks
-    + '<text x="' + (w - 2) + '" y="' + (TOP - 5) + '" font-size="7.5" fill="#64748b" text-anchor="end">' + tot.toFixed(1) + ' km</text>'
+    + '<path d="' + line + '" fill="none" stroke="#2563eb" stroke-width="1.4"/>'
+    + lab + svc
+    + '<text x="' + (w - 2) + '" y="' + (LAB - 52) + '" font-size="8" fill="#64748b" text-anchor="end">' + tot.toFixed(1) + ' km &middot; ' + Math.round(mn) + '-' + Math.round(mx) + ' m</text>'
     + '</svg>';
+}
+
+/* --------------------------- mappa planimetrica ---------------------------- */
+/* Vettoriale: nitida in stampa, nessuna immagine esterna da scaricare. */
+function rbkPlanSvg(w, h, sel, places) {
+  if (!rbTrack || rbTrack.length < 2) return "";
+  var minLa = 90, maxLa = -90, minLo = 180, maxLo = -180;
+  rbTrack.forEach(function (p) {
+    if (p[0] < minLa) minLa = p[0]; if (p[0] > maxLa) maxLa = p[0];
+    if (p[1] < minLo) minLo = p[1]; if (p[1] > maxLo) maxLo = p[1];
+  });
+  var midLa = (minLa + maxLa) / 2, kx = Math.cos(midLa * Math.PI / 180);
+  var dLa = Math.max(1e-6, maxLa - minLa), dLo = Math.max(1e-6, (maxLo - minLo) * kx);
+  var pad = 26;
+  var sc = Math.min((w - pad * 2) / dLo, (h - pad * 2) / dLa);
+  var offX = pad + ((w - pad * 2) - dLo * sc) / 2;
+  var offY = pad + ((h - pad * 2) - dLa * sc) / 2;
+  var P = function (la, lo) { return [offX + ((lo - minLo) * kx) * sc, offY + (maxLa - la) * sc]; };
+
+  var d = "";
+  for (var i = 0; i < rbTrack.length; i += Math.max(1, Math.floor(rbTrack.length / 900))) {
+    var q = P(rbTrack[i][0], rbTrack[i][1]);
+    d += (d ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1) + " ";
+  }
+  var last = P(rbTrack[rbTrack.length - 1][0], rbTrack[rbTrack.length - 1][1]);
+  d += "L" + last[0].toFixed(1) + "," + last[1].toFixed(1);
+
+  var marks = "";
+  (places || []).forEach(function (p) {
+    if (p.lat == null) return;
+    var q = P(p.lat, p.lon);
+    marks += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="1.8" fill="#94a3b8"/>'
+      + '<text x="' + (q[0] + 3.5).toFixed(1) + '" y="' + (q[1] + 2.5).toFixed(1) + '" font-size="6.5" fill="#64748b">' + rbkEsc(p.name.slice(0, 16)) + '</text>';
+  });
+  (sel && sel.water ? sel.water : []).forEach(function (wp) {
+    if (wp.lat == null) return;
+    var q = P(wp.lat, wp.lon);
+    marks += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="3" fill="#2563eb" stroke="#fff" stroke-width="1"/>';
+  });
+  (sel && sel.food ? sel.food : []).forEach(function (st) {
+    if (st.lat == null) return;
+    var q = P(st.lat, st.lon);
+    marks += '<rect x="' + (q[0] - 2.8).toFixed(1) + '" y="' + (q[1] - 2.8).toFixed(1) + '" width="5.6" height="5.6" rx="1.2" fill="#ea580c" stroke="#fff" stroke-width="1"/>';
+  });
+  (rbStops || []).forEach(function (s, i) {
+    var q = P(s.lat, s.lon);
+    var col = (i === 0) ? "#16a34a" : (i === rbStops.length - 1) ? "#dc2626" : "#7c3aed";
+    marks += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="4.6" fill="' + col + '" stroke="#fff" stroke-width="1.4"/>'
+      + '<text x="' + q[0].toFixed(1) + '" y="' + (q[1] + 2.4).toFixed(1) + '" font-size="6" fill="#fff" text-anchor="middle" font-weight="700">' + (i + 1) + '</text>';
+  });
+
+  // barra di scala: sceglie una distanza tonda
+  var kmPerPx = 1 / (sc * 111.32);
+  var target = (w - pad * 2) * 0.28 * kmPerPx;
+  var nice = [1, 2, 5, 10, 20, 50, 100], barKm = nice[0];
+  for (var z = 0; z < nice.length; z++) if (nice[z] <= target) barKm = nice[z];
+  var barPx = barKm / kmPerPx;
+  var bx = pad, by = h - 12;
+  var scale = '<line x1="' + bx + '" y1="' + by + '" x2="' + (bx + barPx).toFixed(1) + '" y2="' + by + '" stroke="#0f172a" stroke-width="1.6"/>'
+    + '<line x1="' + bx + '" y1="' + (by - 3) + '" x2="' + bx + '" y2="' + (by + 3) + '" stroke="#0f172a" stroke-width="1.6"/>'
+    + '<line x1="' + (bx + barPx).toFixed(1) + '" y1="' + (by - 3) + '" x2="' + (bx + barPx).toFixed(1) + '" y2="' + (by + 3) + '" stroke="#0f172a" stroke-width="1.6"/>'
+    + '<text x="' + (bx + barPx / 2).toFixed(1) + '" y="' + (by - 5) + '" font-size="7.5" fill="#0f172a" text-anchor="middle">' + barKm + ' km</text>';
+  // nord
+  var nx = w - 20, ny = 20;
+  var north = '<path d="M' + nx + ',' + (ny + 9) + ' L' + nx + ',' + (ny - 7) + '" stroke="#0f172a" stroke-width="1.4"/>'
+    + '<path d="M' + (nx - 3.4) + ',' + (ny - 3) + ' L' + nx + ',' + (ny - 8.5) + ' L' + (nx + 3.4) + ',' + (ny - 3) + ' Z" fill="#0f172a"/>'
+    + '<text x="' + nx + '" y="' + (ny + 17) + '" font-size="7.5" fill="#0f172a" text-anchor="middle" font-weight="700">N</text>';
+
+  return '<svg width="100%" viewBox="0 0 ' + w + ' ' + h + '" style="display:block">'
+    + '<rect x="0" y="0" width="' + w + '" height="' + h + '" fill="#fbfdff"/>'
+    + '<path d="' + d + '" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>'
+    + '<path d="' + d + '" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>'
+    + marks + scale + north + '</svg>';
 }
 
 /* ------------------------------ righe del giro ----------------------------- */
@@ -88,29 +234,25 @@ function rbkEta(km) {
   if (!rbkHasWeather() || typeof rwEtaAt !== "function") return null;
   return rwEtaAt(km);
 }
-function rbkRows(sel) {
+function rbkRows(sel, places) {
   var rows = [];
   (rbStops || []).forEach(function (s, i) {
     rows.push({ km: rbkStopKm(s), kind: "tappa", label: s.name || ("Tappa " + (i + 1)), extra: (s.type === "point" ? "waypoint" : "passo / salita") });
   });
-  // paesi attraversati: danno un riferimento tra un passo e l'altro
-  if (typeof routePlaces !== "undefined" && routePlaces) {
-    routePlaces.forEach(function (p) {
-      if (p.dist > 900) return;                         // troppo defilato per essere un riferimento
-      rows.push({ km: p.along, kind: "luogo", label: p.name, extra: (p.place === "city" ? "citta'" : p.place === "town" ? "paese" : "frazione") + " · " + Math.round(p.dist) + " m" });
-    });
-  }
+  (places || []).forEach(function (p) {
+    rows.push({ km: p.along, kind: "luogo", label: p.name, extra: rbkPlaceLabel(p) + " &middot; " + Math.round(p.dist) + " m" });
+  });
   (sel && sel.water ? sel.water : []).forEach(function (w) {
     rows.push({
       km: w.along, kind: "acqua", label: w.name || "Fontanella",
-      extra: Math.round(w.dist) + " m dal percorso" + (w.pot === "Acqua potabile" ? "" : " · " + (w.pot || ""))
+      extra: Math.round(w.dist) + " m dal percorso" + (w.pot === "Acqua potabile" ? "" : " &middot; " + (w.pot || ""))
     });
   });
   (sel && sel.food ? sel.food : []).forEach(function (s) {
     var eta = rbkEta(s.along);
     rows.push({
       km: s.along, kind: "ristoro", label: s.name || s.kind,
-      extra: s.kind + " · " + Math.round(s.dist) + " m",
+      extra: s.kind + " &middot; " + Math.round(s.dist) + " m",
       eta: eta ? rbkClock(eta) : "", open: s.open
     });
   });
@@ -150,11 +292,10 @@ function rbkWeatherBlocks() {
     + '<div><span>Temperatura</span><b>' + (tmin != null ? Math.round(tmin) + '/' + Math.round(tmax) + '&deg;' : '-') + '</b></div>'
     + (sun && sun.alba ? '<div><span>Alba</span><b>' + rbkClock(sun.alba) + '</b></div>' : '')
     + (sun && sun.tramonto ? '<div><span>Tramonto</span><b>' + rbkClock(sun.tramonto) + '</b></div>' : '')
-    + '<div><span>Vento contrario</span><b>' + headKm.toFixed(0) + ' km</b></div>'
+    + '<div><span>Contrario</span><b>' + headKm.toFixed(0) + ' km</b></div>'
     + '<div><span>A favore</span><b>' + tailKm.toFixed(0) + ' km</b></div>'
     + '</div>';
 
-  // avvisi, in ordine di sicurezza
   if (sun && sun.tramonto && last.t > sun.tramonto - 20 * 60000) {
     var dopo = Math.round((last.t - sun.tramonto) / 60000);
     h += '<div class="warn red">&#x1F526; <b>Arrivi ' + (dopo > 0 ? 'dopo il tramonto (' + dopo + ' min)' : 'a ridosso del tramonto') + '</b>: '
@@ -182,23 +323,21 @@ function rbkWeatherBlocks() {
     }
   }
 
-  // tabella oraria con vento e sole
-  h += '<table class="wx"><thead><tr><th>Km</th><th>Ora</th><th>Quota</th><th>Temp</th><th>Vento</th><th>Raff.</th><th>Sole</th><th>Pioggia</th><th>Cielo</th></tr></thead><tbody>';
+  h += '<table class="wx"><thead><tr><th>Km</th><th>Ora</th><th>Quota</th><th>Temp</th><th>Vento</th><th>Raff.</th><th>Sole</th><th>Pioggia</th></tr></thead><tbody>';
   a.forEach(function (p) {
     var vento = "-";
     if (p.wind != null) {
-      var lab = p.kind === "cross" ? "lat." : (p.kind === "head" ? "contro" : "favore");
+      var lb = p.kind === "cross" ? "lat." : (p.kind === "head" ? "contro" : "favore");
       var val = p.kind === "cross" ? Math.round(p.cross) : Math.round(Math.abs(p.head));
-      vento = val + " " + lab + "<div class='sub2'>da " + rbkCompass(p.dir) + "</div>";
+      vento = val + " " + lb + "<div class='sub2'>da " + rbkCompass(p.dir) + "</div>";
     }
     var sole = "-";
     if (typeof ppSunAt === "function") {
       var s = ppSunAt(p.lat, p.lon, p.t, p.bearing);
       if (s) {
-        sole = s.kind === "buio" ? "&#x1F311; buio"
-          : s.kind === "basso" ? "&#x1F307; radente"
+        sole = s.kind === "buio" ? "&#x1F311; buio" : s.kind === "basso" ? "&#x1F307; radente"
           : (s.kind === "faccia" ? "&#x2600;&#xFE0F; in faccia" : s.kind === "spalle" ? "&#x2600;&#xFE0F; di spalle" : "&#x2600;&#xFE0F; laterale");
-        if (s.kind !== "buio") sole += "<div class='sub2'>" + Math.round(s.alt) + "&deg; sull'orizzonte</div>";
+        if (s.kind !== "buio") sole += "<div class='sub2'>" + Math.round(s.alt) + "&deg;</div>";
       }
     }
     h += '<tr><td class="km">' + p.km.toFixed(1) + '</td><td>' + rbkClock(p.t) + '</td>'
@@ -207,34 +346,78 @@ function rbkWeatherBlocks() {
       + '<td class="' + (p.kind === "head" ? "bad" : p.kind === "tail" ? "good" : "") + '">' + vento + '</td>'
       + '<td>' + (p.gust != null ? Math.round(p.gust) : '-') + '</td>'
       + '<td>' + sole + '</td>'
-      + '<td>' + (p.rain != null ? p.rain + '%' : '-') + (p.mm > 0.05 ? ' <small>' + p.mm.toFixed(1) + ' mm</small>' : '') + '</td>'
-      + '<td>' + (typeof skyGlyph === "function" ? skyGlyph(p) : '') + '</td></tr>';
+      + '<td>' + (p.rain != null ? p.rain + '%' : '-') + (p.mm > 0.05 ? ' <small>' + p.mm.toFixed(1) + ' mm</small>' : '') + '</td></tr>';
   });
   h += '</tbody></table>';
-  h += '<div class="note">Vento e sole sono relativi alla <b>direzione di marcia</b>. I modelli meteo hanno maglie di 2-11 km e non colgono come il vento si incanala nelle valli: in quota prendili come indicazione. La posizione del sole e\' invece un calcolo astronomico esatto.</div>';
+  h += '<div class="note">Vento e sole sono relativi alla <b>direzione di marcia</b>. La posizione del sole e\' un calcolo astronomico esatto; le previsioni hanno maglie di 2-11 km e non colgono come il vento si incanala nelle valli.</div>';
   return h;
+}
+
+/* ------------------------- tabelle acqua e ristori -------------------------- */
+function rbkWaterSection(sel) {
+  var w = (sel && sel.water) ? sel.water : [];
+  if (!w.length) {
+    return '<div class="hint">Nessun punto acqua in elenco. Se hai appena aperto il percorso attendi qualche secondo e rigenera: '
+      + 'la ricerca delle fontanelle parte da sola.</div>';
+  }
+  var onRoute = w.filter(function (x) { return x.dist <= 30; }).length;
+  var h = '<div class="cards small"><div><span>Punti acqua</span><b>' + w.length + '</b></div>'
+    + '<div><span>Sul percorso</span><b>' + onRoute + '</b></div>'
+    + '<div><span>Primo</span><b>km ' + rbkNum(w[0].km != null ? w[0].km : w[0].along) + '</b></div>'
+    + '<div><span>Ultimo</span><b>km ' + rbkNum(w[w.length - 1].along) + '</b></div></div>';
+  h += '<table class="svc"><thead><tr><th>Km</th><th>Fontanella</th><th>Dal percorso</th><th>Ora</th><th>&#x2713;</th></tr></thead><tbody>';
+  w.forEach(function (x) {
+    var eta = rbkEta(x.along);
+    h += '<tr><td class="km">' + rbkNum(x.along) + '</td>'
+      + '<td><b>' + rbkEsc(x.name || "Fontanella") + '</b>' + (x.pot && x.pot !== "Acqua potabile" ? '<div class="sub">' + rbkEsc(x.pot) + '</div>' : '') + '</td>'
+      + '<td>' + Math.round(x.dist) + ' m</td>'
+      + '<td class="eta">' + (eta ? rbkClock(eta) : '') + '</td><td class="chk"></td></tr>';
+  });
+  return h + '</tbody></table>';
+}
+function rbkFoodSection(sel) {
+  var f = (sel && sel.food) ? sel.food : [];
+  if (!f.length) {
+    return '<div class="hint">Nessun ristoro in elenco: attiva <b>Mostra bar, forni e alimentari</b> nel pannello del percorso e rigenera.</div>';
+  }
+  var open = f.filter(function (x) { return x.open === true; }).length;
+  var h = '<div class="cards small"><div><span>Ristori</span><b>' + f.length + '</b></div>'
+    + '<div><span>Aperti al passaggio</span><b>' + (rbkHasWeather() ? open : '?') + '</b></div>'
+    + '<div><span>Primo</span><b>km ' + rbkNum(f[0].along) + '</b></div>'
+    + '<div><span>Ultimo</span><b>km ' + rbkNum(f[f.length - 1].along) + '</b></div></div>';
+  h += '<table class="svc"><thead><tr><th>Km</th><th>Locale</th><th>Tipo</th><th>Dal perc.</th><th>Ora</th><th>Stato</th><th>&#x2713;</th></tr></thead><tbody>';
+  f.forEach(function (x) {
+    var eta = rbkEta(x.along);
+    var tag = x.open === true ? '<span class="ok">aperto</span>' : x.open === false ? '<span class="no">chiuso</span>' : '<span class="unk">ignoto</span>';
+    h += '<tr><td class="km">' + rbkNum(x.along) + '</td>'
+      + '<td><b>' + rbkEsc(x.name || x.kind) + '</b></td>'
+      + '<td>' + rbkEsc(x.kind || "") + '</td>'
+      + '<td>' + Math.round(x.dist) + ' m</td>'
+      + '<td class="eta">' + (eta ? rbkClock(eta) : '') + '</td>'
+      + '<td class="tg">' + tag + '</td><td class="chk"></td></tr>';
+  });
+  return h + '</tbody></table>';
 }
 
 /* ------------------------------ foglio completo ---------------------------- */
 function buildRoadbookHTML(title) {
   var sel = (typeof selectPOIs === "function") ? selectPOIs() : { water: [], food: [], mode: "all" };
+  var places = rbkPlaces();
   var dist = trackDist(rbTrack), asc = trackAscent(rbTrack);
   var els = rbTrack.map(function (t) { return t[2]; }).filter(function (v) { return v != null; });
   var top = els.length ? Math.round(Math.max.apply(null, els)) : null;
   var name = title || (rbStops && rbStops.length ? rbStops.map(function (s) { return s.name; }).join(" · ") : "Il mio giro");
-  var rows = rbkRows(sel);
+  var rows = rbkRows(sel, places);
   var today = new Date();
   var ds = ("0" + today.getDate()).slice(-2) + "/" + ("0" + (today.getMonth() + 1)).slice(-2) + "/" + today.getFullYear();
 
-  // blocco partenza: cosa ha scelto l'utente
-  var whenEl = document.getElementById("rw-when");
-  var partenza = "";
+  var whenEl = document.getElementById("rw-when"), partenza = "";
   if (whenEl && whenEl.value) {
     var d0 = new Date(whenEl.value);
     if (!isNaN(d0.getTime())) {
-      var giorni = ["domenica", "lunedi'", "martedi'", "mercoledi'", "giovedi'", "venerdi'", "sabato"];
-      var mesi = ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"];
-      partenza = giorni[d0.getDay()] + " " + d0.getDate() + " " + mesi[d0.getMonth()] + " " + d0.getFullYear()
+      var gg = ["domenica", "lunedi'", "martedi'", "mercoledi'", "giovedi'", "venerdi'", "sabato"];
+      var mm = ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"];
+      partenza = gg[d0.getDay()] + " " + d0.getDate() + " " + mm[d0.getMonth()] + " " + d0.getFullYear()
         + " alle " + ("0" + d0.getHours()).slice(-2) + ":" + ("0" + d0.getMinutes()).slice(-2);
     }
   }
@@ -246,17 +429,16 @@ function buildRoadbookHTML(title) {
     var tag = "";
     if (r.kind === "ristoro" && r.open === true) tag = '<span class="ok">aperto</span>';
     else if (r.kind === "ristoro" && r.open === false) tag = '<span class="no">chiuso</span>';
-    else if (r.kind === "ristoro") tag = '<span class="unk">orario ignoto</span>';
+    else if (r.kind === "ristoro") tag = '<span class="unk">ignoto</span>';
     body += '<tr class="' + r.kind + '">'
       + '<td class="km">' + rbkNum(r.km) + '</td>'
       + '<td class="ic">' + ico[r.kind] + '</td>'
-      + '<td><b>' + rbkEsc(r.label) + '</b><div class="sub">' + rbkEsc(r.extra || "") + '</div></td>'
+      + '<td><b>' + rbkEsc(r.label) + '</b><div class="sub">' + r.extra + '</div></td>'
       + '<td class="eta">' + (r.eta || "") + '</td>'
       + '<td class="tg">' + tag + '</td>'
       + '<td class="chk"></td></tr>';
   });
 
-  // riquadro fabbisogno
   var inf = sel.info, fab = "";
   if (inf) {
     fab = '<div class="cards small">'
@@ -267,42 +449,41 @@ function buildRoadbookHTML(title) {
       + '<div class="note">Stima con ciclista+bici 80 kg ed efficienza 23%: serve a decidere cosa mettere in tasca '
       + '(circa ' + Math.max(1, Math.round(inf.carbsG / 25)) + ' barrette e ' + Math.max(1, Math.ceil(inf.liters / 0.75)) + ' borracce), non e\' una misura.</div>';
   }
-
   var selNote = (typeof ppSummaryText === "function") ? ppSummaryText(sel) : "";
-  var conteggio = '<div class="note" style="margin-top:2px">Mostrati <b>' + (sel.water || []).length + '</b> punti acqua su ' + (sel.totalWater || 0)
-    + ' e <b>' + (sel.food || []).length + '</b> ristori su ' + (sel.totalFood || 0) + ' trovati lungo il percorso.</div>';
 
   return '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">'
     + '<meta name="viewport" content="width=device-width,initial-scale=1">'
     + '<title>Roadbook · ' + rbkEsc(name) + '</title><style>'
-    + '@page{size:A4;margin:13mm}'
+    + '@page{size:A4;margin:12mm}'
     + '*{box-sizing:border-box}'
-    + 'body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#0f172a;margin:0;padding:20px;font-size:11.5px;line-height:1.45}'
-    + 'h1{font-size:20px;margin:0 0 2px;letter-spacing:-.2px}'
+    + 'body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#0f172a;margin:0;padding:18px;font-size:11.5px;line-height:1.45}'
+    + 'h1{font-size:19px;margin:0 0 2px;letter-spacing:-.2px}'
     + '.meta{color:#64748b;font-size:10.5px;margin-bottom:4px}'
     + '.dep{background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:8px 11px;margin:8px 0;font-size:11px}'
-    + '.sec{font-size:12.5px;font-weight:700;color:#1e3a8a;border-bottom:2px solid #bfdbfe;padding-bottom:4px;margin:18px 0 9px}'
-    + '.cards{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}'
-    + '.cards div{flex:1;min-width:86px;border:1px solid #e2e8f0;border-radius:9px;padding:7px 9px;background:#f8fafc}'
+    + '.sec{font-size:12.5px;font-weight:700;color:#1e3a8a;border-bottom:2px solid #bfdbfe;padding-bottom:4px;margin:16px 0 8px}'
+    + '.cards{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}'
+    + '.cards div{flex:1;min-width:84px;border:1px solid #e2e8f0;border-radius:9px;padding:6px 9px;background:#f8fafc}'
     + '.cards span{display:block;font-size:8.5px;letter-spacing:.4px;color:#64748b;text-transform:uppercase}'
-    + '.cards b{font-size:14.5px}.cards.small b{font-size:13px}'
-    + '.prof{border:1px solid #e2e8f0;border-radius:9px;overflow:hidden;margin:8px 0 4px;background:#fff}'
-    + '.leg{display:flex;gap:14px;font-size:9px;color:#64748b;margin-bottom:10px}'
+    + '.cards b{font-size:14px}.cards.small b{font-size:12.5px}'
+    + '.prof,.plan{border:1px solid #e2e8f0;border-radius:9px;overflow:hidden;margin:8px 0 4px;background:#fff}'
+    + '.leg{display:flex;gap:14px;font-size:9px;color:#64748b;margin-bottom:8px;flex-wrap:wrap}'
     + '.leg i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2563eb;margin-right:4px}'
-    + '.leg i.sq{border-radius:2px;background:#ea580c}'
+    + '.leg i.sq{border-radius:2px;background:#ea580c}.leg i.pu{background:#7c3aed}.leg i.gr{background:#16a34a}'
     + 'table{width:100%;border-collapse:collapse;margin-top:4px}'
     + 'thead{display:table-header-group}'
     + 'th{text-align:left;font-size:8.5px;text-transform:uppercase;letter-spacing:.4px;color:#64748b;border-bottom:1.5px solid #cbd5e1;padding:5px 4px}'
     + 'td{border-bottom:1px solid #eef2f7;padding:5px 4px;vertical-align:top}'
     + 'tr{page-break-inside:avoid}'
     + '.km{width:42px;font-weight:700;color:#2563eb;white-space:nowrap}'
-    + '.ic{width:18px}.eta{width:36px;font-weight:600}.tg{width:66px}'
+    + '.ic{width:18px}.eta{width:36px;font-weight:600}.tg{width:60px}'
     + '.chk{width:20px;border-left:1px solid #eef2f7}'
     + '.chk:after{content:"";display:block;width:11px;height:11px;border:1px solid #94a3b8;border-radius:3px;margin:1px auto}'
     + '.sub{color:#64748b;font-size:9.5px}.sub2{color:#94a3b8;font-size:8.5px}'
-    + 'tr.tappa td{background:#f5f3ff}tr.tappa .km{color:#7c3aed}'
-    + 'tr.luogo td{background:#fafafa}tr.luogo .km{color:#475569}tr.luogo b{font-weight:600;color:#475569}'
-    + 'tr.acqua .km{color:#0284c7}'
+    + '.svc tbody tr:nth-child(odd) td{background:#f8fbff}'
+    + 'tr.tappa td{background:#f5f3ff}tr.tappa .km{color:#7c3aed}tr.tappa b{color:#5b21b6}'
+    + 'tr.luogo td{background:#fff}tr.luogo .km{color:#94a3b8}tr.luogo b{font-weight:400;color:#64748b;font-size:10.5px}'
+    + 'tr.acqua td{background:#f0f9ff}tr.acqua .km{color:#0284c7}'
+    + 'tr.ristoro td{background:#fff7ed}tr.ristoro .km{color:#ea580c}'
     + '.wx td{font-size:10px}.wx .bad{color:#b91c1c;font-weight:600}.wx .good{color:#15803d;font-weight:600}'
     + '.wx small{color:#64748b}'
     + '.ok{color:#166534;background:#dcfce7;border-radius:20px;padding:1px 6px;font-size:8.5px}'
@@ -314,9 +495,10 @@ function buildRoadbookHTML(title) {
     + '.warn.blue{background:#eff6ff;border:1px solid #bfdbfe}'
     + '.hint{background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:8px 10px;font-size:10px;margin:6px 0}'
     + '.note{color:#94a3b8;font-size:9px;margin-top:6px;line-height:1.4}'
-    + '.foot{margin-top:16px;border-top:1px solid #e2e8f0;padding-top:6px;color:#94a3b8;font-size:8.5px;display:flex;justify-content:space-between}'
-    + '.bar{background:#2563eb;color:#fff;padding:10px 14px;border-radius:10px;margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}'
+    + '.foot{margin-top:14px;border-top:1px solid #e2e8f0;padding-top:6px;color:#94a3b8;font-size:8.5px;display:flex;justify-content:space-between}'
+    + '.bar{background:#2563eb;color:#fff;padding:10px 14px;border-radius:10px;margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}'
     + '.bar button{font:inherit;font-weight:700;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;background:#fff;color:#1e3a5f}'
+    + '.brk{page-break-before:always}'
     + '@media print{.bar{display:none}body{padding:0}}'
     + '</style></head><body>'
     + '<div class="bar"><b>Roadbook pronto</b><button onclick="window.print()">Stampa / Salva come PDF</button>'
@@ -328,13 +510,22 @@ function buildRoadbookHTML(title) {
     + '<div><span>Distanza</span><b>' + rbkNum(dist) + ' km</b></div>'
     + '<div><span>Dislivello</span><b>' + asc + ' m</b></div>'
     + (top != null ? '<div><span>Quota max</span><b>' + top + ' m</b></div>' : '')
-    + '<div><span>Punti in elenco</span><b>' + rows.length + '</b></div></div>'
-    + '<div class="prof">' + rbkProfileSvg(720, 150, sel) + '</div>'
-    + '<div class="leg"><span><i></i>acqua</span><span><i class="sq"></i>ristori</span><span>numeri sotto il profilo = chilometri</span></div>'
+    + '<div><span>Acqua</span><b>' + (sel.water || []).length + '</b></div>'
+    + '<div><span>Ristori</span><b>' + (sel.food || []).length + '</b></div></div>'
+    + '<div class="prof">' + rbkProfileSvg(720, 240, sel, places) + '</div>'
+    + '<div class="leg"><span><i class="pu"></i>passi e tappe</span><span><i></i>acqua (km sotto)</span><span><i class="sq"></i>ristori (km sotto)</span></div>'
+    + '<div class="sec">&#x1F5FA;&#xFE0F; Mappa del giro</div>'
+    + '<div class="plan">' + rbkPlanSvg(720, 430, sel, places) + '</div>'
+    + '<div class="leg"><span><i class="gr"></i>partenza</span><span><i class="pu"></i>tappe</span><span><i></i>acqua</span><span><i class="sq"></i>ristori</span><span>i numeri corrispondono alle tappe in elenco</span></div>'
+    + '<div class="brk"></div>'
     + rbkWeatherBlocks()
+    + '<div class="sec">&#x1F4A7; Dove trovare acqua</div>' + rbkWaterSection(sel)
+    + '<div class="sec">&#x2615; Dove mangiare</div>' + rbkFoodSection(sel)
     + '<div class="sec">&#x1F392; Fabbisogno stimato</div>' + fab
-    + '<div class="sec">&#x1F5FA;&#xFE0F; Sequenza del giro</div>'
-    + '<div class="note" style="margin:0 0 4px">' + selNote + '</div>' + conteggio
+    + '<div class="sec">&#x1F4CB; Sequenza completa</div>'
+    + '<div class="note" style="margin:0 0 4px">' + selNote + '</div>'
+    + '<div class="note" style="margin-top:0">Mostrati <b>' + (sel.water || []).length + '</b> punti acqua su ' + (sel.totalWater || 0)
+    + ' e <b>' + (sel.food || []).length + '</b> ristori su ' + (sel.totalFood || 0) + ' trovati; i paesi sono diradati a uno ogni ~4 km.</div>'
     + '<table><thead><tr><th>Km</th><th></th><th>Punto</th><th>Ora</th><th>Stato</th><th>&#x2713;</th></tr></thead>'
     + '<tbody>' + (body || '<tr><td colspan="6" style="color:#64748b">Nessun punto disponibile.</td></tr>') + '</tbody></table>'
     + '<div class="foot"><span>locaride.app &middot; ride like a local</span>'
@@ -342,8 +533,6 @@ function buildRoadbookHTML(title) {
     + '</body></html>';
 }
 
-/* Apre il roadbook. Prima recupera i paesi attraversati (una sola richiesta,
-   fatta solo qui: nel resto dell'app non serve). */
 function openRoadbook() {
   if (!rbTrack || rbTrack.length < 2) {
     if (typeof flashInfo === "function") flashInfo("Calcola o apri prima un percorso.");
