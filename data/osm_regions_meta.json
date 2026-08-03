@@ -68,5 +68,10 @@
   ],
   "target": "spain-canarie",
   "builtAt": "2026-08-02"
+ },
+ "osm_passes_fr_corse.json": {
+  "bbox": null,
+  "target": "france-corse",
+  "builtAt": "2026-08-03"
  }
 }
