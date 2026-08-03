@@ -63,91 +63,145 @@ function rbkPlaceLabel(p) {
   return p.place === "city" ? "citta'" : p.place === "town" ? "paese" : "frazione";
 }
 
-/* ------------------------- profilo con le etichette ------------------------ */
-function rbkProfileSvg(w, h, sel, places) {
+/* ------------------- profilo altimetrico in stile corsa ------------------- */
+/* Scala delle quote su valori tondi, riempimento colorato per pendenza, nomi
+   scritti per intero sopra il grafico con la quota accanto - come i profili di
+   tappa delle corse. Lo spazio in alto viene CALCOLATO sulla lunghezza del nome
+   piu' lungo, cosi' nessuna etichetta finisce tagliata. */
+
+/* Passo "tondo" per l'asse delle quote: 50/100/200/250/500/1000 m secondo il
+   dislivello complessivo. Le linee cadono su multipli esatti (1000, 1200, ...). */
+function rbkNiceStep(range) {
+  var cand = [50, 100, 200, 250, 500, 1000];
+  for (var i = 0; i < cand.length; i++) if (range / cand[i] <= 6) return cand[i];
+  return 1000;
+}
+function rbkGradColor(g) {
+  if (g < 0.02) return "#93c5fd";
+  if (g < 0.05) return "#22c55e";
+  if (g < 0.08) return "#facc15";
+  if (g < 0.11) return "#f97316";
+  return "#dc2626";
+}
+
+function rbkProfileSvg(w, hBody, sel, places) {
   var els = rbTrack.map(function (t) { return t[2]; }).filter(function (v) { return v != null; });
   if (els.length < 2) return "";
-  var mn = Math.min.apply(null, els), mx = Math.max.apply(null, els), rng = Math.max(1, mx - mn);
+  var eMin = Math.min.apply(null, els), eMax = Math.max.apply(null, els);
+  var stepE = rbkNiceStep(eMax - eMin);
+  var mn = Math.floor(eMin / stepE) * stepE;            // base tonda
+  var mx = Math.ceil(eMax / stepE) * stepE;             // tetto tondo
+  var rng = Math.max(stepE, mx - mn);
   var cum = rbkCum(), tot = cum[cum.length - 1] || 1;
-  var LAB = 62;                        // fascia in alto per i nomi
-  var TOP = LAB, BOT = h - 30, IH = BOT - TOP;
-  var n = 240, pts = [];
-  for (var k = 0; k < n; k++) {
-    var idx = Math.round(k * (rbTrack.length - 1) / (n - 1));
-    var e = rbTrack[idx][2];
-    if (e == null) e = pts.length ? pts[pts.length - 1][1] : mn;
-    pts.push([(k / (n - 1)) * w, e]);
-  }
-  var Y = function (e) { return BOT - ((e - mn) / rng) * IH; };
-  var X = function (km) { return (Math.max(0, Math.min(tot, km)) / tot) * w; };
+  var PL = 42, PR = 12;                                  // spazio per le quote a sinistra
+  var iw = w - PL - PR;
+
+  /* --- etichette: si decide PRIMA quali stanno, poi si dimensiona l'altezza --- */
   var eleAt = function (km) {
     var i = 0; while (i < cum.length - 1 && cum[i] < km) i++;
-    return rbTrack[i] && rbTrack[i][2] != null ? rbTrack[i][2] : mn;
+    return rbTrack[i] && rbTrack[i][2] != null ? rbTrack[i][2] : eMin;
   };
+  var X = function (km) { return PL + (Math.max(0, Math.min(tot, km)) / tot) * iw; };
 
-  var area = "M0," + BOT + " " + pts.map(function (p) { return "L" + p[0].toFixed(1) + "," + Y(p[1]).toFixed(1); }).join(" ") + " L" + w + "," + BOT + " Z";
-  var line = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + "," + Y(p[1]).toFixed(1); }).join(" ");
-
-  var grid = "";
-  for (var g = 1; g <= 3; g++) {
-    var yy = BOT - IH * g / 4, val = Math.round(mn + rng * g / 4);
-    grid += '<line x1="0" y1="' + yy.toFixed(1) + '" x2="' + w + '" y2="' + yy.toFixed(1) + '" stroke="#e2e8f0" stroke-width="0.6"/>'
-      + '<text x="2" y="' + (yy - 2).toFixed(1) + '" font-size="7.5" fill="#94a3b8">' + val + '</text>';
-  }
-  var step = tot > 120 ? 20 : tot > 60 ? 10 : tot > 25 ? 5 : 2, ticks = "";
-  for (var km = step; km < tot; km += step) {
-    ticks += '<line x1="' + X(km).toFixed(1) + '" y1="' + BOT + '" x2="' + X(km).toFixed(1) + '" y2="' + (BOT + 3) + '" stroke="#cbd5e1" stroke-width="0.6"/>'
-      + '<text x="' + X(km).toFixed(1) + '" y="' + (BOT + 12) + '" font-size="7.5" fill="#94a3b8" text-anchor="middle">' + km + '</text>';
-  }
-
-  /* Etichette in alto: prima i passi/tappe (importanti), poi i paesi se resta
-     spazio. Si scarta chi cadrebbe addosso all'etichetta precedente. */
   var labels = [];
   (rbStops || []).forEach(function (s, i) {
     var km = rbkStopKm(s);
     if (km == null) return;
-    labels.push({ km: km, name: s.name || ("Tappa " + (i + 1)), major: s.type !== "point" });
+    var q = Math.round(eleAt(km));
+    var major = s.type !== "point";
+    labels.push({ km: km, major: major, text: (s.name || ("Tappa " + (i + 1))) + (major ? "  " + q + " m" : "") });
   });
-  (places || []).forEach(function (p) { labels.push({ km: p.along, name: p.name, major: false }); });
+  (places || []).forEach(function (p) { labels.push({ km: p.along, major: false, text: p.name }); });
   labels.sort(function (a, b) { return a.km - b.km; });
+
   var placed = [], lastX = -999;
   labels.forEach(function (l) {
     var x = X(l.km);
-    if (x - lastX < 13 && !l.major) return;          // troppo vicine: il paese cede il posto
-    if (x - lastX < 9) return;
+    if (x - lastX < (l.major ? 11 : 15)) {
+      // se il nuovo e' un passo e il precedente era un paese, il passo ha la precedenza
+      if (l.major && placed.length && !placed[placed.length - 1].major) { placed.pop(); }
+      else return;
+    }
     placed.push(l); lastX = x;
   });
 
+  // altezza necessaria in alto: il testo ruotato cresce verso l'alto
+  var maxChars = 0;
+  placed.forEach(function (l) { if (l.text.length > maxChars) maxChars = l.text.length; });
+  var FS_MAJ = 9, FS_MIN = 7.8;
+  var LAB = Math.min(150, Math.max(46, Math.round(maxChars * FS_MAJ * 0.56) + 16));
+  var TOP = LAB, BOT = TOP + hBody, H = BOT + 44;        // 44 sotto: km + fascia servizi
+  var IH = BOT - TOP;
+  var Y = function (e) { return BOT - ((e - mn) / rng) * IH; };
+
+  /* --- riempimento a colonne colorate per pendenza --- */
+  var n = Math.max(60, Math.min(400, Math.round(iw)));
+  var ser = [], idxs = [];
+  for (var k = 0; k < n; k++) {
+    var target = tot * k / (n - 1), i2 = 0;
+    while (i2 < cum.length - 1 && cum[i2] < target) i2++;
+    idxs.push(i2);
+    var e2 = rbTrack[i2][2];
+    ser.push(e2 == null ? (ser.length ? ser[ser.length - 1] : eMin) : e2);
+  }
+  var mPerCol = (tot * 1000) / n, cols = "";
+  for (var k2 = 1; k2 < n; k2++) {
+    var g = (ser[k2] - ser[k2 - 1]) / Math.max(1, mPerCol);
+    var x0 = PL + ((k2 - 1) / (n - 1)) * iw, x1 = PL + (k2 / (n - 1)) * iw;
+    cols += '<rect x="' + x0.toFixed(1) + '" y="' + Y(ser[k2]).toFixed(1) + '" width="' + Math.max(0.8, x1 - x0 + 0.6).toFixed(1)
+      + '" height="' + Math.max(0, BOT - Y(ser[k2])).toFixed(1) + '" fill="' + rbkGradColor(g) + '" opacity="0.85"/>';
+  }
+  var line = ser.map(function (e, i) { return (i ? "L" : "M") + (PL + (i / (n - 1)) * iw).toFixed(1) + "," + Y(e).toFixed(1); }).join(" ");
+
+  /* --- griglia quote su valori tondi --- */
+  var grid = "";
+  for (var q2 = mn; q2 <= mx + 0.1; q2 += stepE) {
+    var yy = Y(q2);
+    grid += '<line x1="' + PL + '" y1="' + yy.toFixed(1) + '" x2="' + (w - PR) + '" y2="' + yy.toFixed(1) + '" stroke="#e2e8f0" stroke-width="0.7"/>'
+      + '<text x="' + (PL - 5) + '" y="' + (yy + 3).toFixed(1) + '" font-size="8.5" fill="#64748b" text-anchor="end">' + q2 + '</text>';
+  }
+  grid += '<text x="' + (PL - 5) + '" y="' + (TOP - 6) + '" font-size="7.5" fill="#94a3b8" text-anchor="end">m</text>';
+
+  /* --- asse dei km --- */
+  var stepK = tot > 200 ? 25 : tot > 120 ? 20 : tot > 60 ? 10 : tot > 25 ? 5 : 2, ticks = "";
+  for (var km2 = 0; km2 <= tot + 0.01; km2 += stepK) {
+    var xx = X(km2);
+    ticks += '<line x1="' + xx.toFixed(1) + '" y1="' + BOT + '" x2="' + xx.toFixed(1) + '" y2="' + (BOT + 4) + '" stroke="#cbd5e1" stroke-width="0.8"/>'
+      + '<text x="' + xx.toFixed(1) + '" y="' + (BOT + 14) + '" font-size="8" fill="#64748b" text-anchor="middle">' + Math.round(km2) + '</text>';
+  }
+  ticks += '<text x="' + (w - PR) + '" y="' + (BOT + 14) + '" font-size="7.5" fill="#94a3b8" text-anchor="end">km</text>';
+
+  /* --- etichette verticali con linea di richiamo --- */
   var lab = "";
   placed.forEach(function (l) {
     var x = X(l.km), ey = Y(eleAt(l.km));
-    var col = l.major ? "#7c3aed" : "#64748b";
-    var nome = l.name.length > 22 ? l.name.slice(0, 21) + "…" : l.name;
-    lab += '<line x1="' + x.toFixed(1) + '" y1="' + (LAB - 4) + '" x2="' + x.toFixed(1) + '" y2="' + ey.toFixed(1) + '" stroke="' + col + '" stroke-width="0.7" stroke-dasharray="2,2" opacity="0.65"/>'
-      + '<circle cx="' + x.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="' + (l.major ? 2.6 : 1.8) + '" fill="' + col + '"/>'
-      + '<text transform="rotate(-90 ' + x.toFixed(1) + ' ' + (LAB - 7) + ')" x="' + x.toFixed(1) + '" y="' + (LAB - 7) + '" '
-      + 'font-size="' + (l.major ? 8.5 : 7.5) + '" fill="' + col + '" font-weight="' + (l.major ? 700 : 400) + '">' + rbkEsc(nome) + '</text>';
+    var col = l.major ? "#6d28d9" : "#64748b";
+    var fs = l.major ? FS_MAJ : FS_MIN;
+    lab += '<line x1="' + x.toFixed(1) + '" y1="' + (TOP - 3) + '" x2="' + x.toFixed(1) + '" y2="' + ey.toFixed(1) + '" stroke="' + col + '" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.6"/>'
+      + '<circle cx="' + x.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="' + (l.major ? 3 : 2) + '" fill="' + col + '" stroke="#fff" stroke-width="1"/>'
+      + '<text transform="rotate(-90 ' + x.toFixed(1) + ' ' + (TOP - 7) + ')" x="' + x.toFixed(1) + '" y="' + (TOP - 7) + '" '
+      + 'font-size="' + fs + '" fill="' + col + '" font-weight="' + (l.major ? 700 : 400) + '">' + rbkEsc(l.text) + '</text>';
   });
 
-  /* Servizi: fascia sotto il profilo, con il km sotto ogni segno. */
+  /* --- fascia servizi sotto l'asse --- */
   var svc = "";
   (sel && sel.water ? sel.water : []).forEach(function (wp) {
     var x = X(wp.along);
-    svc += '<circle cx="' + x.toFixed(1) + '" cy="' + (BOT + 20) + '" r="3.2" fill="#2563eb"/>'
-      + '<text x="' + x.toFixed(1) + '" y="' + (BOT + 29) + '" font-size="6.5" fill="#2563eb" text-anchor="middle">' + wp.along.toFixed(0) + '</text>';
+    svc += '<circle cx="' + x.toFixed(1) + '" cy="' + (BOT + 26) + '" r="3.4" fill="#2563eb"/>'
+      + '<text x="' + x.toFixed(1) + '" y="' + (BOT + 39) + '" font-size="7" fill="#2563eb" text-anchor="middle">' + wp.along.toFixed(0) + '</text>';
   });
   (sel && sel.food ? sel.food : []).forEach(function (st) {
     var x = X(st.along);
-    svc += '<rect x="' + (x - 3).toFixed(1) + '" y="' + (BOT + 17) + '" width="6" height="6" rx="1.2" fill="#ea580c"/>'
-      + '<text x="' + x.toFixed(1) + '" y="' + (BOT + 29) + '" font-size="6.5" fill="#ea580c" text-anchor="middle">' + st.along.toFixed(0) + '</text>';
+    svc += '<rect x="' + (x - 3.2).toFixed(1) + '" y="' + (BOT + 22.8) + '" width="6.4" height="6.4" rx="1.3" fill="#ea580c"/>'
+      + '<text x="' + x.toFixed(1) + '" y="' + (BOT + 39) + '" font-size="7" fill="#ea580c" text-anchor="middle">' + st.along.toFixed(0) + '</text>';
   });
 
-  return '<svg width="100%" viewBox="0 0 ' + w + ' ' + (h + 4) + '" style="display:block">'
-    + grid + ticks
-    + '<path d="' + area + '" fill="#dbeafe"/>'
-    + '<path d="' + line + '" fill="none" stroke="#2563eb" stroke-width="1.4"/>'
-    + lab + svc
-    + '<text x="' + (w - 2) + '" y="' + (LAB - 52) + '" font-size="8" fill="#64748b" text-anchor="end">' + tot.toFixed(1) + ' km &middot; ' + Math.round(mn) + '-' + Math.round(mx) + ' m</text>'
+  return '<svg width="100%" viewBox="0 0 ' + w + ' ' + H + '" style="display:block">'
+    + grid
+    + cols
+    + '<path d="' + line + '" fill="none" stroke="#1e3a8a" stroke-width="1.6"/>'
+    + '<line x1="' + PL + '" y1="' + BOT + '" x2="' + (w - PR) + '" y2="' + BOT + '" stroke="#cbd5e1" stroke-width="1"/>'
+    + ticks + lab + svc
     + '</svg>';
 }
 
@@ -512,11 +566,17 @@ function buildRoadbookHTML(title) {
     + (top != null ? '<div><span>Quota max</span><b>' + top + ' m</b></div>' : '')
     + '<div><span>Acqua</span><b>' + (sel.water || []).length + '</b></div>'
     + '<div><span>Ristori</span><b>' + (sel.food || []).length + '</b></div></div>'
-    + '<div class="prof">' + rbkProfileSvg(720, 240, sel, places) + '</div>'
-    + '<div class="leg"><span><i class="pu"></i>passi e tappe</span><span><i></i>acqua (km sotto)</span><span><i class="sq"></i>ristori (km sotto)</span></div>'
+    + '<div class="prof">' + rbkProfileSvg(720, 200, sel, places) + '</div>'
+    + '<div class="leg"><span><i class="pu"></i>passi e tappe (con quota)</span><span><i></i>acqua (km sotto)</span><span><i class="sq"></i>ristori (km sotto)</span>'
+    + '<span>colore = pendenza: <b style="color:#22c55e">&lt;5%</b> <b style="color:#facc15">5-8%</b> <b style="color:#f97316">8-11%</b> <b style="color:#dc2626">&gt;11%</b></span></div>'
     + '<div class="sec">&#x1F5FA;&#xFE0F; Mappa del giro</div>'
-    + '<div class="plan">' + rbkPlanSvg(720, 430, sel, places) + '</div>'
-    + '<div class="leg"><span><i class="gr"></i>partenza</span><span><i class="pu"></i>tappe</span><span><i></i>acqua</span><span><i class="sq"></i>ristori</span><span>i numeri corrispondono alle tappe in elenco</span></div>'
+    + '<div class="plan">'
+    + (rbkMapImg
+        ? '<img src="' + rbkMapImg + '" style="display:block;width:100%">'
+        : rbkPlanSvg(720, 430, sel, places))
+    + '</div>'
+    + '<div class="leg"><span><i class="gr"></i>partenza</span><span><i class="pu"></i>tappe</span><span><i></i>acqua</span><span><i class="sq"></i>ristori</span>'
+    + (rbkMapImg ? '<span>&copy; OpenStreetMap contributors</span>' : '<span>i numeri corrispondono alle tappe in elenco</span>') + '</div>'
     + '<div class="brk"></div>'
     + rbkWeatherBlocks()
     + '<div class="sec">&#x1F4A7; Dove trovare acqua</div>' + rbkWaterSection(sel)
@@ -533,14 +593,26 @@ function buildRoadbookHTML(title) {
     + '</body></html>';
 }
 
+/* Immagine della mappa (tessere OSM incorporate); resta null se non disponibile
+   e in quel caso il foglio usa la mappa vettoriale. */
+var rbkMapImg = null;
+
 function openRoadbook() {
   if (!rbTrack || rbTrack.length < 2) {
     if (typeof flashInfo === "function") flashInfo("Calcola o apri prima un percorso.");
     return;
   }
   if (typeof flashInfo === "function") flashInfo("Preparo il roadbook&#8230;");
-  if (typeof loadRoutePlaces === "function") loadRoutePlaces(function () { rbkOpenWindow(); });
-  else rbkOpenWindow();
+  var afterPlaces = function () {
+    var sel = (typeof selectPOIs === "function") ? selectPOIs() : { water: [], food: [] };
+    var places = rbkPlaces();
+    if (typeof rbmBuild === "function") {
+      if (typeof flashInfo === "function") flashInfo("Scarico la mappa&#8230;");
+      rbmBuild(sel, places, function (dataUrl) { rbkMapImg = dataUrl; rbkOpenWindow(); });
+    } else rbkOpenWindow();
+  };
+  if (typeof loadRoutePlaces === "function") loadRoutePlaces(afterPlaces);
+  else afterPlaces();
 }
 function rbkOpenWindow() {
   var html = buildRoadbookHTML(null);
