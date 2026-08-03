@@ -74,6 +74,8 @@ var ACTIONS = {
   openMyStats: function () { openMyStats(); },
   toggleLang: function () { toggleLang(); },
   fbLogout: function () { fbLogout(); },
+  retryRouteWater: function () { retryRouteWater(); return false; },
+  retryRwStops: function () { retryRwStops(); return false; },
   profileOpen: function () { profileOpen(); },
   submitVote: function (el) { submitVote(el.getAttribute("data-id")); },
   fbResend: function () { fbResend(); return false; }, // <a> link: false -> preventDefault
