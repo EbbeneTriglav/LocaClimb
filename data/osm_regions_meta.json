@@ -1,0 +1,97 @@
+{
+ "osm_passes_si.json": {
+  "bbox": null,
+  "target": "slovenia",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_bal.json": {
+  "bbox": [
+   1.1,
+   38.6,
+   4.4,
+   40.2
+  ],
+  "target": "spain-baleari",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_de_by.json": {
+  "bbox": null,
+  "target": "germany-bayern",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_pt.json": {
+  "bbox": null,
+  "target": "portugal",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_n.json": {
+  "bbox": [
+   -9.6,
+   41.4,
+   3.5,
+   44
+  ],
+  "target": "spain-nord",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_s.json": {
+  "bbox": [
+   -7.7,
+   35.8,
+   0.9,
+   38.5
+  ],
+  "target": "spain-sud",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_fr_mp.json": {
+  "bbox": null,
+  "target": "france-midi-pyrenees",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_c.json": {
+  "bbox": [
+   -9.6,
+   38.4,
+   3.5,
+   41.5
+  ],
+  "target": "spain-centro",
+  "builtAt": "2026-08-02"
+ },
+ "osm_passes_es_can.json": {
+  "bbox": [
+   -18.4,
+   27.4,
+   -13.2,
+   29.6
+  ],
+  "target": "spain-canarie",
+  "builtAt": "2026-08-03"
+ },
+ "osm_passes_fr_corse.json": {
+  "bbox": null,
+  "target": "france-corse",
+  "builtAt": "2026-08-03"
+ },
+ "osm_passes_hr.json": {
+  "bbox": null,
+  "target": "croatia",
+  "builtAt": "2026-08-03"
+ },
+ "osm_passes_ba.json": {
+  "bbox": null,
+  "target": "bosnia",
+  "builtAt": "2026-08-03"
+ },
+ "osm_passes_rs.json": {
+  "bbox": null,
+  "target": "serbia",
+  "builtAt": "2026-08-03"
+ },
+ "osm_passes_fr_auv.json": {
+  "bbox": null,
+  "target": "france-auvergne",
+  "builtAt": "2026-08-03"
+ }
+}
