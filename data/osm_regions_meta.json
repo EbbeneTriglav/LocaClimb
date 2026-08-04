@@ -123,5 +123,10 @@
   ],
   "target": "confine-es-pt",
   "builtAt": "2026-08-04"
+ },
+ "osm_passes_ch.json": {
+  "bbox": null,
+  "target": "switzerland",
+  "builtAt": "2026-08-04"
  }
 }
