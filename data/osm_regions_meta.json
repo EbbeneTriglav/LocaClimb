@@ -123,5 +123,15 @@
   "bbox": null,
   "target": "switzerland",
   "builtAt": "2026-08-04"
+ },
+ "osm_passes_xb_fres.json": {
+  "bbox": [
+   -1.9,
+   42.2,
+   3.3,
+   43.4
+  ],
+  "target": "confine-fr-es",
+  "builtAt": "2026-08-04"
  }
 }
