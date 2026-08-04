@@ -178,9 +178,9 @@ jobs:
               echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'bbox=1.1,38.6,4.4,40.2' >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_es_bal.json' >> "$GITHUB_OUTPUT" ;;
-            spain-canarie)        # Teide, Masca
-              echo "pbf=$GF/spain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
-              echo 'bbox=-18.4,27.4,-13.2,29.6' >> "$GITHUB_OUTPUT"
+            spain-canarie)        # Teide, Masca - estratto AFRICA (Geofabrik divide per geografia,
+                                  # le Canarie NON sono in europe/spain): niente bbox, il file e' gia' solo isole
+              echo "pbf=https://download.geofabrik.de/africa/canary-islands-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_es_can.json' >> "$GITHUB_OUTPUT" ;;
 
             # ---------- Portogallo (isole comprese) ----------
