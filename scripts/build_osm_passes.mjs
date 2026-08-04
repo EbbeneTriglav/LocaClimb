@@ -209,7 +209,17 @@ const PAVED_HW = { trunk:1, trunk_link:1, primary:1, primary_link:1, secondary:1
 function rideable(t) {
   if (!t || !t.highway) return false;
   if (t.motorroad === "yes") return false;
-  if (t.bicycle === "no" || t.bicycle === "dismount") return false;
+  // bicycle=no su un PASSAGGIO DENTRO UN EDIFICIO (casello, portico) descrive la corsia, non
+  // l'itinerario: al Timmelsjoch due tratti di 10 m e 8 m dentro il casello (tunnel=
+  // building_passage, toll=yes) vetavano l'intera discesa austriaca, lasciando il passo
+  // scollegato da Obergurgl, Zwieselstein e Solden. Stesso ragionamento gia' usato per
+  // mtb:scale qui sotto: un tag che SEVERA una strada asfaltata di classe superiore e' un
+  // dettaglio locale, non un divieto sulla salita. Un divieto vero copre tutta la strada.
+  if (t.bicycle === "no" || t.bicycle === "dismount") {
+    const passage = t.tunnel === "building_passage";
+    const pavedCls = PAVED_SURF[t.surface] || (!t.surface && PAVED_HW[t.highway]);
+    if (!(passage && pavedCls)) return false;
+  }
   if (t.access === "private" || t.access === "no") return false;
   // mtb:scale on a PAVED road is a mapping quirk - an MTB itinerary drawn over the tarmac. Two SR48
   // segments between Pordoi and Canazei carry it, and vetoing any way that has the tag severed the
