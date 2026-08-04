@@ -133,5 +133,10 @@
   ],
   "target": "confine-fr-es",
   "builtAt": "2026-08-04"
+ },
+ "osm_passes_fr_paca.json": {
+  "bbox": null,
+  "target": "france-paca",
+  "builtAt": "2026-08-04"
  }
 }
