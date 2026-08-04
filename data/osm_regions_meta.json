@@ -134,9 +134,15 @@
   "target": "confine-fr-es",
   "builtAt": "2026-08-04"
  },
+<<<<<<< Updated upstream
  "osm_passes_fr_paca.json": {
   "bbox": null,
   "target": "france-paca",
+=======
+ "osm_passes_fr_aq.json": {
+  "bbox": null,
+  "target": "france-aquitaine",
+>>>>>>> Stashed changes
   "builtAt": "2026-08-04"
  }
 }
