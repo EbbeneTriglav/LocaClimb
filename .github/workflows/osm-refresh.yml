@@ -48,21 +48,34 @@ jobs:
       - name: Bake curated routes
         run: node scripts/bake_routes.mjs --out routes_baked.json --data passes_data.js
 
-      # Marker index: what the frontend loads first so the map is populated immediately.
-      - name: Build marker index
-        run: node scripts/build_osm_index.mjs
-
-      - name: Commit changes
+      - name: Commit changes (a prova di conflitto)
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "actions@users.noreply.github.com"
           rm -rf build_tmp node_modules package.json package-lock.json
-          if git diff --quiet -- data/osm_passes.json data/curated_overrides.json data/routes_baked.json data/osm_index.json; then
-            echo "No changes"; exit 0
-          fi
-          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/osm_passes.json')).length)")
-          ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('data/osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
-          git add data/osm_passes.json data/curated_overrides.json data/routes_baked.json data/osm_index.json
-          git commit -m "data: PBF+DEM build (${COUNT} passes, ${ENR} enriched)"
-          git pull --rebase origin main
-          git push
+          mkdir -p "$RUNNER_TEMP/keep"
+          cp data/osm_passes.json data/curated_overrides.json data/routes_baked.json "$RUNNER_TEMP/keep/" 2>/dev/null || true
+          ok=0
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main            # base = remoto pulito, niente rebase/autostash
+            cp "$RUNNER_TEMP/keep/"* data/ 2>/dev/null || true   # rimetti i file appena costruiti
+            node -e '
+              const fs=require("fs");
+              let f=fs.readdirSync("data").filter(x=>/^osm_passes.*\.json$/.test(x));
+              f=f.filter(x=>x==="osm_passes.json").concat(f.filter(x=>x!=="osm_passes.json").sort());
+              fs.writeFileSync("data/osm_regions.json",JSON.stringify(f)+"\n");
+            '
+            node scripts/build_osm_index.mjs
+            if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then
+              echo "ERRORE: marcatori di conflitto nei dati, non pubblico."; exit 1
+            fi
+            git add data/
+            if git diff --staged --quiet; then echo "No changes"; ok=1; break; fi
+            COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/osm_passes.json')).length)")
+            ENR=$(node -e "const a=JSON.parse(require('fs').readFileSync('data/osm_passes.json'));console.log(a.filter(p=>p.versanti&&p.versanti.length).length)")
+            git commit -m "data: PBF+DEM build (${COUNT} passes, ${ENR} enriched)"
+            if git push; then ok=1; break; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
+          done
+          [ "$ok" = 1 ] || { echo "push fallito dopo 5 tentativi"; exit 1; }

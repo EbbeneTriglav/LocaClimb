@@ -70,17 +70,44 @@ jobs:
           LC_PBF: ${{ steps.cfg.outputs.pbf }}
           LC_BBOX: ${{ steps.cfg.outputs.bbox }}
         run: node scripts/build_osm_passes.mjs --out ${{ steps.cfg.outputs.out }}
-      - name: Build marker index
-        run: node scripts/build_osm_index.mjs
-
-      - name: Commit result
+      # Commit a prova di conflitto: base origin/main pulito, manifesto+index rigenerati
+      # dal disco (cosi' il file xb_* viene ANCHE registrato nel manifesto, prima no),
+      # guardia sui marcatori, retry sul push.
+      - name: Commit & push (a prova di conflitto)
+        env:
+          OUTF: ${{ steps.cfg.outputs.out }}
+          ZBBOX: ${{ steps.cfg.outputs.bbox }}
+          ZONE: ${{ github.event.inputs.zone }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -n "$(git status --porcelain data/${{ steps.cfg.outputs.out }})" ]; then
-            git add data/${{ steps.cfg.outputs.out }} data/osm_index.json
-            git commit -m "osm-border: build ${{ github.event.inputs.zone }} [skip ci]"
-            git push
-          else
-            echo "Nessuna variazione."
-          fi
+          git config user.name  "locaclimb-bot"
+          git config user.email "locaclimb-bot@users.noreply.github.com"
+          cp "data/$OUTF" "$RUNNER_TEMP/$OUTF"
+          ok=0
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/$OUTF" "data/$OUTF"
+            node -e '
+              const fs=require("fs"),p="data/osm_regions_meta.json";
+              let m={};try{m=JSON.parse(fs.readFileSync(p,"utf8"));}catch(e){}
+              const bb=(process.env.ZBBOX||"").trim();
+              m[process.env.OUTF]={bbox:bb?bb.split(",").map(Number):null,target:process.env.ZONE,builtAt:new Date().toISOString().slice(0,10)};
+              fs.writeFileSync(p,JSON.stringify(m,null,1));
+            '
+            node -e '
+              const fs=require("fs");
+              let f=fs.readdirSync("data").filter(x=>/^osm_passes.*\.json$/.test(x));
+              f=f.filter(x=>x==="osm_passes.json").concat(f.filter(x=>x!=="osm_passes.json").sort());
+              fs.writeFileSync("data/osm_regions.json",JSON.stringify(f)+"\n");
+            '
+            node scripts/build_osm_index.mjs
+            if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then
+              echo "ERRORE: marcatori di conflitto nei dati, non pubblico."; exit 1
+            fi
+            git add data/
+            if git diff --staged --quiet; then echo "Nessuna variazione."; ok=1; break; fi
+            git commit -m "osm-border: build $ZONE [skip ci]"
+            if git push; then ok=1; break; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
+          done
+          [ "$ok" = 1 ] || { echo "push fallito dopo 5 tentativi"; exit 1; }
