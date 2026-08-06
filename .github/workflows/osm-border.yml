@@ -27,7 +27,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: osm-border
+  group: osm-data
   cancel-in-progress: false
 
 jobs:

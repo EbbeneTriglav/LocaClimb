@@ -15,7 +15,7 @@ on:
     - cron: "17 3 1 1 *"   # yearly (Jan 1, 03:17 UTC); climbs rarely change - run mostly manually
 
 concurrency:
-  group: osm-refresh
+  group: osm-data
   cancel-in-progress: false
 
 permissions:

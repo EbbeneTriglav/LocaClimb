@@ -85,7 +85,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: osm-expand
+  group: osm-data          # condiviso con osm-refresh e osm-border: serializza chi scrive i manifesti
   cancel-in-progress: false
 
 jobs:
@@ -346,59 +346,50 @@ jobs:
             console.log("Esempi: "+a.slice(0,8).map(x=>x.name+" ("+(x.elevation||"?")+" m)").join(" | "));
           '
 
-      # Aggiunta non distruttiva: se il file e' nuovo lo registra nel manifest che il
-      # frontend legge, cosi' non serve ricordarsi di farlo a mano.
-      - name: Add to osm_regions.json
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        env:
-          OUTF: ${{ steps.cfg.outputs.out }}
-        run: |
-          node -e '
-            const fs=require("fs");
-            const p="data/osm_regions.json";
-            const l=JSON.parse(fs.readFileSync(p,"utf8"));
-            if(!l.includes(process.env.OUTF)){ l.push(process.env.OUTF); fs.writeFileSync(p, JSON.stringify(l)); console.log("aggiunto: "+process.env.OUTF); }
-            else console.log("gia present: "+process.env.OUTF);
-          '
-
-      # Riquadro geografico di ogni file: servira' al caricamento per area sulla mappa.
-      - name: Record region bbox
+      # UN SOLO passo, a prova di concorrenza. I file DERIVATI (osm_regions.json e
+      # osm_index.json) vengono rigenerati dal contenuto di data/: due run che vedono
+      # lo stesso set di file producono byte IDENTICI, quindi non possono piu' entrare
+      # in conflitto. La base e' sempre origin/main pulito: niente autostash (era quello
+      # a scrivere i marcatori <<<<<<< dentro i JSON quando due run si accavallavano).
+      - name: Commit & push (a prova di conflitto)
         if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
           OUTF: ${{ steps.cfg.outputs.out }}
           ZBBOX: ${{ steps.cfg.outputs.bbox }}
           TGT: ${{ github.event.inputs.target }}
         run: |
-          node -e '
-            const fs=require("fs");
-            const p="data/osm_regions_meta.json";
-            let m={}; try{ m=JSON.parse(fs.readFileSync(p,"utf8")); }catch(e){}
-            const bb=(process.env.ZBBOX||"").trim();
-            m[process.env.OUTF]={bbox:bb?bb.split(",").map(Number):null,target:process.env.TGT,builtAt:new Date().toISOString().slice(0,10)};
-            fs.writeFileSync(p, JSON.stringify(m,null,1));
-            console.log("riquadro registrato per "+process.env.OUTF);
-          '
-
-      - name: Build marker index
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: node scripts/build_osm_index.mjs
-
-      - name: Commit ${{ steps.cfg.outputs.out }}
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: |
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
-          # ORDINE IMPORTANTE: prima ci si allinea al remoto, POI si mette in stage.
-          # Facendo il pull DOPO il git add, l'autostash mette da parte i file appena
-          # aggiunti e li riapplica come modifiche NON in stage: il commit successivo
-          # non trova nulla da committare e il passo fallisce con exit 1, buttando via
-          # ore di elaborazione. Succede solo quando il pull scarica davvero qualcosa,
-          # per questo il difetto era rimasto nascosto a lungo.
-          git pull --rebase --autostash || true
-          git add "data/${{ steps.cfg.outputs.out }}" data/osm_index.json data/osm_regions.json data/osm_regions_meta.json
-          if git diff --staged --quiet; then
-            echo "Nessuna variazione da committare."
-          else
-            git commit -m "data: OSM passes ${{ github.event.inputs.target }}"
-            git push || { echo "push respinto: riprovo dopo un nuovo allineamento"; git pull --rebase --autostash || true; git push; }
-          fi
+          cp "data/$OUTF" "$RUNNER_TEMP/$OUTF"     # metti al sicuro il file appena costruito
+          ok=0
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main           # base = remoto pulito, SENZA autostash/merge
+            cp "$RUNNER_TEMP/$OUTF" "data/$OUTF"    # rimetti il tuo region file sopra la base
+            # meta bbox: aggiorna la sola voce di questo target
+            node -e '
+              const fs=require("fs"),p="data/osm_regions_meta.json";
+              let m={};try{m=JSON.parse(fs.readFileSync(p,"utf8"));}catch(e){}
+              const bb=(process.env.ZBBOX||"").trim();
+              m[process.env.OUTF]={bbox:bb?bb.split(",").map(Number):null,target:process.env.TGT,builtAt:new Date().toISOString().slice(0,10)};
+              fs.writeFileSync(p,JSON.stringify(m,null,1));
+            '
+            # manifesto DETERMINISTICO da disco (osm_passes.json per primo, il resto ordinato)
+            node -e '
+              const fs=require("fs");
+              let f=fs.readdirSync("data").filter(x=>/^osm_passes.*\.json$/.test(x));
+              f=f.filter(x=>x==="osm_passes.json").concat(f.filter(x=>x!=="osm_passes.json").sort());
+              fs.writeFileSync("data/osm_regions.json",JSON.stringify(f)+"\n");
+            '
+            node scripts/build_osm_index.mjs
+            # GUARDIA: non pubblicare mai marcatori di conflitto
+            if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then
+              echo "ERRORE: marcatori di conflitto nei dati, non pubblico."; exit 1
+            fi
+            git add "data/$OUTF" data/osm_regions.json data/osm_index.json data/osm_regions_meta.json
+            if git diff --staged --quiet; then echo "Nessuna variazione da committare."; ok=1; break; fi
+            git commit -m "data: OSM passes $TGT"
+            if git push; then ok=1; break; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
+          done
+          [ "$ok" = 1 ] || { echo "push fallito dopo 5 tentativi"; exit 1; }
