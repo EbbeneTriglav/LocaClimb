@@ -13,5 +13,10 @@
   "bbox": null,
   "target": "france-midi-pyrenees",
   "builtAt": "2026-08-07"
+ },
+ "osm_passes_fr_fcb.json": {
+  "bbox": null,
+  "target": "france-jura",
+  "builtAt": "2026-08-07"
  }
 }
