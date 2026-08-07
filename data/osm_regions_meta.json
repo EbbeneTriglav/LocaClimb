@@ -18,5 +18,10 @@
   "bbox": null,
   "target": "france-jura",
   "builtAt": "2026-08-07"
+ },
+ "osm_passes_fr_co.json": {
+  "bbox": null,
+  "target": "france-centro-ovest",
+  "builtAt": "2026-08-07"
  }
 }
