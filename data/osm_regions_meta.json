@@ -3,5 +3,10 @@
   "bbox": null,
   "target": "montenegro-albania-macedonia",
   "builtAt": "2026-08-07"
+ },
+ "osm_passes_fr_lr.json": {
+  "bbox": null,
+  "target": "france-languedoc",
+  "builtAt": "2026-08-07"
  }
 }
