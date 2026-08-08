@@ -23,5 +23,10 @@
   "bbox": null,
   "target": "france-centro-ovest",
   "builtAt": "2026-08-07"
+ },
+ "osm_passes_fr_ra.json": {
+  "bbox": null,
+  "target": "france-rhone-alpes",
+  "builtAt": "2026-08-08"
  }
 }
