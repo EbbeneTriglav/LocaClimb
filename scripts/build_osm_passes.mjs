@@ -126,13 +126,26 @@ const KW_WORD = new Set([
   "prohod","vrah","rid","preval",
   // Inglese: e' la lingua dei tag name:en / int_name, quelli che salvano i nomi in cirillico
   "pass","peak","mount","summit","gap","ridge","hill",
+  // Greco (alfabeto greco, senza accenti e con sigma normalizzato dopo deacc)
+  "διασελο","διαβαση","περασμα","στενα","αυχενασ","ποροσ","ραχη","κορυφη","βουνο","οροσ","υψωμα",
+  // Polacco
+  "przelecz","przyslop","gora","szczyt","siodlo","hala",
+  // Ceco / Slovacco
+  "prusmyk","vrch","hora","kopec","priehyb",
+  // Ungherese
+  "hago","nyereg","nyak","teto","hegy","csucs","gerinc",
 ]);
 // German/Ladin toponyms are COMPOUNDS (Timmelsjoch, Gerlospass, Katschberghohe, Hahntennjoch):
 // word-token matching misses them, so match on suffix too.
 const KW_SUFFIX = ["joch","jochl","joechl","pass","passhohe","sattel","scharte","hohe","hoehe","berg","alm","kreuz","kogel","torl","toerl","horn","bichl","spitze","spitz","steig","kopf","eck","warte","blick","prevoj","prijevoj"];
-function deacc(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+function deacc(s) {
+  return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[łŁ]/g, "l").replace(/[øØ]/g, "o").replace(/[đĐ]/g, "d")
+    .replace(/[þÞ]/g, "th").replace(/[ðÐ]/g, "d").replace(/ß/g, "ss")
+    .toLowerCase().replace(/ς/g, "σ");
+}
 function isClimbName(n) {
-  const toks = deacc(n).split(/[^a-z0-9]+/).filter(Boolean);
+  const toks = deacc(n).split(/[^a-z0-9\u0370-\u03ff]+/).filter(Boolean);
   for (const t of toks) {
     if (KW_WORD.has(t)) return true;
     if (t.length >= 7) for (const s of KW_SUFFIX) if (t.endsWith(s)) return true;
