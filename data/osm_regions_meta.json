@@ -28,5 +28,10 @@
   "bbox": null,
   "target": "france-rhone-alpes",
   "builtAt": "2026-08-08"
+ },
+ "osm_passes_fr_aq.json": {
+  "bbox": null,
+  "target": "france-aquitaine",
+  "builtAt": "2026-08-09"
  }
 }
