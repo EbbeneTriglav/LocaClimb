@@ -53,5 +53,15 @@
   "bbox": null,
   "target": "greece",
   "builtAt": "2026-08-09"
+ },
+ "osm_passes_de_bw.json": {
+  "bbox": null,
+  "target": "germany-baden-wuerttemberg",
+  "builtAt": "2026-08-09"
+ },
+ "osm_passes_hu.json": {
+  "bbox": null,
+  "target": "hungary",
+  "builtAt": "2026-08-09"
  }
 }
