@@ -58,6 +58,13 @@ on:
           - montenegro-albania-macedonia
           - serbia
           - bulgaria
+          # --- Europa centrale e del nord ---
+          - belgium
+          - netherlands-luxembourg
+          - czech-republic
+          - poland
+          - hungary
+          - greece
           # --- VALICHI DI CONFINE: due paesi in un solo grafo, entrambi i versanti ---
           - confine-it-ch
           - confine-it-at
@@ -234,6 +241,25 @@ jobs:
               echo "pbf=$GF/bulgaria-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_bg.json' >> "$GITHUB_OUTPUT" ;;
 
+            # ---------- Europa centrale e del nord ----------
+            belgium)              # Ardenne: Mur de Huy, La Redoute, Muur
+              echo "pbf=$GF/belgium-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_be.json' >> "$GITHUB_OUTPUT" ;;
+            netherlands-luxembourg)   # Limburgo (Cauberg) + Ardenne lussemburghesi
+              echo "pbf=$GF/netherlands-latest.osm.pbf,$GF/luxembourg-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_nl_lu.json' >> "$GITHUB_OUTPUT" ;;
+            czech-republic)       # Krkonose, Jeseniky
+              echo "pbf=$GF/czech-republic-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_cz.json' >> "$GITHUB_OUTPUT" ;;
+            poland)               # Tatra, Karkonosze, Bieszczady (estratto grande)
+              echo "pbf=$GF/poland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_pl.json' >> "$GITHUB_OUTPUT" ;;
+            hungary)              # Dobogoko, Mecsek, Bukk
+              echo "pbf=$GF/hungary-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_hu.json' >> "$GITHUB_OUTPUT" ;;
+            greece)               # Olimpo, Parnaso, Peloponneso (estratto grande)
+              echo "pbf=$GF/greece-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gr.json' >> "$GITHUB_OUTPUT" ;;
             # ---------- VALICHI DI CONFINE ----------
             # Si caricano i due paesi confinanti e si ritaglia la fascia di frontiera:
             # cosi' il grafo stradale contiene ENTRAMBI i versanti e la salita non viene
