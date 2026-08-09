@@ -48,5 +48,10 @@
   "bbox": null,
   "target": "germany-ovest",
   "builtAt": "2026-08-09"
+ },
+ "osm_passes_gr.json": {
+  "bbox": null,
+  "target": "greece",
+  "builtAt": "2026-08-09"
  }
 }
