@@ -88,5 +88,10 @@
   "bbox": null,
   "target": "france-bretagne-idf",
   "builtAt": "2026-08-10"
+ },
+ "osm_passes_ch.json": {
+  "bbox": null,
+  "target": "switzerland",
+  "builtAt": "2026-08-10"
  }
 }
