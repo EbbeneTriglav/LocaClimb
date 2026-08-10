@@ -400,31 +400,50 @@ function walkTo(startWay, startIdx, tLat, tLon, vertexMap, capKm, anchor) {
 }
 function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
 async function detectRoadCols(refWays) {
+  // OSM spezza le strade in tanti segmenti: un colle sta a cavallo di piu' segmenti.
+  // Raggruppo per ref e RICUCIO i segmenti (per endpoint condiviso) in strade continue,
+  // poi profilo la strada intera e cerco i massimi locali con prominenza sui due lati.
+  const R5 = (v) => Math.round(v * 1e5) / 1e5, K = (la, lo) => R5(la) + "," + R5(lo);
+  const byRef = new Map();
+  for (const rw of refWays) { if (!byRef.has(rw.ref)) byRef.set(rw.ref, []); byRef.get(rw.ref).push(rw.coords); }
+  const chains = [];
+  for (const [ref, segs] of byRef) {
+    const used = new Array(segs.length).fill(false), endMap = new Map();
+    const addEnd = (k, v) => { if (!endMap.has(k)) endMap.set(k, []); endMap.get(k).push(v); };
+    segs.forEach((c, si) => { if (c.length < 2) return; addEnd(K(c[0][1], c[0][0]), { si, end: 0 }); addEnd(K(c[c.length - 1][1], c[c.length - 1][0]), { si, end: 1 }); });
+    for (let si = 0; si < segs.length; si++) {
+      if (used[si] || segs[si].length < 2) continue;
+      let chain = segs[si].map((p) => [p[1], p[0]]); used[si] = true;
+      let grow = true, guard = 0;
+      while (grow && guard++ < 20000) { grow = false; const tail = chain[chain.length - 1];
+        for (const cand of (endMap.get(K(tail[0], tail[1])) || [])) { if (used[cand.si]) continue;
+          const cc = segs[cand.si].map((p) => [p[1], p[0]]); const seq = cand.end === 0 ? cc : cc.slice().reverse();
+          chain = chain.concat(seq.slice(1)); used[cand.si] = true; grow = true; break; } }
+      grow = true; guard = 0;
+      while (grow && guard++ < 20000) { grow = false; const head = chain[0];
+        for (const cand of (endMap.get(K(head[0], head[1])) || [])) { if (used[cand.si]) continue;
+          const cc = segs[cand.si].map((p) => [p[1], p[0]]); const seq = cand.end === 1 ? cc : cc.slice().reverse();
+          chain = seq.slice(0, -1).concat(chain); used[cand.si] = true; grow = true; break; } }
+      chains.push(chain);
+    }
+  }
   const out = [];
-  for (const rw of refWays) {
-    const coords = rw.coords;
-    if (!coords || coords.length < 4) continue;
+  for (const chain of chains) {
+    if (chain.length < 4) continue;
     const prof = []; let acc = 0, last = null;
-    for (let i = 0; i < coords.length; i++) {
-      const lat = coords[i][1], lon = coords[i][0];
+    for (let i = 0; i < chain.length; i++) {
+      const lat = chain[i][0], lon = chain[i][1];
       if (last) acc += hav(last[0], last[1], lat, lon);
-      if (last === null || acc >= ROADCOL_STEP || i === coords.length - 1) {
-        const e = await elevAt(lat, lon);
-        if (e != null) prof.push({ lat, lon, ele: e });
-        acc = 0;
-      }
+      if (last === null || acc >= ROADCOL_STEP || i === chain.length - 1) { const e = await elevAt(lat, lon); if (e != null) prof.push({ lat, lon, ele: e }); acc = 0; }
       last = [lat, lon];
     }
     if (prof.length < 3) continue;
     for (let i = 1; i < prof.length - 1; i++) {
-      const e = prof[i].ele;
-      if (e < ROADCOL_MINELE) continue;
+      const e = prof[i].ele; if (e < ROADCOL_MINELE) continue;
       let dl = 0; for (let j = i - 1; j >= 0; j--) { if (prof[j].ele > e) break; if (e - prof[j].ele > dl) dl = e - prof[j].ele; }
       let dr = 0; for (let j = i + 1; j < prof.length; j++) { if (prof[j].ele > e) break; if (e - prof[j].ele > dr) dr = e - prof[j].ele; }
       if (dl >= ROADCOL_PROM && dr >= ROADCOL_PROM)
-        out.push({ src: "roadcol", oid: "rc" + Math.round(prof[i].lat * 1e5) + "x" + Math.round(prof[i].lon * 1e5),
-                   lat: prof[i].lat, lon: prof[i].lon, ele: Math.round(e),
-                   tags: { name: (rw.ref ? rw.ref + " " : "") + "colle" } });
+        out.push({ src: "roadcol", oid: "rc" + Math.round(prof[i].lat * 1e5) + "x" + Math.round(prof[i].lon * 1e5), lat: prof[i].lat, lon: prof[i].lon, ele: Math.round(e), tags: { name: "Colle" } });
     }
   }
   out.sort((a, b) => b.ele - a.ele);
@@ -432,7 +451,7 @@ async function detectRoadCols(refWays) {
   for (const c of out) {
     if (kept.some((k) => hav(k.lat, k.lon, c.lat, c.lon) < ROADCOL_MINSEP)) continue;
     const np = (typeof global.nearestPlace === "function") ? global.nearestPlace(c.lat, c.lon) : null;
-    if (np && np.name) c.tags.name = c.tags.name + " " + np.name;
+    if (np && np.name) c.tags.name = "Colle " + np.name;
     kept.push(c);
   }
   return kept;
