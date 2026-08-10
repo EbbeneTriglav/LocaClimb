@@ -93,5 +93,10 @@
   "bbox": null,
   "target": "switzerland",
   "builtAt": "2026-08-10"
+ },
+ "osm_passes_be.json": {
+  "bbox": null,
+  "target": "belgium",
+  "builtAt": "2026-08-10"
  }
 }
