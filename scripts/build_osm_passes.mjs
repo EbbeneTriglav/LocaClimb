@@ -93,6 +93,8 @@ const CAND_MIN_GAIN = parseInt(process.env.LC_CAND_MIN_GAIN || arg("--cand-min-g
 // and brand-new candidates get the lower floor, so no pass can silently grow a spurious versante.
 const MIN_DIST_KM = parseFloat(process.env.LC_MIN_DIST || arg("--min-dist", "1.5"));
 const MIN_GAIN_M = parseInt(process.env.LC_MIN_GAIN || arg("--min-gain", "125"), 10);
+// Muri corti (Fiandre/Olanda): pavimento salita piu' basso SOLO per questi due file.
+const FLATCOUNTRY = /osm_passes_(be|nl_lu)\.json$/.test(OUT);
 // Display-name fixes for OSM passes whose tag name is not the locally-known name.
 // NOTE: names are stored RAW (UTF-8, apostrophes and accents intact). HTML escaping is the
 // frontend's job (esc() at render time). Encoding here produced "Passo Ucc&#39;Aidu" on screen.
@@ -540,9 +542,9 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
   if (pin) base = 0; // manual override: base is fixed at the pinned town (path start), use whole climb
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
-  if (dist < (relax ? 1.2 : MIN_DIST_KM)) return null;
+  if (dist < (relax ? 1.2 : FLATCOUNTRY ? 0.3 : MIN_DIST_KM)) return null;
   const gain = segEl[segEl.length - 1] - segEl[0];
-  if (gain < (relax ? 140 : MIN_GAIN_M)) return null;
+  if (gain < (relax ? 140 : FLATCOUNTRY ? 50 : MIN_GAIN_M)) return null;
   const avg = gain / (dist * 1000) * 100;
   if (avg < (relax ? 2 : 2.5)) return null;
   let maxg = 0; // windowed (>=300m) to kill DEM noise
