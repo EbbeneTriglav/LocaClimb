@@ -1,16 +1,15 @@
 /* translit.js — rende leggibili i nomi in greco e cirillico traslitterandoli in latino.
  *
- * Modulo AUTONOMO. Non tocca i file dati ne' data.js: al caricamento (e ad ogni
- * aggiornamento) riscrive in latino il campo .name dei passi che sono in greco/cirillico,
- * conservando l'originale in .nameLocal. Per rimuoverlo: togli la riga <script> da index.html.
+ * Modulo AUTONOMO. Riscrive in latino il campo .name dei passi in greco/cirillico
+ * (originale conservato in .nameLocal) e ridisegna i marker. Per rimuoverlo: togli la
+ * riga <script> da index.html. Copre greco (Grecia) e cirillico (Serbia, Bulgaria, Macedonia).
  *
- * Copertura: greco (Grecia) e cirillico (Serbia, Bulgaria, Macedonia del Nord). La resa e'
- * "leggibile", non uno standard accademico: Διάσελο -> Diaselo, Връх -> Vrah.
+ * v2: prende osmPasses/PASSES_DATA come globali VERI (sono let/const, non su window) e
+ * forza un redraw, altrimenti la mappa restava coi nomi vecchi gia' disegnati.
  */
 (function () {
   "use strict";
 
-  // digrammi greci (prima della mappa lettera-per-lettera)
   var GR_DI = [
     ["ΟΥ", "OU"], ["Ου", "Ou"], ["ου", "ou"],
     ["ΜΠ", "B"], ["Μπ", "B"], ["μπ", "b"],
@@ -42,38 +41,40 @@
   };
 
   function isForeign(s) { return /[Ͱ-ϿЀ-ӿ]/.test(s); }
-
   function transliterate(s) {
     if (!s || !isForeign(s)) return s;
     for (var i = 0; i < GR_DI.length; i++) s = s.split(GR_DI[i][0]).join(GR_DI[i][1]);
     var out = "";
-    for (var j = 0; j < s.length; j++) {
-      var c = s[j];
-      out += (GR[c] != null) ? GR[c] : (CY[c] != null ? CY[c] : c);
-    }
+    for (var j = 0; j < s.length; j++) { var c = s[j]; out += (GR[c] != null) ? GR[c] : (CY[c] != null ? CY[c] : c); }
     return out;
   }
-  window.transliterateName = transliterate; // esposto per debug
+  window.transliterateName = transliterate;
+
+  // prende un globale VERO anche se e' let/const (non su window): la Function gira in scope globale
+  function gref(name) {
+    try { return (new Function("try{return typeof " + name + "!=='undefined'?" + name + ":(typeof window!=='undefined'&&window." + name + ")||null}catch(e){return null}"))(); }
+    catch (e) { return null; }
+  }
 
   function fix(p) {
     if (!p || !p.name || p._tr) return;
-    if (isForeign(p.name)) { p.nameLocal = p.name; p.name = transliterate(p.name); }
-    p._tr = 1; // marchia: non ritraslitterare
+    if (isForeign(p.name)) { p.nameLocal = p.name; p.name = transliterate(p.name); return true; }
+    p._tr = 1; return false;
   }
+  var redrawn = false;
   function all() {
-    if (window.osmPasses) window.osmPasses.forEach(fix);
-    if (window.PASSES_DATA) window.PASSES_DATA.forEach(fix);
+    var changed = 0;
+    var a = gref("osmPasses"); if (a && a.forEach) a.forEach(function (p) { if (fix(p)) changed++; });
+    var b = gref("PASSES_DATA"); if (b && b.forEach) b.forEach(function (p) { if (fix(p)) changed++; });
+    if (changed && !redrawn) { redrawn = true; try { if (typeof gref("applyFilters") === "function") gref("applyFilters")(); } catch (e) {} }
+    return changed;
   }
 
-  // Aggancio non invasivo: dopo ogni funzione che carica/aggiorna i passi, ripassa.
   ["adoptOsm", "hydrateOsm", "applyManual", "addMarkers"].forEach(function (fn) {
     var orig = window[fn];
-    if (typeof orig === "function") {
-      window[fn] = function () { var r = orig.apply(this, arguments); try { all(); } catch (e) {} return r; };
-    }
+    if (typeof orig === "function") window[fn] = function () { var r = orig.apply(this, arguments); try { all(); } catch (e) {} return r; };
   });
 
   all();
-  // rete di sicurezza per il caricamento asincrono (index -> region files)
-  var n = 0, t = setInterval(function () { all(); if (++n >= 12) clearInterval(t); }, 1500);
+  var n = 0, t = setInterval(function () { all(); if (++n >= 15) clearInterval(t); }, 1500);
 })();

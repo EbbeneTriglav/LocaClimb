@@ -411,29 +411,27 @@ function walkTo(startWay, startIdx, tLat, tLon, vertexMap, capKm, anchor) {
 }
 function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
 async function detectRoadCols(refWays) {
-  // OSM spezza le strade in tanti segmenti: un colle sta a cavallo di piu' segmenti.
-  // Raggruppo per ref e RICUCIO i segmenti (per endpoint condiviso) in strade continue,
-  // poi profilo la strada intera e cerco i massimi locali con prominenza sui due lati.
   const R5 = (v) => Math.round(v * 1e5) / 1e5, K = (la, lo) => R5(la) + "," + R5(lo);
-  const byRef = new Map();
-  for (const rw of refWays) { const kk = rw.key; if (!byRef.has(kk)) byRef.set(kk, []); byRef.get(kk).push(rw.coords); }
+  const byKey = new Map();
+  for (const rw of refWays) { if (!byKey.has(rw.key)) byKey.set(rw.key, []); byKey.get(rw.key).push(rw); }
+  const pts = (seg) => { const t = seg.tun ? 1 : 0; return seg.coords.map((p) => [p[1], p[0], t]); };
   const chains = [];
-  for (const [ref, segs] of byRef) {
+  for (const [key, segs] of byKey) {
     const used = new Array(segs.length).fill(false), endMap = new Map();
     const addEnd = (k, v) => { if (!endMap.has(k)) endMap.set(k, []); endMap.get(k).push(v); };
-    segs.forEach((c, si) => { if (c.length < 2) return; addEnd(K(c[0][1], c[0][0]), { si, end: 0 }); addEnd(K(c[c.length - 1][1], c[c.length - 1][0]), { si, end: 1 }); });
+    segs.forEach((seg, si) => { const c = seg.coords; if (!c || c.length < 2) return; addEnd(K(c[0][1], c[0][0]), { si, end: 0 }); addEnd(K(c[c.length - 1][1], c[c.length - 1][0]), { si, end: 1 }); });
     for (let si = 0; si < segs.length; si++) {
-      if (used[si] || segs[si].length < 2) continue;
-      let chain = segs[si].map((p) => [p[1], p[0]]); used[si] = true;
+      if (used[si] || !segs[si].coords || segs[si].coords.length < 2) continue;
+      let chain = pts(segs[si]); used[si] = true;
       let grow = true, guard = 0;
       while (grow && guard++ < 20000) { grow = false; const tail = chain[chain.length - 1];
         for (const cand of (endMap.get(K(tail[0], tail[1])) || [])) { if (used[cand.si]) continue;
-          const cc = segs[cand.si].map((p) => [p[1], p[0]]); const seq = cand.end === 0 ? cc : cc.slice().reverse();
+          const cc = pts(segs[cand.si]); const seq = cand.end === 0 ? cc : cc.slice().reverse();
           chain = chain.concat(seq.slice(1)); used[cand.si] = true; grow = true; break; } }
       grow = true; guard = 0;
       while (grow && guard++ < 20000) { grow = false; const head = chain[0];
         for (const cand of (endMap.get(K(head[0], head[1])) || [])) { if (used[cand.si]) continue;
-          const cc = segs[cand.si].map((p) => [p[1], p[0]]); const seq = cand.end === 1 ? cc : cc.slice().reverse();
+          const cc = pts(segs[cand.si]); const seq = cand.end === 1 ? cc : cc.slice().reverse();
           chain = seq.slice(0, -1).concat(chain); used[cand.si] = true; grow = true; break; } }
       chains.push(chain);
     }
@@ -443,9 +441,12 @@ async function detectRoadCols(refWays) {
     if (chain.length < 4) continue;
     const prof = []; let acc = 0, last = null;
     for (let i = 0; i < chain.length; i++) {
-      const lat = chain[i][0], lon = chain[i][1];
+      const lat = chain[i][0], lon = chain[i][1], tun = chain[i][2];
       if (last) acc += hav(last[0], last[1], lat, lon);
-      if (last === null || acc >= ROADCOL_STEP || i === chain.length - 1) { const e = await elevAt(lat, lon); if (e != null) prof.push({ lat, lon, ele: e }); acc = 0; }
+      if (last === null || acc >= ROADCOL_STEP || i === chain.length - 1) {
+        if (!tun) { const e = await elevAt(lat, lon); if (e != null) prof.push({ lat, lon, ele: e }); } // in galleria NON si legge la quota
+        acc = 0;
+      }
       last = [lat, lon];
     }
     if (prof.length < 3) continue;
@@ -630,7 +631,7 @@ async function main() {
   await streamSeq(seqFile, (f) => {
     if (!f.geometry || !f.properties) return;
     if (f.geometry.type === "LineString") {
-      if (ROADCOL && refWays && f.properties.highway && (f.properties.ref || f.properties.name) && ROADCOL_HW[f.properties.highway] && rideable(f.properties)) refWays.push({ coords: f.geometry.coordinates, key: f.properties.ref || f.properties.name });
+      if (ROADCOL && refWays && f.properties.highway && (f.properties.ref || f.properties.name) && ROADCOL_HW[f.properties.highway] && rideable(f.properties)) refWays.push({ coords: f.geometry.coordinates, key: f.properties.ref || f.properties.name, tun: !!f.properties.tunnel });
       return;
     }
     if (f.geometry.type !== "Point") return;
