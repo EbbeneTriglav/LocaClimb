@@ -65,6 +65,7 @@ on:
           - poland
           - hungary
           - greece
+          - slovakia
           # --- VALICHI DI CONFINE: due paesi in un solo grafo, entrambi i versanti ---
           - confine-it-ch
           - confine-it-at
@@ -260,6 +261,9 @@ jobs:
             greece)               # Olimpo, Parnaso, Peloponneso (estratto grande)
               echo "pbf=$GF/greece-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gr.json' >> "$GITHUB_OUTPUT" ;;
+            slovakia)             # Alti/Bassi Tatra, Fatra
+              echo "pbf=$GF/slovakia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_sk.json' >> "$GITHUB_OUTPUT" ;;
             # ---------- VALICHI DI CONFINE ----------
             # Si caricano i due paesi confinanti e si ritaglia la fascia di frontiera:
             # cosi' il grafo stradale contiene ENTRAMBI i versanti e la salita non viene
