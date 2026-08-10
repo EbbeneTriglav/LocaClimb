@@ -83,5 +83,10 @@
   "bbox": null,
   "target": "bulgaria",
   "builtAt": "2026-08-10"
+ },
+ "osm_passes_fr_bidf.json": {
+  "bbox": null,
+  "target": "france-bretagne-idf",
+  "builtAt": "2026-08-10"
  }
 }
