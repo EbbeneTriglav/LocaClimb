@@ -78,5 +78,10 @@
   "bbox": null,
   "target": "poland",
   "builtAt": "2026-08-10"
+ },
+ "osm_passes_bg.json": {
+  "bbox": null,
+  "target": "bulgaria",
+  "builtAt": "2026-08-10"
  }
 }
