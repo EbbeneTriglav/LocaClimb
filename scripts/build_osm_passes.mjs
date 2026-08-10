@@ -49,12 +49,18 @@ const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = dataPath(arg("--out", "osm_passes.json"));
 // --- ESPERIMENTO (solo Grecia): candidate-passo dai punti alti delle strade con ref ---
-const ROADCOL = /osm_passes_gr\.json$/.test(OUT);
+const ROADCOL_CFG = {
+  "osm_passes_gr.json":    { prom: 150, minEle: 500, minSep: 3 },   // montagna
+  "osm_passes_be.json":    { prom: 40,  minEle: 20,  minSep: 1.5 }, // Fiandre/Ardenne: muri e cote corte
+  "osm_passes_nl_lu.json": { prom: 40,  minEle: 5,   minSep: 1.5 }, // Cauberg, Ardenne lussemburghesi
+};
+const _rc = ROADCOL_CFG[OUT.split(/[\\/]/).pop()] || null;
+const ROADCOL = !!_rc;
 const ROADCOL_HW = { primary:1, primary_link:1, secondary:1, secondary_link:1, tertiary:1, tertiary_link:1 };
-const ROADCOL_PROM = 150;    // discesa minima su ENTRAMBI i lati (m)
-const ROADCOL_MINELE = 500;  // quota minima del colle (m)
-const ROADCOL_STEP = 0.5;    // passo di campionamento lungo la strada (km)
-const ROADCOL_MINSEP = 3;    // distanza minima tra colli (km)
+const ROADCOL_PROM = _rc ? _rc.prom : 150;
+const ROADCOL_MINELE = _rc ? _rc.minEle : 500;
+const ROADCOL_STEP = 0.25;   // passo di campionamento (km): fitto per i muri corti
+const ROADCOL_MINSEP = _rc ? _rc.minSep : 3;
 const MIN_ELE = parseInt(arg("--min-ele", "130"), 10);
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
@@ -141,10 +147,12 @@ const KW_WORD = new Set([
   "prusmyk","vrch","hora","kopec","priehyb",
   // Ungherese
   "hago","nyereg","nyak","teto","hegy","csucs","gerinc",
+  // Fiandre / Vallonia / Olanda (grandi classiche: muri e cote corte)
+  "muur","helling","kapelmuur","kop",
 ]);
 // German/Ladin toponyms are COMPOUNDS (Timmelsjoch, Gerlospass, Katschberghohe, Hahntennjoch):
 // word-token matching misses them, so match on suffix too.
-const KW_SUFFIX = ["joch","jochl","joechl","pass","passhohe","sattel","scharte","hohe","hoehe","berg","alm","kreuz","kogel","torl","toerl","horn","bichl","spitze","spitz","steig","kopf","eck","warte","blick","prevoj","prijevoj"];
+const KW_SUFFIX = ["joch","jochl","joechl","pass","passhohe","sattel","scharte","hohe","hoehe","berg","alm","kreuz","kogel","torl","toerl","horn","bichl","spitze","spitz","steig","kopf","eck","warte","blick","prevoj","prijevoj","muur","helling"];
 function deacc(s) {
   return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[łŁ]/g, "l").replace(/[øØ]/g, "o").replace(/[đĐ]/g, "d")
