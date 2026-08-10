@@ -48,6 +48,13 @@ const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = dataPath(arg("--out", "osm_passes.json"));
+// --- ESPERIMENTO (solo Grecia): candidate-passo dai punti alti delle strade con ref ---
+const ROADCOL = /osm_passes_gr\.json$/.test(OUT);
+const ROADCOL_HW = { primary:1, primary_link:1, secondary:1, secondary_link:1, tertiary:1, tertiary_link:1 };
+const ROADCOL_PROM = 150;    // discesa minima su ENTRAMBI i lati (m)
+const ROADCOL_MINELE = 500;  // quota minima del colle (m)
+const ROADCOL_STEP = 0.5;    // passo di campionamento lungo la strada (km)
+const ROADCOL_MINSEP = 3;    // distanza minima tra colli (km)
 const MIN_ELE = parseInt(arg("--min-ele", "130"), 10);
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
@@ -392,6 +399,44 @@ function walkTo(startWay, startIdx, tLat, tLon, vertexMap, capKm, anchor) {
   return pts; // base(town) -> summit
 }
 function smooth3(a){const o=a.slice();for(let i=1;i<a.length-1;i++)o[i]=(a[i-1]+a[i]+a[i+1])/3;return o;}
+async function detectRoadCols(refWays) {
+  const out = [];
+  for (const rw of refWays) {
+    const coords = rw.coords;
+    if (!coords || coords.length < 4) continue;
+    const prof = []; let acc = 0, last = null;
+    for (let i = 0; i < coords.length; i++) {
+      const lat = coords[i][1], lon = coords[i][0];
+      if (last) acc += hav(last[0], last[1], lat, lon);
+      if (last === null || acc >= ROADCOL_STEP || i === coords.length - 1) {
+        const e = await elevAt(lat, lon);
+        if (e != null) prof.push({ lat, lon, ele: e });
+        acc = 0;
+      }
+      last = [lat, lon];
+    }
+    if (prof.length < 3) continue;
+    for (let i = 1; i < prof.length - 1; i++) {
+      const e = prof[i].ele;
+      if (e < ROADCOL_MINELE) continue;
+      let dl = 0; for (let j = i - 1; j >= 0; j--) { if (prof[j].ele > e) break; if (e - prof[j].ele > dl) dl = e - prof[j].ele; }
+      let dr = 0; for (let j = i + 1; j < prof.length; j++) { if (prof[j].ele > e) break; if (e - prof[j].ele > dr) dr = e - prof[j].ele; }
+      if (dl >= ROADCOL_PROM && dr >= ROADCOL_PROM)
+        out.push({ src: "roadcol", oid: "rc" + Math.round(prof[i].lat * 1e5) + "x" + Math.round(prof[i].lon * 1e5),
+                   lat: prof[i].lat, lon: prof[i].lon, ele: Math.round(e),
+                   tags: { name: (rw.ref ? rw.ref + " " : "") + "colle" } });
+    }
+  }
+  out.sort((a, b) => b.ele - a.ele);
+  const kept = [];
+  for (const c of out) {
+    if (kept.some((k) => hav(k.lat, k.lon, c.lat, c.lon) < ROADCOL_MINSEP)) continue;
+    const np = (typeof global.nearestPlace === "function") ? global.nearestPlace(c.lat, c.lon) : null;
+    if (np && np.name) c.tags.name = c.tags.name + " " + np.name;
+    kept.push(c);
+  }
+  return kept;
+}
 function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
   const pts = ptsOut.slice().reverse(), el = smooth3(elevsOut.slice().reverse());
   if (pts.length < 4) return null;
@@ -551,8 +596,14 @@ async function main() {
 
   console.log("  stream 1/2: pass nodes ...");
   const passes = [], cands = [], places = [], hintPlaces = [];
+  const refWays = ROADCOL ? [] : null;
   await streamSeq(seqFile, (f) => {
-    if (!f.geometry || f.geometry.type !== "Point" || !f.properties) return;
+    if (!f.geometry || !f.properties) return;
+    if (f.geometry.type === "LineString") {
+      if (ROADCOL && refWays && f.properties.highway && f.properties.ref && ROADCOL_HW[f.properties.highway] && rideable(f.properties)) refWays.push({ coords: f.geometry.coordinates, ref: f.properties.ref });
+      return;
+    }
+    if (f.geometry.type !== "Point") return;
     if (f.properties.mountain_pass === "yes") {
       passes.push({ src: "pass", oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
     } else if ((f.properties.natural === "saddle" || f.properties.natural === "peak") && f.properties.name && anyClimbName(f.properties)) {
@@ -579,6 +630,11 @@ async function main() {
     return best;
   };
   console.log("  passes found: " + passes.length + " (mountain_pass=yes)");
+  if (ROADCOL && refWays && refWays.length) {
+    const rc = await detectRoadCols(refWays);
+    for (const c of rc) cands.push(c);
+    console.log("  road-col (Grecia, sperimentale): " + refWays.length + " strade ref -> " + rc.length + " colli");
+  }
   // Candidate saddles/peaks: drop any that duplicates a real pass node (or another candidate)
   // within 400 m - OSM often carries both a mountain_pass node and a natural=saddle node.
   {
@@ -1013,7 +1069,7 @@ async function main() {
       const slat = slat0, slon = slon0;
       const rec = byId.get(id) || { id };
       rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
-      if (isCand) rec.src = el.src; // "saddle"/"peak": kept via toponym + road-reaches-summit, not mountain_pass=yes
+      if (isCand || el.src === "roadcol") rec.src = el.src; // "saddle"/"peak": kept via toponym + road-reaches-summit, not mountain_pass=yes
       rec.surfaceLabel = surfaceLabel(ch.w.tags);
       const tr = computeTraffic(ch.w.tags, el.ele);
       rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;
