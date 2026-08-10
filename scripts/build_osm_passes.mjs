@@ -53,6 +53,7 @@ const ROADCOL_CFG = {
   "osm_passes_gr.json":    { prom: 150, minEle: 500, minSep: 3 },   // montagna
   "osm_passes_be.json":    { prom: 40,  minEle: 20,  minSep: 1.5 }, // Fiandre/Ardenne: muri e cote corte
   "osm_passes_nl_lu.json": { prom: 40,  minEle: 5,   minSep: 1.5 }, // Cauberg, Ardenne lussemburghesi
+  "osm_passes_no.json":    { prom: 150, minEle: 100, minSep: 3 },   // fiordi: grandi salite dal mare
 };
 const _rc = ROADCOL_CFG[OUT.split(/[\\/]/).pop()] || null;
 const ROADCOL = !!_rc;
@@ -413,7 +414,7 @@ async function detectRoadCols(refWays) {
   // poi profilo la strada intera e cerco i massimi locali con prominenza sui due lati.
   const R5 = (v) => Math.round(v * 1e5) / 1e5, K = (la, lo) => R5(la) + "," + R5(lo);
   const byRef = new Map();
-  for (const rw of refWays) { if (!byRef.has(rw.ref)) byRef.set(rw.ref, []); byRef.get(rw.ref).push(rw.coords); }
+  for (const rw of refWays) { const kk = rw.key; if (!byRef.has(kk)) byRef.set(kk, []); byRef.get(kk).push(rw.coords); }
   const chains = [];
   for (const [ref, segs] of byRef) {
     const used = new Array(segs.length).fill(false), endMap = new Map();
@@ -627,7 +628,7 @@ async function main() {
   await streamSeq(seqFile, (f) => {
     if (!f.geometry || !f.properties) return;
     if (f.geometry.type === "LineString") {
-      if (ROADCOL && refWays && f.properties.highway && f.properties.ref && ROADCOL_HW[f.properties.highway] && rideable(f.properties)) refWays.push({ coords: f.geometry.coordinates, ref: f.properties.ref });
+      if (ROADCOL && refWays && f.properties.highway && (f.properties.ref || f.properties.name) && ROADCOL_HW[f.properties.highway] && rideable(f.properties)) refWays.push({ coords: f.geometry.coordinates, key: f.properties.ref || f.properties.name });
       return;
     }
     if (f.geometry.type !== "Point") return;

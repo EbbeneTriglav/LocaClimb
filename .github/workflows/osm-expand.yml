@@ -65,6 +65,13 @@ on:
           - poland
           - hungary
           - greece
+          # --- Nord Europa e Baltici ---
+          - norway
+          - sweden
+          - finland
+          - estonia
+          - latvia
+          - lithuania
           - slovakia
           # --- VALICHI DI CONFINE: due paesi in un solo grafo, entrambi i versanti ---
           - confine-it-ch
@@ -261,6 +268,24 @@ jobs:
             greece)               # Olimpo, Parnaso, Peloponneso (estratto grande)
               echo "pbf=$GF/greece-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gr.json' >> "$GITHUB_OUTPUT" ;;
+            norway)               # fiordi: salite dal mare, Trollstigen, Sognefjellet
+              echo "pbf=$GF/norway-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_no.json' >> "$GITHUB_OUTPUT" ;;
+            sweden)
+              echo "pbf=$GF/sweden-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_se.json' >> "$GITHUB_OUTPUT" ;;
+            finland)
+              echo "pbf=$GF/finland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_fi.json' >> "$GITHUB_OUTPUT" ;;
+            estonia)
+              echo "pbf=$GF/estonia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_ee.json' >> "$GITHUB_OUTPUT" ;;
+            latvia)
+              echo "pbf=$GF/latvia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_lv.json' >> "$GITHUB_OUTPUT" ;;
+            lithuania)
+              echo "pbf=$GF/lithuania-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_lt.json' >> "$GITHUB_OUTPUT" ;;
             slovakia)             # Alti/Bassi Tatra, Fatra
               echo "pbf=$GF/slovakia-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_sk.json' >> "$GITHUB_OUTPUT" ;;
