@@ -18,15 +18,19 @@
   function getMap() { return window.map || gref("map"); }
 
   var LOGO = '<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><defs><linearGradient id="uklg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M17 2C10.6 2 5.4 7.1 5.4 13.4 5.4 21.6 17 32 17 32s11.6-10.4 11.6-18.6C28.6 7.1 23.4 2 17 2z" fill="url(#uklg)"/><path d="M9 19.5 13.6 13l3 3.7 3-4.6L25 19.5z" fill="#fff"/><circle cx="17" cy="9.2" r="1.9" fill="#f59e0b"/></svg>';
-  var BIKE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="17.5" r="3"/><circle cx="19" cy="17.5" r="3"/><circle cx="12.6" cy="4.4" r="1.6" fill="currentColor" stroke="none"/><path d="M5 17.5 11 16 10 10"/><path d="M11 16 19 17.5"/><path d="M10 10h6l3 7.5"/><path d="M12.6 6 11 11l2.4 4"/><path d="M11.6 9 16 10"/></svg>';
+  var HELMET = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6c-4.7 0-8.5 3.3-8.5 7.4h17C20.5 5.9 16.7 2.6 12 2.6z"/><rect x="3.7" y="11" width="16.6" height="4" rx="2"/><path d="M7.4 16.2c1.5 2.5 7.7 2.5 9.2 0 0 2.7-2.1 4.4-4.6 4.4s-4.6-1.7-4.6-4.4z"/></svg>';
+  var ROUTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-6 7-4 7-9 0-4 5-2 6-5"/><circle cx="5" cy="19" r="2" fill="currentColor" stroke="none"/><path d="M18 3.4c-1.4 0-2.5 1.1-2.5 2.5 0 1.9 2.5 4.1 2.5 4.1s2.5-2.2 2.5-4.1c0-1.4-1.1-2.5-2.5-2.5z" fill="currentColor" stroke="none"/></svg>';
 
   function injectStyle() {
     if (byId("uk-style")) return;
     var css =
       "#place-wrap{display:none!important}" +
       "#rbb{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important}" +
-      "#acct.uk-profile{border-color:var(--ac)!important;color:var(--ac)!important;font-weight:700}" +
-      "#acct.uk-profile .bi{display:inline-flex;vertical-align:middle}" +
+      "#hdr .btn{padding:8px 12px}" +
+      "#acct.uk-profile{width:44px;height:44px;padding:0!important;border-radius:50%!important;justify-content:center;border-color:var(--ac)!important;color:var(--ac)!important}" +
+      "#acct.uk-profile.uk-logged{background:var(--ac)!important;color:#fff!important}" +
+      "#acct.uk-profile .uk-av{display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}" +
+      "#acct.uk-profile .uk-av svg{width:23px;height:23px}" +
       "#uk-more-menu{position:fixed;min-width:212px;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.2);padding:6px;z-index:100000;display:none}" +
       "#uk-more-menu.open{display:block}" +
       "#uk-more-menu .btn{display:flex!important;width:100%;justify-content:flex-start;border:none;background:transparent;border-radius:8px;padding:9px 12px;margin:0}" +
@@ -50,14 +54,24 @@
   }
 
   function newLogo() { var sv = document.querySelector("#hdr h1 svg"); if (sv) sv.outerHTML = LOGO; }
-  function profileBtn() { var a = byId("acct"); if (!a) return; var bi = a.querySelector(".bi"); if (bi) bi.innerHTML = BIKE; a.classList.add("uk-profile"); }
+  function setRouteIcon() { var rb = byId("rbb"); if (!rb) return; var bi = rb.querySelector(".bi"); if (bi) bi.innerHTML = ROUTE; }
+  function profileBtn() {
+    var a = byId("acct"); if (!a) return; a.classList.add("uk-profile"); a.title = "Profilo / accedi";
+    var bl = a.querySelector(".bl"), bi = a.querySelector(".bi");
+    if (bi) bi.style.display = "none"; if (bl) bl.style.display = "none";
+    var av = a.querySelector(".uk-av"); if (!av) { av = el("span", { "class": "uk-av" }); a.appendChild(av); }
+    function initials(name) { name = (name || "").trim(); if (!name || /accedi|login|sign|entra/i.test(name)) return null; var p = name.split(/\s+/).filter(Boolean); var s = (p[0] ? p[0][0] : "") + (p.length > 1 ? p[p.length - 1][0] : ""); return s.toUpperCase().slice(0, 2); }
+    function upd() { var ini = initials(bl ? bl.textContent : ""); av.innerHTML = ini ? esc(ini) : HELMET; a.classList.toggle("uk-logged", !!ini); }
+    upd();
+    if (bl && window.MutationObserver) new MutationObserver(upd).observe(bl, { childList: true, characterData: true, subtree: true });
+  }
 
   function buildMore() {
     var hdr = byId("hdr"); if (!hdr || byId("uk-more")) return;
     var btn = el("button", { "class": "btn", id: "uk-more", title: "Altro" }, '<span class="bi">&#x22EF;</span><span class="bl">Altro</span>');
     hdr.appendChild(btn);
     var menu = el("div", { id: "uk-more-menu" }); document.body.appendChild(menu);
-    ["fb", "tb", "ed", "db", "langBtn", "myrides"].forEach(function (id) { var b = byId(id); if (b) menu.appendChild(b); });
+    ["fb", "tb", "ed", "db", "myrides"].forEach(function (id) { var b = byId(id); if (b) menu.appendChild(b); });
     function place() { var r = btn.getBoundingClientRect(); menu.style.top = (r.bottom + 6) + "px"; menu.style.left = Math.max(8, r.right - menu.offsetWidth) + "px"; }
     btn.addEventListener("click", function (e) { e.stopPropagation(); if (menu.classList.toggle("open")) place(); });
     document.addEventListener("click", function (e) { if (e.target !== btn && !menu.contains(e.target)) menu.classList.remove("open"); });
@@ -134,6 +148,6 @@
     w._uk = 1; window.applyFilters = w;
   }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildMore, buildBottom, wireSearch, buildTabs, firstHint, relabelRoute, neutralizeSearchFilter].forEach(function (f) { try { f(); } catch (e) {} }); }
+  function start() { injectStyle(); [newLogo, setRouteIcon, profileBtn, buildMore, buildBottom, wireSearch, buildTabs, firstHint, relabelRoute, neutralizeSearchFilter].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
