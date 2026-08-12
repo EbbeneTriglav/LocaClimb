@@ -94,7 +94,7 @@
 
   var stimer = null, sctrl = null;
   function restorePasses() { var q = byId("search"); if (q) q.value = ""; var af = gref("applyFilters"); if (typeof af === "function") { try { af(); } catch (e) {} } var box = byId("sresults"); if (box) { box.classList.remove("open"); box.innerHTML = ""; } }
-  function goPlace(r) { var map = getMap(); var lat = parseFloat(r.lat), lon = parseFloat(r.lon), bb = r.boundingbox; if (map && map.fitBounds) { if (bb && bb.length === 4) map.fitBounds([[+bb[0], +bb[2]], [+bb[1], +bb[3]]], { maxZoom: 13, padding: [30, 30] }); else if (!isNaN(lat) && !isNaN(lon)) map.flyTo([lat, lon], 11); } restorePasses(); }
+  function goPlace(r) { var map = getMap(); var lat = parseFloat(r.lat), lon = parseFloat(r.lon), bb = r.boundingbox; if (map && map.fitBounds) { if (bb && bb.length === 4) map.fitBounds([[+bb[0], +bb[2]], [+bb[1], +bb[3]]], { maxZoom: 13, padding: [30, 30] }); else if (!isNaN(lat) && !isNaN(lon)) map.flyTo([lat, lon], 11); } var box = byId("sresults"); if (box) box.classList.remove("open"); }
   function placeAppend() {
     var q = byId("search"); if (!q) return; var v = q.value.trim(); if (v.length < 3) return;
     if (sctrl) { try { sctrl.abort(); } catch (e) {} } sctrl = ("AbortController" in window) ? new AbortController() : null;
@@ -125,6 +125,15 @@
   }
   function relabelRoute() { var rb = byId("rbb"); if (rb) { var bl = rb.querySelector(".bl"); if (bl) bl.textContent = "Crea giro"; } }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildMore, buildBottom, wireSearch, buildTabs, firstHint, relabelRoute].forEach(function (f) { try { f(); } catch (e) {} }); }
+  /* la ricerca NON deve filtrare la mappa: avvolgo applyFilters cosi' ignora il testo del
+     campo (i passi restano tutti). Regione/Difficolta continuano a filtrare. */
+  function neutralizeSearchFilter() {
+    var af = window.applyFilters;
+    if (typeof af !== "function" || af._uk) return;
+    var w = function () { var s = byId("search"), saved = s ? s.value : null; if (s) s.value = ""; try { return af.apply(this, arguments); } finally { if (s && saved != null) s.value = saved; } };
+    w._uk = 1; window.applyFilters = w;
+  }
+
+  function start() { injectStyle(); [newLogo, profileBtn, buildMore, buildBottom, wireSearch, buildTabs, firstHint, relabelRoute, neutralizeSearchFilter].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
