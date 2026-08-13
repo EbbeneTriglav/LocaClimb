@@ -8,7 +8,7 @@
   function getMap() { return window.map || gref("map"); }
 
   var LOGO = '<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><defs><linearGradient id="uklg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M17 2C10.6 2 5.4 7.1 5.4 13.4 5.4 21.6 17 32 17 32s11.6-10.4 11.6-18.6C28.6 7.1 23.4 2 17 2z" fill="url(#uklg)"/><path d="M9 19.5 13.6 13l3 3.7 3-4.6L25 19.5z" fill="#fff"/><circle cx="17" cy="9.2" r="1.9" fill="#f59e0b"/></svg>';
-  var HELMET = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6c-4.7 0-8.5 3.3-8.5 7.4h17C20.5 5.9 16.7 2.6 12 2.6z"/><rect x="3.7" y="11" width="16.6" height="4" rx="2"/><path d="M7.4 16.2c1.5 2.5 7.7 2.5 9.2 0 0 2.7-2.1 4.4-4.6 4.4s-4.6-1.7-4.6-4.4z"/></svg>';
+  var HELMET = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.2" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2.8"/><path d="M12 12V5.4M12 12l5.7 3.3M12 12l-5.7 3.3M12 12l4.4-3.8M12 12l-4.4-3.8" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/></svg>';
   var ROUTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-6 7-4 7-9 0-4 5-2 6-5"/><circle cx="5" cy="19" r="2" fill="currentColor" stroke="none"/><path d="M18 3.4c-1.4 0-2.5 1.1-2.5 2.5 0 1.9 2.5 4.1 2.5 4.1s2.5-2.2 2.5-4.1c0-1.4-1.1-2.5-2.5-2.5z" fill="currentColor" stroke="none"/></svg>';
 
   function injectStyle() {
@@ -16,6 +16,8 @@
     var css =
       "#place-wrap{display:none!important}#uk-more,#uk-more-wrap{display:none!important}" +
       "#hdr .btn{padding:8px 12px}#rbb{display:none!important}" +
+      "#uk-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}#uk-left #search-wrap{flex:1}" +
+      "#uk-center{display:flex;align-items:center;gap:9px;padding:0 6px}#uk-right{display:flex;align-items:center;gap:9px;flex:1;justify-content:flex-end}" +
       "#uk-plus{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important;width:42px;height:42px;padding:0!important;border-radius:50%!important;justify-content:center}" +
       "#uk-plus .bi{font-size:1.5rem;line-height:1}" +
       "#hdr #fountBtn,#hdr #uk-food,#uk-gear{width:40px;height:40px;padding:0!important;border-radius:50%!important;justify-content:center}" +
@@ -53,26 +55,26 @@
 
   /* --- barra: "+" (crea), acqua+cibo, ingranaggio (impostazioni) --- */
   function buildHeader() {
-    var hdr = byId("hdr"); if (!hdr) return;
-    var acct = byId("acct");
+    var hdr = byId("hdr"); if (!hdr || byId("uk-left")) return;
+    var h1 = hdr.querySelector("h1"), sw = byId("search-wrap"), acct = byId("acct"), fount = byId("fountBtn"), lang = byId("langBtn");
+    var left = el("div", { id: "uk-left" }), center = el("div", { id: "uk-center" }), right = el("div", { id: "uk-right" });
     var plus = el("button", { "class": "btn", id: "uk-plus", title: "Crea" }, '<span class="bi">+</span>');
-    hdr.insertBefore(plus, acct || null);
+    var gear = el("button", { "class": "btn", id: "uk-gear", title: "Impostazioni" }, '<span class="bi">&#x2699;&#xFE0F;</span>');
+    var food = el("button", { "class": "btn", id: "uk-food", title: "Ristori (bar, panetterie, market)" }, '<span class="bi">&#x1F37D;&#xFE0F;</span><span class="bl">Cibo</span>');
+    food.addEventListener("click", function () { toggleFood(food); });
+    if (h1) left.appendChild(h1); if (sw) left.appendChild(sw);
+    if (fount) center.appendChild(fount); center.appendChild(food);
+    if (lang) right.appendChild(lang); right.appendChild(plus); right.appendChild(gear); if (acct) right.appendChild(acct);
+    hdr.appendChild(left); hdr.appendChild(center); hdr.appendChild(right);
     var pm = dropdown(plus);
     pm.appendChild(mi("&#x1F4E5;", "Importa GPX", function () { var f = gref("pickGPX"); if (typeof f === "function") { try { f(); return; } catch (e) {} } var b = document.querySelector('[data-act="pickGPX"]'); if (b) b.click(); }));
     pm.appendChild(mi("&#x1F6A9;", "Crea giro", function () { var b = byId("rbb"); if (b) b.click(); }));
     pm.appendChild(mi("&#x2728;", "Giro automatico (area)", autoRoute));
-
-    var fount = byId("fountBtn"); if (fount) hdr.insertBefore(fount, acct || null);
-    var food = el("button", { "class": "btn", id: "uk-food", title: "Ristori (bar, panetterie, market)" }, '<span class="bi">&#x1F37D;&#xFE0F;</span><span class="bl">Cibo</span>');
-    food.addEventListener("click", function () { toggleFood(food); });
-    hdr.insertBefore(food, acct || null);
-
-    var gear = el("button", { "class": "btn", id: "uk-gear", title: "Impostazioni" }, '<span class="bi">&#x2699;&#xFE0F;</span>');
-    hdr.insertBefore(gear, acct || null);
     var gm = dropdown(gear);
     ["fb", "tb", "ed", "db", "myrides"].forEach(function (id) { var b = byId(id); if (b) gm.appendChild(b); });
     gm.appendChild(mi("&#x1F5BC;&#xFE0F;", "Cambia foto profilo", pickPhoto));
   }
+  function setPlaceholder() { var s = byId("search"); if (s) s.placeholder = "Cerca passo o localita"; }
 
   /* --- profilo: foto/iniziali/casco --- */
   function getPhoto() { try { return localStorage.getItem("uk_photo") || ""; } catch (e) { return ""; } }
@@ -151,6 +153,6 @@
   function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", "Mappa", function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", "Cerca", function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", "Crea", function () { var b = byId("uk-plus"); if (b) b.click(); })); bar.appendChild(tab("&#x1F6B5;", "Profilo", function () { var b = byId("acct"); if (b) b.click(); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { var b = byId("uk-gear"); if (b) b.click(); })); document.body.appendChild(bar); }
   function firstHint() { try { if (localStorage.getItem("uk_hint_seen")) return; } catch (e) {} var h = el("div", { id: "uk-hint" }, "&#x1F44B; I pallini colorati sono le salite: il <b>colore</b> e' la difficolta (HC = piu dura). Col <b>+</b> importi un GPX o crei un giro; con &#x2699;&#xFE0F; trovi filtri e impostazioni.<br><button id='uk-hint-ok'>Ho capito</button>"); document.body.appendChild(h); var ok = byId("uk-hint-ok"); if (ok) ok.addEventListener("click", function () { try { localStorage.setItem("uk_hint_seen", "1"); } catch (e) {} h.remove(); }); }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor].forEach(function (f) { try { f(); } catch (e) {} }); }
+  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
