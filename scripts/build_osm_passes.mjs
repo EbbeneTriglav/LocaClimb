@@ -53,6 +53,11 @@ const ROADCOL_CFG = {
   "osm_passes_gr.json":    { prom: 150, minEle: 500, minSep: 3 },   // montagna
   "osm_passes_be.json":    { prom: 40,  minEle: 20,  minSep: 1.5 }, // Fiandre/Ardenne: muri e cote corte
   "osm_passes_nl_lu.json": { prom: 40,  minEle: 5,   minSep: 1.5 }, // Cauberg, Ardenne lussemburghesi
+  "osm_passes_ma.json":    { prom: 150, minEle: 800, minSep: 3 },   // Alto Atlante
+  "osm_passes_tr.json":    { prom: 150, minEle: 600, minSep: 3 },   // Tauro/Anatolia
+  "osm_passes_gb.json":    { prom: 80,  minEle: 20,  minSep: 2 },   // UK: salite corte/ripide
+  "osm_passes_ie.json":    { prom: 80,  minEle: 20,  minSep: 2 },   // Irlanda
+  "osm_passes_fr_paca.json": { prom: 180, minEle: 700, minSep: 3 }, // TEST Alpi (rimuovibile)
   "osm_passes_no.json":    { prom: 150, minEle: 100, minSep: 3 },   // fiordi: grandi salite dal mare
 };
 const _rc = ROADCOL_CFG[OUT.split(/[\\/]/).pop()] || null;
