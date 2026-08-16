@@ -113,5 +113,10 @@
   "bbox": null,
   "target": "sweden",
   "builtAt": "2026-08-10"
+ },
+ "osm_passes_ma.json": {
+  "bbox": null,
+  "target": "morocco",
+  "builtAt": "2026-08-16"
  }
 }
