@@ -34,6 +34,8 @@
       "#uk-hint{position:fixed;left:50%;top:calc(var(--hdr) + 14px);transform:translateX(-50%);z-index:100001;background:var(--bg2);border:1px solid var(--bdr);border-left:4px solid var(--ac);border-radius:12px;padding:12px 14px;max-width:340px;box-shadow:0 12px 30px rgba(0,0,0,.2);font-size:.85rem;color:var(--txt)}#uk-hint button{margin-top:8px;padding:6px 14px;border:none;border-radius:8px;background:var(--ac);color:#fff;font-weight:600;cursor:pointer}" +
       "#uk-auto{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100002;display:none;align-items:center;justify-content:center}#uk-auto.open{display:flex}" +
       ".uk-dlg{background:var(--bg2);color:var(--txt);border-radius:16px;padding:22px;width:340px;max-width:92vw;box-shadow:0 20px 50px rgba(0,0,0,.3)}.uk-dlg h3{margin:0 0 4px}.uk-dh{color:var(--txt2);font-size:.85rem;margin:0 0 14px}.uk-dlg label{display:block;font-size:.85rem;margin:12px 0 4px}.uk-dlg input[type=range]{width:100%}.uk-dbtn{display:flex;gap:8px;margin-top:18px}.uk-dbtn button{flex:1;padding:9px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt);font-weight:600;cursor:pointer}#uk-agen{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important}" +
+      "#uk-rbclose{position:absolute;top:10px;right:12px;width:28px;height:28px;border:none;background:var(--bg);border-radius:8px;color:var(--txt2);font-size:1.3rem;line-height:1;cursor:pointer;z-index:5}#uk-rbclose:hover{background:var(--bdr);color:var(--txt)}" +
+      "#uk-surf{width:100%;padding:7px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt);margin-top:2px}" +
       "#uk-tabs{display:none}" +
       "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#uk-legend{bottom:120px}#be-btn{bottom:74px}}";
     document.head.appendChild(el("style", { id: "uk-style" }, css));
@@ -81,9 +83,11 @@
   function buildAutoDialog() {
     if (byId("uk-auto")) return;
     var ov = el("div", { id: "uk-auto" });
-    ov.innerHTML = '<div class="uk-dlg"><h3>' + L("Giro automatico", "Auto route") + '</h3><p class="uk-dh">' + L("Un anello con le salite nell'area visibile.", "A loop from the climbs in view.") + '</p>' +
+    ov.innerHTML = '<div class="uk-dlg"><h3>' + L("Giro automatico", "Auto route") + '</h3>' +
+      '<p class="uk-dh">' + L("1) Inquadra sulla mappa la zona dove vuoi pedalare.", "1) Frame on the map the area where you want to ride.") + '<br>' + L("2) Regola distanza, dislivello e fondo, poi premi Genera.", "2) Set distance, elevation and surface, then press Generate.") + '</p>' +
       '<label>' + L("Distanza", "Distance") + ': <b id="uk-km">60</b> km</label><input type="range" id="uk-kmR" min="20" max="200" value="60" step="5">' +
       '<label>' + L("Dislivello", "Elevation gain") + ': <b id="uk-el">1500</b> m</label><input type="range" id="uk-elR" min="300" max="4000" value="1500" step="100">' +
+      '<label>' + L("Fondo", "Surface") + '</label><select id="uk-surf"><option value="fastbike">' + L("Solo asfalto (consigliato)", "Paved only (recommended)") + '</option><option value="trekking">' + L("Misto / gravel", "Mixed / gravel") + '</option></select>' +
       '<div class="uk-dbtn"><button id="uk-agen">' + L("Genera", "Generate") + '</button><button id="uk-acan">' + L("Annulla", "Cancel") + '</button></div></div>';
     document.body.appendChild(ov);
     var km = byId("uk-kmR"), e2 = byId("uk-elR");
@@ -99,12 +103,13 @@
     var cand = [];
     (gref("PASSES_DATA") || []).forEach(function (p) { if (p && p.lat != null && b.contains([p.lat, p.lon]) && p.versanti && p.versanti.length) cand.push(mk(p, false)); });
     (gref("osmPasses") || []).forEach(function (p) { if (p && p.lat != null && b.contains([p.lat, p.lon]) && p.versanti && p.versanti.length) cand.push(mk(p, true)); });
-    if (cand.length < 2) { alert(L("Poche salite nell'area: zooma su una zona con piu passi.", "Too few climbs here: zoom to an area with more climbs.")); return; }
+    if (cand.length < 2) { alert(L("Area troppo piccola o poche salite: allarga la vista (zoom out) su una zona con piu passi.", "Area too small or too few climbs: zoom out to an area with more climbs.")); return; }
     cand.sort(function (a, b) { return a.ang - b.ang; }); // ordine ad anello attorno al centro
     var pick = [], sk = 0, sg = 0;
     for (var i = 0; i < cand.length && sk < km; i++) { var x = cand[i]; if (sk + x.dist * 2 <= km * 1.2 && sg + x.gain <= dl * 1.25) { pick.push(x); sk += x.dist * 2; sg += x.gain; } }
     if (pick.length < 2) pick = cand.slice(0, 3);
     var rbb = byId("rbb"); if (rbb) rbb.click();
+    var surf = byId("uk-surf"), rs = byId("rb-surf"); if (surf && rs) rs.value = surf.value; // fondo scelto: evita i sentieri
     var add = gref("addToRoute"), addO = gref("addOsmToRoute");
     function push(x) { try { if (x.osm && typeof addO === "function") addO(x.id); else if (typeof add === "function") add(x.id); } catch (e) {} }
     pick.forEach(push); push(pick[0]); // chiudi ad anello: torna al primo
@@ -160,6 +165,13 @@
   function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", L("Mappa", "Map"), function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", L("Cerca", "Search"), function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", L("Crea", "Create"), function () { var b = byId("uk-plus"); if (b) b.click(); })); bar.appendChild(tab("&#x1F6B5;", L("Profilo", "Profile"), function () { var b = byId("acct"); if (b) b.click(); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { var b = byId("uk-gear"); if (b) b.click(); })); document.body.appendChild(bar); }
   function firstHint() { try { if (localStorage.getItem("uk_hint_seen")) return; } catch (e) {} var h = el("div", { id: "uk-hint" }, L("&#x1F44B; I pallini colorati sono le salite: il <b>colore</b> e' la difficolta (HC = piu dura). Col <b>+</b> importi un GPX o crei un giro; con &#x2699;&#xFE0F; filtri e impostazioni.", "&#x1F44B; The colored dots are climbs: the <b>color</b> is the difficulty (HC = hardest). Use <b>+</b> to import a GPX or plan a ride; &#x2699;&#xFE0F; for filters and settings.") + "<br><button id='uk-hint-ok'>" + L("Ho capito", "Got it") + "</button>"); document.body.appendChild(h); var ok = byId("uk-hint-ok"); if (ok) ok.addEventListener("click", function () { try { localStorage.setItem("uk_hint_seen", "1"); } catch (e) {} h.remove(); }); }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor].forEach(function (f) { try { f(); } catch (e) {} }); }
+  function addRouteClose() {
+    var rb = byId("rb"); if (!rb || byId("uk-rbclose")) return;
+    var x = el("button", { id: "uk-rbclose", title: L("Chiudi", "Close"), "aria-label": L("Chiudi", "Close") }, "&times;");
+    x.addEventListener("click", function () { var sp = gref("setPanel"); if (typeof sp === "function") { try { sp("rb", false); return; } catch (e) {} } var r = byId("rbb"); if (r && byId("rb").classList.contains("open")) r.click(); });
+    rb.appendChild(x);
+  }
+
+  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
