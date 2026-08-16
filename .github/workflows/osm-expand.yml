@@ -65,6 +65,11 @@ on:
           - poland
           - hungary
           - greece
+          # --- Isole britanniche, Nord Africa, Anatolia ---
+          - great-britain
+          - ireland
+          - morocco
+          - turkey
           # --- Nord Europa e Baltici ---
           - norway
           - sweden
@@ -268,6 +273,18 @@ jobs:
             greece)               # Olimpo, Parnaso, Peloponneso (estratto grande)
               echo "pbf=$GF/greece-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gr.json' >> "$GITHUB_OUTPUT" ;;
+            great-britain)        # Highlands, Lake District, Snowdonia, Peak District
+              echo "pbf=$GF/great-britain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb.json' >> "$GITHUB_OUTPUT" ;;
+            ireland)              # Irlanda + Nord Irlanda (Wicklow, Kerry, Conor Pass)
+              echo "pbf=$GF/ireland-and-northern-ireland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_ie.json' >> "$GITHUB_OUTPUT" ;;
+            morocco)              # Alto Atlante: Tizi n'Tichka, Tizi n'Test (estratto AFRICA)
+              echo "pbf=https://download.geofabrik.de/africa/morocco-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_ma.json' >> "$GITHUB_OUTPUT" ;;
+            turkey)               # Tauro, Anatolia (estratto grande ~612 MB)
+              echo "pbf=$GF/turkey-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_tr.json' >> "$GITHUB_OUTPUT" ;;
             norway)               # fiordi: salite dal mare, Trollstigen, Sognefjellet
               echo "pbf=$GF/norway-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_no.json' >> "$GITHUB_OUTPUT" ;;
