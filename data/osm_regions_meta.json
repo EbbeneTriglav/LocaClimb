@@ -133,5 +133,15 @@
   ],
   "target": "turkey-ovest",
   "builtAt": "2026-08-18"
+ },
+ "osm_passes_tr_e.json": {
+  "bbox": [
+   33.5,
+   35.5,
+   45.5,
+   42.5
+  ],
+  "target": "turkey-est",
+  "builtAt": "2026-08-18"
  }
 }
