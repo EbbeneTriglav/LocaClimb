@@ -143,5 +143,10 @@
   ],
   "target": "turkey-est",
   "builtAt": "2026-08-18"
+ },
+ "osm_passes_de_ne.json": {
+  "bbox": null,
+  "target": "germany-nordest",
+  "builtAt": "2026-08-18"
  }
 }
