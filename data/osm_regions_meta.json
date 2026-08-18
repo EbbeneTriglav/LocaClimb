@@ -123,5 +123,15 @@
   "bbox": null,
   "target": "france-paca",
   "builtAt": "2026-08-18"
+ },
+ "osm_passes_tr_w.json": {
+  "bbox": [
+   25.5,
+   35.5,
+   34.5,
+   42.5
+  ],
+  "target": "turkey-ovest",
+  "builtAt": "2026-08-18"
  }
 }
