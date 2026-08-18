@@ -118,5 +118,10 @@
   "bbox": null,
   "target": "morocco",
   "builtAt": "2026-08-16"
+ },
+ "osm_passes_fr_paca.json": {
+  "bbox": null,
+  "target": "france-paca",
+  "builtAt": "2026-08-18"
  }
 }
