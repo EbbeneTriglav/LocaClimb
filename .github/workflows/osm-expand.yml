@@ -69,7 +69,8 @@ on:
           - great-britain
           - ireland
           - morocco
-          - turkey
+          - turkey-ovest
+          - turkey-est
           # --- Nord Europa e Baltici ---
           - norway
           - sweden
@@ -282,9 +283,14 @@ jobs:
             morocco)              # Alto Atlante: Tizi n'Tichka, Tizi n'Test (estratto AFRICA)
               echo "pbf=https://download.geofabrik.de/africa/morocco-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_ma.json' >> "$GITHUB_OUTPUT" ;;
-            turkey)               # Tauro, Anatolia (estratto grande ~612 MB)
+            turkey-ovest)         # Anatolia ovest, Egeo, Tauro occidentale
               echo "pbf=$GF/turkey-latest.osm.pbf" >> "$GITHUB_OUTPUT"
-              echo 'out=osm_passes_tr.json' >> "$GITHUB_OUTPUT" ;;
+              echo 'bbox=25.5,35.5,34.5,42.5' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_tr_w.json' >> "$GITHUB_OUTPUT" ;;
+            turkey-est)           # Anatolia centro-est, Tauro orientale
+              echo "pbf=$GF/turkey-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=33.5,35.5,45.5,42.5' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_tr_e.json' >> "$GITHUB_OUTPUT" ;;
             norway)               # fiordi: salite dal mare, Trollstigen, Sognefjellet
               echo "pbf=$GF/norway-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_no.json' >> "$GITHUB_OUTPUT" ;;
