@@ -69,7 +69,8 @@ on:
           - scotland
           - wales
           - england-nord
-          - england-sud
+          - england-sud-ovest
+          - england-sud-est
           - ireland
           - morocco
           - turkey-ovest
@@ -278,19 +279,20 @@ jobs:
               echo "pbf=$GF/greece-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gr.json' >> "$GITHUB_OUTPUT" ;;
             scotland)             # Highlands: Bealach na Ba, Applecross
-              echo "pbf=$GF/great-britain/scotland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo "pbf=$GF/united-kingdom/scotland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gb_sco.json' >> "$GITHUB_OUTPUT" ;;
             wales)                # Snowdonia, Brecon, Bwlch
-              echo "pbf=$GF/great-britain/wales-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo "pbf=$GF/united-kingdom/wales-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gb_wal.json' >> "$GITHUB_OUTPUT" ;;
-            england-nord)         # Lake District, Pennini, Peak, Yorkshire (estratto England + bbox)
-              echo "pbf=$GF/great-britain/england-latest.osm.pbf" >> "$GITHUB_OUTPUT"
-              echo 'bbox=-3.8,52.7,0.4,55.9' >> "$GITHUB_OUTPUT"
+            england-nord)         # Lake District, Peak, Yorkshire, Pennini (contee)
+              echo "pbf=$GF/united-kingdom/england/cumbria-latest.osm.pbf,$GF/united-kingdom/england/north-yorkshire-latest.osm.pbf,$GF/united-kingdom/england/west-yorkshire-latest.osm.pbf,$GF/united-kingdom/england/south-yorkshire-latest.osm.pbf,$GF/united-kingdom/england/lancashire-latest.osm.pbf,$GF/united-kingdom/england/durham-latest.osm.pbf,$GF/united-kingdom/england/northumberland-latest.osm.pbf,$GF/united-kingdom/england/derbyshire-latest.osm.pbf,$GF/united-kingdom/england/cheshire-latest.osm.pbf,$GF/united-kingdom/england/staffordshire-latest.osm.pbf,$GF/united-kingdom/england/greater-manchester-latest.osm.pbf,$GF/united-kingdom/england/shropshire-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gb_en_n.json' >> "$GITHUB_OUTPUT" ;;
-            england-sud)          # SW (Dartmoor/Exmoor/Cornovaglia) + Downs
-              echo "pbf=$GF/great-britain/england-latest.osm.pbf" >> "$GITHUB_OUTPUT"
-              echo 'bbox=-6.5,49.8,1.9,52.9' >> "$GITHUB_OUTPUT"
-              echo 'out=osm_passes_gb_en_s.json' >> "$GITHUB_OUTPUT" ;;
+            england-sud-ovest)    # Dartmoor/Exmoor/Cornovaglia/Cotswolds/Mendip
+              echo "pbf=$GF/united-kingdom/england/cornwall-latest.osm.pbf,$GF/united-kingdom/england/devon-latest.osm.pbf,$GF/united-kingdom/england/somerset-latest.osm.pbf,$GF/united-kingdom/england/dorset-latest.osm.pbf,$GF/united-kingdom/england/bristol-latest.osm.pbf,$GF/united-kingdom/england/gloucestershire-latest.osm.pbf,$GF/united-kingdom/england/wiltshire-latest.osm.pbf,$GF/united-kingdom/england/herefordshire-latest.osm.pbf,$GF/united-kingdom/england/worcestershire-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb_en_so.json' >> "$GITHUB_OUTPUT" ;;
+            england-sud-est)      # North/South Downs, Chilterns (Box Hill, Ditchling)
+              echo "pbf=$GF/united-kingdom/england/surrey-latest.osm.pbf,$GF/united-kingdom/england/kent-latest.osm.pbf,$GF/united-kingdom/england/east-sussex-latest.osm.pbf,$GF/united-kingdom/england/west-sussex-latest.osm.pbf,$GF/united-kingdom/england/hampshire-latest.osm.pbf,$GF/united-kingdom/england/isle-of-wight-latest.osm.pbf,$GF/united-kingdom/england/oxfordshire-latest.osm.pbf,$GF/united-kingdom/england/buckinghamshire-latest.osm.pbf,$GF/united-kingdom/england/berkshire-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb_en_se.json' >> "$GITHUB_OUTPUT" ;;
             ireland)              # Irlanda + Nord Irlanda (Wicklow, Kerry, Conor Pass)
               echo "pbf=$GF/ireland-and-northern-ireland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_ie.json' >> "$GITHUB_OUTPUT" ;;
