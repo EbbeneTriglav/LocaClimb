@@ -148,5 +148,10 @@
   "bbox": null,
   "target": "germany-nordest",
   "builtAt": "2026-08-18"
+ },
+ "osm_passes_ie.json": {
+  "bbox": null,
+  "target": "ireland",
+  "builtAt": "2026-08-19"
  }
 }
