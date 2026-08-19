@@ -134,7 +134,7 @@ var I18N = {
   "Passi conquistati": "Passes conquered",
   "Giro piu' lungo": "Longest ride", "Piu' dislivello": "Most elevation gain",
   "Quota piu' alta toccata": "Highest point reached",
-  "Distanza": "Distance", "Quota massima": "Highest altitude", "Passi diversi": "Different passes",
+  "Quota massima": "Highest altitude", "Passi diversi": "Different passes",
   "Tutti i livelli raggiunti": "All levels reached",
   "pubblico": "public",
 
@@ -161,7 +161,7 @@ var I18N = {
   "Basso": "Low", "Medio": "Medium", "Alto": "High",
   "Dettagli": "Details", "Servizio non disponibile.": "Service unavailable.",
   "Nessun punto acqua entro 200 m dal percorso.": "No water point within 200 m of the route.",
-  "Lingua": "Language"
+  "Lingua": "Language",
 };
 
 /* Frasi con numeri dentro: si traducono per schema, non per corrispondenza esatta. */

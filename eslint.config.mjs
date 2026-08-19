@@ -11,6 +11,7 @@
 import vm from "node:vm";
 import globals from "globals";
 import { loadApp } from "./test/helpers/load-app.mjs";
+import { readFileSync, readdirSync } from "node:fs";
 
 // High-signal, ~zero-false-positive correctness rules (the useful subset of ESLint's
 // "recommended" set). Enumerated explicitly rather than pulling in @eslint/js, so the
@@ -55,6 +56,17 @@ const projectGlobals = {};
 for (const name of appNames) {
   if (!BUILTINS.has(name) && !HARNESS_STUBS.has(name)) projectGlobals[name] = "writable"; // app reassigns many
 }
+// Belt-and-suspenders: alcuni file js/ non vengono eseguiti dal vm loader, quindi i loro
+// globali non entravano nel set e no-undef dava falsi errori (flashInfo, rideTcx, ...).
+// Aggiungiamo anche le dichiarazioni top-level (colonna 0) trovate scandendo i file js/.
+try {
+  for (const f of readdirSync("js").filter((n) => n.endsWith(".js"))) {
+    const src = readFileSync("js/" + f, "utf8");
+    const re = /^(?:async\s+)?function\s+([A-Za-z_$][\w$]*)|^(?:var|let|const)\s+([A-Za-z_$][\w$]*)/gm;
+    let m;
+    while ((m = re.exec(src))) { const nm = m[1] || m[2]; if (nm) projectGlobals[nm] = "writable"; }
+  }
+} catch (e) { /* se js/ non esiste, resta il set derivato dal vm */ }
 
 // Rules that fight this codebase's legitimate idioms are turned off; the rest of ESLint's
 // recommended set (no-undef, no-dupe-keys, no-unreachable, valid-typeof, use-isnan, ...) stays.
