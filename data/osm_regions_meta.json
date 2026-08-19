@@ -188,5 +188,10 @@
   "bbox": null,
   "target": "england-nord",
   "builtAt": "2026-08-19"
+ },
+ "osm_passes_fr.json": {
+  "bbox": null,
+  "target": "france-alps",
+  "builtAt": "2026-08-19"
  }
 }
