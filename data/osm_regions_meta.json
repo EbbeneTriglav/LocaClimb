@@ -148,5 +148,20 @@
   "bbox": null,
   "target": "germany-nordest",
   "builtAt": "2026-08-18"
+ },
+ "osm_passes_ie.json": {
+  "bbox": null,
+  "target": "ireland",
+  "builtAt": "2026-08-19"
+ },
+ "osm_passes_xb_frde.json": {
+  "bbox": [
+   7.2,
+   47.4,
+   8.6,
+   49.1
+  ],
+  "target": "confine-fr-de",
+  "builtAt": "2026-08-19"
  }
 }
