@@ -173,5 +173,10 @@
   "bbox": null,
   "target": "scotland",
   "builtAt": "2026-08-19"
+ },
+ "osm_passes_sud.json": {
+  "bbox": null,
+  "target": "italy-sud",
+  "builtAt": "2026-08-19"
  }
 }
