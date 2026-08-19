@@ -168,5 +168,10 @@
   "bbox": null,
   "target": "england-sud-est",
   "builtAt": "2026-08-19"
+ },
+ "osm_passes_gb_sco.json": {
+  "bbox": null,
+  "target": "scotland",
+  "builtAt": "2026-08-19"
  }
 }
