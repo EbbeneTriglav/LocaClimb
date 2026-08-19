@@ -178,5 +178,10 @@
   "bbox": null,
   "target": "italy-sud",
   "builtAt": "2026-08-19"
+ },
+ "osm_passes_pt.json": {
+  "bbox": null,
+  "target": "portugal",
+  "builtAt": "2026-08-19"
  }
 }
