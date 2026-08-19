@@ -163,5 +163,10 @@
   ],
   "target": "confine-fr-de",
   "builtAt": "2026-08-19"
+ },
+ "osm_passes_gb_en_se.json": {
+  "bbox": null,
+  "target": "england-sud-est",
+  "builtAt": "2026-08-19"
  }
 }
