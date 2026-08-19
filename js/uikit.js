@@ -35,9 +35,10 @@
       "#uk-auto{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100002;display:none;align-items:center;justify-content:center}#uk-auto.open{display:flex}" +
       ".uk-dlg{background:var(--bg2);color:var(--txt);border-radius:16px;padding:22px;width:340px;max-width:92vw;box-shadow:0 20px 50px rgba(0,0,0,.3)}.uk-dlg h3{margin:0 0 4px}.uk-dh{color:var(--txt2);font-size:.85rem;margin:0 0 14px}.uk-dlg label{display:block;font-size:.85rem;margin:12px 0 4px}.uk-dlg input[type=range]{width:100%}.uk-dbtn{display:flex;gap:8px;margin-top:18px}.uk-dbtn button{flex:1;padding:9px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt);font-weight:600;cursor:pointer}#uk-agen{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important}" +
       "#uk-rbclose{position:absolute;top:10px;right:12px;width:28px;height:28px;border:none;background:var(--bg);border-radius:8px;color:var(--txt2);font-size:1.3rem;line-height:1;cursor:pointer;z-index:5}#uk-rbclose:hover{background:var(--bdr);color:var(--txt)}" +
+      "#uk-install{position:fixed;left:8px;right:8px;top:calc(var(--hdr) + 8px);z-index:100002;display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:8px 10px;box-shadow:0 8px 24px rgba(0,0,0,.18)}#uk-install .uk-ic svg{width:30px;height:30px;display:block}#uk-install .uk-it{flex:1;line-height:1.2}#uk-install .uk-it small{display:block;color:var(--txt2);font-size:.72rem}#uk-inst-go{background:var(--ac);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer;white-space:nowrap}#uk-inst-x{background:transparent;border:none;color:var(--txt2);font-size:1.3rem;cursor:pointer;line-height:1}" +
       "#uk-surf{width:100%;padding:7px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt);margin-top:2px}" +
       "#uk-tabs{display:none}" +
-      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#uk-legend{bottom:120px}#be-btn{bottom:74px}}";
+      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-profile{display:none!important}#hdr #fountBtn,#hdr #uk-food{width:38px;height:38px}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:120px}#be-btn{bottom:74px}}";
     document.head.appendChild(el("style", { id: "uk-style" }, css));
   }
 
@@ -172,6 +173,22 @@
     rb.appendChild(x);
   }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose].forEach(function (f) { try { f(); } catch (e) {} }); }
+  /* banner "installa app" su mobile */
+  function isMobile() { return window.matchMedia && window.matchMedia("(max-width:640px)").matches; }
+  function buildInstall() {
+    if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return; // gia' installata
+    window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); window._ukPrompt = e; });
+    if (!isMobile()) return;
+    try { if (localStorage.getItem("uk_install_x")) return; } catch (e) {}
+    setTimeout(function () {
+      if (byId("uk-install")) return;
+      var b = el("div", { id: "uk-install" }, '<span class="uk-ic">' + LOGO + '</span><div class="uk-it"><b>LocaRide</b><small>' + L("Aggiungi alla schermata Home", "Add to your Home screen") + '</small></div><button id="uk-inst-go">' + L("Installa", "Install") + '</button><button id="uk-inst-x" aria-label="Chiudi">&times;</button>');
+      document.body.appendChild(b);
+      byId("uk-inst-go").addEventListener("click", function () { var p = window._ukPrompt; if (p) { p.prompt(); if (p.userChoice) p.userChoice.finally(function () { window._ukPrompt = null; b.remove(); }); else b.remove(); } else { alert(L("Apri il menu del browser (i tre puntini) e scegli 'Aggiungi a schermata Home'.", "Open your browser menu and choose 'Add to Home screen'.")); } });
+      byId("uk-inst-x").addEventListener("click", function () { try { localStorage.setItem("uk_install_x", "1"); } catch (e) {} b.remove(); });
+    }, 1400);
+  }
+
+  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose, buildInstall].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
