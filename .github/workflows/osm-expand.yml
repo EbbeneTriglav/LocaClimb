@@ -66,7 +66,10 @@ on:
           - hungary
           - greece
           # --- Isole britanniche, Nord Africa, Anatolia ---
-          - great-britain
+          - scotland
+          - wales
+          - england-nord
+          - england-sud
           - ireland
           - morocco
           - turkey-ovest
@@ -274,9 +277,20 @@ jobs:
             greece)               # Olimpo, Parnaso, Peloponneso (estratto grande)
               echo "pbf=$GF/greece-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_gr.json' >> "$GITHUB_OUTPUT" ;;
-            great-britain)        # Highlands, Lake District, Snowdonia, Peak District
-              echo "pbf=$GF/great-britain-latest.osm.pbf" >> "$GITHUB_OUTPUT"
-              echo 'out=osm_passes_gb.json' >> "$GITHUB_OUTPUT" ;;
+            scotland)             # Highlands: Bealach na Ba, Applecross
+              echo "pbf=$GF/great-britain/scotland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb_sco.json' >> "$GITHUB_OUTPUT" ;;
+            wales)                # Snowdonia, Brecon, Bwlch
+              echo "pbf=$GF/great-britain/wales-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb_wal.json' >> "$GITHUB_OUTPUT" ;;
+            england-nord)         # Lake District, Pennini, Peak, Yorkshire (estratto England + bbox)
+              echo "pbf=$GF/great-britain/england-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-3.8,52.7,0.4,55.9' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb_en_n.json' >> "$GITHUB_OUTPUT" ;;
+            england-sud)          # SW (Dartmoor/Exmoor/Cornovaglia) + Downs
+              echo "pbf=$GF/great-britain/england-latest.osm.pbf" >> "$GITHUB_OUTPUT"
+              echo 'bbox=-6.5,49.8,1.9,52.9' >> "$GITHUB_OUTPUT"
+              echo 'out=osm_passes_gb_en_s.json' >> "$GITHUB_OUTPUT" ;;
             ireland)              # Irlanda + Nord Irlanda (Wicklow, Kerry, Conor Pass)
               echo "pbf=$GF/ireland-and-northern-ireland-latest.osm.pbf" >> "$GITHUB_OUTPUT"
               echo 'out=osm_passes_ie.json' >> "$GITHUB_OUTPUT" ;;

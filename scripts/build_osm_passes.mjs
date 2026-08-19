@@ -56,7 +56,10 @@ const ROADCOL_CFG = {
   "osm_passes_ma.json":    { prom: 150, minEle: 800, minSep: 3 },   // Alto Atlante
   "osm_passes_tr_w.json":  { prom: 150, minEle: 600, minSep: 3 },   // Tauro ovest
   "osm_passes_tr_e.json":  { prom: 150, minEle: 600, minSep: 3 },   // Tauro est
-  "osm_passes_gb.json":    { prom: 80,  minEle: 20,  minSep: 2 },   // UK: salite corte/ripide
+  "osm_passes_gb_sco.json": { prom: 100, minEle: 20, minSep: 2 },  // Scozia Highlands
+  "osm_passes_gb_wal.json": { prom: 80,  minEle: 20, minSep: 2 },  // Galles
+  "osm_passes_gb_en_n.json": { prom: 70, minEle: 20, minSep: 2 },  // Inghilterra nord
+  "osm_passes_gb_en_s.json": { prom: 70, minEle: 15, minSep: 2 },  // Inghilterra sud/SW
   "osm_passes_ie.json":    { prom: 80,  minEle: 20,  minSep: 2 },   // Irlanda
   "osm_passes_fr_paca.json": { prom: 180, minEle: 700, minSep: 3 }, // TEST Alpi (rimuovibile)
   "osm_passes_no.json":    { prom: 150, minEle: 100, minSep: 3 },   // fiordi: grandi salite dal mare
