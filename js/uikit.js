@@ -189,6 +189,31 @@
     }, 1400);
   }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose, buildInstall].forEach(function (f) { try { f(); } catch (e) {} }); }
+  // Mobile: la barra a schede (#uk-tabs, fixed in basso) copre il fondo del pannello, dove sta
+  // il tasto salva recensione. Diamo spazio in fondo al contenitore che scrolla, ancorandoci al
+  // voto/textarea recensione. Solo mobile, reversibile (tolgo la funzione dallo start).
+  function fixReviewSpacing() {
+    if (!window.matchMedia("(max-width:640px)").matches) return;
+    var PAD = 82; // altezza barra tab + margine
+    function pad() {
+      var anchor = document.querySelector('#rv_txt, [data-act="submitVote"], [data-act="submitReview"]');
+      if (!anchor) return;
+      var sc = anchor.parentElement;
+      while (sc && sc !== document.body) {
+        var ov = getComputedStyle(sc).overflowY;
+        if ((ov === "auto" || ov === "scroll") && sc.scrollHeight > sc.clientHeight + 4) {
+          if (sc.dataset.ukPad !== "1") { sc.style.paddingBottom = PAD + "px"; sc.dataset.ukPad = "1"; }
+          return;
+        }
+        sc = sc.parentElement;
+      }
+      var box = anchor.closest('[data-act], div');
+      if (box && box.dataset.ukPad !== "1") { box.style.paddingBottom = PAD + "px"; box.dataset.ukPad = "1"; }
+    }
+    new MutationObserver(function () { try { pad(); } catch (e) {} }).observe(document.body, { childList: true, subtree: true });
+    pad();
+  }
+
+  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose, buildInstall, fixReviewSpacing].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();

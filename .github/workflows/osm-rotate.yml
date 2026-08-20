@@ -4,9 +4,9 @@ name: OSM rotate (auto - una zona a giro)
 # lista dei target (nazioni + confini + nuove), letta DIRETTAMENTE dal menu di osm-expand.yml
 # cosi' resta sempre allineata. ~6 zone/giorno, distanziate 2 ore. Nessun click: parte da sola.
 #
-# Perche' cosi': non duplica gli step di build. Lancia osm-expand via `gh workflow run`
-# (evento workflow_dispatch, che con GITHUB_TOKEN e actions:write genera davvero il run).
-# Lo stato del giro sta in data/.osm_rotate (un indice), committato ad ogni scatto.
+# L'indice del giro e' calcolato dal tempo (floor(epoch/7200) % N): gli scatti sono a intervalli
+# fissi di 2h, quindi ogni scatto prende un indice diverso e crescente -> ruota tutte le zone.
+# Niente file di stato, niente git push: cosi' evita il problema del detached-HEAD sui run cron.
 
 on:
   schedule:
@@ -14,8 +14,7 @@ on:
   workflow_dispatch: {}                # per provarlo a mano quando vuoi
 
 permissions:
-  actions: write      # per lanciare osm-expand
-  contents: write     # per salvare lo stato del giro
+  actions: write      # basta questo: serve solo a lanciare osm-expand
 
 concurrency:
   group: osm-rotate
@@ -36,23 +35,11 @@ jobs:
           N=${#TARGETS[@]}
           if [ "$N" -eq 0 ]; then echo "Nessun target trovato nel menu di osm-expand.yml"; exit 1; fi
 
-          # 2) indice corrente dallo stato (default 0)
-          STATE=data/.osm_rotate
-          IDX=0
-          [ -f "$STATE" ] && IDX=$(cat "$STATE" 2>/dev/null || echo 0)
-          case "$IDX" in ''|*[!0-9]*) IDX=0 ;; esac
+          # 2) indice dal tempo: ogni finestra di 2h -> un indice diverso, crescente
+          IDX=$(( $(date +%s) / 7200 ))
           POS=$(( IDX % N ))
           T="${TARGETS[$POS]}"
-          echo "Zona $(( POS + 1 ))/$N : $T   (indice $IDX)"
+          echo "Zona $(( POS + 1 ))/$N : $T   (idx $IDX, totale zone $N)"
 
           # 3) lancia osm-expand su quella zona (dry_run ha default false)
           gh workflow run osm-expand.yml -f target="$T"
-
-          # 4) avanza e salva lo stato
-          echo $(( IDX + 1 )) > "$STATE"
-          git config user.name  "locaclimb-bot"
-          git config user.email "locaclimb-bot@users.noreply.github.com"
-          git add "$STATE"
-          git commit -m "rotate: prossima zona idx $(( IDX + 1 )) [skip ci]" || { echo "niente da committare"; exit 0; }
-          git pull --no-rebase --no-edit || true
-          git push || { git pull --no-rebase --no-edit || true; git push; }
