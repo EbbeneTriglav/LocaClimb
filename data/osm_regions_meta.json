@@ -193,5 +193,10 @@
   "bbox": null,
   "target": "france-alps",
   "builtAt": "2026-08-19"
+ },
+ "osm_passes_at.json": {
+  "bbox": null,
+  "target": "austria",
+  "builtAt": "2026-08-20"
  }
 }
