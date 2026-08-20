@@ -198,5 +198,10 @@
   "bbox": null,
   "target": "austria",
   "builtAt": "2026-08-20"
+ },
+ "osm_passes_fi.json": {
+  "bbox": null,
+  "target": "finland",
+  "builtAt": "2026-08-20"
  }
 }
