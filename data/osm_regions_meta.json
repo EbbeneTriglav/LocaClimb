@@ -208,5 +208,10 @@
   "bbox": null,
   "target": "france-auvergne",
   "builtAt": "2026-08-20"
+ },
+ "osm_passes_gb_wal.json": {
+  "bbox": null,
+  "target": "wales",
+  "builtAt": "2026-08-21"
  }
 }
