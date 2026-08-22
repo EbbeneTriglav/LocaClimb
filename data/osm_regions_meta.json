@@ -218,5 +218,10 @@
   "bbox": null,
   "target": "estonia",
   "builtAt": "2026-08-22"
+ },
+ "osm_passes_lv.json": {
+  "bbox": null,
+  "target": "latvia",
+  "builtAt": "2026-08-22"
  }
 }
