@@ -213,5 +213,10 @@
   "bbox": null,
   "target": "wales",
   "builtAt": "2026-08-21"
+ },
+ "osm_passes_ee.json": {
+  "bbox": null,
+  "target": "estonia",
+  "builtAt": "2026-08-22"
  }
 }
