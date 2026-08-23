@@ -233,5 +233,15 @@
   ],
   "target": "confine-fr-es",
   "builtAt": "2026-08-23"
+ },
+ "osm_passes_xb_frch.json": {
+  "bbox": [
+   5.8,
+   45.8,
+   7.2,
+   47.6
+  ],
+  "target": "confine-fr-ch",
+  "builtAt": "2026-08-23"
  }
 }
