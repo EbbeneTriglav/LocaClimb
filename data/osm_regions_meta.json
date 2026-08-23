@@ -263,5 +263,15 @@
   ],
   "target": "confine-de-ch",
   "builtAt": "2026-08-23"
+ },
+ "osm_passes_xb_atsi.json": {
+  "bbox": [
+   13.2,
+   46.3,
+   16.3,
+   46.95
+  ],
+  "target": "confine-at-si",
+  "builtAt": "2026-08-23"
  }
 }
