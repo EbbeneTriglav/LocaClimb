@@ -87,7 +87,7 @@
  "osm_passes_fr_bidf.json": {
   "bbox": null,
   "target": "france-bretagne-idf",
-  "builtAt": "2026-08-10"
+  "builtAt": "2026-08-25"
  },
  "osm_passes_ch.json": {
   "bbox": null,
