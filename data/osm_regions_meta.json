@@ -283,5 +283,15 @@
   ],
   "target": "spain-nord",
   "builtAt": "2026-08-25"
+ },
+ "osm_passes_es_c.json": {
+  "bbox": [
+   -9.6,
+   38.4,
+   3.5,
+   41.5
+  ],
+  "target": "spain-centro",
+  "builtAt": "2026-08-25"
  }
 }
