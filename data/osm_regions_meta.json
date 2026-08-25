@@ -273,5 +273,15 @@
   ],
   "target": "confine-at-si",
   "builtAt": "2026-08-23"
+ },
+ "osm_passes_es_n.json": {
+  "bbox": [
+   -9.6,
+   41.4,
+   3.5,
+   44
+  ],
+  "target": "spain-nord",
+  "builtAt": "2026-08-25"
  }
 }
