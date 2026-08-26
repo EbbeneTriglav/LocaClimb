@@ -293,5 +293,10 @@
   ],
   "target": "spain-centro",
   "builtAt": "2026-08-25"
+ },
+ "osm_passes_de_nrw.json": {
+  "bbox": null,
+  "target": "germany-nrw",
+  "builtAt": "2026-08-26"
  }
 }
