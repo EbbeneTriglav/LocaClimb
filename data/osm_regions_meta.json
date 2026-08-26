@@ -308,5 +308,10 @@
   "bbox": null,
   "target": "germany-nord",
   "builtAt": "2026-08-26"
+ },
+ "osm_passes_hr.json": {
+  "bbox": null,
+  "target": "croatia",
+  "builtAt": "2026-08-26"
  }
 }
