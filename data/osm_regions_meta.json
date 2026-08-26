@@ -298,5 +298,10 @@
   "bbox": null,
   "target": "germany-nrw",
   "builtAt": "2026-08-26"
+ },
+ "osm_passes_de_e.json": {
+  "bbox": null,
+  "target": "germany-est",
+  "builtAt": "2026-08-26"
  }
 }
