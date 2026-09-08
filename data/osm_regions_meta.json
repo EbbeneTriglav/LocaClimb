@@ -338,5 +338,10 @@
   "bbox": null,
   "target": "germany-bayern",
   "builtAt": "2026-09-07"
+ },
+ "osm_passes_rs.json": {
+  "bbox": null,
+  "target": "serbia",
+  "builtAt": "2026-09-08"
  }
 }
