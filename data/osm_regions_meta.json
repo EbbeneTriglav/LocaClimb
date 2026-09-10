@@ -353,5 +353,15 @@
   ],
   "target": "confine-it-ch",
   "builtAt": "2026-09-10"
+ },
+ "osm_passes_xb_itsi.json": {
+  "bbox": [
+   13.2,
+   45.6,
+   14.3,
+   46.6
+  ],
+  "target": "confine-it-si",
+  "builtAt": "2026-09-10"
  }
 }
