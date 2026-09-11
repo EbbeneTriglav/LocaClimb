@@ -373,5 +373,15 @@
   ],
   "target": "confine-ba-me-rs",
   "builtAt": "2026-09-11"
+ },
+ "osm_passes_xb_rors.json": {
+  "bbox": [
+   20.9,
+   44.2,
+   23.2,
+   45.6
+  ],
+  "target": "confine-ro-rs",
+  "builtAt": "2026-09-11"
  }
 }
