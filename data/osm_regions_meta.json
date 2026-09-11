@@ -363,5 +363,15 @@
   ],
   "target": "confine-it-si",
   "builtAt": "2026-09-10"
+ },
+ "osm_passes_xb_bamers.json": {
+  "bbox": [
+   17.9,
+   42.2,
+   20.8,
+   44.8
+  ],
+  "target": "confine-ba-me-rs",
+  "builtAt": "2026-09-11"
  }
 }
