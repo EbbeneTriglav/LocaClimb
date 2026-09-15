@@ -78,7 +78,7 @@ function renderPassPanel(p,isOsm){
     h+='<tr><td>&#x1F3D6;&#xFE0F; Traffico weekend</td>';p.versanti.forEach(function(v){h+='<td>'+trafBar(versTraffic(v,p).wkd)+'</td>';});h+='</tr>';
     h+='<tr><td>Camion</td>';p.versanti.forEach(function(v){h+='<td>'+truckBadge(versTraffic(v,p).trucks)+'</td>';});h+='</tr>';
     h+='<tr><td>Esposizione</td>';p.versanti.forEach(function(v){h+='<td>'+v.exposure+'</td>';});h+='</tr>';
-    h+='<tr><td>&#x2600;&#xFE0F; Sole</td>';p.versanti.forEach(function(v){h+='<td><span class="sun-badge">'+calcSun(p.lat,p.lon,v.exposure)+'</span></td>';});h+='</tr>';
+    h+='<tr><td>&#x2600;&#xFE0F; Sole</td>';p.versanti.forEach(function (v, i) { h += '<td>' + sunCellStub(i) + '</td>'; });h+='</tr>';
     h+='</tbody></table>';
     h+='<div class="section-title">&#x1F4C8; Profilo Altimetrico</div>';
     if(p.versanti.length>1){h+='<div id="elev-tog" style="display:flex;gap:5px;margin-bottom:5px">';h+='<button class="etog active" data-act="setElev" data-i="-1">Entrambi</button>';p.versanti.forEach(function(v,i){h+='<button class="etog" data-act="setElev" data-i="'+i+'">'+esc(v.side.substring(0,16))+'</button>';});h+='</div>';}
@@ -100,7 +100,7 @@ function renderPassPanel(p,isOsm){
   document.getElementById("dp").innerHTML=h;setPanel("dp",true);
   if(p.versanti&&p.versanti.length)setTimeout(function(){drawElev(p);},80);
   if(p.versanti&&p.versanti.length)loadClimbWater(p);
-  fetchW(p.lat,p.lon);renderRatings(p);renderNews(p);
+  fetchW(p.lat,p.lon);renderSunCells(p);renderRatings(p);renderNews(p);
 }
 function closeD(){setPanel("dp",false);clearRoutes();hideRS();hideElevCursor();}
 
@@ -265,26 +265,6 @@ function setWaterBox(list,vers){
   });
   box.innerHTML=h;
 }
-function fetchW(lat,lon){
-  var k=lat.toFixed(1)+","+lon.toFixed(1);if(weatherCache[k]){renderW(weatherCache[k]);return;}
-  fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,weathercode&timezone=Europe/Rome&forecast_days=7")
-  .then(function(r){return r.json();}).then(function(d){weatherCache[k]=d;renderW(d);})
-  .catch(function(){var e=document.getElementById("wbox");if(e)e.innerHTML="<p style='color:var(--err)'>Meteo non disponibile</p>";});
-}
-function renderW(data){
-  var el=document.getElementById("wbox");if(!el||!data.daily)return;
-  var d=data.daily,h="",maxW=0,scores=[];
-  for(var i=0;i<d.time.length;i++){var w=d.windspeed_10m_max[i]||0;if(w>maxW)maxW=w;var s=100;s-=(d.precipitation_probability_max[i]||0)*0.6;if(w>30)s-=(w-30)*2;var t=d.temperature_2m_max[i]||15;if(t<8)s-=(8-t)*3;if(t>32)s-=(t-32)*4;var dow=new Date(d.time[i]).getDay();if(dow===0||dow===6)s-=8;scores.push(s);}
-  var bI=scores.indexOf(Math.max.apply(null,scores));
-  if(maxW>60)h+='<div class="alert-wind eb">&#x1F534; <b>ATTENZIONE:</b> Raffiche fino a '+Math.round(maxW)+' km/h!</div>';
-  else if(maxW>40)h+='<div class="alert-wind wb">&#x26A0;&#xFE0F; <b>Vento forte:</b> fino a '+Math.round(maxW)+' km/h</div>';
-  h+='<div class="wgrid">';
-  for(var i=0;i<d.time.length;i++){var dt=new Date(d.time[i]),dn=DAYS[dt.getDay()];h+='<div class="wcard'+(i===bI?" best":"")+'"><div style="font-weight:600;font-size:.8em">'+dn+' '+dt.getDate()+'</div><div style="font-size:1.5em;margin:3px 0">'+we(d.weathercode[i])+'</div><div style="font-weight:700">'+Math.round(d.temperature_2m_max[i])+'&#xB0;</div><div style="font-size:.75em;opacity:.6">'+Math.round(d.temperature_2m_min[i])+'&#xB0;</div><div style="font-size:.7em;margin-top:2px">&#x1F4A7;'+Math.round(d.precipitation_probability_max[i])+'%</div><div style="font-size:.7em">&#x1F4A8;'+Math.round(d.windspeed_10m_max[i])+'</div>';if(i===bI)h+='<div style="font-size:.65em;color:var(--ok);font-weight:700;margin-top:2px">BEST</div>';h+='</div>';}
-  h+='</div>';var bd=new Date(d.time[bI]);
-  h+='<p style="margin-top:10px;text-align:center;font-weight:600;font-size:.9em">&#x2B50; Miglior giorno: <span style="color:var(--ok)">'+bd.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"})+'</span></p>';
-  el.innerHTML=h;
-}
-
 /* ===== USER CONTRIBUTIONS ===== */
 function openReport(id){document.getElementById("rp-id").value=id;document.getElementById("rp-msg").style.display="none";document.getElementById("rp-txt").value="";document.getElementById("rp-name").value="";document.getElementById("rp-sub").disabled=false;document.getElementById("modal").classList.add("open");}
 function closeModal(){document.getElementById("modal").classList.remove("open");}

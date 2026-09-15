@@ -169,6 +169,38 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 /* Header: su schermi stretti niente sovrapposizioni tra logo/scritte e pulsanti */
 @media(max-width:900px){#hdr h1 .tag{display:none}}
 @media(max-width:560px){#hdr h1 .wordmark{font-size:1rem}#hdr{padding:0 10px;gap:8px}}
+
+/* --- podio meteo (js/weather.js) --- */
+.wpodium{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));gap:8px;margin:10px 0 6px}
+.wpod{border:1px solid var(--bdr);border-top-width:3px;border-radius:10px;padding:9px 10px}
+.wpod.r1{border-top-color:#f59e0b}
+.wpod.r2{border-top-color:#94a3b8}
+.wpod.r3{border-top-color:#b45309}
+.wpod-top{display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.wpod-rk{flex:0 0 18px;height:18px;border-radius:50%;background:#94a3b8;color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.wpod.r1 .wpod-rk{background:#f59e0b}
+.wpod.r3 .wpod-rk{background:#b45309}
+.wpod-day{flex:1;font-weight:600;font-size:.86rem}
+.wpod-ico{font-size:1.2rem;line-height:1}
+.wpod-mets>div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.78rem;padding:2px 0}
+.wpod-mets span{color:var(--txt2)}
+.wpod-warn{color:var(--err)}
+.wpod-why{margin-top:6px;padding-top:6px;border-top:1px solid var(--bdr);font-size:.74rem;color:var(--txt2)}
+.wnote{font-size:.72rem;color:var(--txt2);margin:0 0 10px}
+.wcard{position:relative}
+.wcard-rk{position:absolute;top:3px;right:3px;width:15px;height:15px;border-radius:50%;background:#94a3b8;color:#fff;font-size:.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.wcard.r1{border-color:#f59e0b}
+.wcard.r1 .wcard-rk{background:#f59e0b}
+.wcard.r3 .wcard-rk{background:#b45309}
+
+/* --- sole sul tracciato (js/sunexposure.js) --- */
+.sunx{line-height:1.3}
+.sunx-h{font-weight:700;font-size:.84rem;white-space:nowrap}
+.sunx-strip{display:flex;gap:1px;justify-content:center;margin:3px 0}
+.sunx-strip.est{opacity:.4}
+.sunx-strip i{display:block;width:5px;height:13px;border-radius:1px}
+.sunx-sub{font-size:.7rem;color:var(--txt2);white-space:nowrap}
+.sunx-wait,.sunx-na{color:var(--txt2);font-size:.78rem}
 </style>
 <link rel="stylesheet" href="css/ui.css">
 </head>
@@ -250,6 +282,8 @@ body.dp-open .leaflet-top.leaflet-right{transform:translateX(-528px)}
 <script src="js/utils.js"></script>
 <script src="js/data.js"></script>
 <script src="js/map.js"></script>
+<script src="js/weather.js?v=1789481317"></script>
+<script src="js/sunexposure.js?v=1789481317"></script>
 <script src="js/panel.js"></script>
 <script src="js/routebuilder.js"></script>
 <script src="js/rideweather.js"></script>
