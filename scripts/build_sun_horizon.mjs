@@ -17,6 +17,7 @@
  *   node scripts/build_sun_horizon.mjs --only stelvio  # one pass (id substring)
  *   node scripts/build_sun_horizon.mjs --force         # recompute everything
  *   node scripts/build_sun_horizon.mjs --limit 50      # first 50 passes only
+ *   node scripts/build_sun_horizon.mjs --minutes 300   # si ferma dopo 5h salvando (riprende dopo)
  *
  * Requires: pngjs (npm), Node 18+ (global fetch). 100% ASCII.
  */
@@ -32,6 +33,7 @@ const OUT = dataPath(arg("--out", "sun_horizon.json"));
 const ONLY = arg("--only", "");
 const LIMIT = parseInt(arg("--limit", "0"), 10) || 0;
 const FORCE = has("--force");
+const MINUTES = parseInt(arg("--minutes", "0"), 10) || 0;   // 0 = nessun limite
 
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 const DEM_Z = 12;                 // ~39 m/px at 45N: fine enough for ridge lines, cheap on tiles
@@ -222,7 +224,16 @@ async function main() {
   };
 
   let done = 0, skipped = 0, failed = 0;
+  const t0 = Date.now(), budget = MINUTES * 60000;
+  let stopped = false;
   for (let i = 0; i < passes.length; i++) {
+    /* 24.699 versanti non stanno nelle 6 ore di un job: con --minutes il lavoro si
+       interrompe pulito e la volta dopo riparte da dove era arrivato (store.p). */
+    if (budget && Date.now() - t0 > budget) {
+      stopped = true;
+      console.log("  budget di " + MINUTES + " min esaurito a " + (i + 1) + "/" + passes.length + ": salvo e mi fermo");
+      break;
+    }
     const p = passes[i];
     for (const v of p.versanti) {
       const key = p.id + "|" + (v.side || "");
@@ -236,5 +247,6 @@ async function main() {
   }
   await save();
   console.log("fatto: " + done + " calcolati, " + skipped + " gia' presenti, " + failed + " saltati -> " + OUT);
+  if (stopped) console.log("INCOMPLETO: rilancia per continuare.");
 }
 main().catch((e) => { console.error("FATAL: " + e.stack); process.exit(1); });

@@ -122,7 +122,7 @@ function wWhy(o) {
   else if (o.tmin < 0) t.push("gelo all'alba");
   else if (o.tmax > 30) t.push("caldo intenso");
   var dow = new Date(o.date + "T12:00:00").getDay();
-  if ((dow === 0 || dow === 6) && t.length < 3) t.push("weekend: piu' auto");
+  if ((dow === 0 || dow === 6) && t.length < 3) t.push("weekend: pi&#xF9; auto");
   if (!t.length) t.push(WCTXT[o.icode] || "condizioni nella media");
   return t.slice(0, 3).join(", ");
 }
@@ -179,7 +179,7 @@ function renderW(data) {
     var dt = new Date(o.date + "T12:00:00"), r = pos[o.date];
     h += '<div class="wcard' + (r ? ' rk r' + r : '') + '">';
     if (r) h += '<div class="wcard-rk">' + r + '</div>';
-    h += '<div style="font-weight:600;font-size:.8em">' + DAYS[dt.getDay()] + ' ' + dt.getDate() + '</div>';
+    h += '<div class="wcard-d">' + DAYS[dt.getDay()] + ' ' + dt.getDate() + '</div>';
     h += '<div style="font-size:1.5em;margin:3px 0">' + we(o.icode) + '</div>';
     h += '<div style="font-weight:700">' + Math.round(o.tmax) + '&#xB0;</div>';
     h += '<div style="font-size:.75em;opacity:.6">' + Math.round(o.tmin) + '&#xB0;</div>';
