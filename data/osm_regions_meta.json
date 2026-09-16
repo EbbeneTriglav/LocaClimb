@@ -393,5 +393,15 @@
   "bbox": null,
   "target": "lithuania",
   "builtAt": "2026-09-16"
+ },
+ "osm_passes_xb_at.json": {
+  "bbox": [
+   10.3,
+   46.4,
+   13.5,
+   47.15
+  ],
+  "target": "confine-it-at",
+  "builtAt": "2026-09-16"
  }
 }
