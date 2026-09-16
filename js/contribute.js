@@ -127,8 +127,8 @@ function lrcPropose() {
   if (!tr || tr.length < 8) {
     lrcModal("<h3>" + lrcT("Proponi una salita", "Suggest a climb") + "</h3>"
       + '<p class="lrc-sub">' + lrcT(
-        "Prima disegna la salita: apri <b>Crea giro</b>, metti un punto dove inizia e uno in cima, calcola il percorso. Poi torna qui.",
-        "Draw the climb first: open <b>Plan a ride</b>, drop a point where it starts and one at the top, calculate the route. Then come back.") + "</p>"
+        "Serve prima il tracciato. Apri <b>Crea giro</b>, clicca sulla mappa dove la salita comincia, poi sulla cima, e premi <b>Calcola percorso</b>. A quel punto trovi <b>Proponi salita</b> li' dentro, sotto Salva giro.",
+        "The track comes first. Open <b>Plan a ride</b>, click where the climb starts, then the summit, and hit <b>Calculate route</b>. You'll then find <b>Suggest climb</b> right there, under Save ride.") + "</p>"
       + '<div class="lrc-btns"><button onclick="lrcClose()">' + lrcT("Chiudi", "Close") + "</button>"
       + '<button class="lrc-go" onclick="lrcClose();var b=document.getElementById(\'rbb\');if(b)b.click();">' + lrcT("Apri Crea giro", "Open planner") + "</button></div>");
     return;
@@ -388,7 +388,22 @@ function lrcFindMenus() {
   if (!gear && all.length > 1) gear = all[1];
   return { plus: plus, gear: gear };
 }
+/* Il posto naturale per proporre e' il pannello del route builder, appena finito
+   di disegnare: niente giro "apri il menu, scopri che manca il tracciato, torna
+   indietro". Il bottone appare accanto a "Salva giro" e si attiva da solo quando
+   c'e' un percorso calcolato. */
+function lrcWireRB() {
+  var save = document.querySelector('[data-act="saveRide"]');
+  if (!save || save._lrcDone === 1) return;
+  save._lrcDone = 1;
+  var b = lrcEl("button", { "class": "rb-btn", id: "lrc-rbprop", style: "background:#a855f7" },
+    "&#x1F3D4;&#xFE0F; " + lrcT("Proponi salita", "Suggest climb"));
+  b.addEventListener("click", lrcPropose);
+  save.parentNode.insertBefore(b, save.nextSibling);
+}
+
 function lrcWire() {
+  lrcWireRB();
   var m = lrcFindMenus();
   if (m.plus && m.plus._lrcDone !== 1) {
     m.plus.appendChild(lrcMenuItem("&#x1F3D4;&#xFE0F;", lrcT("Proponi salita", "Suggest a climb"), lrcPropose));
