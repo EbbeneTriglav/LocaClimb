@@ -607,9 +607,12 @@ function lrcAdminFab() {
   if (lrcId("lrc-fab")) return;
   var b = lrcEl("button", { id: "lrc-fab", title: lrcT("Revisione proposte", "Review queue") },
     "&#x2705; " + lrcT("Proposte", "Review"));
-  b.style.cssText = "position:fixed;left:12px;bottom:76px;z-index:1200;border:none;border-radius:22px;"
+  /* a sinistra in basso c'e' gia' il Bike Day (e su mobile sale sopra le schede):
+     questo va a destra, dove non litiga con nessuno. */
+  b.style.cssText = "position:fixed;right:12px;bottom:20px;z-index:1200;border:none;border-radius:22px;"
     + "padding:9px 15px;background:#7c3aed;color:#fff;font-weight:700;font-size:.85rem;cursor:pointer;"
     + "box-shadow:0 6px 18px rgba(0,0,0,.25)";
+  if (window.matchMedia("(max-width:640px)").matches) b.style.bottom = "74px";
   b.addEventListener("click", lrcQueue);
   document.body.appendChild(b);
   var db = lrcDb();

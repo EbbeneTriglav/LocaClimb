@@ -37,8 +37,12 @@
       "#uk-rbclose{position:absolute;top:10px;right:12px;width:28px;height:28px;border:none;background:var(--bg);border-radius:8px;color:var(--txt2);font-size:1.3rem;line-height:1;cursor:pointer;z-index:5}#uk-rbclose:hover{background:var(--bdr);color:var(--txt)}" +
       "#uk-install{position:fixed;left:8px;right:8px;top:calc(var(--hdr) + 8px);z-index:100002;display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:8px 10px;box-shadow:0 8px 24px rgba(0,0,0,.18)}#uk-install .uk-ic svg{width:30px;height:30px;display:block}#uk-install .uk-it{flex:1;line-height:1.2}#uk-install .uk-it small{display:block;color:var(--txt2);font-size:.72rem}#uk-inst-go{background:var(--ac);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer;white-space:nowrap}#uk-inst-x{background:transparent;border:none;color:var(--txt2);font-size:1.3rem;cursor:pointer;line-height:1}" +
       "#uk-surf{width:100%;padding:7px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt);margin-top:2px}" +
+      /* Accedi: pieno, con etichetta. E' la porta d'ingresso, non un'icona fra tante. */
+      "#acct.uk-anon{width:auto!important;border-radius:22px!important;padding:0 16px!important;background:var(--ac)!important;border-color:var(--ac)!important;color:#fff!important}" +
+      "#acct.uk-anon .uk-av{width:auto;height:auto;background:none!important}" +
+      "#acct.uk-anon .uk-in{font-weight:700;font-size:.88rem;white-space:nowrap;text-shadow:none}" +
       "#uk-tabs{display:none}" +
-      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-profile{display:none!important}#hdr #fountBtn,#hdr #uk-food{width:38px;height:38px}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:120px}#be-btn{bottom:74px}}";
+      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-logged{display:none!important}#acct.uk-anon{display:inline-flex!important;padding:0 12px!important;height:38px}#hdr #fountBtn,#hdr #uk-food{width:38px;height:38px}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:118px;font-size:.68rem;padding:5px 9px;gap:7px;left:8px;right:8px;transform:none;justify-content:center}#be-btn{bottom:74px;left:8px}}";
     document.head.appendChild(el("style", { id: "uk-style" }, css));
   }
 
@@ -73,7 +77,24 @@
   function setPhoto(d) { try { if (d) localStorage.setItem("uk_photo", d); else localStorage.removeItem("uk_photo"); } catch (e) {} renderAvatar(); }
   function pickPhoto() { var inp = el("input", { type: "file", accept: "image/*" }); inp.style.display = "none"; document.body.appendChild(inp); inp.onchange = function () { var f = inp.files && inp.files[0]; if (!f) return; var rd = new FileReader(); rd.onload = function () { setPhoto(rd.result); }; rd.readAsDataURL(f); setTimeout(function () { inp.remove(); }, 0); }; inp.click(); }
   function curInitials() { var a = byId("acct"), bl = a && a.querySelector(".bl"); var name = (bl ? bl.textContent : "").trim(); if (!name || /accedi|login|sign|entra/i.test(name)) return null; var p = name.split(/\s+/).filter(Boolean); return ((p[0] ? p[0][0] : "") + (p.length > 1 ? p[p.length - 1][0] : "")).toUpperCase().slice(0, 2); }
-  function renderAvatar() { var a = byId("acct"); if (!a) return; var av = a.querySelector(".uk-av"); if (!av) return; var ini = curInitials(), photo = getPhoto(); if (photo) { av.style.backgroundImage = "url(" + photo + ")"; av.innerHTML = ini ? esc(ini) : ""; a.classList.add("uk-logged"); } else { av.style.backgroundImage = ""; av.innerHTML = ini ? esc(ini) : WHEEL; a.classList.toggle("uk-logged", !!ini); } }
+  /* Da sloggato un cerchietto muto non dice niente a nessuno: si scrive ACCEDI.
+     Da loggato torna l'avatar compatto con le iniziali, che non ruba spazio. */
+  function renderAvatar() {
+    var a = byId("acct"); if (!a) return;
+    var av = a.querySelector(".uk-av"); if (!av) return;
+    var ini = curInitials(), photo = getPhoto(), logged = !!ini || !!photo;
+    a.classList.toggle("uk-logged", logged);
+    a.classList.toggle("uk-anon", !logged);
+    if (!logged) {
+      av.style.backgroundImage = "";
+      av.innerHTML = '<span class="uk-in">' + L("Accedi", "Sign in") + "</span>";
+      a.title = L("Accedi o registrati", "Sign in or register");
+      return;
+    }
+    a.title = L("Il tuo profilo", "Your profile");
+    if (photo) { av.style.backgroundImage = "url(" + photo + ")"; av.innerHTML = ini ? esc(ini) : ""; }
+    else { av.style.backgroundImage = ""; av.innerHTML = ini ? esc(ini) : WHEEL; }
+  }
   function profileBtn() { var a = byId("acct"); if (!a) return; a.classList.add("uk-profile"); a.title = L("Profilo / accedi", "Profile / sign in"); var bl = a.querySelector(".bl"), bi = a.querySelector(".bi"); if (bi) bi.style.display = "none"; if (bl) bl.style.display = "none"; if (!a.querySelector(".uk-av")) a.appendChild(el("span", { "class": "uk-av" })); renderAvatar(); if (bl && window.MutationObserver) new MutationObserver(renderAvatar).observe(bl, { childList: true, characterData: true, subtree: true }); }
 
   /* fix ghost profilo */
@@ -163,8 +184,33 @@
   function neutralizeSearchFilter() { var af = window.applyFilters; if (typeof af !== "function" || af._uk) return; var w = function () { var s = byId("search"), saved = s ? s.value : null; if (s) s.value = ""; try { return af.apply(this, arguments); } finally { if (s && saved != null) s.value = saved; } }; w._uk = 1; window.applyFilters = w; }
 
   function tab(ic, label, fn) { var b = el("button", null, '<span class="ic">' + ic + '</span><span>' + label + '</span>'); b.addEventListener("click", fn); return b; }
-  function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", L("Mappa", "Map"), function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", L("Cerca", "Search"), function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", L("Crea", "Create"), function () { var b = byId("uk-plus"); if (b) b.click(); })); bar.appendChild(tab("&#x1F6B5;", L("Profilo", "Profile"), function () { var b = byId("acct"); if (b) b.click(); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { var b = byId("uk-gear"); if (b) b.click(); })); document.body.appendChild(bar); }
-  function firstHint() { try { if (localStorage.getItem("uk_hint_seen")) return; } catch (e) {} var h = el("div", { id: "uk-hint" }, L("&#x1F44B; I pallini colorati sono le salite: il <b>colore</b> e' la difficolta (HC = piu dura). Col <b>+</b> importi un GPX o crei un giro; con &#x2699;&#xFE0F; filtri e impostazioni.", "&#x1F44B; The colored dots are climbs: the <b>color</b> is the difficulty (HC = hardest). Use <b>+</b> to import a GPX or plan a ride; &#x2699;&#xFE0F; for filters and settings.") + "<br><button id='uk-hint-ok'>" + L("Ho capito", "Got it") + "</button>"); document.body.appendChild(h); var ok = byId("uk-hint-ok"); if (ok) ok.addEventListener("click", function () { try { localStorage.setItem("uk_hint_seen", "1"); } catch (e) {} h.remove(); }); }
+  /* Le schede in basso pilotano i bottoni dell'header, che pero' su mobile sono
+     display:none: il menu si apriva ancorato a un elemento di dimensione zero e
+     finiva fuori schermo. Lo riposizioniamo sopra la barra, a tutta larghezza. */
+  function openFromTab(id) {
+    var b = byId(id);
+    if (!b) return;
+    b.click();
+    setTimeout(function () {
+      var m = document.querySelector(".uk-menu.open");
+      if (!m || !window.matchMedia("(max-width:640px)").matches) return;
+      m.style.left = "8px"; m.style.right = "8px"; m.style.width = "auto";
+      m.style.top = "auto"; m.style.bottom = "66px"; m.style.transform = "none";
+      m.style.maxHeight = "60vh"; m.style.overflowY = "auto";
+    }, 0);
+  }
+  /* tornando al desktop (rotazione, finestra allargata) tolgo gli stili inline */
+  window.addEventListener("resize", function () {
+    if (window.matchMedia("(max-width:640px)").matches) return;
+    var ms = document.querySelectorAll(".uk-menu");
+    for (var i = 0; i < ms.length; i++) ms[i].style.cssText = "";
+  });
+  function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", L("Mappa", "Map"), function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", L("Cerca", "Search"), function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", L("Crea", "Create"), function () { openFromTab("uk-plus"); })); bar.appendChild(tab("&#x1F6B5;", L("Profilo", "Profile"), function () { openFromTab("acct"); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { openFromTab("uk-gear"); })); document.body.appendChild(bar); }
+  function firstHint() {
+    try { if (localStorage.getItem("uk_hint_seen")) return; } catch (e) {}
+    /* due riquadri sovrapposti in cima sono il modo piu' rapido per far chiudere
+       entrambi senza leggerli: il consiglio aspetta che il banner sia sparito */
+    if (byId("uk-install")) { setTimeout(firstHint, 4000); return; } var h = el("div", { id: "uk-hint" }, L("&#x1F44B; I pallini colorati sono le salite: il <b>colore</b> e' la difficolta (HC = piu dura). Col <b>+</b> importi un GPX o crei un giro; con &#x2699;&#xFE0F; filtri e impostazioni.", "&#x1F44B; The colored dots are climbs: the <b>color</b> is the difficulty (HC = hardest). Use <b>+</b> to import a GPX or plan a ride; &#x2699;&#xFE0F; for filters and settings.") + "<br><button id='uk-hint-ok'>" + L("Ho capito", "Got it") + "</button>"); document.body.appendChild(h); var ok = byId("uk-hint-ok"); if (ok) ok.addEventListener("click", function () { try { localStorage.setItem("uk_hint_seen", "1"); } catch (e) {} h.remove(); }); }
 
   function addRouteClose() {
     var rb = byId("rb"); if (!rb || byId("uk-rbclose")) return;
