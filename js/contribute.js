@@ -470,23 +470,95 @@ function lrcWire() {
     m.plus.appendChild(lrcMenuItem("&#x1F3D4;&#xFE0F;", lrcT("Proponi salita", "Suggest a climb"), lrcPropose));
     m.plus._lrcDone = 1;
   }
-  if (m.gear && m.gear._lrcDone !== 1) {
-    m.gear._lrcDone = 1;
-    m.gear.appendChild(lrcMenuItem("&#x1F4DD;", lrcT("Le mie proposte", "My suggestions"), lrcMine));
-    var gm = m.gear;
-    lrcWhoAmI().then(function (me) {
-      if (me && me.admin && gm._lrcAdmin !== 1) {
-        gm._lrcAdmin = 1;
-        gm.appendChild(lrcMenuItem("&#x2705;", lrcT("Revisione proposte", "Review queue"), lrcQueue));
-      }
-    });
+  /* "Le mie proposte" va nel menu impostazioni se esiste, altrimenti in quello
+     del "+": l'importante e' che sia raggiungibile. Teniamo il riferimento,
+     perche' la voce admin deve finire NELLO STESSO posto. */
+  var host = m.gear || m.plus;
+  if (host && host._lrcMine !== 1) {
+    host._lrcMine = 1;
+    host.appendChild(lrcMenuItem("&#x1F4DD;", lrcT("Le mie proposte", "My suggestions"), lrcMine));
+    LRC._menu = host;
   }
+  /* La voce admin va aggiunta SOLO quando sappiamo chi e' l'utente. Al primo giro
+     Firebase non ha ancora risolto l'autenticazione, quindi il momento giusto lo
+     decide lrcAuthHook: qui ci limitiamo a farlo quando FBUSER esiste davvero. */
+  var gm = LRC._menu;
+  if (gm && !gm._lrcAdmin && lrcUser()) {
+    gm._lrcAdmin = "checking";
+    lrcWhoAmI().then(function (me) {
+      gm._lrcAdmin = "done";
+      if (!me || !me.admin) return;
+      var it = lrcMenuItem("&#x2705;", lrcT("Revisione proposte", "Review queue"), lrcQueue);
+      gm.appendChild(it);
+      lrcPendingCount(it);
+      lrcAdminFab();                     // e comunque un accesso diretto
+    }).catch(function () { gm._lrcAdmin = null; });
+  }
+  /* Nessun menu raggiungibile (l'interfaccia puo' cambiare): l'admin non deve
+     restare senza porta d'ingresso, quindi gliene diamo una sempre visibile. */
+  if (!gm && lrcUser() && !LRC._fabChecked) {
+    LRC._fabChecked = 1;
+    lrcWhoAmI().then(function (me) { if (me && me.admin) lrcAdminFab(); });
+  }
+}
+
+/* Pulsante flottante in basso a sinistra, solo per l'admin, con il numero delle
+   proposte in attesa. E' l'accesso che non dipende da come e' fatto il menu. */
+function lrcAdminFab() {
+  if (lrcId("lrc-fab")) return;
+  var b = lrcEl("button", { id: "lrc-fab", title: lrcT("Revisione proposte", "Review queue") },
+    "&#x2705; " + lrcT("Proposte", "Review"));
+  b.style.cssText = "position:fixed;left:12px;bottom:76px;z-index:1200;border:none;border-radius:22px;"
+    + "padding:9px 15px;background:#7c3aed;color:#fff;font-weight:700;font-size:.85rem;cursor:pointer;"
+    + "box-shadow:0 6px 18px rgba(0,0,0,.25)";
+  b.addEventListener("click", lrcQueue);
+  document.body.appendChild(b);
+  var db = lrcDb();
+  if (db) db.collection("proposals").where("status", "==", "pending").limit(50).get().then(function (qs) {
+    if (qs.size) b.innerHTML = "&#x2705; " + lrcT("Proposte", "Review") + " (" + qs.size + ")";
+    else b.style.opacity = ".55";
+  }).catch(function () {});
+}
+
+/* Quante proposte aspettano: il menu deve dirlo senza doverlo aprire. */
+function lrcPendingCount(item) {
+  var db = lrcDb();
+  if (!db || !item) return;
+  db.collection("proposals").where("status", "==", "pending").limit(50).get().then(function (qs) {
+    if (!qs.size) return;
+    var b = lrcEl("span", { style: "margin-left:6px;background:var(--ac);color:#fff;border-radius:10px;padding:0 7px;font-size:.72rem;font-weight:700" }, String(qs.size));
+    item.appendChild(b);
+  }).catch(function () { /* non e' essenziale */ });
+}
+
+/* L'autenticazione e' il segnale vero: quando cambia, rifacciamo il controllo.
+   In piu' un giro a tempo nei primi secondi, perche' FB potrebbe non esistere
+   ancora quando parte il modulo. Si ferma da solo appena ha finito. */
+function lrcAuthHook() {
+  try {
+    if (typeof FB === "undefined" || !FB || !FB.auth || LRC._authHook) return;
+    LRC._authHook = 1;
+    FB.auth.onAuthStateChanged(function () {
+      LRC.me = null;
+      var g = lrcFindMenus().gear;
+      if (g) g._lrcAdmin = null;          // col nuovo utente il controllo va rifatto
+      setTimeout(lrcWire, 80);
+    });
+  } catch (e) { /* auth.js non pronto: riproviamo al giro dopo */ }
 }
 
 function lrcStart() {
   lrcStyle();
   lrcWire();
   new MutationObserver(function () { try { lrcWire(); } catch (e) {} }).observe(document.body, { childList: true, subtree: true });
+  /* rete di sicurezza: per i primi 20 secondi riproviamo comunque, cosi' non
+     dipendiamo dal fatto che il DOM si muova al momento giusto */
+  var tries = 0;
+  var iv = setInterval(function () {
+    try { lrcAuthHook(); lrcWire(); } catch (e) {}
+    var g = lrcFindMenus().gear;
+    if (++tries >= 20 || (g && g._lrcAdmin === "done")) clearInterval(iv);
+  }, 1000);
   setTimeout(function () { try { lrcLoadApproved(); } catch (e) {} }, 1500);
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", lrcStart); else lrcStart();
