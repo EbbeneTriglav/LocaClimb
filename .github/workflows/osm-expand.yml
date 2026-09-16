@@ -445,6 +445,25 @@ jobs:
       # lo stesso set di file producono byte IDENTICI, quindi non possono piu' entrare
       # in conflitto. La base e' sempre origin/main pulito: niente autostash (era quello
       # a scrivere i marcatori <<<<<<< dentro i JSON quando due run si accavallavano).
+
+      # --- bosco -> indice di ombra (aggiunta, non blocca il build dei passi) ---
+      - name: Ombra (bosco + rilievi)
+        continue-on-error: true
+        run: |
+          set +e
+          # l'output 'pbf' e' un URL: qui serve il file gia' scaricato nel job.
+          # Prendo il .osm.pbf piu' grande presente (se sono stati uniti, e' il merge).
+          PBF_ONE=$(ls -S *.osm.pbf /tmp/*.osm.pbf 2>/dev/null | head -1)
+          if [ -z "$PBF_ONE" ]; then echo "nessun PBF locale: salto l'ombra"; exit 0; fi
+          echo "bosco da: $PBF_ONE"
+          osmium tags-filter "$PBF_ONE" wa/landuse=forest wa/natural=wood wa/landcover=trees \
+            -o /tmp/forest.pbf --overwrite || exit 0
+          osmium export /tmp/forest.pbf -f geojsonseq --geometry-types=polygon \
+            -o /tmp/forest.geojsonseq --overwrite || exit 0
+          node scripts/build_shade.mjs --forest /tmp/forest.geojsonseq \
+            --passes "data/${{ steps.cfg.outputs.out }}" --minutes 60 || true
+          rm -f /tmp/forest.pbf /tmp/forest.geojsonseq
+
       - name: Commit & push (a prova di conflitto)
         if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
