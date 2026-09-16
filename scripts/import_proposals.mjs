@@ -107,6 +107,36 @@ async function template() {
   return null;
 }
 
+/* ---- fusione: due proposte sulla stessa montagna sono due versanti -------- */
+/* Stessa regola del frontend: decide la vicinanza della CIMA, non il nome, che
+   ognuno scrive a modo suo. Il nome serve solo come conferma. */
+const MERGE_KM = 2;
+function norm(x) {
+  return String(x || "").toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+}
+function nameMatch(a, b) {
+  const x = norm(a), y = norm(b);
+  if (!x || !y) return false;
+  if (x === y || x.includes(y) || y.includes(x)) return true;
+  const tx = x.split(" ").filter((t) => t.length >= 4);
+  const ty = y.split(" ").filter((t) => t.length >= 4);
+  return tx.some((t) => ty.includes(t));
+}
+function mergePasses(list) {
+  const out = [];
+  for (const p of list) {
+    const q = out.find((o) => hav(p.lat, p.lon, o.lat, o.lon) <= MERGE_KM && nameMatch(p.name, o.name));
+    if (!q) { out.push(p); continue; }
+    q.versanti = q.versanti.concat(p.versanti);
+    if (p.name.length < q.name.length) q.name = p.name;          // il nome pulito
+    if ((p.elevation || 0) > (q.elevation || 0)) { q.elevation = p.elevation; q.lat = p.lat; q.lon = p.lon; }
+    q.mergedFrom = (q.mergedFrom || [q.id]).concat([p.id]);
+  }
+  return out;
+}
+
 function toPass(r) {
   const track = [];
   const flat = r.flat || [];
@@ -126,6 +156,7 @@ function toPass(r) {
       startElevation: r.startElevation, endElevation: r.endElevation,
       distance_km: r.km, avgGradient: r.avgGradient,
       maxGradient: r.maxGradient != null ? r.maxGradient : null,
+      exposure: r.exposure || null,
       track: track,
       elevSource: "user"
     }]
@@ -139,10 +170,14 @@ async function main() {
 
   const raw = await fetchApproved(cfg);
   console.log("proposte approvate su Firestore: " + raw.length);
-  const passes = raw.map(toPass).filter(Boolean);
-  const scarti = raw.length - passes.length;
+  const single = raw.map(toPass).filter(Boolean);
+  const scarti = raw.length - single.length;
   if (scarti) console.warn("  ! " + scarti + " senza tracciato utilizzabile, saltate");
-  if (!passes.length) { console.log("niente da importare."); return; }
+  if (!single.length) { console.log("niente da importare."); return; }
+  const passes = mergePasses(single);
+  if (passes.length < single.length) {
+    console.log("  fusi " + single.length + " versanti in " + passes.length + " salite (stessa cima, nome compatibile)");
+  }
 
   const tpl = await template();
   if (tpl) {
@@ -154,8 +189,11 @@ async function main() {
     console.warn("  ! nessun passo di riferimento trovato: non posso confrontare i campi");
   }
 
-  passes.forEach((p) => console.log("  - " + p.name + " (" + p.versanti[0].side + ", "
-    + p.versanti[0].distance_km + " km) di " + (p.author || "?")));
+  passes.forEach((p) => {
+    console.log("  - " + p.name + (p.versanti.length > 1 ? "  [" + p.versanti.length + " versanti]" : ""));
+    p.versanti.forEach((v) => console.log("      " + v.side + ", " + v.distance_km + " km, max "
+      + (v.maxGradient != null ? v.maxGradient + "%" : "n/d") + ", " + (v.exposure || "esposizione n/d")));
+  });
 
   if (DRY) { console.log("\n(--dry) Niente scritto."); return; }
 

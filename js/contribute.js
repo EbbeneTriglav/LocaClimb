@@ -104,12 +104,56 @@ function lrcFlatTrack(tr) {
   }
   return out;
 }
+/* distanza fra due punti, km */
+function lrcHav(la1, lo1, la2, lo2) {
+  var R = 6371, p = Math.PI / 180;
+  var x = Math.pow(Math.sin((la2 - la1) * p / 2), 2)
+    + Math.cos(la1 * p) * Math.cos(la2 * p) * Math.pow(Math.sin((lo2 - lo1) * p / 2), 2);
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+/* rotta bussola, gradi da nord */
+function lrcBearing(la1, lo1, la2, lo2) {
+  var p = Math.PI / 180;
+  var y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p);
+  var x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
+var LRC_DIRS = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];
+function lrcDirLabel(deg) { return LRC_DIRS[Math.round(((deg % 360) + 360) % 360 / 45) % 8]; }
+
+/* Pendenza massima su finestre di ~100 m: sul singolo punto il GPS produce
+   picchi assurdi (30% su dieci metri), mediare su cento metri da il numero che
+   un ciclista riconosce come "il tratto piu' duro". */
+function lrcMaxGradient(tr) {
+  var best = 0, i = 0;
+  while (i < tr.length - 1) {
+    var d = 0, j = i, dz;
+    while (j < tr.length - 1 && d < 0.1) {
+      d += lrcHav(tr[j][0], tr[j][1], tr[j + 1][0], tr[j + 1][1]);
+      j++;
+    }
+    if (d >= 0.05 && tr[j][2] != null && tr[i][2] != null) {
+      dz = tr[j][2] - tr[i][2];
+      var g = dz / (d * 10);
+      if (g > best) best = g;
+    }
+    i = j > i ? j : i + 1;
+  }
+  return Math.round(best * 10) / 10;
+}
+
 /* misure dal tracciato disegnato, riusando le funzioni del route builder */
 function lrcFacts(tr) {
   var km = (typeof trackDist === "function") ? trackDist(tr) : 0;
   var gain = (typeof trackAscent === "function") ? trackAscent(tr) : 0;
   var a = tr[0], b = tr[tr.length - 1];
+  /* il versante guarda dalla parte opposta alla cima: stessa convenzione di
+     build_osm_passes.mjs, cioe' rotta dalla vetta verso il fondovalle */
+  var expDeg = lrcBearing(b[0], b[1], a[0], a[1]);
   return {
+    maxGradient: lrcMaxGradient(tr),
+    exposure: lrcDirLabel(expDeg),
+    exposureDeg: Math.round(expDeg),
     km: km, gain: gain,
     startLat: +(+a[0]).toFixed(5), startLon: +(+a[1]).toFixed(5),
     endLat: +(+b[0]).toFixed(5), endLon: +(+b[1]).toFixed(5),
@@ -189,6 +233,7 @@ function lrcSubmit(tr, f) {
     lat: f.endLat, lon: f.endLon,          // la cima: serve per il marker
     elevation: f.endElevation,
     km: +f.km.toFixed(2), gain: f.gain, avgGradient: f.avgGradient,
+    maxGradient: f.maxGradient, exposure: f.exposure, exposureDeg: f.exposureDeg,
     startLat: f.startLat, startLon: f.startLon,
     startElevation: f.startElevation, endElevation: f.endElevation,
     flat: lrcFlatTrack(tr),                // [lat,lon,ele, lat,lon,ele, ...]
@@ -398,31 +443,85 @@ function lrcToPass(r, id) {
       side: r.side,
       startLat: r.startLat, startLon: r.startLon,
       startElevation: r.startElevation, endElevation: r.endElevation,
-      distance_km: r.km, avgGradient: r.avgGradient, maxGradient: r.maxGradient || null,
+      distance_km: r.km, avgGradient: r.avgGradient,
+      maxGradient: r.maxGradient != null ? r.maxGradient : null,
+      exposure: r.exposure || null,
       track: track, elevSource: "user"
     }]
   };
 }
+/* Due proposte sulla stessa montagna sono DUE VERSANTI, non due salite. La chiave
+   per capirlo e' la cima, non il nome: chi mappa il Nerone da nord e chi lo mappa
+   da sud finiscono entrambi in vetta, mentre il nome lo scrivono come gli pare
+   ("Monte Nerone", "Nerone da Piobbico"...). Quindi raggruppiamo per vicinanza
+   della cima, col nome come conferma. */
+var LRC_MERGE_KM = 2;
+
+function lrcNorm(x) {
+  return String(x || "").toLowerCase()
+    .replace(/[\u00e0\u00e1\u00e2]/g, "a").replace(/[\u00e8\u00e9\u00ea]/g, "e")
+    .replace(/[\u00ec\u00ed]/g, "i").replace(/[\u00f2\u00f3\u00f4]/g, "o").replace(/[\u00f9\u00fa]/g, "u")
+    .replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+}
+/* nomi compatibili se uguali, se uno contiene l'altro, o se condividono una
+   parola significativa ("nerone"). Le parole corte non fanno testo. */
+function lrcNameMatch(a, b) {
+  var x = lrcNorm(a), y = lrcNorm(b);
+  if (!x || !y) return false;
+  if (x === y || x.indexOf(y) >= 0 || y.indexOf(x) >= 0) return true;
+  var tx = x.split(" ").filter(function (t) { return t.length >= 4; });
+  var ty = y.split(" ").filter(function (t) { return t.length >= 4; });
+  for (var i = 0; i < tx.length; i++) if (ty.indexOf(tx[i]) >= 0) return true;
+  return false;
+}
+
+function lrcMergePasses(list) {
+  var out = [];
+  list.forEach(function (p) {
+    for (var i = 0; i < out.length; i++) {
+      var q = out[i];
+      if (lrcHav(p.lat, p.lon, q.lat, q.lon) <= LRC_MERGE_KM && lrcNameMatch(p.name, q.name)) {
+        q.versanti = q.versanti.concat(p.versanti);
+        /* teniamo il nome piu' corto: di solito e' quello pulito, senza il
+           "da Tal dei Tali" che appartiene al versante */
+        if (p.name.length < q.name.length) q.name = p.name;
+        if ((p.elevation || 0) > (q.elevation || 0)) { q.elevation = p.elevation; q.lat = p.lat; q.lon = p.lon; }
+        return;
+      }
+    }
+    out.push(p);
+  });
+  return out;
+}
+
 function lrcLoadApproved(force) {
   var db = lrcDb();
   if (!db) return;
   if (LRC._loaded && !force) return;
   LRC._loaded = true;
   db.collection("proposals").where("status", "==", "approved").limit(300).get().then(function (qs) {
-    var list = [];
-    qs.forEach(function (d) { try { list.push(lrcToPass(d.data(), d.id)); } catch (e) {} });
-    if (!list.length) return;
+    var raw = [];
+    qs.forEach(function (d) { try { raw.push(lrcToPass(d.data(), d.id)); } catch (e) {} });
+    if (!raw.length) return;
+    var list = lrcMergePasses(raw);
     LRC.approved = list;
     try {
       var arr = window.OSM_PASSES || window.osmPasses;
-      if (arr && arr.push) {
-        var have = {};
-        for (var i = 0; i < arr.length; i++) have[arr[i].id] = 1;
-        list.forEach(function (p) { if (!have[p.id]) arr.push(p); });
+      if (!arr || !arr.push) return;
+      /* togliamo le nostre voci precedenti prima di rimetterle: senza questo,
+         ogni ricarica aggiunge un altro giro di marker sopra i vecchi (e' il
+         motivo per cui vedevi cinque puntini sulla stessa salita) */
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i] && typeof arr[i].id === "string" && arr[i].id.indexOf("usr-") === 0) arr.splice(i, 1);
       }
-      ["hydrateOsm", "applyManual", "addMarkers", "applyFilters"].forEach(function (fn) {
-        var f = window[fn]; if (typeof f === "function") { try { f(); } catch (e) {} }
-      });
+      list.forEach(function (p) { arr.push(p); });
+      /* UNA sola funzione di ridisegno: chiamarne quattro in fila rischia di
+         moltiplicare i marker invece di rinfrescarli */
+      var redraw = ["applyFilters", "addMarkers", "hydrateOsm"];
+      for (var k = 0; k < redraw.length; k++) {
+        var fn = window[redraw[k]];
+        if (typeof fn === "function") { try { fn(); } catch (e) {} break; }
+      }
     } catch (e) {}
   }).catch(function () { /* regole o rete: l'app funziona lo stesso */ });
 }
