@@ -388,5 +388,10 @@
   "bbox": null,
   "target": "spain-canarie",
   "builtAt": "2026-09-13"
+ },
+ "osm_passes_lt.json": {
+  "bbox": null,
+  "target": "lithuania",
+  "builtAt": "2026-09-16"
  }
 }
