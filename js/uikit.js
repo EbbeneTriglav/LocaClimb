@@ -42,7 +42,7 @@
       "#acct.uk-anon .uk-av{width:auto;height:auto;background:none!important}" +
       "#acct.uk-anon .uk-in{font-weight:700;font-size:.88rem;white-space:nowrap;text-shadow:none}" +
       "#uk-tabs{display:none}" +
-      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-logged{display:none!important}#acct.uk-anon{display:inline-flex!important;padding:0 12px!important;height:38px}#hdr #fountBtn,#hdr #uk-food{width:38px;height:38px}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:118px;font-size:.68rem;padding:5px 9px;gap:7px;left:8px;right:8px;transform:none;justify-content:center}#be-btn{bottom:74px;left:8px}}";
+      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-logged{display:none!important}#acct.uk-anon{display:inline-flex!important;padding:0 12px!important;height:38px}#hdr #fountBtn,#hdr #uk-food{width:34px;height:34px}#hdr{gap:6px}#uk-center{padding:0 2px;gap:4px}#acct.uk-anon{padding:0 11px!important;height:34px;font-size:.8rem}#acct.uk-anon .uk-in{font-size:.8rem}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:118px;font-size:.68rem;padding:5px 9px;gap:7px;left:8px;right:8px;transform:none;justify-content:center}#be-btn{bottom:74px;left:8px}}";
     document.head.appendChild(el("style", { id: "uk-style" }, css));
   }
 
@@ -190,14 +190,18 @@
   function openFromTab(id) {
     var b = byId(id);
     if (!b) return;
-    b.click();
+    /* Il clic sulla scheda continua a risalire fino a document, dove dropdown()
+       chiude ogni menu aperto "fuori dal bottone": aprendolo subito si aprirebbe
+       e richiuderebbe nello stesso evento. Rimandiamo di un giro, cosi' quella
+       chiusura e' gia' passata e il nostro click() parte pulito. */
+    setTimeout(function () { b.click(); }, 0);
     setTimeout(function () {
       var m = document.querySelector(".uk-menu.open");
       if (!m || !window.matchMedia("(max-width:640px)").matches) return;
       m.style.left = "8px"; m.style.right = "8px"; m.style.width = "auto";
       m.style.top = "auto"; m.style.bottom = "66px"; m.style.transform = "none";
       m.style.maxHeight = "60vh"; m.style.overflowY = "auto";
-    }, 0);
+    }, 20);
   }
   /* tornando al desktop (rotazione, finestra allargata) tolgo gli stili inline */
   window.addEventListener("resize", function () {
@@ -208,8 +212,6 @@
   function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", L("Mappa", "Map"), function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", L("Cerca", "Search"), function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", L("Crea", "Create"), function () { openFromTab("uk-plus"); })); bar.appendChild(tab("&#x1F6B5;", L("Profilo", "Profile"), function () { openFromTab("acct"); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { openFromTab("uk-gear"); })); document.body.appendChild(bar); }
   function firstHint() {
     try { if (localStorage.getItem("uk_hint_seen")) return; } catch (e) {}
-    /* due riquadri sovrapposti in cima sono il modo piu' rapido per far chiudere
-       entrambi senza leggerli: il consiglio aspetta che il banner sia sparito */
     if (byId("uk-install")) { setTimeout(firstHint, 4000); return; } var h = el("div", { id: "uk-hint" }, L("&#x1F44B; I pallini colorati sono le salite: il <b>colore</b> e' la difficolta (HC = piu dura). Col <b>+</b> importi un GPX o crei un giro; con &#x2699;&#xFE0F; filtri e impostazioni.", "&#x1F44B; The colored dots are climbs: the <b>color</b> is the difficulty (HC = hardest). Use <b>+</b> to import a GPX or plan a ride; &#x2699;&#xFE0F; for filters and settings.") + "<br><button id='uk-hint-ok'>" + L("Ho capito", "Got it") + "</button>"); document.body.appendChild(h); var ok = byId("uk-hint-ok"); if (ok) ok.addEventListener("click", function () { try { localStorage.setItem("uk_hint_seen", "1"); } catch (e) {} h.remove(); }); }
 
   function addRouteClose() {
@@ -226,13 +228,17 @@
     window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); window._ukPrompt = e; });
     if (!isMobile()) return;
     try { if (localStorage.getItem("uk_install_x")) return; } catch (e) {}
-    setTimeout(function () {
+    function show() {
       if (byId("uk-install")) return;
+      /* il consiglio iniziale e' gia' in cima allo schermo: due riquadri
+         sovrapposti si chiudono entrambi senza leggerli. Aspettiamo il nostro turno. */
+      if (byId("uk-hint")) { setTimeout(show, 3000); return; }
       var b = el("div", { id: "uk-install" }, '<span class="uk-ic">' + LOGO + '</span><div class="uk-it"><b>LocaRide</b><small>' + L("Aggiungi alla schermata Home", "Add to your Home screen") + '</small></div><button id="uk-inst-go">' + L("Installa", "Install") + '</button><button id="uk-inst-x" aria-label="Chiudi">&times;</button>');
       document.body.appendChild(b);
       byId("uk-inst-go").addEventListener("click", function () { var p = window._ukPrompt; if (p) { p.prompt(); if (p.userChoice) p.userChoice.finally(function () { window._ukPrompt = null; b.remove(); }); else b.remove(); } else { alert(L("Apri il menu del browser (i tre puntini) e scegli 'Aggiungi a schermata Home'.", "Open your browser menu and choose 'Add to Home screen'.")); } });
       byId("uk-inst-x").addEventListener("click", function () { try { localStorage.setItem("uk_install_x", "1"); } catch (e) {} b.remove(); });
-    }, 1400);
+    }
+    setTimeout(show, 1400);
   }
 
   // Mobile: la barra a schede (#uk-tabs, fixed in basso) copre il fondo del pannello, dove sta
