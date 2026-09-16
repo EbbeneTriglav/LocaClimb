@@ -107,6 +107,14 @@ async function template() {
   return null;
 }
 
+/* distanza fra due punti in km */
+function hav(la1, lo1, la2, lo2) {
+  const R = 6371, p = Math.PI / 180;
+  const x = Math.sin((la2 - la1) * p / 2) ** 2
+    + Math.cos(la1 * p) * Math.cos(la2 * p) * Math.sin((lo2 - lo1) * p / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+
 /* ---- fusione: due proposte sulla stessa montagna sono due versanti -------- */
 /* Stessa regola del frontend: decide la vicinanza della CIMA, non il nome, che
    ognuno scrive a modo suo. Il nome serve solo come conferma. */
@@ -137,11 +145,59 @@ function mergePasses(list) {
   return out;
 }
 
+/* rotta bussola, gradi da nord */
+function bearing(la1, lo1, la2, lo2) {
+  const p = Math.PI / 180;
+  const y = Math.sin((lo2 - lo1) * p) * Math.cos(la2 * p);
+  const x = Math.cos(la1 * p) * Math.sin(la2 * p) - Math.sin(la1 * p) * Math.cos(la2 * p) * Math.cos((lo2 - lo1) * p);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
+const DIRS = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];
+const dirLabel = (d) => DIRS[Math.round(((d % 360) + 360) % 360 / 45) % 8];
+
+/* quote a passo costante: il pannello disegna il profilo solo se ci sono */
+function elevProfile(tr, n = 100) {
+  if (!tr || tr.length < 2) return [];
+  const cum = [0];
+  for (let i = 1; i < tr.length; i++) cum.push(cum[i - 1] + hav(tr[i - 1][0], tr[i - 1][1], tr[i][0], tr[i][1]));
+  const tot = cum[cum.length - 1];
+  if (!(tot > 0)) return [];
+  const out = [];
+  let j = 1;
+  for (let i = 0; i < n; i++) {
+    const d = tot * i / (n - 1);
+    while (j < cum.length - 1 && cum[j] < d) j++;
+    const a = cum[j - 1], b = cum[j], f = b > a ? (d - a) / (b - a) : 0;
+    const ea = tr[j - 1][2] || 0, eb = tr[j][2] || 0;
+    out.push(Math.round(ea + (eb - ea) * f));
+  }
+  return out;
+}
+
+/* pendenza massima su finestre di ~100 m: sul singolo punto il GPS spara picchi */
+function maxGradient(tr) {
+  let best = 0, i = 0;
+  while (i < tr.length - 1) {
+    let d = 0, j = i;
+    while (j < tr.length - 1 && d < 0.1) { d += hav(tr[j][0], tr[j][1], tr[j + 1][0], tr[j + 1][1]); j++; }
+    if (d >= 0.05 && tr[j][2] != null && tr[i][2] != null) {
+      const g = (tr[j][2] - tr[i][2]) / (d * 10);
+      if (g > best) best = g;
+    }
+    i = j > i ? j : i + 1;
+  }
+  return Math.round(best * 10) / 10;
+}
+
 function toPass(r) {
   const track = [];
   const flat = r.flat || [];
   for (let i = 0; i + 2 < flat.length; i += 3) track.push([flat[i], flat[i + 1], flat[i + 2]]);
   if (track.length < 4) return null;
+  /* le proposte vecchie non hanno questi campi: li ricaviamo dal tracciato */
+  const maxG = r.maxGradient != null ? r.maxGradient : maxGradient(track);
+  const expo = r.exposure
+    || dirLabel(bearing(track[track.length - 1][0], track[track.length - 1][1], track[0][0], track[0][1]));
   return {
     id: "usr-" + r._id,
     name: r.name,
@@ -155,8 +211,9 @@ function toPass(r) {
       startLat: r.startLat, startLon: r.startLon,
       startElevation: r.startElevation, endElevation: r.endElevation,
       distance_km: r.km, avgGradient: r.avgGradient,
-      maxGradient: r.maxGradient != null ? r.maxGradient : null,
-      exposure: r.exposure || null,
+      maxGradient: maxG,
+      exposure: expo,
+      elevationProfile: elevProfile(track, 100),
       track: track,
       elevSource: "user"
     }]

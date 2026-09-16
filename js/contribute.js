@@ -431,9 +431,39 @@ function lrcReject(id) {
 /* Le approvate vivono su Firestore finche' import_proposals.mjs non le travasa
    nel repo. Le trasformiamo nella stessa forma dei passi manuali e le diamo in
    pasto alle funzioni dell'app. Difensivo: se una funzione non c'e', si salta. */
+/* Il pannello disegna il profilo solo per i versanti che hanno elevationProfile
+   (vedi profileVers in panel.js): e' un elenco di quote a passo costante lungo la
+   salita. Il tracciato le ha gia', basta ricampionarle per distanza - altrimenti
+   i tornanti fitti peserebbero come i rettilinei e il profilo verrebbe storto. */
+function lrcElevProfile(tr, n) {
+  n = n || 100;
+  if (!tr || tr.length < 2) return [];
+  var cum = [0], i;
+  for (i = 1; i < tr.length; i++) cum.push(cum[i - 1] + lrcHav(tr[i - 1][0], tr[i - 1][1], tr[i][0], tr[i][1]));
+  var tot = cum[cum.length - 1];
+  if (!(tot > 0)) return [];
+  var out = [], j = 1;
+  for (i = 0; i < n; i++) {
+    var d = tot * i / (n - 1);
+    while (j < cum.length - 1 && cum[j] < d) j++;
+    var a = cum[j - 1], b = cum[j], f = b > a ? (d - a) / (b - a) : 0;
+    var ea = tr[j - 1][2], eb = tr[j][2];
+    out.push(Math.round((ea == null ? 0 : ea) + ((eb == null ? 0 : eb) - (ea == null ? 0 : ea)) * f));
+  }
+  return out;
+}
+
 function lrcToPass(r, id) {
   var track = [];
   for (var i = 0; i + 2 < r.flat.length; i += 3) track.push([r.flat[i], r.flat[i + 1], r.flat[i + 2]]);
+  /* le proposte inviate prima che calcolassimo questi valori non li hanno:
+     li ricaviamo qui dal tracciato, invece di chiedere all'utente di rimandarle */
+  var maxG = r.maxGradient != null ? r.maxGradient : lrcMaxGradient(track);
+  var expo = r.exposure;
+  if (!expo && track.length > 1) {
+    var a0 = track[0], b0 = track[track.length - 1];
+    expo = lrcDirLabel(lrcBearing(b0[0], b0[1], a0[0], a0[1]));
+  }
   return {
     id: "usr-" + id,
     name: r.name,
@@ -444,8 +474,9 @@ function lrcToPass(r, id) {
       startLat: r.startLat, startLon: r.startLon,
       startElevation: r.startElevation, endElevation: r.endElevation,
       distance_km: r.km, avgGradient: r.avgGradient,
-      maxGradient: r.maxGradient != null ? r.maxGradient : null,
-      exposure: r.exposure || null,
+      maxGradient: maxG,
+      exposure: expo || null,
+      elevationProfile: lrcElevProfile(track, 100),
       track: track, elevSource: "user"
     }]
   };
@@ -509,12 +540,17 @@ function lrcLoadApproved(force) {
       var arr = window.OSM_PASSES || window.osmPasses;
       if (!arr || !arr.push) return;
       /* togliamo le nostre voci precedenti prima di rimetterle: senza questo,
-         ogni ricarica aggiunge un altro giro di marker sopra i vecchi (e' il
-         motivo per cui vedevi cinque puntini sulla stessa salita) */
+         ogni ricarica aggiunge un altro giro di marker sopra i vecchi */
       for (var i = arr.length - 1; i >= 0; i--) {
         if (arr[i] && typeof arr[i].id === "string" && arr[i].id.indexOf("usr-") === 0) arr.splice(i, 1);
       }
       list.forEach(function (p) { arr.push(p); });
+      /* I file regione arrivano dalla rete con tempi variabili, e da quando le
+         proposte approvate stanno ANCHE in osm_passes_user.json le stesse salite
+         possono atterrare dopo questa pulizia: nessuno le toglierebbe piu' e si
+         vedrebbero raddoppiate. Ripassiamo per qualche secondo finche' i dati
+         non hanno finito di arrivare. */
+      lrcWatchDupes();
       /* UNA sola funzione di ridisegno: chiamarne quattro in fila rischia di
          moltiplicare i marker invece di rinfrescarli */
       var redraw = ["applyFilters", "addMarkers", "hydrateOsm"];
@@ -524,6 +560,46 @@ function lrcLoadApproved(force) {
       }
     } catch (e) {}
   }).catch(function () { /* regole o rete: l'app funziona lo stesso */ });
+}
+
+/* Toglie le salite con id ripetuto, tenendo quella piu' completa (piu' versanti,
+   poi quella col profilo altimetrico). Non tocca nulla se non ci sono doppioni,
+   cosi' non ridisegna la mappa senza motivo. */
+function lrcDedupe() {
+  var arr = window.OSM_PASSES || window.osmPasses;
+  if (!arr || !arr.length) return false;
+  var best = {}, i, p;
+  for (i = 0; i < arr.length; i++) {
+    p = arr[i];
+    if (!p || typeof p.id !== "string" || p.id.indexOf("usr-") !== 0) continue;
+    var cur = best[p.id];
+    var score = (p.versanti ? p.versanti.length : 0) * 10
+      + ((p.versanti && p.versanti[0] && p.versanti[0].elevationProfile) ? 1 : 0);
+    if (!cur || score > cur.score) best[p.id] = { i: i, score: score };
+  }
+  var removed = 0;
+  for (i = arr.length - 1; i >= 0; i--) {
+    p = arr[i];
+    if (!p || typeof p.id !== "string" || p.id.indexOf("usr-") !== 0) continue;
+    if (best[p.id] && best[p.id].i !== i) { arr.splice(i, 1); removed++; }
+  }
+  if (!removed) return false;
+  var redraw = ["applyFilters", "addMarkers"];
+  for (var k = 0; k < redraw.length; k++) {
+    var fn = window[redraw[k]];
+    if (typeof fn === "function") { try { fn(); } catch (e) {} break; }
+  }
+  return true;
+}
+
+/* Controlli scaglionati: coprono i primi 30 secondi, cioe' il tempo in cui i
+   file regione finiscono di scaricarsi anche su una connessione lenta. */
+function lrcWatchDupes() {
+  if (LRC._watching) return;
+  LRC._watching = 1;
+  [1000, 2500, 5000, 9000, 15000, 30000].forEach(function (ms) {
+    setTimeout(function () { try { lrcDedupe(); } catch (e) {} }, ms);
+  });
 }
 
 /* ------------------------------------------------- aggancio ai menu esistenti */
@@ -662,5 +738,6 @@ function lrcStart() {
     if (++tries >= 20 || (g && g._lrcAdmin === "done")) clearInterval(iv);
   }, 1000);
   setTimeout(function () { try { lrcLoadApproved(); } catch (e) {} }, 1500);
+  setTimeout(function () { try { lrcWatchDupes(); } catch (e) {} }, 2000);
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", lrcStart); else lrcStart();
