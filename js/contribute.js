@@ -246,13 +246,73 @@ function lrcMine() {
       h += '<div class="lrc-item"><span class="lrc-st ' + r.status + '">' + st + "</span>"
         + "<h4>" + lrcEsc(r.name) + "</h4>"
         + '<div class="lrc-meta">' + lrcEsc(r.side) + " &middot; " + (r.km || 0) + " km &middot; " + (r.gain || 0) + " m"
-        + (r.reviewNote ? "<br>" + lrcT("Nota: ", "Note: ") + lrcEsc(r.reviewNote) : "") + "</div></div>";
+        + (r.reviewNote ? "<br>" + lrcT("Nota: ", "Note: ") + lrcEsc(r.reviewNote) : "") + "</div>";
+      /* finche' e' in revisione si puo' correggere o ritirare: dopo l'approvazione
+         il contenuto e' congelato, altrimenti si potrebbe cambiare cio' che e'
+         gia' stato pubblicato. Il tracciato non si modifica a mano: si ritira e
+         si ridisegna, che e' piu' rapido di qualsiasi editor. */
+      if (r.status === "pending") {
+        h += '<div class="lrc-btns" style="margin-top:9px">'
+          + '<button onclick="lrcEdit(\'' + r.id + '\')">' + lrcT("Modifica", "Edit") + "</button>"
+          + '<button onclick="lrcWithdraw(\'' + r.id + '\')">' + lrcT("Ritira", "Withdraw") + "</button></div>";
+      }
+      h += "</div>";
     });
     lrcId("lrc-list").className = "";
     lrcId("lrc-list").innerHTML = h;
   }).catch(function (e) {
     lrcId("lrc-list").innerHTML = '<span class="lrc-err">' + lrcEsc(e.message || e) + "</span>";
   });
+}
+
+/* Correzione dei dati testuali di una proposta ancora in attesa. Il tracciato
+   resta quello: per cambiarlo si ritira e si ridisegna. */
+function lrcEdit(id) {
+  var db = lrcDb();
+  if (!db) return;
+  db.collection("proposals").doc(id).get().then(function (d) {
+    if (!d.exists) return;
+    var r = d.data();
+    var u = lrcUser();
+    var back = (u && r.uid === u.uid) ? lrcMine : lrcQueue;   // dove torno dopo
+    lrcModal("<h3>" + lrcT("Correggi la proposta", "Fix your suggestion") + "</h3>"
+      + '<p class="lrc-sub">' + lrcT("Il tracciato non si tocca: se e' quello sbagliato, ritira la proposta e ridisegnala.",
+        "The track stays as is: if that's what's wrong, withdraw and draw it again.") + "</p>"
+      + "<label>" + lrcT("Nome della salita", "Climb name") + "</label>"
+      + '<input id="lrc-ename" maxlength="70" value="' + lrcEsc(r.name) + '">'
+      + "<label>" + lrcT("Da dove si sale", "Which side") + "</label>"
+      + '<input id="lrc-eside" maxlength="50" value="' + lrcEsc(r.side) + '">'
+      + "<label>" + lrcT("Note per il revisore", "Notes for the reviewer") + "</label>"
+      + '<textarea id="lrc-enote" maxlength="400">' + lrcEsc(r.note || "") + "</textarea>"
+      + '<div class="lrc-btns"><button id="lrc-eback">' + lrcT("Annulla", "Cancel") + "</button>"
+      + '<button class="lrc-go" id="lrc-esave">' + lrcT("Salva", "Save") + "</button></div>"
+      + '<div class="lrc-msg" id="lrc-msg"></div>');
+    lrcId("lrc-eback").addEventListener("click", back);
+    lrcId("lrc-esave").addEventListener("click", function () {
+      var name = (lrcId("lrc-ename").value || "").trim();
+      var msg = lrcId("lrc-msg");
+      if (name.length < 3) { msg.className = "lrc-msg lrc-err"; msg.textContent = lrcT("Il nome e' troppo corto.", "Name too short."); return; }
+      db.collection("proposals").doc(id).update({
+        name: name,
+        side: (lrcId("lrc-eside").value || "").trim() || r.side,
+        note: (lrcId("lrc-enote").value || "").trim(),
+        editedAt: Date.now()
+      }).then(back).catch(function (e) {
+        msg.className = "lrc-msg lrc-err";
+        msg.textContent = lrcT("Errore: ", "Error: ") + (e.message || e);
+      });
+    });
+  });
+}
+
+function lrcWithdraw(id) {
+  var db = lrcDb();
+  if (!db) return;
+  if (!confirm(lrcT("Ritiro la proposta? Potrai ridisegnarla e rimandarla.",
+    "Withdraw this suggestion? You can draw it again and resend."))) return;
+  db.collection("proposals").doc(id).delete()
+    .then(lrcMine)
+    .catch(function (e) { alert(lrcT("Errore: ", "Error: ") + (e.message || e)); });
 }
 
 /* -------------------------------------------------------- coda di revisione */
@@ -276,6 +336,7 @@ function lrcQueue() {
           + (r.note ? "<br><i>" + lrcEsc(r.note) + "</i>" : "") + "</div>"
           + '<div class="lrc-btns" style="margin-top:9px">'
           + '<button onclick="lrcShow(\'' + r.id + '\')">' + lrcT("Vedi", "Show") + "</button>"
+          + '<button onclick="lrcEdit(\'' + r.id + '\')">' + lrcT("Correggi", "Fix") + "</button>"
           + '<button onclick="lrcReject(\'' + r.id + '\')">' + lrcT("Rifiuta", "Reject") + "</button>"
           + '<button class="lrc-go" onclick="lrcApprove(\'' + r.id + '\')">' + lrcT("Approva", "Approve") + "</button>"
           + "</div></div>";
