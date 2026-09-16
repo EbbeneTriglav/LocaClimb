@@ -11,12 +11,26 @@
    push, senza capire il perche'. Con network-first, online hai SEMPRE l'ultima
    versione; la copia salvata entra in gioco solo quando la rete non risponde.
 
+   CORREZIONE IMPORTANTE (set 2026)
+   "Prima la rete" non bastava. Il nostro fetch() finiva comunque nella cache HTTP
+   del browser, che GitHub Pages autorizza per qualche minuto: il service worker
+   credeva di aver preso il file fresco e serviva invece quello vecchio. Per la
+   PAGINA e per SCRIPT e FOGLI DI STILE ora forziamo cache:"reload", che salta
+   quella cache e va davvero in rete. E' il motivo per cui un aggiornamento
+   poteva restare invisibile per ore, soprattutto nell'app installata, dove non
+   esiste un "ricarica forzato" da offrire all'utente.
+
+   I dati (data/*.json, tessere, meteo) continuano a usare la cache normale: sono
+   file grandi e chiederli sempre da zero costerebbe traffico senza vantaggio.
+
    Cosa NON viene messo in cache: le chiamate a Firebase, Overpass, Open-Meteo,
    BRouter e le tessere della mappa. Sono dati vivi: una risposta vecchia sarebbe
    peggio di nessuna risposta (un meteo di ieri, un bar che nel frattempo ha chiuso).
    =========================================================================== */
 
-var CACHE = "locaride-v1";
+/* Il nome cambia a ogni versione: cosi' l'evento activate qui sotto fa pulizia
+   delle copie vecchie invece di tenersele per sempre. */
+var CACHE = "locaride-v2";
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();                       // la nuova versione entra subito in servizio
@@ -29,6 +43,12 @@ self.addEventListener("activate", function (e) {
     }).then(function () { return self.clients.claim(); })
   );
 });
+
+/* la pagina e il codice devono essere sempre freschi; i dati possono aspettare */
+function mustBeFresh(req, url) {
+  if (req.mode === "navigate") return true;
+  return /\.(?:js|css|html)$/.test(url.pathname);
+}
 
 self.addEventListener("fetch", function (e) {
   var req = e.request;
@@ -43,8 +63,12 @@ self.addEventListener("fetch", function (e) {
   // I dati che cambiano di continuo non vanno mai serviti da una copia vecchia.
   if (/\/(api|__)\//.test(url.pathname)) return;
 
+  var fresh = mustBeFresh(req, url);
+
   e.respondWith(
-    fetch(req).then(function (res) {
+    // cache:"reload" salta la cache HTTP del browser: senza, "prima la rete"
+    // restava una buona intenzione e l'aggiornamento non arrivava mai.
+    fetch(fresh ? new Request(req, { cache: "reload" }) : req).then(function (res) {
       if (res && res.status === 200 && res.type === "basic") {
         var copy = res.clone();
         caches.open(CACHE).then(function (c) { c.put(req, copy); });
@@ -58,5 +82,21 @@ self.addEventListener("fetch", function (e) {
         return new Response("", { status: 504, statusText: "offline" });
       });
     })
+  );
+});
+
+/* Permette alla pagina di chiedere una pulizia completa ("Aggiorna app"):
+   svuota tutte le cache e si toglie di mezzo, poi la pagina ricarica. */
+self.addEventListener("message", function (e) {
+  if (!e.data || e.data.type !== "LR_RESET") return;
+  e.waitUntil(
+    caches.keys()
+      .then(function (keys) { return Promise.all(keys.map(function (k) { return caches.delete(k); })); })
+      .then(function () { return self.registration.unregister(); })
+      .then(function () {
+        return self.clients.matchAll({ type: "window" }).then(function (cs) {
+          cs.forEach(function (c) { c.postMessage({ type: "LR_RESET_DONE" }); });
+        });
+      })
   );
 });

@@ -266,6 +266,58 @@
     pad();
   }
 
-  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose, buildInstall, fixReviewSpacing].forEach(function (f) { try { f(); } catch (e) {} }); }
+  /* Installa e Aggiorna: due voci nel menu, perche' il banner automatico non
+     basta. Il banner si puo' chiudere per sbaglio (e non torna mai piu'), e
+     nell'app installata NON esiste un "ricarica forzato" da spiegare a voce. */
+  function installFromMenu() {
+    var p = window._ukPrompt;
+    if (p) {
+      p.prompt();
+      if (p.userChoice) p.userChoice.finally(function () { window._ukPrompt = null; });
+      return;
+    }
+    alert(L("Se non vedi la richiesta: apri il menu del browser (i tre puntini) e scegli 'Installa app' o 'Aggiungi a schermata Home'.",
+      "If no prompt appears: open your browser menu (three dots) and pick 'Install app' or 'Add to Home screen'."));
+  }
+
+  function resetApp() {
+    if (!confirm(L("Scarico di nuovo l'app aggiornata. I tuoi giri salvati e l'account non si toccano. Procedo?",
+      "This re-downloads the updated app. Your saved rides and account are untouched. Continue?"))) return;
+    try { localStorage.removeItem("uk_install_x"); } catch (e) {}
+    var done = function () { location.reload(true); };
+    if (!navigator.serviceWorker) { done(); return; }
+    navigator.serviceWorker.getRegistration().then(function (r) {
+      if (r && r.active) {
+        navigator.serviceWorker.addEventListener("message", function (e) {
+          if (e.data && e.data.type === "LR_RESET_DONE") done();
+        });
+        r.active.postMessage({ type: "LR_RESET" });
+        setTimeout(done, 2500);            // se il messaggio si perde, ricarichiamo comunque
+      } else { done(); }
+    }).catch(done);
+  }
+
+  function extraMenuItems() {
+    var gear = byId("uk-gear");
+    var menus = document.querySelectorAll(".uk-menu");
+    var gm = null;
+    for (var i = 0; i < menus.length; i++) {
+      if (/impostazion|settings|foto|photo|tema|theme|editor|filtri/i.test(menus[i].textContent || "")) gm = menus[i];
+    }
+    if (!gm && menus.length > 1) gm = menus[1];
+    if (!gm || gm._ukExtra === 1) return;
+    gm._ukExtra = 1;
+    if (isMobile()) gm.appendChild(mi("&#x2B07;&#xFE0F;", L("Installa app", "Install app"), installFromMenu));
+    gm.appendChild(mi("&#x1F504;", L("Aggiorna app", "Update app"), resetApp));
+  }
+
+  function start() { injectStyle(); [newLogo, profileBtn, buildHeader, setPlaceholder, buildLegend, wireSearch, buildTabs, firstHint, neutralizeSearchFilter, fixRbCursor, addRouteClose, buildInstall, fixReviewSpacing, extraMenuItems].forEach(function (f) { try { f(); } catch (e) {} }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  /* i menu di uikit nascono subito, ma un altro modulo potrebbe ricrearli:
+     ritentiamo per qualche secondo e poi smettiamo */
+  var exTries = 0;
+  var exIv = setInterval(function () {
+    try { extraMenuItems(); } catch (e) {}
+    if (++exTries > 10) clearInterval(exIv);
+  }, 1000);
 })();
