@@ -1,0 +1,85 @@
+// ============================================================================
+// LocaRide - regole per le proposte di salite.
+// ----------------------------------------------------------------------------
+// NON sostituire l'intero file: incolla SOLO il blocco qui sotto dentro il tuo
+// match /databases/{database}/documents { ... } esistente, accanto a users,
+// ratings e shared. Poi Firebase console -> Firestore -> Regole -> Pubblica.
+//
+// Chi puo' fare cosa:
+//   - creare una proposta: solo utenti con users/{uid}.canPropose == true,
+//     e solo intestata a se stessi, e solo con stato "pending" (nessuno puo'
+//     auto-approvarsi);
+//   - leggere: l'autore vede le sue, l'admin vede tutto, e chiunque (anche non
+//     autenticato) vede quelle approvate - serve perche' l'app le mostri subito
+//     e perche' import_proposals.mjs le legga senza credenziali;
+//   - approvare o rifiutare: solo users/{uid}.role == "admin";
+//   - cancellare: l'autore finche' e' in attesa, oppure l'admin.
+//
+// Prima di usarlo, sul TUO documento users/{tuo uid} metti  role: "admin"
+// e su quello dei tester  canPropose: true  (dalla console, a mano).
+// ============================================================================
+
+function lrUser() {
+  return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+}
+function lrIsAdmin() {
+  return request.auth != null
+    && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+    && lrUser().role == 'admin';
+}
+function lrCanPropose() {
+  return request.auth != null
+    && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+    && lrUser().canPropose == true;
+}
+
+match /proposals/{pid} {
+
+  // approvate: pubbliche. Le altre: solo autore o admin.
+  allow read: if resource.data.status == 'approved'
+              || (request.auth != null && resource.data.uid == request.auth.uid)
+              || lrIsAdmin();
+
+  // il tracciato piatto puo' arrivare a 800 punti x 3 valori: teniamo un tetto
+  // per non farci riempire il database, e imponiamo stato iniziale "pending".
+  allow create: if lrCanPropose()
+                && request.resource.data.uid == request.auth.uid
+                && request.resource.data.status == 'pending'
+                && request.resource.data.name is string
+                && request.resource.data.name.size() >= 3
+                && request.resource.data.name.size() <= 70
+                && request.resource.data.flat is list
+                && request.resource.data.flat.size() <= 2400
+                && request.resource.data.km is number
+                && request.resource.data.km > 0
+                && request.resource.data.km < 60;
+
+  // solo l'admin decide. L'autore non puo' modificare dopo l'invio: se sbaglia
+  // cancella e rimanda, cosi' non puo' cambiare il contenuto post-approvazione.
+  allow update: if lrIsAdmin();
+
+  allow delete: if lrIsAdmin()
+                || (request.auth != null
+                    && resource.data.uid == request.auth.uid
+                    && resource.data.status == 'pending');
+}
+
+// ----------------------------------------------------------------------------
+// Sul documento users/{uid} servono due campi nuovi: canPropose (bool) e role
+// (string). Se le tue regole attuali permettono all'utente di scrivere tutto il
+// proprio documento, ATTENZIONE: potrebbe auto-assegnarsi role "admin".
+// In quel caso stringi cosi' (adatta ai campi che gia' hai):
+//
+//   match /users/{uid} {
+//     allow read: if request.auth != null && request.auth.uid == uid;
+//     allow create: if request.auth != null && request.auth.uid == uid
+//                   && !('role' in request.resource.data)
+//                   && !('canPropose' in request.resource.data);
+//     allow update: if request.auth != null && request.auth.uid == uid
+//                   && request.resource.data.role == resource.data.role
+//                   && request.resource.data.canPropose == resource.data.canPropose;
+//   }
+//
+// Cosi' quei due campi li puoi cambiare solo tu dalla console: sono la chiave
+// di tutto il sistema di permessi.
+// ----------------------------------------------------------------------------
