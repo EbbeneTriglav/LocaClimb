@@ -413,5 +413,15 @@
   ],
   "target": "confine-si-hr",
   "builtAt": "2026-09-17"
+ },
+ "osm_passes_xb_meal.json": {
+  "bbox": [
+   18.9,
+   41.7,
+   20.8,
+   42.9
+  ],
+  "target": "confine-me-al",
+  "builtAt": "2026-09-17"
  }
 }
