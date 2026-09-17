@@ -403,5 +403,15 @@
   ],
   "target": "confine-it-at",
   "builtAt": "2026-09-16"
+ },
+ "osm_passes_xb_sihr.json": {
+  "bbox": [
+   13.4,
+   45.2,
+   16.7,
+   46.4
+  ],
+  "target": "confine-si-hr",
+  "builtAt": "2026-09-17"
  }
 }
