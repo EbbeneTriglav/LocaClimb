@@ -423,5 +423,10 @@
   ],
   "target": "confine-me-al",
   "builtAt": "2026-09-17"
+ },
+ "osm_passes_fr_corse.json": {
+  "bbox": null,
+  "target": "france-corse",
+  "builtAt": "2026-09-18"
  }
 }
