@@ -428,5 +428,15 @@
   "bbox": null,
   "target": "france-corse",
   "builtAt": "2026-09-18"
+ },
+ "osm_passes_es_s.json": {
+  "bbox": [
+   -7.7,
+   35.8,
+   0.9,
+   38.5
+  ],
+  "target": "spain-sud",
+  "builtAt": "2026-09-19"
  }
 }
