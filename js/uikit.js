@@ -42,7 +42,7 @@
       "#acct.uk-anon .uk-av{width:auto;height:auto;background:none!important}" +
       "#acct.uk-anon .uk-in{font-weight:700;font-size:.88rem;white-space:nowrap;text-shadow:none}" +
       "#uk-tabs{display:none}" +
-      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-logged{display:none!important}#acct.uk-anon{display:inline-flex!important;padding:0 12px!important;height:38px}#hdr #fountBtn,#hdr #uk-food{width:34px;height:34px}#hdr{gap:6px}#uk-center{padding:0 2px;gap:4px}#acct.uk-anon{padding:0 11px!important;height:34px;font-size:.8rem}#acct.uk-anon .uk-in{font-size:.8rem}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:118px;font-size:.68rem;padding:5px 9px;gap:7px;left:8px;right:8px;transform:none;justify-content:center}#be-btn{bottom:74px;left:8px}}";
+      "@media(max-width:640px){#uk-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--bg2);border-top:1px solid var(--bdr);padding:4px 0 max(4px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}#uk-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;color:var(--txt2);font-size:.62rem;padding:5px 0;cursor:pointer}#uk-tabs button .ic{font-size:1.25rem;line-height:1}#hdr{padding:0 8px;gap:8px}#uk-plus,#uk-gear,#acct.uk-logged{display:inline-flex!important;width:34px!important;height:34px!important;min-width:34px;padding:0!important;border-radius:50%!important;overflow:hidden}#acct.uk-anon{display:inline-flex!important;padding:0 12px!important;height:38px}#hdr #fountBtn,#hdr #uk-food{width:34px;height:34px}#hdr{gap:6px}#uk-center{padding:0 2px;gap:4px}#acct.uk-anon{padding:0 11px!important;height:34px;font-size:.8rem}#acct.uk-anon .uk-in{font-size:.8rem}#hdr h1 .wordmark,#hdr h1 .tag{display:none}#uk-left{gap:8px;flex:1}#uk-center{gap:6px}#uk-right{flex:0 1 auto;gap:6px}#search{font-size:.95rem}#uk-legend{bottom:118px;font-size:.68rem;padding:5px 9px;gap:7px;left:8px;right:8px;transform:none;justify-content:center}#be-btn{bottom:74px;left:8px}}";
     document.head.appendChild(el("style", { id: "uk-style" }, css));
   }
 
@@ -85,6 +85,19 @@
     var ini = curInitials(), photo = getPhoto(), logged = !!ini || !!photo;
     a.classList.toggle("uk-logged", logged);
     a.classList.toggle("uk-anon", !logged);
+    /* su mobile lo stato deve vedersi anche nella barra in basso: la scheda
+       Profilo mostra le iniziali da loggato, la bici da ospite */
+    var tabs = byId("uk-tabs");
+    if (tabs) {
+      var tb = tabs.querySelectorAll("button");
+      for (var t = 0; t < tb.length; t++) {
+        if (!/Profil/i.test(tb[t].textContent)) continue;
+        var ic = tb[t].querySelector(".ic");
+        if (ic) ic.innerHTML = logged && ini
+          ? '<b style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ac);color:#fff;font-size:.72rem">' + esc(ini) + "</b>"
+          : "&#x1F6B5;";
+      }
+    }
     if (!logged) {
       av.style.backgroundImage = "";
       av.innerHTML = '<span class="uk-in">' + L("Accedi", "Sign in") + "</span>";
@@ -209,7 +222,7 @@
     var ms = document.querySelectorAll(".uk-menu");
     for (var i = 0; i < ms.length; i++) ms[i].style.cssText = "";
   });
-  function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", L("Mappa", "Map"), function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", L("Cerca", "Search"), function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", L("Crea", "Create"), function () { openFromTab("uk-plus"); })); bar.appendChild(tab("&#x1F6B5;", L("Profilo", "Profile"), function () { openFromTab("acct"); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { openFromTab("uk-gear"); })); document.body.appendChild(bar); }
+  function buildTabs() { if (byId("uk-tabs")) return; var bar = el("div", { id: "uk-tabs" }); bar.appendChild(tab("&#x1F5FA;&#xFE0F;", L("Mappa", "Map"), function () { var h = document.querySelector('#hdr h1'); if (h) h.click(); })); bar.appendChild(tab("&#x1F50D;", L("Cerca", "Search"), function () { var s = byId("search"); if (s) { s.focus(); s.scrollIntoView(); } })); bar.appendChild(tab("&#x2B;", L("Crea", "Create"), function () { openFromTab("uk-plus"); })); bar.appendChild(tab("&#x1F6B5;", L("Profilo", "Profile"), function () { openFromTab("acct"); })); bar.appendChild(tab("&#x2699;&#xFE0F;", "Menu", function () { openFromTab("uk-gear"); })); document.body.appendChild(bar); try { renderAvatar(); } catch (e) {} }
   function firstHint() {
     try { if (localStorage.getItem("uk_hint_seen")) return; } catch (e) {}
     if (byId("uk-install")) { setTimeout(firstHint, 4000); return; } var h = el("div", { id: "uk-hint" }, L("&#x1F44B; I pallini colorati sono le salite: il <b>colore</b> e' la difficolta (HC = piu dura). Col <b>+</b> importi un GPX o crei un giro; con &#x2699;&#xFE0F; filtri e impostazioni.", "&#x1F44B; The colored dots are climbs: the <b>color</b> is the difficulty (HC = hardest). Use <b>+</b> to import a GPX or plan a ride; &#x2699;&#xFE0F; for filters and settings.") + "<br><button id='uk-hint-ok'>" + L("Ho capito", "Got it") + "</button>"); document.body.appendChild(h); var ok = byId("uk-hint-ok"); if (ok) ok.addEventListener("click", function () { try { localStorage.setItem("uk_hint_seen", "1"); } catch (e) {} h.remove(); }); }
