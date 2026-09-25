@@ -2,7 +2,7 @@
  "osm_passes_bal_s.json": {
   "bbox": null,
   "target": "montenegro-albania-macedonia",
-  "builtAt": "2026-09-14"
+  "builtAt": "2026-09-20"
  },
  "osm_passes_fr_lr.json": {
   "bbox": null,
@@ -12,12 +12,12 @@
  "osm_passes_fr_mp.json": {
   "bbox": null,
   "target": "france-midi-pyrenees",
-  "builtAt": "2026-08-20"
+  "builtAt": "2026-09-18"
  },
  "osm_passes_fr_fcb.json": {
   "bbox": null,
   "target": "france-jura",
-  "builtAt": "2026-09-12"
+  "builtAt": "2026-09-18"
  },
  "osm_passes_fr_co.json": {
   "bbox": null,
@@ -27,7 +27,7 @@
  "osm_passes_fr_ra.json": {
   "bbox": null,
   "target": "france-rhone-alpes",
-  "builtAt": "2026-08-24"
+  "builtAt": "2026-09-24"
  },
  "osm_passes_fr_aq.json": {
   "bbox": null,
@@ -102,7 +102,7 @@
  "osm_passes_sk.json": {
   "bbox": null,
   "target": "slovakia",
-  "builtAt": "2026-08-10"
+  "builtAt": "2026-09-22"
  },
  "osm_passes_no.json": {
   "bbox": null,
@@ -167,7 +167,7 @@
  "osm_passes_gb_en_se.json": {
   "bbox": null,
   "target": "england-sud-est",
-  "builtAt": "2026-09-09"
+  "builtAt": "2026-09-21"
  },
  "osm_passes_gb_sco.json": {
   "bbox": null,
@@ -182,7 +182,7 @@
  "osm_passes_pt.json": {
   "bbox": null,
   "target": "portugal",
-  "builtAt": "2026-08-19"
+  "builtAt": "2026-09-19"
  },
  "osm_passes_gb_en_n.json": {
   "bbox": null,
@@ -207,17 +207,17 @@
  "osm_passes_fr_auv.json": {
   "bbox": null,
   "target": "france-auvergne",
-  "builtAt": "2026-08-20"
+  "builtAt": "2026-09-24"
  },
  "osm_passes_gb_wal.json": {
   "bbox": null,
   "target": "wales",
-  "builtAt": "2026-08-21"
+  "builtAt": "2026-09-21"
  },
  "osm_passes_ee.json": {
   "bbox": null,
   "target": "estonia",
-  "builtAt": "2026-08-28"
+  "builtAt": "2026-09-22"
  },
  "osm_passes_lv.json": {
   "bbox": null,
@@ -262,7 +262,7 @@
    48.1
   ],
   "target": "confine-de-ch",
-  "builtAt": "2026-08-29"
+  "builtAt": "2026-09-23"
  },
  "osm_passes_xb_atsi.json": {
   "bbox": [
@@ -312,7 +312,7 @@
  "osm_passes_hr.json": {
   "bbox": null,
   "target": "croatia",
-  "builtAt": "2026-08-26"
+  "builtAt": "2026-09-20"
  },
  "osm_passes_xb_fr.json": {
   "bbox": [
@@ -337,12 +337,12 @@
  "osm_passes_de_by.json": {
   "bbox": null,
   "target": "germany-bayern",
-  "builtAt": "2026-09-07"
+  "builtAt": "2026-09-19"
  },
  "osm_passes_rs.json": {
   "bbox": null,
   "target": "serbia",
-  "builtAt": "2026-09-08"
+  "builtAt": "2026-09-20"
  },
  "osm_passes_xb_ch.json": {
   "bbox": [
@@ -393,5 +393,60 @@
   "bbox": null,
   "target": "lithuania",
   "builtAt": "2026-09-16"
+ },
+ "osm_passes_xb_at.json": {
+  "bbox": [
+   10.3,
+   46.4,
+   13.5,
+   47.15
+  ],
+  "target": "confine-it-at",
+  "builtAt": "2026-09-16"
+ },
+ "osm_passes_xb_sihr.json": {
+  "bbox": [
+   13.4,
+   45.2,
+   16.7,
+   46.4
+  ],
+  "target": "confine-si-hr",
+  "builtAt": "2026-09-17"
+ },
+ "osm_passes_xb_meal.json": {
+  "bbox": [
+   18.9,
+   41.7,
+   20.8,
+   42.9
+  ],
+  "target": "confine-me-al",
+  "builtAt": "2026-09-17"
+ },
+ "osm_passes_fr_corse.json": {
+  "bbox": null,
+  "target": "france-corse",
+  "builtAt": "2026-09-18"
+ },
+ "osm_passes_es_s.json": {
+  "bbox": [
+   -7.7,
+   35.8,
+   0.9,
+   38.5
+  ],
+  "target": "spain-sud",
+  "builtAt": "2026-09-19"
+ },
+ "osm_passes_xb_hrba.json": {
+  "bbox": [
+   15.6,
+   42.5,
+   19.2,
+   45.4
+  ],
+  "target": "confine-hr-ba",
+  "builtAt": "2026-09-23"
  }
 }
