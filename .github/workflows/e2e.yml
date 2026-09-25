@@ -1,0 +1,70 @@
+name: e2e-smoke
+
+# Real-browser smoke (Chromium via Playwright) - the automated part of docs/browser-smoke.md.
+# GitHub-only on purpose: NOT mirrored to .gitea/workflows/ (needs a browser binary that a
+# generic Gitea runner may not have). Complements test.yml, doesn't replace it.
+
+on:
+  push:
+    branches: [main]
+    # the data bots push many times a day and are already gated (validate + golden):
+    # a browser run for each of them would only be noise
+    paths-ignore: ["data/**"]
+  pull_request:
+  schedule:
+    - cron: "41 5 * * *"   # daily 05:41 UTC - catches data/CDN drift from the bots
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "URL da testare (vuoto = server locale sul checkout)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        viewport: [desktop, mobile]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright (ad-hoc, --no-save)
+        run: |
+          npm install playwright --no-save --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Start static server
+        if: ${{ !github.event.inputs.base_url }}
+        run: |
+          node scripts/serve.mjs 8000 > /tmp/serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://localhost:8000/ > /dev/null && exit 0; sleep 1; done
+          echo "server did not start"; cat /tmp/serve.log; exit 1
+
+      - name: Run smoke (${{ matrix.viewport }})
+        env:
+          BASE_URL: ${{ github.event.inputs.base_url || 'http://localhost:8000/' }}
+          E2E_VIEWPORT: ${{ matrix.viewport }}
+          E2E_SHOTS: e2e-shots
+        run: node --test "e2e/*.e2e.mjs"
+
+      - name: Upload screenshot on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-${{ matrix.viewport }}-${{ github.run_id }}
+          path: e2e-shots/
+          retention-days: 7

@@ -1,0 +1,19 @@
+[
+ { "id": "stelvio", "note": "piu versanti - caso regressione base-rule" },
+ { "id": "osm-828125656", "note": "Gavia" },
+ { "id": "mortirolo", "note": "piu versanti" },
+ { "id": "spluga", "note": "confine CH" },
+ { "id": "osm-1845679597", "note": "San Bernardino, confine CH" },
+ { "id": "pordoi" },
+ { "id": "sella" },
+ { "id": "giau" },
+ { "id": "fedaia" },
+ { "id": "falzarego" },
+ { "id": "tonale" },
+ { "id": "aprica" },
+ { "id": "san-pellegrino", "note": "guardia sul bug hint-substring 'San Pellegrino'" },
+ { "id": "osm-428627679", "note": "Colle delle Finestre" },
+ { "id": "osm-412129180", "note": "Colle dell'Agnello (strada), confine FR" },
+ { "id": "grappa" },
+ { "id": "abetone" }
+]

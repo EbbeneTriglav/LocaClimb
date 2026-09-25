@@ -1,0 +1,17 @@
+{
+  // Cloudflare Workers: static assets + a tiny Worker that runs ONLY for /__/* paths.
+  // The Worker reverse-proxies Firebase Auth (/__/auth/*, /__/firebase/*) so Google sign-in
+  // happens on locaride.app itself (first-party): signInWithRedirect keeps working on
+  // Safari/iOS and on browsers that partition third-party storage. Everything else is
+  // served straight from the assets, the Worker never sees it (no cost, no latency).
+  // Files NOT to publish: .assetsignore. Security/cache headers: _headers.
+  "name": "locaride",
+  "main": "cf/worker.js",
+  "compatibility_date": "2026-09-21",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    "run_worker_first": ["/__/*"]
+  }
+}

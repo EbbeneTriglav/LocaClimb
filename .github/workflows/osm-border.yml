@@ -14,6 +14,11 @@ name: osm-border
 on:
   workflow_dispatch:
     inputs:
+      accept_golden_changes:
+        description: "Committa anche se il golden set fallisce (cambio algoritmo VOLUTO)"
+        type: boolean
+        required: false
+        default: false
       zone:
         description: "Corridoio di confine da costruire"
         required: true
@@ -73,6 +78,29 @@ jobs:
       # Commit a prova di conflitto: base origin/main pulito, manifesto+index rigenerati
       # dal disco (cosi' il file xb_* viene ANCHE registrato nel manifesto, prima no),
       # guardia sui marcatori, retry sul push.
+      - name: Gate 1 - validate data + 24 MB limit (never bypassable)
+        run: |
+          # manifest from disk, like the commit step does: a NEW region/border file is included
+          node -e 'const fs=require("fs");let f=fs.readdirSync("data").filter(x=>/^osm_passes.*\.json$/.test(x));f=f.filter(x=>x==="osm_passes.json").concat(f.filter(x=>x!=="osm_passes.json").sort());fs.writeFileSync("data/osm_regions.json",JSON.stringify(f)+"\n");'
+          node scripts/validate_data.mjs
+          if [ -f test/asset-size.test.mjs ]; then node --test test/asset-size.test.mjs; fi
+      - name: Gate 2 - golden set
+        id: golden
+        continue-on-error: ${{ github.event.inputs.accept_golden_changes == 'true' }}
+        run: if [ -f test/golden.test.mjs ]; then node --test test/golden.test.mjs; fi
+      - name: Golden report (visible on the run page)
+        if: ${{ always() }}
+        continue-on-error: true
+        run: node scripts/golden_report.mjs >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload build for review (gate failed)
+        if: ${{ failure() || steps.golden.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: osm-border-${{ github.run_id }}
+          path: |
+            data/${{ steps.cfg.outputs.out }}
+          retention-days: 14
+
       - name: Commit & push (a prova di conflitto)
         env:
           OUTF: ${{ steps.cfg.outputs.out }}
@@ -106,7 +134,7 @@ jobs:
             fi
             git add data/
             if git diff --staged --quiet; then echo "Nessuna variazione."; ok=1; break; fi
-            git commit -m "osm-border: build $ZONE [skip ci]"
+            git commit -m "osm-border: build $ZONE"
             if git push; then ok=1; break; fi
             echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
           done

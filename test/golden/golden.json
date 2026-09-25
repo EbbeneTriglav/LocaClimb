@@ -1,0 +1,528 @@
+{
+ "_comment": "Golden baseline - human-approved. Regenerate ONLY via scripts/golden_snapshot.mjs after reviewing its output. Agents: never edit.",
+ "approvedAt": "2026-09-25",
+ "stats": {
+  "curated": 24,
+  "osm": 14708,
+  "osmEnriched": 11948,
+  "versantiTotal": 20566
+ },
+ "passes": [
+  {
+   "id": "stelvio",
+   "name": "Passo dello Stelvio",
+   "src": "curated",
+   "note": "piu versanti - caso regressione base-rule",
+   "summit": {
+    "lat": 46.52862,
+    "lon": 10.45321,
+    "elevation": 2758
+   },
+   "versanti": [
+    {
+     "side": "Da Bormio",
+     "startLat": 46.4668,
+     "startLon": 10.37944,
+     "distance_km": 22,
+     "gain": 1542,
+     "avgGradient": 7
+    },
+    {
+     "side": "Da Prato allo Stelvio",
+     "startLat": 46.61593,
+     "startLon": 10.58915,
+     "distance_km": 24.4,
+     "gain": 1846,
+     "avgGradient": 7.6
+    }
+   ]
+  },
+  {
+   "id": "osm-828125656",
+   "name": "Passo di Gavia",
+   "src": "osm",
+   "note": "Gavia",
+   "summit": {
+    "lat": 46.34348,
+    "lon": 10.48733,
+    "elevation": 2621
+   },
+   "versanti": [
+    {
+     "side": "Da Bormio",
+     "startLat": 46.46669,
+     "startLon": 10.38316,
+     "distance_km": 24.6,
+     "gain": 1388,
+     "avgGradient": 5.7
+    },
+    {
+     "side": "Da Ponte di Legno",
+     "startLat": 46.255,
+     "startLon": 10.50891,
+     "distance_km": 20.5,
+     "gain": 1361,
+     "avgGradient": 6.6
+    }
+   ]
+  },
+  {
+   "id": "mortirolo",
+   "name": "Passo del Mortirolo",
+   "src": "curated",
+   "note": "piu versanti",
+   "summit": {
+    "lat": 46.24738,
+    "lon": 10.29587,
+    "elevation": 1852
+   },
+   "versanti": [
+    {
+     "side": "Da Mazzo di Valtellina",
+     "startLat": 46.2585,
+     "startLon": 10.25459,
+     "distance_km": 20.3,
+     "gain": 1259,
+     "avgGradient": 6.2
+    },
+    {
+     "side": "Da Grosio",
+     "startLat": 46.29824,
+     "startLon": 10.27483,
+     "distance_km": 15.2,
+     "gain": 1149,
+     "avgGradient": 7.6
+    },
+    {
+     "side": "Da Monno",
+     "startLat": 46.21227,
+     "startLon": 10.34158,
+     "distance_km": 11.1,
+     "gain": 741,
+     "avgGradient": 6.7
+    },
+    {
+     "side": "Da Tovo di Sant'Agata",
+     "startLat": 46.24678,
+     "startLon": 10.24714,
+     "distance_km": 21.7,
+     "gain": 1282,
+     "avgGradient": 5.9
+    }
+   ]
+  },
+  {
+   "id": "spluga",
+   "name": "Passo dello Spluga",
+   "src": "curated",
+   "note": "confine CH",
+   "summit": {
+    "lat": 46.50468,
+    "lon": 9.33042,
+    "elevation": 2113
+   },
+   "versanti": [
+    {
+     "side": "Da Campodolcino",
+     "startLat": 46.40282,
+     "startLon": 9.35477,
+     "distance_km": 17.2,
+     "gain": 1004,
+     "avgGradient": 5.8
+    },
+    {
+     "side": "Da Chiavenna",
+     "startLat": 46.32105,
+     "startLon": 9.39617,
+     "distance_km": 30,
+     "gain": 1783,
+     "avgGradient": 5.9
+    }
+   ]
+  },
+  {
+   "id": "osm-1845679597",
+   "name": "Passo del San Bernardino",
+   "src": "osm",
+   "note": "San Bernardino, confine CH",
+   "summit": {
+    "lat": 46.49696,
+    "lon": 9.17102,
+    "elevation": 2067
+   },
+   "versanti": [
+    {
+     "side": "Da Mesocco",
+     "startLat": 46.39442,
+     "startLon": 9.23186,
+     "distance_km": 20.9,
+     "gain": 1262,
+     "avgGradient": 6
+    },
+    {
+     "side": "Da Hinterrhein",
+     "startLat": 46.53035,
+     "startLon": 9.19997,
+     "distance_km": 9.1,
+     "gain": 454,
+     "avgGradient": 5
+    }
+   ]
+  },
+  {
+   "id": "pordoi",
+   "name": "Passo Pordoi",
+   "src": "curated",
+   "summit": {
+    "lat": 46.48737,
+    "lon": 11.81353,
+    "elevation": 2239
+   },
+   "versanti": [
+    {
+     "side": "Da Canazei",
+     "startLat": 46.47641,
+     "startLon": 11.77417,
+     "distance_km": 11.7,
+     "gain": 772,
+     "avgGradient": 6.6
+    },
+    {
+     "side": "Da Arabba",
+     "startLat": 46.49729,
+     "startLon": 11.87423,
+     "distance_km": 9,
+     "gain": 643,
+     "avgGradient": 7.1
+    }
+   ]
+  },
+  {
+   "id": "sella",
+   "name": "Passo Sella",
+   "src": "curated",
+   "summit": {
+    "lat": 46.50807,
+    "lon": 11.76733,
+    "elevation": 2218
+   },
+   "versanti": [
+    {
+     "side": "Da Santa Cristina Valgardena",
+     "startLat": 46.55811,
+     "startLon": 11.72839,
+     "distance_km": 12.8,
+     "gain": 803,
+     "avgGradient": 6.3
+    },
+    {
+     "side": "Da Canazei",
+     "startLat": 46.49589,
+     "startLon": 11.78739,
+     "distance_km": 5.5,
+     "gain": 418,
+     "avgGradient": 7.6
+    }
+   ]
+  },
+  {
+   "id": "giau",
+   "name": "Passo Giau",
+   "src": "curated",
+   "summit": {
+    "lat": 46.48272,
+    "lon": 12.05309,
+    "elevation": 2236
+   },
+   "versanti": [
+    {
+     "side": "Da Selva di Cadore",
+     "startLat": 46.45145,
+     "startLon": 12.0346,
+     "distance_km": 10.1,
+     "gain": 883,
+     "avgGradient": 8.7
+    },
+    {
+     "side": "Da Cortina d'Ampezzo",
+     "startLat": 46.53972,
+     "startLon": 12.13415,
+     "distance_km": 16.1,
+     "gain": 1006,
+     "avgGradient": 6.3
+    }
+   ]
+  },
+  {
+   "id": "fedaia",
+   "name": "Passo Fedaia",
+   "src": "curated",
+   "summit": {
+    "lat": 46.46398,
+    "lon": 11.86236,
+    "elevation": 2057
+   },
+   "versanti": [
+    {
+     "side": "Da Canazei",
+     "startLat": 46.47665,
+     "startLon": 11.77057,
+     "distance_km": 11.4,
+     "gain": 601,
+     "avgGradient": 5.3
+    },
+    {
+     "side": "Da Caprile",
+     "startLat": 46.43911,
+     "startLon": 11.99238,
+     "distance_km": 16.3,
+     "gain": 1053,
+     "avgGradient": 6.5
+    }
+   ]
+  },
+  {
+   "id": "falzarego",
+   "name": "Passo Falzarego",
+   "src": "curated",
+   "summit": {
+    "lat": 46.51875,
+    "lon": 12.00822,
+    "elevation": 2105
+   },
+   "versanti": [
+    {
+     "side": "Da Cortina d'Ampezzo",
+     "startLat": 46.53972,
+     "startLon": 12.13415,
+     "distance_km": 16.1,
+     "gain": 888,
+     "avgGradient": 5.5
+    },
+    {
+     "side": "Da Andraz",
+     "startLat": 46.48584,
+     "startLon": 11.98411,
+     "distance_km": 10.1,
+     "gain": 638,
+     "avgGradient": 6.3
+    }
+   ]
+  },
+  {
+   "id": "tonale",
+   "name": "Passo del Tonale",
+   "src": "curated",
+   "summit": {
+    "lat": 46.25807,
+    "lon": 10.58206,
+    "elevation": 1883
+   },
+   "versanti": [
+    {
+     "side": "Da Ponte di Legno",
+     "startLat": 46.25505,
+     "startLon": 10.51268,
+     "distance_km": 10.8,
+     "gain": 625,
+     "avgGradient": 5.8
+    },
+    {
+     "side": "Da Vermiglio",
+     "startLat": 46.29711,
+     "startLon": 10.69013,
+     "distance_km": 10.8,
+     "gain": 627,
+     "avgGradient": 5.8
+    }
+   ]
+  },
+  {
+   "id": "aprica",
+   "name": "Passo dell'Aprica",
+   "src": "curated",
+   "summit": {
+    "lat": 46.15446,
+    "lon": 10.15489,
+    "elevation": 1175
+   },
+   "versanti": [
+    {
+     "side": "Da Edolo",
+     "startLat": 46.18037,
+     "startLon": 10.32947,
+     "distance_km": 14.9,
+     "gain": 488,
+     "avgGradient": 3.3
+    },
+    {
+     "side": "Da Tresenda",
+     "startLat": 46.16304,
+     "startLon": 10.08639,
+     "distance_km": 13.4,
+     "gain": 801,
+     "avgGradient": 6
+    }
+   ]
+  },
+  {
+   "id": "san-pellegrino",
+   "name": "Passo San Pellegrino",
+   "src": "curated",
+   "note": "guardia sul bug hint-substring 'San Pellegrino'",
+   "summit": {
+    "lat": 46.37835,
+    "lon": 11.79099,
+    "elevation": 1918
+   },
+   "versanti": [
+    {
+     "side": "Da Cencenighe Agordino",
+     "startLat": 46.3612,
+     "startLon": 11.95428,
+     "distance_km": 16.9,
+     "gain": 1065,
+     "avgGradient": 6.3
+    },
+    {
+     "side": "Da Moena",
+     "startLat": 46.37409,
+     "startLon": 11.65891,
+     "distance_km": 11.5,
+     "gain": 754,
+     "avgGradient": 6.6
+    }
+   ]
+  },
+  {
+   "id": "osm-428627679",
+   "name": "Colle delle Finestre",
+   "src": "osm",
+   "note": "Colle delle Finestre",
+   "summit": {
+    "lat": 45.07203,
+    "lon": 7.05334,
+    "elevation": 2176
+   },
+   "versanti": [
+    {
+     "side": "Da Susa",
+     "startLat": 45.13803,
+     "startLon": 7.05276,
+     "distance_km": 19.4,
+     "gain": 1669,
+     "avgGradient": 8.6
+    },
+    {
+     "side": "Da Sestriere",
+     "startLat": 45.04615,
+     "startLon": 6.99918,
+     "distance_km": 11,
+     "gain": 747,
+     "avgGradient": 6.8
+    }
+   ]
+  },
+  {
+   "id": "osm-412129180",
+   "name": "Col Agnel / Colle dell'Agnello",
+   "src": "osm",
+   "note": "Colle dell'Agnello (strada), confine FR",
+   "summit": {
+    "lat": 44.68388,
+    "lon": 6.97959,
+    "elevation": 2744
+   },
+   "versanti": [
+    {
+     "side": "Da Pontechianale",
+     "startLat": 44.62444,
+     "startLon": 7.02705,
+     "distance_km": 13.6,
+     "gain": 1095,
+     "avgGradient": 8.1
+    },
+    {
+     "side": "Versante Ovest",
+     "startLat": 44.71645,
+     "startLon": 6.75788,
+     "distance_km": 29.3,
+     "gain": 1509,
+     "avgGradient": 5.2
+    }
+   ]
+  },
+  {
+   "id": "grappa",
+   "name": "Monte Grappa",
+   "src": "curated",
+   "summit": {
+    "lat": 45.86874,
+    "lon": 11.80133,
+    "elevation": 1685
+   },
+   "versanti": [
+    {
+     "side": "Da Romano d'Ezzelino",
+     "startLat": 45.79628,
+     "startLon": 11.75832,
+     "distance_km": 20.3,
+     "gain": 1516,
+     "avgGradient": 7.5
+    },
+    {
+     "side": "Da Semonzo",
+     "startLat": 45.81139,
+     "startLon": 11.77341,
+     "distance_km": 18,
+     "gain": 1489,
+     "avgGradient": 8.3
+    },
+    {
+     "side": "Da Caupo",
+     "startLat": 45.9945,
+     "startLon": 11.83228,
+     "distance_km": 27.3,
+     "gain": 1341,
+     "avgGradient": 4.9
+    },
+    {
+     "side": "Da Possagno",
+     "startLat": 45.85525,
+     "startLon": 11.8815,
+     "distance_km": 24.6,
+     "gain": 1397,
+     "avgGradient": 5.7
+    }
+   ]
+  },
+  {
+   "id": "abetone",
+   "name": "Passo dell'Abetone",
+   "src": "curated",
+   "summit": {
+    "lat": 44.14564,
+    "lon": 10.66496,
+    "elevation": 1388
+   },
+   "versanti": [
+    {
+     "side": "Da Cutigliano",
+     "startLat": 44.10052,
+     "startLon": 10.74888,
+     "distance_km": 12.4,
+     "gain": 768,
+     "avgGradient": 6.2
+    },
+    {
+     "side": "Da Fiumalbo",
+     "startLat": 44.17959,
+     "startLon": 10.64477,
+     "distance_km": 6.7,
+     "gain": 391,
+     "avgGradient": 5.9
+    }
+   ]
+  }
+ ]
+}
