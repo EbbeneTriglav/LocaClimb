@@ -164,10 +164,12 @@ function lrcFacts(tr) {
 }
 
 /* ------------------------------------------------------------ proponi */
-function lrcPropose() {
+function lrcPropose(trArg, pre) {
   var u = lrcUser();
   if (!u) { alert(lrcT("Accedi per proporre una salita.", "Sign in to suggest a climb.")); return; }
-  var tr = (typeof rbTrack !== "undefined" && rbTrack) ? rbTrack : null;
+  /* trArg: tratto gia' pronto (es. dal GPX di un giro, gpxclimbs.js); altrimenti il route builder.
+     Usata anche come listener di click: l'evento non e' un array, quindi si ricade su rbTrack. */
+  var tr = Array.isArray(trArg) ? trArg : ((typeof rbTrack !== "undefined" && rbTrack) ? rbTrack : null);
   if (!tr || tr.length < 8) {
     lrcModal("<h3>" + lrcT("Proponi una salita", "Suggest a climb") + "</h3>"
       + '<p class="lrc-sub">' + lrcT(
@@ -210,6 +212,9 @@ function lrcPropose() {
       + '<button class="lrc-go" id="lrc-send">' + lrcT("Invia proposta", "Send") + "</button></div>"
       + '<div class="lrc-msg" id="lrc-msg"></div>');
     lrcId("lrc-send").addEventListener("click", function () { lrcSubmit(tr, f); });
+    if (pre && pre.name) lrcId("lrc-name").value = pre.name;
+    if (pre && pre.side) lrcId("lrc-side").value = pre.side;
+    if (Array.isArray(trArg)) { var sb = document.querySelector("#lrc-mask .lrc-sub"); if (sb) sb.textContent = lrcT("Il tratto arriva dal tuo giro GPX. Pendenze e quote le ricalcoliamo noi.", "The section comes from your GPX ride. We recompute gradients and elevations."); }
   });
 }
 
