@@ -122,6 +122,21 @@ function adoptCuratedSides(op){
   if(op.versanti&&op.versanti.length){p._osmTwin=(p._osmTwin||[]).concat(op.versanti);refreshCuratedSides(p);}
   return true;
 }
+/* ---- OSM name fixes (data/name_fixes.json, by pass id). OSM sometimes names a pass after a
+   nearby col ("Passo Crocetta" for the Cerreto) or lacks the name cyclists use ("Radici"); a
+   base_hints label can also be wrong. Display-only: geometry and ids stay the pipeline's. */
+var NAME_FIX=null;
+function applyNameFixes(){
+  if(!NAME_FIX)return;
+  osmPasses.forEach(function(op){var f=NAME_FIX[op.id];if(!f)return;
+    if(f.name)op.name=f.name;
+    if(f.sides&&op.versanti)op.versanti.forEach(function(v){if(v&&f.sides[v.side])v.side=f.sides[v.side];});});
+}
+function loadNameFixes(){
+  fetch(DATA_DIR+"name_fixes.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():{};}).then(function(o){
+    NAME_FIX=o||{};if(osmPasses.length){applyNameFixes();applyFilters();}
+  }).catch(function(){NAME_FIX={};});
+}
 function mergeColocated(arr){
   // Border passes: the same valico appears in two region files (e.g. Italia + Francia), each carrying
   // only its in-country versante. Union the versanti of co-located OSM passes (<~1km) so both sides show.
@@ -143,6 +158,7 @@ function adoptOsm(arr){
   // drop entries too close to curated passes
   osmPasses=arr.filter(function(op){return!adoptCuratedSides(op);});
   osmPasses.forEach(function(op){if(op.name)op.name=decodeEntities(op.name);if(op.surfaceLabel)op.surfaceLabel=decodeEntities(op.surfaceLabel);}); // ripulisce entità residue (cache localStorage / file non ancora ricostruiti)
+  applyNameFixes();
   applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();
   var b=document.getElementById("ob");if(b)b.textContent="OSM ("+osmPasses.length+")";
 }
@@ -157,6 +173,7 @@ function stripMarker(op){var o={};for(var k in op){if(k!=="_marker")o[k]=op[k];}
    cache:"no-cache" (not "no-store"): the browser revalidates with an ETag and gets a 304 on
    reload instead of re-downloading everything. */
 function loadOsmBaked(){
+  loadNameFixes();
   fetch(DATA_DIR+"osm_index.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(idx){
     if(!idx||!idx.length)throw 0;
     adoptOsm(idx);                     // markers now
@@ -201,7 +218,7 @@ function hydrateOsm(arr){
     if(t.name)t.name=decodeEntities(t.name);
     if(t.surfaceLabel)t.surfaceLabel=decodeEntities(t.surfaceLabel);
   });
-  osmFull=true;setDataVersion();
+  applyNameFixes();osmFull=true;setDataVersion();
   if(window.MANUAL_OV)applyManual();
 }
 function classifyWay(t){

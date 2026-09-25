@@ -1,0 +1,6 @@
+{
+ "_note": "Runtime fixes for OSM names (applied in js/data.js by pass id). Use only when OSM is wrong or unknown to cyclists; the geometry stays the pipeline's. name = display name; sides = {old side label: new label}.",
+ "osm-1585564523": { "name": "Passo del Cerreto", "why": "OSM node 'Passo Crocetta' 600 m from the Cerreto summit, same climbs (Fivizzano / Acquabona)" },
+ "osm-1608715841": { "name": "Passo delle Radici - San Pellegrino in Alpe", "why": "no 'Radici' node in OSM; these are the Radici climbs (Castelnuovo, Pievepelago, Piandelagotti)" },
+ "osm-428627679": { "sides": { "Da Sestriere": "Da Usseaux" }, "why": "start is at Usseaux 1416 m (OSM reverse geocode: Balboutet, Usseaux); the base_hints label said Sestriere" }
+}
