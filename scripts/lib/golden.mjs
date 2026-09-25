@@ -65,7 +65,18 @@ export async function loadEffective() {
   const files = Array.isArray(regions) && regions.length ? regions : ["osm_passes.json"];
   const parts = await Promise.all(files.map((f) => readJson(f, [])));
   const osmRaw = [].concat(...parts.map((x) => (Array.isArray(x) ? x : [])));
-  const osm = app.mergeColocated(JSON.parse(JSON.stringify(osmRaw))).map((p) => ({ ...p, _src: "osm" }));
+  // Mirror js/data.js adoptOsm(): OSM passes within ~800 m of a curated one are hidden, and the
+  // curated pass adopts their clearly-different sides (newSidesFor, shared with the app).
+  const merged = app.mergeColocated(JSON.parse(JSON.stringify(osmRaw)));
+  const near = (a, b) => Math.abs(a.lat - b.lat) < 0.008 && Math.abs(a.lon - b.lon) < 0.008;
+  const osm = [];
+  for (const op of merged) {
+    const c = curated.find((p) => near(p, op));
+    if (!c) { osm.push({ ...op, _src: "osm" }); continue; }
+    if (typeof app.newSidesFor === "function") {
+      for (const v of app.newSidesFor(c, op)) (c.versanti = c.versanti || []).push({ ...v, fromOsm: true });
+    }
+  }
   return { curated, osm, all: curated.concat(osm), files };
 }
 

@@ -5,7 +5,7 @@
    inside the manifest loop; the baked-routes perf cache) - those must stay quiet so this
    never cries wolf. `showRSBrief` may be absent/#rs missing in tests, hence the try/catch. */
 function dataWarn(msg){if(window.console&&console.warn)console.warn("[locaClimb] "+msg);try{showRSBrief("&#x26A0;&#xFE0F; "+msg);}catch(e){}}
-function loadCuratedOverrides(){fetch(DATA_DIR+"curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length)p.versanti=ov.versanti;if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;if(ov.algo)p.algo=ov.algo;}});applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();}).catch(function(){dataWarn("Override passi non caricati (curated_overrides.json).");});}
+function loadCuratedOverrides(){fetch(DATA_DIR+"curated_overrides.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){PASSES_DATA.forEach(function(p){var ov=o[p.id];if(ov){if(ov.lat){p.lat=ov.lat;p.lon=ov.lon;}if(ov.versanti&&ov.versanti.length){p.versanti=ov.versanti;refreshCuratedSides(p);}if(ov.difficulty)p.difficulty=ov.difficulty;if(ov.cat)p.cat=ov.cat;if(ov.updatedAt)p.updatedAt=ov.updatedAt;if(ov.algo)p.algo=ov.algo;}});applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();}).catch(function(){dataWarn("Override passi non caricati (curated_overrides.json).");});}
 function getCurated(id){return PASSES_DATA.find(function(x){return x.id===id;});}
 function getOsm(id){return osmPasses.find(function(x){return x.id===id;});}
 function getEvts(id){var now=new Date();return BIKE_EVENTS.filter(function(e){return e.passes.indexOf(id)>=0&&new Date(e.date)>=now;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);});}
@@ -90,6 +90,38 @@ function setDataVersion(){
   el.innerHTML="&#x1F4E6; Dati: "+(ver||"?")+(mx?" &middot; "+fmtDate(mx):"");
 }
 function versSameOrigin(a,b){if(!a||!b)return false;var d=Math.abs((a.startLat||0)-(b.startLat||0))+Math.abs((a.startLon||0)-(b.startLon||0));return d<0.02;}
+/* ---- Curated passes: adopt the OSM twin's MISSING sides (typically the foreign side of a
+   border pass). adoptOsm() hides OSM passes within ~800 m of a curated one; before, their
+   versanti were thrown away with them. A twin side is adopted only if it clearly comes from
+   another direction: start > 3 km from every curated start AND summit->start bearing >= 60 deg
+   from every curated side, with a real track. Curated sides are never modified; manual
+   (editor) overrides always win. Pure part (newSidesFor) is shared with scripts/lib/golden.mjs. */
+function sideBearing(p,v){var r=Math.PI/180,dy=v.startLat-p.lat,dx=(v.startLon-p.lon)*Math.cos(p.lat*r);return (Math.atan2(dx,dy)/r+360)%360;}
+function newSidesFor(p,twin){
+  var cv=(p&&p.versanti)||[],out=[];
+  if(!twin||!twin.versanti||!twin.versanti.length)return out;
+  if(cv.some(function(w){return !isFinite(w.startLat)||!isFinite(w.startLon);}))return out; // can't compare -> add nothing
+  twin.versanti.forEach(function(v){
+    if(!v||!isFinite(v.startLat)||!isFinite(v.startLon)||!(v.track&&v.track.length>1))return;
+    var b=sideBearing(p,v);
+    var clash=cv.concat(out).some(function(w){var d=Math.abs(sideBearing(p,w)-b);d=Math.min(d,360-d);return d<60||hav(v.startLat,v.startLon,w.startLat,w.startLon)<3;});
+    if(!clash)out.push(v);
+  });
+  return out;
+}
+function curatedTwin(op){for(var i=0;i<PASSES_DATA.length;i++){var q=PASSES_DATA[i];if(Math.abs(q.lat-op.lat)<0.008&&Math.abs(q.lon-op.lon)<0.008)return q;}return null;}
+function refreshCuratedSides(p){
+  if(!p||!p._osmTwin||p.manual)return;
+  var base=(p.versanti||[]).filter(function(v){return !v.fromOsm;});
+  var add=newSidesFor({lat:p.lat,lon:p.lon,versanti:base},{versanti:p._osmTwin});
+  p.versanti=base.concat(add.map(function(v){var c={};for(var k in v)c[k]=v[k];c.fromOsm=true;return c;}));
+}
+/* true = op is a curated duplicate (hide it); its useful sides are handed to the curated pass */
+function adoptCuratedSides(op){
+  var p=curatedTwin(op);if(!p)return false;
+  if(op.versanti&&op.versanti.length){p._osmTwin=(p._osmTwin||[]).concat(op.versanti);refreshCuratedSides(p);}
+  return true;
+}
 function mergeColocated(arr){
   // Border passes: the same valico appears in two region files (e.g. Italia + Francia), each carrying
   // only its in-country versante. Union the versanti of co-located OSM passes (<~1km) so both sides show.
@@ -109,7 +141,7 @@ function adoptOsm(arr){
   if(!arr||!arr.length)return;
   arr=mergeColocated(arr);
   // drop entries too close to curated passes
-  osmPasses=arr.filter(function(op){return!PASSES_DATA.some(function(p){return Math.abs(p.lat-op.lat)<0.008&&Math.abs(p.lon-op.lon)<0.008;});});
+  osmPasses=arr.filter(function(op){return!adoptCuratedSides(op);});
   osmPasses.forEach(function(op){if(op.name)op.name=decodeEntities(op.name);if(op.surfaceLabel)op.surfaceLabel=decodeEntities(op.surfaceLabel);}); // ripulisce entità residue (cache localStorage / file non ancora ricostruiti)
   applyFilters();setDataVersion();if(window.MANUAL_OV)applyManual();
   var b=document.getElementById("ob");if(b)b.textContent="OSM ("+osmPasses.length+")";
@@ -159,6 +191,7 @@ function hydrateOsm(arr){
     var t=by[full.id];
     if(!t){
       // dropped as a curated duplicate, or folded into a co-located twin by mergeColocated
+      if(adoptCuratedSides(full))return;
       for(var i=0;i<osmPasses.length;i++){var q=osmPasses[i];if(Math.abs(q.lat-full.lat)<0.009&&Math.abs(q.lon-full.lon)<0.009){t=q;break;}}
       if(!t)return;
       (full.versanti||[]).forEach(function(v){t.versanti=t.versanti||[];if(!t.versanti.some(function(w){return versSameOrigin(v,w);}))t.versanti.push(v);});

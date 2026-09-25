@@ -3,9 +3,9 @@
  "approvedAt": "2026-09-25",
  "stats": {
   "curated": 24,
-  "osm": 14708,
-  "osmEnriched": 11948,
-  "versantiTotal": 20566
+  "osm": 14687,
+  "osmEnriched": 11927,
+  "versantiTotal": 20524
  },
  "passes": [
   {
@@ -38,13 +38,13 @@
    ]
   },
   {
-   "id": "osm-828125656",
-   "name": "Passo di Gavia",
-   "src": "osm",
+   "id": "gavia",
+   "name": "Passo Gavia",
+   "src": "curated",
    "note": "Gavia",
    "summit": {
-    "lat": 46.34348,
-    "lon": 10.48733,
+    "lat": 46.3441,
+    "lon": 10.48938,
     "elevation": 2621
    },
    "versanti": [
@@ -52,16 +52,16 @@
      "side": "Da Bormio",
      "startLat": 46.46669,
      "startLon": 10.38316,
-     "distance_km": 24.6,
-     "gain": 1388,
+     "distance_km": 24.4,
+     "gain": 1386,
      "avgGradient": 5.7
     },
     {
      "side": "Da Ponte di Legno",
      "startLat": 46.255,
      "startLon": 10.50891,
-     "distance_km": 20.5,
-     "gain": 1361,
+     "distance_km": 20.7,
+     "gain": 1359,
      "avgGradient": 6.6
     }
    ]
@@ -137,6 +137,14 @@
      "distance_km": 30,
      "gain": 1783,
      "avgGradient": 5.9
+    },
+    {
+     "side": "Da Splügen",
+     "startLat": 46.55085,
+     "startLon": 9.32334,
+     "distance_km": 8.6,
+     "gain": 651,
+     "avgGradient": 7.6
     }
    ]
   },
