@@ -458,5 +458,10 @@
   ],
   "target": "spain-baleari",
   "builtAt": "2026-09-25"
+ },
+ "osm_passes_ro.json": {
+  "bbox": null,
+  "target": "romania",
+  "builtAt": "2026-09-26"
  }
 }
