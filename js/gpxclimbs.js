@@ -161,6 +161,12 @@ function gcMatch(tr, passes) {
   return { kind: "newside", pass: best };
 }
 
+/* data del giro (primo <time> del file), YYYY-MM-DD, o null se il GPX non la porta */
+function gcRideDate(text) {
+  var m = /<time>\s*(\d{4}-\d{2}-\d{2})/.exec(String(text || ""));
+  return m ? m[1] : null;
+}
+
 function gcAnalyze(text, passes) {
   var pts = gcParse(text);
   if (pts.length < 20) return { err: "few" };
@@ -169,7 +175,7 @@ function gcAnalyze(text, passes) {
   var R = gcResample(pts), cl = gcFindClimbs(R), tot = R.d[R.d.length - 1] / 1000;
   var up = 0; for (i = 1; i < R.e.length; i++) if (R.e[i] > R.e[i - 1]) up += R.e[i] - R.e[i - 1];
   return {
-    km: +tot.toFixed(1), gain: Math.round(up), R: R,
+    km: +tot.toFixed(1), gain: Math.round(up), R: R, date: gcRideDate(text),
     climbs: cl.map(function (c) { var tr = gcSegment(R, c); c.tr = tr; c.top = tr[tr.length - 1]; c.match = gcMatch(tr, passes || []); return c; })
   };
 }
@@ -230,8 +236,14 @@ function gcShow(res, fname) {
       + (act ? '<div class="lrc-btns" style="margin-top:8px">' + act + "</div>" : "") + "</div>";
   });
   if (nNew) h += '<p class="lrc-sub" style="margin-top:10px">' + gcT("Le salite che mancano passano dalla revisione prima di comparire nella mappa.", "Missing climbs are reviewed before they appear on the map.") + "</p>";
+  var nDone = res.climbs.filter(function (c) { return c.match.pass; }).length;
   h += '<div class="lrc-btns"><button onclick="lrcClose()">' + gcT("Chiudi", "Close") + "</button>"
     + (res.climbs.length ? '<button onclick="gcDraw()">' + gcT("Vedi sulla mappa", "Show on map") + "</button>" : "") + "</div>";
+  /* le salite di passi noti possono finire tra "Le mie salite" (myclimbs.js) */
+  if (nDone && typeof mcSaveFromGpx === "function")
+    h += '<div class="lrc-btns" style="margin-top:8px"><button class="lrc-go" id="gc-save" onclick="mcSaveFromGpx()">&#x2705; '
+      + gcT("Segna come fatte", "Mark as climbed") + " (" + nDone + ")</button></div>"
+      + '<div class="lrc-msg" id="gc-save-msg"></div>';
   lrcModal(h);
 }
 
