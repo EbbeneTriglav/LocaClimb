@@ -2,7 +2,7 @@
  "osm_passes_bal_s.json": {
   "bbox": null,
   "target": "montenegro-albania-macedonia",
-  "builtAt": "2026-09-20"
+  "builtAt": "2026-09-26"
  },
  "osm_passes_fr_lr.json": {
   "bbox": null,
@@ -52,7 +52,7 @@
  "osm_passes_gr.json": {
   "bbox": null,
   "target": "greece",
-  "builtAt": "2026-09-02"
+  "builtAt": "2026-09-27"
  },
  "osm_passes_de_bw.json": {
   "bbox": null,
@@ -102,7 +102,7 @@
  "osm_passes_sk.json": {
   "bbox": null,
   "target": "slovakia",
-  "builtAt": "2026-09-22"
+  "builtAt": "2026-09-28"
  },
  "osm_passes_no.json": {
   "bbox": null,
@@ -147,7 +147,7 @@
  "osm_passes_de_ne.json": {
   "bbox": null,
   "target": "germany-nordest",
-  "builtAt": "2026-08-26"
+  "builtAt": "2026-09-26"
  },
  "osm_passes_ie.json": {
   "bbox": null,
@@ -202,7 +202,7 @@
  "osm_passes_fi.json": {
   "bbox": null,
   "target": "finland",
-  "builtAt": "2026-09-03"
+  "builtAt": "2026-09-28"
  },
  "osm_passes_fr_auv.json": {
   "bbox": null,
@@ -212,7 +212,7 @@
  "osm_passes_gb_wal.json": {
   "bbox": null,
   "target": "wales",
-  "builtAt": "2026-09-21"
+  "builtAt": "2026-09-27"
  },
  "osm_passes_ee.json": {
   "bbox": null,
@@ -252,7 +252,7 @@
    48
   ],
   "target": "confine-de-at",
-  "builtAt": "2026-08-23"
+  "builtAt": "2026-09-29"
  },
  "osm_passes_xb_dech.json": {
   "bbox": [
@@ -447,6 +447,21 @@
    45.4
   ],
   "target": "confine-hr-ba",
-  "builtAt": "2026-09-23"
+  "builtAt": "2026-09-29"
+ },
+ "osm_passes_es_bal.json": {
+  "bbox": [
+   1.1,
+   38.6,
+   4.4,
+   40.2
+  ],
+  "target": "spain-baleari",
+  "builtAt": "2026-09-25"
+ },
+ "osm_passes_ro.json": {
+  "bbox": null,
+  "target": "romania",
+  "builtAt": "2026-09-26"
  }
 }
