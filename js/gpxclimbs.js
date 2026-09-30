@@ -180,6 +180,61 @@ function gcAnalyze(text, passes) {
   };
 }
 
+/* ------------------------------------------ anteprima come una salita vera */
+/* Il tratto del GPX diventa un oggetto "passo" con lo stesso formato dei versanti
+   OSM: cosi' lo apre lo stesso pannello (profilo, pendenze colorate, meteo, ombra)
+   e lo si giudica come si giudica qualunque salita, prima di proporlo. */
+function gcProfile(tr, n) {
+  n = n || 100;
+  var cum = [0], i;
+  for (i = 1; i < tr.length; i++) cum.push(cum[i - 1] + gcHav(tr[i - 1][0], tr[i - 1][1], tr[i][0], tr[i][1]));
+  var tot = cum[cum.length - 1], out = [], j = 1;
+  if (!(tot > 0)) return [];
+  for (i = 0; i < n; i++) {
+    var d = tot * i / (n - 1);
+    while (j < cum.length - 1 && cum[j] < d) j++;
+    var a = cum[j - 1], b = cum[j], f = b > a ? (d - a) / (b - a) : 0;
+    out.push(Math.round((tr[j - 1][2] || 0) + ((tr[j][2] || 0) - (tr[j - 1][2] || 0)) * f));
+  }
+  return out;
+}
+/* pendenza massima su ~100 m (5 campioni da 20 m): il numero che un ciclista riconosce */
+function gcMaxGrad(tr) {
+  var best = 0;
+  for (var i = 0; i + 5 < tr.length; i++) {
+    var d = 0; for (var k = i; k < i + 5; k++) d += gcHav(tr[k][0], tr[k][1], tr[k + 1][0], tr[k + 1][1]) * 1000;
+    if (d > 60 && tr[i + 5][2] != null && tr[i][2] != null) best = Math.max(best, (tr[i + 5][2] - tr[i][2]) / d * 100);
+  }
+  return +best.toFixed(1);
+}
+var GC_DIRS = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];
+function gcBuildPass(c, idx, title) {
+  var tr = c.tr, a = tr[0], b = tr[tr.length - 1];
+  var dir = GC_DIRS[Math.round(gcBearing(b[0], b[1], a[0], a[1]) / 45) % 8];
+  return {
+    id: "gpx-prev-" + idx, name: title, lat: b[0], lon: b[1], elevation: b[2] == null ? null : Math.round(b[2]),
+    gpxPreview: true,
+    versanti: [{
+      side: "GPX", startLat: a[0], startLon: a[1],
+      startElevation: a[2] == null ? null : Math.round(a[2]), endElevation: b[2] == null ? null : Math.round(b[2]),
+      distance_km: c.km, avgGradient: c.avg, maxGradient: gcMaxGrad(tr), exposure: dir,
+      elevationProfile: gcProfile(tr, 100), track: tr, elevSource: "gpx"
+    }]
+  };
+}
+/* passi noti vicini alla cima: servono a capire se la salita c'e' gia' o e' tagliata */
+function gcNear(c, passes, km) {
+  km = km || 5;
+  var t = c.top, out = [];
+  for (var j = 0; j < passes.length; j++) {
+    var p = passes[j];
+    if (!p || Math.abs(p.lat - t[0]) > 0.06 || Math.abs(p.lon - t[1]) > 0.09) continue;
+    var d = gcHav(t[0], t[1], p.lat, p.lon);
+    if (d <= km) out.push({ pass: p, km: +d.toFixed(1) });
+  }
+  return out.sort(function (x, y) { return x.km - y.km; });
+}
+
 /* ================================================================== UI */
 function gcT(it, en) { return typeof lrcT === "function" ? lrcT(it, en) : it; }
 function gcEsc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -211,7 +266,7 @@ function gcPick() {
 
 var GC_LAST = null;
 function gcShow(res, fname) {
-  GC_LAST = res;
+  GC_LAST = res; if (fname) res.fname = fname;
   if (res.err) {
     lrcModal("<h3>" + gcT("Non riesco a leggere il giro", "Can't read this ride") + "</h3><p class=\"lrc-sub\">"
       + (res.err === "noele"
@@ -231,6 +286,8 @@ function gcShow(res, fname) {
     else if (m.kind === "via") { title = gcT("Sale verso ", "Climbs past ") + gcEsc(p.name); st = '<span class="lrc-st approved">' + gcT("nota", "known") + "</span>"; }
     else if (m.kind === "newside") { nNew++; title = gcEsc(p.name) + " &middot; " + gcT("versante nuovo", "new side"); st = '<span class="lrc-st pending">' + gcT("manca", "missing") + "</span>"; act = '<button class="lrc-go" onclick="gcPropose(' + i + ')">' + gcT("Proponi", "Suggest") + "</button>"; }
     else { nNew++; title = gcT("Salita senza nome", "Unnamed climb") + " &middot; " + gcT("cima a ", "top at ") + Math.round(c.top[2]) + " m"; st = '<span class="lrc-st pending">' + gcT("manca", "missing") + "</span>"; act = '<button class="lrc-go" onclick="gcPropose(' + i + ')">' + gcT("Proponi", "Suggest") + "</button>"; }
+    c.title = title.replace(/<[^>]+>/g, "").replace(/&middot;/g, "-").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+    act = '<button onclick="gcPreview(' + i + ')">&#x1F441;&#xFE0F; ' + gcT("Vedi", "View") + "</button>" + act;
     h += '<div class="lrc-item">' + st + "<h4>" + title + "</h4>"
       + '<div class="lrc-meta">' + gcNum(c.km) + " km &middot; +" + c.gain + " m &middot; " + gcNum(c.avg) + "% " + gcT("medio", "avg") + "</div>"
       + (act ? '<div class="lrc-btns" style="margin-top:8px">' + act + "</div>" : "") + "</div>";
@@ -245,6 +302,44 @@ function gcShow(res, fname) {
       + gcT("Segna come fatte", "Mark as climbed") + " (" + nDone + ")</button></div>"
       + '<div class="lrc-msg" id="gc-save-msg"></div>';
   lrcModal(h);
+}
+
+function gcPreview(i) {
+  var c = GC_LAST && GC_LAST.climbs[i]; if (!c) return;
+  if (typeof openPass !== "function") { gcDraw(); return; }
+  lrcClose(); gcClear();
+  var p = gcBuildPass(c, i, c.title || gcT("Salita dal GPX", "Climb from GPX"));
+  openPass(p, true);
+  /* passi noti entro 5 km: tracce tratteggiate in blu. Stanno in routeLines, quindi
+     spariscono da sole quando chiudi il pannello o apri un'altra salita. */
+  var near = gcNear(c, gcAllPasses(), 5), shown = 0;
+  near.forEach(function (n) {
+    (n.pass.versanti || []).forEach(function (v) {
+      if (!v.track || v.track.length < 2 || typeof L === "undefined") return;
+      var ln = L.polyline(v.track.map(function (q) { return [q[0], q[1]]; }), { color: "#2563eb", weight: 4, opacity: 0.6, dashArray: "6 8" }).addTo(map);
+      ln.bindTooltip(gcEsc(n.pass.name) + (v.side ? " - " + gcEsc(v.side) : ""), { sticky: true });
+      if (typeof routeLines !== "undefined") routeLines.push(ln);
+      shown++;
+    });
+  });
+  var m = c.match, canProp = m.kind === "new" || m.kind === "newside";
+  var list = near.slice(0, 4).map(function (n) { return "<b>" + gcEsc(n.pass.name) + "</b> " + gcNum(n.km) + " km"; }).join(" &middot; ");
+  var box = document.createElement("div");
+  box.id = "gc-banner";
+  box.style.cssText = "border:2px dashed #a855f7;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:.84rem";
+  box.innerHTML = "<b>&#x1F50E; " + gcT("Anteprima dal tuo GPX", "Preview from your GPX") + "</b> &middot; "
+    + gcT("non e' ancora in LocaRide.", "not in LocaRide yet.")
+    + '<div style="color:var(--txt2);margin-top:4px">'
+    + (near.length
+      ? gcT("Vicino alla cima: ", "Near the top: ") + list + (shown ? ". " + gcT("In blu tratteggiato le loro salite: se coincidono, questa c'e' gia'.", "Dashed blue: their climbs. If they overlap, this one already exists.") : ".")
+      : gcT("Nessun passo noto entro 5 km dalla cima.", "No known pass within 5 km of the top."))
+    + "</div>"
+    + '<div class="lrc-btns" style="margin-top:8px">'
+    + '<button onclick="gcShow(GC_LAST)">&#x2190; ' + gcT("Lista", "List") + "</button>"
+    + (canProp ? '<button class="lrc-go" onclick="gcPropose(' + i + ')">' + gcT("Proponi", "Suggest") + "</button>" : "")
+    + "</div>";
+  var body = document.querySelector("#dp .dp-body");
+  if (body) body.insertBefore(box, body.firstChild);
 }
 
 function gcOpen(i) {
