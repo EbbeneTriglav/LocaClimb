@@ -35,7 +35,7 @@ var LRC = {
   me: null                  // { canPropose, role } dell'utente corrente
 };
 
-function lrcT(it, en) { try { return (window.gref && gref("LR_LANG") === "en") || window.LR_LANG === "en" ? en : it; } catch (e) { return it; } }
+function lrcT(it, en) { try { return (window.gref && window.gref("LR_LANG") === "en") || window.LR_LANG === "en" ? en : it; } catch (e) { return it; } }
 function lrcEl(t, a, h) { var e = document.createElement(t); if (a) for (var k in a) e.setAttribute(k, a[k]); if (h != null) e.innerHTML = h; return e; }
 function lrcId(i) { return document.getElementById(i); }
 function lrcUser() { return (typeof FBUSER !== "undefined" && FBUSER) ? FBUSER : null; }
