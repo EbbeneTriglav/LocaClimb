@@ -8,6 +8,7 @@
   "name": "locaride",
   "main": "cf/worker.js",
   "compatibility_date": "2026-09-21",
+  "preview_urls": false,
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
