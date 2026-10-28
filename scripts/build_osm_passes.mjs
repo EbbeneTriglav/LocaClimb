@@ -14,14 +14,15 @@
  * Usage: node scripts/build_osm_passes.mjs [--out F] [--min-ele M] [--max N]
  *        [--skip-download] [--no-curated] [--reenrich]
  */
-import { readFile, writeFile, mkdir, access } from "node:fs/promises";
+import { readFile, writeFile, mkdir, access, readdir } from "node:fs/promises";
 import { createReadStream, createWriteStream } from "node:fs";
 import { createInterface } from "node:readline";
 import { execFileSync } from "node:child_process";
 import { Readable } from "node:stream";
 import vm from "node:vm";
 import { createRequire } from "node:module";
-import { dataPath } from "./lib/paths.mjs";
+import { dataPath, DATA_DIR } from "./lib/paths.mjs";
+import { DISCOVER_REGIONS, southOfLine, findRoadTops, dropKnown, nameTop, csrTyped } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -34,9 +35,15 @@ const PBF_DEFAULT = [
   "https://download.geofabrik.de/europe/italy/nord-est-latest.osm.pbf",
   "https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf"
 ];
+// --discover <region>: climbs WITHOUT a pass node, found as tops of the road network
+// (scripts/lib/discover.mjs). Writes data/discover_<region>.json, which the app does NOT load:
+// it is reviewed by hand on https://locaride.app/?discover=<region> first. Nothing else changes.
+const DISC_KEY = _arg0("--discover", "");
+const DISC = DISC_KEY ? DISCOVER_REGIONS[DISC_KEY] : null;
+if (DISC_KEY && !DISC) { console.error("--discover: regione sconosciuta " + DISC_KEY + " (note: " + Object.keys(DISCOVER_REGIONS).join(", ") + ")"); process.exit(1); }
 const PBF_URLS = ((process.env.LC_PBF || _arg0("--pbf", "")).trim()
   ? (process.env.LC_PBF || _arg0("--pbf", "")).split(",").map((s) => s.trim()).filter(Boolean)
-  : PBF_DEFAULT);
+  : (DISC ? DISC.pbf : PBF_DEFAULT));
 const DEM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 const DEM_Z = 13;
 // "trunk" is here NOT because we want to send anyone up a superstrada, but because Italian state roads
@@ -47,7 +54,7 @@ const DEM_Z = 13;
 const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link","trunk","trunk_link","residential","living_street","road"];
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
-const OUT = dataPath(arg("--out", "osm_passes.json"));
+const OUT = dataPath(arg("--out", DISC ? "discover_" + DISC_KEY + ".json" : "osm_passes.json"));
 // --- ESPERIMENTO (solo Grecia): candidate-passo dai punti alti delle strade con ref ---
 const ROADCOL_CFG = {
   "osm_passes_gr.json":    { prom: 150, minEle: 500, minSep: 3 },   // montagna
@@ -75,12 +82,12 @@ const ROADCOL_MINSEP = _rc ? _rc.minSep : 3;
 const MIN_ELE = /osm_passes_(be|nl_lu)\.json$/.test(OUT) ? 20 : parseInt(arg("--min-ele", "130"), 10);
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
-const NO_CURATED = process.argv.includes("--no-curated");
+const NO_CURATED = process.argv.includes("--no-curated") || !!DISC; // curated_overrides.json belongs to osm-refresh only
 const REENRICH = process.argv.includes("--reenrich");
 // Optional cross-border clip: minlon,minlat,maxlon,maxlat. When set, the merged PBF is cut to this
 // box (complete_ways, so border-crossing roads stay intact) BEFORE filtering. Lets us build a border
 // corridor (Italy + neighbour) with both climb sides in-graph, without loading a whole foreign country.
-const BBOX = (process.env.LC_BBOX || arg("--bbox", "")).trim();
+const BBOX = (process.env.LC_BBOX || arg("--bbox", "") || (DISC ? DISC.bbox : "")).trim();
 // Bump this whenever the climb-building algorithm changes: every cached OSM pass whose
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
@@ -637,6 +644,7 @@ async function main() {
 
   console.log("  stream 1/2: pass nodes ...");
   const passes = [], cands = [], places = [], hintPlaces = [];
+  const discPeaks = []; // --discover only: every named peak/saddle, to name the tops
   const refWays = ROADCOL ? [] : null;
   await streamSeq(seqFile, (f) => {
     if (!f.geometry || !f.properties) return;
@@ -645,6 +653,7 @@ async function main() {
       return;
     }
     if (f.geometry.type !== "Point") return;
+    if (DISC && (f.properties.natural === "peak" || f.properties.natural === "saddle" || f.properties.mountain_pass === "yes") && f.properties.name) discPeaks.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], name: f.properties["name:it"] || f.properties.name });
     if (f.properties.mountain_pass === "yes") {
       passes.push({ src: "pass", oid: String(f.properties["@id"] || "").replace(/\D/g, ""), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ele: parseInt(f.properties.ele, 10) || 0, tags: f.properties });
     } else if ((f.properties.natural === "saddle" || f.properties.natural === "peak") && f.properties.name && anyClimbName(f.properties)) {
@@ -695,6 +704,7 @@ async function main() {
   }
   let extraClimbs = [];
   try { extraClimbs = JSON.parse(await readFile(dataPath("climbs_extra.json"), "utf8")); } catch {}
+  if (DISC) extraClimbs = []; // they live in osm_passes.json already
   // Manual base override: base_hints.json maps a pass name -> list of start points (town name or [lat,lon]).
   // For a matched pass we pin those bases (path summit->town, no auto base-finding). Safety net for
   // icon passes the heuristic mis-handles (cones like Amiata). All other passes stay automatic.
@@ -763,9 +773,16 @@ async function main() {
     const c = f.geometry.coordinates;
     if (!c || c.length < 2) return;
     const mid = c[Math.floor(c.length / 2)];
-    if (!nearPass(mid[1], mid[0]) && !nearPass(c[0][1], c[0][0]) && !nearPass(c[c.length - 1][1], c[c.length - 1][0])) return;
+    if (DISC) {
+      // the whole bbox, minus the plain: keep a way if any of its points is south of the ridge
+      // line + 0.04 deg (~4 km of plain, so foothill tops can still descend into it)
+      let inside = false;
+      for (let k = 0; k < c.length && !inside; k += 5) inside = southOfLine(DISC.southOf, c[k][1], c[k][0], 0.04);
+      if (!inside && !southOfLine(DISC.southOf, c[c.length - 1][1], c[c.length - 1][0], 0.04)) return;
+    } else if (!nearPass(mid[1], mid[0]) && !nearPass(c[0][1], c[0][0]) && !nearPass(c[c.length - 1][1], c[c.length - 1][0])) return;
     if (!rideable(f.properties)) return;
     const t = f.properties, tags = { highway: t.highway, name: t.name, ref: t.ref, surface: t.surface, tracktype: t.tracktype, smoothness: t.smoothness, hgv: t.hgv, maxweight: t.maxweight };
+    if (DISC) { tags.tunnel = t.tunnel; tags.bridge = t.bridge; } // DEM is wrong inside tunnels / on bridges
     const g = new Float32Array(c.length * 2);
     for (let k = 0; k < c.length; k++) { g[k * 2] = c[k][1]; g[k * 2 + 1] = c[k][0]; }
     ways.push({ uid: uid++, tags, g });
@@ -1079,6 +1096,88 @@ async function main() {
     return finalv;
   }
 
+  if (DISC) await runDiscovery();
+
+  // --- discover mode: road-network tops replace the pass nodes as seeds ---------------------
+  async function runDiscovery() {
+    console.log("  discover " + DISC_KEY + ": " + DISC.label);
+    // 1. every summit we already PUBLISH -> a top near one of them is not new. Not this run's
+    // pass/peak nodes: a peak whose road stops 300 m below it never became a climb.
+    const known = [];
+    for (const f of (await readdir(DATA_DIR)).filter((x) => /^osm_passes.*\.json$/.test(x))) {
+      try { for (const r of JSON.parse(await readFile(dataPath(f), "utf8"))) if (r && r.lat != null) known.push({ lat: r.lat, lon: r.lon }); } catch {}
+    }
+    try { for (const x of JSON.parse(await readFile(dataPath("climbs_extra.json"), "utf8"))) known.push({ lat: x.lat, lon: x.lon }); } catch {}
+    try {
+      const ctx = {}; vm.createContext(ctx); vm.runInContext(await readFile(dataPath("passes_data.js"), "utf8"), ctx);
+      for (const p of (ctx.PASSES_DATA || [])) known.push({ lat: p.lat, lon: p.lon });
+    } catch {}
+    console.log("    summit gia' noti: " + known.length);
+    // 2. paved road graph over every vertex (ids attached to the vertexMap entries)
+    const DISC_PAVED_HW = { unclassified: 1, residential: 1, living_street: 1, road: 1 };
+    const paved = (t) => !!(PAVED_SURF[t.surface] || (!t.surface && (PAVED_HW[t.highway] || DISC_PAVED_HW[t.highway])));
+    let n = 0, m = 0, maxE = 0;
+    for (const a of vertexMap.values()) a.id = n++;
+    for (const w of ways) if (paved(w.tags)) maxE += glen(w) - 1;
+    const lat = new Float64Array(n), lon = new Float64Array(n), ele = new Float32Array(n).fill(NaN);
+    const occ = new Uint16Array(n), occStruct = new Uint16Array(n);
+    const ea = new Int32Array(maxE), eb = new Int32Array(maxE), el = new Float32Array(maxE);
+    const yes = (x) => !!x && x !== "no";
+    for (const w of ways) {
+      const L = glen(w), st = yes(w.tags.tunnel) || yes(w.tags.bridge), ids = new Int32Array(L);
+      for (let i = 0; i < L; i++) {
+        const id = vertexMap.get(vkey(gx(w, i), gy(w, i))).id;
+        ids[i] = id; lat[id] = gx(w, i); lon[id] = gy(w, i);
+        if (occ[id] < 65535) occ[id]++;
+        if (st && i > 0 && i < L - 1 && occStruct[id] < 65535) occStruct[id]++;
+      }
+      if (!paved(w.tags)) continue;
+      for (let i = 1; i < L; i++) { ea[m] = ids[i - 1]; eb[m] = ids[i]; el[m] = hav(lat[ids[i - 1]], lon[ids[i - 1]], lat[ids[i]], lon[ids[i]]); m++; }
+    }
+    const g = csrTyped(n, lat, lon, ele, ea, eb, el, m);
+    console.log("    grafo asfaltato: " + n + " vertici, " + m + " tratti");
+    // 3. DEM at every graph vertex except tunnel/bridge interiors, one tile at a time (then freed)
+    const N2 = 1 << DEM_Z, byTile = new Map();
+    const tileXY = (la, lo) => { const r = la * Math.PI / 180; return [(lo + 180) / 360 * N2, (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * N2]; };
+    for (let v = 0; v < n; v++) {
+      if (g.off[v] === g.off[v + 1]) continue;
+      if (occStruct[v] > 0 && occStruct[v] === occ[v]) continue;
+      const [fx, fy] = tileXY(lat[v], lon[v]), k = Math.floor(fx) + "/" + Math.floor(fy);
+      let a = byTile.get(k); if (!a) byTile.set(k, a = []); a.push(v);
+    }
+    const tiles = [...byTile.keys()];
+    let ti = 0, doneT = 0;
+    async function tileWorker() {
+      while (ti < tiles.length) {
+        const k = tiles[ti++], [tx, ty] = k.split("/").map(Number), png = await demTile(DEM_Z, tx, ty);
+        if (png) for (const v of byTile.get(k)) {
+          const [fx, fy] = tileXY(lat[v], lon[v]);
+          const px = Math.min(png.width - 1, Math.max(0, Math.floor((fx - tx) * png.width)));
+          const py = Math.min(png.height - 1, Math.max(0, Math.floor((fy - ty) * png.height)));
+          const i = (py * png.width + px) * 4;
+          ele[v] = (png.data[i] * 256 + png.data[i + 1] + png.data[i + 2] / 256) - 32768;
+        }
+        demCache.delete(DEM_Z + "/" + k); // memory: the enrichment refetches only the tiles it needs
+        if (++doneT % 500 === 0) console.log("    ... DEM " + doneT + "/" + tiles.length + " riquadri");
+      }
+    }
+    await Promise.all(Array.from({ length: 8 }, tileWorker));
+    // 4. tops -> drop the known ones -> seeds for the normal climb builder
+    const tops = findRoadTops(g, { minEle: DISC.minEle, prom: DISC.prom, domKm: DISC.domKm, minSepKm: DISC.minSepKm, maxNodes: 80000,
+      inMask: (la, lo) => southOfLine(DISC.southOf, la, lo, 0.01) });
+    const fresh = dropKnown(tops, known, DISC.knownKm);
+    console.log("    cime della rete stradale: " + tops.length + " -> nuove (lontane da salite note): " + fresh.length);
+    passes.length = 0;
+    for (const t of fresh) {
+      const arr = vertexMap.get(vkey(t.lat, t.lon));
+      if (!arr || !arr.length) continue;
+      const on = arr.find((e) => e.w.tags.name) || arr[0];
+      const np = global.nearestPlace(t.lat, t.lon);
+      const name = nameTop(t, discPeaks, hintPlaces, on.w.tags.name, np && np.name);
+      passes.push({ src: "roadtop", oid: "rt" + Math.round(t.lat * 1e5) + "x" + Math.round(t.lon * 1e5), lat: t.lat, lon: t.lon, ele: t.ele, prom: t.prom, ch: { w: on.w, idx: on.idx }, tags: { name } });
+    }
+  }
+
   let existing = [];
   try { existing = JSON.parse(await readFile(OUT, "utf8")); } catch {}
   const byId = new Map(existing.map((p) => [p.id, p]));
@@ -1092,7 +1191,7 @@ async function main() {
       if (!isCand && (!el.ele || el.ele < MIN_ELE)) { skipped++; continue; }
       // Candidates snap tighter: a road 500 m from a peak passes BY it, it does not climb TO it.
       // Snap FIRST (grid lookup, free) so the DEM is only touched for nodes that reached a road.
-      const ch = snap(el.lat, el.lon, isCand ? 0.3 : 0.5);
+      const ch = el.ch || snap(el.lat, el.lon, isCand ? 0.3 : 0.5); // roadtop: already ON its road vertex
       if (!ch) { skipped++; continue; }
       const slat0 = gx(ch.w,ch.idx), slon0 = gy(ch.w,ch.idx);
       if (isCand) {
@@ -1110,7 +1209,8 @@ async function main() {
       const slat = slat0, slon = slon0;
       const rec = byId.get(id) || { id };
       rec.name = name; rec.lat = slat; rec.lon = slon; rec.elevation = el.ele; rec.snapped = true; rec.nodeId = el.oid;
-      if (isCand || el.src === "roadcol") rec.src = el.src; // "saddle"/"peak": kept via toponym + road-reaches-summit, not mountain_pass=yes
+      if (el.src === "roadtop") rec.prom = el.prom;
+      if (isCand || el.src === "roadcol" || el.src === "roadtop") rec.src = el.src; // "saddle"/"peak": kept via toponym + road-reaches-summit, not mountain_pass=yes
       rec.surfaceLabel = surfaceLabel(ch.w.tags);
       const tr = computeTraffic(ch.w.tags, el.ele);
       rec.trafFeriale = tr.fer; rec.trafWeekend = tr.wkd; rec.trucks = tr.trucks;

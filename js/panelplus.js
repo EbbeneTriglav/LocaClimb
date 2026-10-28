@@ -60,13 +60,18 @@ function ppSpeed(g, flatKmh) {
 }
 /* W/kg -> VAM (m/h) alla pendenza media della salita (Ferrari) */
 function ppVam(wkg, avgPct) { return wkg * (200 + 10 * Math.max(0, avgPct || 0)); }
-/* tempo in minuti: il profilo percorso tratto per tratto con il modello del meteo */
-function ppMinutes(prof, km, vam) {
+/* tempo in minuti: il profilo percorso tratto per tratto con il modello del meteo.
+   dists = km di ogni punto del profilo (profileDist in panel.js); senza, passo costante. */
+function ppMinutes(prof, km, vam, dists) {
   if (!prof || prof.length < 2 || !(km > 0) || !(vam > 0)) return null;
-  var d = km / (prof.length - 1), h = 0, flat = vam / 34;
-  for (var i = 1; i < prof.length; i++) h += d / ppSpeed((prof[i] - prof[i - 1]) / (d * 1000), flat);
+  var h = 0, flat = vam / 34, ok = dists && dists.length === prof.length;
+  for (var i = 1; i < prof.length; i++) {
+    var d = ok ? dists[i] - dists[i - 1] : km / (prof.length - 1);
+    if (d > 0) h += d / ppSpeed((prof[i] - prof[i - 1]) / (d * 1000), flat);
+  }
   return h * 60;
 }
+function ppDists(v) { return typeof profileDist === "function" ? profileDist(v) : null; }
 function ppClock(min) {
   if (min == null || !isFinite(min)) return "-";
   var m = Math.round(min);
@@ -87,10 +92,10 @@ function ppSection(p) {
   var row = function (label, fn) { h += "<tr><td>" + label + "</td>" + cols.map(function (v) { return "<td>" + fn(v) + "</td>"; }).join("") + "</tr>"; };
   row("&#x1F504; " + ppT("Tornanti", "Hairpins"), function (v) { var n = ppHairpins(v.track); return v.track && v.track.length > 2 ? "&asymp;" + n : "-"; });
   PP.WKG_REF.forEach(function (w) {
-    row("&#x23F1;&#xFE0F; " + ppNum(w, 0) + " W/kg", function (v) { return ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(w, v.avgGradient))); });
+    row("&#x23F1;&#xFE0F; " + ppNum(w, 0) + " W/kg", function (v) { return ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(w, v.avgGradient), ppDists(v))); });
   });
   row("<b>&#x1F464; " + ppT("Tu", "You") + "</b> " + (my ? "(" + ppNum(my) + " W/kg)" : ""), function (v) {
-    return my ? "<b>" + ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(my, v.avgGradient))) + "</b>" : "-";
+    return my ? "<b>" + ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(my, v.avgGradient), ppDists(v))) + "</b>" : "-";
   });
   h += "</tbody></table>";
   h += '<div class="pp-my"><label>' + ppT("I tuoi W/kg", "Your W/kg") + ' <input id="pp-wkg" type="number" step="0.1" min="1" max="8" inputmode="decimal" value="' + (my ? my : "") + '" placeholder="3,0"></label>'

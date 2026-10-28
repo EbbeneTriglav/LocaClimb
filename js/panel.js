@@ -134,8 +134,8 @@ function drawElev(p){
   var mn=Math.min.apply(null,allE)-50,mx=Math.max.apply(null,allE)+50;
   var maxDist=Math.max.apply(null,vers.map(function(v){return v.distance_km||10;}));
   var series=vers.map(function(v){
-    var pr=v.elevationProfile,n=pr.length,dist=v.distance_km||10,seg=(dist*1000)/(n-1);
-    var pts=[];for(var i=0;i<n;i++){var g=i===0?0:(pr[i]-pr[i-1])/seg*100;pts.push({d:i/(n-1)*dist,e:pr[i],g:g});}
+    var pr=v.elevationProfile,n=pr.length,dist=v.distance_km||10,pd=profileDist(v);
+    var pts=[];for(var i=0;i<n;i++){var dd=i===0?0:(pd[i]-pd[i-1])*1000,g=dd>0?(pr[i]-pr[i-1])/dd*100:0;pts.push({d:pd[i],e:pr[i],g:g});}
     return {name:v.side,dist:dist,pts:pts,track:v.track};
   });
   elevMeta={c:c,mn:mn,mx:mx,maxDist:maxDist,series:series};
@@ -231,6 +231,21 @@ function renderElev(frac){
       ctx.restore();
     });
   }
+}
+/* Distance (km) of each elevationProfile sample along the climb. Pipeline profiles (builder,
+   enrich_manual, data.js) take sample j at TRACK INDEX round(j*(M-1)/(n-1)), and the track is
+   dense on hairpins and sparse on straights: read as evenly spaced, the chart squeezed and
+   stretched the climb (Finestre showed an 18% km that is really 14%). Profiles built at even
+   distance (GPX, user proposals: elevSource set) keep the even spacing. */
+function profileDist(v){
+  var pr=v.elevationProfile||[],n=pr.length,T=v.track||[],M=T.length,dist=v.distance_km||0,out=[],i;
+  if(n<2)return [0];
+  var even=function(){out=[];for(var j=0;j<n;j++)out.push(j/(n-1)*(dist||10));return out;};
+  if(v.elevSource||M<n)return even();
+  var cum=[0];for(i=1;i<M;i++)cum.push(cum[i-1]+hav(T[i-1][0],T[i-1][1],T[i][0],T[i][1]));
+  var L=cum[M-1];if(!(L>0))return even();
+  var k=(dist||L)/L;for(i=0;i<n;i++)out.push(cum[Math.round(i*(M-1)/(n-1))]*k);
+  return out;
 }
 /* versanti eligible for the profile chart (must match drawElev so water `vi` aligns with series) */
 function profileVers(p){return (p.versanti||[]).filter(function(v){return v.elevationProfile&&v.elevationProfile.length>1&&v.track&&v.track.length>1;});}
