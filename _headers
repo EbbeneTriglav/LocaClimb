@@ -8,9 +8,6 @@
   Permissions-Policy: camera=(), microphone=(), payment=(), geolocation=(self)
   Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; frame-src https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'
 
-# Data changes with every bot commit and file names are not versioned: always revalidate (ETag).
-/data/*
-  Cache-Control: public, max-age=0, must-revalidate
 
-/js/*
-  Cache-Control: public, max-age=300
+# Cache: nessuna regola. Il default di Cloudflare (max-age=0, must-revalidate + ETag)
+# fa ricontrollare ogni file a ogni visita: un deploy e' visibile subito.
