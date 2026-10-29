@@ -31,6 +31,9 @@ quello che trova. Nessun passaggio a mano.
 - La ricerca salite gira sulle zone con `"discover": true` (45 oggi): soglie Alpi o colline secondo
   il terreno; zone piatte e fasce di confine sono saltate.
 - Lancio a mano: Actions → OSM discover → Run workflow → `italia`, `europa`, oppure gli id
-  separati da virgola (es. `austria,slovenia`). Il giro automatico a rotazione arriva nella PR successiva.
+  separati da virgola (es. `austria,slovenia`).
+- Giro automatico: `osm-discover-rotate.yml` (01:17 e 19:17 UTC) lancia ogni volta le 2 zone mai
+  fatte o aggiornate da piu' tempo (`scripts/discover_next.mjs`, stato = storia git): 4 zone al giorno,
+  tutto il catalogo si rinnova in circa 2 settimane.
 - Nuova zona: aggiungila a `zones.json` e il suo id al menu di `osm-expand.yml`
   (`test/zones.test.mjs` controlla che coincidano).
