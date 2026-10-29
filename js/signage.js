@@ -39,6 +39,7 @@ var SG_ICONS = {
   "calendar-days": '<path d="M8 2v3" /><path d="M16 2v3" /><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="M8 13h.01" /><path d="M12 13h.01" /><path d="M16 13h.01" /><path d="M8 17h.01" /><path d="M12 17h.01" /><path d="M16 17h.01" />',
   "info": '<circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />',
   "route": '<circle cx="6" cy="19" r="3" /><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /><circle cx="18" cy="5" r="3" />',
+  "languages": '<path d="m5 8 6 6" /><path d="m4 14 6-6 2-3" /><path d="M2 5h12" /><path d="M7 2h1" /><path d="m22 22-5-10-5 10" /><path d="M14 18h6" />',
   "utensils": '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />'
 };
 
@@ -227,6 +228,26 @@ function sgWrapFit() {
   map.fitBounds._sg = 1;
 }
 
+/* ------------------------------------------------------------- testata (passo 2) */
+/* Sul telefono la testata aveva logo, ricerca e otto pulsanti in 375 px: la ricerca era
+   tagliata ("Cerca passo o lo") e due pulsanti ci finivano sopra. Ora la testata e' logo +
+   ricerca a tutta larghezza. Crea, Profilo e Menu sono gia' nella barra in basso; Acqua,
+   Cibo e Lingua scendono nella colonna di pulsanti sulla mappa (#mapctl), spostati e non
+   ricreati, cosi' i loro gestori restano attaccati. */
+function sgPhone() { return window.matchMedia && window.matchMedia("(max-width: 640px)").matches; }
+function sgHeader() {
+  var ctl = document.getElementById("mapctl");
+  if (!sgPhone() || !ctl) return false;
+  [["fountBtn", "droplet"], ["uk-food", "utensils"], ["langBtn", "languages"]].forEach(function (x) {
+    var b = document.getElementById(x[0]);
+    if (!b || b.parentNode === ctl) return;
+    var bi = b.querySelector(".bi"); if (bi) bi.innerHTML = sgIcon(x[1], 22);
+    ctl.appendChild(b);
+  });
+  document.body.classList.add("sg-hdr-clean");
+  return true;
+}
+
 /* ------------------------------------------------------------- tabs + start */
 function sgTabs() {
   var bar = document.getElementById("uk-tabs");
@@ -250,6 +271,7 @@ function sgStart() {
   sgWrapFit();
   sgSetSheet(SG.sheet);
   var tries = 0; (function t() { if (!sgTabs() && tries++ < 20) setTimeout(t, 500); })();
+  var htries = 0; (function h() { if (!sgHeader() && sgPhone() && htries++ < 20) setTimeout(h, 500); })();
 }
 if (typeof document !== "undefined" && document.addEventListener && typeof window !== "undefined") {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sgStart); else sgStart();

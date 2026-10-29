@@ -3,8 +3,13 @@
  *
  *  1. Base con rilievo (OpenTopoMap) come default; un pulsante torna alla mappa
  *     stradale. Se le tessere del rilievo non arrivano, si torna da soli a OSM.
- *  2. Da zoom 10 in su le salite sono TRACCE colorate per categoria (HC -> 4), con un
- *     punto in cima, al posto delle bolle blu numerate che non dicevano niente.
+ *  2. Tre livelli di lettura (passo 2 della nuova grafica, 29/10/2026):
+ *     - lontano (zoom < 9): gruppi grigi con il numero, salite singole come punti colorati;
+ *     - medio (9-11): un punto per salita, colore e grandezza per categoria, niente linee:
+ *       con 18.000 salite le linee a questo zoom erano un groviglio;
+ *     - vicino (da 12): le tracce colorate per categoria, con il punto in cima.
+ *  5. Filtri per categoria (HC, 1a ... 4a) al posto della legenda: si vede solo quello che
+ *     interessa, sulla mappa, nella striscia e nei gruppi. La scelta resta sul dispositivo.
  *  3. "Salite in vista": in basso le salite dell'area visibile, dalla piu' dura, con
  *     categoria, km, pendenza, dislivello e il profilo in miniatura. Tocco = apre.
  *  4. La legenda delle categorie sale in alto e lascia il basso alla striscia.
@@ -15,7 +20,11 @@
  * ==========================================================================*/
 
 var MUX = {
-  LINES_Z: 10,        // da questo zoom: tracce al posto delle bolle
+  DOTS_Z: 9,          // da questo zoom: un punto per salita al posto dei gruppi
+  LINES_Z: 12,        // da questo zoom: anche le tracce
+  MAX_DOTS: 3000,
+  CATS: ["HC", "1", "2", "3", "4"],
+  sel: null,          // categorie scelte (null = tutte)
   STRIP_Z: 9,         // da questo zoom: striscia "salite in vista"
   MAX_CARDS: 40,
   MAX_TRACKS: 900,    // oltre, si disegnano prima le piu' dure
@@ -52,6 +61,18 @@ function muxInView(passes, b) {
   }
   return out.sort(function (x, y) { return (y.rank - x.rank) || (y.gain - x.gain); });
 }
+/* categoria di un passo per i filtri: quella del versante piu' duro */
+function muxCatOf(p) { var v = muxBestSide(p); return String((v && v.cat) || p.cat || ""); }
+/* sel = null (tutte) o array di categorie; senza categoria si vede solo con "tutte" */
+function muxCatOk(p, sel) { if (!sel) return true; return sel.indexOf(muxCatOf(p)) >= 0; }
+/* tocco su un filtro: da "tutte" si passa a quella sola; poi si aggiunge/toglie; vuoto = tutte */
+function muxToggleCat(sel, c, all) {
+  if (!sel) return [c];
+  var out = sel.indexOf(c) >= 0 ? sel.filter(function (x) { return x !== c; }) : sel.concat([c]);
+  return (!out.length || out.length === all.length) ? null : out;
+}
+/* raggio del punto: le salite dure si vedono prima */
+function muxDotR(cat, z) { return 3 + muxRank(cat) + (z >= 12 ? 1 : 0); }
 /* spessore: le salite dure si vedono di piu', le facili non coprono la mappa */
 function muxWeight(cat, z) { var r = muxRank(cat); return (r >= 4 ? 5 : r >= 3 ? 4 : 3) + (z >= 12 ? 1 : 0); }
 /* profilo in miniatura: path SVG "area" da elevationProfile */
@@ -86,6 +107,12 @@ function muxWatchTopo() {
     l.on("tileerror", function () { if (++errs === 12) { MUX.fallback = 1; muxPickBase("OSM"); } });
   });
 }
+/* i colori delle salite devono vincere sul fondo: le mappe disegnate vengono smorzate,
+   la foto aerea no (body.mux-photo) */
+function muxPhotoClass() {
+  var inp = document.querySelector(".leaflet-control-layers-base input:checked"), lab = inp && inp.closest("label");
+  document.body.classList.toggle("mux-photo", !!(lab && /orto|sat|aer/i.test(lab.textContent || "")));
+}
 function muxBase() {
   if (!document.querySelector(".leaflet-control-layers-base label")) return;
   var want = "Topo";
@@ -94,20 +121,21 @@ function muxBase() {
   map.on("baselayerchange", function (e) {
     if (!MUX.fallback) { try { localStorage.setItem("lr_base_name", e.name); } catch (x) {} }
     MUX.fallback = 0;
-    muxWatchTopo();
+    muxWatchTopo(); muxPhotoClass();
   });
-  muxWatchTopo();
+  muxWatchTopo(); muxPhotoClass();
 }
 
 /* ------------------------------------------------------- visible passes */
 function muxVisiblePasses() {
   var out = [];
-  try { PASSES_DATA.forEach(function (p) { out.push(p); }); } catch (e) {}
+  try { PASSES_DATA.forEach(function (p) { if (muxCatOk(p, MUX.sel)) out.push(p); }); } catch (e) {}
   try {
     var useMarkers = typeof markers !== "undefined" && markers && markers.hasLayer;
     osmPasses.forEach(function (p) {
       if (!p.versanti || !p.versanti.length) return;
       if (useMarkers && p._marker && !markers.hasLayer(p._marker)) return;   // nascosto dai filtri
+      if (!muxCatOk(p, MUX.sel)) return;
       out.push(p);
     });
   } catch (e) {}
@@ -127,21 +155,21 @@ function muxBounds(pad) {
 function muxDrawLines() {
   if (!MUX.layer) { MUX.renderer = L.canvas({ padding: 0.3, tolerance: 6 }); MUX.layer = L.layerGroup().addTo(map); }
   MUX.layer.clearLayers(); MUX.byId = {};
-  var z = map.getZoom(), on = z >= MUX.LINES_Z;
+  var z = map.getZoom(), on = z >= MUX.DOTS_Z, withLines = z >= MUX.LINES_Z;
   if (typeof markers !== "undefined" && markers) {
     if (on && map.hasLayer(markers)) map.removeLayer(markers);
     if (!on && !map.hasLayer(markers)) map.addLayer(markers);
   }
   document.body.classList.toggle("mux-lines", on);
   if (!on) return;
-  var list = muxInView(muxVisiblePasses(), muxBounds(0.2)), n = 0;
+  var list = muxInView(muxVisiblePasses(), muxBounds(0.2)), n = 0, cap = withLines ? MUX.MAX_TRACKS : MUX.MAX_DOTS;
   list.reverse();                       // le piu' dure per ultime = disegnate sopra
-  if (list.length > MUX.MAX_TRACKS) list = list.slice(list.length - MUX.MAX_TRACKS);
+  if (list.length > cap) list = list.slice(list.length - cap);
   var dim = document.body.classList.contains("dp-open");
   list.forEach(function (it) {
     var p = it.p, lines = [];
     (p.versanti || []).forEach(function (v) {
-      if (!v.track || v.track.length < 2) return;
+      if (!withLines || !v.track || v.track.length < 2) return;
       var col = muxColor(p, v);
       var ln = L.polyline(v.track.map(function (q) { return [q[0], q[1]]; }), {
         renderer: MUX.renderer, color: col, weight: muxWeight(v.cat || p.cat, z), opacity: dim ? 0.35 : 0.9, lineCap: "round", lineJoin: "round"
@@ -151,9 +179,9 @@ function muxDrawLines() {
       ln.bindTooltip(muxEsc(p.name) + (v.side ? " &middot; " + muxEsc(v.side) : "") + " &middot; " + muxNum(v.distance_km) + " km " + muxNum(v.avgGradient) + "%", { sticky: true });
       ln.addTo(MUX.layer); lines.push(ln); n++;
     });
-    var dot = L.circleMarker([p.lat, p.lon], { renderer: MUX.renderer, radius: z >= 12 ? 6 : 5, color: "#fff", weight: 2, fillColor: muxColor(p, it.v), fillOpacity: 1 });
+    var dot = L.circleMarker([p.lat, p.lon], { renderer: MUX.renderer, radius: muxDotR(it.v.cat || p.cat, z), color: "#fff", weight: 1.5, fillColor: muxColor(p, it.v), fillOpacity: dim ? 0.45 : 1 });
     dot.on("click", function () { muxOpen(p); });
-    dot.bindTooltip(muxEsc(p.name), { direction: "top", offset: [0, -6] });
+    dot.bindTooltip(muxEsc(p.name) + " &middot; " + muxNum(it.v.distance_km) + " km " + muxNum(it.v.avgGradient) + "%", { direction: "top", offset: [0, -6] });
     dot.addTo(MUX.layer);
     MUX.byId[p.id] = { lines: lines, dot: dot };
   });
@@ -180,15 +208,28 @@ function muxStyle() {
     ".mux-name{font-weight:700;font-size:.8rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}" +
     ".mux-card svg{display:block;width:100%;height:34px;margin:4px 0 2px}" +
     ".mux-meta{font-size:.72rem;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
-        /* legenda in alto, compatta */
-    "#uk-legend{top:80px!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content!important;max-width:none!important;white-space:nowrap}" +
+    /* la legenda diventa una fila di filtri */
+    "#uk-legend{display:none!important}" +
+    "body:not(.mux-photo) .leaflet-tile-pane{filter:saturate(.42) contrast(.96) brightness(1.05)}" +
+    "#mux-chips{position:fixed;top:calc(var(--hdr) + 10px);left:50%;transform:translateX(-50%);z-index:960;display:flex;gap:6px;max-width:calc(100vw - 132px);overflow-x:auto;scrollbar-width:none;padding:2px}" +
+    "#mux-chips::-webkit-scrollbar{display:none}" +
+    "#mux-chips button{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:16px;border:1px solid var(--bdr);background:var(--bg2);color:var(--txt);font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(15,23,42,.12)}" +
+    "#mux-chips button i{width:10px;height:10px;border-radius:50%;display:inline-block}" +
+    "#mux-chips button.on{color:#fff;border-color:transparent}" +
+    "#mux-chips button.on i{background:#fff!important;opacity:.85}" +
+    "#mux-chips .mux-all{font-weight:600;color:var(--txt2)}" +
+    "body[class*='-open'] #mux-chips{display:none}" +
+    /* gruppi lontani: dischi grigi asfalto, non bolle blu */
+    ".mux-cl{display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(35,40,46,.86);color:#fff;font-weight:800;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}" +
+    ".cat-pill{border-radius:50%!important;min-width:0!important;width:20px;height:20px!important;padding:0!important;line-height:17px!important;font-size:.66rem!important;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}" +
     /* il basso e' della striscia: il resto sale quando e' aperta */
     "body.mux-strip-on #be-btn,body.mux-strip-on #lrc-fab{bottom:var(--mux-up)!important}" +
     "body[class*='-open'] #mux-strip{display:none}" +
     "@media (max-width:640px){" +
       "#mux-strip{left:6px;right:6px;bottom:58px}" +
       ".mux-card{flex-basis:150px;width:150px!important}" +
-      "#uk-legend{top:68px!important;font-size:.72rem}" +
+      "#mux-chips{max-width:calc(100vw - 112px);gap:5px}" +
+      "#mux-chips button{height:30px;padding:0 8px;font-size:.78rem}" +
     "}";
   var s = document.createElement("style"); s.id = "mux-style"; s.textContent = css; document.head.appendChild(s);
 }
@@ -236,14 +277,60 @@ function muxLift() {
   if (vis) document.body.style.setProperty("--mux-up", (window.innerHeight - el.getBoundingClientRect().top + 8) + "px");
 }
 
+/* ------------------------------------------------------------- filtri */
+function muxLoadSel() { try { var s = JSON.parse(localStorage.getItem("lr_cats") || "null"); MUX.sel = Array.isArray(s) && s.length ? s : null; } catch (e) { MUX.sel = null; } }
+function muxSaveSel() { try { if (MUX.sel) localStorage.setItem("lr_cats", JSON.stringify(MUX.sel)); else localStorage.removeItem("lr_cats"); } catch (e) {} }
+function muxChips() {
+  var el = document.getElementById("mux-chips");
+  if (!el) { el = document.createElement("div"); el.id = "mux-chips"; el.setAttribute("role", "toolbar"); el.setAttribute("aria-label", muxT("Filtra per categoria", "Filter by category")); document.body.appendChild(el); L.DomEvent.disableClickPropagation(el); }
+  var h = "";
+  MUX.CATS.forEach(function (c) {
+    var on = !!(MUX.sel && MUX.sel.indexOf(c) >= 0), col = "#64748b";
+    try { col = catColor(c); } catch (e) {}
+    h += '<button type="button" data-cat="' + c + '" aria-pressed="' + on + '" class="' + (on ? "on" : "") + '" style="' + (on ? "background:" + col : "") + '"><i style="background:' + col + '"></i>' + (c === "HC" ? "HC" : c + "&ordf;") + "</button>";
+  });
+  if (MUX.sel) h += '<button type="button" class="mux-all" data-cat="*">' + muxT("Tutte", "All") + "</button>";
+  el.innerHTML = h;
+  Array.prototype.forEach.call(el.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      var c = b.getAttribute("data-cat");
+      MUX.sel = c === "*" ? null : muxToggleCat(MUX.sel, c, MUX.CATS);
+      muxSaveSel(); muxChips();
+      try { if (typeof applyFilters === "function") applyFilters(); else muxRefresh(); } catch (e) { muxRefresh(); }
+    });
+  });
+}
+/* i gruppi (zoom lontano) rispettano i filtri: addMarkers vede solo le categorie scelte */
+function muxWrapMarkers() {
+  if (typeof addMarkers !== "function" || addMarkers._mux) return;
+  var am = addMarkers;
+  addMarkers = function (data) {
+    if (!MUX.sel) return am.apply(this, arguments);
+    var keep = osmPasses;
+    osmPasses = keep.filter(function (p) { return muxCatOk(p, MUX.sel); });
+    try { return am.call(this, (data || []).filter(function (p) { return muxCatOk(p, MUX.sel); })); } finally { osmPasses = keep; }
+  };
+  addMarkers._mux = 1;
+}
+function muxClusterLook() {
+  if (typeof markers === "undefined" || !markers || !markers.options || markers._muxLook) return;
+  markers.options.iconCreateFunction = function (cl) {
+    var n = cl.getChildCount(), s = n < 10 ? 26 : n < 100 ? 32 : 38;
+    return L.divIcon({ html: '<div class="mux-cl" style="width:' + s + "px;height:" + s + 'px">' + n + "</div>", className: "", iconSize: [s, s] });
+  };
+  markers._muxLook = 1;
+  try { markers.refreshClusters(); } catch (e) {}
+}
+
 /* ------------------------------------------------------------- wiring */
 function muxRefresh() { clearTimeout(MUX.timer); MUX.timer = setTimeout(function () { try { muxDrawLines(); muxStrip(); } catch (e) { if (window.console) console.warn("[locaClimb] mapux: " + e.message); } }, 120); }
 function muxStart() {
   if (typeof L === "undefined" || typeof map === "undefined" || !map || !map.getZoom) { setTimeout(muxStart, 400); return; }
-  muxStyle(); muxBase();
+  muxStyle(); muxBase(); muxLoadSel(); muxWrapMarkers(); muxClusterLook(); muxChips();
+  if (MUX.sel) { try { applyFilters(); } catch (e) {} }
   map.on("moveend zoomend", muxRefresh);
   /* chi rimette le bolle sulla mappa mentre siamo in modalita' tracce viene "corretto" */
-  map.on("layeradd", function (e) { if (typeof markers !== "undefined" && e.layer === markers && map.getZoom() >= MUX.LINES_Z) setTimeout(function () { if (map.getZoom() >= MUX.LINES_Z) map.removeLayer(markers); }, 0); });
+  map.on("layeradd", function (e) { if (typeof markers !== "undefined" && e.layer === markers && map.getZoom() >= MUX.DOTS_Z) setTimeout(function () { if (map.getZoom() >= MUX.DOTS_Z) map.removeLayer(markers); }, 0); });
   /* i filtri cambiano cosa e' visibile */
   if (typeof applyFilters === "function" && !applyFilters._mux) {
     var af = applyFilters;

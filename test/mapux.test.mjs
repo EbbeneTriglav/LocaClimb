@@ -44,3 +44,21 @@ test("sparkline: closed area path spanning the full width, flat profile does not
   assert.doesNotMatch(ctx.muxSpark([500, 500, 500], 150, 34), /NaN|Infinity/);
   assert.equal(ctx.muxSpark([], 150, 34), "");
 });
+
+test("category filter: best side decides, toggles from all -> one -> back to all", () => {
+  const p = { cat: "3", versanti: [side("2", 500, 1100), side("1", 400, 1300)] };
+  assert.equal(ctx.muxCatOf(p), "1");
+  assert.equal(ctx.muxCatOk(p, null), true);
+  assert.equal(ctx.muxCatOk(p, ["HC", "1"]), true);
+  assert.equal(ctx.muxCatOk(p, ["3"]), false);
+  const all = ["HC", "1", "2", "3", "4"];
+  assert.deepEqual(Array.from(ctx.muxToggleCat(null, "2", all)), ["2"]);
+  assert.deepEqual(Array.from(ctx.muxToggleCat(["2"], "1", all)), ["2", "1"]);
+  assert.equal(ctx.muxToggleCat(["2"], "2", all), null);
+  assert.equal(ctx.muxToggleCat(["HC", "1", "2", "3"], "4", all), null);
+});
+
+test("dot size grows with the category", () => {
+  assert.ok(ctx.muxDotR("HC", 10) > ctx.muxDotR("4", 10));
+  assert.equal(ctx.muxDotR("2", 12), ctx.muxDotR("2", 10) + 1);
+});

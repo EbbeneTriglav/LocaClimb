@@ -85,16 +85,16 @@ function ppSection(p) {
   var vs = (p.versanti || []).filter(function (v) { return v && v.distance_km > 0; });
   if (!vs.length) return null;
   var my = ppMyWkg(), cols = vs.slice(0, 3);
-  var h = '<div class="section-title">&#x23F1;&#xFE0F; ' + ppT("Tornanti e tempi di salita", "Hairpins and climbing times") + "</div>";
+  var h = '<div class="section-title">' + ppT("Tornanti e tempi di salita", "Hairpins and climbing times") + "</div>";
   h += '<table class="vtable pp-t"><thead><tr><th></th>' + cols.map(function (v, i) {
     return '<th style="color:' + (typeof VCOLS !== "undefined" ? VCOLS[i % VCOLS.length] : "inherit") + '">' + ppEsc(v.side || ppT("Versante", "Side")) + "</th>";
   }).join("") + "</tr></thead><tbody>";
   var row = function (label, fn) { h += "<tr><td>" + label + "</td>" + cols.map(function (v) { return "<td>" + fn(v) + "</td>"; }).join("") + "</tr>"; };
-  row("&#x1F504; " + ppT("Tornanti", "Hairpins"), function (v) { var n = ppHairpins(v.track); return v.track && v.track.length > 2 ? "&asymp;" + n : "-"; });
+  row(ppT("Tornanti", "Hairpins"), function (v) { var n = ppHairpins(v.track); return v.track && v.track.length > 2 ? "&asymp;" + n : "-"; });
   PP.WKG_REF.forEach(function (w) {
-    row("&#x23F1;&#xFE0F; " + ppNum(w, 0) + " W/kg", function (v) { return ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(w, v.avgGradient), ppDists(v))); });
+    row(ppNum(w, 0) + " W/kg", function (v) { return ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(w, v.avgGradient), ppDists(v))); });
   });
-  row("<b>&#x1F464; " + ppT("Tu", "You") + "</b> " + (my ? "(" + ppNum(my) + " W/kg)" : ""), function (v) {
+  row("<b>" + ppT("Tu", "You") + "</b> " + (my ? "(" + ppNum(my) + " W/kg)" : ""), function (v) {
     return my ? "<b>" + ppClock(ppMinutes(v.elevationProfile, v.distance_km, ppVam(my, v.avgGradient), ppDists(v))) + "</b>" : "-";
   });
   h += "</tbody></table>";

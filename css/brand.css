@@ -67,4 +67,13 @@ body, button, input, select, textarea { font-family: "Overpass", system-ui, -app
   .sg-plate-n { font-size: 1.2rem; }
   .sg-nums b { font-size: 1.25rem; }
 }
+/* ------------------------------ testata pulita (telefono, passo 2) ------------------------------ */
+@media (max-width: 640px) {
+  body.sg-hdr-clean #hdr #uk-plus, body.sg-hdr-clean #hdr #uk-gear, body.sg-hdr-clean #hdr #acct,
+  body.sg-hdr-clean #hdr #uk-center, body.sg-hdr-clean #hdr #uk-right { display: none !important; }
+  body.sg-hdr-clean #uk-left { flex: 1 1 auto; min-width: 0; }
+  body.sg-hdr-clean #search-wrap { flex: 1 1 auto; min-width: 0; }
+  body.sg-hdr-clean #search { width: 100%; }
+  #mapctl .btn .bi .sg-ic { vertical-align: middle; }
+}
 @media (prefers-reduced-motion: reduce) { #dp { transition: none; } }
