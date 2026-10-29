@@ -4,9 +4,10 @@
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
 import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel } from "./lib/data.mjs";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt } from "./lib/climb.mjs";
-import { dayVerdict, advice, fetchForecast } from "./lib/weather.mjs";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur } from "./lib/diary.mjs";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs";
+import { poisNear } from "./lib/poi.mjs";
+import { dayVerdict, advice, fetchForecast, fetchDaily } from "./lib/weather.mjs";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings } from "./lib/diary.mjs";
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -191,12 +192,21 @@ function renderClimb() {
       <thead><tr><th scope="col">KM</th><th scope="col">PENDENZA</th><th scope="col" style="text-align:right">QUOTA</th></tr></thead>
       <tbody>${rows.map((r, i) => `<tr class="${i === hard ? "hard" : ""}"><td>${num(r.k, r.k % 1 ? 1 : 0)}</td><td><div class="bar"><i style="width:${Math.max(4, Math.min(70, r.g / maxG * 70)).toFixed(0)}%;background:${gradeColor(r.g)}"></i><b>${num(r.g)}%</b></div></td><td>${esc(r.e)}</td></tr>`).join("")}
       <tr class="summit"><td>⛰</td><td>${top}</td><td>${esc(st.top ?? c.elevation)}</td></tr></tbody></table>
+    ${timesHtml(c, vs)}
+    <section class="sec" id="water"><h3>Acqua e ristori sulla salita</h3><p class="note">Cerco fontane e bar lungo la strada…</p></section>
+    ${vs.length > 1 ? compareHtml(c, vs) : ""}
+    <section class="sec" id="week"><h3>Meteo 7 giorni in cima</h3><p class="note">Carico…</p></section>
     <div class="facts">
       ${v.exposure ? `<div><span>Esposizione</span><b>${esc(v.exposure)}</b></div>` : ""}
       ${c.surfaceLabel ? `<div><span>Fondo</span><b>${esc(cleanLabel(c.surfaceLabel))}</b></div>` : ""}
-      ${v.traffic && v.traffic !== "n/d" ? `<div><span>Traffico</span><b>${esc(v.traffic)}</b></div>` : ""}
+      ${trafficFacts(v, c)}
       ${hard >= 0 ? `<div><span>Km più duro</span><b>${num(rows[hard].g)}% al km ${num(rows[hard].k, rows[hard].k % 1 ? 1 : 0)}</b></div>` : ""}
     </div>
+    ${c.description || (c.tips && c.tips.length) ? `<section class="sec"><h3>Da sapere</h3>${c.description ? `<p class="note">${esc(c.description)}</p>` : ""}${c.tips && c.tips.length ? `<ul class="tips">${c.tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}</section>` : ""}
+    ${bikeDayHtml(c)}
+    <section class="sec" id="news" hidden></section>
+    <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
+    ${stravaHtml(c)}
     <div class="actions"><button type="button" class="btn pri" id="rideBtn">Avvia modalità salita</button><button type="button" class="btn" id="gpxBtn">GPX</button></div>
   </div>`;
   panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
@@ -204,7 +214,101 @@ function renderClimb() {
   $("#rideBtn").addEventListener("click", () => startRide(c, v));
   $("#share").addEventListener("click", () => share(c));
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
+  wireTimes(c, vs);
+  fillWater(c, v); fillWeek(c); fillRating(c); fillNews(c);
   flyToClimb(c, v);
+}
+
+/* ------------------------------------------------------------------ climb sections (parity with v1) */
+const WKG_KEY = "lr_wkg";                     // same key as the classic app: one setting for both
+function myWkg() { try { const x = parseFloat(localStorage.getItem(WKG_KEY)); return x > 0.5 && x < 9 ? x : null; } catch { return null; } }
+function timesHtml(c, vs) {
+  const cols = vs.slice(0, 3), my = myWkg();
+  const rows = [2, 3, 4, 5].map((w) => `<tr><td>${w} W/kg</td>${cols.map((v) => `<td>${esc(clock(climbMinutes(v, w)))}</td>`).join("")}</tr>`).join("");
+  return `<section class="sec"><h3>Tornanti e tempi di salita</h3>
+    <table class="vt"><thead><tr><th></th>${cols.map((v) => `<th>${esc(v.side || "")}</th>`).join("")}</tr></thead><tbody>
+      <tr><td>Tornanti</td>${cols.map((v) => `<td>${v.track && v.track.length > 2 ? "≈" + hairpins(v.track) : "–"}</td>`).join("")}</tr>
+      ${rows}
+      <tr class="me"><td>Tu <input id="wkg" type="number" inputmode="decimal" step="0.1" min="1" max="8" value="${my ?? ""}" placeholder="3,0" aria-label="I tuoi W/kg"></td>${cols.map((v) => `<td data-my>${my ? esc(clock(climbMinutes(v, my))) : "–"}</td>`).join("")}</tr>
+    </tbody></table>
+    <p class="note small">Stima: VAM da W/kg (formula di Ferrari) e velocità tratto per tratto sul profilo. Vento, peso e stanchezza non contano.</p></section>`;
+}
+function wireTimes(c, vs) {
+  const inp = $("#wkg"); if (!inp) return;
+  inp.addEventListener("input", () => {
+    const w = parseFloat(String(inp.value).replace(",", "."));
+    if (w > 0.5 && w < 9) { try { localStorage.setItem(WKG_KEY, String(w)); } catch { /* private mode */ } }
+    panel.querySelectorAll("td[data-my]").forEach((td, i) => { td.textContent = w > 0.5 && w < 9 ? clock(climbMinutes(vs[i], w)) : "–"; });
+  });
+}
+function compareHtml(c, vs) {
+  const cols = vs.slice(0, 3), row = (l, f) => `<tr><td>${l}</td>${cols.map((v) => `<td>${f(v)}</td>`).join("")}</tr>`;
+  return `<section class="sec"><h3>Versanti a confronto</h3><table class="vt"><thead><tr><th></th>${cols.map((v) => `<th>${esc(v.side || "")}</th>`).join("")}</tr></thead><tbody>
+    ${row("Distanza", (v) => num(v.distance_km) + " km")}
+    ${row("Dislivello", (v) => esc(Math.round((v.endElevation ?? 0) - (v.startElevation ?? 0))) + " m")}
+    ${row("Media", (v) => num(v.avgGradient) + "%")}
+    ${row("Max", (v) => num(v.maxGradient) + "%")}
+    ${row("Esposizione", (v) => esc(v.exposure || "–"))}
+  </tbody></table></section>`;
+}
+function trafficFacts(v, c) {
+  const t = traffic(v, c);
+  if (!t) return "";
+  return `<div><span>Traffico feriale / weekend</span><b>${esc(t.fer)} / ${esc(t.wkd)} su 10</b></div><div><span>Camion</span><b>${esc(TRUCKS[t.trucks] || TRUCKS.rari)}</b></div>`;
+}
+function bikeDayHtml(c) {
+  const ev = (globalThis.BIKE_EVENTS || []).filter((e) => (e.passes || []).includes(c.id) && new Date(e.date) >= new Date(new Date().toDateString())).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 4);
+  if (!ev.length) return "";
+  return `<section class="sec"><h3>Bike Day: strada solo per bici</h3><ul class="tips">${ev.map((e) => `<li><b>${esc(new Date(e.date).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "long" }))}</b> · ${esc(e.name)} · ${esc(e.hours || "")}${e.url ? ` · <a href="${esc(e.url)}" target="_blank" rel="noopener">sito</a>` : ""}</li>`).join("")}</ul></section>`;
+}
+/* known Strava segments per curated pass (same table as the classic app, js/state.js). Strava
+   closed its public segment explorer page, so the old "Cerca segmenti" link is gone: segment search
+   comes back with the Strava connection. */
+const STRAVA_SEGMENTS = { stelvio: { "Prato allo Stelvio": 614103, "Bormio": 614115 }, gavia: { "Ponte di Legno": 1084024 }, mortirolo: { "Mazzo di Valtellina": 617404 }, zoncolan: { "Ovaro": 1253584 } };
+function stravaHtml(c) {
+  const seg = STRAVA_SEGMENTS[c.id];
+  if (!seg) return "";
+  return `<section class="sec"><h3>Segmenti Strava</h3><div class="links">${Object.entries(seg).map(([side, id]) => `<a class="chip" href="https://www.strava.com/segments/${esc(id)}" target="_blank" rel="noopener">${esc(side)} ↗</a>`).join("")}</div></section>`;
+}
+async function fillWater(c, v) {
+  const el = $("#water"); if (!el) return;
+  let r;
+  try { r = await poisNear(v.track || []); } catch { r = null; }
+  if (S.sel !== c || !$("#water")) return;
+  if (!r || (!r.covered && !r.points.length)) { el.innerHTML = `<h3>Acqua e ristori sulla salita</h3><p class="note">Dati non ancora disponibili in questa zona.</p>`; return; }
+  const water = alongTrack(v, r.points.filter((p) => p.kind === "water"), 100);
+  const foodAll = alongTrack(v, r.points.filter((p) => p.kind === "food"), 150);
+  const atStart = foodAll.filter((x) => x.km < 0.5).length, food = foodAll.filter((x) => x.km >= 0.5);   // the start town has bars anyway
+  const li = (x) => `<li><b>km ${num(x.km)}</b> · ${esc(x.p.name || x.p.label)}${x.p.name ? ` <span class="mu">${esc(x.p.label)}</span>` : ""} <span class="mu">· ${esc(x.m)} m dalla strada</span></li>`;
+  el.innerHTML = `<h3>Acqua e ristori sulla salita</h3>
+    <p class="note">${water.length ? `<b>${water.length}</b> punti acqua entro 100 m` : "Nessun punto acqua mappato entro 100 m: parti con le borracce piene."}${food.length ? ` · <b>${food.length}</b> bar o ristori lungo la salita` : " · nessun bar lungo la salita"}${atStart ? ` (più ${atStart} in partenza)` : ""}</p>
+    ${water.length ? `<ul class="tips water">${water.slice(0, 12).map(li).join("")}</ul>` : ""}
+    ${food.length ? `<ul class="tips food">${food.slice(0, 8).map(li).join("")}</ul>` : ""}`;
+}
+async function fillWeek(c) {
+  const el = $("#week"); if (!el) return;
+  let rows;
+  try { rows = await fetchDaily({ lat: c.lat, lon: c.lon, ele: c.elevation }); } catch { rows = null; }
+  if (S.sel !== c || !$("#week")) return;
+  if (!rows || !rows.length) { el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><p class="note">Meteo non disponibile ora.</p>`; return; }
+  el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><div class="week">${rows.map((d) => `<div class="day ${d.pp >= 50 ? "wet" : ""}"><span class="dn">${esc(new Date(d.date + "T12:00:00").toLocaleDateString("it-IT", { weekday: "short", day: "numeric" }))}</span><span class="wl">${esc(d.label)}</span><b>${num(d.tmax, 0)}°</b><span class="mu">${num(d.tmin, 0)}°</span><span class="pp">${esc(d.pp ?? "–")}%</span><span class="mu">${num(d.wind, 0)} km/h</span></div>`).join("")}</div>`;
+}
+async function fillRating(c) {
+  const el = $("#rating"); if (!el) return;
+  await new Promise((r) => (document.readyState === "complete" ? r() : addEventListener("load", r, { once: true })));
+  let s = null;
+  try { s = await loadRatings(c.id); } catch { s = null; }
+  if (S.sel !== c || !$("#rating")) return;
+  if (!s) { el.innerHTML = `<h3>Valutazioni della community</h3><p class="note">Non disponibili ora.</p>`; return; }
+  el.innerHTML = `<h3>Valutazioni della community</h3>${s.n ? `<p class="note"><b class="big">${num(s.overall)}</b> /5 · ${esc(s.n)} voti</p><div class="axes">${s.axes.map(([l, x]) => `<div><span>${esc(l)}</span><i><u style="width:${(x / 5 * 100).toFixed(0)}%"></u></i><b>${num(x)}</b></div>`).join("")}</div>` : `<p class="note">Ancora nessun voto. Si vota dall'app classica, per ora.</p>`}`;
+}
+let NEWS = null;
+async function fillNews(c) {
+  if (!NEWS) NEWS = fetch("../data/pass_news.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => ({}));
+  const all = await NEWS, items = all[c.id] || all[c.name] || [];
+  const el = $("#news"); if (!el || S.sel !== c || !Array.isArray(items) || !items.length) return;
+  el.hidden = false;
+  el.innerHTML = `<h3>News e stato della strada</h3><ul class="tips">${items.slice(0, 5).map((n) => `<li><b>${esc(n.date || "")}</b> · ${n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>` : esc(n.title)}${n.source ? ` <span class="mu">${esc(n.source)}</span>` : ""}</li>`).join("")}</ul>`;
 }
 
 function flyToClimb(c, v) {

@@ -83,3 +83,26 @@ export async function fetchForecast(points, days = 3) {
   const j = await r.json();
   return (Array.isArray(j) ? j : [j]).map((x) => x.hourly || {});
 }
+
+/* ---------------------------------------------------------------- 7 days at the summit */
+const WMO = [[0, "Sereno"], [3, "Nuvoloso"], [48, "Nebbia"], [57, "Pioviggine"], [67, "Pioggia"], [77, "Neve"], [82, "Rovesci"], [86, "Neve"], [99, "Temporali"]];
+export function wmoLabel(code) { for (const [max, l] of WMO) if (code <= max) return l; return "–"; }
+/* pure: Open-Meteo "daily" block -> rows */
+export function dailyRows(daily) {
+  const t = daily.time || [];
+  return t.map((d, i) => ({
+    date: d, label: wmoLabel(daily.weather_code?.[i] ?? 0), code: daily.weather_code?.[i],
+    tmax: daily.temperature_2m_max?.[i], tmin: daily.temperature_2m_min?.[i],
+    pp: daily.precipitation_probability_max?.[i], wind: daily.wind_speed_10m_max?.[i]
+  }));
+}
+export async function fetchDaily(p) {
+  const q = new URLSearchParams({
+    latitude: p.lat.toFixed(4), longitude: p.lon.toFixed(4), elevation: String(Math.round(p.ele ?? 0)),
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max",
+    timezone: "auto", forecast_days: "7"
+  });
+  const r = await fetch("https://api.open-meteo.com/v1/forecast?" + q.toString());
+  if (!r.ok) throw new Error("meteo " + r.status);
+  return dailyRows((await r.json()).daily || {});
+}

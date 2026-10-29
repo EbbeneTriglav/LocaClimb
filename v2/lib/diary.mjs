@@ -69,3 +69,16 @@ export function dur(sec) {
   const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60, p = (x) => String(x).padStart(2, "0");
   return h ? `${h}:${p(m)}:${p(s)}` : `${m}:${p(s)}`;
 }
+
+/* community ratings of a climb (ratings/{id}, written by the classic app): averages 1..5 */
+export async function loadRatings(id) {
+  const x = init();
+  if (!x) return null;
+  const d = await x.db.collection("ratings").doc(String(id)).get();
+  return ratingSummary(d.exists ? d.data() : null);
+}
+export function ratingSummary(a) {
+  const n = (a && a.n) || 0, av = (s) => (n ? (a[s] || 0) / n : 0);
+  const axes = [["Emozione", av("eSum")], ["Paesaggio", av("pSum")], ["Traffico", av("tSum")], ["Asfalto", av("aSum")]];
+  return { n, overall: n ? axes.reduce((t, x) => t + x[1], 0) / 4 : 0, axes };
+}

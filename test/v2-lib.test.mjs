@@ -1,7 +1,7 @@
 // v2/lib/*.mjs - pure logic of the new frontend (road book, profile, ride mode, weather verdict, diary).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { gradeColor, difficultyColor, num, eleAt, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats } from "../v2/lib/climb.mjs";
+import { gradeColor, difficultyColor, num, eleAt, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, profileDist, hairpins, climbMinutes, clock, traffic, alongTrack } from "../v2/lib/climb.mjs";
 import { hourState, dayVerdict, advice } from "../v2/lib/weather.mjs";
 import { diaryStats, bestOf, dur } from "../v2/lib/diary.mjs";
 import { cleanLabel } from "../v2/lib/data.mjs";
@@ -26,7 +26,7 @@ test("gradient and difficulty colours follow the one scale of the app", () => {
 });
 
 test("road book: one row per km with the gradient of that km; hardest km found", () => {
-  assert.equal(eleAt(V, 2.5), 1150);
+  assert.ok(Math.abs(eleAt(V, 2.5) - 1150) < 1e-6);
   const rows = kmTable(V);
   assert.equal(rows.length, 10);
   assert.deepEqual(rows[0], { k: 1, len: 1, g: 6, e: 1060 });
@@ -129,4 +129,67 @@ test("diary: totals, best time across sides, durations", () => {
 test("labels from the classic app lose their emoji", () => {
   assert.equal(cleanLabel("🛣️ Asfalto"), "Asfalto");
   assert.equal(cleanLabel("🪨 Sterrato/gravel"), "Sterrato/gravel");
+});
+
+test("profile samples sit at TRACK INDEXES, not at even distances (as the classic app)", () => {
+  // track: 10 points over the first 0.1 km (dense: hairpins), then 10 points 0.9 km apart (9.1 km,
+  // scaled to distance_km 10); the middle sample is track index 10, at 1.0 / 9.1 * 10 = 1.1 km
+  const t = [];
+  for (let i = 0; i < 10; i++) t.push([46 + i * 0.1 / 9 / 111.2, 11]);
+  for (let i = 1; i <= 10; i++) t.push([46 + (0.1 + i * 0.9) / 111.2, 11]);
+  const v = { distance_km: 10, elevationProfile: [1000, 1100, 1500], track: t };   // samples at index 0, 10, 19
+  const pd = profileDist(v);
+  assert.equal(pd[0], 0);
+  assert.ok(Math.abs(pd[1] - 1.1) < 0.01, "middle sample at ~1.1 km, not 5 km: " + pd[1]);
+  assert.ok(Math.abs(pd[2] - 10) < 1e-9);
+  assert.ok(Math.abs(eleAt(v, pd[1]) - 1100) < 1e-6);
+  assert.equal(profileDist({ ...v, elevSource: "gpx" })[1], 5, "GPX profiles stay evenly spaced");
+});
+
+test("hairpins: a zig-zag road counts its turns; a straight road has none", () => {
+  const z = [];
+  for (let k = 0; k < 6; k++) { const la = 46 + k * 0.0006; z.push([la, 11], [la, 11.002], [la + 0.0003, 11.002], [la + 0.0003, 11]); }
+  assert.ok(hairpins(z) >= 8, "zig-zag " + hairpins(z));
+  assert.equal(hairpins(V.track), 0);
+});
+
+test("climbing time from W/kg on the profile (Ferrari VAM + the weather speed model)", () => {
+  const m3 = climbMinutes(V, 3), m4 = climbMinutes(V, 4);
+  assert.ok(m3 > m4 && m4 > 0);
+  assert.ok(m3 > 40 && m3 < 70, "3 W/kg on 10 km at 8%: " + m3);
+  assert.equal(clock(75), "1h15"); assert.equal(clock(42.4), "42'");
+});
+
+test("traffic model as the classic app; unknown traffic says nothing", () => {
+  assert.deepEqual(traffic({ traffic: "alto" }, { region: "Veneto", elevation: 1500 }), { fer: 8, wkd: 10, trucks: "possibili" });
+  assert.deepEqual(traffic({ trafFeriale: 3, trafWeekend: 5 }, {}), { fer: 3, wkd: 5, trucks: "rari" });
+  assert.equal(traffic({ traffic: "n/d" }, {}), null);
+});
+
+test("water along the climb: within 100 m of the track, with its km", () => {
+  const w = alongTrack(V, [{ lat: 46 + 3 / 111.2, lon: 11.0005 }, { lat: 46 + 3 / 111.2, lon: 11.01 }]);
+  assert.equal(w.length, 1);
+  assert.ok(Math.abs(w[0].km - 3) < 0.15 && w[0].m < 60);
+});
+
+test("POI: what counts as water and food for a cyclist; cells of a track", async () => {
+  const { classify, cellsFor, cellKey } = await import("../v2/lib/poi.mjs");
+  assert.equal(classify({ amenity: "drinking_water" }).kind, "water");
+  assert.equal(classify({ natural: "spring", drinking_water: "no" }).label, null);
+  assert.equal(classify({ amenity: "fountain" }), null, "decorative fountains are not water");
+  assert.equal(classify({ amenity: "cafe" }).label, "Bar");
+  assert.equal(classify({ highway: "bus_stop" }), null);
+  assert.equal(cellKey(46.53, 10.45), "186_41");
+  assert.deepEqual(cellsFor([[46.30, 10.40], [46.53, 10.45]]), ["185_41", "186_41"]);
+});
+
+test("7-day weather rows and community ratings summary", async () => {
+  const { dailyRows, wmoLabel } = await import("../v2/lib/weather.mjs");
+  const { ratingSummary } = await import("../v2/lib/diary.mjs");
+  assert.equal(wmoLabel(0), "Sereno"); assert.equal(wmoLabel(95), "Temporali"); assert.equal(wmoLabel(73), "Neve");
+  const r = dailyRows({ time: ["2026-10-30"], weather_code: [61], temperature_2m_max: [5], temperature_2m_min: [-1], precipitation_probability_max: [70], wind_speed_10m_max: [20] });
+  assert.deepEqual(r[0], { date: "2026-10-30", label: "Pioggia", code: 61, tmax: 5, tmin: -1, pp: 70, wind: 20 });
+  const s = ratingSummary({ n: 2, eSum: 10, pSum: 8, tSum: 6, aSum: 8 });
+  assert.equal(s.n, 2); assert.equal(s.overall, 4); assert.deepEqual(s.axes[0], ["Emozione", 5]);
+  assert.equal(ratingSummary(null).n, 0);
 });
