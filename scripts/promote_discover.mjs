@@ -46,6 +46,11 @@ try {
   for (const p of (c.PASSES_DATA || [])) { const o = ov[p.id]; known.push(o && o.versanti && o.versanti.length ? { lat: p.lat, lon: p.lon, versanti: o.versanti } : p); }
 } catch { /* no curated file */ }
 const grid = ctx.dvGrid(known);
+// Regions overlap (Trentino / Veneto share the Dolomites): a top already PUBLISHED by another
+// region file is the same climb, not a new one. Same 1.5 km rule the discovery itself uses.
+const otherTops = known.filter((p) => p && p.lat != null);
+const nearKnownTop = (p) => otherTops.some((k) => Math.abs(k.lat - p.lat) < 0.02 && Math.abs(k.lon - p.lon) < 0.03
+  && Math.hypot((k.lat - p.lat) * 111, (k.lon - p.lon) * 111 * Math.cos(p.lat * Math.PI / 180)) < 1.5);
 
 const out = [], stat = {};
 for (const p of disc) {
@@ -53,8 +58,9 @@ for (const p of disc) {
   let mn = 1;
   for (const v of p.versanti) mn = Math.min(mn, ctx.dvOverlap(v.track, grid));
   const g = ctx.dvGroup(p, mn);
-  const pub = !no.has(p.id) && (ok.has(p.id) || publish.has(g));
-  stat[g] = stat[g] || { tot: 0, pub: 0 }; stat[g].tot++; if (pub) stat[g].pub++;
+  const dupTop = nearKnownTop(p);
+  const pub = !no.has(p.id) && !dupTop && (ok.has(p.id) || publish.has(g));
+  stat[g] = stat[g] || { tot: 0, pub: 0, dup: 0 }; stat[g].tot++; if (pub) stat[g].pub++; if (dupTop) stat[g].dup++;
   if (!pub) continue;
   const r = JSON.parse(JSON.stringify(p));
   if (/^Cima senza nome$/.test(r.name)) {
@@ -67,5 +73,5 @@ for (const p of disc) {
 }
 out.sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
 await writeFile(dataPath(OUTF), JSON.stringify(out, J5) + "\n", "utf8");
-for (const g of Object.keys(stat)) console.log("  " + g + ": " + stat[g].pub + " pubblicate su " + stat[g].tot);
+for (const g of Object.keys(stat)) console.log("  " + g + ": " + stat[g].pub + " pubblicate su " + stat[g].tot + (stat[g].dup ? " (" + stat[g].dup + " gia' pubblicate da un'altra regione)" : ""));
 console.log("scritto data/" + OUTF + " (" + out.length + " salite)");

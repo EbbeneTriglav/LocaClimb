@@ -1,0 +1,6 @@
+{
+ "_comment": "Pubblicazione 29/10/2026 con la regola verificata in Emilia-Romagna (campione: 93% buone). Nessuna revisione a mano ancora: per togliere una salita aggiungi il suo id in \"no\" e rilancia promote_discover.mjs.",
+ "publish": ["nuova", "doppione"],
+ "ok": [],
+ "no": []
+}
