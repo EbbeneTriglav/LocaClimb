@@ -16,6 +16,7 @@
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import vm from "node:vm";
 import { dataPath, DATA_DIR, ROOT } from "./lib/paths.mjs";
+import { resolveReview, DEFAULT_REVIEW } from "./lib/discover_review.mjs";
 import path from "node:path";
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
@@ -25,8 +26,21 @@ const OUTF = "osm_passes_disc_" + REGION + ".json";
 const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
 
 const disc = JSON.parse(await readFile(dataPath("discover_" + REGION + ".json"), "utf8"));
-const review = JSON.parse(await readFile(dataPath("discover_" + REGION + "_review.json"), "utf8"));
-const ok = new Set(review.ok || []), no = new Set(review.no || []), publish = new Set(review.publish || []);
+// No review file yet (a region never reviewed by hand): publish with the default rule, the one
+// verified on Emilia-Romagna (groups "nuova" + "doppione"), and create the file so that "no"
+// decisions can be added to it later.
+const REVIEW_F = "discover_" + REGION + "_review.json";
+let reviewRaw = null, review;
+try { reviewRaw = await readFile(dataPath(REVIEW_F), "utf8"); review = JSON.parse(reviewRaw); }
+catch (e) {
+  if (e.code !== "ENOENT") throw e;
+  review = { _comment: "Creato in automatico da promote_discover.mjs: si pubblicano i gruppi in 'publish'. Per togliere una salita aggiungi il suo id in 'no'.", ...DEFAULT_REVIEW, ok: [], no: [] };
+  console.log("  " + REVIEW_F + " assente: regola di default (" + review.publish.join(" + ") + ")");
+}
+// decisions follow their climb when a summit moved and its id changed (see lib/discover_review.mjs)
+const rr = resolveReview(review, disc);
+for (const m of rr.moved) console.log("  " + m.kind + ": " + m.from + " -> " + m.to + " (stessa cima, id cambiato)");
+const ok = rr.ok, no = rr.no, publish = new Set(rr.review.publish || []);
 
 const ctx = {};
 vm.createContext(ctx);
@@ -73,5 +87,8 @@ for (const p of disc) {
 }
 out.sort((a, b) => (b.elevation || 0) - (a.elevation || 0));
 await writeFile(dataPath(OUTF), JSON.stringify(out, J5) + "\n", "utf8");
+// review file: written only when something changed (new file, ids moved, positions added)
+const reviewNext = JSON.stringify(rr.review, null, 1) + "\n";
+if (reviewNext !== reviewRaw) { await writeFile(dataPath(REVIEW_F), reviewNext, "utf8"); console.log("aggiornato data/" + REVIEW_F); }
 for (const g of Object.keys(stat)) console.log("  " + g + ": " + stat[g].pub + " pubblicate su " + stat[g].tot + (stat[g].dup ? " (" + stat[g].dup + " gia' pubblicate da un'altra regione)" : ""));
 console.log("scritto data/" + OUTF + " (" + out.length + " salite)");

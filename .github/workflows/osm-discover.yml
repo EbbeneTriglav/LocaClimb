@@ -1,17 +1,21 @@
 name: OSM discover (salite senza passo)
 
 # Trova le salite che NON hanno un nodo "passo" in OSM (cime, santuari, paesi in cima,
-# strade senza uscita) come cime della rete stradale asfaltata. Scrive SOLO
-# data/discover_<regione>.json, che l'app NON carica: si rivede a mano su
-# https://locaride.app/?discover=<regione> e solo le salite approvate vengono pubblicate
-# (scripts/promote_discover.mjs). Non tocca osm_passes*.json, osm_regions.json,
-# curated_overrides.json ne' il golden set.
+# strade senza uscita) come cime della rete stradale asfaltata e le PUBBLICA da sola:
+#   data/discover_<regione>.json         tutte le salite trovate (l'app non lo carica)
+#   data/discover_<regione>_review.json  regola + decisioni a mano (creato se manca: gruppi
+#                                        "nuova" + "doppione", la regola verificata in ER)
+#   data/osm_passes_disc_<regione>.json  le salite pubblicate (scripts/promote_discover.mjs)
+#   data/osm_regions.json + osm_index.json  rigenerati dal disco, come fa osm-expand
+# Per togliere una salita: il suo id in "no" del file _review (o "Copia esito" su
+# https://locaride.app/?discover=<regione>). Non tocca curated_overrides.json ne' il golden set.
 #
 # Parte da solo: quando questo file cambia (push) e il 2 di ogni mese, su TUTTE le regioni.
 # A mano si puo' lanciare una regione o "tutte". Rilanciare una regione gia' pubblicata e' sicuro:
 # promote_discover.mjs riapplica le stesse scelte (data/discover_<regione>_review.json).
 # 29/10/2026: rilancio di tutte, compresa "er", per il taglio del fondovalle (flatCutBase).
 # 29/10/2026 (2): flatCutBase rifatto - taglia solo il fondovalle iniziale, non i falsopiani a meta salita.
+# 29/10/2026 (3): pubblicazione automatica dopo la ricerca (promote + manifest + indice).
 on:
   push:
     branches: [main]
@@ -94,7 +98,7 @@ jobs:
           npm install pngjs --no-save
 
       - name: Test della ricerca (veloce, prima dei download)
-        run: node --test test/discover.test.mjs
+        run: node --test test/discover.test.mjs test/discover-review.test.mjs
 
       - name: Cerca le salite (${{ matrix.region }})
         run: node --max-old-space-size=12288 scripts/build_osm_passes.mjs --discover "${{ matrix.region }}"
@@ -115,23 +119,41 @@ jobs:
             fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join("\n")+"\n");
           '
 
-      - name: Guardia dimensione file (limite Cloudflare)
-        run: node --test test/asset-size.test.mjs
+      - name: Pubblica (regola del file _review, creato se manca)
+        run: node scripts/promote_discover.mjs --region "${{ matrix.region }}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Manifest + indice dal disco, poi controlli
+        run: |
+          node scripts/build_regions_manifest.mjs
+          node scripts/build_osm_index.mjs
+          node scripts/validate_data.mjs
+          node --test test/asset-size.test.mjs
 
       - name: Commit & push (a prova di conflitto)
         env:
-          OUTF: discover_${{ matrix.region }}.json
+          REG: ${{ matrix.region }}
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
-          cp "data/$OUTF" "$RUNNER_TEMP/$OUTF"
+          DISC="discover_$REG.json"; REV="discover_${REG}_review.json"; PUB="osm_passes_disc_$REG.json"
+          cp "data/$DISC" "$RUNNER_TEMP/$DISC"
+          cp "data/$REV" "$RUNNER_TEMP/$REV"
           for attempt in 1 2 3 4 5 6 7 8; do
             git fetch origin main
-            git reset --hard origin/main
-            cp "$RUNNER_TEMP/$OUTF" "data/$OUTF"
-            git add "data/$OUTF"
+            git reset --hard origin/main            # base = remoto pulito, niente merge/autostash
+            cp "$RUNNER_TEMP/$DISC" "data/$DISC"
+            cp "$RUNNER_TEMP/$REV" "data/$REV"
+            # ripubblica sulla base aggiornata: un'altra regione puo' aver appena pubblicato
+            # cime vicine (doppioni tra regioni); i file derivati si rigenerano dal disco
+            node scripts/promote_discover.mjs --region "$REG"
+            node scripts/build_regions_manifest.mjs
+            node scripts/build_osm_index.mjs
+            if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then
+              echo "ERRORE: marcatori di conflitto nei dati, non pubblico."; exit 1
+            fi
+            git add "data/$DISC" "data/$REV" "data/$PUB" data/osm_regions.json data/osm_index.json
             if git diff --staged --quiet; then echo "Nessuna variazione."; exit 0; fi
-            git commit -m "data: salite dalla rete stradale ($OUTF)"
+            git commit -m "data: salite dalla rete stradale, pubblicate ($REG)"
             if git push; then exit 0; fi
             echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 15 + 5))
           done
