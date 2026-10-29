@@ -468,7 +468,7 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           # manifest from disk, like the commit step does: a NEW region/border file is included
-          node -e 'const fs=require("fs");let f=fs.readdirSync("data").filter(x=>/^osm_passes.*\.json$/.test(x));f=f.filter(x=>x==="osm_passes.json").concat(f.filter(x=>x!=="osm_passes.json").sort());fs.writeFileSync("data/osm_regions.json",JSON.stringify(f)+"\n");'
+          node scripts/build_regions_manifest.mjs
           node scripts/validate_data.mjs
           if [ -f test/asset-size.test.mjs ]; then node --test test/asset-size.test.mjs; fi
       - name: Gate 2 - golden set
@@ -512,12 +512,7 @@ jobs:
               fs.writeFileSync(p,JSON.stringify(m,null,1));
             '
             # manifesto DETERMINISTICO da disco (osm_passes.json per primo, il resto ordinato)
-            node -e '
-              const fs=require("fs");
-              let f=fs.readdirSync("data").filter(x=>/^osm_passes.*\.json$/.test(x));
-              f=f.filter(x=>x==="osm_passes.json").concat(f.filter(x=>x!=="osm_passes.json").sort());
-              fs.writeFileSync("data/osm_regions.json",JSON.stringify(f)+"\n");
-            '
+            node scripts/build_regions_manifest.mjs
             node scripts/build_osm_index.mjs
             # GUARDIA: non pubblicare mai marcatori di conflitto
             if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then
