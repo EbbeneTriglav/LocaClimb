@@ -1104,7 +1104,10 @@ async function main() {
     // 1. every summit we already PUBLISH -> a top near one of them is not new. Not this run's
     // pass/peak nodes: a peak whose road stops 300 m below it never became a climb.
     const known = [];
-    for (const f of (await readdir(DATA_DIR)).filter((x) => /^osm_passes.*\.json$/.test(x))) {
+    // ...except this region's own published discoveries: a re-run must find them again, or
+    // promote_discover.mjs would rebuild the published file without them
+    const ownPub = "osm_passes_disc_" + DISC_KEY + ".json";
+    for (const f of (await readdir(DATA_DIR)).filter((x) => /^osm_passes.*\.json$/.test(x) && x !== ownPub)) {
       try { for (const r of JSON.parse(await readFile(dataPath(f), "utf8"))) if (r && r.lat != null) known.push({ lat: r.lat, lon: r.lon }); } catch {}
     }
     try { for (const x of JSON.parse(await readFile(dataPath("climbs_extra.json"), "utf8"))) known.push({ lat: x.lat, lon: x.lon }); } catch {}

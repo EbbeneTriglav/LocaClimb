@@ -1,18 +1,29 @@
 name: OSM discover (salite senza passo)
 
-# Prova: trova le salite che NON hanno un nodo "passo" in OSM (cime, santuari, paesi in cima,
+# Trova le salite che NON hanno un nodo "passo" in OSM (cime, santuari, paesi in cima,
 # strade senza uscita) come cime della rete stradale asfaltata. Scrive SOLO
 # data/discover_<regione>.json, che l'app NON carica: si rivede a mano su
-# https://locaride.app/?discover=<regione> e solo le salite approvate verranno pubblicate.
-# Non tocca osm_passes*.json, osm_regions.json, curated_overrides.json ne' il golden set.
+# https://locaride.app/?discover=<regione> e solo le salite approvate vengono pubblicate
+# (scripts/promote_discover.mjs). Non tocca osm_passes*.json, osm_regions.json,
+# curated_overrides.json ne' il golden set.
+#
+# Parte da solo: quando questo file cambia (push) e il 2 di ogni mese, su TUTTE le regioni
+# tranne "er" (gia' rivista e pubblicata). A mano si puo' lanciare una regione o "tutte".
 on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/osm-discover.yml"]
+  schedule:
+    - cron: "17 3 2 * *"
   workflow_dispatch:
     inputs:
       region:
-        description: "Regione"
+        description: "Regione (o tutte)"
         required: true
         type: choice
+        default: tutte
         options:
+          - tutte
           - er
           - toscana-nord
           - toscana-sud
@@ -33,9 +44,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  discover:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    outputs:
+      regions: ${{ steps.r.outputs.regions }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Elenco regioni
+        id: r
+        env:
+          ONE: ${{ github.event.inputs.region }}
+        run: |
+          node -e '
+            import("./scripts/lib/discover.mjs").then((m) => {
+              const all = Object.keys(m.DISCOVER_REGIONS).filter((k) => k !== "er");
+              const one = (process.env.ONE || "tutte").trim();
+              const list = one === "tutte" ? all : [one];
+              if (!list.every((k) => m.DISCOVER_REGIONS[k])) { console.error("regione sconosciuta: " + one); process.exit(1); }
+              console.log("regioni: " + list.join(", "));
+              require("fs").appendFileSync(process.env.GITHUB_OUTPUT, "regions=" + JSON.stringify(list) + "\n");
+            });
+          '
+
+  discover:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false        # una regione che finisce la memoria non ferma le altre
+      max-parallel: 3
+      matrix:
+        region: ${{ fromJSON(needs.plan.outputs.regions) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -51,21 +93,21 @@ jobs:
       - name: Test della ricerca (veloce, prima dei download)
         run: node --test test/discover.test.mjs
 
-      - name: Cerca le salite (${{ github.event.inputs.region }})
-        run: node --max-old-space-size=6144 scripts/build_osm_passes.mjs --discover "${{ github.event.inputs.region }}"
+      - name: Cerca le salite (${{ matrix.region }})
+        run: node --max-old-space-size=12288 scripts/build_osm_passes.mjs --discover "${{ matrix.region }}"
 
       - name: Riepilogo
         env:
-          REG: ${{ github.event.inputs.region }}
+          REG: ${{ matrix.region }}
         run: |
           node -e '
             const fs=require("fs"),p="data/discover_"+process.env.REG+".json";
             if(!fs.existsSync(p)){ console.log("Nessun file prodotto"); process.exit(1); }
             const a=JSON.parse(fs.readFileSync(p,"utf8"));
             const g=(x)=>Math.max(0,...(x.versanti||[]).map(v=>(v.endElevation||0)-(v.startElevation||0)));
-            const lines=["### Salite nuove: "+a.length,"Dimensione: "+(fs.statSync(p).size/1048576).toFixed(1)+" MB","",
+            const lines=["### "+process.env.REG+": salite nuove "+a.length,"Dimensione: "+(fs.statSync(p).size/1048576).toFixed(1)+" MB","",
               "| Nome | Quota | Dislivello max | Versanti |","|---|---|---|---|"]
-              .concat(a.slice().sort((x,y)=>g(y)-g(x)).slice(0,40).map(x=>"| "+x.name+" | "+x.elevation+" m | +"+g(x)+" m | "+(x.versanti||[]).length+" |"));
+              .concat(a.slice().sort((x,y)=>g(y)-g(x)).slice(0,25).map(x=>"| "+x.name+" | "+x.elevation+" m | +"+g(x)+" m | "+(x.versanti||[]).length+" |"));
             console.log(lines.join("\n"));
             fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,lines.join("\n")+"\n");
           '
@@ -73,28 +115,21 @@ jobs:
       - name: Guardia dimensione file (limite Cloudflare)
         run: node --test test/asset-size.test.mjs
 
-      - name: Salva il file anche come artefatto
-        uses: actions/upload-artifact@v4
-        with:
-          name: discover-${{ github.event.inputs.region }}-${{ github.run_id }}
-          path: data/discover_${{ github.event.inputs.region }}.json
-          retention-days: 14
-
       - name: Commit & push (a prova di conflitto)
         env:
-          OUTF: discover_${{ github.event.inputs.region }}.json
+          OUTF: discover_${{ matrix.region }}.json
         run: |
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
           cp "data/$OUTF" "$RUNNER_TEMP/$OUTF"
-          for attempt in 1 2 3 4 5; do
+          for attempt in 1 2 3 4 5 6 7 8; do
             git fetch origin main
             git reset --hard origin/main
             cp "$RUNNER_TEMP/$OUTF" "data/$OUTF"
             git add "data/$OUTF"
             if git diff --staged --quiet; then echo "Nessuna variazione."; exit 0; fi
-            git commit -m "data: prova salite dalla rete stradale ($OUTF)"
+            git commit -m "data: salite dalla rete stradale ($OUTF)"
             if git push; then exit 0; fi
-            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 15 + 5))
           done
           exit 1

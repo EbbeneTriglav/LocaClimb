@@ -1,0 +1,89 @@
+name: POI acqua e ristori (riquadri statici)
+
+# Fontanelle, sorgenti, bar, forni e alimentari dagli estratti OSM, tagliati in riquadri da
+# 0,25 gradi in data/poi/ (scripts/build_poi.mjs). L'app li legge da Cloudflare
+# (js/poilocal.js) invece di chiederli in diretta ai server Overpass pubblici, che quando sono
+# sovraccarichi lasciavano vuoti gli strati acqua e cibo. Fuori dai riquadri l'app usa ancora
+# Overpass come prima.
+# Parte da solo quando questo file cambia e il 5 di ogni mese; si puo' lanciare a mano.
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/poi-build.yml", "scripts/build_poi.mjs"]
+  schedule:
+    - cron: "41 2 5 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: poi-data
+  cancel-in-progress: false
+
+jobs:
+  poi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      # Italia intera + paesi confinanti (Alpi, Slovenia, Francia sud-est). Si allarga aggiungendo URL.
+      PBFS: >-
+        italy/nord-ovest italy/nord-est italy/centro italy/sud italy/isole
+        switzerland austria slovenia
+        france/rhone-alpes france/provence-alpes-cote-d-azur
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y osmium-tool
+
+      - name: Test (prima dei download)
+        run: node --test test/poilocal.test.mjs
+
+      - name: Scarica e filtra gli estratti (uno alla volta, per lo spazio disco)
+        run: |
+          mkdir -p "$RUNNER_TEMP/poi"
+          for p in $PBFS; do
+            f="$RUNNER_TEMP/part.osm.pbf"; n=$(echo "$p" | tr '/' '_')
+            ok=0
+            for u in "https://download.geofabrik.de/europe/$p-latest.osm.pbf" "https://download.openstreetmap.fr/extracts/europe/$p.osm.pbf"; do
+              if curl -fsSL --retry 5 --retry-delay 20 -o "$f" "$u"; then ok=1; break; fi
+            done
+            if [ "$ok" != 1 ]; then echo "ERRORE: download $p"; exit 1; fi
+            osmium tags-filter "$f" \
+              n/amenity=drinking_water,fountain,cafe,bar,pub,restaurant,fast_food,ice_cream \
+              n/man_made=water_tap n/natural=spring \
+              n/shop=bakery,convenience,supermarket,greengrocer,pastry \
+              -o "$RUNNER_TEMP/poi/$n.osm.pbf" --overwrite
+            osmium export "$RUNNER_TEMP/poi/$n.osm.pbf" -f geojsonseq -a type,id -o "$RUNNER_TEMP/poi/$n.geojsonseq" --overwrite
+            rm -f "$f" "$RUNNER_TEMP/poi/$n.osm.pbf"
+            echo "$p: $(wc -l < "$RUNNER_TEMP/poi/$n.geojsonseq") punti"
+          done
+
+      - name: Riquadri
+        run: |
+          IN=$(ls "$RUNNER_TEMP"/poi/*.geojsonseq | paste -sd, -)
+          node scripts/build_poi.mjs --in "$IN" --out data/poi | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "file: $(ls data/poi/c | wc -l)" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Guardia dimensione file (limite Cloudflare)
+        run: node --test test/asset-size.test.mjs
+
+      - name: Commit & push (a prova di conflitto)
+        run: |
+          git config user.name  "locaclimb-bot"
+          git config user.email "locaclimb-bot@users.noreply.github.com"
+          rm -rf "$RUNNER_TEMP/poi-out" && cp -r data/poi "$RUNNER_TEMP/poi-out"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            rm -rf data/poi && cp -r "$RUNNER_TEMP/poi-out" data/poi
+            git add -A data/poi
+            if git diff --staged --quiet; then echo "Nessuna variazione."; exit 0; fi
+            git commit -m "data: riquadri acqua e ristori (POI)"
+            if git push; then exit 0; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 10 + 5))
+          done
+          exit 1
