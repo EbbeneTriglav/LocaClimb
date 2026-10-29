@@ -193,3 +193,40 @@ test("7-day weather rows and community ratings summary", async () => {
   assert.equal(s.n, 2); assert.equal(s.overall, 4); assert.deepEqual(s.axes[0], ["Emozione", 5]);
   assert.equal(ratingSummary(null).n, 0);
 });
+
+test("never '-0' in numbers", () => {
+  assert.equal(num(-0.3, 0), "0"); assert.equal(num(-0.04, 1), "0,0"); assert.equal(num(-1.6, 0), "-2");
+});
+
+test("index merge: one marker per pass (dup ids, co-located, curated twins incl. same name ~1 km away)", async () => {
+  const { mergeIndex, baseName } = await import("../v2/lib/data.mjs");
+  const curated = [{ id: "mortirolo", name: "Passo del Mortirolo", lat: 46.24738, lon: 10.29587, twins: [] }];
+  const idx = [
+    { id: "osm-1", name: "Passo del Mortirolo", lat: 46.24935, lon: 10.30737, hasV: 1, f: 0 },   // 900 m east, same name
+    { id: "osm-1", name: "Passo del Mortirolo", lat: 46.24935, lon: 10.30737, hasV: 1, f: 76 },
+    { id: "osm-2", name: "Cima A", lat: 46.4, lon: 10.4, hasV: 1, f: 3 },
+    { id: "osm-3", name: "Cima A (FR)", lat: 46.4005, lon: 10.4004, hasV: 1, f: 9 },             // border twin, other file
+    { id: "osm-4", name: "Nessun versante", lat: 46.5, lon: 10.5, f: 1 }
+  ];
+  const out = mergeIndex(idx, curated);
+  assert.deepEqual(out.map((p) => p.id), ["osm-2"]);
+  assert.deepEqual(out[0].co.map((p) => p.id), ["osm-3"]);
+  assert.deepEqual(curated[0].twins.map((p) => p.id), ["osm-1"]);
+  assert.deepEqual(curated[0].twins[0].fs, [0, 76]);
+  assert.equal(baseName("Passo dello Stelvio"), "stelvio");
+});
+
+test("curated pass adopts only the twin sides from another direction (as v1 newSidesFor)", async () => {
+  const { newSidesFor, sameOrigin } = await import("../v2/lib/climb.mjs");
+  const p = { lat: 46.34, lon: 10.49, versanti: [{ startLat: 46.467, startLon: 10.383 }] };               // from the NW (Bormio)
+  const tr = [[0, 0], [1, 1]];
+  const same = { startLat: 46.466, startLon: 10.384, track: tr }, south = { startLat: 46.255, startLon: 10.509, track: tr };
+  assert.deepEqual(newSidesFor(p, [same, south]), [south]);
+  assert.ok(sameOrigin(same, p.versanti[0]));
+});
+
+test("auth errors in Italian", async () => {
+  const { authError } = await import("../v2/lib/diary.mjs");
+  assert.equal(authError({ code: "auth/wrong-password" }), "Password sbagliata.");
+  assert.equal(authError({ message: "boom" }), "boom");
+});

@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/maplibre-gl-5.24.0/maplibre-gl.css">
-<link rel="stylesheet" href="app.css?v=3">
+<link rel="stylesheet" href="app.css?v=4">
 </head>
 <body>
 <div id="map" aria-label="Mappa delle salite"></div>
@@ -58,12 +58,13 @@
 </nav>
 
 <div id="ride" class="ride" hidden></div>
+<dialog id="dlg" class="dlg" aria-label="Finestra"></dialog>
 
 <script src="../data/passes_data.js"></script>
 <script src="vendor/maplibre-gl-5.24.0/maplibre-gl.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js" defer></script>
-<script type="module" src="app.mjs?v=3"></script>
+<script type="module" src="app.mjs?v=4"></script>
 </body>
 </html>

@@ -192,3 +192,26 @@ a { color: var(--acc); }
   .panel[data-mode="list"] .ph { padding-top: 18px; }
 }
 @media (min-width: 900px) and (max-width: 1240px) { .chips { left: 456px; top: 112px; } .legend { top: 160px; } }
+
+/* ---------- votes, comments, dialogs ---------- */
+.vote { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 6px 0; font-size: 14px; }
+.vote div { display: flex; gap: 4px; }
+.vote button { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); font-weight: 600; }
+.vote button[aria-checked="true"] { background: var(--acc); color: var(--acc-tx); border-color: var(--acc); }
+.voteform { margin-top: 12px; padding: 12px; border-radius: 12px; background: var(--s2); }
+.voteform .k, .dform .k { font-family: var(--cond); font-weight: 600; font-size: 12px; letter-spacing: .14em; color: var(--mu); text-transform: uppercase; }
+.voteform textarea, .dform textarea, .dform input:not([type="radio"]) { width: 100%; margin: 6px 0 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--tx); padding: 10px; font: inherit; }
+.voteform .btn, #voteLogin { width: 100%; }
+.comments { list-style: none; padding: 0; margin: 10px 0; font-size: 14px; line-height: 1.45; }
+.comments li { padding: 8px 10px; border-left: 3px solid var(--acc); background: var(--s2); border-radius: 8px; margin-bottom: 6px; }
+.linkbtn { border: 0; background: none; color: var(--acc); text-decoration: underline; padding: 8px 0; font-size: 14px; }
+.dlg { border: 1px solid var(--line2); border-radius: 18px; background: var(--s1); color: var(--tx); padding: 0; width: min(440px, calc(100vw - 24px)); }
+.dlg::backdrop { background: rgba(0,0,0,.6); }
+.dform { padding: 16px 18px 18px; display: flex; flex-direction: column; }
+.dform .dh { display: flex; justify-content: space-between; align-items: center; }
+.dform h2 { margin: 0; font-family: var(--cond); font-weight: 800; font-size: 26px; text-transform: uppercase; }
+.dform label { font-size: 13px; color: var(--mu); }
+.dform .or { text-align: center; color: var(--mu); font-size: 13px; margin: 10px 0 4px; }
+.dform fieldset { border: 0; padding: 0; margin: 4px 0 8px; }
+.dform .radio { display: flex; gap: 8px; align-items: center; color: var(--tx); font-size: 14px; padding: 4px 0; }
+.dform .btn, .voteform .btn { flex: none; margin-top: 6px; }
