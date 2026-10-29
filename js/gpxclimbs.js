@@ -40,7 +40,9 @@ function gcBearing(la1, lo1, la2, lo2) {
 
 /* ---------------------------------------------------------------- parsing */
 /* Regex e non DOMParser: gira anche nei test senza browser, e un GPX e' XML
-   semplice. Accetta trkpt e rtept, attributi in qualunque ordine. */
+   semplice. Accetta trkpt e rtept, attributi in qualunque ordine.
+   Punto = [lat, lon, ele|null], piu' un quarto valore (ms epoch) se il punto ha <time>:
+   e' quello che permette di misurare i tempi di salita. */
 function gcParse(text) {
   var out = [], re = /<(trkpt|rtept)\b([^>]*?)(\/>|>([\s\S]*?)<\/\1>)/g, m;
   while ((m = re.exec(String(text || ""))) !== null) {
@@ -48,6 +50,8 @@ function gcParse(text) {
     if (!la || !lo) continue;
     var el = m[4] ? /<ele>\s*([-+\d.eE]+)\s*<\/ele>/.exec(m[4]) : null;
     var p = [+la[1], +lo[1], el ? +el[1] : null];
+    var tm = m[4] ? /<time>\s*([^<\s]+)\s*<\/time>/.exec(m[4]) : null;
+    if (tm) { var t = Date.parse(tm[1]); if (isFinite(t)) p.push(t); }
     if (isFinite(p[0]) && isFinite(p[1])) out.push(p);
   }
   return out;
@@ -58,13 +62,17 @@ function gcResample(pts, step) {
   step = step || GC.STEP_M;
   var d = [0], i;
   for (i = 1; i < pts.length; i++) d.push(d[i - 1] + gcHav(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]) * 1000);
-  var tot = d[d.length - 1], R = { d: [], e: [], la: [], lo: [] }, j = 0;
+  var tot = d[d.length - 1], R = { d: [], e: [], la: [], lo: [], t: null }, j = 0;
+  /* tempi solo se (quasi) tutti i punti li hanno: un GPX disegnato a mano non ne ha */
+  var nt = 0; for (i = 0; i < pts.length; i++) if (pts[i][3] != null) nt++;
+  if (pts.length && nt >= pts.length * 0.9) R.t = [];
   for (var s = 0; s <= tot; s += step) {
     while (j < d.length - 2 && d[j + 1] < s) j++;
     var span = d[j + 1] - d[j], t = span > 0 ? (s - d[j]) / span : 0;
     var a = pts[j], b = pts[j + 1] || a;
     R.d.push(s); R.la.push(a[0] + (b[0] - a[0]) * t); R.lo.push(a[1] + (b[1] - a[1]) * t);
     R.e.push(a[2] == null || b[2] == null ? (a[2] == null ? b[2] : a[2]) : a[2] + (b[2] - a[2]) * t);
+    if (R.t) R.t.push(a[3] == null || b[3] == null ? (a[3] == null ? b[3] : a[3]) : a[3] + (b[3] - a[3]) * t);
   }
   var w = GC.SMOOTH, h = (w - 1) / 2, sm = [];
   for (i = 0; i < R.e.length; i++) {
@@ -156,7 +164,7 @@ function gcMatch(tr, passes) {
     var v = vs[i];
     if (!isFinite(v.startLat) || !isFinite(v.startLon)) return { kind: "known", pass: best };
     var d = Math.abs(gcBearing(best.lat, best.lon, v.startLat, v.startLon) - b); d = Math.min(d, 360 - d);
-    if (d < 60 || gcHav(start[0], start[1], v.startLat, v.startLon) < 3) return { kind: "known", pass: best, side: v.side };
+    if (d < 60 || gcHav(start[0], start[1], v.startLat, v.startLon) < 3) return { kind: "known", pass: best, side: v.side, v: v };
   }
   return { kind: "newside", pass: best };
 }
@@ -167,17 +175,73 @@ function gcRideDate(text) {
   return m ? m[1] : null;
 }
 
-function gcAnalyze(text, passes) {
-  var pts = gcParse(text);
-  if (pts.length < 20) return { err: "few" };
+/* ---------------------------------------------------- tempi di salita */
+/* Tempo tra due campioni: totale e in movimento. Un passo da 20 m che dura piu' di
+   STOP_S (fermo al bar, foto, semaforo) non conta nel tempo in movimento. */
+GC.STOP_S = 60;
+function gcClimbTime(R, i0, i1) {
+  if (!R.t || i1 <= i0 || R.t[i0] == null || R.t[i1] == null) return null;
+  var sec = (R.t[i1] - R.t[i0]) / 1000, mov = 0;
+  if (!(sec > 0)) return null;
+  for (var i = i0 + 1; i <= i1; i++) {
+    var dt = (R.t[i] - R.t[i - 1]) / 1000;
+    if (dt > 0 && dt <= GC.STOP_S) mov += dt;
+  }
+  return { sec: Math.round(sec), moving: Math.round(mov) };
+}
+/* Per una salita nota il cronometro parte dalla partenza UFFICIALE del versante (come un
+   segmento): cosi' due giri sulla stessa salita sono confrontabili anche se uno arriva da
+   un'altra strada. Cerca il punto del giro piu' vicino alla partenza del versante (entro
+   300 m), fino a 5 km prima dell'inizio trovato dallo zig-zag; altrimenti usa quello. */
+GC.CANON_KM = 0.3;
+function gcSpan(R, c) {
+  var m = c.match, v = m && m.v, out = { i0: c.i0, i1: c.i1, canon: false };
+  if (!v || !isFinite(v.startLat) || !isFinite(v.startLon)) return out;
+  var from = Math.max(0, c.i0 - Math.round(5000 / GC.STEP_M)), best = -1, bd = GC.CANON_KM;
+  for (var i = from; i < c.i1; i++) {
+    var d = gcHav(R.la[i], R.lo[i], v.startLat, v.startLon);
+    if (d < bd) { bd = d; best = i; }
+  }
+  if (best >= 0) { out.i0 = best; out.canon = true; }
+  return out;
+}
+function gcTiming(R, c, date) {
+  var sp = gcSpan(R, c), tm = gcClimbTime(R, sp.i0, sp.i1);
+  if (!tm) return null;
+  var km = (R.d[sp.i1] - R.d[sp.i0]) / 1000, gain = (R.e[sp.i1] || 0) - (R.e[sp.i0] || 0);
+  return {
+    sec: tm.sec, moving: tm.moving, km: +km.toFixed(2), gain: Math.round(gain), canon: sp.canon,
+    vam: tm.moving > 0 ? Math.round(gain / (tm.moving / 3600)) : null,
+    start: new Date(R.t[sp.i0]).toISOString(), date: date || new Date(R.t[sp.i0]).toISOString().slice(0, 10)
+  };
+}
+/* 3725 -> "1:02:05", 725 -> "12:05" */
+function gcDur(sec) {
+  sec = Math.round(sec || 0);
+  var h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
+  var p2 = function (x) { return (x < 10 ? "0" : "") + x; };
+  return h ? h + ":" + p2(m) + ":" + p2(s) : m + ":" + p2(s);
+}
+
+/* points: [[lat,lon,ele,ms?]] da GPX, FIT o TCX (rideimport.js). date: YYYY-MM-DD o null */
+function gcAnalyzePts(pts, passes, date) {
+  if (!pts || pts.length < 20) return { err: "few" };
   var withEle = 0; for (var i = 0; i < pts.length; i++) if (pts[i][2] != null) withEle++;
   if (withEle < pts.length * 0.8) return { err: "noele" };
   var R = gcResample(pts), cl = gcFindClimbs(R), tot = R.d[R.d.length - 1] / 1000;
   var up = 0; for (i = 1; i < R.e.length; i++) if (R.e[i] > R.e[i - 1]) up += R.e[i] - R.e[i - 1];
+  if (!date && R.t && R.t[0] != null) date = new Date(R.t[0]).toISOString().slice(0, 10);
   return {
-    km: +tot.toFixed(1), gain: Math.round(up), R: R, date: gcRideDate(text),
-    climbs: cl.map(function (c) { var tr = gcSegment(R, c); c.tr = tr; c.top = tr[tr.length - 1]; c.match = gcMatch(tr, passes || []); return c; })
+    km: +tot.toFixed(1), gain: Math.round(up), R: R, date: date || null, timed: !!R.t,
+    climbs: cl.map(function (c) {
+      var tr = gcSegment(R, c); c.tr = tr; c.top = tr[tr.length - 1]; c.match = gcMatch(tr, passes || []);
+      c.timing = gcTiming(R, c, date);
+      return c;
+    })
   };
+}
+function gcAnalyze(text, passes) {
+  return gcAnalyzePts(gcParse(text), passes, gcRideDate(text));
 }
 
 /* ------------------------------------------ anteprima come una salita vera */
@@ -249,8 +313,13 @@ function gcAllPasses() {
 
 function gcPick() {
   var inp = document.createElement("input");
-  inp.type = "file"; inp.accept = ".gpx,application/gpx+xml";
+  inp.type = "file";
+  /* rideimport.js aggiunge FIT, TCX, .gz, piu' file insieme e lo zip dell'export completo */
+  var ri = typeof riHandleFiles === "function";
+  inp.accept = ri ? ".gpx,.fit,.tcx,.gz,.zip,application/gpx+xml,application/zip" : ".gpx,application/gpx+xml";
+  if (ri) inp.multiple = true;
   inp.addEventListener("change", function () {
+    if (ri) { riHandleFiles(Array.prototype.slice.call(inp.files || [])); return; }
     var f = inp.files && inp.files[0]; if (!f) return;
     var rd = new FileReader();
     rd.onload = function () {
@@ -289,7 +358,8 @@ function gcShow(res, fname) {
     c.title = title.replace(/<[^>]+>/g, "").replace(/&middot;/g, "-").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
     act = '<button onclick="gcPreview(' + i + ')">&#x1F441;&#xFE0F; ' + gcT("Vedi", "View") + "</button>" + act;
     h += '<div class="lrc-item">' + st + "<h4>" + title + "</h4>"
-      + '<div class="lrc-meta">' + gcNum(c.km) + " km &middot; +" + c.gain + " m &middot; " + gcNum(c.avg) + "% " + gcT("medio", "avg") + "</div>"
+      + '<div class="lrc-meta">' + gcNum(c.km) + " km &middot; +" + c.gain + " m &middot; " + gcNum(c.avg) + "% " + gcT("medio", "avg")
+      + (c.timing ? " &middot; <b>&#x23F1; " + gcDur(c.timing.sec) + "</b>" + (c.timing.vam ? " &middot; VAM " + c.timing.vam : "") : "") + "</div>"
       + (act ? '<div class="lrc-btns" style="margin-top:8px">' + act + "</div>" : "") + "</div>";
   });
   if (nNew) h += '<p class="lrc-sub" style="margin-top:10px">' + gcT("Le salite che mancano passano dalla revisione prima di comparire nella mappa.", "Missing climbs are reviewed before they appear on the map.") + "</p>";
@@ -388,7 +458,9 @@ function gcWire() {
   var m = lrcFindMenus().plus;
   if (!m || m._gcDone === 1) return;
   m._gcDone = 1;
-  m.appendChild(lrcMenuItem("&#x1F50E;", gcT("Salite da un giro (GPX)", "Climbs from a ride (GPX)"), gcPick));
+  m.appendChild(lrcMenuItem("&#x1F50E;", typeof riHandleFiles === "function"
+    ? gcT("Salite dai tuoi giri (GPX, FIT, zip)", "Climbs from your rides (GPX, FIT, zip)")
+    : gcT("Salite da un giro (GPX)", "Climbs from a ride (GPX)"), gcPick));
 }
 function gcStart() {
   gcWire();

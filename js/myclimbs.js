@@ -10,7 +10,7 @@
  * o fare due volte la stessa salita nello stesso giro, non gonfia il numero.
  *
  * Dipende da: contribute.js (lrcModal, lrcClose, lrcT, lrcUser, lrcDb, lrcFindMenus,
- * lrcMenuItem), gpxclimbs.js (GC_LAST, gcEsc, gcNum). mcMerge e mcStats sono pure. ASCII.
+ * lrcMenuItem), gpxclimbs.js (GC_LAST, gcEsc, gcNum, gcDur). mcMerge, mcBestTimes e mcStats sono pure. ASCII.
  * ==========================================================================*/
 
 var MC = { cache: null, MAXDATES: 60 };
@@ -30,7 +30,35 @@ function mcMerge(doc, en) {
   if (!d.best || (en.gain || 0) > (d.best.gain || 0)) d.best = { km: en.km, gain: en.gain };
   var real = d.dates.filter(function (x) { return x !== "senza-data"; });
   d.firstAt = real[0] || null; d.lastAt = real[real.length - 1] || null;
+  /* tempi misurati (giri con orario: GPX/FIT/TCX). Un passaggio = un'uscita su quel versante;
+     la chiave e' l'ora di partenza, cosi' ricaricare lo stesso file non lo duplica. */
+  if (en.sec > 0) {
+    d.efforts = d.efforts || [];
+    var key = en.start || (day + "|" + sd);
+    var dup = d.efforts.some(function (x) { return (x.start || (x.date + "|" + x.side)) === key; });
+    if (!dup) {
+      d.efforts.push({ date: en.date || null, side: sd, sec: en.sec, moving: en.moving || null, vam: en.vam || null,
+        km: en.tkm || en.km || null, gain: en.tgain || en.gain || null, canon: !!en.canon, start: en.start || null, src: en.src || "gpx" });
+      d.efforts.sort(function (a, b) { return String(a.start || a.date || "").localeCompare(String(b.start || b.date || "")); });
+      if (d.efforts.length > MC.MAXDATES) d.efforts = d.efforts.slice(-MC.MAXDATES);
+    }
+    d.bestTime = mcBestTimes(d.efforts);
+  }
   return d;
+}
+
+/* miglior tempo per versante: il tempo in movimento (le soste non contano), poi il totale.
+   Solo i passaggi cronometrati dalla partenza ufficiale (canon) sono confrontabili tra loro;
+   se un versante non ne ha, vale il migliore che c'e'. */
+function mcBestTimes(efforts) {
+  var by = {};
+  (efforts || []).forEach(function (x) {
+    var t = x.moving || x.sec, cur = by[x.side];
+    if (!(t > 0)) return;
+    if (!cur || (x.canon && !cur.canon) || (x.canon === cur.canon && t < (cur.moving || cur.sec)))
+      by[x.side] = { sec: x.sec, moving: x.moving || null, date: x.date, canon: !!x.canon, vam: x.vam || null };
+  });
+  return by;
 }
 
 function mcStats(list) {
@@ -48,31 +76,60 @@ function mcEntriesFrom(res) {
   var out = [];
   (res && res.climbs || []).forEach(function (c) {
     var m = c.match, p = m && m.pass; if (!p) return;
+    var tm = c.timing;
     out.push({ passId: String(p.id), name: p.name, lat: p.lat, lon: p.lon, elevation: p.elevation || null,
       side: m.kind === "known" ? (m.side || "?") : m.kind === "newside" ? mcT("versante nuovo", "new side") : "?",
-      date: res.date, km: c.km, gain: c.gain });
+      date: res.date, km: c.km, gain: c.gain,
+      sec: tm ? tm.sec : null, moving: tm ? tm.moving : null, vam: tm ? tm.vam : null, start: tm ? tm.start : null,
+      canon: tm ? tm.canon : false, tkm: tm ? tm.km : null, tgain: tm ? tm.gain : null, src: res.src || "gpx" });
   });
   return out;
 }
 
+/* Salva voci (anche centinaia, da un export completo): prima le unisce per salita in memoria,
+   poi UNA lettura + UNA scrittura per salita, 4 alla volta. onProgress(fatte, totale). */
+function mcSaveEntries(ens, onProgress) {
+  var u = typeof lrcUser === "function" ? lrcUser() : null, db = typeof lrcDb === "function" ? lrcDb() : null;
+  if (!u || !db) return Promise.reject(new Error(mcT("Accedi per salvare le tue salite.", "Sign in to save your climbs.")));
+  var groups = {}, ids = [];
+  (ens || []).forEach(function (en) { var k = en.passId.replace(/\//g, "_"); if (!groups[k]) { groups[k] = []; ids.push(k); } groups[k].push(en); });
+  var col = db.collection("users").doc(u.uid).collection("climbs"), done = 0, next = 0;
+  function one(k) {
+    var ref = col.doc(k);
+    return ref.get().then(function (snap) {
+      var d = snap.exists ? snap.data() : null;
+      groups[k].forEach(function (en) { d = mcMerge(d, en); });
+      return ref.set(d);
+    }).then(function () { done++; if (onProgress) onProgress(done, ids.length); });
+  }
+  function worker() { if (next >= ids.length) return Promise.resolve(); var k = ids[next++]; return one(k).then(worker); }
+  var w = []; for (var i = 0; i < Math.min(4, ids.length); i++) w.push(worker());
+  return Promise.all(w).then(function () { MC.cache = null; return ids.length; });
+}
+
 function mcSaveFromGpx() {
   var msg = document.getElementById("gc-save-msg"), btn = document.getElementById("gc-save");
-  var u = typeof lrcUser === "function" ? lrcUser() : null, db = typeof lrcDb === "function" ? lrcDb() : null;
-  if (!u || !db) { if (msg) { msg.className = "lrc-msg lrc-err"; msg.textContent = mcT("Accedi per salvare le tue salite.", "Sign in to save your climbs."); } return; }
   var ens = mcEntriesFrom(typeof GC_LAST !== "undefined" ? GC_LAST : null);
   if (!ens.length) return;
   if (btn) btn.disabled = true;
-  var col = db.collection("users").doc(u.uid).collection("climbs");
-  Promise.all(ens.map(function (en) {
-    var ref = col.doc(en.passId.replace(/\//g, "_"));
-    return ref.get().then(function (snap) { return ref.set(mcMerge(snap.exists ? snap.data() : null, en)); });
-  })).then(function () {
-    MC.cache = null;
+  mcSaveEntries(ens).then(function () {
     if (msg) { msg.className = "lrc-msg lrc-ok"; msg.innerHTML = mcT("Salvate. Le trovi in <b>Le mie salite</b>.", "Saved. You'll find them in <b>My climbs</b>."); }
   }).catch(function (e) {
     if (btn) btn.disabled = false;
-    if (msg) { msg.className = "lrc-msg lrc-err"; msg.textContent = mcT("Errore: ", "Error: ") + (e && e.message ? e.message : e); }
+    if (msg) { msg.className = "lrc-msg lrc-err"; msg.textContent = (e && e.message ? e.message : String(e)); }
   });
+}
+
+/* "Record: Da Bormio 1:12:05 (12/07/2026) - VAM 1270" una riga per versante cronometrato */
+function mcBestHtml(d) {
+  var bt = d && d.bestTime, keys = bt ? Object.keys(bt) : [];
+  if (!keys.length || typeof gcDur !== "function") return "";
+  return keys.map(function (k) {
+    var b = bt[k];
+    return '<div class="lrc-meta">&#x23F1; ' + mcT("Record", "Best") + (k !== "?" ? " " + mcE(k) : "") + ": <b>" + gcDur(b.moving || b.sec) + "</b>"
+      + (b.date ? " (" + mcFmtDate(b.date) + ")" : "") + (b.vam ? " &middot; VAM " + b.vam : "")
+      + " &middot; " + ((d.efforts || []).filter(function (x) { return x.side === k; }).length) + "&times;</div>";
+  }).join("");
 }
 
 function mcFmtDate(iso) { if (!iso) return ""; var p = iso.split("-"); return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : iso; }
@@ -92,8 +149,8 @@ function mcRender() {
   var list = MC.cache || [], s = mcStats(list);
   var h = "<h3>" + mcT("Le mie salite", "My climbs") + "</h3>";
   if (!list.length) {
-    h += '<p class="lrc-sub">' + mcT("Ancora nessuna. Dal menu + scegli <b>Salite da un giro (GPX)</b>, carica un giro fatto e premi <b>Segna come fatte</b>.",
-      "None yet. From the + menu pick <b>Climbs from a ride (GPX)</b>, load a ride and hit <b>Mark as climbed</b>.") + "</p>";
+    h += '<p class="lrc-sub">' + mcT("Ancora nessuna. Carica i tuoi giri: un GPX o FIT, oppure lo <b>zip dell'export completo</b> di Strava o Garmin Connect per avere tutto lo storico con i tempi.",
+      "None yet. Load your rides: a GPX or FIT, or the <b>full export zip</b> from Strava or Garmin Connect to get your whole history with times.") + "</p>";
   } else {
     h += '<div class="lrc-facts">'
       + "<div>" + mcT("Passi", "Passes") + "<b>" + s.passes + "</b></div>"
@@ -106,6 +163,7 @@ function mcRender() {
         + "<h4>" + mcE(d.name) + (d.elevation ? ' <span class="lrc-meta">' + d.elevation + " m</span>" : "") + "</h4>"
         + '<div class="lrc-meta">' + (sides.length ? mcE(sides.join(", ")) + " &middot; " : "")
         + (d.lastAt ? mcT("ultima ", "last ") + mcFmtDate(d.lastAt) : mcT("senza data", "no date")) + "</div>"
+        + mcBestHtml(d)
         + '<div class="lrc-btns" style="margin-top:6px"><button onclick="mcOpen(' + i + ')">' + mcT("Apri", "Open") + "</button>"
         + '<button onclick="mcDel(' + i + ')">' + mcT("Rimuovi", "Remove") + "</button></div></div>";
     });
