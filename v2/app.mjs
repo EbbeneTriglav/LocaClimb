@@ -20,7 +20,12 @@ const map = new maplibregl.Map({
   container: "map", style: "https://tiles.openfreemap.org/styles/dark",
   center: [10.6, 45.6], zoom: 6.4, maxPitch: 75, attributionControl: { compact: true }, hash: false
 });
-map.addControl(new maplibregl.NavigationControl({ showCompass: true, visualizePitch: true }), "bottom-right");
+/* our own control stack (zoom, north, 3D, locate) - MapLibre's NavigationControl overlapped it */
+document.getElementById("bzin").addEventListener("click", () => map.zoomIn());
+document.getElementById("bzout").addEventListener("click", () => map.zoomOut());
+const bnorth = document.getElementById("bnorth");
+bnorth.addEventListener("click", () => map.easeTo({ bearing: 0, pitch: S.three ? 58 : 0, duration: 600 }));
+map.on("rotate", () => { bnorth.firstElementChild.style.transform = `rotate(${-map.getBearing()}deg)`; });
 /* basemap unreachable (offline, blocked network): the app must still work - plain dark ground */
 let mapLoaded = false;
 map.once("load", () => { mapLoaded = true; });

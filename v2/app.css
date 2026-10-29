@@ -18,7 +18,7 @@ a { color: var(--acc); }
 #map { position: fixed; inset: 0; }
 .maplibregl-ctrl-attrib { background: rgba(11,15,20,.7) !important; color: var(--mu); font-size: 10px; }
 .maplibregl-ctrl-attrib a { color: var(--mu); }
-.maplibregl-ctrl-bottom-right { bottom: calc(var(--tabs) + var(--safe-b) + 236px); }
+.maplibregl-ctrl-bottom-right { bottom: calc(var(--tabs) + var(--safe-b) + 234px); }
 
 /* ---------- top: search ---------- */
 .top { position: fixed; top: 12px; left: 12px; right: 12px; z-index: 5; }
@@ -35,9 +35,11 @@ a { color: var(--acc); }
 .legend { position: fixed; top: 114px; left: 12px; z-index: 3; display: flex; align-items: center; gap: 5px; padding: 6px 10px; background: rgba(11,15,20,.82); border-radius: 8px; font-size: 11px; color: var(--mu); }
 .legend i { width: 18px; height: 6px; border-radius: 3px; }
 .legend .lg-t { margin-right: 2px; }
-.mapbtns { position: fixed; right: 12px; z-index: 3; bottom: calc(var(--tabs) + var(--safe-b) + 248px); display: flex; flex-direction: column; gap: 8px; }
+.mapbtns { position: fixed; right: 12px; z-index: 3; bottom: calc(var(--tabs) + var(--safe-b) + 270px); display: flex; flex-direction: column; gap: 8px; }
 .mapbtns button { width: 48px; height: 48px; border-radius: 24px; border: 1px solid var(--line2); background: var(--s1); display: grid; place-items: center; font-family: var(--cond); font-weight: 800; font-size: 16px; }
 .mapbtns button[aria-pressed="true"] { background: var(--acc); color: var(--acc-tx); }
+.mapbtns .zoom { display: none; }               /* phones: pinch to zoom */
+#bnorth svg { transition: transform .2s; }
 
 /* ---------- tabs ---------- */
 .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; height: calc(var(--tabs) + var(--safe-b)); padding-bottom: var(--safe-b); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--bg); border-top: 1px solid var(--s2); }
@@ -155,7 +157,8 @@ a { color: var(--acc); }
   .top { left: 456px; width: 380px; right: auto; }
   .chips { left: 852px; top: 18px; right: 12px; }
   .legend { left: 456px; top: 70px; }
-  .mapbtns { bottom: 24px; }
+  .mapbtns { bottom: 44px; }
+  .mapbtns .zoom { display: grid; }
   .maplibregl-ctrl-bottom-right { bottom: 0; }
   .cards { flex-direction: column; overflow: visible; }
   .card { flex: none; min-height: 0; }
