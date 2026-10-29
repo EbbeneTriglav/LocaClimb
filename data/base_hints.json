@@ -7,12 +7,7 @@
   "Bormio",
   "Ponte di Legno"
  ],
- "Mortirolo": [
-  "Mazzo di Valtellina",
-  "Grosio",
-  "Monno",
-  "Tovo di Sant'Agata"
- ],
+ "Mortirolo": [[[46.2585, 10.2546], [46.25169, 10.25984], [46.25501, 10.26302], [46.25795, 10.28603], [46.25876, 10.29165], "Mazzo di Valtellina"], "Grosio", "Monno", [[46.24678, 10.24714], [46.25169, 10.25984], [46.25501, 10.26302], [46.25795, 10.28603], [46.25876, 10.29165], "Tovo di Sant'Agata"]],
  "Aprica": [
   "Edolo",
   "Tresenda"
