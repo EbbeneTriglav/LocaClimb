@@ -10,7 +10,8 @@ name: OSM discover (salite senza passo)
 # Parte da solo: quando questo file cambia (push) e il 2 di ogni mese, su TUTTE le regioni.
 # A mano si puo' lanciare una regione o "tutte". Rilanciare una regione gia' pubblicata e' sicuro:
 # promote_discover.mjs riapplica le stesse scelte (data/discover_<regione>_review.json).
-# 30/10/2026: rilancio di tutte, compresa "er", per il taglio del fondovalle (flatCutBase).
+# 29/10/2026: rilancio di tutte, compresa "er", per il taglio del fondovalle (flatCutBase).
+# 29/10/2026 (2): flatCutBase rifatto - taglia solo il fondovalle iniziale, non i falsopiani a meta salita.
 on:
   push:
     branches: [main]

@@ -47,17 +47,20 @@ export const DISCOVER_REGIONS = {
 /* Valley approach cut. The road-network tops are reached from far away: Merano -> San
    Martino in Passiria was 19.5 km at 3.3%, of which 12 km of valley floor at 1-2% and the real
    climb only in the last 4 km (sample review 30/10/2026: half of the Trentino sides had this).
-   Walking DOWN from the summit, the climb ends at the first stretch of at least flatKm that
-   averages under flatPct: below that is the valley, not the climb.
+   The climb starts where el - flatPct% * distance is LOWEST: below that point the road gains,
+   on average, less than flatPct (valley floor), above it more. A false flat in the MIDDLE of a
+   climb cannot win: the climbing below it has already lifted the curve (the first version cut
+   at the first 2 km under 2.5% walking down from the top, and turned Monesi di Triora from
+   25 km / +1259 m into 1.9 km / +155 m). Only cuts of at least flatKm are applied.
    cum/el are buildSide's base->summit arrays (km, m); returns the new base index (>= base). */
 export function flatCutBase(cum, el, base, end, flatKm, flatPct) {
-  let j = end;
-  for (let i = end; i > base; i--) {
-    while (j > base && cum[i] - cum[j] < flatKm) j--;
-    if (cum[i] - cum[j] < flatKm) break;                 // less than flatKm left below: no valley
-    if ((el[i] - el[j]) / ((cum[i] - cum[j]) * 1000) * 100 < flatPct) return i;
+  const s = flatPct * 10;                                // m of gain per km at flatPct
+  let bi = base, bf = el[base];
+  for (let i = base + 1; i < end; i++) {
+    const f = el[i] - s * (cum[i] - cum[base]);
+    if (f < bf) { bf = f; bi = i; }
   }
-  return base;
+  return cum[bi] - cum[base] >= flatKm ? bi : base;
 }
 
 export function havKm(la1, lo1, la2, lo2) {

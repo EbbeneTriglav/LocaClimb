@@ -107,3 +107,19 @@ test("a steady climb is not cut", () => {
   const el2 = el.map((e, k) => (k > 40 && k <= 50 ? el[40] + (k - 40) * 1 : k > 50 ? e - 60 : e));
   assert.equal(flatCutBase(cum, el2, 0, cum.length - 1, 2.0, 2.5), 0);
 });
+
+test("a long false flat in the middle of a real climb does not cut the climb below it", () => {
+  // 5 km at 7%, then 2.5 km at 1%, then 5 km at 7% (Monesi di Triora shape)
+  const cum = [], el = [];
+  for (let k = 0; k <= 125; k++) {
+    const km = k * 0.1; cum.push(km);
+    el.push(400 + (km <= 5 ? km * 70 : km <= 7.5 ? 350 + (km - 5) * 10 : 375 + (km - 7.5) * 70));
+  }
+  assert.equal(flatCutBase(cum, el, 0, cum.length - 1, 2.0, 2.5), 0);
+});
+
+test("a short flat start (under flatKm) is kept", () => {
+  const cum = [], el = [];
+  for (let k = 0; k <= 80; k++) { const km = k * 0.1; cum.push(km); el.push(300 + (km <= 1.5 ? km * 10 : 15 + (km - 1.5) * 60)); }
+  assert.equal(flatCutBase(cum, el, 0, cum.length - 1, 2.0, 2.5), 0);
+});
