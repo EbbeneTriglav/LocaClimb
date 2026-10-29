@@ -959,7 +959,7 @@ async function main() {
         var full = [];
         for (var i = 0; i < wps.length - 1; i++) {
           var hop = hav(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1]);
-          var seg = dijkstraSeg(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1], hop * 3 + 3);
+          var seg = dijkstraSeg(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1], hop * 5 + 3); // hairpin stretches between two waypoints can be 4x the straight line (Mortirolo da Mazzo)
           if (!seg || seg.length < 2) return null;
           full = full.length ? full.concat(seg.slice(1)) : seg;
         }
