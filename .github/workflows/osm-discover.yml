@@ -10,12 +10,15 @@ name: OSM discover (salite senza passo)
 # Per togliere una salita: il suo id in "no" del file _review (o "Copia esito" su
 # https://locaride.app/?discover=<regione>). Non tocca curated_overrides.json ne' il golden set.
 #
-# Parte da solo: quando questo file cambia (push) e il 2 di ogni mese, su TUTTE le regioni.
+# Parte da solo: quando questo file cambia (push) e il 2 di ogni mese, sulle 11 regioni italiane.
+# Le zone del resto d'Europa (scripts/lib/zones.json, discover:true) si lanciano a mano
+# ("europa" o i loro id) finche' non arriva il giro automatico a rotazione.
 # A mano si puo' lanciare una regione o "tutte". Rilanciare una regione gia' pubblicata e' sicuro:
 # promote_discover.mjs riapplica le stesse scelte (data/discover_<regione>_review.json).
 # 29/10/2026: rilancio di tutte, compresa "er", per il taglio del fondovalle (flatCutBase).
 # 29/10/2026 (2): flatCutBase rifatto - taglia solo il fondovalle iniziale, non i falsopiani a meta salita.
 # 29/10/2026 (3): pubblicazione automatica dopo la ricerca (promote + manifest + indice).
+# 29/10/2026 (4): zone europee dal catalogo unico scripts/lib/zones.json.
 on:
   push:
     branches: [main]
@@ -25,23 +28,10 @@ on:
   workflow_dispatch:
     inputs:
       region:
-        description: "Regione (o tutte)"
+        description: "italia (le 11 regioni), europa (tutte le zone del catalogo), oppure uno o piu' id separati da virgola (es. er,austria)"
         required: true
-        type: choice
-        default: tutte
-        options:
-          - tutte
-          - er
-          - toscana-nord
-          - toscana-sud
-          - marche-umbria
-          - liguria
-          - piemonte-sud
-          - piemonte-nord
-          - lombardia
-          - trentino-aa
-          - veneto-fvg
-          - colli-veneti
+        type: string
+        default: italia
 
 permissions:
   contents: write
@@ -67,11 +57,14 @@ jobs:
         run: |
           node -e '
             import("./scripts/lib/discover.mjs").then((m) => {
-              const all = Object.keys(m.DISCOVER_REGIONS);
-              const one = (process.env.ONE || "tutte").trim();
-              const list = one === "tutte" ? all : [one];
-              if (!list.every((k) => m.DISCOVER_REGIONS[k])) { console.error("regione sconosciuta: " + one); process.exit(1); }
-              console.log("regioni: " + list.join(", "));
+              const it = m.ITALY_REGIONS, all = Object.keys(m.DISCOVER_REGIONS);
+              const one = (process.env.ONE || "italia").trim();
+              const list = (one === "italia" || one === "tutte") ? it
+                : one === "europa" ? all.filter((k) => !it.includes(k))
+                : one.split(",").map((s) => s.trim()).filter(Boolean);
+              const bad = list.filter((k) => !m.DISCOVER_REGIONS[k]);
+              if (!list.length || bad.length) { console.error("regione sconosciuta: " + bad.join(", ") + " (note: " + all.join(", ") + ")"); process.exit(1); }
+              console.log("regioni (" + list.length + "): " + list.join(", "));
               require("fs").appendFileSync(process.env.GITHUB_OUTPUT, "regions=" + JSON.stringify(list) + "\n");
             });
           '
