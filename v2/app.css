@@ -215,3 +215,20 @@ a { color: var(--acc); }
 .dform fieldset { border: 0; padding: 0; margin: 4px 0 8px; }
 .dform .radio { display: flex; gap: 8px; align-items: center; color: var(--tx); font-size: 14px; padding: 4px 0; }
 .dform .btn, .voteform .btn { flex: none; margin-top: 6px; }
+
+/* classic importer inside v2 (classic-bridge.js) */
+.lrc h3 { font-family: var(--cond); font-weight: 800; font-size: 24px; text-transform: uppercase; margin: 0 0 6px; }
+.lrc .lrc-sub, .lrc .lrc-meta { color: var(--mu); font-size: 13px; }
+.lrc .lrc-item { padding: 10px 0; border-top: 1px solid var(--line2); }
+.lrc .lrc-item h4 { margin: 4px 0; font-size: 16px; }
+.lrc .lrc-st { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 6px; background: var(--s2); color: var(--mu); }
+.lrc .lrc-st.approved { background: var(--acc); color: var(--acc-tx); }
+.lrc .lrc-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.lrc .lrc-btns button { height: 40px; padding: 0 14px; border-radius: 20px; border: 1px solid var(--line); background: var(--s2); }
+.lrc .lrc-btns .lrc-go { background: var(--acc); color: var(--acc-tx); border-color: var(--acc); font-weight: 700; }
+.lrc .lrc-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 8px 0; text-align: center; font-size: 11px; color: var(--mu); }
+.lrc .lrc-facts b { display: block; font-family: var(--cond); font-size: 24px; color: var(--tx); }
+.lrc .lrc-msg { font-size: 13px; margin-top: 8px; } .lrc .lrc-ok { color: var(--acc); } .lrc .lrc-err { color: #FF8A8E; }
+.lrc .lrc-empty { color: var(--mu); padding: 8px 0; }
+/* features of the classic map / proposals that v2 does not have yet */
+.lrc button[onclick^="gcPreview"], .lrc button[onclick^="gcDraw"], .lrc button[onclick^="gcPropose"] { display: none; }

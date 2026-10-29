@@ -53,6 +53,9 @@ map.on("load", async () => {
   map.addSource("dem", TERRAIN);
   map.addLayer({ id: "hillshade", type: "hillshade", source: "dem", paint: { "hillshade-shadow-color": "#05080C", "hillshade-highlight-color": "#3A4D63", "hillshade-accent-color": "#1A2531", "hillshade-exaggeration": 0.55 } }, firstSymbolId());
   const st = await loadIndex();
+  // the classic ride importer (classic-bridge.js) matches rides against these globals
+  window.PASSES_DATA = st.climbs.filter((c) => c.curated);
+  window.osmPasses = st.climbs.filter((c) => !c.curated);
   const gj = geojson(st.climbs);
   gj.features.forEach((f) => { f.properties.disc = /^osm-rt/.test(f.properties.id) ? 1 : 0; });
   map.addSource("climbs", { type: "geojson", data: gj });
@@ -559,7 +562,9 @@ async function renderDiario() {
   body.className = "";
   body.innerHTML = `<div class="challenge"><div><b>${s.climbs}</b><span>salite</span></div><div><b>${s.efforts}</b><span>passaggi</span></div><div><b>${s.top && s.top.elevation ? esc(s.top.elevation) : "–"}</b><span>m la più alta</span></div></div>
     ${list.length ? `<div class="stamps">${list.map(stamp).join("")}</div>` : `<p class="note">Ancora nessuna. Carica i tuoi giri: un GPX o FIT, oppure lo zip dell'export completo di Strava o Garmin Connect.</p>`}
-    <p class="note" style="margin-top:16px">Per caricare i giri usa per ora l'app classica: menu <b>+</b> → <i>Salite dai tuoi giri (GPX, FIT, zip)</i>. <a href="../">Apri l'app classica</a></p>`;
+    <div class="actions" style="position:static;margin-top:14px"><button type="button" class="btn pri" id="importBtn">Carica i tuoi giri</button></div>
+    <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>`;
+  $("#importBtn").addEventListener("click", () => { window.LRC_V2.onSaved = () => { if ((location.hash || "").startsWith("#/diario")) renderDiario(); }; window.gcPick(); });
 }
 function stamp(d) {
   const meta = loadIndexSync(d.passId), diff = meta ? meta.difficulty || 0 : 0, b = bestOf(d);
