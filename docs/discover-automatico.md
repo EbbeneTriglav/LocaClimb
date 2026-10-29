@@ -23,3 +23,14 @@ quello che trova. Nessun passaggio a mano.
 - **Actions → OSM discover**: il riepilogo di ogni regione mostra pubblicate e scartate per gruppo.
 - Il sito: le salite nuove compaiono sulla mappa dopo il commit del bot (cache del browser
   fino a ~10 minuti).
+
+## Le zone d'Europa (catalogo unico)
+- `scripts/lib/zones.json` e' l'elenco unico delle zone: lo usano `osm-expand.yml` (passi OSM),
+  `osm-rotate.yml` (il giro dei passi) e la ricerca salite. Ogni zona ha i suoi estratti
+  Geofabrik, il ritaglio, il file di uscita e il tipo di terreno (`alps`, `hills`, `flat`, `border`).
+- La ricerca salite gira sulle zone con `"discover": true` (45 oggi): soglie Alpi o colline secondo
+  il terreno; zone piatte e fasce di confine sono saltate.
+- Lancio a mano: Actions → OSM discover → Run workflow → `italia`, `europa`, oppure gli id
+  separati da virgola (es. `austria,slovenia`). Il giro automatico a rotazione arriva nella PR successiva.
+- Nuova zona: aggiungila a `zones.json` e il suo id al menu di `osm-expand.yml`
+  (`test/zones.test.mjs` controlla che coincidano).

@@ -19,6 +19,8 @@
 /* Regions for the pilot. bbox = osmium "minlon,minlat,maxlon,maxlat".
    ridge = polyline [lon,lat] west->east; tops must lie SOUTH of it (the Via Emilia: north of it
    is the Po plain, nothing to climb, and leaving it out keeps memory low). */
+import { ZONES } from "./zones.mjs";
+
 const GF = "https://download.geofabrik.de/europe/italy/";
 const HILLS = { prom: 120, minEle: 150, domKm: 1.0, minSepKm: 1.5, knownKm: 1.5, flatKm: 2.0, flatPct: 2.5 };   // Appennino, colline
 const ALPS = { prom: 150, minEle: 300, domKm: 1.0, minSepKm: 1.5, knownKm: 1.5, flatKm: 2.0, flatPct: 2.5 };    // Alpi e prealpi
@@ -40,6 +42,16 @@ export const DISCOVER_REGIONS = {
   "veneto-fvg": { ...ALPS, minEle: 250, label: "Veneto e Friuli (prealpi e Dolomiti)", pbf: [GF + "nord-est-latest.osm.pbf"], bbox: "10.65,45.62,13.95,46.70" },
   "colli-veneti": { ...HILLS, label: "Colli Euganei e Berici", pbf: [GF + "nord-est-latest.osm.pbf"], bbox: "11.35,45.20,11.85,45.55" }
 };
+
+/* The 11 hand-tuned Italian regions above ("tutte" / "italia" in osm-discover.yml). */
+export const ITALY_REGIONS = Object.keys(DISCOVER_REGIONS);
+
+/* Every other zone of the catalogue (scripts/lib/zones.json) with discover:true: same
+   thresholds by terrain, the zone's own extracts, its discoverBbox (or bbox) as the clip. */
+for (const z of ZONES) {
+  if (!z.discover || DISCOVER_REGIONS[z.id]) continue;
+  DISCOVER_REGIONS[z.id] = { ...(z.terrain === "alps" ? ALPS : HILLS), label: z.label || z.id, pbf: z.pbf.slice(), bbox: z.discoverBbox || z.bbox || "", zone: true };
+}
 /* Regions: bbox = osmium "minlon,minlat,maxlon,maxlat". Optional masks to leave out a plain:
    southOf / northOf = polyline [lon,lat] west->east; tops must lie on that side of it (the Po
    plain has nothing to climb, and leaving it out keeps memory low). */
