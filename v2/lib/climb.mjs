@@ -30,7 +30,8 @@ export function difficultyColor(d) {
 /* Italian number: 7.04 -> "7,0" */
 export function num(x, d = 1) {
   if (x == null || !isFinite(x)) return "–";
-  return (+x).toFixed(d).replace(".", ",");
+  const r = (+x).toFixed(d);
+  return (/^-0(\.0+)?$/.test(r) ? r.slice(1) : r).replace(".", ",");   // never "-0"
 }
 
 export function havKm(la1, lo1, la2, lo2) {
@@ -231,4 +232,26 @@ export function alongTrack(v, points, maxM = 100) {
     if (bd * 1000 <= maxM) out.push({ km: +(cum[bi] / tot * L).toFixed(1), m: Math.round(bd * 1000), p });
   }
   return out.sort((a, b) => a.km - b.km);
+}
+
+/* ------------------------------------------------ merging sides (as the classic app, js/data.js) */
+/* two sides start at the same place (~2 km) */
+export function sameOrigin(a, b) {
+  if (!a || !b) return false;
+  return Math.abs((a.startLat || 0) - (b.startLat || 0)) + Math.abs((a.startLon || 0) - (b.startLon || 0)) < 0.02;
+}
+function sideBearing(p, v) { const r = Math.PI / 180, dy = v.startLat - p.lat, dx = (v.startLon - p.lon) * Math.cos(p.lat * r); return (Math.atan2(dx, dy) / r + 360) % 360; }
+/* sides of an OSM twin that a curated pass is missing: start > 3 km from every curated start AND
+   summit->start bearing >= 60 deg from every curated side, with a real track (js/data.js newSidesFor) */
+export function newSidesFor(p, twinSides) {
+  const cv = (p && p.versanti) || [], out = [];
+  if (!twinSides || !twinSides.length) return out;
+  if (cv.some((w) => !isFinite(w.startLat) || !isFinite(w.startLon))) return out;
+  for (const v of twinSides) {
+    if (!v || !isFinite(v.startLat) || !isFinite(v.startLon) || !(v.track && v.track.length > 1)) continue;
+    const b = sideBearing(p, v);
+    const clash = cv.concat(out).some((w) => { let d = Math.abs(sideBearing(p, w) - b); d = Math.min(d, 360 - d); return d < 60 || havKm(v.startLat, v.startLon, w.startLat, w.startLon) < 3; });
+    if (!clash) out.push(v);
+  }
+  return out;
 }

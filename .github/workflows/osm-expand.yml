@@ -83,6 +83,7 @@ on:
           - latvia
           - lithuania
           - slovakia
+          - andorra
           # --- VALICHI DI CONFINE: due paesi in un solo grafo, entrambi i versanti ---
           - confine-it-ch
           - confine-it-at

@@ -7,7 +7,7 @@ import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel } fr
 import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs";
 import { poisNear } from "./lib/poi.mjs";
 import { dayVerdict, advice, fetchForecast, fetchDaily } from "./lib/weather.mjs";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings } from "./lib/diary.mjs";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs";
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -57,8 +57,8 @@ map.on("load", async () => {
   gj.features.forEach((f) => { f.properties.disc = /^osm-rt/.test(f.properties.id) ? 1 : 0; });
   map.addSource("climbs", { type: "geojson", data: gj });
   map.addSource("sel", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-  map.addLayer({ id: "sel-glow", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 14, "line-opacity": 0.28, "line-blur": 4 } });
-  map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 4.5 } });
+  map.addLayer({ id: "sel-glow", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], 14, 8], "line-opacity": ["case", ["==", ["get", "sel"], 1], 0.28, 0.08], "line-blur": 4 } });
+  map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], 4.5, 2.5], "line-opacity": ["case", ["==", ["get", "sel"], 1], 1, 0.45] } });
   map.addLayer({ id: "c-glow", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 9, 13, 16], "circle-opacity": 0.22, "circle-blur": 0.8 } });
   map.addLayer({ id: "c-dot", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 1.6, 9, 4, 13, 7], "circle-stroke-color": "#0B0F14", "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 5, 0, 9, 1.2] } });
   map.addLayer({ id: "c-lab", type: "symbol", source: "climbs", minzoom: 9.5, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true, "symbol-sort-key": ["-", 0, ["get", "d"]] }, paint: { "text-color": "#E8EDF2", "text-halo-color": "#0B0F14", "text-halo-width": 1.4 } });
@@ -278,7 +278,8 @@ async function fillWater(c, v) {
   if (!r || (!r.covered && !r.points.length)) { el.innerHTML = `<h3>Acqua e ristori sulla salita</h3><p class="note">Dati non ancora disponibili in questa zona.</p>`; return; }
   const water = alongTrack(v, r.points.filter((p) => p.kind === "water"), 100);
   const foodAll = alongTrack(v, r.points.filter((p) => p.kind === "food"), 150);
-  const atStart = foodAll.filter((x) => x.km < 0.5).length, food = foodAll.filter((x) => x.km >= 0.5);   // the start town has bars anyway
+  const town = Math.min(2, 0.15 * (+v.distance_km || 0));   // the start town has bars anyway: counted apart
+  const atStart = foodAll.filter((x) => x.km < town).length, food = foodAll.filter((x) => x.km >= town);
   const li = (x) => `<li><b>km ${num(x.km)}</b> · ${esc(x.p.name || x.p.label)}${x.p.name ? ` <span class="mu">${esc(x.p.label)}</span>` : ""} <span class="mu">· ${esc(x.m)} m dalla strada</span></li>`;
   el.innerHTML = `<h3>Acqua e ristori sulla salita</h3>
     <p class="note">${water.length ? `<b>${water.length}</b> punti acqua entro 100 m` : "Nessun punto acqua mappato entro 100 m: parti con le borracce piene."}${food.length ? ` · <b>${food.length}</b> bar o ristori lungo la salita` : " · nessun bar lungo la salita"}${atStart ? ` (più ${atStart} in partenza)` : ""}</p>
@@ -293,15 +294,95 @@ async function fillWeek(c) {
   if (!rows || !rows.length) { el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><p class="note">Meteo non disponibile ora.</p>`; return; }
   el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><div class="week">${rows.map((d) => `<div class="day ${d.pp >= 50 ? "wet" : ""}"><span class="dn">${esc(new Date(d.date + "T12:00:00").toLocaleDateString("it-IT", { weekday: "short", day: "numeric" }))}</span><span class="wl">${esc(d.label)}</span><b>${num(d.tmax, 0)}°</b><span class="mu">${num(d.tmin, 0)}°</span><span class="pp">${esc(d.pp ?? "–")}%</span><span class="mu">${num(d.wind, 0)} km/h</span></div>`).join("")}</div>`;
 }
+const AXES = [["e", "Emozione"], ["p", "Paesaggio"], ["t", "Traffico"], ["a", "Asfalto"]];
 async function fillRating(c) {
   const el = $("#rating"); if (!el) return;
   await new Promise((r) => (document.readyState === "complete" ? r() : addEventListener("load", r, { once: true })));
-  let s = null;
-  try { s = await loadRatings(c.id); } catch { s = null; }
+  let s = null, u = null, mine = null, comments = [];
+  try { [s, u] = await Promise.all([loadRatings(c.id), currentUser()]); } catch { s = null; }
+  if (u) { try { mine = await myVote(c.id, u); } catch { mine = null; } }
+  try { comments = await recentComments(c.id, 5); } catch { comments = []; }
   if (S.sel !== c || !$("#rating")) return;
   if (!s) { el.innerHTML = `<h3>Valutazioni della community</h3><p class="note">Non disponibili ora.</p>`; return; }
-  el.innerHTML = `<h3>Valutazioni della community</h3>${s.n ? `<p class="note"><b class="big">${num(s.overall)}</b> /5 · ${esc(s.n)} voti</p><div class="axes">${s.axes.map(([l, x]) => `<div><span>${esc(l)}</span><i><u style="width:${(x / 5 * 100).toFixed(0)}%"></u></i><b>${num(x)}</b></div>`).join("")}</div>` : `<p class="note">Ancora nessun voto. Si vota dall'app classica, per ora.</p>`}`;
+  const canVote = u && (u.emailVerified || (u.providerData || []).some((x) => x.providerId === "google.com"));
+  const sel = (k, l) => `<div class="vote"><span>${l}</span><div role="radiogroup" aria-label="${l}">${[1, 2, 3, 4, 5].map((n) => `<button type="button" role="radio" data-ax="${k}" data-n="${n}" aria-checked="${mine && mine[k] === n}">${n}</button>`).join("")}</div></div>`;
+  el.innerHTML = `<h3>Valutazioni della community</h3>
+    ${s.n ? `<p class="note"><b class="big">${num(s.overall)}</b> /5 · ${esc(s.n)} ${s.n === 1 ? "voto" : "voti"}</p><div class="axes">${s.axes.map(([l, x]) => `<div><span>${esc(l)}</span><i><u style="width:${(x / 5 * 100).toFixed(0)}%"></u></i><b>${num(x)}</b></div>`).join("")}</div>` : `<p class="note">Ancora nessun voto: il primo è tuo.</p>`}
+    ${comments.length ? `<ul class="comments">${comments.map((v) => `<li><b>${esc(v.by || "Ciclista")}</b> <span class="mu">· ${esc(new Date(v.ts).toLocaleDateString("it-IT"))}</span><br>${esc(String(v.txt).slice(0, REV_MAX))}</li>`).join("")}</ul>` : ""}
+    ${canVote ? `<form class="voteform" id="voteForm"><div class="k">${mine ? "Il tuo voto (puoi cambiarlo)" : "Il tuo voto"}</div>${AXES.map(([k, l]) => sel(k, l)).join("")}
+        <label class="sr" for="vtxt">Commento</label><textarea id="vtxt" maxlength="${REV_MAX}" rows="2" placeholder="Com'è andata, in due righe (facoltativo)">${esc(mine && mine.txt || "")}</textarea>
+        <button type="submit" class="btn pri">Invia voto</button><p class="note small" id="vmsg"></p></form>`
+      : `<button type="button" class="btn" id="voteLogin">${u ? "Conferma la tua email per votare" : "Accedi per votare"}</button>`}
+    <button type="button" class="linkbtn" id="reportBtn">Segnala un errore su questa salita</button>`;
+  const vals = mine ? { e: mine.e, p: mine.p, t: mine.t, a: mine.a } : {};
+  el.querySelectorAll("[data-ax]").forEach((b) => b.addEventListener("click", () => {
+    vals[b.dataset.ax] = +b.dataset.n;
+    el.querySelectorAll(`[data-ax="${b.dataset.ax}"]`).forEach((x) => x.setAttribute("aria-checked", String(x === b)));
+  }));
+  const vf = $("#voteForm");
+  if (vf) vf.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("#vmsg");
+    if (AXES.some(([k]) => !(vals[k] >= 1))) { msg.textContent = "Dai un voto da 1 a 5 a tutte e quattro le voci."; return; }
+    try { await submitVote(c.id, c.name, { ...vals, txt: $("#vtxt").value }, u); msg.textContent = "Grazie, voto salvato."; fillRating(c); }
+    catch (err) { msg.textContent = "Voto non salvato: " + (err && err.message ? err.message : err); }
+  });
+  const vl = $("#voteLogin"); if (vl) vl.addEventListener("click", () => openAccount(() => fillRating(c)));
+  $("#reportBtn").addEventListener("click", () => openReport(c));
 }
+
+/* ------------------------------------------------------------------ dialogs: account, report */
+const dlg = $("#dlg");
+function openDialog(html) { dlg.innerHTML = html; if (!dlg.open) dlg.showModal(); return dlg; }
+function closeDialog() { if (dlg.open) dlg.close(); }
+dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.closest("[data-close]")) closeDialog(); });
+
+function openAccount(onDone, mode = "in") {
+  const title = mode === "up" ? "Crea un account" : mode === "reset" ? "Password dimenticata" : "Accedi";
+  openDialog(`<form class="dform" id="acct">
+    <div class="dh"><h2>${title}</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
+    ${mode === "in" ? `<button type="button" class="btn pri" id="gIn" style="width:100%">Accedi con Google</button><p class="or">oppure con la tua email</p>` : ""}
+    ${mode === "up" ? `<label>Nome (si vede accanto ai tuoi voti)<input id="aName" autocomplete="nickname" maxlength="40"></label>` : ""}
+    <label>Email<input id="aEmail" type="email" autocomplete="email" required></label>
+    ${mode !== "reset" ? `<label>Password<input id="aPw" type="password" autocomplete="${mode === "up" ? "new-password" : "current-password"}" minlength="6" required></label>` : ""}
+    <button type="submit" class="btn ${mode === "in" ? "" : "pri"}" style="width:100%">${mode === "up" ? "Crea account" : mode === "reset" ? "Mandami il link" : "Accedi con email"}</button>
+    <p class="note small" id="aMsg" role="status"></p>
+    <p class="note small">${mode === "in" ? `<button type="button" class="linkbtn" data-mode="up">Crea un account</button> · <button type="button" class="linkbtn" data-mode="reset">Password dimenticata?</button>` : `<button type="button" class="linkbtn" data-mode="in">Torna all'accesso</button>`}</p>
+  </form>`);
+  const msg = $("#aMsg");
+  dlg.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", () => openAccount(onDone, b.dataset.mode)));
+  const g = $("#gIn"); if (g) g.addEventListener("click", async () => { try { await signIn(); closeDialog(); onDone && onDone(); } catch (e) { msg.textContent = authError(e); } });
+  $("#acct").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const em = $("#aEmail").value.trim(), pw = $("#aPw") ? $("#aPw").value : "";
+    try {
+      if (mode === "reset") { await resetPassword(em); msg.textContent = "Ti abbiamo mandato un link per scegliere una nuova password."; return; }
+      if (mode === "up") { await signUpEmail(em, pw, $("#aName").value.trim()); msg.textContent = "Account creato: conferma la mail dal link che ti abbiamo mandato, poi potrai votare."; onDone && onDone(); return; }
+      await signInEmail(em, pw); closeDialog(); onDone && onDone();
+    } catch (err) { msg.textContent = authError(err); }
+  });
+}
+
+const REPORT_KINDS = [["tracciato", "Il tracciato è sbagliato"], ["versante", "Manca un versante"], ["strada", "Strada chiusa o rovinata"], ["dati", "Numeri sbagliati (km, quota, pendenza)"], ["altro", "Altro"]];
+async function openReport(c) {
+  const u = await currentUser();
+  if (!u) { openAccount(() => openReport(c)); return; }
+  openDialog(`<form class="dform" id="rep">
+    <div class="dh"><h2>Segnala un errore</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
+    <p class="note">${esc(c.name)}${S.sel === c && (c.versanti || [])[S.side] ? " · " + esc(c.versanti[S.side].side || "") : ""}</p>
+    <fieldset><legend class="k">Cosa non va</legend>${REPORT_KINDS.map(([k, l], i) => `<label class="radio"><input type="radio" name="kind" value="${k}" ${i === 0 ? "checked" : ""}> ${l}</label>`).join("")}</fieldset>
+    <label>Dettagli<textarea id="rTxt" rows="4" maxlength="1000" required placeholder="Es.: da Mazzo la salita parte dal paese e sale diretta, qui passa da Grosio."></textarea></label>
+    <button type="submit" class="btn pri" style="width:100%">Invia segnalazione</button><p class="note small" id="rMsg" role="status"></p>
+  </form>`);
+  $("#rep").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const kind = (dlg.querySelector('input[name="kind"]:checked') || {}).value;
+    const side = (c.versanti || [])[S.side];
+    try { await sendReport(c.id, c.name + (side ? " · " + (side.side || "") : ""), kind, $("#rTxt").value, u); $("#rMsg").textContent = "Grazie: segnalazione inviata, la controlliamo."; setTimeout(closeDialog, 1600); }
+    catch (err) { $("#rMsg").textContent = /permission/i.test(String(err && err.code || err && err.message)) ? "Invio non ancora attivo (manca una regola sul server). Riprova tra poco." : "Non inviata: " + (err && err.message ? err.message : err); }
+  });
+}
+
 let NEWS = null;
 async function fillNews(c) {
   if (!NEWS) NEWS = fetch("../data/pass_news.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => ({}));
@@ -311,23 +392,29 @@ async function fillNews(c) {
   el.innerHTML = `<h3>News e stato della strada</h3><ul class="tips">${items.slice(0, 5).map((n) => `<li><b>${esc(n.date || "")}</b> · ${n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>` : esc(n.title)}${n.source ? ` <span class="mu">${esc(n.source)}</span>` : ""}</li>`).join("")}</ul>`;
 }
 
+/* every side of the climb on the map, coloured by gradient; the selected one bright, the others
+   dimmed (the classic app showed all sides too: drawing only one looked like missing sides) */
+function sideFeatures(v, sel) {
+  const t = trackWithEle(v), L = +v.distance_km || 1, feats = [];
+  if (t.length < 2) return feats;
+  let cum = 0; const tot = t.reduce((a, q2, i) => i ? a + Math.hypot(q2[0] - t[i - 1][0], (q2[1] - t[i - 1][1]) * Math.cos(q2[0] * Math.PI / 180)) : 0, 0) || 1;
+  for (let i = 1; i < t.length; i++) {
+    const seg = Math.hypot(t[i][0] - t[i - 1][0], (t[i][1] - t[i - 1][1]) * Math.cos(t[i][0] * Math.PI / 180));
+    const a = cum / tot * L, b = (cum + seg) / tot * L; cum += seg;
+    const g = b > a ? (eleAt(v, b) - eleAt(v, a)) / ((b - a) * 10) : 0;
+    feats.push({ type: "Feature", properties: { c: gradeColor(g), sel: sel ? 1 : 0 }, geometry: { type: "LineString", coordinates: [[t[i - 1][1], t[i - 1][0]], [t[i][1], t[i][0]]] } });
+  }
+  return feats;
+}
 function flyToClimb(c, v) {
   const src = map.getSource("sel");
   if (!v || !src) { map.flyTo({ center: [c.lon, c.lat], zoom: 12 }); return; }
-  const t = trackWithEle(v);
-  const L = +v.distance_km || 1, feats = [];
-  if (t.length > 1) {
-    let cum = 0; const tot = t.reduce((a, q2, i) => i ? a + Math.hypot(q2[0] - t[i - 1][0], (q2[1] - t[i - 1][1]) * Math.cos(q2[0] * Math.PI / 180)) : 0, 0) || 1;
-    for (let i = 1; i < t.length; i++) {
-      const seg = Math.hypot(t[i][0] - t[i - 1][0], (t[i][1] - t[i - 1][1]) * Math.cos(t[i][0] * Math.PI / 180));
-      const a = cum / tot * L, b = (cum + seg) / tot * L; cum += seg;
-      const g = b > a ? (eleAt(v, b) - eleAt(v, a)) / ((b - a) * 10) : 0;
-      feats.push({ type: "Feature", properties: { c: gradeColor(g) }, geometry: { type: "LineString", coordinates: [[t[i - 1][1], t[i - 1][0]], [t[i][1], t[i][0]]] } });
-    }
-  }
+  const all = (c.versanti || []).filter((x) => x.track && x.track.length > 1);
+  const feats = all.filter((x) => x !== v).flatMap((x) => sideFeatures(x, false)).concat(sideFeatures(v, true));
   src.setData({ type: "FeatureCollection", features: feats });
+  const t = v.track || [];
   if (t.length > 1) {
-    const lons = t.map((x) => x[1]), lats = t.map((x) => x[0]);
+    const pts = all.flatMap((x) => x.track), lons = pts.map((x) => x[1]), lats = pts.map((x) => x[0]);
     const pad = DESKTOP() ? { top: 80, bottom: 60, left: 480, right: 60 } : { top: 120, bottom: Math.round(innerHeight * 0.6), left: 30, right: 30 };
     if (!S.three) set3d(true);
     map.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding: pad, pitch: 58, bearing: bearingOf(t), duration: 1400, maxZoom: 14 });
@@ -459,9 +546,9 @@ async function renderDiario() {
   if (!u) {
     body.className = "";
     body.innerHTML = `<p class="note">Qui compaiono le salite che hai fatto davvero, con i tempi registrati dal tuo dispositivo.</p>
-      <div class="actions" style="position:static"><button type="button" class="btn pri" id="login">Accedi con Google</button></div>
+      <div class="actions" style="position:static"><button type="button" class="btn pri" id="login">Accedi</button></div>
       <p class="note">Hai già l'account nell'app classica? È lo stesso: se sei collegato lì, lo sei anche qui.</p>`;
-    $("#login").addEventListener("click", async () => { try { await signIn(); renderDiario(); } catch (e) { toast("Accesso non riuscito"); } });
+    $("#login").addEventListener("click", () => openAccount(() => renderDiario()));
     return;
   }
   let list = [];

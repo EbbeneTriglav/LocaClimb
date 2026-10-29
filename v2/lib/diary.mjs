@@ -82,3 +82,64 @@ export function ratingSummary(a) {
   const axes = [["Emozione", av("eSum")], ["Paesaggio", av("pSum")], ["Traffico", av("tSum")], ["Asfalto", av("aSum")]];
   return { n, overall: n ? axes.reduce((t, x) => t + x[1], 0) / 4 : 0, axes };
 }
+
+/* ---------------------------------------------------------------- account (as the classic app) */
+export async function signInEmail(email, pw) { const x = init(); if (!x) throw new Error("Accesso non disponibile"); return (await x.auth.signInWithEmailAndPassword(email, pw)).user; }
+export async function signUpEmail(email, pw, name) {
+  const x = init(); if (!x) throw new Error("Accesso non disponibile");
+  const cr = await x.auth.createUserWithEmailAndPassword(email, pw);
+  if (name) await cr.user.updateProfile({ displayName: name }).catch(() => {});
+  await cr.user.sendEmailVerification().catch(() => {});
+  return cr.user;
+}
+export async function resetPassword(email) { const x = init(); if (!x) throw new Error("Accesso non disponibile"); await x.auth.sendPasswordResetEmail(email); }
+export async function signOut() { const x = init(); if (x) await x.auth.signOut(); }
+/* Firebase error -> Italian sentence (the codes the classic app handles too) */
+export function authError(e) {
+  const c = (e && e.code) || "";
+  return ({ "auth/invalid-email": "Indirizzo email non valido.", "auth/user-not-found": "Nessun account con questa email.",
+    "auth/wrong-password": "Password sbagliata.", "auth/invalid-credential": "Email o password sbagliate.",
+    "auth/email-already-in-use": "Esiste già un account con questa email: accedi.", "auth/weak-password": "Password troppo corta: almeno 6 caratteri.",
+    "auth/too-many-requests": "Troppi tentativi: riprova tra qualche minuto.", "auth/popup-closed-by-user": "Finestra di accesso chiusa." })[c]
+    || (e && e.message) || "Accesso non riuscito.";
+}
+
+/* ---------------------------------------------------------------- votes and comments */
+export const REV_MAX = 300;
+/* same documents and transaction as js/reviews.js: ratings/{id} keeps the sums, votes/{uid} the vote */
+export async function submitVote(pid, passName, v, user) {
+  const x = init(); if (!x || !user) throw new Error("Accedi per votare");
+  const txt = String(v.txt || "").trim().slice(0, REV_MAX);
+  const passRef = x.db.collection("ratings").doc(String(pid)), voteRef = passRef.collection("votes").doc(user.uid);
+  await x.db.runTransaction(async (tx) => {
+    const vs = await tx.get(voteRef), ps = await tx.get(passRef);
+    const agg = ps.exists ? ps.data() : { n: 0, eSum: 0, pSum: 0, tSum: 0, aSum: 0 }, old = vs.exists ? vs.data() : null;
+    if (old) { agg.eSum -= old.e; agg.pSum -= old.p; agg.tSum -= old.t; agg.aSum -= old.a; agg.n -= 1; }
+    agg.eSum += v.e; agg.pSum += v.p; agg.tSum += v.t; agg.aSum += v.a; agg.n += 1;
+    tx.set(passRef, agg);
+    tx.set(voteRef, { e: v.e, p: v.p, t: v.t, a: v.a, txt, by: user.displayName || "", ts: Date.now() });
+  });
+  x.db.collection("users").doc(user.uid).collection("reviews").doc(String(pid))
+    .set({ passId: String(pid), passName, txt, e: v.e, p: v.p, t: v.t, a: v.a, ts: Date.now() }).catch(() => {});
+}
+export async function myVote(pid, user) {
+  const x = init(); if (!x || !user) return null;
+  const d = await x.db.collection("ratings").doc(String(pid)).collection("votes").doc(user.uid).get();
+  return d.exists ? d.data() : null;
+}
+export async function recentComments(pid, n = 5) {
+  const x = init(); if (!x) return [];
+  const qs = await x.db.collection("ratings").doc(String(pid)).collection("votes").orderBy("ts", "desc").limit(20).get();
+  const out = []; qs.forEach((d) => { const o = d.data(); if (o.txt) out.push(o); });
+  return out.slice(0, n);
+}
+
+/* ---------------------------------------------------------------- reports ("segnala") */
+/* Writes reports/{auto}: the classic app's "Segnala informazione" never sent anything.
+   Needs the rules in firestore-reports.rules (published by Rick in the Firebase console). */
+export async function sendReport(pid, passName, kind, text, user) {
+  const x = init(); if (!x || !user) throw new Error("Accedi per segnalare");
+  const t = String(text || "").trim().slice(0, 1000);
+  if (t.length < 5) throw new Error("Scrivi cosa non va (almeno qualche parola).");
+  await x.db.collection("reports").add({ passId: String(pid), passName: String(passName || ""), kind: String(kind || "altro"), text: t, uid: user.uid, by: user.displayName || user.email || "", ts: Date.now(), status: "new", app: "v2" });
+}
