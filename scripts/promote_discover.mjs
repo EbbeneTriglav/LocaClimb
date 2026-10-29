@@ -20,7 +20,7 @@ import path from "node:path";
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const REGION = arg("--region", "");
-if (!/^[a-z_]+$/.test(REGION)) { console.error("uso: node scripts/promote_discover.mjs --region er"); process.exit(1); }
+if (!/^[a-z_-]+$/.test(REGION)) { console.error("uso: node scripts/promote_discover.mjs --region er"); process.exit(1); }
 const OUTF = "osm_passes_disc_" + REGION + ".json";
 const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
 

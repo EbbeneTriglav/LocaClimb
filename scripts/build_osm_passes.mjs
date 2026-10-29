@@ -22,7 +22,7 @@ import { Readable } from "node:stream";
 import vm from "node:vm";
 import { createRequire } from "node:module";
 import { dataPath, DATA_DIR } from "./lib/paths.mjs";
-import { DISCOVER_REGIONS, southOfLine, findRoadTops, dropKnown, nameTop, csrTyped } from "./lib/discover.mjs";
+import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -774,11 +774,11 @@ async function main() {
     if (!c || c.length < 2) return;
     const mid = c[Math.floor(c.length / 2)];
     if (DISC) {
-      // the whole bbox, minus the plain: keep a way if any of its points is south of the ridge
-      // line + 0.04 deg (~4 km of plain, so foothill tops can still descend into it)
+      // the whole bbox, minus the masked plain: keep a way if any of its points is inside the masks
+      // + 0.04 deg (~4 km of plain, so foothill tops can still descend into it)
       let inside = false;
-      for (let k = 0; k < c.length && !inside; k += 5) inside = southOfLine(DISC.southOf, c[k][1], c[k][0], 0.04);
-      if (!inside && !southOfLine(DISC.southOf, c[c.length - 1][1], c[c.length - 1][0], 0.04)) return;
+      for (let k = 0; k < c.length && !inside; k += 5) inside = inRegion(DISC, c[k][1], c[k][0], 0.04);
+      if (!inside && !inRegion(DISC, c[c.length - 1][1], c[c.length - 1][0], 0.04)) return;
     } else if (!nearPass(mid[1], mid[0]) && !nearPass(c[0][1], c[0][0]) && !nearPass(c[c.length - 1][1], c[c.length - 1][0])) return;
     if (!rideable(f.properties)) return;
     const t = f.properties, tags = { highway: t.highway, name: t.name, ref: t.ref, surface: t.surface, tracktype: t.tracktype, smoothness: t.smoothness, hgv: t.hgv, maxweight: t.maxweight };
@@ -1164,7 +1164,7 @@ async function main() {
     await Promise.all(Array.from({ length: 8 }, tileWorker));
     // 4. tops -> drop the known ones -> seeds for the normal climb builder
     const tops = findRoadTops(g, { minEle: DISC.minEle, prom: DISC.prom, domKm: DISC.domKm, minSepKm: DISC.minSepKm, maxNodes: 80000,
-      inMask: (la, lo) => southOfLine(DISC.southOf, la, lo, 0.01) });
+      inMask: (la, lo) => inRegion(DISC, la, lo, 0.01) });
     const fresh = dropKnown(tops, known, DISC.knownKm);
     console.log("    cime della rete stradale: " + tops.length + " -> nuove (lontane da salite note): " + fresh.length);
     passes.length = 0;

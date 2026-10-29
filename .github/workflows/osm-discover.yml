@@ -14,6 +14,16 @@ on:
         type: choice
         options:
           - er
+          - toscana-nord
+          - toscana-sud
+          - marche-umbria
+          - liguria
+          - piemonte-sud
+          - piemonte-nord
+          - lombardia
+          - trentino-aa
+          - veneto-fvg
+          - colli-veneti
 
 permissions:
   contents: write

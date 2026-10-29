@@ -1,7 +1,7 @@
 // scripts/lib/discover.mjs: road-graph tops for climbs that have no pass node.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findRoadTops, roadProminence, dominates, dropKnown, nameTop, southOfLine, csr, DISCOVER_REGIONS } from "../scripts/lib/discover.mjs";
+import { findRoadTops, roadProminence, dominates, dropKnown, nameTop, southOfLine, inRegion, csr, DISCOVER_REGIONS } from "../scripts/lib/discover.mjs";
 
 // a straight road of n vertices, 100 m apart, heading north from 44.0,11.0, with given elevations
 function road(eles, extraEdges) {
@@ -76,4 +76,18 @@ test("nameTop: peak, then place, then road, then nearest town", () => {
   assert.equal(nameTop(t, [], [{ lat: 44.005, lon: 11.0, name: "Montepiano" }], null, null), "Montepiano");
   assert.equal(nameTop(t, [], [], "Via di San Luca", "Bologna"), "Via di San Luca");
   assert.equal(nameTop(t, [], [], "SP 24", "Loiano"), "Salita presso Loiano");
+});
+
+test("every region is well formed and the masks work both ways", () => {
+  for (const [k, r] of Object.entries(DISCOVER_REGIONS)) {
+    const b = r.bbox.split(",").map(Number);
+    assert.equal(b.length, 4, k);
+    assert.ok(b[0] < b[2] && b[1] < b[3], k + " bbox");
+    assert.ok(r.pbf.length >= 1 && r.prom > 0 && r.minEle > 0, k);
+    assert.match(k, /^[a-z-]+$/, k + ": the name is used in file names");
+  }
+  const north = { northOf: [[10, 45.5], [12, 45.5]] };
+  assert.equal(inRegion(north, 45.8, 11, 0), true);
+  assert.equal(inRegion(north, 45.2, 11, 0), false);
+  assert.equal(inRegion({}, 40, 10, 0), true);
 });

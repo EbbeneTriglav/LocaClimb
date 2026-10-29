@@ -20,7 +20,7 @@ var DV = { region: null, list: [], byId: {}, layer: null, marks: {}, dec: {}, gr
 var DV_RANK = { nuova: 0, piccola: 1, doppione: 2, sterrata: 3 };
 var DV_LABEL = { nuova: "nuova", piccola: "piccola (sotto 200 m)", doppione: "doppione o variante di una salita gia' pubblicata", sterrata: "fondo non asfaltato in cima" };
 
-function dvParam() { var m = /[?&]discover=([a-z_]+)/.exec(location.search || ""); return m ? m[1] : null; }
+function dvParam() { var m = /[?&]discover=([a-z_-]+)/.exec(location.search || ""); return m ? m[1] : null; }
 function dvKey() { return "lr_disc_" + DV.region; }
 function dvLoadDec() { try { DV.dec = JSON.parse(localStorage.getItem(dvKey()) || "{}") || {}; } catch (e) { DV.dec = {}; } }
 function dvSaveDec() { try { localStorage.setItem(dvKey(), JSON.stringify(DV.dec)); } catch (e) { /* ignore */ } }
