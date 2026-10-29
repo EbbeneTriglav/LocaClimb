@@ -22,7 +22,7 @@ import { Readable } from "node:stream";
 import vm from "node:vm";
 import { createRequire } from "node:module";
 import { dataPath, DATA_DIR } from "./lib/paths.mjs";
-import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped } from "./lib/discover.mjs";
+import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -83,7 +83,7 @@ const MIN_ELE = /osm_passes_(be|nl_lu)\.json$/.test(OUT) ? 20 : parseInt(arg("--
 const MAX_ENRICH = parseInt(arg("--max", "100000"), 10);
 const SKIP_DL = process.argv.includes("--skip-download");
 const NO_CURATED = process.argv.includes("--no-curated") || !!DISC; // curated_overrides.json belongs to osm-refresh only
-const REENRICH = process.argv.includes("--reenrich");
+const REENRICH = process.argv.includes("--reenrich") || !!DISC; // discover: always rebuild (the algorithm changes between runs)
 // Optional cross-border clip: minlon,minlat,maxlon,maxlat. When set, the merged PBF is cut to this
 // box (complete_ways, so border-crossing roads stay intact) BEFORE filtering. Lets us build a border
 // corridor (Italy + neighbour) with both climb sides in-graph, without loading a whole foreign country.
@@ -557,6 +557,8 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
     if (hitClimb && townIdx > base) base = townIdx;
   }
   if (base >= end - 1) { let bi = 0; for (let i = 1; i <= end; i++) if (el[i] < el[bi]) bi = i; base = bi; }
+  // discover mode only: cut the valley approach (see flatCutBase); the normal build is unchanged
+  if (DISC && !pin) base = flatCutBase(cum, el, base, end, DISC.flatKm || 2.0, DISC.flatPct || 2.5);
   if (pin) base = 0; // manual override: base is fixed at the pinned town (path start), use whole climb
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];

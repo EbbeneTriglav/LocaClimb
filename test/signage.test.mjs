@@ -36,3 +36,11 @@ test("every icon used by the module exists", () => {
   for (const t of ["profilo", "confronto", "acqua", "meteo", "news", "valutazioni", "consigli", "tornanti", "bike day", "strava", "ristori", "vento"]) used.add(ctx.sgTitleIcon(t));
   for (const k of used) assert.ok(ctx.SG_ICONS[k], "missing icon " + k);
 });
+
+test("no function is declared twice (a later one silently replaces the first)", () => {
+  const src = readFileSync(new URL("../js/signage.js", import.meta.url), "utf8");
+  const names = [...src.matchAll(/^function (\w+)\s*\(/gm)].map((m) => m[1]);
+  const dup = names.filter((n, i) => names.indexOf(n) !== i);
+  assert.deepEqual(dup, []);
+  assert.equal(typeof ctx.sgHeader({ name: "X", elevation: 1000 }, true, true), "string");
+});

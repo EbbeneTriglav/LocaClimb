@@ -21,7 +21,8 @@ var DV_RANK = { nuova: 0, piccola: 1, doppione: 2, sterrata: 3 };
 var DV_LABEL = { nuova: "nuova", piccola: "piccola (sotto 200 m)", doppione: "doppione o variante di una salita gia' pubblicata", sterrata: "fondo non asfaltato in cima" };
 
 function dvParam() { var m = /[?&]discover=([a-z_-]+)/.exec(location.search || ""); return m ? m[1] : null; }
-function dvKey() { return "lr_disc_" + DV.region; }
+/* the choices belong to ONE run of the search: a new run (new tracks) starts a fresh sample */
+function dvKey() { return "lr_disc_" + DV.region + (DV.ver ? "_" + DV.ver : ""); }
 function dvLoadDec() { try { DV.dec = JSON.parse(localStorage.getItem(dvKey()) || "{}") || {}; } catch (e) { DV.dec = {}; } }
 function dvSaveDec() { try { localStorage.setItem(dvKey(), JSON.stringify(DV.dec)); } catch (e) { /* ignore */ } }
 function dvEsc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -159,6 +160,8 @@ function dvClassify() {
 }
 function dvShow(arr) {
   DV.list = (arr || []).filter(function (p) { return p && p.versanti && p.versanti.length; });
+  DV.ver = DV.list.reduce(function (m, p) { return p.updatedAt && p.updatedAt > m ? p.updatedAt : m; }, "");
+  dvLoadDec();
   DV.list.forEach(function (p) { DV.byId[p.id] = p; });
   DV.layer = L.layerGroup().addTo(map);
   DV.list.forEach(function (p) {
@@ -185,7 +188,7 @@ function dvStyle() {
 function dvStart() {
   DV.region = dvParam(); if (!DV.region) return;
   if (typeof map === "undefined" || typeof openPass !== "function" || typeof renderPassPanel !== "function" || typeof L === "undefined") { setTimeout(dvStart, 400); return; }
-  dvLoadDec(); dvStyle();
+  dvStyle();
   var rp = renderPassPanel;
   renderPassPanel = function (p) { var r = rp.apply(this, arguments); try { dvPanelBox(p); } catch (e) { /* ignore */ } return r; };
   fetch(DATA_DIR + "discover_" + DV.region + ".json", { cache: "no-cache" })

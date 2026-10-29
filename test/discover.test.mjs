@@ -1,7 +1,7 @@
 // scripts/lib/discover.mjs: road-graph tops for climbs that have no pass node.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findRoadTops, roadProminence, dominates, dropKnown, nameTop, southOfLine, inRegion, csr, DISCOVER_REGIONS } from "../scripts/lib/discover.mjs";
+import { findRoadTops, roadProminence, dominates, dropKnown, nameTop, southOfLine, inRegion, csr, DISCOVER_REGIONS, flatCutBase } from "../scripts/lib/discover.mjs";
 
 // a straight road of n vertices, 100 m apart, heading north from 44.0,11.0, with given elevations
 function road(eles, extraEdges) {
@@ -90,4 +90,20 @@ test("every region is well formed and the masks work both ways", () => {
   assert.equal(inRegion(north, 45.8, 11, 0), true);
   assert.equal(inRegion(north, 45.2, 11, 0), false);
   assert.equal(inRegion({}, 40, 10, 0), true);
+});
+
+test("valley approach is cut: 12 km at 1.5% then 4 km at 10% -> base at the foot of the ramp", () => {
+  const cum = [], el = [];
+  for (let k = 0; k <= 160; k++) { const km = k * 0.1; cum.push(km); el.push(km <= 12 ? 350 + km * 15 : 530 + (km - 12) * 100); }
+  const b = flatCutBase(cum, el, 0, cum.length - 1, 2.0, 2.5);
+  assert.ok(Math.abs(cum[b] - 12) < 0.25, "base at km " + cum[b]);
+});
+
+test("a steady climb is not cut", () => {
+  const cum = [], el = [];
+  for (let k = 0; k <= 100; k++) { cum.push(k * 0.1); el.push(500 + k * 7); }       // 7%
+  assert.equal(flatCutBase(cum, el, 0, cum.length - 1, 2.0, 2.5), 0);
+  // a short 1 km false flat in the middle is not a valley either
+  const el2 = el.map((e, k) => (k > 40 && k <= 50 ? el[40] + (k - 40) * 1 : k > 50 ? e - 60 : e));
+  assert.equal(flatCutBase(cum, el2, 0, cum.length - 1, 2.0, 2.5), 0);
 });

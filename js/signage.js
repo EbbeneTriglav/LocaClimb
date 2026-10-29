@@ -235,7 +235,7 @@ function sgWrapFit() {
    Cibo e Lingua scendono nella colonna di pulsanti sulla mappa (#mapctl), spostati e non
    ricreati, cosi' i loro gestori restano attaccati. */
 function sgPhone() { return window.matchMedia && window.matchMedia("(max-width: 640px)").matches; }
-function sgHeader() {
+function sgTopbar() {
   var ctl = document.getElementById("mapctl");
   if (!sgPhone() || !ctl) return false;
   [["fountBtn", "droplet"], ["uk-food", "utensils"], ["langBtn", "languages"]].forEach(function (x) {
@@ -271,7 +271,7 @@ function sgStart() {
   sgWrapFit();
   sgSetSheet(SG.sheet);
   var tries = 0; (function t() { if (!sgTabs() && tries++ < 20) setTimeout(t, 500); })();
-  var htries = 0; (function h() { if (!sgHeader() && sgPhone() && htries++ < 20) setTimeout(h, 500); })();
+  var htries = 0; (function h() { if (!sgTopbar() && sgPhone() && htries++ < 20) setTimeout(h, 500); })();
 }
 if (typeof document !== "undefined" && document.addEventListener && typeof window !== "undefined") {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sgStart); else sgStart();
