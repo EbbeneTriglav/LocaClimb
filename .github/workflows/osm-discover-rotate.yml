@@ -1,0 +1,39 @@
+name: OSM discover rotate (auto - due zone a giro)
+
+# Fa girare da sola la ricerca salite (osm-discover.yml) su TUTTE le zone del catalogo
+# (11 regioni italiane + zone europee di scripts/lib/zones.json con discover:true).
+# Due volte al giorno lancia le 2 zone mai fatte o aggiornate da piu' tempo: 4 zone/giorno,
+# tutto il catalogo (~56 zone) si rinnova in circa 2 settimane. Orari lontani da osm-rotate
+# (05-15 UTC), che scrive gli stessi file di indice.
+#
+# Niente file di stato e niente push: lo stato e' la storia git (data dell'ultimo commit di
+# data/discover_<zona>.json, letta dalle API GitHub) - scripts/discover_next.mjs.
+on:
+  schedule:
+    - cron: "17 1,19 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: osm-discover-rotate
+  cancel-in-progress: false
+
+jobs:
+  next:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Scegli le prossime zone e lancia osm-discover
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NEXT=$(node scripts/discover_next.mjs --n 2)
+          echo "Prossime zone: $NEXT"
+          echo "### Prossime zone: $NEXT" >> "$GITHUB_STEP_SUMMARY"
+          gh workflow run osm-discover.yml -f region="$NEXT"
