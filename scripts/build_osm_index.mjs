@@ -31,7 +31,7 @@ try { regions = JSON.parse(await readFile(dataPath("osm_regions.json"), "utf8"))
 catch { regions = ["osm_passes.json"]; }
 
 const out = [];
-for (const f of regions) {
+for (const [fi, f] of regions.entries()) {
   let arr;
   try { arr = JSON.parse(await readFile(dataPath(f), "utf8")); }
   catch { console.log("  - " + f + ": missing, skipped"); continue; }   // xb_* not built yet: expected
@@ -48,6 +48,7 @@ for (const f of regions) {
     if (hasV) r.hasV = 1;                                                // "tracks exist, fetch them on demand"
     if (p.algo) r.algo = p.algo;
     if (p.updatedAt) r.updatedAt = p.updatedAt;
+    r.f = fi;                                                            // which region file holds the tracks (v2 fetches only that one)
     out.push(r); n++;
   }
   console.log("  " + f + ": " + n);
