@@ -473,5 +473,15 @@
   "bbox": null,
   "target": "bosnia",
   "builtAt": "2026-10-21"
+ },
+ "osm_passes_ad.json": {
+  "bbox": [
+   1.15,
+   42.25,
+   2.05,
+   42.8
+  ],
+  "target": "andorra",
+  "builtAt": "2026-10-29"
  }
 }
