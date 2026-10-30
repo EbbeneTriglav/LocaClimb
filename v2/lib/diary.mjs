@@ -136,7 +136,7 @@ export async function recentComments(pid, n = 5) {
 
 /* ---------------------------------------------------------------- reports ("segnala") */
 /* Writes reports/{auto}: the classic app's "Segnala informazione" never sent anything.
-   Needs the rules in firestore-reports.rules (published by Rick in the Firebase console). */
+   Needs the reports block of firestore.rules (published by Rick in the Firebase console). */
 export async function sendReport(pid, passName, kind, text, user) {
   const x = init(); if (!x || !user) throw new Error("Accedi per segnalare");
   const t = String(text || "").trim().slice(0, 1000);
