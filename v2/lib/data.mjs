@@ -33,6 +33,7 @@ export async function loadIndex() {
   });
   const climbs = curated.concat(mergeIndex(idx, curated));
   for (const c of climbs) { if (!c.curated) c.name = displayName(c); c._n = norm(c.name); }
+  assignCountries(climbs, regions);
   state = { climbs, regions, byId: new Map(climbs.map((c) => [String(c.id), c])) };
   return state;
 }
@@ -176,7 +177,7 @@ export function isGravel(c) { return /sterrato|gravel|misto|unpaved|dirt|ground|
 export function geojson(climbs) {
   return {
     type: "FeatureCollection",
-    features: climbs.map((c) => ({ type: "Feature", id: undefined, properties: { id: String(c.id), name: c.name, d: c.difficulty || 0, ele: c.elevation || 0, cur: c.curated ? 1 : 0, gr: isGravel(c) ? 1 : 0 }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } }))
+    features: climbs.map((c) => ({ type: "Feature", id: undefined, properties: { id: String(c.id), name: c.name, d: c.difficulty || 0, ele: c.elevation || 0, cur: c.curated ? 1 : 0, gr: isGravel(c) ? 1 : 0, cc: c.cc || "", tk: fewTrucks(c) ? 0 : 1 }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } }))
   };
 }
 
@@ -191,3 +192,57 @@ export function placeHit(h) {
   const bb = b.length === 4 && b.every(isFinite) ? [[b[2], b[0]], [b[3], b[1]]] : null;
   return { name, sub, lat, lon, bb };
 }
+
+/* ---------------------------------------------------------------- country of a climb
+   The index says which region file a climb comes from ("f"); the file name says the country.
+   Border files (xb_*), user proposals and unknown names take the country of the nearest climb
+   that has one (assignCountries). A few files hold several small countries: one group each. */
+export const COUNTRIES = {
+  IT: "Italia", AD: "Andorra", AT: "Austria", BA: "Bosnia ed Erzegovina", BAL: "Montenegro, Albania, Macedonia",
+  BE: "Belgio", BG: "Bulgaria", CH: "Svizzera", CZ: "Cechia", DE: "Germania", EE: "Estonia", ES: "Spagna",
+  FI: "Finlandia", FR: "Francia", GB: "Regno Unito", GR: "Grecia", HR: "Croazia", HU: "Ungheria", IE: "Irlanda",
+  LT: "Lituania", LV: "Lettonia", MA: "Marocco", NLLU: "Paesi Bassi e Lussemburgo", NO: "Norvegia", PL: "Polonia",
+  PT: "Portogallo", RO: "Romania", RS: "Serbia", SE: "Svezia", SI: "Slovenia", SK: "Slovacchia", TR: "Turchia"
+};
+const CODE = { ad: "AD", at: "AT", ba: "BA", bal: "BAL", be: "BE", bg: "BG", ch: "CH", cz: "CZ", de: "DE", ee: "EE", es: "ES", fi: "FI",
+  fr: "FR", gb: "GB", gr: "GR", hr: "HR", hu: "HU", ie: "IE", lt: "LT", lv: "LV", ma: "MA", nl: "NLLU", no: "NO", pl: "PL", pt: "PT",
+  ro: "RO", rs: "RS", se: "SE", si: "SI", sk: "SK", tr: "TR", sud: "IT" };
+// discover zones are named after the country (or an Italian region)
+const DISC = { andorra: "AD", austria: "AT", slovenia: "SI", switzerland: "CH", france: "FR", spain: "ES", germany: "DE", portugal: "PT",
+  croatia: "HR", poland: "PL", czech: "CZ", slovakia: "SK", romania: "RO", bulgaria: "BG", greece: "GR", norway: "NO", sweden: "SE",
+  belgium: "BE", netherlands: "NLLU", luxembourg: "NLLU", hungary: "HU", serbia: "RS", bosnia: "BA", ireland: "IE", gb: "GB", england: "GB",
+  scotland: "GB", wales: "GB", turkey: "TR", morocco: "MA", finland: "FI", estonia: "EE", latvia: "LV", lithuania: "LT",
+  italy: "IT", er: "IT", lombardia: "IT", liguria: "IT", piemonte: "IT", toscana: "IT", trentino: "IT", veneto: "IT", colli: "IT", marche: "IT",
+  lazio: "IT", abruzzo: "IT", campania: "IT", sicilia: "IT", sardegna: "IT", calabria: "IT", puglia: "IT", umbria: "IT", friuli: "IT" };
+export function countryOfFile(file) {
+  const m = /^osm_passes(?:_(.+))?\.json$/.exec(String(file || ""));
+  if (!m) return null;
+  if (!m[1]) return "IT";                                   // osm_passes.json: Italy north and centre
+  const k = m[1];
+  if (k.startsWith("xb_") || k === "user") return null;     // border corridors, proposals: by neighbour
+  if (k.startsWith("disc_")) { const z = k.slice(5).split("-")[0]; return DISC[z] || null; }
+  return CODE[k.split("_")[0]] || null;
+}
+/* fills c.cc for every climb: from its file, else from the nearest climb that has one (0.25 deg grid) */
+export function assignCountries(climbs, regions) {
+  const G = 0.25, grid = new Map(), key = (a, b) => a + ":" + b;
+  for (const c of climbs) {
+    c.cc = c.curated ? "IT" : countryOfFile(regions[c.f]);
+    if (c.cc) { const k = key(Math.floor(c.lat / G), Math.floor(c.lon / G)); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(c); }
+  }
+  for (const c of climbs) {
+    if (c.cc) continue;
+    const a = Math.floor(c.lat / G), b = Math.floor(c.lon / G);
+    let best = null, bd = Infinity;
+    for (let r = 1; r <= 3 && !best; r++) {
+      for (let i = a - r; i <= a + r; i++) for (let j = b - r; j <= b + r; j++) for (const q of grid.get(key(i, j)) || []) {
+        const d = (q.lat - c.lat) ** 2 + ((q.lon - c.lon) * Math.cos(c.lat * Math.PI / 180)) ** 2;
+        if (d < bd) { bd = d; best = q; }
+      }
+    }
+    c.cc = best ? best.cc : null;
+  }
+  return climbs;
+}
+/* trucks on the climb: "no" (forbidden), "rari" (default), "possibili", "si" */
+export function fewTrucks(c) { const t = c.tk || c.trucks; return t !== "possibili" && t !== "si"; }
