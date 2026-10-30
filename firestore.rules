@@ -1,0 +1,139 @@
+// LocaRide - Firestore security rules: the FULL, official copy.
+// Published by hand by Rick: Firebase console -> Firestore -> Regole -> select all, paste this
+// whole file, Pubblica. Edit HERE first; the console must always equal this file.
+// Checked with the emulator: test/firestore-rules.emu.mjs (how to run: see that file).
+// Last published: 30/10/2026 (reports added, users/{uid} self-admin hole closed).
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------------------------------------------------------------- helper
+    function signedIn() {
+      return request.auth != null;
+    }
+    function verified() {
+      return signedIn() && request.auth.token.email_verified == true;
+    }
+    function profile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function hasProfile() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+    function isAdmin() {
+      return hasProfile() && profile().role == 'admin';
+    }
+    function canPropose() {
+      return hasProfile() && profile().canPropose == true;
+    }
+
+    // ------------------------------------------- dati personali dell'utente
+    // I campi 'role' e 'canPropose' decidono chi amministra e chi puo' proporre:
+    // l'utente NON deve poterli toccare, altrimenti si nomina admin da solo.
+    // Li imposti solo tu dalla console (la console ignora le regole).
+    match /users/{uid} {
+      allow read:   if signedIn() && request.auth.uid == uid;
+      allow delete: if signedIn() && request.auth.uid == uid;
+
+      allow create: if signedIn() && request.auth.uid == uid
+                    && !request.resource.data.keys().hasAny(['role', 'canPropose']);
+
+      allow update: if signedIn() && request.auth.uid == uid
+                    && !request.resource.data.diff(resource.data)
+                          .affectedKeys().hasAny(['role', 'canPropose']);
+
+      // sottocollezioni (routes, reviews, climbs): private, senza altre restrizioni.
+      // ATTENZIONE: deve essere /{coll}/{document=**} e NON /{document=**}: in
+      // rules_version 2 "{document=**}" vale anche per ZERO segmenti, cioe' per lo
+      // stesso users/{uid}, e cosi' scavalcava il divieto su 'role' qui sopra
+      // (chiunque poteva scriversi role: 'admin' sul proprio profilo).
+      match /{coll}/{document=**} {
+        allow read, write: if signedIn() && request.auth.uid == uid;
+      }
+    }
+
+    // ------------------------------------------ valutazioni aggregate (come prima)
+    match /ratings/{passId} {
+      allow read: if true;
+      allow write: if verified();
+
+      match /votes/{uid} {
+        allow read: if true;
+        allow write: if verified() && request.auth.uid == uid;
+      }
+    }
+
+    // --------------------------------------- giri condivisi via link (come prima)
+    match /shared/{sid} {
+      allow read: if true;
+      allow create: if verified() && request.resource.data.owner == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.owner == request.auth.uid;
+    }
+
+    // --------------------------------------------- proposte di salite (nuovo)
+    match /proposals/{pid} {
+
+      // le approvate sono pubbliche: servono all'app per mostrarle subito e a
+      // import_proposals.mjs per leggerle senza credenziali. Le altre le vedono
+      // solo l'autore e l'admin.
+      allow read: if resource.data.status == 'approved'
+                  || (signedIn() && resource.data.uid == request.auth.uid)
+                  || isAdmin();
+
+      // solo tester abilitati, solo a proprio nome, solo in stato 'pending'
+      // (nessuno puo' nascere approvato). Tetti su nome e tracciato per non
+      // farsi riempire il database.
+      allow create: if canPropose()
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'pending'
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() >= 3
+                    && request.resource.data.name.size() <= 70
+                    && request.resource.data.flat is list
+                    && request.resource.data.flat.size() <= 2400
+                    && request.resource.data.km is number
+                    && request.resource.data.km > 0
+                    && request.resource.data.km < 60;
+
+      // approvare o rifiutare: solo l'admin. L'autore puo' correggere la propria
+      // proposta SOLO finche' e' in attesa, e senza poterla promuovere da solo:
+      // dopo l'approvazione il contenuto e' congelato, altrimenti si potrebbe
+      // cambiare cio' che e' gia' stato pubblicato.
+      allow update: if isAdmin()
+                    || (signedIn()
+                        && resource.data.uid == request.auth.uid
+                        && resource.data.status == 'pending'
+                        && request.resource.data.status == 'pending'
+                        && request.resource.data.uid == resource.data.uid);
+
+      // l'autore puo' ritirare finche' e' in attesa; l'admin sempre.
+      allow delete: if isAdmin()
+                    || (signedIn()
+                        && resource.data.uid == request.auth.uid
+                        && resource.data.status == 'pending');
+    }
+
+    // ------------------------------- segnalazioni "Segnala un errore" (nuovo, v2)
+    // Chi e' collegato puo' mandare una segnalazione, solo a proprio nome, solo
+    // in stato 'new', con un testo di 5-1000 caratteri e solo i campi che l'app
+    // scrive (niente campi estranei, niente testi giganti).
+    // Leggerle, chiuderle o cancellarle: solo l'admin. Nessun altro le vede.
+    match /reports/{rid} {
+      allow create: if signedIn()
+                    && request.resource.data.keys().hasOnly(['passId', 'passName', 'kind', 'text', 'uid', 'by', 'ts', 'status', 'app'])
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'new'
+                    && request.resource.data.passId is string
+                    && request.resource.data.passId.size() <= 120
+                    && request.resource.data.passName is string
+                    && request.resource.data.passName.size() <= 200
+                    && request.resource.data.kind is string
+                    && request.resource.data.kind.size() <= 40
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() >= 5
+                    && request.resource.data.text.size() <= 1000;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

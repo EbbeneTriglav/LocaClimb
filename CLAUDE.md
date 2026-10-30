@@ -99,8 +99,9 @@ Production URL: https://locaride.app/ — hosting is GitHub Pages until the Clou
   mobile (replaces `amGoogle`); `js/weather.js` weather podium; `js/shadeindex.js` shade index.
 - `sw.js` is network-first with `cache:"reload"` for html/js/css. Changing its strategy can
   strand every installed app on an old version: bump `CACHE` and ask Rick first.
-- `firestore*.rules` are published by hand by Rick in the Firebase console: never assume a
-  rules change is live; security lives in the rules, never only in the UI.
+- `firestore.rules` is the full, official copy of the Firestore rules. Rick publishes it by hand
+  (console -> Firestore -> Regole: replace all, Pubblica): never assume a rules change is live;
+  security lives in the rules, never only in the UI. Check changes with `test/firestore-rules.emu.mjs`.
 
 ## v2 frontend (beta, `/v2/`) - redesign "Notturna + Road book"
 - `v2/index.html` + `v2/app.mjs` (ES modules, no build step) + `v2/lib/*.mjs` (pure, tested in
