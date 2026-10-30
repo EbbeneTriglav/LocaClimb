@@ -1,12 +1,13 @@
 /*
  * LocaRide v2 - app shell: map (MapLibre, dark basemap, hillshade + 3D terrain), climbs in view,
- * road book, "Oggi si sale", diary, ride mode. Hash routes: #/  #/s/<id>  #/oggi  #/diario
+ * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
 import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel } from "./lib/data.mjs";
 import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs";
 import { poisNear } from "./lib/poi.mjs";
-import { dayVerdict, advice, fetchForecast, fetchDaily } from "./lib/weather.mjs";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs";
 import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -62,14 +63,20 @@ map.on("load", async () => {
   map.addSource("sel", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
   map.addLayer({ id: "sel-glow", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], 14, 8], "line-opacity": ["case", ["==", ["get", "sel"], 1], 0.28, 0.08], "line-blur": 4 } });
   map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], 4.5, 2.5], "line-opacity": ["case", ["==", ["get", "sel"], 1], 1, 0.45] } });
+  map.addSource("route", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+  map.addSource("route-surf", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+  map.addLayer({ id: "route-case", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 8, "line-opacity": 0.85 } });
+  map.addLayer({ id: "route-line", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 4.5 } });
+  map.addLayer({ id: "route-surf", type: "line", source: "route-surf", paint: { "line-color": "#E8EDF2", "line-width": 2, "line-dasharray": [1, 2.5] } });
   map.addLayer({ id: "c-glow", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 9, 13, 16], "circle-opacity": 0.22, "circle-blur": 0.8 } });
   map.addLayer({ id: "c-dot", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 1.6, 9, 4, 13, 7], "circle-stroke-color": "#0B0F14", "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 5, 0, 9, 1.2] } });
   map.addLayer({ id: "c-lab", type: "symbol", source: "climbs", minzoom: 9.5, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true, "symbol-sort-key": ["-", 0, ["get", "d"]] }, paint: { "text-color": "#E8EDF2", "text-halo-color": "#0B0F14", "text-halo-width": 1.4 } });
   for (const id of ["c-dot", "c-glow"]) {
-    map.on("click", id, (e) => { const f = e.features && e.features[0]; if (f) location.hash = "#/s/" + encodeURIComponent(f.properties.id); });
+    map.on("click", id, (e) => { if (giroOn()) return; const f = e.features && e.features[0]; if (f) location.hash = "#/s/" + encodeURIComponent(f.properties.id); });
     map.on("mouseenter", id, () => { map.getCanvas().style.cursor = "pointer"; });
     map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
   }
+  map.on("click", giroClick);
   applyFilter();
   route();
 });
@@ -120,12 +127,13 @@ window.addEventListener("hashchange", route);
 function route() {
   const h = location.hash || "#/";
   document.querySelectorAll(".tabs a").forEach((a) => a.removeAttribute("aria-current"));
-  const tab = h.startsWith("#/oggi") ? "oggi" : h.startsWith("#/diario") ? "diario" : "map";
+  const tab = h.startsWith("#/oggi") ? "oggi" : h.startsWith("#/diario") ? "diario" : h.startsWith("#/giro") ? "giro" : "map";
   const t = document.querySelector(`.tabs a[data-tab="${tab}"]`); if (t) t.setAttribute("aria-current", "page");
   if (h.startsWith("#/s/")) return openClimb(decodeURIComponent(h.slice(4)));
   clearSel();
   if (tab === "oggi") return renderOggi();
   if (tab === "diario") return renderDiario();
+  if (tab === "giro") return openGiro(h);
   renderList();
 }
 
@@ -210,12 +218,13 @@ function renderClimb() {
     <section class="sec" id="news" hidden></section>
     <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
     ${stravaHtml(c)}
-    <div class="actions"><button type="button" class="btn pri" id="rideBtn">Avvia modalità salita</button><button type="button" class="btn" id="gpxBtn">GPX</button></div>
+    <div class="actions"><button type="button" class="btn pri" id="rideBtn">Avvia modalità salita</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
   </div>`;
   panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
   $("#rideBtn").addEventListener("click", () => startRide(c, v));
   $("#share").addEventListener("click", () => share(c));
+  $("#giroAdd").addEventListener("click", () => { addStop({ lat: c.lat, lon: c.lon, id: String(c.id), name: c.name }); toast(`Aggiunta al giro · ${G.stops.length} ${G.stops.length === 1 ? "tappa" : "tappe"}`); });
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
   wireTimes(c, vs);
   fillWater(c, v); fillWeek(c); fillRating(c); fillNews(c);
@@ -577,6 +586,205 @@ function stamp(d) {
 let _idx = null;
 function loadIndexSync(id) { if (!_idx) loadIndex().then((s) => { _idx = s; }); return _idx ? _idx.byId.get(String(id)) : null; }
 loadIndex().then((s) => { _idx = s; });
+
+/* ------------------------------------------------------------------ il tuo giro (route builder) */
+const GIRO_KEY = "lr_v2_giro";
+const G = { stops: [], profile: "fastbike", res: null, side: null, eta: null, on: [], markers: [], seq: 0, err: "", day: 0, start: "08:00", wx: null, water: null };
+try { const o = JSON.parse(localStorage.getItem(GIRO_KEY) || "null"); if (o && Array.isArray(o.stops)) { G.stops = o.stops.slice(0, MAX_STOPS); G.profile = o.profile || G.profile; } } catch { /* private mode */ }
+function giroOn() { return panel.dataset.mode === "giro"; }
+function saveGiro() {
+  try { localStorage.setItem(GIRO_KEY, JSON.stringify({ stops: G.stops, profile: G.profile })); } catch { /* private mode */ }
+  if (giroOn()) history.replaceState(null, "", G.stops.length ? "#/giro?p=" + encodeStops(G.stops) : "#/giro");
+}
+function stopName(s, i) { return s.name || (i === 0 ? "Partenza" : i === G.stops.length - 1 ? "Arrivo" : "Tappa " + (i + 1)); }
+function addStop(s) {
+  if (G.stops.length >= MAX_STOPS) { toast(`Massimo ${MAX_STOPS} tappe`); return; }
+  G.stops.push({ lat: +(+s.lat).toFixed(5), lon: +(+s.lon).toFixed(5), id: s.id || null, name: s.name || null });
+  giroChanged();
+}
+function giroChanged() { saveGiro(); syncMarkers(); if (giroOn()) renderGiro(); calcSoon(); }
+function giroClick(e) {
+  if (!giroOn()) return;
+  const f = map.queryRenderedFeatures(e.point, { layers: ["c-dot", "c-glow"].filter((l) => map.getLayer(l)) })[0];
+  if (f) { const c = loadIndexSync(f.properties.id); addStop({ lat: c ? c.lat : e.lngLat.lat, lon: c ? c.lon : e.lngLat.lng, id: f.properties.id, name: f.properties.name }); }
+  else addStop({ lat: e.lngLat.lat, lon: e.lngLat.lng });
+}
+function openGiro(h) {
+  const m = /[?&]p=([^&]+)/.exec(h);
+  if (m) {
+    const st = decodeStops(decodeURIComponent(m[1]));
+    if (st.length && encodeStops(st) !== encodeStops(G.stops)) {
+      G.stops = st.map((s) => { const c = s.id && loadIndexSync(s.id); return { ...s, name: c ? c.name : null }; });
+      G.res = null; syncMarkers(); calcSoon();
+    }
+  }
+  setMode("giro"); saveGiro(); renderGiro();
+  if (G.res) fitRoute(); else if (G.stops.length >= 2 && !G.busy) calcSoon();
+}
+
+/* numbered, draggable stop markers */
+function syncMarkers() {
+  G.markers.forEach((m) => m.remove()); G.markers = [];
+  G.stops.forEach((s, i) => {
+    const el = document.createElement("div");
+    el.className = "wp" + (i === 0 ? " a" : i === G.stops.length - 1 && i ? " z" : "");
+    el.textContent = String(i + 1); el.title = stopName(s, i);
+    const mk = new maplibregl.Marker({ element: el, draggable: true }).setLngLat([s.lon, s.lat]).addTo(map);
+    mk.on("dragend", () => { const p = mk.getLngLat(); Object.assign(G.stops[i], { lat: +p.lat.toFixed(5), lon: +p.lng.toFixed(5), id: null, name: null }); giroChanged(); });
+    G.markers.push(mk);
+  });
+}
+
+let calcT = null;
+function calcSoon() { clearTimeout(calcT); calcT = setTimeout(calcRoute, 350); }
+async function calcRoute() {
+  const seq = ++G.seq;
+  if (G.stops.length < 2) { G.res = null; G.side = null; paintRoute(); if (giroOn()) renderGiro(); return; }
+  G.busy = true; G.err = ""; if (giroOn()) renderGiro();
+  let res = null;
+  try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, G.profile))).json()); } catch { res = null; }
+  if (!res) {
+    // BRouter down or no route with this profile: OSRM gives the geometry only (no heights, no surface)
+    try {
+      const j = await (await fetch(osrmUrl(G.stops))).json();
+      const r = j.code === "Ok" && j.routes && j.routes[0];
+      if (r) res = { track: r.geometry.coordinates.map((c) => [c[1], c[0], null]), km: r.distance / 1000, gain: null, surf: null, segs: [], noEle: true };
+    } catch { res = null; }
+  }
+  if (seq !== G.seq) return;
+  G.busy = false;
+  if (!res) { G.res = null; G.side = null; G.err = "Percorso non trovato: sposta una tappa su una strada."; paintRoute(); if (giroOn()) renderGiro(); return; }
+  G.res = res; G.side = asSide(res.track, 300); G.eta = G.side ? etaMinutes(G.side, myWkg() || 3) : null;
+  G.on = climbsOnRoute(res.track, (_idx && _idx.climbs) || [], 0.25).filter((x) => !G.stops.some((s, i) => i === 0 && Math.abs(s.lat - x.c.lat) < 1e-4)).slice(0, 40);
+  G.wx = null; G.water = null;
+  paintRoute(); if (giroOn()) { renderGiro(); fitRoute(); }
+  fillGiroWater(seq); fillGiroWeather(seq);
+}
+function paintRoute() {
+  const a = map.getSource && map.getSource("route"), b = map.getSource && map.getSource("route-surf");
+  if (!a || !b) return;
+  a.setData({ type: "FeatureCollection", features: G.side ? (G.res.noEle ? [{ type: "Feature", properties: { c: "#C8F560" }, geometry: { type: "LineString", coordinates: G.res.track.map((q) => [q[1], q[0]]) } }] : routeFeatures(G.side)) : [] });
+  b.setData({ type: "FeatureCollection", features: G.res ? surfaceFeatures(G.res.track, G.res.segs) : [] });
+}
+function fitRoute() {
+  if (!G.res) return;
+  const t = G.res.track, lons = t.map((q) => q[1]), lats = t.map((q) => q[0]);
+  const pad = DESKTOP() ? { top: 80, bottom: 60, left: 480, right: 60 } : { top: 110, bottom: Math.round(innerHeight * 0.5), left: 30, right: 30 };
+  map.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding: pad, duration: 900, maxZoom: 13 });
+}
+
+function renderGiro() {
+  const n = G.stops.length, r = G.res, sd = G.side;
+  const stops = G.stops.map((s, i) => `<li><span class="wp ${i === 0 ? "a" : i === n - 1 && i ? "z" : ""}">${i + 1}</span><span class="nm">${esc(stopName(s, i))}</span>
+    <button type="button" class="ib sm" data-mv="${i}:-1" aria-label="Sposta su" ${i ? "" : "disabled"}>↑</button><button type="button" class="ib sm" data-mv="${i}:1" aria-label="Sposta giù" ${i < n - 1 ? "" : "disabled"}>↓</button><button type="button" class="ib sm" data-rm="${i}" aria-label="Togli tappa">${ICON.close}</button></li>`).join("");
+  let body = "";
+  if (G.busy) body = `<p class="note">Calcolo il percorso…</p>`;
+  else if (G.err) body = `<p class="note">${esc(G.err)}</p>`;
+  else if (r && sd) {
+    const sh = r.noEle ? null : profileShapes(sd, 680, 160, 8), shares = surfaceShares(r.surf), tot = G.eta ? G.eta[G.eta.length - 1] : null;
+    body = `<div class="strip">
+        <div><b>${num(r.km, r.km < 100 ? 1 : 0)}</b><span>km</span></div>
+        <div><b>${r.gain != null ? "+" + esc(r.gain) : "–"}</b><span>metri</span></div>
+        <div><b>${r.noEle ? "–" : clock(tot)}</b><span>in sella</span></div>
+        <div><b>${sh ? esc(sh.hi) : "–"}</b><span>quota max</span></div></div>
+      ${r.noEle ? `<p class="note small">Percorso di riserva (OSRM): senza quote né fondo.</p>` : ""}
+      ${sh ? `<figure class="prof"><svg viewBox="0 0 680 160" role="img" aria-label="Profilo del giro">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#E8EDF2" stroke-width="2"/></svg>
+        <figcaption><span>${esc(sh.lo)} m · 0 km</span><span>${num(r.km, 0)} km</span></figcaption></figure>` : ""}
+      ${shares.length ? `<div class="surf">${shares.map((x) => `<span class="${esc(x.k)}">${esc(x.k)} ${x.pct}%</span>`).join("")}</div>` : ""}
+      <p class="note small mu">Tempo stimato a ${num(myWkg() || 3)} W/kg${myWkg() ? "" : " (impostalo nella scheda di una salita)"}, soste escluse.</p>
+      ${G.on.length ? `<section class="sec"><h3>Salite sul percorso</h3><div class="cards">${G.on.map((x) => `<a class="card" href="#/s/${esc(encodeURIComponent(x.c.id))}" style="text-decoration:none;color:inherit"><span class="badge" style="background:${difficultyColor(x.c.difficulty || 0)}">${x.c.difficulty ? x.c.difficulty + "/10" : "–"}</span><span class="nm">${esc(x.c.name)}</span><span class="mt">km ${num(x.km, 0)}${x.c.elevation ? " · " + esc(x.c.elevation) + " m" : ""}</span></a>`).join("")}</div></section>` : ""}
+      <section class="sec" id="gwx"><h3>Meteo lungo il giro</h3>
+        <div class="when"><div class="sides" role="group" aria-label="Giorno">${["Oggi", "Domani", "Dopodomani"].map((l, i) => `<button type="button" data-day="${i}" aria-pressed="${G.day === i}">${l}</button>`).join("")}</div>
+        <label>Partenza <input type="time" id="gstart" value="${esc(G.start)}" step="900"></label></div>
+        <div id="gwxt"><p class="note">Carico…</p></div></section>
+      <section class="sec" id="gwater"><h3>Acqua lungo il giro</h3><p class="note">Cerco fontane vicino alla strada…</p></section>`;
+  } else body = `<p class="note">${n ? "Aggiungi almeno un'altra tappa." : "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda."}</p>`;
+  panel.innerHTML = `<div class="handle"></div><div class="cl giro">
+    <div class="ph" style="padding:4px 0 10px"><h2>Il tuo giro</h2><small>${n ? n + (n === 1 ? " tappa" : " tappe") : "nessuna tappa"}</small></div>
+    ${n ? `<ol class="stops">${stops}</ol>` : ""}
+    <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
+    ${body}
+    <div class="actions">${r ? `<button type="button" class="btn pri" id="ggpx">GPX con punti utili</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
+  </div>`;
+  panel.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { G.stops.splice(+b.dataset.rm, 1); giroChanged(); }));
+  panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => { const [i, d] = b.dataset.mv.split(":").map(Number); const t = G.stops[i]; G.stops[i] = G.stops[i + d]; G.stops[i + d] = t; giroChanged(); }));
+  panel.querySelectorAll("[data-prof]").forEach((b) => b.addEventListener("click", () => { G.profile = b.dataset.prof; giroChanged(); }));
+  panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { G.day = +b.dataset.day; G.wx = null; renderGiro(); fillGiroWeather(G.seq); }));
+  const gs = $("#gstart"); if (gs) gs.addEventListener("change", () => { G.start = gs.value || "08:00"; paintGiroWeather(); });
+  const gg = $("#ggpx"); if (gg) gg.addEventListener("click", giroGpx);
+  const gh = $("#gshare"); if (gh) gh.addEventListener("click", async () => { const url = location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops); try { if (navigator.share) await navigator.share({ title: "Il mio giro · LocaRide", url }); else { await navigator.clipboard.writeText(url); toast("Link copiato"); } } catch { /* cancelled */ } });
+  const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });
+  if (G.wx) paintGiroWeather();
+  if (G.water) paintGiroWater();
+}
+
+/* weather at the start, at every climb on the way, at the top and at the finish - at the hour you get there */
+function keyPoints() {
+  const sd = G.side, L = sd.distance_km, n = sd.elevationProfile.length, at = (km) => Math.max(0, Math.min(n - 1, Math.round(km / L * (n - 1))));
+  const pts = [{ name: "Partenza", i: 0 }];
+  for (const x of G.on.slice(0, 6)) pts.push({ name: x.c.name, i: at(x.km) });
+  const hi = highestIdx(sd.elevationProfile);
+  if (!pts.some((p) => Math.abs(p.i - hi) <= 3)) pts.push({ name: "Punto più alto", i: hi });
+  pts.push({ name: "Arrivo", i: n - 1 });
+  return pts.sort((a, b) => a.i - b.i).map((p) => ({ ...p, lat: sd.track[p.i][0], lon: sd.track[p.i][1], ele: sd.elevationProfile[p.i], km: p.i / (n - 1) * L, min: G.eta ? G.eta[p.i] : p.i / (n - 1) * L / 24 * 60 }));
+}
+async function fillGiroWeather(seq) {
+  if (!G.side) return;
+  const pts = keyPoints();
+  let h = null;
+  try { h = await fetchForecast(pts, 3); } catch { h = null; }
+  if (seq !== G.seq) return;
+  G.wx = { pts, h }; paintGiroWeather();
+}
+function paintGiroWeather() {
+  const el = $("#gwxt"); if (!el || !G.wx) return;
+  const { pts, h } = G.wx;
+  if (!h) { el.innerHTML = `<p class="note">Meteo non disponibile ora.</p>`; return; }
+  const [hh, mm] = (G.start || "08:00").split(":").map(Number), t0 = hh * 60 + (mm || 0);
+  const base = new Date(); base.setHours(0, 0, 0, 0); base.setDate(base.getDate() + G.day);
+  const rows = pts.map((p, k) => {
+    const at = new Date(base.getTime() + (t0 + p.min) * 60000), hk = at.getFullYear() + "-" + String(at.getMonth() + 1).padStart(2, "0") + "-" + String(at.getDate()).padStart(2, "0") + "T" + String(at.getHours()).padStart(2, "0") + ":00";
+    const H = h[k] || {}, i = (H.time || []).indexOf(hk);
+    const x = i >= 0 ? { temp: H.temperature_2m?.[i], pp: H.precipitation_probability?.[i], wind: H.wind_speed_10m?.[i], cape: H.cape?.[i] } : null;
+    return `<tr><td>${esc(at.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }))}</td><td><b>${esc(p.name)}</b><br><span class="mu">km ${num(p.km, 0)} · ${esc(p.ele)} m</span></td>${x ? `<td><i class="st ${hourState(x)}"></i>${num(x.temp, 0)}°</td><td>${num(x.wind, 0)} km/h</td><td>${esc(x.pp ?? "–")}%</td>` : `<td colspan="3" class="mu">fuori previsione</td>`}</tr>`;
+  }).join("");
+  el.innerHTML = `<table class="vt wxt"><thead><tr><th>Ora</th><th>Dove</th><th>Temp.</th><th>Vento</th><th>Pioggia</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+async function fillGiroWater(seq) {
+  if (!G.res || G.res.track.length < 2) return;
+  const dense = asSide(G.res.track, Math.min(4000, Math.max(300, Math.round(G.res.km * 20))));
+  let r = null;
+  try { r = await poisNear(dense.track); } catch { r = null; }
+  if (seq !== G.seq) return;
+  G.water = r ? { covered: r.covered, list: alongTrack(dense, r.points.filter((p) => p.kind === "water"), 100) } : { covered: false, list: [] };
+  paintGiroWater();
+}
+function paintGiroWater() {
+  const el = $("#gwater"); if (!el || !G.water) return;
+  const w = G.water.list;
+  // gaps: the longest stretch without water
+  let gap = 0, prev = 0;
+  for (const x of w) { gap = Math.max(gap, x.km - prev); prev = x.km; }
+  if (G.res) gap = Math.max(gap, G.res.km - prev);
+  el.innerHTML = `<h3>Acqua lungo il giro</h3>${!w.length && !G.water.covered ? `<p class="note">Dati non ancora disponibili in questa zona.</p>` :
+    `<p class="note">${w.length ? `<b>${w.length}</b> punti acqua entro 100 m · tratto più lungo senza: <b>${num(gap, 0)} km</b>` : "Nessun punto acqua mappato entro 100 m: parti con le borracce piene."}</p>
+    ${w.length ? `<ul class="tips water">${w.slice(0, 15).map((x) => `<li><b>km ${num(x.km, 0)}</b> · ${esc(x.p.name || x.p.label)}</li>`).join("")}</ul>` : ""}
+    <p class="note small mu">Nel GPX con punti utili trovi questi punti e le cime delle salite.</p>`}`;
+}
+function giroGpx() {
+  if (!G.res) return;
+  const wpts = [];
+  G.stops.forEach((s, i) => { if (s.name) wpts.push({ lat: s.lat, lon: s.lon, name: s.name, sym: "Summit" }); else if (i === 0 || i === G.stops.length - 1) wpts.push({ lat: s.lat, lon: s.lon, name: stopName(s, i), sym: "Flag, Blue" }); });
+  for (const x of G.on) if (!wpts.some((w) => Math.abs(w.lat - x.c.lat) < 1e-4 && Math.abs(w.lon - x.c.lon) < 1e-4)) wpts.push({ lat: x.c.lat, lon: x.c.lon, ele: x.c.elevation, name: x.c.name, sym: "Summit" });
+  for (const x of (G.water && G.water.list) || []) wpts.push({ lat: x.p.lat, lon: x.p.lon, name: "Acqua" + (x.p.name ? " - " + x.p.name : ""), sym: "Drinking Water" });
+  const name = "Giro LocaRide " + new Date().toLocaleDateString("it-IT");
+  const track = G.res.noEle ? G.res.track : G.res.track.map((q) => [q[0], q[1], q[2]]);
+  const blob = new Blob([routeGpx(name, track, wpts)], { type: "application/gpx+xml" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "giro_locaride_" + num(G.res.km, 0) + "km.gpx";
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+map.once("load", () => { syncMarkers(); if (G.stops.length >= 2 && !G.res) calcSoon(); });
 
 /* ------------------------------------------------------------------ icons */
 const ICON = {
