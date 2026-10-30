@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/maplibre-gl-5.24.0/maplibre-gl.css">
-<link rel="stylesheet" href="app.css?v=6">
+<link rel="stylesheet" href="app.css?v=7">
 </head>
 <body>
 <div id="map" aria-label="Mappa delle salite"></div>
@@ -20,7 +20,7 @@
 <header class="top">
   <form class="search" role="search" autocomplete="off">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-    <input id="q" type="search" placeholder="Cerca salita o passo" aria-label="Cerca salita o passo">
+    <input id="q" type="search" placeholder="Cerca salita, passo o località" aria-label="Cerca salita, passo o località">
   </form>
   <ul id="results" class="results" role="listbox" hidden></ul>
 </header>
@@ -30,6 +30,7 @@
   <button type="button" data-filter="hard" aria-pressed="false">Dure 8+</button>
   <button type="button" data-filter="top" aria-pressed="false">10/10</button>
   <button type="button" data-filter="new" aria-pressed="false">Scoperte</button>
+  <button type="button" id="bpaved" class="tog" aria-pressed="false">Solo asfalto</button>
 </div>
 
 <div class="legend" aria-label="Legenda difficoltà">
@@ -42,6 +43,7 @@
   <button type="button" id="bzin" class="zoom" aria-label="Avvicina"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   <button type="button" id="bzout" class="zoom" aria-label="Allontana"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
   <button type="button" id="bnorth" aria-label="Nord in alto"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l4 9h-8z" fill="#E5484D"/><path d="M12 21l-4-9h8z" fill="#A9B4C0"/></svg></button>
+  <button type="button" id="bpoi" aria-pressed="false" aria-label="Acqua e bar sulla mappa" title="Acqua e bar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></button>
   <button type="button" id="b3d" aria-pressed="false" aria-label="Rilievo 3D">3D</button>
   <button type="button" id="bloc" aria-label="Centra sulla mia posizione">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
@@ -70,6 +72,6 @@
 <script src="../js/gpxclimbs.js?v=1793290000" defer></script>
 <script src="../js/myclimbs.js?v=1793290000" defer></script>
 <script src="../js/rideimport.js?v=1793290000" defer></script>
-<script type="module" src="app.mjs?v=6"></script>
+<script type="module" src="app.mjs?v=7"></script>
 </body>
 </html>

@@ -32,7 +32,7 @@ export async function loadIndex() {
       versanti: o.versanti && o.versanti.length ? o.versanti : p.versanti, curated: true, twins: [] };
   });
   const climbs = curated.concat(mergeIndex(idx, curated));
-  for (const c of climbs) c._n = norm(c.name);
+  for (const c of climbs) { if (!c.curated) c.name = displayName(c); c._n = norm(c.name); }
   state = { climbs, regions, byId: new Map(climbs.map((c) => [String(c.id), c])) };
   return state;
 }
@@ -70,6 +70,19 @@ export function mergeIndex(idx, curated) {
     const k = cell(p.lat, p.lon); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(p);
   }
   return out;
+}
+
+/* Names that say nothing: ~1200 OSM tops are called just "Passo" / "Colle" / "Sattel". Show the
+   height with them, so the list does not read "Passo, Passo, Passo". A few discover tops took the
+   name of a nearby feature that is not the climb: fixed by id (position-based, stable). */
+const GENERIC = /^(passo|pass|colle|col|sella|forcella|valico|sattel|joch|bocchetta|coll|collado|puerto|prevoj|sedlo|przelecz|salita)$/i;
+const NAME_FIX = { "osm-rt4692440x1094453": "Ötztaler Gletscherstraße (Tiefenbach)" };
+export function displayName(c) {
+  if (NAME_FIX[c.id]) return NAME_FIX[c.id];
+  const n = String(c.name || "").trim();
+  if (!n) return c.elevation ? `Salita a ${c.elevation} m` : "Salita senza nome";
+  if (GENERIC.test(n)) return c.elevation ? `${n[0].toUpperCase() + n.slice(1)} a ${c.elevation} m` : `${n} senza nome`;
+  return n;
 }
 
 export function search(q, limit = 8) {
@@ -157,9 +170,24 @@ function regionFile(file) {
   return cache.get(file);
 }
 
+/* unpaved: the pipeline's surface label ("🪨 Sterrato/gravel", "Misto"...) */
+export function isGravel(c) { return /sterrato|gravel|misto|unpaved|dirt|ground|sand/i.test(String(c.surfaceLabel || "")); }
+
 export function geojson(climbs) {
   return {
     type: "FeatureCollection",
-    features: climbs.map((c) => ({ type: "Feature", id: undefined, properties: { id: String(c.id), name: c.name, d: c.difficulty || 0, ele: c.elevation || 0, cur: c.curated ? 1 : 0 }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } }))
+    features: climbs.map((c) => ({ type: "Feature", id: undefined, properties: { id: String(c.id), name: c.name, d: c.difficulty || 0, ele: c.elevation || 0, cur: c.curated ? 1 : 0, gr: isGravel(c) ? 1 : 0 }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } }))
   };
+}
+
+/* Nominatim (jsonv2) hit -> { name, sub, lat, lon, bb: [[w, s], [e, n]] | null } */
+export function placeHit(h) {
+  const lat = +h.lat, lon = +h.lon;
+  if (!isFinite(lat) || !isFinite(lon)) return null;
+  const parts = String(h.display_name || "").split(",").map((x) => x.trim()).filter(Boolean);
+  const name = h.name || parts[0] || "";
+  const sub = parts.filter((x) => x !== name && !/^\d{4,6}$/.test(x)).slice(0, 2).join(", ");
+  const b = (h.boundingbox || []).map(Number);
+  const bb = b.length === 4 && b.every(isFinite) ? [[b[2], b[0]], [b[3], b[1]]] : null;
+  return { name, sub, lat, lon, bb };
 }

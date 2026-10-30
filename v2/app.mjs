@@ -3,7 +3,7 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel } from "./lib/data.mjs";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit } from "./lib/data.mjs";
 import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs";
 import { poisNear } from "./lib/poi.mjs";
 import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs";
@@ -14,7 +14,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const panel = $("#panel");
 const DESKTOP = () => matchMedia("(min-width: 900px)").matches;
-const S = { filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null };
+const S = { paved: false, poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null };
 
 /* ------------------------------------------------------------------ map */
 const TERRAIN = { type: "raster-dem", tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], encoding: "terrarium", tileSize: 256, maxzoom: 14, attribution: "Rilievo: Mapzen / AWS Terrain Tiles" };
@@ -68,6 +68,12 @@ map.on("load", async () => {
   map.addLayer({ id: "route-case", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 8, "line-opacity": 0.85 } });
   map.addLayer({ id: "route-line", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 4.5 } });
   map.addLayer({ id: "route-surf", type: "line", source: "route-surf", paint: { "line-color": "#E8EDF2", "line-width": 2, "line-dasharray": [1, 2.5] } });
+  map.addSource("poi", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+  map.addLayer({ id: "poi-dot", type: "circle", source: "poi", minzoom: POI_ZOOM, layout: { visibility: "none" }, paint: { "circle-color": ["match", ["get", "k"], "water", "#38BDF8", "#E8EDF2"], "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 3, 15, 6], "circle-stroke-color": "#0B0F14", "circle-stroke-width": 1.2 } });
+  map.on("click", "poi-dot", (e) => {
+    const f = e.features && e.features[0]; if (!f || giroOn()) return;
+    new maplibregl.Popup({ closeButton: false, className: "pop" }).setLngLat(e.lngLat).setHTML(`<b>${esc(f.properties.n)}</b>${f.properties.n !== f.properties.l ? `<br><span>${esc(f.properties.l)}</span>` : ""}`).addTo(map);
+  });
   map.addLayer({ id: "c-glow", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 9, 13, 16], "circle-opacity": 0.22, "circle-blur": 0.8 } });
   map.addLayer({ id: "c-dot", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 1.6, 9, 4, 13, 7], "circle-stroke-color": "#0B0F14", "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 5, 0, 9, 1.2] } });
   map.addLayer({ id: "c-lab", type: "symbol", source: "climbs", minzoom: 9.5, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true, "symbol-sort-key": ["-", 0, ["get", "d"]] }, paint: { "text-color": "#E8EDF2", "text-halo-color": "#0B0F14", "text-halo-width": 1.4 } });
@@ -83,19 +89,25 @@ map.on("load", async () => {
 map.on("moveend", () => { if (panel.dataset.mode === "list") renderList(); });
 
 function applyFilter() {
-  const f = S.filter === "hard" ? [">=", ["get", "d"], 8] : S.filter === "top" ? [">=", ["get", "d"], 10] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
+  let f = S.filter === "hard" ? [">=", ["get", "d"], 8] : S.filter === "top" ? [">=", ["get", "d"], 10] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
+  if (S.paved) f = f ? ["all", f, ["==", ["get", "gr"], 0]] : ["==", ["get", "gr"], 0];
   for (const id of ["c-dot", "c-glow", "c-lab"]) if (map.getLayer(id)) map.setFilter(id, f);
 }
 function passesFilter(c) {
   const d = c.difficulty || 0;
+  if (S.paved && isGravel(c)) return false;
   return S.filter === "hard" ? d >= 8 : S.filter === "top" ? d >= 10 : S.filter === "new" ? /^osm-rt/.test(c.id) : true;
 }
-document.querySelectorAll(".chips button").forEach((b) => b.addEventListener("click", () => {
+document.querySelectorAll(".chips button[data-filter]").forEach((b) => b.addEventListener("click", () => {
   S.filter = b.dataset.filter;
-  document.querySelectorAll(".chips button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  document.querySelectorAll(".chips button[data-filter]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
   applyFilter(); if (panel.dataset.mode === "list") renderList();
 }));
 
+$("#bpaved").addEventListener("click", (e) => {
+  S.paved = !S.paved; e.currentTarget.setAttribute("aria-pressed", String(S.paved));
+  applyFilter(); if (panel.dataset.mode === "list") renderList();
+});
 $("#b3d").addEventListener("click", (e) => set3d(!S.three, e.currentTarget));
 function set3d(on, btn = $("#b3d")) {
   S.three = on; btn.setAttribute("aria-pressed", String(on));
@@ -110,17 +122,61 @@ $("#bloc").addEventListener("click", () => {
 
 /* ------------------------------------------------------------------ search */
 const q = $("#q"), results = $("#results");
+let placeT = null, placeCtl = null, placeHits = [];
 q.addEventListener("input", () => {
-  const r = search(q.value);
-  results.hidden = !r.length;
-  results.innerHTML = r.map((c) => `<li><button type="button" data-id="${esc(c.id)}"><span>${esc(c.name)}</span><small>${c.elevation ? esc(c.elevation) + " m" : ""}</small></button></li>`).join("");
+  placeHits = []; paintResults();
+  clearTimeout(placeT); if (placeCtl) placeCtl.abort();
+  const txt = q.value.trim();
+  if (txt.length < 3) return;
+  // places (towns, valleys, roads) from Nominatim, as the classic app: ~1 request/s, so debounced
+  placeT = setTimeout(async () => {
+    placeCtl = new AbortController();
+    try {
+      const r = await fetch("https://nominatim.openstreetmap.org/search?" + new URLSearchParams({ q: txt, format: "jsonv2", limit: "5", "accept-language": "it" }), { signal: placeCtl.signal, headers: { Accept: "application/json" } });
+      const j = await r.json();
+      if (q.value.trim() !== txt) return;
+      placeHits = (Array.isArray(j) ? j : []).map(placeHit).filter(Boolean); paintResults();
+    } catch { /* aborted or offline: climbs only */ }
+  }, 450);
 });
+function paintResults() {
+  const r = search(q.value);
+  results.hidden = !r.length && !placeHits.length;
+  results.innerHTML = r.map((c) => `<li><button type="button" data-id="${esc(c.id)}"><span>${esc(c.name)}</span><small>${c.elevation ? esc(c.elevation) + " m" : ""}</small></button></li>`).join("")
+    + (placeHits.length ? `<li class="rh">Località</li>` + placeHits.map((p, i) => `<li><button type="button" data-pl="${i}"><span>${esc(p.name)}</span><small>${esc(p.sub)}</small></button></li>`).join("") : "");
+}
 results.addEventListener("click", (e) => {
+  const pl = e.target.closest("button[data-pl]");
+  if (pl) {
+    const p = placeHits[+pl.dataset.pl]; results.hidden = true; q.value = ""; q.blur();
+    if (location.hash.startsWith("#/s/") || !location.hash || location.hash === "#/") location.hash = "#/";
+    if (p.bb) map.fitBounds(p.bb, { padding: 40, maxZoom: 12.5, duration: 900 }); else map.flyTo({ center: [p.lon, p.lat], zoom: 11.5 });
+    return;
+  }
   const b = e.target.closest("button[data-id]"); if (!b) return;
   results.hidden = true; q.value = ""; q.blur();
   location.hash = "#/s/" + encodeURIComponent(b.dataset.id);
 });
 $(".search").addEventListener("submit", (e) => { e.preventDefault(); const b = results.querySelector("button"); if (b) b.click(); });
+
+/* ------------------------------------------------------------------ water and food on the map */
+$("#bpoi").addEventListener("click", (e) => {
+  S.poi = !S.poi; e.currentTarget.setAttribute("aria-pressed", String(S.poi));
+  for (const id of ["poi-dot"]) if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", S.poi ? "visible" : "none");
+  if (S.poi) { if (map.getZoom() < POI_ZOOM) toast("Avvicinati per vedere acqua e bar"); loadPoi(); }
+});
+const POI_ZOOM = 11;
+let poiSeq = 0;
+async function loadPoi() {
+  const src = map.getSource && map.getSource("poi");
+  if (!S.poi || !src || map.getZoom() < POI_ZOOM) return;
+  const b = map.getBounds(), seq = ++poiSeq;
+  let r;
+  try { r = await poisNear([[b.getSouth(), b.getWest()], [b.getNorth(), b.getEast()]]); } catch { r = null; }
+  if (seq !== poiSeq || !r) return;
+  src.setData({ type: "FeatureCollection", features: r.points.map((p) => ({ type: "Feature", properties: { k: p.kind, n: p.name || p.label, l: p.label }, geometry: { type: "Point", coordinates: [p.lon, p.lat] } })) });
+}
+map.on("moveend", () => { if (S.poi) loadPoi(); });
 
 /* ------------------------------------------------------------------ router */
 window.addEventListener("hashchange", route);

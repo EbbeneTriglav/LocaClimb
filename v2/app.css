@@ -255,3 +255,11 @@ a { color: var(--acc); }
 .giro .actions { flex-wrap: wrap; }
 .giro .actions .btn { flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 16px; font-size: 16px; }
 .giro .cards { padding: 0; }
+
+/* ---------- map extras ---------- */
+.chips .tog { margin-left: 4px; border-style: dashed; }
+.chips .tog[aria-pressed="true"] { border-style: solid; }
+.results .rh { padding: 8px 10px 2px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mu); }
+.pop .maplibregl-popup-content { background: var(--s1); color: var(--tx); border-radius: 10px; padding: 8px 12px; font-size: 13px; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+.pop .maplibregl-popup-content span { color: var(--mu); }
+.pop .maplibregl-popup-tip { border-top-color: var(--s1) !important; border-bottom-color: var(--s1) !important; }
