@@ -11,7 +11,7 @@ import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinu
 import { getLang, setLang, startI18n } from "./lib/i18n.mjs";
 import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs";
 
-const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : LOC;
+const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
