@@ -31,7 +31,7 @@ export function difficultyColor(d) {
 export function num(x, d = 1) {
   if (x == null || !isFinite(x)) return "–";
   const r = (+x).toFixed(d);
-  return (/^-0(\.0+)?$/.test(r) ? r.slice(1) : r).replace(".", ",");   // never "-0"
+  return (/^-0(\.0+)?$/.test(r) ? r.slice(1) : r).replace(".", globalThis.LR_DEC || ",");   // never "-0"; "." in English
 }
 
 export function havKm(la1, lo1, la2, lo2) {

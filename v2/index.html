@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/maplibre-gl-5.24.0/maplibre-gl.css">
-<link rel="stylesheet" href="app.css?v=8">
+<link rel="stylesheet" href="app.css?v=9">
 </head>
 <body>
 <div id="map" aria-label="Mappa delle salite"></div>
@@ -46,6 +46,7 @@
   <button type="button" id="bzout" class="zoom" aria-label="Allontana"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
   <button type="button" id="bnorth" aria-label="Nord in alto"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l4 9h-8z" fill="#E5484D"/><path d="M12 21l-4-9h8z" fill="#A9B4C0"/></svg></button>
   <button type="button" id="bpoi" aria-pressed="false" aria-label="Acqua e bar sulla mappa" title="Acqua e bar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></button>
+  <button type="button" id="blang" class="lang" aria-label="Switch to English">EN</button>
   <button type="button" id="b3d" aria-pressed="false" aria-label="Rilievo 3D">3D</button>
   <button type="button" id="bloc" aria-label="Centra sulla mia posizione">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
@@ -74,6 +75,6 @@
 <script src="../js/gpxclimbs.js?v=1793290000" defer></script>
 <script src="../js/myclimbs.js?v=1793290000" defer></script>
 <script src="../js/rideimport.js?v=1793290000" defer></script>
-<script type="module" src="app.mjs?v=8"></script>
+<script type="module" src="app.mjs?v=9"></script>
 </body>
 </html>
