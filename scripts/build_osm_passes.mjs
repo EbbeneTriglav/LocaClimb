@@ -22,6 +22,7 @@ import { Readable } from "node:stream";
 import vm from "node:vm";
 import { createRequire } from "node:module";
 import { dataPath, DATA_DIR } from "./lib/paths.mjs";
+import { hwKeep } from "./lib/highways.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
@@ -51,7 +52,10 @@ const DEM_Z = 13;
 // dropping them cut the road graph into islands (a 70-node BFS from the summit). The genuinely
 // unrideable ones carry motorroad=yes and are still rejected by rideable(); the rest are steered
 // away from by a heavy edgeExtra penalty and scored as heavy traffic. Connectivity first, preference second.
-const HW_KEEP = ["primary","primary_link","secondary","secondary_link","tertiary","tertiary_link","unclassified","unclassified_link","trunk","trunk_link","residential","living_street","road"];
+// Residential streets only outside the full Italy refresh: with three PBFs at once they blow the
+// 6 GB heap (scripts/lib/highways.mjs).
+const FULL_REFRESH = !DISC && !(process.env.LC_PBF || _arg0("--pbf", "")).trim();
+const HW_KEEP = hwKeep({ fullRefresh: FULL_REFRESH, env: process.env });
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const OUT = dataPath(arg("--out", DISC ? "discover_" + DISC_KEY + ".json" : "osm_passes.json"));
