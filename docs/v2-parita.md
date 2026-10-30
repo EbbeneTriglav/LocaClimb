@@ -45,9 +45,9 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 
 | Funzione v1 | v1 | v2 |
 |---|---|---|
-| Route builder (waypoint, calcolo, asfalto/gravel) | presente (non provato fino in fondo) | ⏭️ **il pezzo più grosso che manca** |
-| GPX + punti utili, roadbook stampabile, immagine da condividere | presenti (non provati) | ⏭️ |
-| Meteo del percorso (vento lungo il giro) | presente (non provato) | ⏭️ |
+| Route builder (waypoint, calcolo, asfalto/gravel) | presente (non provato fino in fondo) | ✅ scheda **Giro**: tappe toccando la mappa o una salita («+ Giro» nella scheda), trascinabili, ordine ↑↓; BRouter (Solo asfalto / Anche sterrato / Più corto) con riserva OSRM; linea colorata per pendenza, sterrato tratteggiato; km, dislivello, tempo stimato (W/kg), profilo, fondo %, salite sul percorso; link condivisibile `#/giro?p=…` |
+| GPX + punti utili, roadbook stampabile, immagine da condividere | presenti (non provati) | 🟡 GPX con cime e acqua come waypoint; roadbook stampabile e immagine ⏭️ |
+| Meteo del percorso (vento lungo il giro) | presente (non provato) | ✅ partenza, ogni salita, punto più alto e arrivo all'ora in cui ci passi (oggi/domani/dopodomani, ora di partenza); acqua lungo il giro e tratto più lungo senza |
 | Importa GPX / Le mie salite (GPX, FIT, zip) | ok | 🟡 il Diario le mostra; l'import si fa ancora dalla v1 |
 | I miei giri | presente | ⏭️ |
 | Accesso Google | ok | ✅ condiviso con la v1 |
@@ -67,6 +67,6 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 
 ## Ordine proposto delle prossime PR v2
 1. **Import giri dentro la v2** (GPX/FIT/zip, riusa `js/rideimport.js`) + **I miei giri**.
-2. **Route builder v2**: waypoint su mappa, calcolo, GPX con punti utili, meteo e vento del percorso.
+2. ~~**Route builder v2**~~ fatto (PR `v2-giro`). Restano roadbook stampabile e immagine del giro.
 3. **Mappa**: ricerca località, strati acqua/cibo, filtri regione/stato/camion, lingua EN.
 4. **Proposte salite, livelli, badge** → poi si spegne la v1 (la v2 va su `/`, la v1 resta su `/classica/` per un mese).

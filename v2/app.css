@@ -42,14 +42,14 @@ a { color: var(--acc); }
 #bnorth svg { transition: transform .2s; }
 
 /* ---------- tabs ---------- */
-.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; height: calc(var(--tabs) + var(--safe-b)); padding-bottom: var(--safe-b); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--bg); border-top: 1px solid var(--s2); }
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; height: calc(var(--tabs) + var(--safe-b)); padding-bottom: var(--safe-b); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: var(--bg); border-top: 1px solid var(--s2); }
 .tabs a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: var(--mu); font-size: 11px; }
 .tabs a[aria-current="page"] { color: var(--acc); font-weight: 600; }
 
 /* ---------- panel (bottom sheet on phones, side panel on desktop) ---------- */
 .panel { position: fixed; left: 0; right: 0; bottom: calc(var(--tabs) + var(--safe-b)); z-index: 5; background: var(--s1); border-top: 1px solid var(--line2); border-radius: 22px 22px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,.35); max-height: calc(100% - var(--tabs) - var(--safe-b) - 70px); overflow: auto; overscroll-behavior: contain; transition: max-height .25s ease; }
 .panel[data-mode="list"] { max-height: 232px; overflow: hidden; }
-.panel[data-mode="climb"] { max-height: 62%; }
+.panel[data-mode="climb"], .panel[data-mode="giro"] { max-height: 62%; }
 .handle { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 10px auto 6px; }
 .ph { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 16px 10px; gap: 8px; }
 .ph h2 { margin: 0; font-family: var(--cond); font-weight: 800; font-size: 20px; text-transform: uppercase; letter-spacing: .01em; }
@@ -177,7 +177,7 @@ a { color: var(--acc); }
 
 /* ---------- desktop: side panel ---------- */
 @media (min-width: 900px) {
-  .panel, .panel[data-mode="list"], .panel[data-mode="climb"] { top: 0; bottom: 0; left: 0; right: auto; width: 440px; max-height: none; border-radius: 0; border-top: 0; border-right: 1px solid var(--line2); overflow: auto; }
+  .panel, .panel[data-mode="list"], .panel[data-mode="climb"], .panel[data-mode="giro"] { top: 0; bottom: 0; left: 0; right: auto; width: 440px; max-height: none; border-radius: 0; border-top: 0; border-right: 1px solid var(--line2); overflow: auto; }
   .tabs { left: 0; right: auto; width: 440px; }
   .panel { bottom: var(--tabs); }
   .top { left: 456px; width: 380px; right: auto; }
@@ -232,3 +232,26 @@ a { color: var(--acc); }
 .lrc .lrc-empty { color: var(--mu); padding: 8px 0; }
 /* features of the classic map / proposals that v2 does not have yet */
 .lrc button[onclick^="gcPreview"], .lrc button[onclick^="gcDraw"], .lrc button[onclick^="gcPropose"] { display: none; }
+
+/* ---------- il tuo giro ---------- */
+.wp { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tx); color: var(--bg); font: 700 13px/1 var(--cond, sans-serif); border: 2px solid var(--bg); box-shadow: 0 2px 8px rgba(0,0,0,.5); cursor: grab; }
+.wp.a { background: var(--acc); } .wp.z { background: var(--hl); }
+.stops { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; }
+.stops li { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--line2); }
+.stops .wp { flex: none; width: 24px; height: 24px; cursor: default; box-shadow: none; }
+.stops .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ib.sm { width: 32px; height: 32px; font-size: 15px; }
+.ib.sm svg { width: 16px; height: 16px; }
+.ib[disabled] { opacity: .3; }
+.surf { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; font-size: 12px; }
+.surf span { padding: 3px 9px; border-radius: 12px; background: var(--s2); text-transform: capitalize; }
+.surf .asfalto { box-shadow: inset 3px 0 0 var(--acc); } .surf .sterrato, .surf .naturale { box-shadow: inset 3px 0 0 var(--g2); }
+.when { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 8px; }
+.when .sides { margin: 0; }
+.when input { height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); color: var(--tx); padding: 0 8px; margin-left: 6px; }
+.wxt td { vertical-align: top; }
+.wxt .st { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; background: var(--acc); }
+.wxt .st.storm { background: var(--g4); } .wxt .st.wet { background: var(--g1); } .wxt .st.wind { background: var(--g3); } .wxt .st.cold { background: #7B8794; }
+.giro .actions { flex-wrap: wrap; }
+.giro .actions .btn { flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 16px; font-size: 16px; }
+.giro .cards { padding: 0; }
