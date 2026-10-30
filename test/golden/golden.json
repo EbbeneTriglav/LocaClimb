@@ -1,6 +1,6 @@
 {
  "_comment": "Golden baseline - human-approved. Regenerate ONLY via scripts/golden_snapshot.mjs after reviewing its output. Agents: never edit.",
- "approvedAt": "2026-09-25",
+ "approvedAt": "2026-10-30",
  "stats": {
   "curated": 24,
   "osm": 14687,
@@ -81,9 +81,9 @@
      "side": "Da Mazzo di Valtellina",
      "startLat": 46.2585,
      "startLon": 10.25459,
-     "distance_km": 20.3,
-     "gain": 1259,
-     "avgGradient": 6.2
+     "distance_km": 10.8,
+     "gain": 1239,
+     "avgGradient": 11.4
     },
     {
      "side": "Da Grosio",
@@ -103,11 +103,11 @@
     },
     {
      "side": "Da Tovo di Sant'Agata",
-     "startLat": 46.24678,
-     "startLon": 10.24714,
-     "distance_km": 21.7,
-     "gain": 1282,
-     "avgGradient": 5.9
+     "startLat": 46.24776,
+     "startLon": 10.24788,
+     "distance_km": 11.2,
+     "gain": 1260,
+     "avgGradient": 11.2
     }
    ]
   },
@@ -422,12 +422,12 @@
      "avgGradient": 8.6
     },
     {
-     "side": "Da Sestriere",
-     "startLat": 45.04615,
-     "startLon": 6.99918,
-     "distance_km": 11,
-     "gain": 747,
-     "avgGradient": 6.8
+     "side": "Da Usseaux",
+     "startLat": 45.04609,
+     "startLon": 6.99745,
+     "distance_km": 11.2,
+     "gain": 742,
+     "avgGradient": 6.6
     }
    ]
   },
