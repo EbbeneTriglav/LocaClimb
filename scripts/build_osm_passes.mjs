@@ -23,6 +23,7 @@ import vm from "node:vm";
 import { createRequire } from "node:module";
 import { dataPath, DATA_DIR } from "./lib/paths.mjs";
 import { hwKeep } from "./lib/highways.mjs";
+import { fillStruct } from "./lib/structdem.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
@@ -96,7 +97,7 @@ const BBOX = (process.env.LC_BBOX || arg("--bbox", "") || (DISC ? DISC.bbox : ""
 // rec.algo != ALGO_VERSION is regenerated exactly once, then stamped and skipped on later
 // runs. This propagates algorithm fixes (e.g. valley-trim) without a manual --reenrich,
 // and without re-doing the heavy work every month. (Curated + extra climbs always rebuild.)
-const ALGO_VERSION = "v4.7-pavedauto";
+const ALGO_VERSION = "v4.8-structdem"; // v4.8: tunnel/bridge heights interpolated, waypoint chains without gaps
 const BUILD_DATE = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, stamped on every (re)built climb
 const NO_XDEDUP = process.argv.includes("--no-crossdedup"); // disable cross-pass overlap prune (D)
 // Extra gain (m) required of a name-matched saddle/peak, ON TOP of the floor buildVersanti already
@@ -788,12 +789,23 @@ async function main() {
     } else if (!nearPass(mid[1], mid[0]) && !nearPass(c[0][1], c[0][0]) && !nearPass(c[c.length - 1][1], c[c.length - 1][0])) return;
     if (!rideable(f.properties)) return;
     const t = f.properties, tags = { highway: t.highway, name: t.name, ref: t.ref, surface: t.surface, tracktype: t.tracktype, smoothness: t.smoothness, hgv: t.hgv, maxweight: t.maxweight };
-    if (DISC) { tags.tunnel = t.tunnel; tags.bridge = t.bridge; } // DEM is wrong inside tunnels / on bridges
+    if (t.tunnel && t.tunnel !== "no") tags.tunnel = t.tunnel;   // DEM is wrong inside tunnels / on bridges:
+    if (t.bridge && t.bridge !== "no") tags.bridge = t.bridge;   // their inner vertices get interpolated heights
     const g = new Float32Array(c.length * 2);
     for (let k = 0; k < c.length; k++) { g[k * 2] = c[k][1]; g[k * 2 + 1] = c[k][0]; }
     ways.push({ uid: uid++, tags, g });
   });
   console.log("  ways kept: " + ways.length);
+  // inner vertices of tunnels and bridges that no ordinary road touches: their DEM height is wrong
+  // (mountain above / valley below), climbHeights() interpolates them between the portals
+  const structInner = new Set();
+  for (const w of ways) if (w.tags.tunnel || w.tags.bridge) for (let i = 1; i < glen(w) - 1; i++) structInner.add(vkey(gx(w, i), gy(w, i)));
+  if (structInner.size) for (const w of ways) if (!w.tags.tunnel && !w.tags.bridge) for (let i = 0; i < glen(w); i++) structInner.delete(vkey(gx(w, i), gy(w, i)));
+  console.log("  tunnel/bridge inner vertices: " + structInner.size);
+  async function climbHeights(pts) {
+    const ev = await elevations(pts);
+    return ev && fillStruct(pts, ev, (p) => structInner.has(vkey(p[0], p[1])));
+  }
 
   // vertex graph: index EVERY vertex but only for ways close to a pass (full continuity, bounded memory)
   function wayNearPass(w) {
@@ -930,11 +942,16 @@ async function main() {
       // search). Used to stitch a waypoint chain so a pinned versante follows an EXACT road the
       // shortest path would otherwise skip (e.g. the steeper "Dritta Contador", or a Grappa side
       // that must keep its own lower road instead of merging onto the neighbouring one).
-      function dijkstraSeg(aLat, aLon, bLat, bLon, capSeg) {
-        var sa = snap(aLat, aLon, 0.6); if (!sa) return null; // tight: a waypoint must sit ON its road, not a parallel one
-        var startK = vkey(gx(sa.w, sa.idx), gy(sa.w, sa.idx));
+      // fromKey: start from this graph vertex (the previous hop's goal) instead of snapping (aLat, aLon).
+      // snap() ranks road CLASS before distance, so re-snapping a waypoint on an unclassified road could
+      // jump to a tertiary vertex hundreds of metres away: the chain then had a straight gap across the
+      // hairpins (Mortirolo da Mazzo: 478 m, read by the DEM as 48% and stored as max 27%).
+      function dijkstraSeg(aLat, aLon, bLat, bLon, capSeg, fromKey) {
+        var startK, startC;
+        if (fromKey) { var fk = fromKey.split(","); startK = fromKey; startC = [parseFloat(fk[0]), parseFloat(fk[1])]; }
+        else { var sa = snap(aLat, aLon, 0.6); if (!sa) return null; startK = vkey(gx(sa.w, sa.idx), gy(sa.w, sa.idx)); startC = [gx(sa.w, sa.idx), gy(sa.w, sa.idx)]; } // tight: a waypoint must sit ON its road, not a parallel one
         var distM = new Map([[startK, 0]]), costM = new Map([[startK, 0]]), par = new Map(), crd = new Map();
-        crd.set(startK, [gx(sa.w, sa.idx), gy(sa.w, sa.idx)]);
+        crd.set(startK, startC);
         var h = [[0, startK]], seen = new Set(), goalK = null;
         while (h.length) {
           var t = hpop(h), c = t[1];
@@ -957,18 +974,20 @@ async function main() {
         }
         if (!goalK) return null;
         var path = [], k = goalK; while (k != null) { path.push(crd.get(k)); k = par.get(k); }
-        return path.reverse(); // a -> b
+        path.reverse(); path.goalKey = goalK; // a -> b; the next hop starts exactly here
+        return path;
       }
       function routeChain(wps) { // wps: [[lat,lon],...] base -> top; returns base -> summit, or null
-        var full = [];
+        var full = [], at = null;
         for (var i = 0; i < wps.length - 1; i++) {
           var hop = hav(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1]);
-          var seg = dijkstraSeg(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1], hop * 5 + 3); // hairpin stretches between two waypoints can be 4x the straight line (Mortirolo da Mazzo)
+          var seg = dijkstraSeg(wps[i][0], wps[i][1], wps[i + 1][0], wps[i + 1][1], hop * 5 + 3, at); // hairpin stretches between two waypoints can be 4x the straight line (Mortirolo da Mazzo)
           if (!seg || seg.length < 2) return null;
           full = full.length ? full.concat(seg.slice(1)) : seg;
+          at = seg.goalKey; // continuous chain: no gap between hops
         }
         var lw = wps[wps.length - 1];
-        var toTop = dijkstraSeg(lw[0], lw[1], lat, lon, hav(lw[0], lw[1], lat, lon) * 3 + 5);
+        var toTop = dijkstraSeg(lw[0], lw[1], lat, lon, hav(lw[0], lw[1], lat, lon) * 3 + 5, at);
         if (toTop && toTop.length > 1) full = full.concat(toTop.slice(1));
         return full;
       }
@@ -990,7 +1009,7 @@ async function main() {
           if (rp.length < 4) continue;
           pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
         }
-        var ev = await elevations(pth); if (!ev) continue;
+        var ev = await climbHeights(pth); if (!ev) continue;
         var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
         if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town
         if (!pv) { console.log("    . hint " + tg.name + ": salita non valida"); continue; }
@@ -1056,7 +1075,7 @@ async function main() {
       var path = rawPath.slice().reverse(); // summit -> base
       if (path.length < 4) continue;
       path = resampleByDist(path, 0.05); // ~50m on straights, full resolution on hairpins (adaptive)
-      var ev = await elevations(path); if (!ev) continue;
+      var ev = await climbHeights(path); if (!ev) continue;
       var v = buildSide(path, ev, lat, lon, relax); // path is summit->base; buildSide reverses internally
       if (v) raw.push(v);
     }
