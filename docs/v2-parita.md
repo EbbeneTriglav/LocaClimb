@@ -30,10 +30,10 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 
 | Funzione v1 | v1 | v2 |
 |---|---|---|
-| Salite colorate, filtri | ok (regione, difficoltà, stato, camion) | 🟡 difficoltà (8+, 10/10) e "Scoperte"; mancano regione, stato, camion |
+| Salite colorate, filtri | ok (regione, difficoltà, stato, camion) | 🟡 difficoltà (8+, 10/10), "Scoperte" e **Solo asfalto**; mancano regione, stato, camion (non sono nell'indice: servono dati) |
 | Ricerca salite | ok | ✅ |
-| Ricerca località (paesi) | ok | ⏭️ |
-| Strati acqua 💧 e cibo 🍽️ sulla mappa | ok | ⏭️ (ora solo nella scheda salita) |
+| Ricerca località (paesi) | ok | ✅ nella stessa barra (Nominatim, come la v1) |
+| Strati acqua 💧 e cibo 🍽️ sulla mappa | ok | ✅ bottone goccia, da zoom 11 (acqua azzurra, bar bianchi) |
 | Strato traffico | presente (non provato) | ⏭️ |
 | Mappe di base (Topo, ecc.) | ok | 🟡 una sola mappa scura con rilievo e 3D |
 | Lingua inglese 🌐 | ok | ⏭️ |
@@ -68,5 +68,5 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 ## Ordine proposto delle prossime PR v2
 1. **Import giri dentro la v2** (GPX/FIT/zip, riusa `js/rideimport.js`) + **I miei giri**.
 2. ~~**Route builder v2**~~ fatto (PR `v2-giro`). Restano roadbook stampabile e immagine del giro.
-3. **Mappa**: ricerca località, strati acqua/cibo, filtri regione/stato/camion, lingua EN.
+3. **Mappa**: ✅ ricerca località, acqua/bar, Solo asfalto, nomi generici ("Passo" → "Passo a 2959 m"). Restano filtri regione/stato/camion e lingua EN.
 4. **Proposte salite, livelli, badge** → poi si spegne la v1 (la v2 va su `/`, la v1 resta su `/classica/` per un mese).

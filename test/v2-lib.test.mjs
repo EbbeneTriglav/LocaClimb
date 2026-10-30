@@ -230,3 +230,28 @@ test("auth errors in Italian", async () => {
   assert.equal(authError({ code: "auth/wrong-password" }), "Password sbagliata.");
   assert.equal(authError({ message: "boom" }), "boom");
 });
+
+import { displayName, isGravel, placeHit } from "../v2/lib/data.mjs";
+test("displayName: generic OSM names get the height; fixed ids; real names untouched", () => {
+  assert.equal(displayName({ id: "a", name: "Passo", elevation: 2959 }), "Passo a 2959 m");
+  assert.equal(displayName({ id: "a", name: "colle", elevation: 900 }), "Colle a 900 m");
+  assert.equal(displayName({ id: "a", name: "Sattel" }), "Sattel senza nome");
+  assert.equal(displayName({ id: "a", name: "", elevation: 1200 }), "Salita a 1200 m");
+  assert.equal(displayName({ id: "a", name: "Passo Gavia", elevation: 2621 }), "Passo Gavia");
+  assert.equal(displayName({ id: "osm-rt4692440x1094453", name: "Tunnelausgang Süd" }), "Ötztaler Gletscherstraße (Tiefenbach)");
+});
+test("isGravel reads the pipeline's surface labels", () => {
+  assert.ok(isGravel({ surfaceLabel: "🪨 Sterrato/gravel" }));
+  assert.ok(isGravel({ surfaceLabel: "Fondo: unpaved" }));
+  assert.ok(isGravel({ surfaceLabel: "Fondo: dirt" }));
+  assert.ok(!isGravel({ surfaceLabel: "🛣️ Asfalto" }));
+  assert.ok(!isGravel({ surfaceLabel: "Fondo: sett" }));
+  assert.ok(!isGravel({}));
+});
+test("placeHit: Nominatim jsonv2 -> name, context, bounds as [[w,s],[e,n]]", () => {
+  const p = placeHit({ lat: "46.4677", lon: "10.3707", name: "Bormio", display_name: "Bormio, Comunità montana Alta Valtellina, Sondrio, Lombardia, 23032, Italia", boundingbox: ["46.43", "46.52", "10.30", "10.45"] });
+  assert.equal(p.name, "Bormio");
+  assert.equal(p.sub, "Comunità montana Alta Valtellina, Sondrio");
+  assert.deepEqual(p.bb, [[10.3, 46.43], [10.45, 46.52]]);
+  assert.equal(placeHit({ lat: "x", lon: "1" }), null);
+});
