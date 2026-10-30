@@ -109,6 +109,8 @@ Production URL: https://locaride.app/ — hosting is GitHub Pages until the Clou
 - Map: MapLibre (vendored), OpenFreeMap "dark" basemap, AWS Terrarium DEM for hillshade + 3D.
   Region files are fetched on demand through the `f` field of `osm_index.json`.
 - Design tokens live in `v2/app.css` (`:root`). One gradient scale for the whole app (`GRADE_STOPS`).
+- Release: bump `?v=` on `app.mjs` and on EVERY relative import in `v2/` together (Pages caches files for
+  minutes; new app + old lib = blank page). `test/v2-version.test.mjs` guards it; `e2e/v2.e2e.mjs` boots it in it + en.
 - The classic app (`index.html`, `js/`) stays the production app until Rick switches.
 
 ## Code conventions
