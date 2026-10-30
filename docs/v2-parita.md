@@ -30,7 +30,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 
 | Funzione v1 | v1 | v2 |
 |---|---|---|
-| Salite colorate, filtri | ok (regione, difficoltà, stato, camion) | 🟡 difficoltà (8+, 10/10), "Scoperte" e **Solo asfalto**; mancano regione, stato, camion (non sono nell'indice: servono dati) |
+| Salite colorate, filtri | ok (regione, difficoltà, stato, camion) | ✅ difficoltà (8+, 10/10), "Scoperte", **Solo asfalto**, **Pochi camion**, **Zona** (Paese della zona dati). Stato (chiuso/stagionale) solo per i 24 passi curati: per gli OSM il dato non esiste |
 | Ricerca salite | ok | ✅ |
 | Ricerca località (paesi) | ok | ✅ nella stessa barra (Nominatim, come la v1) |
 | Strati acqua 💧 e cibo 🍽️ sulla mappa | ok | ✅ bottone goccia, da zoom 11 (acqua azzurra, bar bianchi) |

@@ -3,7 +3,7 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit } from "./lib/data.mjs";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs";
 import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs";
 import { poisNear } from "./lib/poi.mjs";
 import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs";
@@ -14,7 +14,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const panel = $("#panel");
 const DESKTOP = () => matchMedia("(min-width: 900px)").matches;
-const S = { paved: false, poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null };
+const S = { paved: false, trucks: false, cc: "", poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null };
 
 /* ------------------------------------------------------------------ map */
 const TERRAIN = { type: "raster-dem", tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], encoding: "terrarium", tileSize: 256, maxzoom: 14, attribution: "Rilievo: Mapzen / AWS Terrain Tiles" };
@@ -90,12 +90,15 @@ map.on("moveend", () => { if (panel.dataset.mode === "list") renderList(); });
 
 function applyFilter() {
   let f = S.filter === "hard" ? [">=", ["get", "d"], 8] : S.filter === "top" ? [">=", ["get", "d"], 10] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
-  if (S.paved) f = f ? ["all", f, ["==", ["get", "gr"], 0]] : ["==", ["get", "gr"], 0];
+  const all = [f, S.paved && ["==", ["get", "gr"], 0], S.trucks && ["==", ["get", "tk"], 0], S.cc && ["==", ["get", "cc"], S.cc]].filter(Boolean);
+  f = all.length > 1 ? ["all", ...all] : all[0] || null;
   for (const id of ["c-dot", "c-glow", "c-lab"]) if (map.getLayer(id)) map.setFilter(id, f);
 }
 function passesFilter(c) {
   const d = c.difficulty || 0;
   if (S.paved && isGravel(c)) return false;
+  if (S.trucks && !fewTrucks(c)) return false;
+  if (S.cc && c.cc !== S.cc) return false;
   return S.filter === "hard" ? d >= 8 : S.filter === "top" ? d >= 10 : S.filter === "new" ? /^osm-rt/.test(c.id) : true;
 }
 document.querySelectorAll(".chips button[data-filter]").forEach((b) => b.addEventListener("click", () => {
@@ -107,6 +110,33 @@ document.querySelectorAll(".chips button[data-filter]").forEach((b) => b.addEven
 $("#bpaved").addEventListener("click", (e) => {
   S.paved = !S.paved; e.currentTarget.setAttribute("aria-pressed", String(S.paved));
   applyFilter(); if (panel.dataset.mode === "list") renderList();
+});
+$("#btrucks").addEventListener("click", (e) => {
+  S.trucks = !S.trucks; e.currentTarget.setAttribute("aria-pressed", String(S.trucks));
+  applyFilter(); if (panel.dataset.mode === "list") renderList();
+});
+/* zone = the data zone a climb comes from (one per country; climbs near a border may sit in the
+   neighbour's zone): a menu with the counts, the map flies to the chosen zone */
+$("#bzone").addEventListener("click", async () => {
+  const st = await loadIndex(), n = new Map();
+  for (const c of st.climbs) if (c.cc) n.set(c.cc, (n.get(c.cc) || 0) + 1);
+  const list = [...n.entries()].sort((a, b) => (COUNTRIES[a[0]] || a[0]).localeCompare(COUNTRIES[b[0]] || b[0], "it"));
+  const d = openDialog(`<form method="dialog" class="dform zones"><h2>Zona</h2>
+    <button type="button" class="zr" data-cc="" aria-pressed="${!S.cc}"><span>Tutte le zone</span><small>${esc(st.climbs.length.toLocaleString("it-IT"))}</small></button>
+    ${list.map(([k, v]) => `<button type="button" class="zr" data-cc="${esc(k)}" aria-pressed="${S.cc === k}"><span>${esc(COUNTRIES[k] || k)}</span><small>${esc(v.toLocaleString("it-IT"))}</small></button>`).join("")}
+    <p class="note small mu">Le salite vicino a un confine possono stare nella zona del Paese accanto.</p>
+    <button class="btn" value="x">Chiudi</button></form>`);
+  d.querySelectorAll("[data-cc]").forEach((b) => b.addEventListener("click", () => {
+    S.cc = b.dataset.cc; closeDialog();
+    const bz = $("#bzone"); bz.setAttribute("aria-pressed", String(!!S.cc)); bz.textContent = S.cc ? (COUNTRIES[S.cc] || S.cc) + " ▾" : "Zona ▾";
+    applyFilter();
+    if (S.cc) {
+      const pts = st.climbs.filter((c) => c.cc === S.cc), la = pts.map((c) => c.lat).sort((a, b2) => a - b2), lo = pts.map((c) => c.lon).sort((a, b2) => a - b2);
+      const q = (a, x) => a[Math.min(a.length - 1, Math.max(0, Math.round(x * (a.length - 1))))];   // 2nd-98th percentile: one stray point does not zoom out to Europe
+      if (pts.length) map.fitBounds([[q(lo, 0.02), q(la, 0.02)], [q(lo, 0.98), q(la, 0.98)]], { padding: DESKTOP() ? { top: 80, bottom: 40, left: 480, right: 60 } : { top: 140, bottom: 260, left: 20, right: 20 }, duration: 900 });
+    }
+    if (panel.dataset.mode === "list") renderList();
+  }));
 });
 $("#b3d").addEventListener("click", (e) => set3d(!S.three, e.currentTarget));
 function set3d(on, btn = $("#b3d")) {
@@ -198,9 +228,9 @@ function setMode(m) { panel.dataset.mode = m; panel.scrollTop = 0; }
 /* ------------------------------------------------------------------ climbs in view */
 function renderList() {
   setMode("list");
-  const b = map.getBounds(), r = inBounds({ s: b.getSouth(), n: b.getNorth(), w: b.getWest(), e: b.getEast() }, 400);
-  const list = (r.list || []).filter(passesFilter).slice(0, 30);
-  const total = r.total || 0;
+  const b = map.getBounds(), r = inBounds({ s: b.getSouth(), n: b.getNorth(), w: b.getWest(), e: b.getEast() }, Infinity);
+  const all = (r.list || []).filter(passesFilter), list = all.slice(0, 30);
+  const total = all.length;   // what the filters leave, not every climb in view
   panel.innerHTML = `<div class="handle"></div>
     <div class="ph"><h2>${total ? esc(total.toLocaleString("it-IT")) + " salite qui" : "Nessuna salita qui"}</h2><small>${list.length ? "le più dure" : "sposta o allarga la mappa"}</small></div>
     ${list.length ? `<div class="cards">${list.map(card).join("")}</div>` : `<p class="empty">Zoom indietro o cambia filtro.</p>`}`;

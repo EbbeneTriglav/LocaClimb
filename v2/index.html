@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/maplibre-gl-5.24.0/maplibre-gl.css">
-<link rel="stylesheet" href="app.css?v=7">
+<link rel="stylesheet" href="app.css?v=8">
 </head>
 <body>
 <div id="map" aria-label="Mappa delle salite"></div>
@@ -31,6 +31,8 @@
   <button type="button" data-filter="top" aria-pressed="false">10/10</button>
   <button type="button" data-filter="new" aria-pressed="false">Scoperte</button>
   <button type="button" id="bpaved" class="tog" aria-pressed="false">Solo asfalto</button>
+  <button type="button" id="btrucks" class="tog" aria-pressed="false">Pochi camion</button>
+  <button type="button" id="bzone" class="tog" aria-pressed="false">Zona ▾</button>
 </div>
 
 <div class="legend" aria-label="Legenda difficoltà">
@@ -72,6 +74,6 @@
 <script src="../js/gpxclimbs.js?v=1793290000" defer></script>
 <script src="../js/myclimbs.js?v=1793290000" defer></script>
 <script src="../js/rideimport.js?v=1793290000" defer></script>
-<script type="module" src="app.mjs?v=7"></script>
+<script type="module" src="app.mjs?v=8"></script>
 </body>
 </html>

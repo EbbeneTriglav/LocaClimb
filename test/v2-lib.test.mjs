@@ -255,3 +255,30 @@ test("placeHit: Nominatim jsonv2 -> name, context, bounds as [[w,s],[e,n]]", () 
   assert.deepEqual(p.bb, [[10.3, 46.43], [10.45, 46.52]]);
   assert.equal(placeHit({ lat: "x", lon: "1" }), null);
 });
+
+import { countryOfFile, assignCountries, fewTrucks } from "../v2/lib/data.mjs";
+test("countryOfFile: country from the region file name; border files and proposals left to the neighbours", () => {
+  assert.equal(countryOfFile("osm_passes.json"), "IT");
+  assert.equal(countryOfFile("osm_passes_fr_paca.json"), "FR");
+  assert.equal(countryOfFile("osm_passes_de_by.json"), "DE");
+  assert.equal(countryOfFile("osm_passes_sud.json"), "IT");
+  assert.equal(countryOfFile("osm_passes_disc_lombardia.json"), "IT");
+  assert.equal(countryOfFile("osm_passes_disc_france-rhone-alpes.json"), "FR");
+  assert.equal(countryOfFile("osm_passes_disc_andorra.json"), "AD");
+  assert.equal(countryOfFile("osm_passes_nl_lu.json"), "NLLU");
+  assert.equal(countryOfFile("osm_passes_xb_itsi.json"), null);
+  assert.equal(countryOfFile("osm_passes_user.json"), null);
+  assert.equal(countryOfFile("curated_overrides.json"), null);
+});
+test("assignCountries: border climbs take the nearest climb's country", () => {
+  const regions = ["osm_passes.json", "osm_passes_si.json", "osm_passes_xb_itsi.json"];
+  const cl = [{ lat: 46.30, lon: 13.40, f: 0 }, { lat: 46.30, lon: 13.80, f: 1 }, { lat: 46.31, lon: 13.75, f: 2 }, { lat: 46.30, lon: 13.45, f: 2 }, { lat: 46.5, lon: 10.4, curated: true }];
+  assignCountries(cl, regions);
+  assert.deepEqual(cl.map((c) => c.cc), ["IT", "SI", "SI", "IT", "IT"]);
+});
+test("fewTrucks: only 'possibili' and 'si' count as trucks", () => {
+  assert.ok(fewTrucks({}));
+  assert.ok(fewTrucks({ tk: "no" }));
+  assert.ok(!fewTrucks({ tk: "possibili" }));
+  assert.ok(!fewTrucks({ trucks: "si" }));
+});
