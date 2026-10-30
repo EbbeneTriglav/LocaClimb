@@ -8,8 +8,11 @@ import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, prof
 import { poisNear } from "./lib/poi.mjs";
 import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs";
 import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs";
 import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs";
 
+const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : LOC;
+globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const panel = $("#panel");
@@ -122,8 +125,8 @@ $("#bzone").addEventListener("click", async () => {
   for (const c of st.climbs) if (c.cc) n.set(c.cc, (n.get(c.cc) || 0) + 1);
   const list = [...n.entries()].sort((a, b) => (COUNTRIES[a[0]] || a[0]).localeCompare(COUNTRIES[b[0]] || b[0], "it"));
   const d = openDialog(`<form method="dialog" class="dform zones"><h2>Zona</h2>
-    <button type="button" class="zr" data-cc="" aria-pressed="${!S.cc}"><span>Tutte le zone</span><small>${esc(st.climbs.length.toLocaleString("it-IT"))}</small></button>
-    ${list.map(([k, v]) => `<button type="button" class="zr" data-cc="${esc(k)}" aria-pressed="${S.cc === k}"><span>${esc(COUNTRIES[k] || k)}</span><small>${esc(v.toLocaleString("it-IT"))}</small></button>`).join("")}
+    <button type="button" class="zr" data-cc="" aria-pressed="${!S.cc}"><span>Tutte le zone</span><small>${esc(st.climbs.length.toLocaleString(LOC))}</small></button>
+    ${list.map(([k, v]) => `<button type="button" class="zr" data-cc="${esc(k)}" aria-pressed="${S.cc === k}"><span>${esc(COUNTRIES[k] || k)}</span><small>${esc(v.toLocaleString(LOC))}</small></button>`).join("")}
     <p class="note small mu">Le salite vicino a un confine possono stare nella zona del Paese accanto.</p>
     <button class="btn" value="x">Chiudi</button></form>`);
   d.querySelectorAll("[data-cc]").forEach((b) => b.addEventListener("click", () => {
@@ -138,6 +141,9 @@ $("#bzone").addEventListener("click", async () => {
     if (panel.dataset.mode === "list") renderList();
   }));
 });
+$("#blang").textContent = LANG === "en" ? "IT" : "EN";
+$("#blang").setAttribute("aria-label", LANG === "en" ? "Passa all'italiano" : "Switch to English");
+$("#blang").addEventListener("click", () => { setLang(LANG === "en" ? "it" : "en"); location.reload(); });
 $("#b3d").addEventListener("click", (e) => set3d(!S.three, e.currentTarget));
 function set3d(on, btn = $("#b3d")) {
   S.three = on; btn.setAttribute("aria-pressed", String(on));
@@ -232,7 +238,7 @@ function renderList() {
   const all = (r.list || []).filter(passesFilter), list = all.slice(0, 30);
   const total = all.length;   // what the filters leave, not every climb in view
   panel.innerHTML = `<div class="handle"></div>
-    <div class="ph"><h2>${total ? esc(total.toLocaleString("it-IT")) + " salite qui" : "Nessuna salita qui"}</h2><small>${list.length ? "le più dure" : "sposta o allarga la mappa"}</small></div>
+    <div class="ph"><h2>${total ? esc(total.toLocaleString(LOC)) + " salite qui" : "Nessuna salita qui"}</h2><small>${list.length ? "le più dure" : "sposta o allarga la mappa"}</small></div>
     ${list.length ? `<div class="cards">${list.map(card).join("")}</div>` : `<p class="empty">Zoom indietro o cambia filtro.</p>`}`;
 }
 function card(c) {
@@ -357,7 +363,7 @@ function trafficFacts(v, c) {
 function bikeDayHtml(c) {
   const ev = (globalThis.BIKE_EVENTS || []).filter((e) => (e.passes || []).includes(c.id) && new Date(e.date) >= new Date(new Date().toDateString())).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 4);
   if (!ev.length) return "";
-  return `<section class="sec"><h3>Bike Day: strada solo per bici</h3><ul class="tips">${ev.map((e) => `<li><b>${esc(new Date(e.date).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "long" }))}</b> · ${esc(e.name)} · ${esc(e.hours || "")}${e.url ? ` · <a href="${esc(e.url)}" target="_blank" rel="noopener">sito</a>` : ""}</li>`).join("")}</ul></section>`;
+  return `<section class="sec"><h3>Bike Day: strada solo per bici</h3><ul class="tips">${ev.map((e) => `<li><b>${esc(new Date(e.date).toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "long" }))}</b> · ${esc(e.name)} · ${esc(e.hours || "")}${e.url ? ` · <a href="${esc(e.url)}" target="_blank" rel="noopener">sito</a>` : ""}</li>`).join("")}</ul></section>`;
 }
 /* known Strava segments per curated pass (same table as the classic app, js/state.js). Strava
    closed its public segment explorer page, so the old "Cerca segmenti" link is gone: segment search
@@ -390,7 +396,7 @@ async function fillWeek(c) {
   try { rows = await fetchDaily({ lat: c.lat, lon: c.lon, ele: c.elevation }); } catch { rows = null; }
   if (S.sel !== c || !$("#week")) return;
   if (!rows || !rows.length) { el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><p class="note">Meteo non disponibile ora.</p>`; return; }
-  el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><div class="week">${rows.map((d) => `<div class="day ${d.pp >= 50 ? "wet" : ""}"><span class="dn">${esc(new Date(d.date + "T12:00:00").toLocaleDateString("it-IT", { weekday: "short", day: "numeric" }))}</span><span class="wl">${esc(d.label)}</span><b>${num(d.tmax, 0)}°</b><span class="mu">${num(d.tmin, 0)}°</span><span class="pp">${esc(d.pp ?? "–")}%</span><span class="mu">${num(d.wind, 0)} km/h</span></div>`).join("")}</div>`;
+  el.innerHTML = `<h3>Meteo 7 giorni in cima</h3><div class="week">${rows.map((d) => `<div class="day ${d.pp >= 50 ? "wet" : ""}"><span class="dn">${esc(new Date(d.date + "T12:00:00").toLocaleDateString(LOC, { weekday: "short", day: "numeric" }))}</span><span class="wl">${esc(d.label)}</span><b>${num(d.tmax, 0)}°</b><span class="mu">${num(d.tmin, 0)}°</span><span class="pp">${esc(d.pp ?? "–")}%</span><span class="mu">${num(d.wind, 0)} km/h</span></div>`).join("")}</div>`;
 }
 const AXES = [["e", "Emozione"], ["p", "Paesaggio"], ["t", "Traffico"], ["a", "Asfalto"]];
 async function fillRating(c) {
@@ -406,7 +412,7 @@ async function fillRating(c) {
   const sel = (k, l) => `<div class="vote"><span>${l}</span><div role="radiogroup" aria-label="${l}">${[1, 2, 3, 4, 5].map((n) => `<button type="button" role="radio" data-ax="${k}" data-n="${n}" aria-checked="${mine && mine[k] === n}">${n}</button>`).join("")}</div></div>`;
   el.innerHTML = `<h3>Valutazioni della community</h3>
     ${s.n ? `<p class="note"><b class="big">${num(s.overall)}</b> /5 · ${esc(s.n)} ${s.n === 1 ? "voto" : "voti"}</p><div class="axes">${s.axes.map(([l, x]) => `<div><span>${esc(l)}</span><i><u style="width:${(x / 5 * 100).toFixed(0)}%"></u></i><b>${num(x)}</b></div>`).join("")}</div>` : `<p class="note">Ancora nessun voto: il primo è tuo.</p>`}
-    ${comments.length ? `<ul class="comments">${comments.map((v) => `<li><b>${esc(v.by || "Ciclista")}</b> <span class="mu">· ${esc(new Date(v.ts).toLocaleDateString("it-IT"))}</span><br>${esc(String(v.txt).slice(0, REV_MAX))}</li>`).join("")}</ul>` : ""}
+    ${comments.length ? `<ul class="comments" data-noi18n>${comments.map((v) => `<li><b>${esc(v.by || "Ciclista")}</b> <span class="mu">· ${esc(new Date(v.ts).toLocaleDateString(LOC))}</span><br>${esc(String(v.txt).slice(0, REV_MAX))}</li>`).join("")}</ul>` : ""}
     ${canVote ? `<form class="voteform" id="voteForm"><div class="k">${mine ? "Il tuo voto (puoi cambiarlo)" : "Il tuo voto"}</div>${AXES.map(([k, l]) => sel(k, l)).join("")}
         <label class="sr" for="vtxt">Commento</label><textarea id="vtxt" maxlength="${REV_MAX}" rows="2" placeholder="Com'è andata, in due righe (facoltativo)">${esc(mine && mine.txt || "")}</textarea>
         <button type="submit" class="btn pri">Invia voto</button><p class="note small" id="vmsg"></p></form>`
@@ -832,7 +838,7 @@ function paintGiroWeather() {
     const at = new Date(base.getTime() + (t0 + p.min) * 60000), hk = at.getFullYear() + "-" + String(at.getMonth() + 1).padStart(2, "0") + "-" + String(at.getDate()).padStart(2, "0") + "T" + String(at.getHours()).padStart(2, "0") + ":00";
     const H = h[k] || {}, i = (H.time || []).indexOf(hk);
     const x = i >= 0 ? { temp: H.temperature_2m?.[i], pp: H.precipitation_probability?.[i], wind: H.wind_speed_10m?.[i], cape: H.cape?.[i] } : null;
-    return `<tr><td>${esc(at.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }))}</td><td><b>${esc(p.name)}</b><br><span class="mu">km ${num(p.km, 0)} · ${esc(p.ele)} m</span></td>${x ? `<td><i class="st ${hourState(x)}"></i>${num(x.temp, 0)}°</td><td>${num(x.wind, 0)} km/h</td><td>${esc(x.pp ?? "–")}%</td>` : `<td colspan="3" class="mu">fuori previsione</td>`}</tr>`;
+    return `<tr><td>${esc(at.toLocaleTimeString(LOC, { hour: "2-digit", minute: "2-digit" }))}</td><td><b>${esc(p.name)}</b><br><span class="mu">km ${num(p.km, 0)} · ${esc(p.ele)} m</span></td>${x ? `<td><i class="st ${hourState(x)}"></i>${num(x.temp, 0)}°</td><td>${num(x.wind, 0)} km/h</td><td>${esc(x.pp ?? "–")}%</td>` : `<td colspan="3" class="mu">fuori previsione</td>`}</tr>`;
   }).join("");
   el.innerHTML = `<table class="vt wxt"><thead><tr><th>Ora</th><th>Dove</th><th>Temp.</th><th>Vento</th><th>Pioggia</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
@@ -863,7 +869,7 @@ function giroGpx() {
   G.stops.forEach((s, i) => { if (s.name) wpts.push({ lat: s.lat, lon: s.lon, name: s.name, sym: "Summit" }); else if (i === 0 || i === G.stops.length - 1) wpts.push({ lat: s.lat, lon: s.lon, name: stopName(s, i), sym: "Flag, Blue" }); });
   for (const x of G.on) if (!wpts.some((w) => Math.abs(w.lat - x.c.lat) < 1e-4 && Math.abs(w.lon - x.c.lon) < 1e-4)) wpts.push({ lat: x.c.lat, lon: x.c.lon, ele: x.c.elevation, name: x.c.name, sym: "Summit" });
   for (const x of (G.water && G.water.list) || []) wpts.push({ lat: x.p.lat, lon: x.p.lon, name: "Acqua" + (x.p.name ? " - " + x.p.name : ""), sym: "Drinking Water" });
-  const name = "Giro LocaRide " + new Date().toLocaleDateString("it-IT");
+  const name = "Giro LocaRide " + new Date().toLocaleDateString(LOC);
   const track = G.res.noEle ? G.res.track : G.res.track.map((q) => [q[0], q[1], q[2]]);
   const blob = new Blob([routeGpx(name, track, wpts)], { type: "application/gpx+xml" });
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
@@ -878,3 +884,5 @@ const ICON = {
   share: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg>`,
   close: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`
 };
+
+startI18n(LANG);

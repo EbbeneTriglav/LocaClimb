@@ -268,3 +268,4 @@ a { color: var(--acc); }
 .zones .zr:hover { background: var(--s2); }
 .zones .zr[aria-pressed="true"] { background: var(--acc); color: var(--acc-tx); font-weight: 600; }
 .zones .zr small { color: inherit; opacity: .7; }
+.mapbtns .lang { font-size: 14px; letter-spacing: .04em; }
