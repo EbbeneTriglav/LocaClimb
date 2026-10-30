@@ -23,6 +23,7 @@ import vm from "node:vm";
 import { createRequire } from "node:module";
 import { dataPath, DATA_DIR } from "./lib/paths.mjs";
 import { hwKeep } from "./lib/highways.mjs";
+import { hintKeyFor } from "./lib/hints.mjs";
 import { fillStruct } from "./lib/structdem.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
@@ -717,8 +718,7 @@ async function main() {
   // icon passes the heuristic mis-handles (cones like Amiata). All other passes stay automatic.
   let baseHints = {};
   try { baseHints = JSON.parse(await readFile(dataPath("base_hints.json"), "utf8")); } catch {}
-  const normH = (n) => (n || "").toLowerCase().replace(/passo |del |dell'|della |di |monte |dello |colle |col /g, "").trim();
-  function hintsFor(name) { var nn = normH(name); for (var key in baseHints) { var nk = normH(key); if (nk && nn.indexOf(nk) >= 0) return baseHints[key]; } return null; } // key must be contained in the pass name (NOT the reverse), so "San Pellegrino" does not match the "...in Alpe" key
+  function hintsFor(name) { const k = hintKeyFor(name, baseHints); return k ? baseHints[k] : null; } // scripts/lib/hints.mjs: key contained in the name, first key in the file wins
   var deacc = function (s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
   function resolveTowns(list, sLat, sLon) {
     var out = [];
