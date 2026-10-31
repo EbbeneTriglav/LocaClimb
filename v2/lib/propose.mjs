@@ -5,7 +5,7 @@
  * approves; scripts/import_proposals.mjs moves approved ones into data/osm_passes_user.json.
  * Pure and tested (test/v2-propose.test.mjs).
  */
-import { havKm } from "./climb.mjs?v=19";
+import { havKm } from "./climb.mjs?v=20";
 
 export const MAXPTS = 800, MINKM = 1.5, MINGAIN = 100;
 /* levels count ACCEPTED climbs (a second side of the same pass counts half), as the classic app */

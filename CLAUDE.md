@@ -12,8 +12,11 @@ summit or a closed pass shown as open is worse than a missing feature.
 Single maintainer: Rick. He approves every change. You propose, he decides.
 
 ## Layout (details: docs/architecture.md)
-- `index.html` + `js/*.js` — plain ES5-style classic scripts sharing ~200 globals, loaded
-  in the order listed in `test/helpers/js-files.mjs`. No import/export in `js/`.
+- `index.html` — the main page = v2 (MapLibre, ES modules in `v2/`; see "v2 frontend" below).
+- `classica/index.html` + `js/*.js` — the classic app (Leaflet), kept at `/classica/` for a few
+  weeks after the switch (31/10/2026). Plain ES5-style classic scripts sharing ~200 globals, loaded
+  in the order listed in `test/helpers/js-files.mjs`. No import/export in `js/`. Its paths are
+  `../` relative; `LR_BASE` (set inline in the page) prefixes `DATA_DIR` and the service worker.
 - `data/` — the data layer. `passes_data.js` (curated core), `curated_overrides.json`,
   `osm_passes*.json` (generated, multi-MB), `base_hints.json`, `pass_news.json` (human-only),
   `pass_news_candidates.json` (automation queue). `DATA_DIR` in `js/state.js` and
@@ -103,15 +106,17 @@ Production URL: https://locaride.app/ — hosting is GitHub Pages until the Clou
   (console -> Firestore -> Regole: replace all, Pubblica): never assume a rules change is live;
   security lives in the rules, never only in the UI. Check changes with `test/firestore-rules.emu.mjs`.
 
-## v2 frontend (beta, `/v2/`) - redesign "Notturna + Road book"
-- `v2/index.html` + `v2/app.mjs` (ES modules, no build step) + `v2/lib/*.mjs` (pure, tested in
+## v2 frontend (the main page `/` since 31/10/2026) - redesign "Notturna + Road book"
+- `index.html` (repo root) + `v2/app.mjs` (ES modules, no build step) + `v2/lib/*.mjs` (pure, tested in
   `test/v2-lib.test.mjs`). Same data files as the classic app; it never writes data.
 - Map: MapLibre (vendored), OpenFreeMap "dark" basemap, AWS Terrarium DEM for hillshade + 3D.
   Region files are fetched on demand through the `f` field of `osm_index.json`.
 - Design tokens live in `v2/app.css` (`:root`). One gradient scale for the whole app (`GRADE_STOPS`).
-- Release: bump `?v=` on `app.mjs` and on EVERY relative import in `v2/` together (Pages caches files for
+- Release: bump `?v=` on `v2/app.mjs` (in the root `index.html`) and on EVERY relative import in `v2/` together (Pages caches files for
   minutes; new app + old lib = blank page). `test/v2-version.test.mjs` guards it; `e2e/v2.e2e.mjs` boots it in it + en.
-- The classic app (`index.html`, `js/`) stays the production app until Rick switches.
+- `v2/index.html` is only a redirect to `/` that keeps the hash (old `/v2/#/s/...` links). The root page
+  sends the classic app's old links (`?g=` shared ride, `?discover=`, `#admin`) to `/classica/`.
+- Data URLs in `v2/lib/*.mjs` are built from `import.meta.url`, never from the page address.
 
 ## Code conventions
 - UI text in **Italian**; code comments, docs, commit messages in **English**.

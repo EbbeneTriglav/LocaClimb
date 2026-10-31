@@ -6,7 +6,8 @@ import { readFileSync, readdirSync } from "node:fs";
 // breaks the page ("does not provide an export named ..."). So every relative import in v2 carries
 // the same ?v= as app.mjs in index.html - bump them all together.
 const root = new URL("../v2/", import.meta.url);
-const v = /app\.mjs\?v=(\d+)/.exec(readFileSync(new URL("index.html", root), "utf8"))[1];
+const page = new URL("../index.html", import.meta.url);   // v2 is the main page since 31/10/2026
+const v = /app\.mjs\?v=(\d+)/.exec(readFileSync(page, "utf8"))[1];
 test("every v2 module import carries the release version of index.html", () => {
   const files = ["app.mjs", ...readdirSync(new URL("lib/", root)).filter((f) => f.endsWith(".mjs")).map((f) => "lib/" + f)];
   for (const f of files) {

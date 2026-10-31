@@ -1,5 +1,6 @@
 /*
- * smoke.e2e.mjs - automated subset of docs/browser-smoke.md, in a real Chromium.
+ * smoke.e2e.mjs - automated subset of docs/browser-smoke.md, in a real Chromium: the classic app,
+ * which lives at /classica/ since v2 became the main page (31/10/2026).
  *
  * Covers the wiring jsdom can't: Leaflet boots, the data layer loads from data/ with no
  * silent failures, OSM passes merge in, search -> detail panel works for a curated pass.
@@ -19,7 +20,7 @@ import { mkdir } from "node:fs/promises";
 let chromium;
 try { ({ chromium } = await import("playwright")); } catch {}
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:8000/";
+const BASE_URL = (process.env.BASE_URL || "http://localhost:8000/").replace(/\/?$/, "/") + "classica/";
 const PASS_QUERY = process.env.E2E_PASS || "Stelvio";            // a curated pass with >1 versante
 const CORE_DATA = ["curated_overrides.json", "osm_regions.json"]; // must load; regional osm_*.json 404s are expected
 const MOBILE = process.env.E2E_VIEWPORT === "mobile";                 // CI matrix runs both
