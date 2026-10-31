@@ -35,7 +35,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | Ricerca località (paesi) | ok | ✅ nella stessa barra (Nominatim, come la v1) |
 | Strati acqua 💧 e cibo 🍽️ sulla mappa | ok | ✅ bottone goccia, da zoom 11 (acqua azzurra, bar bianchi) |
 | Strato traffico | presente (non provato) | ⏭️ |
-| Mappe di base (Topo, ecc.) | ok | 🟡 una sola mappa scura con rilievo e 3D |
+| Mappe di base (Topo, ecc.) | ok | ✅ bottone «Mappe»: Notte+ (di partenza, strade leggibili), Chiara, Ciclabile (CyclOSM), Topografica (OpenTopoMap), Satellite (Sentinel-2 2016); nel Giro passa da sola a Ciclabile |
 | Lingua inglese 🌐 | ok | ✅ bottone EN/IT nella pila della mappa, stessa impostazione della v1 (default: lingua del browser). Descrizioni e consigli dei passi curati restano in italiano (sono dati) |
 | Errori in console `getMinZoom` (ripetuti) | ❌ bug v1 | – |
 | Doppioni dello stesso passo (stesso id da due file, gemelli OSM con nome uguale a ~1 km) | 🟡 unisce entro 800 m: il Mortirolo resta doppio | ✅ unisce anche per nome entro ~2 km |
