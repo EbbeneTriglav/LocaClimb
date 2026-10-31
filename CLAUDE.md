@@ -16,7 +16,8 @@ Single maintainer: Rick. He approves every change. You propose, he decides.
   in the order listed in `test/helpers/js-files.mjs`. No import/export in `js/`.
 - `data/` — the data layer. `passes_data.js` (curated core), `curated_overrides.json`,
   `osm_passes*.json` (generated, multi-MB), `base_hints.json`, `pass_news.json` (human-only),
-  `pass_news_candidates.json` (automation queue). `DATA_DIR` in `js/state.js` and
+  `pass_news_candidates.json` (automation queue), `not_climbs.json` (OSM ids that are no road climb:
+  both builders drop them; human-curated, like `name_fixes.json`). `DATA_DIR` in `js/state.js` and
   `dataPath()` in `scripts/lib/paths.mjs` are the only places naming the directory.
 - `scripts/*.mjs` — Node 22 ESM pipelines. `build_osm_passes.mjs` is the heavy one.
 - `test/` — `node:test` suite. `e2e/` — Playwright browser smoke (GitHub only).

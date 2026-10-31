@@ -1,0 +1,4 @@
+{
+ "_note": "OSM passes that are not road-bike climbs (glacier cols, ski pistes, hiking saddles) and must never reach the app. Keyed by OSM id; build_osm_passes.mjs drops them from region files, build_osm_index.mjs from the index (and so from v1 and v2). Human-curated: add one only after checking the place.",
+ "osm-94950235": { "name": "Schnalser Schartl", "why": "3127 m glacier col above the Val Senales ski area: no road reaches it (computed side 2.3 km at 31.7% avg, 72.6% max, on ski pistes). Removed at Rick's request, 31/10/2026." }
+}
