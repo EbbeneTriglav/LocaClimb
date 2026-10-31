@@ -20,6 +20,9 @@ if (!chromium) {
       try {
         const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
         await ctx.addInitScript((l) => { try { localStorage.setItem("locaride_lang", l); } catch { /* ignore */ } }, lang);
+        // third-party network is not under test and made this flaky in CI: basemap, DEM, weather, geocoding off.
+        // The panel must still work without them (it renders from our data, not from the map).
+        await ctx.route(/openfreemap\.org|amazonaws\.com|open-meteo\.com|nominatim\.openstreetmap\.org|brouter\.de/, (r) => r.abort());
         const page = await ctx.newPage(), errors = [];
         page.on("pageerror", (e) => errors.push(e.message));
         await page.goto(BASE_URL + "v2/");
