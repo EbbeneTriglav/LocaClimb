@@ -289,3 +289,13 @@ test("hardestFirst: paved hard climbs first, unpaved after, implausible last", a
     { n: "stelvio", difficulty: 10, elevation: 2758 }, { n: "gavia", difficulty: 9, elevation: 2621, surfaceLabel: "🛣️ Asfalto" }];
   assert.deepEqual(l.sort(hardestFirst).map((c) => c.n), ["stelvio", "gavia", "theodul", "schartl"]);
 });
+
+test("basemaps: Notte+ by default, Ciclabile for the Giro, every one attributed", async () => {
+  const { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads } = await import("../v2/lib/maps.mjs");
+  assert.deepEqual(BASEMAPS.map((b) => b.id), ["notte", "chiara", "ciclabile", "topo", "satellite"]);
+  assert.equal(basemap("nope").id, DEFAULT_MAP);
+  assert.equal(basemap(GIRO_MAP).label, "Ciclabile");
+  for (const b of BASEMAPS) if (typeof b.style !== "string") assert.ok(b.style.sources.base.attribution.length > 10, b.id);
+  assert.deepEqual(notteRoads({ type: "line", id: "road_major" }), { "line-color": "#8A9AAD", "line-opacity": 0.95 });
+  assert.equal(notteRoads({ type: "circle", id: "x" }), null);
+});

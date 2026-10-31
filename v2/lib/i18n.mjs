@@ -122,6 +122,9 @@ export const DICT = {
   "I miei giri": "My rides", "Salva": "Save", "Salva il giro": "Save the ride", "Nome": "Name", "Annulla": "Cancel", "Apri": "Open", "Elimina": "Delete", "Conferma": "Confirm",
   "Giro salvato nel Diario": "Ride saved in the Diary", "Non riesco a leggere i tuoi giri ora.": "Can't read your rides right now.", "Non eliminato": "Not deleted",
   "Nessun giro salvato. Costruiscilo nella scheda Giro e premi «Salva».": "No saved rides. Build one in the Ride tab and press «Save».", "Traccia non valida": "Invalid track",
+  "Mappe": "Maps", "Notte+": "Night+", "Chiara": "Light", "Ciclabile": "Cycling", "Topografica": "Topographic", "Satellite": "Satellite",
+  "di partenza": "default", "di giorno": "daytime", "per il Giro": "for rides", "terreno": "terrain", "dall'alto": "from above",
+  "Nel Giro la mappa passa da sola a Ciclabile; uscendo torna la tua.": "In the Ride tab the map switches to Cycling by itself; leaving it brings yours back.",
   "Il mio giro · LocaRide": "My ride · LocaRide",
   "Stima: VAM da W/kg (formula di Ferrari) e velocità tratto per tratto sul profilo. Vento, peso e stanchezza non contano.": "Estimate: VAM from W/kg (Ferrari's formula) and speed stretch by stretch on the profile. Wind, weight and fatigue are not counted."
 };
