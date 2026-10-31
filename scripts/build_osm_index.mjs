@@ -13,6 +13,7 @@
  * Run after any osm_passes*.json changes:  node scripts/build_osm_index.mjs
  */
 import { readFile, writeFile } from "node:fs/promises";
+import { implausibleClimb } from "./lib/plausible.mjs";
 import { dataPath } from "./lib/paths.mjs";
 
 const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
@@ -44,7 +45,8 @@ for (const [fi, f] of regions.entries()) {
     if (p.difficulty) r.difficulty = p.difficulty;
     if (p.cat) r.cat = p.cat;
     if (p.surfaceLabel) r.surfaceLabel = p.surfaceLabel;
-    if (p.trucks && p.trucks !== "rari") r.tk = p.trucks;               // trucks filter in v2 ("rari" = the default, left out)
+    if (p.trucks && p.trucks !== "rari") r.tk = p.trucks;
+    if (hasV && implausibleClimb(p)) r.q = 1;                          // implausible gradients (scripts/lib/plausible.mjs)               // trucks filter in v2 ("rari" = the default, left out)
     if (p.snapped) r.snapped = 1;
     if (hasV) r.hasV = 1;                                                // "tracks exist, fetch them on demand"
     if (p.algo) r.algo = p.algo;

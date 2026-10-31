@@ -282,3 +282,10 @@ test("fewTrucks: only 'possibili' and 'si' count as trucks", () => {
   assert.ok(!fewTrucks({ tk: "possibili" }));
   assert.ok(!fewTrucks({ trucks: "si" }));
 });
+
+test("hardestFirst: paved hard climbs first, unpaved after, implausible last", async () => {
+  const { hardestFirst } = await import("../v2/lib/data.mjs");
+  const l = [{ n: "theodul", difficulty: 10, elevation: 3295, surfaceLabel: "🪨 Sterrato/gravel" }, { n: "schartl", difficulty: 10, elevation: 3127, q: 1 },
+    { n: "stelvio", difficulty: 10, elevation: 2758 }, { n: "gavia", difficulty: 9, elevation: 2621, surfaceLabel: "🛣️ Asfalto" }];
+  assert.deepEqual(l.sort(hardestFirst).map((c) => c.n), ["stelvio", "gavia", "theodul", "schartl"]);
+});

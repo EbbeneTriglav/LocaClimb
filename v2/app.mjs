@@ -3,13 +3,13 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=12";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=12";
-import { poisNear } from "./lib/poi.mjs?v=12";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=12";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=12";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=12";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=12";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=14";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=14";
+import { poisNear } from "./lib/poi.mjs?v=14";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=14";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=14";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=14";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=14";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -92,7 +92,7 @@ map.on("load", async () => {
 map.on("moveend", () => { if (panel.dataset.mode === "list") renderList(); });
 
 function applyFilter() {
-  let f = S.filter === "hard" ? [">=", ["get", "d"], 8] : S.filter === "top" ? [">=", ["get", "d"], 10] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
+  let f = S.filter === "hard" ? ["all", [">=", ["get", "d"], 8], ["!=", ["get", "q"], 1]] : S.filter === "top" ? ["all", [">=", ["get", "d"], 10], ["!=", ["get", "q"], 1]] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
   const all = [f, S.paved && ["==", ["get", "gr"], 0], S.trucks && ["==", ["get", "tk"], 0], S.cc && ["==", ["get", "cc"], S.cc]].filter(Boolean);
   f = all.length > 1 ? ["all", ...all] : all[0] || null;
   for (const id of ["c-dot", "c-glow", "c-lab"]) if (map.getLayer(id)) map.setFilter(id, f);
@@ -102,6 +102,7 @@ function passesFilter(c) {
   if (S.paved && isGravel(c)) return false;
   if (S.trucks && !fewTrucks(c)) return false;
   if (S.cc && c.cc !== S.cc) return false;
+  if ((S.filter === "hard" || S.filter === "top") && c.q) return false;   // implausible gradients are not "hard"
   return S.filter === "hard" ? d >= 8 : S.filter === "top" ? d >= 10 : S.filter === "new" ? /^osm-rt/.test(c.id) : true;
 }
 document.querySelectorAll(".chips button[data-filter]").forEach((b) => b.addEventListener("click", () => {
@@ -347,6 +348,7 @@ function renderClimb() {
       <div><b>+${esc(st.gain)}</b><span>metri</span></div>
       <div class="mx"><b>${num(st.max)}%</b><span>max</span></div>
     </div>
+    ${implausible(v) ? `<div class="warnbox"><b>Dati da verificare</b><p>Pendenze non credibili per una strada asfaltata (${v.maxGradient >= 30 ? "max " + num(v.maxGradient, 0) + "%" : "media " + num(v.avgGradient) + "% su " + num(v.distance_km) + " km"}): probabile errore del modello del terreno (galleria, ponte) o un tratto che non è una strada asfaltata. Per questo non compare tra le salite più dure.</p><button type="button" class="btn" id="warnRep">Segnala com'è davvero</button></div>` : ""}
     <div class="verdict" id="verdict"><div class="k">IL VERDETTO DI OGGI</div><p>Carico il meteo in quota…</p></div>
     <figure class="prof">
       <svg viewBox="0 0 680 220" role="img" aria-label="Profilo altimetrico ${top}">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#E8EDF2" stroke-width="2"/></svg>
@@ -378,6 +380,7 @@ function renderClimb() {
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
   $("#sendBtn").addEventListener("click", () => { const f = climbGpx(c, v); sendToDevice(c.name + (v.side ? " · " + v.side : ""), f.name, f.text); });
   $("#share").addEventListener("click", () => share(c));
+  const wr = $("#warnRep"); if (wr) wr.addEventListener("click", () => openReport(c));
   $("#giroAdd").addEventListener("click", () => { addStop({ lat: c.lat, lon: c.lon, id: String(c.id), name: c.name }); toast(`Aggiunta al giro · ${G.stops.length} ${G.stops.length === 1 ? "tappa" : "tappe"}`); });
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
   wireTimes(c, vs);
@@ -631,35 +634,47 @@ function downloadGpx(c, v) { const f = climbGpx(c, v); saveFile(f.name, f.text);
    use their computer, so the useful thing is getting the climb or the ride ONTO it. Phones: the
    system share sheet with the GPX file (Garmin Connect, Wahoo, Karoo, Komoot... whatever is
    installed). Everywhere: download + a short how-to for the device the rider picked (remembered). */
+/* [key, label, how-to, service to open after the download (or null), its label]. A web page cannot
+   hand a file to Garmin Connect & co. directly (their apps accept files only from approved partners
+   or through the share sheet), so each device gets two explicit steps: get the GPX, open the service. */
 const DEVICES = [
-  ["garmin", "Garmin", "Garmin Connect sul computer: Allenamento e pianificazione → Percorsi → Importa il GPX, poi «Invia al dispositivo». Dal telefono: condividi il file con l'app Garmin Connect, se il tuo telefono lo permette."],
-  ["wahoo", "Wahoo", "Condividi il GPX con l'app Wahoo ELEMNT (o aprilo con lei dai file scaricati): lo trovi tra i percorsi del ciclocomputer alla prossima sincronizzazione."],
-  ["karoo", "Hammerhead Karoo", "Carica il GPX nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo."],
-  ["app", "Strava o Komoot", "Importa il GPX come percorso su Strava o Komoot: se il ciclocomputer è collegato a quell'app, il percorso arriva da solo."],
-  ["altro", "Altro", "Bryton, Coros, Sigma, Apple Watch...: apri il GPX con l'app del tuo dispositivo."]
+  ["garmin", "Garmin", "Garmin non accetta file inviati da un sito: scarica il GPX, poi su Garmin Connect (meglio dal computer) apri Allenamento e pianificazione → Percorsi → Importa e scegli il file; infine «Invia al dispositivo». Più comodo: collega Garmin a Komoot o Strava, i percorsi arrivano da soli.", "https://connect.garmin.com/modern/courses", "Apri Garmin Connect"],
+  ["wahoo", "Wahoo", "Dal telefono: «Condividi con un'app» e scegli Wahoo ELEMNT; il percorso arriva al ciclocomputer alla prossima sincronizzazione. In alternativa scarica il GPX e aprilo con l'app ELEMNT.", null, ""],
+  ["karoo", "Hammerhead Karoo", "Scarica il GPX e caricalo nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo.", "https://dashboard.hammerhead.io/", "Apri la dashboard"],
+  ["komoot", "Komoot", "Scarica il GPX e importalo su Komoot: se il ciclocomputer è collegato a Komoot, il percorso arriva da solo.", "https://www.komoot.com/upload", "Apri Komoot"],
+  ["strava", "Strava", "Scarica il GPX e importalo come percorso su Strava: se il ciclocomputer è collegato a Strava, il percorso arriva da solo.", "https://www.strava.com/athlete/routes", "Apri Strava"],
+  ["altro", "Altro", "Bryton, Coros, Sigma, Apple Watch...: «Condividi con un'app» e scegli l'app del tuo dispositivo, oppure scarica il GPX e aprilo con lei.", null, ""]
 ];
 const DEV_KEY = "lr_device";
 function sendToDevice(title, fname, text) {
   let dev = "garmin"; try { dev = localStorage.getItem(DEV_KEY) || dev; } catch { /* private mode */ }
+  if (!DEVICES.some((x) => x[0] === dev)) dev = "garmin";
   let file = null; try { file = new File([text], fname, { type: "application/gpx+xml" }); } catch { file = null; }
   const canShare = !!(file && navigator.canShare && navigator.canShare({ files: [file] }));
   const d = openDialog(`<form method="dialog" class="dform send"><h2>Manda al dispositivo</h2>
     <p class="note">${esc(title)}</p>
     <div class="k">Il tuo dispositivo</div>
     <div class="sides" role="group" aria-label="Dispositivo">${DEVICES.map(([k, l]) => `<button type="button" data-dev="${k}" aria-pressed="${k === dev}">${l}</button>`).join("")}</div>
-    <p class="note" id="devHow"></p>
-    ${canShare ? `<button type="button" class="btn pri" id="devShare">Condividi con un'app</button>` : ""}
-    <button type="button" class="btn ${canShare ? "" : "pri"}" id="devSave">Scarica il GPX</button>
+    <div class="steps" id="devSteps"></div>
     <button class="btn" value="x">Chiudi</button></form>`);
-  const how = () => { const x = DEVICES.find((e) => e[0] === dev) || DEVICES[0]; $("#devHow").textContent = x[2]; };
+  const paint = () => {
+    const [, label, how, url, urlLabel] = DEVICES.find((e) => e[0] === dev);
+    const share = canShare && (dev === "wahoo" || dev === "altro");
+    $("#devSteps").innerHTML = `<p class="note">${esc(how)}</p>
+      ${share ? `<button type="button" class="btn pri" id="devShare">Condividi con un'app</button>` : ""}
+      <button type="button" class="btn ${share ? "" : "pri"}" id="devSave">${url ? "1 · " : ""}Scarica il GPX</button>
+      ${url ? `<a class="btn" id="devOpen" href="${esc(url)}" target="_blank" rel="noopener">2 · ${esc(urlLabel)}</a>` : ""}
+      ${!share && canShare ? `<button type="button" class="btn" id="devShare">Condividi con un'app</button>` : ""}
+      <p class="note small mu">${esc(label)}: ${share ? "il file va direttamente all'app che scegli." : "nessun sito può inviare il file da solo a questo servizio: servono questi due passaggi."}</p>`;
+    $("#devSave").addEventListener("click", () => { saveFile(fname, text); toast("GPX scaricato"); });
+    const sh = $("#devShare");
+    if (sh) sh.addEventListener("click", async () => { try { await navigator.share({ files: [file], title }); } catch { /* cancelled */ } });
+  };
   d.querySelectorAll("[data-dev]").forEach((b) => b.addEventListener("click", () => {
     dev = b.dataset.dev; try { localStorage.setItem(DEV_KEY, dev); } catch { /* private mode */ }
-    d.querySelectorAll("[data-dev]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); how();
+    d.querySelectorAll("[data-dev]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); paint();
   }));
-  how();
-  const sh = $("#devShare");
-  if (sh) sh.addEventListener("click", async () => { try { await navigator.share({ files: [file], title }); } catch { /* cancelled */ } });
-  $("#devSave").addEventListener("click", () => saveFile(fname, text));
+  paint();
 }
 async function share(c) {
   const url = location.origin + location.pathname + "#/s/" + encodeURIComponent(c.id);

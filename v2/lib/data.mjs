@@ -6,7 +6,7 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=12";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=14";
 
 const DATA = "../data/";
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -97,11 +97,17 @@ export function search(q, limit = 8) {
   return starts.concat(has).slice(0, limit);
 }
 
+/* "the hardest" is for road bikes: implausible gradients (index flag "q", scripts/lib/plausible.mjs)
+   go last, unpaved climbs (Theodulpass, Sommeiller, ski-area tracks near 3000 m) after the paved ones */
+export function hardestFirst(a, b) {
+  const rank = (c) => (c.q ? 2 : isGravel(c) ? 1 : 0);
+  return rank(a) - rank(b) || (b.difficulty || 0) - (a.difficulty || 0) || (b.elevation || 0) - (a.elevation || 0);
+}
 export function inBounds(b, limit = 40) {
   if (!state) return [];
   const out = [];
   for (const c of state.climbs) if (c.lat >= b.s && c.lat <= b.n && c.lon >= b.w && c.lon <= b.e) out.push(c);
-  out.sort((a, b2) => (b2.difficulty || 0) - (a.difficulty || 0) || (b2.elevation || 0) - (a.elevation || 0));
+  out.sort(hardestFirst);
   return { total: out.length, list: out.slice(0, limit) };
 }
 
@@ -177,7 +183,7 @@ export function isGravel(c) { return /sterrato|gravel|misto|unpaved|dirt|ground|
 export function geojson(climbs) {
   return {
     type: "FeatureCollection",
-    features: climbs.map((c) => ({ type: "Feature", id: undefined, properties: { id: String(c.id), name: c.name, d: c.difficulty || 0, ele: c.elevation || 0, cur: c.curated ? 1 : 0, gr: isGravel(c) ? 1 : 0, cc: c.cc || "", tk: fewTrucks(c) ? 0 : 1 }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } }))
+    features: climbs.map((c) => ({ type: "Feature", id: undefined, properties: { id: String(c.id), name: c.name, d: c.difficulty || 0, ele: c.elevation || 0, cur: c.curated ? 1 : 0, gr: isGravel(c) ? 1 : 0, cc: c.cc || "", tk: fewTrucks(c) ? 0 : 1, q: c.q ? 1 : 0 }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } }))
   };
 }
 
