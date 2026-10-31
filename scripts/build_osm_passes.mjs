@@ -25,6 +25,7 @@ import { dataPath, DATA_DIR } from "./lib/paths.mjs";
 import { hwKeep } from "./lib/highways.mjs";
 import { hintKeyFor } from "./lib/hints.mjs";
 import { fillStruct } from "./lib/structdem.mjs";
+import { loadNotClimbs } from "./lib/notclimbs.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
@@ -1340,6 +1341,14 @@ async function main() {
       if (!vs.length || best < CAND_MIN_GAIN) { byId.delete(id); dropped++; }
     }
     if (dropped) console.log("  dropped " + dropped + " candidate(s)" + (CAND_MIN_GAIN > 0 ? ": no climb or gain < " + CAND_MIN_GAIN + " m" : ": no climb computed"));
+  }
+
+  // data/not_climbs.json: places a human checked and found are no road climb (glacier cols, pistes).
+  {
+    const NOT = await loadNotClimbs();
+    let gone = 0;
+    for (const id of NOT) if (byId.delete(id)) gone++;
+    if (gone) console.log("  not_climbs.json: dropped " + gone);
   }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));

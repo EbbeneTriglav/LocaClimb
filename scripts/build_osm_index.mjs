@@ -15,6 +15,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { implausibleClimb } from "./lib/plausible.mjs";
 import { dataPath } from "./lib/paths.mjs";
+import { loadNotClimbs } from "./lib/notclimbs.mjs";
 
 const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
 
@@ -31,7 +32,9 @@ let regions;
 try { regions = JSON.parse(await readFile(dataPath("osm_regions.json"), "utf8")); }
 catch { regions = ["osm_passes.json"]; }
 
+const NOT = await loadNotClimbs();                                   // data/not_climbs.json: never in the app
 const out = [];
+let hidden = 0;
 for (const [fi, f] of regions.entries()) {
   let arr;
   try { arr = JSON.parse(await readFile(dataPath(f), "utf8")); }
@@ -39,14 +42,15 @@ for (const [fi, f] of regions.entries()) {
   let n = 0;
   for (const p of arr) {
     if (!p || p.lat == null || p.lon == null) continue;
+    if (NOT.has(p.id)) { hidden++; continue; }
     const hasV = !!(p.versanti && p.versanti.length);
     if (!hasV && !p.snapped) continue;                                   // the frontend would not draw it anyway
     const r = { id: p.id, name: decodeEntities(p.name), lat: p.lat, lon: p.lon, elevation: p.elevation || 0 };
     if (p.difficulty) r.difficulty = p.difficulty;
     if (p.cat) r.cat = p.cat;
     if (p.surfaceLabel) r.surfaceLabel = p.surfaceLabel;
-    if (p.trucks && p.trucks !== "rari") r.tk = p.trucks;
-    if (hasV && implausibleClimb(p)) r.q = 1;                          // implausible gradients (scripts/lib/plausible.mjs)               // trucks filter in v2 ("rari" = the default, left out)
+    if (p.trucks && p.trucks !== "rari") r.tk = p.trucks;                // trucks filter in v2 ("rari" = the default, left out)
+    if (hasV && implausibleClimb(p)) r.q = 1;                          // implausible gradients (scripts/lib/plausible.mjs)
     if (p.snapped) r.snapped = 1;
     if (hasV) r.hasV = 1;                                                // "tracks exist, fetch them on demand"
     if (p.algo) r.algo = p.algo;
@@ -57,6 +61,7 @@ for (const [fi, f] of regions.entries()) {
   console.log("  " + f + ": " + n);
 }
 
+if (hidden) console.log("  not_climbs.json: " + hidden + " hidden");
 const js = JSON.stringify(out, J5) + "\n";
 await writeFile(dataPath("osm_index.json"), js, "utf8");
 console.log("wrote osm_index.json (" + out.length + " passes, " + Math.round(js.length / 1024) + " KB)");
