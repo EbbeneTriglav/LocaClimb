@@ -52,7 +52,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | I miei giri | presente | ✅ «Salva» nel Giro, elenco nel Diario (apri, manda al dispositivo, elimina); stessi dati della v1 (users/{uid}/routes) |
 | Accesso Google | ok | ✅ condiviso con la v1 |
 | Accesso con email | presente | ✅ accesso, nuovo account con conferma mail, password dimenticata |
-| Proponi salita + revisione admin, livelli e badge | presenti | ⏭️ |
+| Proponi salita + revisione admin, livelli e badge | presenti | ✅ «Proponi salita» nel Giro (tester abilitati), «Le mie proposte» con livello e barra nel Diario, coda «Da rivedere» per l’admin (vedi, approva, rifiuta con motivo); stessi documenti della v1 |
 | Revisione salite trovate (`?discover=`) | ok | resta nella v1 finché serve (strumento admin) |
 
 ## Errori nei DATI (v1 e v2 uguali: non dipendono dall'interfaccia)
