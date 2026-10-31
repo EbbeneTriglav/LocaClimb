@@ -3,14 +3,14 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=17";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=17";
-import { poisNear } from "./lib/poi.mjs?v=17";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=17";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=17";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=17";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=17";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute } from "./lib/diary.mjs?v=17";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=18";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=18";
+import { poisNear } from "./lib/poi.mjs?v=18";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=18";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=18";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=18";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=18";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute } from "./lib/diary.mjs?v=18";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -75,7 +75,7 @@ function addOurLayers() {
   map.addLayer({ id: "c-glow", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 9, 13, 16], "circle-opacity": 0.22, "circle-blur": 0.8 } });
   map.addLayer({ id: "c-dot", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 1.6, 9, 4, 13, 7], "circle-stroke-color": "#0B0F14", "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 5, 0, 9, 1.2] } });
   map.addLayer({ id: "c-lab", type: "symbol", source: "climbs", minzoom: 9.5, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true, "symbol-sort-key": ["-", 0, ["get", "d"]] }, paint: { "text-color": "#E8EDF2", "text-halo-color": "#0B0F14", "text-halo-width": 1.4 } });
-  applyFilter(); paintRoute(); if (S.poi) loadPoi();
+  applyFilter(); paintRoute(); rideVisible(panel.dataset.mode === "giro"); if (S.poi) loadPoi();
   if (S.three) map.setTerrain({ source: "dem", exaggeration: 1.35 });
 }
 map.on("style.load", () => { tuneBasemap(); addOurLayers(); });
@@ -116,7 +116,8 @@ map.on("load", async () => {
   applyFilter();
   route();
 });
-map.on("moveend", () => { if (panel.dataset.mode === "list") renderList(); });
+let listT = null;
+map.on("moveend", () => { if (panel.dataset.mode !== "list") return; clearTimeout(listT); listT = setTimeout(renderList, 120); });
 /* The panel needs the data, not the map: render as soon as the index is in, even when the map is slow
    to fire "load" (slow tile server, a tab opened in the background, headless CI). The map's load
    handler runs route() again to draw the climb and the layers. Seen on 31/10: an empty page while the
@@ -268,6 +269,7 @@ function setMode(m) {
   else if (m !== "giro" && panel.dataset.mode === "giro") setBase(mapPref, true);          // back to the rider's map
   panel.dataset.mode = m; panel.scrollTop = 0;
   document.body.classList.toggle("inner", m === "climb" || m === "giro");
+  document.body.classList.toggle("ingiro", m === "giro"); rideVisible(m === "giro");
   if (m !== "climb" && m !== "giro") { panel.style.height = ""; delete panel.dataset.sheet; sheetVar(); clearPad(); }
 }
 
@@ -284,7 +286,15 @@ function sheetHeights() {
   return { peek: p, half: Math.max(p + 60, Math.round(full * 0.55)), full };
 }
 /* the sheet sets a persistent map padding while dragged; fitBounds adds its own on top, so clear first */
-function clearPad() { try { if (mapLoaded) map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 }); } catch { /* old map */ } }
+/* only when there is padding to clear: setPadding moves the camera and fires "moveend", which
+   re-renders the list, which called clearPad again - an endless loop that froze the page (31/10) */
+function clearPad() {
+  try {
+    if (!mapLoaded) return;
+    const p = map.getPadding();
+    if (p.top || p.bottom || p.left || p.right) map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 });
+  } catch { /* old map */ }
+}
 function sheetPx() { return DESKTOP() ? 0 : (panel.getBoundingClientRect().height || 232); }
 function sheetVar() { document.documentElement.style.setProperty("--sheet-h", (DESKTOP() ? 0 : Math.round(panel.getBoundingClientRect().height || 232)) + "px"); }
 function setSheet(state, keepMap) {
@@ -962,6 +972,9 @@ async function fillRides(u) {
     try { await deleteRoute(u.uid, list[+b.dataset.del].id); fillRides(u); } catch { toast("Non eliminato"); }
   }));
 }
+function rideVisible(on) {
+  for (const id of ["route-case", "route-line", "route-surf"]) if (map.getLayer && map.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+}
 function paintRoute() {
   const a = map.getSource && map.getSource("route"), b = map.getSource && map.getSource("route-surf");
   if (!a || !b) return;
@@ -1089,7 +1102,8 @@ function giroFile() {
   const track = G.res.noEle ? G.res.track : G.res.track.map((q) => [q[0], q[1], q[2]]);
   return { title: name, name: "giro_locaride_" + num(G.res.km, 0) + "km.gpx", text: routeGpx(name, track, wpts) };
 }
-map.once("load", () => { syncMarkers(); if (G.stops.length >= 2 && !G.res) calcSoon(); });
+// the saved ride is drawn and routed only inside the Giro (outside it stayed on the map, 31/10)
+map.once("load", () => { syncMarkers(); });
 
 /* ------------------------------------------------------------------ icons */
 const ICON = {

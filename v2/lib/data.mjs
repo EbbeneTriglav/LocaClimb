@@ -6,7 +6,7 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=17";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=18";
 
 const DATA = "../data/";
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -99,9 +99,10 @@ export function search(q, limit = 8) {
 
 /* "the hardest" is for road bikes: implausible gradients (index flag "q", scripts/lib/plausible.mjs)
    go last, unpaved climbs (Theodulpass, Sommeiller, ski-area tracks near 3000 m) after the paved ones */
+const RANK = new WeakMap();   // computed once per climb: the sort runs on every map move (19k climbs in view)
+const rankOf = (c) => { let r = RANK.get(c); if (r === undefined) { r = c.q ? 2 : isGravel(c) ? 1 : 0; RANK.set(c, r); } return r; };
 export function hardestFirst(a, b) {
-  const rank = (c) => (c.q ? 2 : isGravel(c) ? 1 : 0);
-  return rank(a) - rank(b) || (b.difficulty || 0) - (a.difficulty || 0) || (b.elevation || 0) - (a.elevation || 0);
+  return rankOf(a) - rankOf(b) || (b.difficulty || 0) - (a.difficulty || 0) || (b.elevation || 0) - (a.elevation || 0);
 }
 export function inBounds(b, limit = 40) {
   if (!state) return [];
@@ -178,7 +179,8 @@ function regionFile(file) {
 }
 
 /* unpaved: the pipeline's surface label ("🪨 Sterrato/gravel", "Misto"...) */
-export function isGravel(c) { return /sterrato|gravel|misto|unpaved|dirt|ground|sand/i.test(String(c.surfaceLabel || "")); }
+const GRAVEL = /sterrato|gravel|misto|unpaved|dirt|ground|sand/i;
+export function isGravel(c) { return !!c.surfaceLabel && GRAVEL.test(c.surfaceLabel); }
 
 export function geojson(climbs) {
   return {
