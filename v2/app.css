@@ -35,7 +35,7 @@ a { color: var(--acc); }
 .legend { position: fixed; top: 114px; left: 12px; z-index: 3; display: flex; align-items: center; gap: 5px; padding: 6px 10px; background: rgba(11,15,20,.82); border-radius: 8px; font-size: 11px; color: var(--mu); }
 .legend i { width: 18px; height: 6px; border-radius: 3px; }
 .legend .lg-t { margin-right: 2px; }
-.mapbtns { position: fixed; right: 12px; z-index: 3; bottom: calc(var(--tabs) + var(--safe-b) + 270px); display: flex; flex-direction: column; gap: 8px; }
+.mapbtns { position: fixed; right: 12px; z-index: 3; bottom: calc(var(--tabs) + var(--safe-b) + var(--sheet-h, 232px) + 14px); transition: bottom .25s ease; display: flex; flex-direction: column; gap: 8px; }
 .mapbtns button { width: 48px; height: 48px; border-radius: 24px; border: 1px solid var(--line2); background: var(--s1); display: grid; place-items: center; font-family: var(--cond); font-weight: 800; font-size: 16px; }
 .mapbtns button[aria-pressed="true"] { background: var(--acc); color: var(--acc-tx); }
 .mapbtns .zoom { display: none; }               /* phones: pinch to zoom */
@@ -269,3 +269,26 @@ a { color: var(--acc); }
 .zones .zr[aria-pressed="true"] { background: var(--acc); color: var(--acc-tx); font-weight: 600; }
 .zones .zr small { color: inherit; opacity: .7; }
 .mapbtns .lang { font-size: 14px; letter-spacing: .04em; }
+
+/* ---------- phone sheet: three heights (peek / half / full), set by app.mjs setSheet() ---------- */
+@media (max-width: 899px) {
+  .panel[data-sheet] { max-height: none; transition: height .25s ease; overflow: auto; }
+  .panel[data-sheet="peek"] { overflow: hidden; }
+  .panel.dragging { transition: none; user-select: none; }
+  .panel[data-sheet] .handle, .panel[data-sheet] .cl-top, .panel[data-sheet] .ph, .panel[data-sheet] .cl h1, .panel[data-sheet] .ov, .panel[data-sheet] .sub, .panel[data-sheet] .strip { touch-action: none; }
+  .panel[data-sheet] .handle { width: 48px; height: 5px; margin: 8px auto 6px; cursor: grab; position: relative; }
+  .panel[data-sheet] .handle::after { content: ""; position: absolute; inset: -12px -40px; }   /* bigger touch target */
+  body.inner .top, body.inner .chips, body.inner .legend { display: none; }
+  body.inner .panel[data-sheet="full"] { border-radius: 0; }
+  body.inner .panel[data-sheet="full"] ~ .mapbtns, body.inner:has(.panel[data-sheet="full"]) .mapbtns { visibility: hidden; }
+  /* peek: name + four numbers only, the rest is one drag away */
+  .panel[data-sheet="peek"] .cl { position: relative; }
+  .panel[data-sheet="peek"] .cl-top { position: absolute; right: 18px; top: 0; z-index: 1; }
+  .panel[data-sheet="peek"] .cl-top .ib { width: 38px; height: 38px; }
+  .panel[data-sheet="peek"] .cl h1 { font-size: 30px; padding-right: 96px; }
+  .panel[data-sheet="peek"] .ov { padding-right: 96px; }
+  .panel[data-sheet="peek"] .sides, .panel[data-sheet="peek"] .actions { display: none; }
+  .panel[data-sheet="peek"] .sub { margin: 2px 0 8px; font-size: 14px; }
+  .panel[data-sheet="peek"] .strip { padding: 8px 10px; }
+  .panel[data-sheet="peek"] .strip b { font-size: 22px; }
+}

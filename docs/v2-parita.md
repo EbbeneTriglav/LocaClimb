@@ -24,7 +24,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | Strava: "Cerca segmenti" | ❌ **non funziona**: Strava ha chiuso la pagina pubblica di ricerca segmenti | ⏭️ torna con il collegamento Strava (API segments/explore) |
 | Sole / ombra (indice di ombra) | ⚠️ "n/d" sullo Stelvio | ⏭️ da portare, prima va capito perché è n/d |
 | Segnala informazione | ❌ **finto**: mostra "Grazie!" ma non invia niente | ✅ invia davvero (`reports`), regole in `firestore.rules` |
-| Modalità salita (manubrio) | – | ✅ nuovo |
+| Modalità salita (manubrio) | – | 🅿️ in soffitta (31/10): sostituita da **Manda al dispositivo** (condivisione del GPX con Garmin Connect, Wahoo, Karoo, Strava, Komoot + istruzioni per dispositivo); il codice resta, spento |
 
 ## Mappa
 
