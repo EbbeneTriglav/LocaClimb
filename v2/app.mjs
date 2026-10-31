@@ -3,14 +3,15 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=18";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=18";
-import { poisNear } from "./lib/poi.mjs?v=18";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=18";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=18";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=18";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=18";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute } from "./lib/diary.mjs?v=18";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=19";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=19";
+import { poisNear } from "./lib/poi.mjs?v=19";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=19";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=19";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=19";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=19";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal } from "./lib/diary.mjs?v=19";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=19";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -782,14 +783,15 @@ async function renderOggi() {
     if (!navigator.geolocation) return res(fallback);
     navigator.geolocation.getCurrentPosition((p) => res({ lat: p.coords.latitude, lon: p.coords.longitude, src: "gps" }), () => res(fallback), { timeout: 6000, maximumAge: 600000 });
   });
+  if (panel.dataset.mode !== "oggi") return;   // the rider moved on while we waited for the GPS
   let list = nearby(here.lat, here.lon, 60, 12);
   if (list.length < 4) list = nearby(here.lat, here.lon, 120, 12);
   if (!list.length) { $("#ogList").textContent = "Nessuna salita dura entro 120 km: sposta la mappa su una zona di montagna e riapri Oggi."; return; }
   try {
     const hs = await fetchForecast(list.map((c) => ({ lat: c.lat, lon: c.lon, ele: c.elevation })), 3);
     S.oggi = { here, list, hs };
-  } catch { $("#ogList").textContent = "Meteo non disponibile ora. Riprova tra poco."; return; }
-  paintOggi();
+  } catch { const ol = $("#ogList"); if (ol) ol.textContent = "Meteo non disponibile ora. Riprova tra poco."; return; }
+  if (panel.dataset.mode === "oggi") paintOggi();
 }
 function paintOggi() {
   const { here, list, hs } = S.oggi;
@@ -829,8 +831,10 @@ async function renderDiario() {
     ${list.length ? `<div class="stamps">${list.map(stamp).join("")}</div>` : `<p class="note">Ancora nessuna. Carica i tuoi giri: un GPX o FIT, oppure lo zip dell'export completo di Strava o Garmin Connect.</p>`}
     <div class="actions" style="position:static;margin-top:14px"><button type="button" class="btn pri" id="importBtn">Carica i tuoi giri</button></div>
     <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>
-    <section class="sec" id="rides"><h3>I miei giri</h3><p class="note">Carico…</p></section>`;
-  fillRides(u);
+    <section class="sec" id="rides"><h3>I miei giri</h3><p class="note">Carico…</p></section>
+    <section class="sec" id="props"><h3>Le mie proposte</h3><p class="note">Carico…</p></section>
+    <section class="sec" id="queue" hidden></section>`;
+  fillRides(u); fillProposals(u);
   $("#importBtn").addEventListener("click", () => { window.LRC_V2.onSaved = () => { if ((location.hash || "").startsWith("#/diario")) renderDiario(); }; window.gcPick(); });
 }
 function stamp(d) {
@@ -952,6 +956,86 @@ function openSaved(r) {
   location.hash = "#/giro";
   applyRoute({ track, km: +r.distKm || 0, gain: r.ascent ?? null, surf: null, segs: [], noEle: !track.some((q) => q[2] != null) }, G.seq);
 }
+/* ------------------------------------------------------------------ proponi una salita, livelli, revisione
+   Same documents as the classic app (js/contribute.js); only on user action, nothing at startup. */
+async function proposeDialog() {
+  if (!G.res) return;
+  const u = await currentUser();
+  if (!u) { openAccount(() => proposeDialog()); return; }
+  const me = await whoAmI(u);
+  if (!me || !me.canPropose) {
+    openDialog(`<form method="dialog" class="dform"><h2>Proposte su invito</h2><p class="note">In beta le proposte sono aperte ai tester autorizzati. Scrivici se vuoi partecipare: l'account ce l'hai già, serve solo l'abilitazione.</p><button class="btn" value="x">Ho capito</button></form>`);
+    return;
+  }
+  const tr = G.res.track, f = facts(tr, G.res.km, G.res.gain ?? 0), bad = proposalProblem(f);
+  if (bad || G.res.noEle) { toast(bad || "Servono le quote: ricalcola il percorso"); return; }
+  const last = G.stops[G.stops.length - 1];
+  openDialog(`<form method="dialog" class="dform" id="propForm"><h2>Proponi una salita</h2>
+    <p class="note small mu">Il tracciato è il Giro che hai disegnato, dalla base alla cima. Pendenze e quote le ricalcoliamo noi.</p>
+    <div class="strip"><div><b>${num(f.km)}</b><span>km</span></div><div><b>+${esc(f.gain)}</b><span>metri</span></div><div><b>${num(f.avgGradient)}%</b><span>media</span></div><div><b>${num(f.maxGradient)}%</b><span>max</span></div></div>
+    <label class="k" for="pName">Nome della salita</label><input id="pName" maxlength="70" placeholder="es. Monte Nerone" value="${esc(last && last.name ? last.name : "")}">
+    <label class="k" for="pSide">Da dove si sale</label><input id="pSide" maxlength="50" placeholder="es. Da Piobbico">
+    <label class="k" for="pNote">Note per chi controlla (facoltative)</label><textarea id="pNote" maxlength="400" rows="3" placeholder="fondo, traffico, tratti al 15%, chiusure..."></textarea>
+    <p class="note" id="pMsg"></p>
+    <button type="submit" class="btn pri" value="send">Invia proposta</button><button class="btn" value="x">Annulla</button></form>`);
+  $("#propForm").addEventListener("submit", async (e) => {
+    if (e.submitter && e.submitter.value !== "send") return;
+    e.preventDefault();
+    const name = $("#pName").value.trim(), msg = $("#pMsg");
+    if (name.length < 3) { msg.textContent = "Manca il nome della salita."; return; }
+    try { await sendProposal(proposalDoc(u, { name, side: $("#pSide").value, note: $("#pNote").value }, f, tr)); closeDialog(); toast("Proposta inviata · la trovi nel Diario"); }
+    catch (err) { msg.textContent = "Non inviata: " + ((err && err.message) || "errore"); }
+  });
+}
+async function fillProposals(u) {
+  const el = $("#props"); if (!el) return;
+  let rows = [], me = null;
+  try { [rows, me] = await Promise.all([myProposals(u.uid), whoAmI(u)]); } catch { el.innerHTML = `<h3>Le mie proposte</h3><p class="note">Non riesco a leggere le tue proposte ora.</p>`; return; }
+  if (!$("#props")) return;
+  const pts = points(rows), lv = levelOf(pts), nx = nextLevel(pts), en = document.documentElement.lang === "en";
+  const pct = nx ? Math.max(0, Math.min(100, Math.round((pts - lv.min) / ((nx.min - lv.min) || 1) * 100))) : 100;
+  const st = (r) => (r.status === "approved" ? "Pubblicata" : r.status === "rejected" ? "Non accolta" : "In revisione");
+  el.innerHTML = `<h3>Le mie proposte</h3>
+    <div class="lvl"><span class="lic">${lv.ic}</span><div><b>${esc(en ? lv.en : lv.it)}</b><i><u style="width:${pct}%"></u></i>
+      <span class="mu">${nx ? `Ancora ${esc(nx.min - pts)} ${nx.min - pts === 1 ? "salita accettata" : "salite accettate"} per diventare ${esc(en ? nx.en : nx.it)}` : "Livello massimo. Grazie."}</span></div></div>
+    ${rows.length ? `<ul class="rides">${rows.map((r, i) => `<li><div><b>${esc(r.name)}</b><span class="mu"><span class="pst ${esc(r.status)}">${st(r)}</span> · ${esc(r.side || "")} · ${num(+r.km || 0, 1)} km · +${esc(r.gain || 0)} m${r.reviewNote ? " · Nota: " + esc(r.reviewNote) : ""}</span></div>
+      ${r.status === "pending" ? `<div class="ra"><button type="button" class="btn" data-wd="${i}">Ritira</button></div>` : ""}</li>`).join("")}</ul>`
+    : `<p class="note">${me && me.canPropose ? "Nessuna proposta ancora. Disegna nel Giro una salita che manca (dalla base alla cima) e premi «Proponi salita»." : "Le proposte sono su invito durante la beta."}</p>`}`;
+  el.querySelectorAll("[data-wd]").forEach((b) => b.addEventListener("click", async () => {
+    if (b.dataset.sure !== "1") { b.dataset.sure = "1"; b.textContent = "Conferma"; b.classList.add("pri"); return; }
+    try { await withdrawProposal(rows[+b.dataset.wd].id); fillProposals(u); } catch { toast("Non ritirata"); }
+  }));
+  if (me && me.admin) fillQueue(u);
+}
+async function fillQueue(u) {
+  const el = $("#queue"); if (!el) return;
+  let rows = [];
+  try { rows = await pendingProposals(); } catch { return; }
+  if (!$("#queue")) return;
+  el.hidden = false;
+  el.innerHTML = `<h3>Da rivedere (${rows.length})</h3>${rows.length ? `<ul class="rides">${rows.map((r, i) => `<li><div><b>${esc(r.name)}</b><span class="mu">${esc(r.side || "")} · ${num(+r.km || 0, 1)} km · +${esc(r.gain || 0)} m · ${num(+r.avgGradient || 0)}% · da ${esc(r.author || "")}${r.note ? " · " + esc(r.note) : ""}</span></div>
+    <div class="ra"><button type="button" class="btn" data-see="${i}">Vedi</button><button type="button" class="btn pri" data-ok="${i}">Approva</button><button type="button" class="btn" data-no="${i}">Rifiuta</button></div>
+    <input class="why" id="why${i}" maxlength="300" placeholder="Motivo del rifiuto (lo vede chi ha proposto)" hidden></li>`).join("")}</ul>` : `<p class="note">Coda vuota.</p>`}`;
+  el.querySelectorAll("[data-see]").forEach((b) => b.addEventListener("click", () => {
+    const t = unflat(rows[+b.dataset.see].flat);
+    if (t.length < 2) return;
+    location.hash = "#/";
+    setTimeout(() => {
+      SEL = { type: "FeatureCollection", features: [{ type: "Feature", properties: { c: "#C04BD6", sel: 1 }, geometry: { type: "LineString", coordinates: t.map((q) => [q[1], q[0]]) } }] };
+      const src = map.getSource("sel"); if (src) src.setData(SEL);
+      const lo = t.map((q) => q[1]), la = t.map((q) => q[0]);
+      map.fitBounds([[Math.min(...lo), Math.min(...la)], [Math.max(...lo), Math.max(...la)]], { padding: 60, duration: 800, maxZoom: 14 });
+    }, 60);
+  }));
+  el.querySelectorAll("[data-ok]").forEach((b) => b.addEventListener("click", async () => {
+    try { await reviewProposal(rows[+b.dataset.ok].id, true, "", u); toast("Approvata"); fillQueue(u); } catch { toast("Non salvata"); }
+  }));
+  el.querySelectorAll("[data-no]").forEach((b) => b.addEventListener("click", async () => {
+    const i = +b.dataset.no, why = $("#why" + i);
+    if (why.hidden) { why.hidden = false; why.focus(); b.textContent = "Conferma rifiuto"; return; }
+    try { await reviewProposal(rows[i].id, false, why.value, u); toast("Rifiutata"); fillQueue(u); } catch { toast("Non salvata"); }
+  }));
+}
 async function fillRides(u) {
   const el = $("#rides"); if (!el) return;
   let list = [];
@@ -1021,7 +1105,7 @@ function renderGiro() {
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
     <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${body}
-    <div class="actions">${r ? `<button type="button" class="btn pri" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="gsave">Salva</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
+    <div class="actions">${r ? `<button type="button" class="btn pri" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="gsave">Salva</button><button type="button" class="btn" id="gprop">Proponi salita</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
   </div>`;
   panel.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { G.stops.splice(+b.dataset.rm, 1); giroChanged(); }));
   panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => { const [i, d] = b.dataset.mv.split(":").map(Number); const t = G.stops[i]; G.stops[i] = G.stops[i + d]; G.stops[i + d] = t; giroChanged(); }));
@@ -1030,6 +1114,7 @@ function renderGiro() {
   const gs = $("#gstart"); if (gs) gs.addEventListener("change", () => { G.start = gs.value || "08:00"; paintGiroWeather(); });
   const gg = $("#ggpx"); if (gg) gg.addEventListener("click", () => { const f = giroFile(); if (f) saveFile(f.name, f.text); });
   const gsv = $("#gsave"); if (gsv) gsv.addEventListener("click", saveGiroDialog);
+  const gpr = $("#gprop"); if (gpr) gpr.addEventListener("click", proposeDialog);
   const gsd = $("#gsend"); if (gsd) gsd.addEventListener("click", () => { const f = giroFile(); if (f) sendToDevice(f.title, f.name, f.text); });
   const gh = $("#gshare"); if (gh) gh.addEventListener("click", async () => { const url = location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops); try { if (navigator.share) await navigator.share({ title: "Il mio giro · LocaRide", url }); else { await navigator.clipboard.writeText(url); toast("Link copiato"); } } catch { /* cancelled */ } });
   const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });

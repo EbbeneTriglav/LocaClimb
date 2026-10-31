@@ -156,3 +156,30 @@ export async function listRoutes(uid) {
   return out;
 }
 export async function deleteRoute(uid, id) { const x = init(); if (x) await x.db.collection("users").doc(uid).collection("routes").doc(id).delete(); }
+
+/* ---------------------------------------------------------------- climb proposals (as js/contribute.js) */
+export async function whoAmI(user) {
+  const x = init(); if (!x || !user) return null;
+  const d = await x.db.collection("users").doc(user.uid).get().catch(() => null);
+  const o = (d && d.exists && d.data()) || {};
+  return { uid: user.uid, canPropose: !!o.canPropose, admin: o.role === "admin" };
+}
+export async function sendProposal(doc) { const x = init(); if (!x) throw new Error("Accesso non disponibile"); return (await x.db.collection("proposals").add(doc)).id; }
+export async function myProposals(uid) {
+  const x = init(); if (!x) return [];
+  const qs = await x.db.collection("proposals").where("uid", "==", uid).limit(100).get();
+  const out = []; qs.forEach((d) => out.push({ ...d.data(), id: d.id }));
+  return out.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+}
+export async function withdrawProposal(id) { const x = init(); if (x) await x.db.collection("proposals").doc(id).delete(); }
+export async function pendingProposals() {
+  const x = init(); if (!x) return [];
+  const qs = await x.db.collection("proposals").where("status", "==", "pending").limit(50).get();
+  const out = []; qs.forEach((d) => out.push({ ...d.data(), id: d.id }));
+  return out.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+}
+export async function reviewProposal(id, approve, note, reviewer) {
+  const x = init(); if (!x) return;
+  await x.db.collection("proposals").doc(id).update(approve ? { status: "approved", reviewedAt: Date.now(), reviewedBy: reviewer.uid }
+    : { status: "rejected", reviewNote: String(note || "").slice(0, 300), reviewedAt: Date.now(), reviewedBy: reviewer.uid });
+}
