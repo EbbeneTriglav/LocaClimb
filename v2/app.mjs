@@ -3,13 +3,13 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=11";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=11";
-import { poisNear } from "./lib/poi.mjs?v=11";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=11";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=11";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=11";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=11";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=12";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=12";
+import { poisNear } from "./lib/poi.mjs?v=12";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=12";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=12";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=12";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=12";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -372,11 +372,11 @@ function renderClimb() {
     <section class="sec" id="news" hidden></section>
     <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
     ${stravaHtml(c)}
-    <div class="actions"><button type="button" class="btn pri" id="rideBtn">Avvia modalità salita</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
+    <div class="actions"><button type="button" class="btn pri" id="sendBtn">Manda al dispositivo</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
   </div>`;
   panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; S.sideSwitch = true; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
-  $("#rideBtn").addEventListener("click", () => startRide(c, v));
+  $("#sendBtn").addEventListener("click", () => { const f = climbGpx(c, v); sendToDevice(c.name + (v.side ? " · " + v.side : ""), f.name, f.text); });
   $("#share").addEventListener("click", () => share(c));
   $("#giroAdd").addEventListener("click", () => { addStop({ lat: c.lat, lon: c.lon, id: String(c.id), name: c.name }); toast(`Aggiunta al giro · ${G.stops.length} ${G.stops.length === 1 ? "tappa" : "tappe"}`); });
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
@@ -616,12 +616,50 @@ function hoursHtml(v) {
   return `<div class="hours" aria-label="Condizioni ora per ora dalle 7 alle 19">${v.cells.map((x) => `<i class="${x.state}" title="${x.h}:00 · ${num(x.temp, 0)}° · vento ${num(x.wind, 0)} km/h · pioggia ${esc(x.pp ?? "–")}%"></i>`).join("")}</div><div class="hlab"><span>7</span><span>10</span><span>13</span><span>16</span><span>19</span></div>`;
 }
 
-function downloadGpx(c, v) {
+function climbGpx(c, v) {
   const name = c.name + (v.side ? " - " + v.side : "");
-  const blob = new Blob([gpx(name, trackWithEle(v))], { type: "application/gpx+xml" });
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = name.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().replace(/\s+/g, "_") + ".gpx";
-  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  return { name: name.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().replace(/\s+/g, "_") + ".gpx", text: gpx(name, trackWithEle(v)) };
+}
+function saveFile(fname, text) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "application/gpx+xml" }));
+  a.download = fname; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function downloadGpx(c, v) { const f = climbGpx(c, v); saveFile(f.name, f.text); }
+
+/* ------------------------------------------------------------------ manda al dispositivo
+   Replaces the parked "modalità salita" (startRide below, no longer reachable): on the bike people
+   use their computer, so the useful thing is getting the climb or the ride ONTO it. Phones: the
+   system share sheet with the GPX file (Garmin Connect, Wahoo, Karoo, Komoot... whatever is
+   installed). Everywhere: download + a short how-to for the device the rider picked (remembered). */
+const DEVICES = [
+  ["garmin", "Garmin", "Garmin Connect sul computer: Allenamento e pianificazione → Percorsi → Importa il GPX, poi «Invia al dispositivo». Dal telefono: condividi il file con l'app Garmin Connect, se il tuo telefono lo permette."],
+  ["wahoo", "Wahoo", "Condividi il GPX con l'app Wahoo ELEMNT (o aprilo con lei dai file scaricati): lo trovi tra i percorsi del ciclocomputer alla prossima sincronizzazione."],
+  ["karoo", "Hammerhead Karoo", "Carica il GPX nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo."],
+  ["app", "Strava o Komoot", "Importa il GPX come percorso su Strava o Komoot: se il ciclocomputer è collegato a quell'app, il percorso arriva da solo."],
+  ["altro", "Altro", "Bryton, Coros, Sigma, Apple Watch...: apri il GPX con l'app del tuo dispositivo."]
+];
+const DEV_KEY = "lr_device";
+function sendToDevice(title, fname, text) {
+  let dev = "garmin"; try { dev = localStorage.getItem(DEV_KEY) || dev; } catch { /* private mode */ }
+  let file = null; try { file = new File([text], fname, { type: "application/gpx+xml" }); } catch { file = null; }
+  const canShare = !!(file && navigator.canShare && navigator.canShare({ files: [file] }));
+  const d = openDialog(`<form method="dialog" class="dform send"><h2>Manda al dispositivo</h2>
+    <p class="note">${esc(title)}</p>
+    <div class="k">Il tuo dispositivo</div>
+    <div class="sides" role="group" aria-label="Dispositivo">${DEVICES.map(([k, l]) => `<button type="button" data-dev="${k}" aria-pressed="${k === dev}">${l}</button>`).join("")}</div>
+    <p class="note" id="devHow"></p>
+    ${canShare ? `<button type="button" class="btn pri" id="devShare">Condividi con un'app</button>` : ""}
+    <button type="button" class="btn ${canShare ? "" : "pri"}" id="devSave">Scarica il GPX</button>
+    <button class="btn" value="x">Chiudi</button></form>`);
+  const how = () => { const x = DEVICES.find((e) => e[0] === dev) || DEVICES[0]; $("#devHow").textContent = x[2]; };
+  d.querySelectorAll("[data-dev]").forEach((b) => b.addEventListener("click", () => {
+    dev = b.dataset.dev; try { localStorage.setItem(DEV_KEY, dev); } catch { /* private mode */ }
+    d.querySelectorAll("[data-dev]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); how();
+  }));
+  how();
+  const sh = $("#devShare");
+  if (sh) sh.addEventListener("click", async () => { try { await navigator.share({ files: [file], title }); } catch { /* cancelled */ } });
+  $("#devSave").addEventListener("click", () => saveFile(fname, text));
 }
 async function share(c) {
   const url = location.origin + location.pathname + "#/s/" + encodeURIComponent(c.id);
@@ -630,6 +668,8 @@ async function share(c) {
 function toast(t) { const d = document.createElement("div"); d.textContent = t; d.style.cssText = "position:fixed;left:50%;top:76px;transform:translateX(-50%);z-index:30;background:#E8EDF2;color:#0B0F14;padding:8px 14px;border-radius:18px;font-weight:600"; document.body.appendChild(d); setTimeout(() => d.remove(), 1600); }
 
 /* ------------------------------------------------------------------ modalità salita */
+/* PARKED (31/10/2026, Rick): live "modalità salita" on the phone. Not reachable from the UI any more -
+   replaced by "Manda al dispositivo"; kept for a possible comeback. */
 function startRide(c, v) {
   const box = $("#ride"); box.hidden = false;
   S.ride = { c, v, watch: null, sim: null };
@@ -862,14 +902,15 @@ function renderGiro() {
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
     <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${body}
-    <div class="actions">${r ? `<button type="button" class="btn pri" id="ggpx">GPX con punti utili</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
+    <div class="actions">${r ? `<button type="button" class="btn pri" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
   </div>`;
   panel.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { G.stops.splice(+b.dataset.rm, 1); giroChanged(); }));
   panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => { const [i, d] = b.dataset.mv.split(":").map(Number); const t = G.stops[i]; G.stops[i] = G.stops[i + d]; G.stops[i + d] = t; giroChanged(); }));
   panel.querySelectorAll("[data-prof]").forEach((b) => b.addEventListener("click", () => { G.profile = b.dataset.prof; giroChanged(); }));
   panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { G.day = +b.dataset.day; G.wx = null; renderGiro(); fillGiroWeather(G.seq); }));
   const gs = $("#gstart"); if (gs) gs.addEventListener("change", () => { G.start = gs.value || "08:00"; paintGiroWeather(); });
-  const gg = $("#ggpx"); if (gg) gg.addEventListener("click", giroGpx);
+  const gg = $("#ggpx"); if (gg) gg.addEventListener("click", () => { const f = giroFile(); if (f) saveFile(f.name, f.text); });
+  const gsd = $("#gsend"); if (gsd) gsd.addEventListener("click", () => { const f = giroFile(); if (f) sendToDevice(f.title, f.name, f.text); });
   const gh = $("#gshare"); if (gh) gh.addEventListener("click", async () => { const url = location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops); try { if (navigator.share) await navigator.share({ title: "Il mio giro · LocaRide", url }); else { await navigator.clipboard.writeText(url); toast("Link copiato"); } } catch { /* cancelled */ } });
   const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });
   if (G.wx) paintGiroWeather();
@@ -930,18 +971,16 @@ function paintGiroWater() {
     ${w.length ? `<ul class="tips water">${w.slice(0, 15).map((x) => `<li><b>km ${num(x.km, 0)}</b> · ${esc(x.p.name || x.p.label)}</li>`).join("")}</ul>` : ""}
     <p class="note small mu">Nel GPX con punti utili trovi questi punti e le cime delle salite.</p>`}`;
 }
-function giroGpx() {
-  if (!G.res) return;
+/* the ride as GPX with useful points (summits, water) as waypoints */
+function giroFile() {
+  if (!G.res) return null;
   const wpts = [];
   G.stops.forEach((s, i) => { if (s.name) wpts.push({ lat: s.lat, lon: s.lon, name: s.name, sym: "Summit" }); else if (i === 0 || i === G.stops.length - 1) wpts.push({ lat: s.lat, lon: s.lon, name: stopName(s, i), sym: "Flag, Blue" }); });
   for (const x of G.on) if (!wpts.some((w) => Math.abs(w.lat - x.c.lat) < 1e-4 && Math.abs(w.lon - x.c.lon) < 1e-4)) wpts.push({ lat: x.c.lat, lon: x.c.lon, ele: x.c.elevation, name: x.c.name, sym: "Summit" });
   for (const x of (G.water && G.water.list) || []) wpts.push({ lat: x.p.lat, lon: x.p.lon, name: "Acqua" + (x.p.name ? " - " + x.p.name : ""), sym: "Drinking Water" });
   const name = "Giro LocaRide " + new Date().toLocaleDateString(LOC);
   const track = G.res.noEle ? G.res.track : G.res.track.map((q) => [q[0], q[1], q[2]]);
-  const blob = new Blob([routeGpx(name, track, wpts)], { type: "application/gpx+xml" });
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = "giro_locaride_" + num(G.res.km, 0) + "km.gpx";
-  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  return { title: name, name: "giro_locaride_" + num(G.res.km, 0) + "km.gpx", text: routeGpx(name, track, wpts) };
 }
 map.once("load", () => { syncMarkers(); if (G.stops.length >= 2 && !G.res) calcSoon(); });
 

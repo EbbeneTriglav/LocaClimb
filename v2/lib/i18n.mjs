@@ -109,6 +109,13 @@ export const DICT = {
   "Nel GPX con punti utili trovi questi punti e le cime delle salite.": "The GPX with useful points has these and the climb summits.",
   "GPX con punti utili": "GPX with useful points", "Svuota": "Clear", "Percorso di riserva (OSRM): senza quote né fondo.": "Fallback route (OSRM): no elevation or surface.",
   "asfalto": "paved", "sterrato": "gravel", "naturale": "natural", "altro": "other", "Massimo 30 tappe": "30 stops at most",
+  "Manda al dispositivo": "Send to device", "Il tuo dispositivo": "Your device", "Dispositivo": "Device", "Condividi con un'app": "Share with an app",
+  "Scarica il GPX": "Download the GPX", "Strava o Komoot": "Strava or Komoot",
+  "Garmin Connect sul computer: Allenamento e pianificazione → Percorsi → Importa il GPX, poi «Invia al dispositivo». Dal telefono: condividi il file con l'app Garmin Connect, se il tuo telefono lo permette.": "Garmin Connect on a computer: Training & Planning → Courses → Import the GPX, then «Send to device». From the phone: share the file with the Garmin Connect app, if your phone allows it.",
+  "Condividi il GPX con l'app Wahoo ELEMNT (o aprilo con lei dai file scaricati): lo trovi tra i percorsi del ciclocomputer alla prossima sincronizzazione.": "Share the GPX with the Wahoo ELEMNT app (or open it from your downloads): it shows up in the bike computer's routes at the next sync.",
+  "Carica il GPX nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo.": "Upload the GPX to the Hammerhead dashboard (Routes → Import): the Karoo downloads it by itself.",
+  "Importa il GPX come percorso su Strava o Komoot: se il ciclocomputer è collegato a quell'app, il percorso arriva da solo.": "Import the GPX as a route on Strava or Komoot: if your bike computer is linked to that app, the route arrives by itself.",
+  "Bryton, Coros, Sigma, Apple Watch...: apri il GPX con l'app del tuo dispositivo.": "Bryton, Coros, Sigma, Apple Watch...: open the GPX with your device's app.",
   "Il mio giro · LocaRide": "My ride · LocaRide",
   "Stima: VAM da W/kg (formula di Ferrari) e velocità tratto per tratto sul profilo. Vento, peso e stanchezza non contano.": "Estimate: VAM from W/kg (Ferrari's formula) and speed stretch by stretch on the profile. Wind, weight and fatigue are not counted."
 };
