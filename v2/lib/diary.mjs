@@ -143,3 +143,16 @@ export async function sendReport(pid, passName, kind, text, user) {
   if (t.length < 5) throw new Error("Scrivi cosa non va (almeno qualche parola).");
   await x.db.collection("reports").add({ passId: String(pid), passName: String(passName || ""), kind: String(kind || "altro"), text: t, uid: user.uid, by: user.displayName || user.email || "", ts: Date.now(), status: "new", app: "v2" });
 }
+
+/* ---------------------------------------------------------------- saved rides (users/{uid}/routes, as js/myrides.js) */
+export async function saveRoute(user, doc) {
+  const x = init(); if (!x || !user) throw new Error("Accedi per salvare il giro");
+  return (await x.db.collection("users").doc(user.uid).collection("routes").add(doc)).id;
+}
+export async function listRoutes(uid) {
+  const x = init(); if (!x) return [];
+  const qs = await x.db.collection("users").doc(uid).collection("routes").orderBy("savedAt", "desc").limit(100).get();
+  const out = []; qs.forEach((d) => out.push({ ...d.data(), id: d.id }));
+  return out;
+}
+export async function deleteRoute(uid, id) { const x = init(); if (x) await x.db.collection("users").doc(uid).collection("routes").doc(id).delete(); }

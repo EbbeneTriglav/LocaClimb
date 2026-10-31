@@ -49,7 +49,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | GPX + punti utili, roadbook stampabile, immagine da condividere | presenti (non provati) | 🟡 GPX con cime e acqua come waypoint; roadbook stampabile e immagine ⏭️ |
 | Meteo del percorso (vento lungo il giro) | presente (non provato) | ✅ partenza, ogni salita, punto più alto e arrivo all'ora in cui ci passi (oggi/domani/dopodomani, ora di partenza); acqua lungo il giro e tratto più lungo senza |
 | Importa GPX / Le mie salite (GPX, FIT, zip) | ok | 🟡 il Diario le mostra; l'import si fa ancora dalla v1 |
-| I miei giri | presente | ⏭️ |
+| I miei giri | presente | ✅ «Salva» nel Giro, elenco nel Diario (apri, manda al dispositivo, elimina); stessi dati della v1 (users/{uid}/routes) |
 | Accesso Google | ok | ✅ condiviso con la v1 |
 | Accesso con email | presente | ✅ accesso, nuovo account con conferma mail, password dimenticata |
 | Proponi salita + revisione admin, livelli e badge | presenti | ⏭️ |

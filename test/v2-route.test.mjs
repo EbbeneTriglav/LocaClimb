@@ -92,3 +92,19 @@ test("highestIdx and trackKm", () => {
   assert.equal(highestIdx([1, 5, 3, 5]), 1);
   assert.ok(Math.abs(trackKm(track) - 10) < 0.01);
 });
+
+import { encodeTrack, decodeTrack, fitTrack, rideDoc } from "../v2/lib/route.mjs";
+test("saved rides: same track encoding as the classic app (js/myrides.js)", () => {
+  const t = [[46.123456, 10.987654, 1234.4], [46.2, 10.9, null]];
+  assert.equal(encodeTrack(t), "46.12346,10.98765,1234;46.20000,10.90000,");
+  assert.deepEqual(decodeTrack(encodeTrack(t)), [[46.12346, 10.98765, 1234], [46.2, 10.9, null]]);
+  assert.deepEqual(decodeTrack(""), []);
+});
+test("saved rides: resampled keeping both ends; the document has the classic fields", () => {
+  const long = Array.from({ length: 7001 }, (_, i) => [45 + i * 1e-4, 10, 500]);
+  const f = fitTrack(long, 6000);
+  assert.equal(f.length, 6000); assert.deepEqual(f[0], long[0]); assert.deepEqual(f[5999], long[7000]);
+  const d = rideDoc("  ", [{ lat: 46.5, lon: 10.4, id: "stelvio", name: "Passo dello Stelvio" }, { lat: 46.4, lon: 10.3 }], long, 70.04, 1939.6, 123);
+  assert.equal(d.name, "Il mio giro"); assert.equal(d.pts, 6000); assert.equal(d.distKm, 70.04); assert.equal(d.ascent, 1940); assert.equal(d.savedAt, 123);
+  assert.deepEqual(d.stops.map((s) => s.type), ["pass", "point"]);
+});

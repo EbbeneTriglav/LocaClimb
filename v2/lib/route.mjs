@@ -3,7 +3,7 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor } from "./climb.mjs?v=15";
+import { havKm, speedKmh, vamFor, gradeColor } from "./climb.mjs?v=16";
 
 export const BROUTER = "https://brouter.de/brouter";
 export const PROFILES = [["fastbike", "Solo asfalto"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
@@ -176,3 +176,31 @@ export function routeGpx(name, track, wpts = []) {
 
 /* index of the highest sample */
 export function highestIdx(p) { let b = 0; for (let i = 1; i < p.length; i++) if (p[i] > p[b]) b = i; return b; }
+
+/* ---------------------------------------------------------------- saved rides
+   Same storage as the classic app (js/myrides.js), so a ride saved in one shows in the other:
+   users/{uid}/routes/{auto} = { name, stops, track: "lat,lon,ele;...", pts, distKm, ascent, savedAt } */
+export const MAX_TRACK_PTS = 6000;
+export function fitTrack(t, max) {
+  if (t.length <= max) return t.slice();
+  const out = [], step = (t.length - 1) / (max - 1);
+  for (let i = 0; i < max - 1; i++) out.push(t[Math.round(i * step)]);
+  out.push(t[t.length - 1]);
+  return out;
+}
+export function encodeTrack(t) { return t.map((q) => (+q[0]).toFixed(5) + "," + (+q[1]).toFixed(5) + "," + (q[2] == null ? "" : Math.round(q[2]))).join(";"); }
+export function decodeTrack(s) {
+  if (!s) return [];
+  return String(s).split(";").map((p) => { const a = p.split(","); return [parseFloat(a[0]), parseFloat(a[1]), a[2] === "" || a[2] == null ? null : parseFloat(a[2])]; })
+    .filter((q) => isFinite(q[0]) && isFinite(q[1]));
+}
+/* the document to store for the current ride (track resampled like the classic app) */
+export function rideDoc(name, stops, track, km, gain, now = Date.now()) {
+  let t = fitTrack(track, MAX_TRACK_PTS), enc = encodeTrack(t);
+  if (enc.length > 900000) { t = fitTrack(track, 3000); enc = encodeTrack(t); }
+  return {
+    name: String(name || "Il mio giro").trim().slice(0, 80) || "Il mio giro",
+    stops: stops.map((s) => ({ type: s.id ? "pass" : "point", name: String(s.name || "").slice(0, 80), lat: +s.lat, lon: +s.lon, elevation: s.elevation ?? null })),
+    track: enc, pts: t.length, distKm: +(+km).toFixed(2), ascent: gain == null ? 0 : Math.round(gain), savedAt: now
+  };
+}
