@@ -6,7 +6,7 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=13";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=14";
 
 const DATA = "../data/";
 const cache = new Map();          // region file -> Promise<Map(id -> record)>

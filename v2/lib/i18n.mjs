@@ -111,12 +111,14 @@ export const DICT = {
   "asfalto": "paved", "sterrato": "gravel", "naturale": "natural", "altro": "other", "Massimo 30 tappe": "30 stops at most",
   "Manda al dispositivo": "Send to device", "Il tuo dispositivo": "Your device", "Dispositivo": "Device", "Condividi con un'app": "Share with an app",
   "Scarica il GPX": "Download the GPX", "Strava o Komoot": "Strava or Komoot",
-  "Garmin Connect sul computer: Allenamento e pianificazione → Percorsi → Importa il GPX, poi «Invia al dispositivo». Dal telefono: condividi il file con l'app Garmin Connect, se il tuo telefono lo permette.": "Garmin Connect on a computer: Training & Planning → Courses → Import the GPX, then «Send to device». From the phone: share the file with the Garmin Connect app, if your phone allows it.",
-  "Condividi il GPX con l'app Wahoo ELEMNT (o aprilo con lei dai file scaricati): lo trovi tra i percorsi del ciclocomputer alla prossima sincronizzazione.": "Share the GPX with the Wahoo ELEMNT app (or open it from your downloads): it shows up in the bike computer's routes at the next sync.",
-  "Carica il GPX nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo.": "Upload the GPX to the Hammerhead dashboard (Routes → Import): the Karoo downloads it by itself.",
-  "Importa il GPX come percorso su Strava o Komoot: se il ciclocomputer è collegato a quell'app, il percorso arriva da solo.": "Import the GPX as a route on Strava or Komoot: if your bike computer is linked to that app, the route arrives by itself.",
-  "Bryton, Coros, Sigma, Apple Watch...: apri il GPX con l'app del tuo dispositivo.": "Bryton, Coros, Sigma, Apple Watch...: open the GPX with your device's app.",
   "Dati da verificare": "Data to be checked", "Segnala com'è davvero": "Tell us what it's really like",
+  "Garmin non accetta file inviati da un sito: scarica il GPX, poi su Garmin Connect (meglio dal computer) apri Allenamento e pianificazione → Percorsi → Importa e scegli il file; infine «Invia al dispositivo». Più comodo: collega Garmin a Komoot o Strava, i percorsi arrivano da soli.": "Garmin does not accept files sent by a website: download the GPX, then on Garmin Connect (best from a computer) open Training & Planning → Courses → Import and pick the file; then «Send to device». Easier: link Garmin to Komoot or Strava and routes arrive by themselves.",
+  "Dal telefono: «Condividi con un'app» e scegli Wahoo ELEMNT; il percorso arriva al ciclocomputer alla prossima sincronizzazione. In alternativa scarica il GPX e aprilo con l'app ELEMNT.": "From the phone: «Share with an app» and pick Wahoo ELEMNT; the route reaches the bike computer at the next sync. Or download the GPX and open it with the ELEMNT app.",
+  "Scarica il GPX e caricalo nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo.": "Download the GPX and upload it to the Hammerhead dashboard (Routes → Import): the Karoo downloads it by itself.",
+  "Scarica il GPX e importalo su Komoot: se il ciclocomputer è collegato a Komoot, il percorso arriva da solo.": "Download the GPX and import it into Komoot: if your bike computer is linked to Komoot, the route arrives by itself.",
+  "Scarica il GPX e importalo come percorso su Strava: se il ciclocomputer è collegato a Strava, il percorso arriva da solo.": "Download the GPX and import it as a route on Strava: if your bike computer is linked to Strava, the route arrives by itself.",
+  "Bryton, Coros, Sigma, Apple Watch...: «Condividi con un'app» e scegli l'app del tuo dispositivo, oppure scarica il GPX e aprilo con lei.": "Bryton, Coros, Sigma, Apple Watch...: «Share with an app» and pick your device's app, or download the GPX and open it with it.",
+  "GPX scaricato": "GPX downloaded", "Apri Garmin Connect": "Open Garmin Connect", "Apri la dashboard": "Open the dashboard", "Apri Komoot": "Open Komoot", "Apri Strava": "Open Strava",
   "Il mio giro · LocaRide": "My ride · LocaRide",
   "Stima: VAM da W/kg (formula di Ferrari) e velocità tratto per tratto sul profilo. Vento, peso e stanchezza non contano.": "Estimate: VAM from W/kg (Ferrari's formula) and speed stretch by stretch on the profile. Wind, weight and fatigue are not counted."
 };
@@ -149,6 +151,10 @@ export const RULES = [
   [/^Voto non salvato: (.*)$/, "Vote not saved: $1"],
   [/^Non inviata: (.*)$/, "Not sent: $1"],
   [/^tratto più lungo senza:$/, "longest stretch without:"],
+  [/^([12]) · (Scarica il GPX)$/, (m, n) => n + " · Download the GPX"],
+  [/^2 · Apri (.+)$/, (m, x) => "2 · Open " + x.replace(/^la dashboard$/, "the dashboard")],
+  [/^(.+): il file va direttamente all'app che scegli\.$/, "$1: the file goes straight to the app you pick."],
+  [/^(.+): nessun sito può inviare il file da solo a questo servizio: servono questi due passaggi\.$/, "$1: no website can send the file to this service by itself: these two steps are needed."],
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`]
 ];
 
