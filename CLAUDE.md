@@ -101,7 +101,9 @@ Production URL: https://locaride.app/ — hosting is GitHub Pages until the Clou
 - `js/uikit.js` header, menus, bottom tabs, avatar; `js/contribute.js` climb proposals,
   admin review, levels, merge of user climbs; `js/authfix.js` Google login via redirect on
   mobile (replaces `amGoogle`); `js/weather.js` weather podium; `js/shadeindex.js` shade index.
-- `sw.js` is network-first with `cache:"reload"` for html/js/css. Changing its strategy can
+- `sw.js` (registered by both apps, scope `/`) is network-first with `cache:"reload"` for pages and
+  unversioned html/js/css; files with `?v=` and `vendor/` use the HTTP cache, and a copy is stored only
+  when its ETag changed. v2's install card/Diario entry: `v2/lib/install.mjs` (manifest: `manifest.json`). Changing its strategy can
   strand every installed app on an old version: bump `CACHE` and ask Rick first.
 - `firestore.rules` is the full, official copy of the Firestore rules. Rick publishes it by hand
   (console -> Firestore -> Regole: replace all, Pubblica): never assume a rules change is live;

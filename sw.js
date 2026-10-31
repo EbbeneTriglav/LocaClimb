@@ -30,7 +30,7 @@
 
 /* Il nome cambia a ogni versione: cosi' l'evento activate qui sotto fa pulizia
    delle copie vecchie invece di tenersele per sempre. */
-var CACHE = "locaride-v2";
+var CACHE = "locaride-v3";   // v3 (31/10/2026): v2 is the main page; versioned files no longer re-downloaded
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();                       // la nuova versione entra subito in servizio
@@ -44,10 +44,24 @@ self.addEventListener("activate", function (e) {
   );
 });
 
-/* la pagina e il codice devono essere sempre freschi; i dati possono aspettare */
+/* la pagina e il codice devono essere sempre freschi; i dati possono aspettare.
+   Eccezione: i file con la versione nel nome (?v=...) e le librerie in vendor/ (MapLibre, ~1 MB):
+   cambiano indirizzo quando cambiano, quindi la cache HTTP normale e' gia' giusta. Prima venivano
+   riscaricati per intero a ogni apertura, ed era il grosso del tempo di avvio della nuova versione. */
 function mustBeFresh(req, url) {
   if (req.mode === "navigate") return true;
-  return /\.(?:js|css|html)$/.test(url.pathname);
+  if (/[?&]v=/.test(url.search) || /\/vendor\//.test(url.pathname)) return false;
+  return /\.(?:m?js|css|html)$/.test(url.pathname);
+}
+
+/* Salva la copia solo se e' cambiata (stesso ETag = stesso file): l'indice delle salite pesa
+   ~5 MB e riscriverlo nel telefono a ogni apertura era lavoro inutile. */
+function keep(req, res) {
+  var copy = res.clone(), tag = res.headers.get("etag");
+  caches.open(CACHE).then(function (c) {
+    var same = tag ? c.match(req).then(function (old) { return !!old && old.headers.get("etag") === tag; }) : Promise.resolve(false);
+    return same.then(function (s) { if (!s) return c.put(req, copy); });
+  }).catch(function () {});
 }
 
 self.addEventListener("fetch", function (e) {
@@ -69,10 +83,7 @@ self.addEventListener("fetch", function (e) {
     // cache:"reload" salta la cache HTTP del browser: senza, "prima la rete"
     // restava una buona intenzione e l'aggiornamento non arrivava mai.
     fetch(fresh ? new Request(req, { cache: "reload" }) : req).then(function (res) {
-      if (res && res.status === 200 && res.type === "basic") {
-        var copy = res.clone();
-        caches.open(CACHE).then(function (c) { c.put(req, copy); });
-      }
+      if (res && res.status === 200 && res.type === "basic") keep(req, res);
       return res;
     }).catch(function () {
       return caches.match(req).then(function (hit) {

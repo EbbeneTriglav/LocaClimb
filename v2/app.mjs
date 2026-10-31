@@ -3,15 +3,16 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=20";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=20";
-import { poisNear } from "./lib/poi.mjs?v=20";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=20";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=20";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=20";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=20";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal } from "./lib/diary.mjs?v=20";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=20";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=21";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=21";
+import { poisNear } from "./lib/poi.mjs?v=21";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=21";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=21";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=21";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=21";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal } from "./lib/diary.mjs?v=21";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=21";
+import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=21";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -367,6 +368,7 @@ async function openClimb(id) {
   if (S.sel !== c) { S.sel = c; S.side = 0; }
   renderClimb();
   loadVerdict(c);
+  setTimeout(() => nudgeInstall(true), 8000);      // someone reading a climb page: suggest the app, not on top of the first look
 }
 
 function renderClimb() {
@@ -817,8 +819,9 @@ async function renderDiario() {
     body.className = "";
     body.innerHTML = `<p class="note">Qui compaiono le salite che hai fatto davvero, con i tempi registrati dal tuo dispositivo.</p>
       <div class="actions" style="position:static"><button type="button" class="btn pri" id="login">Accedi</button></div>
-      <p class="note">Hai già l'account nell'app classica? È lo stesso: se sei collegato lì, lo sei anche qui.</p>`;
+      <p class="note">Hai già l'account nell'app classica? È lo stesso: se sei collegato lì, lo sei anche qui.</p>${installSec()}`;
     $("#login").addEventListener("click", () => openAccount(() => renderDiario()));
+    wireInstallSec();
     return;
   }
   let list = [];
@@ -833,8 +836,8 @@ async function renderDiario() {
     <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>
     <section class="sec" id="rides"><h3>I miei giri</h3><p class="note">Carico…</p></section>
     <section class="sec" id="props"><h3>Le mie proposte</h3><p class="note">Carico…</p></section>
-    <section class="sec" id="queue" hidden></section>`;
-  fillRides(u); fillProposals(u);
+    <section class="sec" id="queue" hidden></section>${installSec()}`;
+  fillRides(u); fillProposals(u); wireInstallSec();
   $("#importBtn").addEventListener("click", () => { window.LRC_V2.onSaved = () => { if ((location.hash || "").startsWith("#/diario")) renderDiario(); }; window.gcPick(); });
 }
 function stamp(d) {
@@ -1189,6 +1192,68 @@ function giroFile() {
 }
 // the saved ride is drawn and routed only inside the Giro (outside it stayed on the map, 31/10)
 map.once("load", () => { syncMarkers(); });
+
+/* ------------------------------------------------------------------ install (lib/install.mjs)
+   One tap where the browser allows it (beforeinstallprompt, captured in index.html), the Share-sheet
+   steps on iPhone, the browser menu otherwise. A card suggests it to people who come back or are
+   using the app (never on the very first look, never again for 30 days after "Non ora"); the Diario
+   keeps a permanent entry. */
+const INST_KEY = "lr_install";
+const instState = () => { try { return JSON.parse(localStorage.getItem(INST_KEY)) || {}; } catch { return {}; } };
+const instSave = (st) => { try { localStorage.setItem(INST_KEY, JSON.stringify(st)); } catch { /* private mode */ } };
+const standalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const instMode = () => installMode({ standalone: standalone() || (window.LR_INSTALL && LR_INSTALL.installed), prompt: !!(window.LR_INSTALL && LR_INSTALL.prompt), ua: navigator.userAgent });
+const IOS_SHARE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M6 11H5v10h14V11h-1"/></svg>`;
+
+async function doInstall() {
+  const m = instMode();
+  if (m === "prompt") {
+    const e = LR_INSTALL.prompt; LR_INSTALL.prompt = null;      // the event can be used once
+    hideInstallCard();
+    try { await e.prompt(); const r = await e.userChoice; if (r && r.outcome === "accepted") toast("Installata: la trovi nella schermata Home"); } catch { /* dismissed */ }
+    return;
+  }
+  hideInstallCard();
+  openDialog(`<div class="dform inst"><div class="dh"><h2>LocaRide sul telefono</h2><button type="button" class="ib" id="instX" aria-label="Chiudi">${ICON.close}</button></div>
+    ${m === "ios" ? `<ol class="steps"><li><span>Tocca</span> <b class="key">${IOS_SHARE}</b> <span>Condividi, nella barra del browser</span></li><li><span>Scorri e scegli</span> <b>Aggiungi alla schermata Home</b></li><li><span>Conferma con</span> <b>Aggiungi</b></li></ol>`
+      : `<ol class="steps"><li><span>Apri il menu del browser</span> <b class="key">⋮</b></li><li><span>Scegli</span> <b>Installa app</b> <span>(o «Aggiungi a schermata Home»)</span></li></ol><p class="note">Se nel menu c'è «Apri app», LocaRide è già installata: aprila dall'icona.</p>`}
+    <p class="note">Si apre dall'icona, a tutto schermo, e ricorda le ultime salite anche con poco campo.</p></div>`);
+  $("#instX").addEventListener("click", closeDialog);
+}
+
+function installSec() {
+  const m = instMode();
+  if (m === "none") return "";
+  return `<section class="sec" id="instSec"><h3>App sul telefono</h3><p class="note">Icona nella schermata Home, a tutto schermo, più veloce ad aprirsi.</p>
+    <div class="actions" style="position:static"><button type="button" class="btn" id="instBtn">${m === "prompt" ? "Installa LocaRide" : "Come installarla"}</button></div></section>`;
+}
+function wireInstallSec() { const b = $("#instBtn"); if (b) b.addEventListener("click", doInstall); }
+
+function hideInstallCard() { const c = $("#instCard"); if (c) { c.classList.remove("on"); setTimeout(() => c.remove(), 250); } }
+function nudgeInstall(engaged = false) {
+  const m = instMode(), st = instState();
+  if ($("#instCard") || !shouldNudge(m, st, Date.now(), engaged)) return;
+  const c = document.createElement("div");
+  c.id = "instCard"; c.className = "instcard"; c.setAttribute("role", "dialog"); c.setAttribute("aria-label", "Installa LocaRide");
+  c.innerHTML = `<img src="apple-touch-icon.png" width="48" height="48" alt=""><div class="it"><b>App LocaRide</b><span>Dalla Home, a tutto schermo</span></div>
+    <button type="button" class="ib" id="instNo" aria-label="Non ora">${ICON.close}</button><button type="button" class="btn pri" id="instGo">${m === "prompt" ? "Installa" : "Come fare"}</button>`;
+  document.body.appendChild(c);
+  requestAnimationFrame(() => c.classList.add("on"));
+  $("#instGo").addEventListener("click", doInstall);
+  $("#instNo").addEventListener("click", () => { instSave(snooze(instState())); hideInstallCard(); });
+}
+addEventListener("lr-install", () => {
+  if (window.LR_INSTALL.installed) { hideInstallCard(); const s = $("#instSec"); if (s) s.remove(); return; }
+  setTimeout(() => nudgeInstall(false), 20000);                 // a returning visitor: after 20 s of use, not on top of the first paint
+});
+instSave(countVisit(instState()));
+if (instMode() !== "none") setTimeout(() => nudgeInstall(false), 20000);   // the dialog may have been offered before this module ran
+
+/* Service worker (sw.js, shared with the classic app): installable everywhere and a last copy of the page
+   and the climbs for a mountain without signal. Registered after the first paint, never in its way. */
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  addEventListener("load", () => setTimeout(() => navigator.serviceWorker.register(new URL("../sw.js", import.meta.url)).catch(() => { /* not fatal */ }), 4000), { once: true });
+}
 
 /* ------------------------------------------------------------------ icons */
 const ICON = {

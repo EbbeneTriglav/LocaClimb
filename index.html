@@ -8,6 +8,13 @@
 (function () { var s = location.search, h = location.hash;
   if (/[?&](g|discover)=/.test(s) || /admin/.test(s + h)) location.replace("classica/" + s + h); })();
 </script>
+<script>
+/* The browser offers the install dialog once, possibly before the modules load: keep it for the
+   "Installa" button (v2/app.mjs, lib/install.mjs). */
+window.LR_INSTALL = { prompt: null, installed: false };
+addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); LR_INSTALL.prompt = e; dispatchEvent(new Event("lr-install")); });
+addEventListener("appinstalled", function () { LR_INSTALL.prompt = null; LR_INSTALL.installed = true; dispatchEvent(new Event("lr-install")); });
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B0F14">
 <title>LocaRide — salite e passi in bici</title>
@@ -18,11 +25,13 @@
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="LocaRide">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="v2/vendor/maplibre-gl-5.24.0/maplibre-gl.css">
-<link rel="stylesheet" href="v2/app.css?v=20">
+<link rel="stylesheet" href="v2/app.css?v=21">
 </head>
 <body>
 <div id="map" aria-label="Mappa delle salite"></div>
@@ -86,6 +95,6 @@
 <script src="js/gpxclimbs.js?v=1793290000" defer></script>
 <script src="js/myclimbs.js?v=1793290000" defer></script>
 <script src="js/rideimport.js?v=1793290000" defer></script>
-<script type="module" src="v2/app.mjs?v=20"></script>
+<script type="module" src="v2/app.mjs?v=21"></script>
 </body>
 </html>
