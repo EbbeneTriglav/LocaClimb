@@ -299,3 +299,16 @@ test("basemaps: Notte+ by default, Ciclabile for the Giro, every one attributed"
   assert.deepEqual(notteRoads({ type: "line", id: "road_major" }), { "line-color": "#8A9AAD", "line-opacity": 0.95 });
   assert.equal(notteRoads({ type: "circle", id: "x" }), null);
 });
+
+test("alongTrack (grid) finds the same points as a full scan", () => {
+  const t = Array.from({ length: 400 }, (_, i) => [46 + i * 0.0009, 10 + Math.sin(i / 20) * 0.01]);
+  const v = { track: t, distance_km: 40 };
+  const pts = Array.from({ length: 300 }, (_, i) => ({ lat: 46 + (i * 37 % 360) * 0.001, lon: 10 + ((i * 53) % 40 - 20) * 0.0007, id: i }));
+  const fast = alongTrack(v, pts, 120);
+  // brute force reference
+  const cum = [0]; for (let i = 1; i < t.length; i++) { const r = Math.PI / 180, a = Math.sin((t[i][0] - t[i - 1][0]) * r / 2) ** 2 + Math.cos(t[i - 1][0] * r) * Math.cos(t[i][0] * r) * Math.sin((t[i][1] - t[i - 1][1]) * r / 2) ** 2; cum.push(cum[i - 1] + 2 * 6371 * Math.asin(Math.sqrt(a))); }
+  const ref = [];
+  for (const p of pts) { let bd = Infinity, bi = 0; t.forEach((q, i) => { const r = Math.PI / 180, a = Math.sin((q[0] - p.lat) * r / 2) ** 2 + Math.cos(p.lat * r) * Math.cos(q[0] * r) * Math.sin((q[1] - p.lon) * r / 2) ** 2, d = 2 * 6371 * Math.asin(Math.sqrt(a)); if (d < bd) { bd = d; bi = i; } }); if (bd * 1000 <= 120) ref.push(p.id); }
+  assert.deepEqual(fast.map((x) => x.p.id).sort((a, b) => a - b), ref.sort((a, b) => a - b));
+  assert.ok(ref.length > 10);
+});

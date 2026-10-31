@@ -3,7 +3,7 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor } from "./climb.mjs?v=17";
+import { havKm, speedKmh, vamFor, gradeColor } from "./climb.mjs?v=18";
 
 export const BROUTER = "https://brouter.de/brouter";
 export const PROFILES = [["fastbike", "Solo asfalto"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];

@@ -225,10 +225,18 @@ export function alongTrack(v, points, maxM = 100) {
   let la0 = 90, la1 = -90, lo0 = 180, lo1 = -180;
   for (const q of t) { la0 = Math.min(la0, q[0]); la1 = Math.max(la1, q[0]); lo0 = Math.min(lo0, q[1]); lo1 = Math.max(lo1, q[1]); }
   const pad = 0.002;
+  // grid of track points (cells larger than maxM): each point only looks at the 3x3 cells around it.
+  // A long ride (4000 points) against thousands of fountains was millions of distances (31/10).
+  const C = Math.max(0.005, maxM / 1000 / 111 * 2.2), grid = new Map(), key = (a, b) => a + ":" + b;
+  t.forEach((q, i) => { const k = key(Math.floor(q[0] / C), Math.floor(q[1] / C)); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(i); });
   for (const p of points) {
     if (p.lat < la0 - pad || p.lat > la1 + pad || p.lon < lo0 - pad || p.lon > lo1 + pad) continue;
+    const a = Math.floor(p.lat / C), b = Math.floor(p.lon / C), cand = [];
+    for (let x = a - 1; x <= a + 1; x++) for (let y = b - 1; y <= b + 1; y++) { const g = grid.get(key(x, y)); if (g) cand.push(...g); }
+    if (!cand.length) continue;
+    cand.sort((m, n) => m - n);   // same tie-break as a full scan
     let bd = Infinity, bi = 0;
-    for (let i = 0; i < t.length; i++) { const d = havKm(p.lat, p.lon, t[i][0], t[i][1]); if (d < bd) { bd = d; bi = i; } }
+    for (const i of cand) { const d = havKm(p.lat, p.lon, t[i][0], t[i][1]); if (d < bd) { bd = d; bi = i; } }
     if (bd * 1000 <= maxM) out.push({ km: +(cum[bi] / tot * L).toFixed(1), m: Math.round(bd * 1000), p });
   }
   return out.sort((a, b) => a.km - b.km);
