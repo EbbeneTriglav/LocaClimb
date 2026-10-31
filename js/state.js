@@ -1,7 +1,7 @@
 /* Shared mutable global state + constants used across the app's classic <script> files. */
 /* Where the data layer lives, relative to index.html. Single source of truth for the
    frontend (scripts/lib/paths.mjs is the Node-side equivalent). Change here to relocate. */
-var DATA_DIR="data/";
+var DATA_DIR=((typeof window!=="undefined"&&window.LR_BASE)||"")+"data/"; // LR_BASE: set by classica/index.html (the classic app lives one level down)
 var map,markers,routeLines=[],weatherCache={},routeCache={};
 var rbMode=false,rbStops=[],rbLine=null,rbTrack=[],wpMarkers=[];
 var osmPasses=[],osmEnrichCache={},showOsm=true;

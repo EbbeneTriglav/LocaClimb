@@ -3,7 +3,7 @@
  * (data/poi/c/<floor(lat*4)>_<floor(lon*4)>.json, built by scripts/build_poi.mjs; 0.25 deg cells,
  * each { n: [[osmId, lat, lon, tags]...] }). No Overpass from v2: a zone without tiles says so.
  */
-const DATA = "../data/poi/";
+const DATA = new URL("../../data/poi/", import.meta.url).href;
 let index = null;
 const cells = new Map();
 

@@ -29,7 +29,7 @@ const MIME = {
 const server = createServer(async (req, res) => {
   try {
     let reqPath = decodeURIComponent(req.url.split("?")[0]);
-    if (reqPath.endsWith("/")) reqPath += "index.html";   // like GitHub Pages: /v2/ -> /v2/index.html
+    if (reqPath.endsWith("/")) reqPath += "index.html";   // like Cloudflare/Pages: /classica/ -> /classica/index.html
     const filePath = path.normalize(path.join(ROOT, reqPath));
     if (!filePath.startsWith(ROOT)) { res.writeHead(403); res.end("Forbidden"); return; }
 

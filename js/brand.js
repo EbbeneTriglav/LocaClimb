@@ -40,7 +40,7 @@ function applyBrand() {
 function registerSW() {
   if (!("serviceWorker" in navigator)) return;
   if (location.protocol !== "https:" && location.hostname !== "localhost") return;
-  navigator.serviceWorker.register("sw.js").catch(function (e) {
+  navigator.serviceWorker.register((window.LR_BASE||"")+"sw.js").catch(function (e) {
     console.warn("Service worker non registrato:", e && e.message);
   });
 }

@@ -3,15 +3,15 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=19";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=19";
-import { poisNear } from "./lib/poi.mjs?v=19";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=19";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=19";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=19";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=19";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal } from "./lib/diary.mjs?v=19";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=19";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=20";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=20";
+import { poisNear } from "./lib/poi.mjs?v=20";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=20";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=20";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=20";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=20";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal } from "./lib/diary.mjs?v=20";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=20";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -600,7 +600,7 @@ async function openReport(c) {
 
 let NEWS = null;
 async function fillNews(c) {
-  if (!NEWS) NEWS = fetch("../data/pass_news.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => ({}));
+  if (!NEWS) NEWS = fetch(new URL("../data/pass_news.json", import.meta.url), { cache: "no-cache" }).then((r) => r.json()).catch(() => ({}));
   const all = await NEWS, items = all[c.id] || all[c.name] || [];
   const el = $("#news"); if (!el || S.sel !== c || !Array.isArray(items) || !items.length) return;
   el.hidden = false;

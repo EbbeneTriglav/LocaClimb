@@ -1,14 +1,14 @@
 {
   "name": "LocaRide — ride like a local",
   "short_name": "LocaRide",
-  "description": "Scopri passi e salite, pianifica il giro con meteo, fontanelle e ristori, esporta il GPX.",
+  "description": "Salite e passi in bici: mappa 3D, road book km per km, meteo in quota, il tuo giro in GPX.",
   "lang": "it",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0f172a",
-  "theme_color": "#2563eb",
+  "background_color": "#0B0F14",
+  "theme_color": "#0B0F14",
   "categories": ["sports", "navigation", "travel"],
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },

@@ -5,7 +5,11 @@ committed to the repo. `index.html` + `js/*.js` are served as-is; Leaflet, SunCa
 Firebase come from CDNs; a set of JSON files are fetched at runtime and merged
 client-side into the working dataset. UI copy is in Italian; code/docs are in English.
 
-## Frontend: `index.html` + `js/*.js` classic scripts
+> **31/10/2026:** the main page `/` is now the v2 frontend (`index.html` at the root + `v2/`).
+> This section describes the classic app, which moved to `classica/index.html` (served at
+> `/classica/` for a few weeks) and keeps using `js/*.js` unchanged.
+
+## Frontend: `classica/index.html` + `js/*.js` classic scripts
 
 `index.html` holds markup and CSS only. The JS (~1050 lines total) lives in `js/`,
 loaded via plain `<script src>` tags - **not** `type="module"`. That's a deliberate
