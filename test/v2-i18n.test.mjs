@@ -32,3 +32,6 @@ test("a leading or trailing ' · ' separator does not block the match", () => {
   assert.equal(translate(" · 17 m dalla strada"), " · 17 m from the road");
   assert.equal(translate("punti acqua entro 100 m · "), "water points within 100 m · ");
 });
+test("the implausible-gradients warning is translated", () => {
+  assert.match(translate("Pendenze non credibili per una strada asfaltata (max 72%): probabile errore del modello del terreno (galleria, ponte) o un tratto che non è una strada asfaltata. Per questo non compare tra le salite più dure."), /^Gradients not credible for a paved road \(max 72%\)/);
+});

@@ -3,13 +3,13 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=12";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=12";
-import { poisNear } from "./lib/poi.mjs?v=12";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=12";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=12";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=12";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=12";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=13";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=13";
+import { poisNear } from "./lib/poi.mjs?v=13";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=13";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=13";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=13";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=13";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -92,7 +92,7 @@ map.on("load", async () => {
 map.on("moveend", () => { if (panel.dataset.mode === "list") renderList(); });
 
 function applyFilter() {
-  let f = S.filter === "hard" ? [">=", ["get", "d"], 8] : S.filter === "top" ? [">=", ["get", "d"], 10] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
+  let f = S.filter === "hard" ? ["all", [">=", ["get", "d"], 8], ["!=", ["get", "q"], 1]] : S.filter === "top" ? ["all", [">=", ["get", "d"], 10], ["!=", ["get", "q"], 1]] : S.filter === "new" ? ["==", ["get", "disc"], 1] : null;
   const all = [f, S.paved && ["==", ["get", "gr"], 0], S.trucks && ["==", ["get", "tk"], 0], S.cc && ["==", ["get", "cc"], S.cc]].filter(Boolean);
   f = all.length > 1 ? ["all", ...all] : all[0] || null;
   for (const id of ["c-dot", "c-glow", "c-lab"]) if (map.getLayer(id)) map.setFilter(id, f);
@@ -102,6 +102,7 @@ function passesFilter(c) {
   if (S.paved && isGravel(c)) return false;
   if (S.trucks && !fewTrucks(c)) return false;
   if (S.cc && c.cc !== S.cc) return false;
+  if ((S.filter === "hard" || S.filter === "top") && c.q) return false;   // implausible gradients are not "hard"
   return S.filter === "hard" ? d >= 8 : S.filter === "top" ? d >= 10 : S.filter === "new" ? /^osm-rt/.test(c.id) : true;
 }
 document.querySelectorAll(".chips button[data-filter]").forEach((b) => b.addEventListener("click", () => {
@@ -347,6 +348,7 @@ function renderClimb() {
       <div><b>+${esc(st.gain)}</b><span>metri</span></div>
       <div class="mx"><b>${num(st.max)}%</b><span>max</span></div>
     </div>
+    ${implausible(v) ? `<div class="warnbox"><b>Dati da verificare</b><p>Pendenze non credibili per una strada asfaltata (${v.maxGradient >= 30 ? "max " + num(v.maxGradient, 0) + "%" : "media " + num(v.avgGradient) + "% su " + num(v.distance_km) + " km"}): probabile errore del modello del terreno (galleria, ponte) o un tratto che non è una strada asfaltata. Per questo non compare tra le salite più dure.</p><button type="button" class="btn" id="warnRep">Segnala com'è davvero</button></div>` : ""}
     <div class="verdict" id="verdict"><div class="k">IL VERDETTO DI OGGI</div><p>Carico il meteo in quota…</p></div>
     <figure class="prof">
       <svg viewBox="0 0 680 220" role="img" aria-label="Profilo altimetrico ${top}">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#E8EDF2" stroke-width="2"/></svg>
@@ -378,6 +380,7 @@ function renderClimb() {
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
   $("#sendBtn").addEventListener("click", () => { const f = climbGpx(c, v); sendToDevice(c.name + (v.side ? " · " + v.side : ""), f.name, f.text); });
   $("#share").addEventListener("click", () => share(c));
+  const wr = $("#warnRep"); if (wr) wr.addEventListener("click", () => openReport(c));
   $("#giroAdd").addEventListener("click", () => { addStop({ lat: c.lat, lon: c.lon, id: String(c.id), name: c.name }); toast(`Aggiunta al giro · ${G.stops.length} ${G.stops.length === 1 ? "tappa" : "tappe"}`); });
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
   wireTimes(c, vs);

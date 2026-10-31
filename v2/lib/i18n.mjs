@@ -116,6 +116,7 @@ export const DICT = {
   "Carica il GPX nella dashboard Hammerhead (Percorsi → Importa): il Karoo lo scarica da solo.": "Upload the GPX to the Hammerhead dashboard (Routes → Import): the Karoo downloads it by itself.",
   "Importa il GPX come percorso su Strava o Komoot: se il ciclocomputer è collegato a quell'app, il percorso arriva da solo.": "Import the GPX as a route on Strava or Komoot: if your bike computer is linked to that app, the route arrives by itself.",
   "Bryton, Coros, Sigma, Apple Watch...: apri il GPX con l'app del tuo dispositivo.": "Bryton, Coros, Sigma, Apple Watch...: open the GPX with your device's app.",
+  "Dati da verificare": "Data to be checked", "Segnala com'è davvero": "Tell us what it's really like",
   "Il mio giro · LocaRide": "My ride · LocaRide",
   "Stima: VAM da W/kg (formula di Ferrari) e velocità tratto per tratto sul profilo. Vento, peso e stanchezza non contano.": "Estimate: VAM from W/kg (Ferrari's formula) and speed stretch by stretch on the profile. Wind, weight and fatigue are not counted."
 };
@@ -147,7 +148,8 @@ export const RULES = [
   [/^Non sei su questa salita: sei a (.+) km dalla strada\.$/, "You're not on this climb: you're $1 km from the road."],
   [/^Voto non salvato: (.*)$/, "Vote not saved: $1"],
   [/^Non inviata: (.*)$/, "Not sent: $1"],
-  [/^tratto più lungo senza:$/, "longest stretch without:"]
+  [/^tratto più lungo senza:$/, "longest stretch without:"],
+  [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`]
 ];
 
 function one(s) {

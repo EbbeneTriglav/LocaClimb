@@ -255,3 +255,7 @@ export function newSidesFor(p, twinSides) {
   }
   return out;
 }
+
+/* a side that cannot be a paved road climb (max >= 30%, or >= 18% average over >= 1.5 km): DEM
+   artefact or a track. Same rule as scripts/lib/plausible.mjs (test/plausible.test.mjs). */
+export function implausible(v) { return (+v.maxGradient || 0) >= 30 || ((+v.avgGradient || 0) >= 18 && (+v.distance_km || 0) >= 1.5); }

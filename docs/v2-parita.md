@@ -70,3 +70,11 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 2. ~~**Route builder v2**~~ fatto (PR `v2-giro`). Restano roadbook stampabile e immagine del giro.
 3. **Mappa**: ✅ ricerca località, acqua/bar, Solo asfalto, nomi generici ("Passo" → "Passo a 2959 m"). Restano filtri regione/stato/camion e lingua EN.
 4. **Proposte salite, livelli, badge** → poi si spegne la v1 (la v2 va su `/`, la v1 resta su `/classica/` per un mese).
+
+## Salite con pendenze non credibili (31/10/2026)
+Regola (`scripts/lib/plausible.mjs`, uguale in `v2/lib/climb.mjs`): un versante con max ≥ 30% o media ≥ 18% su ≥ 1,5 km
+non può essere una strada asfaltata. Al 31/10: 185 salite su 20.378 (80 con difficoltà 9-10), 166 in file non ancora
+ricostruiti con v4.8 (gallerie e ponti: si sistemano da sole con la rotazione). L'indice le marca `q`: la v2 le lascia
+sulla mappa ma fuori da "le più dure", Dure 8+ e 10/10, e nella scheda avvisa e invita a segnalarle.
+"Le più dure" mette anche gli sterrati dopo gli asfaltati (Theodulpass, Sommeiller, piste da sci vicino ai 3000 m).
+
