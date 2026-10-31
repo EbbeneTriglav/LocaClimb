@@ -3,13 +3,13 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=15";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=15";
-import { poisNear } from "./lib/poi.mjs?v=15";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=15";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=15";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=15";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=15";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=16";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=16";
+import { poisNear } from "./lib/poi.mjs?v=16";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=16";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=16";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=16";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute } from "./lib/diary.mjs?v=16";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -788,7 +788,9 @@ async function renderDiario() {
   body.innerHTML = `<div class="challenge"><div><b>${s.climbs}</b><span>salite</span></div><div><b>${s.efforts}</b><span>passaggi</span></div><div><b>${s.top && s.top.elevation ? esc(s.top.elevation) : "–"}</b><span>m la più alta</span></div></div>
     ${list.length ? `<div class="stamps">${list.map(stamp).join("")}</div>` : `<p class="note">Ancora nessuna. Carica i tuoi giri: un GPX o FIT, oppure lo zip dell'export completo di Strava o Garmin Connect.</p>`}
     <div class="actions" style="position:static;margin-top:14px"><button type="button" class="btn pri" id="importBtn">Carica i tuoi giri</button></div>
-    <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>`;
+    <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>
+    <section class="sec" id="rides"><h3>I miei giri</h3><p class="note">Carico…</p></section>`;
+  fillRides(u);
   $("#importBtn").addEventListener("click", () => { window.LRC_V2.onSaved = () => { if ((location.hash || "").startsWith("#/diario")) renderDiario(); }; window.gcPick(); });
 }
 function stamp(d) {
@@ -870,11 +872,65 @@ async function calcRoute() {
   if (seq !== G.seq) return;
   G.busy = false;
   if (!res) { G.res = null; G.side = null; G.err = "Percorso non trovato: sposta una tappa su una strada."; paintRoute(); if (giroOn()) renderGiro(); return; }
-  G.res = res; G.side = asSide(res.track, 300); G.eta = G.side ? etaMinutes(G.side, myWkg() || 3) : null;
+  applyRoute(res, seq);
+}
+function applyRoute(res, seq) {
+  G.res = res; G.side = asSide(res.track, 300); G.eta = G.side && !res.noEle ? etaMinutes(G.side, myWkg() || 3) : null;
   G.on = climbsOnRoute(res.track, (_idx && _idx.climbs) || [], 0.25).filter((x) => !G.stops.some((s, i) => i === 0 && Math.abs(s.lat - x.c.lat) < 1e-4)).slice(0, 40);
   G.wx = null; G.water = null;
   paintRoute(); if (giroOn()) { renderGiro(); fitRoute(); }
   fillGiroWater(seq); fillGiroWeather(seq);
+}
+
+/* ------------------------------------------------------------------ i miei giri (saved rides)
+   Same Firestore documents as the classic app: users/{uid}/routes. Saved from the Giro, listed in the
+   Diario, reopened with their stored track (no new routing: the ride stays exactly as saved). */
+async function saveGiroDialog() {
+  if (!G.res) return;
+  const u = await currentUser();
+  if (!u) { openAccount(() => saveGiroDialog()); return; }
+  const named = G.stops.filter((s) => s.name).map((s) => s.name);
+  const suggested = (named.length ? named.join(" - ") : "Giro di " + num(G.res.km, 0) + " km").slice(0, 60);
+  const d = openDialog(`<form method="dialog" class="dform" id="saveForm"><h2>Salva il giro</h2>
+    <label class="k" for="rideName">Nome</label><input id="rideName" maxlength="80" value="${esc(suggested)}">
+    <p class="note small mu">${num(G.res.km, 1)} km · +${esc(G.res.gain ?? 0)} m · lo ritrovi nel Diario, anche nell'app classica.</p>
+    <button type="submit" class="btn pri" value="save">Salva</button><button class="btn" value="x">Annulla</button></form>`);
+  $("#saveForm").addEventListener("submit", async (e) => {
+    if (e.submitter && e.submitter.value !== "save") return;
+    e.preventDefault();
+    try { await saveRoute(u, rideDoc($("#rideName").value, G.stops, G.res.track, G.res.km, G.res.gain)); closeDialog(); toast("Giro salvato nel Diario"); }
+    catch (err) { toast("Non salvato: " + ((err && err.message) || "errore")); }
+  });
+  d.querySelector("#rideName").select();
+}
+function openSaved(r) {
+  const track = decodeTrack(r.track);
+  if (track.length < 2) { toast("Traccia non valida"); return; }
+  G.seq++; G.err = ""; G.busy = false;
+  G.stops = (r.stops || []).map((s) => ({ lat: +s.lat, lon: +s.lon, id: null, name: s.type === "pass" ? s.name : null })).slice(0, MAX_STOPS);
+  saveGiro(); syncMarkers();
+  location.hash = "#/giro";
+  applyRoute({ track, km: +r.distKm || 0, gain: r.ascent ?? null, surf: null, segs: [], noEle: !track.some((q) => q[2] != null) }, G.seq);
+}
+async function fillRides(u) {
+  const el = $("#rides"); if (!el) return;
+  let list = [];
+  try { list = await listRoutes(u.uid); } catch { el.innerHTML = `<h3>I miei giri</h3><p class="note">Non riesco a leggere i tuoi giri ora.</p>`; return; }
+  if (!$("#rides")) return;
+  el.innerHTML = `<h3>I miei giri</h3>${list.length ? `<p class="note">${list.length} ${list.length === 1 ? "giro salvato" : "giri salvati"} · ${num(list.reduce((a, r) => a + (+r.distKm || 0), 0), 0)} km · +${esc(list.reduce((a, r) => a + (+r.ascent || 0), 0))} m</p>
+    <ul class="rides">${list.map((r, i) => `<li><div><b>${esc(r.name || "Giro")}</b><span class="mu">${num(+r.distKm || 0, 1)} km · +${esc(r.ascent || 0)} m · ${esc(new Date(r.savedAt || 0).toLocaleDateString(LOC))}</span></div>
+      <div class="ra"><button type="button" class="btn" data-open="${i}">Apri</button><button type="button" class="btn" data-gpx="${i}">GPX</button><button type="button" class="btn" data-del="${i}">Elimina</button></div></li>`).join("")}</ul>`
+    : `<p class="note">Nessun giro salvato. Costruiscilo nella scheda Giro e premi «Salva».</p>`}`;
+  el.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => openSaved(list[+b.dataset.open])));
+  el.querySelectorAll("[data-gpx]").forEach((b) => b.addEventListener("click", () => {
+    const r = list[+b.dataset.gpx], t = decodeTrack(r.track);
+    sendToDevice(r.name || "Giro", String(r.name || "giro").replace(/[^\p{L}\p{N} _-]+/gu, "").trim().replace(/\s+/g, "_") + ".gpx",
+      routeGpx(r.name || "Giro", t, (r.stops || []).filter((s) => s.name).map((s) => ({ lat: s.lat, lon: s.lon, name: s.name, sym: s.type === "pass" ? "Summit" : "Flag, Blue" }))));
+  }));
+  el.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", async () => {
+    if (b.dataset.sure !== "1") { b.dataset.sure = "1"; b.textContent = "Conferma"; b.classList.add("pri"); return; }   // two taps: no confirm() dialogs
+    try { await deleteRoute(u.uid, list[+b.dataset.del].id); fillRides(u); } catch { toast("Non eliminato"); }
+  }));
 }
 function paintRoute() {
   const a = map.getSource && map.getSource("route"), b = map.getSource && map.getSource("route-surf");
@@ -922,7 +978,7 @@ function renderGiro() {
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
     <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${body}
-    <div class="actions">${r ? `<button type="button" class="btn pri" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
+    <div class="actions">${r ? `<button type="button" class="btn pri" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="gsave">Salva</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
   </div>`;
   panel.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { G.stops.splice(+b.dataset.rm, 1); giroChanged(); }));
   panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => { const [i, d] = b.dataset.mv.split(":").map(Number); const t = G.stops[i]; G.stops[i] = G.stops[i + d]; G.stops[i + d] = t; giroChanged(); }));
@@ -930,6 +986,7 @@ function renderGiro() {
   panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { G.day = +b.dataset.day; G.wx = null; renderGiro(); fillGiroWeather(G.seq); }));
   const gs = $("#gstart"); if (gs) gs.addEventListener("change", () => { G.start = gs.value || "08:00"; paintGiroWeather(); });
   const gg = $("#ggpx"); if (gg) gg.addEventListener("click", () => { const f = giroFile(); if (f) saveFile(f.name, f.text); });
+  const gsv = $("#gsave"); if (gsv) gsv.addEventListener("click", saveGiroDialog);
   const gsd = $("#gsend"); if (gsd) gsd.addEventListener("click", () => { const f = giroFile(); if (f) sendToDevice(f.title, f.name, f.text); });
   const gh = $("#gshare"); if (gh) gh.addEventListener("click", async () => { const url = location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops); try { if (navigator.share) await navigator.share({ title: "Il mio giro · LocaRide", url }); else { await navigator.clipboard.writeText(url); toast("Link copiato"); } } catch { /* cancelled */ } });
   const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });

@@ -119,6 +119,9 @@ export const DICT = {
   "Scarica il GPX e importalo come percorso su Strava: se il ciclocomputer è collegato a Strava, il percorso arriva da solo.": "Download the GPX and import it as a route on Strava: if your bike computer is linked to Strava, the route arrives by itself.",
   "Bryton, Coros, Sigma, Apple Watch...: «Condividi con un'app» e scegli l'app del tuo dispositivo, oppure scarica il GPX e aprilo con lei.": "Bryton, Coros, Sigma, Apple Watch...: «Share with an app» and pick your device's app, or download the GPX and open it with it.",
   "GPX scaricato": "GPX downloaded", "Apri Garmin Connect": "Open Garmin Connect", "Apri la dashboard": "Open the dashboard", "Apri Komoot": "Open Komoot", "Apri Strava": "Open Strava",
+  "I miei giri": "My rides", "Salva": "Save", "Salva il giro": "Save the ride", "Nome": "Name", "Annulla": "Cancel", "Apri": "Open", "Elimina": "Delete", "Conferma": "Confirm",
+  "Giro salvato nel Diario": "Ride saved in the Diary", "Non riesco a leggere i tuoi giri ora.": "Can't read your rides right now.", "Non eliminato": "Not deleted",
+  "Nessun giro salvato. Costruiscilo nella scheda Giro e premi «Salva».": "No saved rides. Build one in the Ride tab and press «Save».", "Traccia non valida": "Invalid track",
   "Il mio giro · LocaRide": "My ride · LocaRide",
   "Stima: VAM da W/kg (formula di Ferrari) e velocità tratto per tratto sul profilo. Vento, peso e stanchezza non contano.": "Estimate: VAM from W/kg (Ferrari's formula) and speed stretch by stretch on the profile. Wind, weight and fatigue are not counted."
 };
@@ -151,6 +154,9 @@ export const RULES = [
   [/^Voto non salvato: (.*)$/, "Vote not saved: $1"],
   [/^Non inviata: (.*)$/, "Not sent: $1"],
   [/^tratto più lungo senza:$/, "longest stretch without:"],
+  [/^(\d+) (giri salvati|giro salvato)$/, (m, n) => n + (n === "1" ? " saved ride" : " saved rides")],
+  [/^(.+) · lo ritrovi nel Diario, anche nell'app classica\.$/, "$1 · you'll find it in the Diary, in the classic app too."],
+  [/^Non salvato: (.*)$/, "Not saved: $1"],
   [/^([12]) · (Scarica il GPX)$/, (m, n) => n + " · Download the GPX"],
   [/^2 · Apri (.+)$/, (m, x) => "2 · Open " + x.replace(/^la dashboard$/, "the dashboard")],
   [/^(.+): il file va direttamente all'app che scegli\.$/, "$1: the file goes straight to the app you pick."],
