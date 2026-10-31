@@ -3,13 +3,13 @@
  * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=10";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=10";
-import { poisNear } from "./lib/poi.mjs?v=10";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=10";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=10";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=10";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=10";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=11";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=11";
+import { poisNear } from "./lib/poi.mjs?v=11";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=11";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx } from "./lib/route.mjs?v=11";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=11";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX } from "./lib/diary.mjs?v=11";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -229,7 +229,69 @@ function route() {
   renderList();
 }
 
-function setMode(m) { panel.dataset.mode = m; panel.scrollTop = 0; }
+function setMode(m) {
+  if (m !== "giro") S.giroOpen = false;
+  panel.dataset.mode = m; panel.scrollTop = 0;
+  document.body.classList.toggle("inner", m === "climb" || m === "giro");
+  if (m !== "climb" && m !== "giro") { panel.style.height = ""; delete panel.dataset.sheet; sheetVar(); clearPad(); }
+}
+
+/* ------------------------------------------------------------------ phone sheet: three heights
+   On phones the climb page and the ride builder open LOW (name + four numbers, "peek"), so the map
+   stays the main thing; drag the handle (or the title) to half and to full screen. Desktop: side
+   panel as before. The map keeps the climb in view above the sheet (padding = sheet height). */
+const SHEETS = ["peek", "half", "full"];
+function sheetHeights() {
+  const tabs = $(".tabs").getBoundingClientRect().height, full = innerHeight - tabs - 12;
+  const mk = panel.querySelector("[data-peek]");
+  const peek = mk ? Math.round(mk.getBoundingClientRect().bottom - panel.getBoundingClientRect().top + panel.scrollTop + 14) : 170;
+  const p = Math.max(120, Math.min(peek, Math.round(full * 0.45)));
+  return { peek: p, half: Math.max(p + 60, Math.round(full * 0.55)), full };
+}
+/* the sheet sets a persistent map padding while dragged; fitBounds adds its own on top, so clear first */
+function clearPad() { try { if (mapLoaded) map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 }); } catch { /* old map */ } }
+function sheetPx() { return DESKTOP() ? 0 : (panel.getBoundingClientRect().height || 232); }
+function sheetVar() { document.documentElement.style.setProperty("--sheet-h", (DESKTOP() ? 0 : Math.round(panel.getBoundingClientRect().height || 232)) + "px"); }
+function setSheet(state, keepMap) {
+  if (DESKTOP() || (panel.dataset.mode !== "climb" && panel.dataset.mode !== "giro")) { panel.style.height = ""; sheetVar(); return; }
+  S.sheet = SHEETS.includes(state) ? state : "peek";
+  panel.dataset.sheet = "peek";                      // the peek height is measured in its compact layout
+  const h = sheetHeights()[S.sheet];
+  panel.dataset.sheet = S.sheet; panel.style.height = h + "px";
+  if (S.sheet !== "full") panel.scrollTop = 0;
+  document.documentElement.style.setProperty("--sheet-h", h + "px");
+  if (!keepMap && mapLoaded) map.easeTo({ padding: { top: 70, bottom: h + 10, left: 0, right: 0 }, duration: 350 });
+}
+(function sheetDrag() {
+  let y0 = 0, h0 = 0, t0 = 0, drag = false, moved = false, onHandle = false;
+  const grab = (t) => t.closest(".handle, .cl-top, .ph, .ov, .cl h1, .sub, .strip") && !t.closest("a, button, input, select, label");
+  panel.addEventListener("pointerdown", (e) => {
+    if (DESKTOP() || !panel.dataset.sheet || !grab(e.target)) return;
+    if (panel.dataset.sheet === "full" && panel.scrollTop > 0 && !e.target.closest(".handle")) return;
+    drag = true; moved = false; onHandle = !!e.target.closest(".handle"); y0 = e.clientY; h0 = panel.getBoundingClientRect().height; t0 = performance.now();
+    panel.classList.add("dragging"); panel.setPointerCapture(e.pointerId);
+  });
+  panel.addEventListener("pointermove", (e) => {
+    if (!drag) return;
+    const dy = e.clientY - y0; if (Math.abs(dy) > 6) moved = true;
+    const H = sheetHeights(); panel.style.height = Math.max(H.peek * 0.8, Math.min(H.full, h0 - dy)) + "px";
+  });
+  const end = (e) => {
+    if (!drag) return;
+    drag = false; panel.classList.remove("dragging");
+    const i = SHEETS.indexOf(S.sheet);
+    if (!moved) { if (onHandle) setSheet(SHEETS[(i + 1) % 3]); else setSheet(S.sheet, true); return; }
+    const H = sheetHeights(), h = panel.getBoundingClientRect().height, v = (e.clientY - y0) / Math.max(1, performance.now() - t0);
+    let next;
+    if (v < -0.5) next = SHEETS[Math.min(2, SHEETS.indexOf(nearest(H, h)) + (nearest(H, h) === S.sheet ? 1 : 0))];
+    else if (v > 0.5) next = SHEETS[Math.max(0, SHEETS.indexOf(nearest(H, h)) - (nearest(H, h) === S.sheet ? 1 : 0))];
+    else next = nearest(H, h);
+    setSheet(next);
+  };
+  const nearest = (H, h) => SHEETS.reduce((a, b) => (Math.abs(H[b] - h) < Math.abs(H[a] - h) ? b : a));
+  panel.addEventListener("pointerup", end); panel.addEventListener("pointercancel", end);
+  addEventListener("resize", () => { if (panel.dataset.sheet) setSheet(S.sheet, true); else sheetVar(); });
+})();
 
 /* ------------------------------------------------------------------ climbs in view */
 function renderList() {
@@ -267,19 +329,19 @@ function renderClimb() {
   const d = c.difficulty || 0;
   const top = esc(c.name);
   if (!v) {
-    panel.innerHTML = `<div class="cl"><div class="cl-top"><a class="ib" href="#/" aria-label="Torna alla mappa">${ICON.back}</a></div><h1>${top}</h1><p class="sub">${c.elevation ? esc(c.elevation) + " m" : ""}</p><p class="note">Di questa salita non abbiamo ancora i versanti.</p></div>`;
-    flyToClimb(c, null); return;
+    panel.innerHTML = `<div class="handle"></div><div class="cl"><div class="cl-top"><a class="ib" href="#/" aria-label="Torna alla mappa">${ICON.back}</a></div><h1>${top}</h1><p class="sub" data-peek>${c.elevation ? esc(c.elevation) + " m" : ""}</p><p class="note">Di questa salita non abbiamo ancora i versanti.</p></div>`;
+    setSheet("peek", true); flyToClimb(c, null); return;
   }
   const st = sideStats(v), rows = kmTable(v), hard = hardestKm(rows), sh = profileShapes(v, 680, 220, 10);
   const maxG = Math.max(12, ...rows.map((r) => r.g));
-  panel.innerHTML = `<div class="cl">
+  panel.innerHTML = `<div class="handle"></div><div class="cl">
     <div class="cl-top"><a class="ib" href="#/" aria-label="Torna alla mappa">${ICON.back}</a>
       <div style="display:flex;gap:8px"><button type="button" class="ib" id="share" aria-label="Condividi">${ICON.share}</button></div></div>
     <div class="ov">${d ? "Difficoltà " + d + "/10" : "Salita"}${c.cat ? " · cat. " + esc(c.cat) : ""}${c.status === "seasonal" ? " · stagionale" : ""}</div>
     <h1>${top}</h1>
     <p class="sub">${esc(v.side || "")}${st.start != null ? " · " + esc(st.start) + " → " + esc(st.top) + " m" : ""}</p>
     ${vs.length > 1 ? `<div class="sides" role="group" aria-label="Versante">${vs.map((x, i) => `<button type="button" data-side="${i}" aria-pressed="${i === (vs.indexOf(v))}">${esc(x.side || "Versante " + (i + 1))}</button>`).join("")}</div>` : ""}
-    <div class="strip">
+    <div class="strip" data-peek>
       <div><b>${num(st.km)}</b><span>km</span></div>
       <div><b>${num(st.avg)}%</b><span>media</span></div>
       <div><b>+${esc(st.gain)}</b><span>metri</span></div>
@@ -312,7 +374,7 @@ function renderClimb() {
     ${stravaHtml(c)}
     <div class="actions"><button type="button" class="btn pri" id="rideBtn">Avvia modalità salita</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
   </div>`;
-  panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
+  panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; S.sideSwitch = true; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
   $("#rideBtn").addEventListener("click", () => startRide(c, v));
   $("#share").addEventListener("click", () => share(c));
@@ -320,6 +382,7 @@ function renderClimb() {
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
   wireTimes(c, vs);
   fillWater(c, v); fillWeek(c); fillRating(c); fillNews(c);
+  setSheet(S.sideSwitch ? S.sheet : "peek", true); S.sideSwitch = false;
   flyToClimb(c, v);
 }
 
@@ -511,6 +574,7 @@ function sideFeatures(v, sel) {
   return feats;
 }
 function flyToClimb(c, v) {
+  clearPad();
   const src = map.getSource("sel");
   if (!v || !src) { map.flyTo({ center: [c.lon, c.lat], zoom: 12 }); return; }
   const all = (c.versanti || []).filter((x) => x.track && x.track.length > 1);
@@ -519,7 +583,7 @@ function flyToClimb(c, v) {
   const t = v.track || [];
   if (t.length > 1) {
     const pts = all.flatMap((x) => x.track), lons = pts.map((x) => x[1]), lats = pts.map((x) => x[0]);
-    const pad = DESKTOP() ? { top: 80, bottom: 60, left: 480, right: 60 } : { top: 120, bottom: Math.round(innerHeight * 0.6), left: 30, right: 30 };
+    const pad = DESKTOP() ? { top: 80, bottom: 60, left: 480, right: 60 } : { top: 70, bottom: sheetPx() + 20, left: 30, right: 30 };
     if (!S.three) set3d(true);
     map.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding: pad, pitch: 58, bearing: bearingOf(t), duration: 1400, maxZoom: 14 });
   } else map.flyTo({ center: [c.lon, c.lat], zoom: 12 });
@@ -760,8 +824,9 @@ function paintRoute() {
 }
 function fitRoute() {
   if (!G.res) return;
+  clearPad();
   const t = G.res.track, lons = t.map((q) => q[1]), lats = t.map((q) => q[0]);
-  const pad = DESKTOP() ? { top: 80, bottom: 60, left: 480, right: 60 } : { top: 110, bottom: Math.round(innerHeight * 0.5), left: 30, right: 30 };
+  const pad = DESKTOP() ? { top: 80, bottom: 60, left: 480, right: 60 } : { top: 70, bottom: sheetPx() + 20, left: 30, right: 30 };
   map.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding: pad, duration: 900, maxZoom: 13 });
 }
 
@@ -769,17 +834,17 @@ function renderGiro() {
   const n = G.stops.length, r = G.res, sd = G.side;
   const stops = G.stops.map((s, i) => `<li><span class="wp ${i === 0 ? "a" : i === n - 1 && i ? "z" : ""}">${i + 1}</span><span class="nm">${esc(stopName(s, i))}</span>
     <button type="button" class="ib sm" data-mv="${i}:-1" aria-label="Sposta su" ${i ? "" : "disabled"}>↑</button><button type="button" class="ib sm" data-mv="${i}:1" aria-label="Sposta giù" ${i < n - 1 ? "" : "disabled"}>↓</button><button type="button" class="ib sm" data-rm="${i}" aria-label="Togli tappa">${ICON.close}</button></li>`).join("");
-  let body = "";
-  if (G.busy) body = `<p class="note">Calcolo il percorso…</p>`;
-  else if (G.err) body = `<p class="note">${esc(G.err)}</p>`;
+  let body = "", sum = "";
+  if (G.busy) body = `<p class="note" data-peek>Calcolo il percorso…</p>`;
+  else if (G.err) body = `<p class="note" data-peek>${esc(G.err)}</p>`;
   else if (r && sd) {
     const sh = r.noEle ? null : profileShapes(sd, 680, 160, 8), shares = surfaceShares(r.surf), tot = G.eta ? G.eta[G.eta.length - 1] : null;
-    body = `<div class="strip">
+    sum = `<div class="strip" data-peek>
         <div><b>${num(r.km, r.km < 100 ? 1 : 0)}</b><span>km</span></div>
         <div><b>${r.gain != null ? "+" + esc(r.gain) : "–"}</b><span>metri</span></div>
         <div><b>${r.noEle ? "–" : clock(tot)}</b><span>in sella</span></div>
-        <div><b>${sh ? esc(sh.hi) : "–"}</b><span>quota max</span></div></div>
-      ${r.noEle ? `<p class="note small">Percorso di riserva (OSRM): senza quote né fondo.</p>` : ""}
+        <div><b>${sh ? esc(sh.hi) : "–"}</b><span>quota max</span></div></div>`;
+    body = `${r.noEle ? `<p class="note small">Percorso di riserva (OSRM): senza quote né fondo.</p>` : ""}
       ${sh ? `<figure class="prof"><svg viewBox="0 0 680 160" role="img" aria-label="Profilo del giro">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#E8EDF2" stroke-width="2"/></svg>
         <figcaption><span>${esc(sh.lo)} m · 0 km</span><span>${num(r.km, 0)} km</span></figcaption></figure>` : ""}
       ${shares.length ? `<div class="surf">${shares.map((x) => `<span class="${esc(x.k)}">${esc(x.k)} ${x.pct}%</span>`).join("")}</div>` : ""}
@@ -790,9 +855,10 @@ function renderGiro() {
         <label>Partenza <input type="time" id="gstart" value="${esc(G.start)}" step="900"></label></div>
         <div id="gwxt"><p class="note">Carico…</p></div></section>
       <section class="sec" id="gwater"><h3>Acqua lungo il giro</h3><p class="note">Cerco fontane vicino alla strada…</p></section>`;
-  } else body = `<p class="note">${n ? "Aggiungi almeno un'altra tappa." : "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda."}</p>`;
+  } else body = `<p class="note" data-peek>${n ? "Aggiungi almeno un'altra tappa." : "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda."}</p>`;
   panel.innerHTML = `<div class="handle"></div><div class="cl giro">
     <div class="ph" style="padding:4px 0 10px"><h2>Il tuo giro</h2><small>${n ? n + (n === 1 ? " tappa" : " tappe") : "nessuna tappa"}</small></div>
+    ${sum}
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
     <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${body}
@@ -808,6 +874,7 @@ function renderGiro() {
   const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });
   if (G.wx) paintGiroWeather();
   if (G.water) paintGiroWater();
+  setSheet(S.giroOpen ? S.sheet : "peek", true); S.giroOpen = true;
 }
 
 /* weather at the start, at every climb on the way, at the top and at the finish - at the hour you get there */
