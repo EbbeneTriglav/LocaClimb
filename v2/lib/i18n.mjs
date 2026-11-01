@@ -128,6 +128,9 @@ export const DICT = {
   "Immagine": "Image", "Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri": "For Instagram, WhatsApp, Strava: route, profile and numbers",
   "Road book da stampare": "Printable road book", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "One A4 page with profile, climbs, times, water and weather. PDF too",
   "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print",
+  // sun and shade (app.mjs fillShade)
+  "Sole e ombra": "Sun and shade", "Pieno sole": "Full sun", "Poca ombra": "Little shade", "Ombra a tratti": "Shade in places", "Molta ombra": "Lots of shade", "Quasi sempre ombra": "Shade almost all the way",
+  "Ombra media sul tracciato nelle ore di luce: rilievi intorno, bosco (con le foglie della stagione) ed esposizione del versante.": "Average shade on the road during daylight: surrounding terrain, forest (with the season's leaves) and the slope's aspect.",
   // install (app.mjs: card, Diario, dialog)
   "LocaRide sul telefono": "LocaRide on your phone", "App LocaRide": "LocaRide app", "Dalla Home, a tutto schermo": "From your home screen, full screen",
   "Installa": "Install", "Come fare": "How to", "Non ora": "Not now", "Installa LocaRide": "Install LocaRide", "Come installarla": "How to install it",

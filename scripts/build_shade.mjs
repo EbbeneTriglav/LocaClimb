@@ -27,6 +27,7 @@
  *   node scripts/build_shade.mjs --forest forest.geojsonseq --passes data/osm_passes_it_nord.json
  *   node scripts/build_shade.mjs --passes data/osm_passes_fr_paca.json      # senza bosco
  *   node scripts/build_shade.mjs --minutes 300                             # tutte le regioni, a tempo
+ *   ... --passes data/osm_passes.json --also data/curated_overrides.json   # + i passi curati della zona
  *
  * Idempotente e riprendibile: rilegge data/shade.json e salta le chiavi gia' fatte
  * (--force per rifarle). Non tocca nessun altro file. 100% ASCII.
@@ -35,12 +36,14 @@ import { readFile, writeFile, stat } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import { createReadStream } from "node:fs";
 import { dataPath } from "./lib/paths.mjs";
+import { passList, insideArea } from "./lib/shade.mjs";
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const has = (n) => process.argv.indexOf(n) >= 0;
 
 const FOREST = arg("--forest", "");
 const PASSES = arg("--passes", "");
+const ALSO = arg("--also", "");   // more passes (array or {id: {versanti}}), kept only inside the area of --passes
 const OUT = dataPath(arg("--out", "shade.json"));
 const HORIZON = dataPath(arg("--horizon", "sun_horizon.json"));
 const FORCE = has("--force");
@@ -140,6 +143,15 @@ function forestAt(ix, la, lo) {
     if (!hole) return p.kind;
   }
   return -1;
+}
+
+/* is this run's forest data around these points at all? (a box can reach past the edge of the PBF) */
+function forestNear(ix, pts, r = 2) {
+  for (const q of pts) {
+    const a = Math.floor(q[0] / CELL), b = Math.floor(q[1] / CELL);
+    for (let i = -r; i <= r; i++) for (let j = -r; j <= r; j++) if (ix.grid.has((a + i) + ":" + (b + j))) return true;
+  }
+  return false;
 }
 
 async function loadForest(file) {
@@ -261,8 +273,14 @@ function samplePoints(track) {
 async function loadPasses() {
   const all = [];
   if (PASSES) {
-    const j = JSON.parse(await readFile(PASSES, "utf8"));
-    (Array.isArray(j) ? j : j.passes || []).forEach((p) => all.push(p));
+    passList(JSON.parse(await readFile(PASSES, "utf8"))).forEach((p) => all.push(p));
+    if (ALSO) {
+      try {
+        const extra = insideArea(all, passList(JSON.parse(await readFile(ALSO, "utf8"))));
+        console.log("  --also: " + extra.length + " passi nella zona");
+        extra.forEach((p) => all.push(Object.assign({}, p, { _also: true })));
+      } catch (e) { console.warn("  ! --also " + ALSO + ": " + e.message); }
+    }
   } else {
     const files = [];
     try {
@@ -320,6 +338,7 @@ async function main() {
       if (!Array.isArray(tr) || tr.length < 4) { fail++; continue; }
       const sp = samplePoints(tr);
       if (!sp.length) { fail++; continue; }
+      if (p._also && nForest && !forestNear(ix, sp)) { skip++; continue; }   // outside this PBF: another region's run will do it
       const baked = horizon[key] || null;
       /* Senza orizzonte DEM restano comunque bosco ed esposizione: il versante si
          ricava dal tracciato (la strada sale verso la cima, quindi il pendio guarda

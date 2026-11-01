@@ -15,6 +15,7 @@ import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat
 import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=24";
 import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=24";
 import { AXIS_W, yTicks, kmAtX, pointAt, kmNear } from "./lib/profile.mjs?v=24";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=24";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -421,6 +422,7 @@ function renderClimb() {
       ${hard >= 0 ? `<div><span>Km più duro</span><b>${num(rows[hard].g)}% al km ${num(rows[hard].k, rows[hard].k % 1 ? 1 : 0)}</b></div>` : ""}
     </div>
     ${c.description || (c.tips && c.tips.length) ? `<section class="sec"><h3>Da sapere</h3>${c.description ? `<p class="note">${esc(c.description)}</p>` : ""}${c.tips && c.tips.length ? `<ul class="tips">${c.tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}</section>` : ""}
+    <section class="sec" id="shade" hidden></section>
     ${bikeDayHtml(c)}
     <section class="sec" id="news" hidden></section>
     <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
@@ -436,7 +438,7 @@ function renderClimb() {
   $("#giroAdd").addEventListener("click", () => { addStop({ lat: c.lat, lon: c.lon, id: String(c.id), name: c.name }); toast(`Aggiunta al giro · ${G.stops.length} ${G.stops.length === 1 ? "tappa" : "tappe"}`); });
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
   wireTimes(c, vs);
-  fillWater(c, v); fillWeek(c); fillRating(c); fillNews(c);
+  fillWater(c, v); fillWeek(c); fillRating(c); fillNews(c); fillShade(c, v);
   setSheet(S.sideSwitch ? S.sheet : "peek", true); S.sideSwitch = false;
   flyToClimb(c, v);
 }
@@ -507,6 +509,22 @@ async function fillWater(c, v) {
     <p class="note">${water.length ? `<b>${water.length}</b> punti acqua entro 100 m` : "Nessun punto acqua mappato entro 100 m: parti con le borracce piene."}${food.length ? ` · <b>${food.length}</b> bar o ristori lungo la salita` : " · nessun bar lungo la salita"}${atStart ? ` (più ${atStart} in partenza)` : ""}</p>
     ${water.length ? `<ul class="tips water">${water.slice(0, 12).map(li).join("")}</ul>` : ""}
     ${food.length ? `<ul class="tips food">${food.slice(0, 8).map(li).join("")}</ul>` : ""}`;
+}
+/* Sole e ombra (lib/shade.mjs): shown only where the pipeline has computed it - no "n/d" box */
+const MONTHS = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+async function fillShade(c, v) {
+  const m = await loadShade(), el = $("#shade");
+  if (!el || S.sel !== c) return;
+  const rows = shadeFor(m, c, v.side);
+  if (!rows) return;
+  const mi = new Date().getMonth(), cur = rows[mi], cz = shadeCauses(cur);
+  el.hidden = false;
+  el.innerHTML = `<h3>Sole e ombra</h3>
+    <div class="shx"><div class="shn" style="color:${shadeTone(cur.shade)}"><b>${esc(cur.shade)}%</b><span>di ombra a ${esc(MONTHS[mi].toLowerCase())}</span></div>
+      <div class="shw"><b>${esc(shadeWord(cur.shade))}</b><span class="mu">${cz.length ? cz.map((x) => `${x.k} ${x.pct}%`).join(" · ") : "sole diretto " + num(cur.sun, 1) + " h"}</span></div></div>
+    <div class="shy" role="img" aria-label="Ombra mese per mese">${rows.map((r, i) => `<i class="${i === mi ? "on" : ""}" style="height:${Math.max(4, Math.round(4 + r.shade * 0.4))}px;background:${shadeTone(r.shade)}" title="${MONTHS[i]}: ${r.shade}%"></i>`).join("")}</div>
+    <div class="shm">${MONTHS.map((x, i) => `<span class="${i === mi ? "on" : ""}">${x[0]}</span>`).join("")}</div>
+    <p class="note small mu">Ombra media sul tracciato nelle ore di luce: rilievi intorno, bosco (con le foglie della stagione) ed esposizione del versante.</p>`;
 }
 async function fillWeek(c) {
   const el = $("#week"); if (!el) return;
