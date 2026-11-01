@@ -1,18 +1,18 @@
 /*
  * LocaRide v2 - app shell: map (MapLibre, dark basemap, hillshade + 3D terrain), climbs in view,
- * road book, "Oggi si sale", diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/diario  #/giro
+ * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=21";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=21";
-import { poisNear } from "./lib/poi.mjs?v=21";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=21";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=21";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=21";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=21";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal } from "./lib/diary.mjs?v=21";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=21";
-import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=21";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=22";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=22";
+import { poisNear } from "./lib/poi.mjs?v=22";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=22";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=22";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=22";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=22";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=22";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=22";
+import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=22";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -255,12 +255,12 @@ window.addEventListener("hashchange", route);
 function route() {
   const h = location.hash || "#/";
   document.querySelectorAll(".tabs a").forEach((a) => a.removeAttribute("aria-current"));
-  const tab = h.startsWith("#/oggi") ? "oggi" : h.startsWith("#/diario") ? "diario" : h.startsWith("#/giro") ? "giro" : "map";
+  const tab = h.startsWith("#/oggi") ? "oggi" : h.startsWith("#/profilo") || h.startsWith("#/diario") ? "profilo" : h.startsWith("#/giro") ? "giro" : "map";
   const t = document.querySelector(`.tabs a[data-tab="${tab}"]`); if (t) t.setAttribute("aria-current", "page");
   if (h.startsWith("#/s/")) return openClimb(decodeURIComponent(h.slice(4)));
   clearSel();
   if (tab === "oggi") return renderOggi();
-  if (tab === "diario") return renderDiario();
+  if (tab === "profilo") return renderDiario();
   if (tab === "giro") return openGiro(h);
   renderList();
 }
@@ -808,37 +808,71 @@ function paintOggi() {
       <span class="pill ${r.v.tone}">${esc(r.v.label)}</span>${r.v.cells.length ? `<div class="hw">${hoursHtml(r.v)}</div>` : ""}</a>`).join("");
 }
 
-/* ------------------------------------------------------------------ diario */
+/* ------------------------------------------------------------------ profilo (+ diario)
+   One place for the account: who you are (or "Accedi"), your climbs, your rides, your proposals,
+   then the settings that used to be scattered (language, W/kg, the app on the phone). #/diario
+   (old links, the manifest shortcut of the first release) opens the same page. */
+function avatarHtml(u, cls = "av") {
+  const n = (u && (u.displayName || u.email)) || "";
+  return u && u.photoURL ? `<img class="${cls}" src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer">` : `<span class="${cls} ini">${esc((n.trim()[0] || "?").toUpperCase())}</span>`;
+}
+function paintTabAvatar(u) {
+  const t = $("#tabav"); if (!t) return;
+  if (!t.dataset.icon) t.dataset.icon = t.innerHTML;
+  t.innerHTML = u ? avatarHtml(u, "tav") : t.dataset.icon;
+  t.classList.toggle("in", !!u);
+}
+function settingsHtml() {
+  const w = myWkg();
+  return `<section class="sec" id="setSec"><h3>Impostazioni</h3>
+    <div class="setrow"><span>Lingua</span><div class="seg" role="group" aria-label="Lingua"><button type="button" data-lang="it" aria-pressed="${LANG === "it"}">Italiano</button><button type="button" data-lang="en" aria-pressed="${LANG === "en"}">English</button></div></div>
+    <div class="setrow"><label for="setWkg">Watt per kg <small>per i tempi stimati in salita</small></label><input id="setWkg" type="number" inputmode="decimal" min="1" max="8" step="0.1" placeholder="3,0" value="${w ? esc(String(w)) : ""}"></div>
+  </section>`;
+}
+function wireSettings() {
+  document.querySelectorAll("#setSec [data-lang]").forEach((b) => b.addEventListener("click", () => { if (b.dataset.lang !== LANG) { setLang(b.dataset.lang); location.reload(); } }));
+  const wk = $("#setWkg");
+  if (wk) wk.addEventListener("change", () => { const x = parseFloat(String(wk.value).replace(",", ".")); if (x > 0.5 && x < 9) { try { localStorage.setItem(WKG_KEY, String(x)); } catch { /* private mode */ } toast("Salvato"); } });
+}
 async function renderDiario() {
   setMode("diario");
-  panel.innerHTML = `<div class="di"><div class="handle"></div><div class="ov">Stagione ${new Date().getFullYear()}</div><h1>Le tue salite</h1><div id="diBody" class="loading">Controllo l'accesso…</div></div>`;
-  const body = $("#diBody");
+  panel.innerHTML = `<div class="di"><div class="handle"></div><div id="who" class="who loading">Controllo l'accesso…</div><div id="diBody"></div></div>`;
+  const body = $("#diBody"), who = $("#who");
   await new Promise((r) => (document.readyState === "complete" ? r() : addEventListener("load", r, { once: true })));
   const u = await currentUser();
+  paintTabAvatar(u);
+  if (!$("#who")) return;                                     // the user left the tab meanwhile
+  who.className = "who";
   if (!u) {
-    body.className = "";
-    body.innerHTML = `<p class="note">Qui compaiono le salite che hai fatto davvero, con i tempi registrati dal tuo dispositivo.</p>
-      <div class="actions" style="position:static"><button type="button" class="btn pri" id="login">Accedi</button></div>
-      <p class="note">Hai già l'account nell'app classica? È lo stesso: se sei collegato lì, lo sei anche qui.</p>${installSec()}`;
+    who.innerHTML = `<div class="ov">Il tuo profilo</div><h1>${LANG === "en" ? "Join LocaRide" : "Entra in LocaRide"}</h1>
+      <p class="note">Con un account ritrovi le salite che hai fatto davvero con i tuoi tempi, salvi i giri, voti le salite e ne proponi di nuove. Gratis.</p>
+      <div class="actions" style="position:static"><button type="button" class="btn pri" id="login">Accedi o crea un account</button></div>`;
+    body.innerHTML = settingsHtml() + installSec();
     $("#login").addEventListener("click", () => openAccount(() => renderDiario()));
-    wireInstallSec();
+    wireSettings(); wireInstallSec();
     return;
   }
+  who.innerHTML = `<div class="me">${avatarHtml(u)}<div class="mi"><div class="ov">Stagione ${new Date().getFullYear()}</div><b data-noi18n>${esc(u.displayName || (u.email || "").split("@")[0])}</b><span class="mu" data-noi18n>${esc(u.email || "")}</span></div>
+    <button type="button" class="linkbtn" id="logout">Esci</button></div>`;
+  $("#logout").addEventListener("click", async () => { try { await signOut(); } catch { /* ignore */ } paintTabAvatar(null); renderDiario(); });
+  body.innerHTML = `<section class="sec" id="mine"><h3>Le tue salite</h3><p class="note">Carico…</p></section>`;
   let list = [];
-  try { list = await loadClimbs(u.uid); } catch { body.textContent = "Non riesco a leggere le tue salite ora."; return; }
-  await loadIndex();
-  const s = diaryStats(list);
-  list.sort((a, b) => String(b.lastAt || "").localeCompare(String(a.lastAt || "")));
-  body.className = "";
-  body.innerHTML = `<div class="challenge"><div><b>${s.climbs}</b><span>salite</span></div><div><b>${s.efforts}</b><span>passaggi</span></div><div><b>${s.top && s.top.elevation ? esc(s.top.elevation) : "–"}</b><span>m la più alta</span></div></div>
-    ${list.length ? `<div class="stamps">${list.map(stamp).join("")}</div>` : `<p class="note">Ancora nessuna. Carica i tuoi giri: un GPX o FIT, oppure lo zip dell'export completo di Strava o Garmin Connect.</p>`}
-    <div class="actions" style="position:static;margin-top:14px"><button type="button" class="btn pri" id="importBtn">Carica i tuoi giri</button></div>
-    <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>
-    <section class="sec" id="rides"><h3>I miei giri</h3><p class="note">Carico…</p></section>
+  try { list = await loadClimbs(u.uid); } catch { $("#mine").innerHTML = `<h3>Le tue salite</h3><p class="note">Non riesco a leggere le tue salite ora.</p>`; list = null; }
+  if (!$("#diBody")) return;
+  if (list) {
+    await loadIndex();
+    const s = diaryStats(list);
+    list.sort((a, b) => String(b.lastAt || "").localeCompare(String(a.lastAt || "")));
+    $("#mine").innerHTML = `<h3>Le tue salite</h3><div class="challenge"><div><b>${s.climbs}</b><span>salite</span></div><div><b>${s.efforts}</b><span>passaggi</span></div><div><b>${s.top && s.top.elevation ? esc(s.top.elevation) : "–"}</b><span>m la più alta</span></div></div>
+      ${list.length ? `<div class="stamps">${list.map(stamp).join("")}</div>` : `<p class="note">Ancora nessuna. Carica i tuoi giri: un GPX o FIT, oppure lo zip dell'export completo di Strava o Garmin Connect.</p>`}
+      <div class="actions" style="position:static;margin-top:14px"><button type="button" class="btn pri" id="importBtn">Carica i tuoi giri</button></div>
+      <p class="note small">GPX, FIT o TCX, anche più file insieme, oppure lo <b>zip dell'export completo</b> di Strava (Impostazioni → Il mio account → Scarica i tuoi dati) o di Garmin Connect (Esporta dati): così entra tutto lo storico con i tempi. I file restano sul tuo dispositivo.</p>`;
+    $("#importBtn").addEventListener("click", () => { window.LRC_V2.onSaved = () => { if (/^#\/(profilo|diario)/.test(location.hash || "")) renderDiario(); }; window.gcPick(); });
+  }
+  body.insertAdjacentHTML("beforeend", `<section class="sec" id="rides"><h3>I miei giri</h3><p class="note">Carico…</p></section>
     <section class="sec" id="props"><h3>Le mie proposte</h3><p class="note">Carico…</p></section>
-    <section class="sec" id="queue" hidden></section>${installSec()}`;
-  fillRides(u); fillProposals(u); wireInstallSec();
-  $("#importBtn").addEventListener("click", () => { window.LRC_V2.onSaved = () => { if ((location.hash || "").startsWith("#/diario")) renderDiario(); }; window.gcPick(); });
+    <section class="sec" id="queue" hidden></section>${settingsHtml()}${installSec()}`);
+  fillRides(u); fillProposals(u); wireSettings(); wireInstallSec();
 }
 function stamp(d) {
   const meta = loadIndexSync(d.passId), diff = meta ? meta.difficulty || 0 : 0, b = bestOf(d);
@@ -1247,6 +1281,7 @@ addEventListener("lr-install", () => {
   setTimeout(() => nudgeInstall(false), 20000);                 // a returning visitor: after 20 s of use, not on top of the first paint
 });
 instSave(countVisit(instState()));
+addEventListener("load", () => setTimeout(() => onUser((u) => paintTabAvatar(u)), 2500), { once: true });
 if (instMode() !== "none") setTimeout(() => nudgeInstall(false), 20000);   // the dialog may have been offered before this module ran
 
 /* Service worker (sw.js, shared with the classic app): installable everywhere and a last copy of the page

@@ -66,9 +66,9 @@
       ]
     },
     {
-      "name": "Le tue salite",
-      "short_name": "Diario",
-      "url": "./#/diario",
+      "name": "Il tuo profilo e le tue salite",
+      "short_name": "Profilo",
+      "url": "./#/profilo",
       "icons": [
         {
           "src": "icon-192.png",

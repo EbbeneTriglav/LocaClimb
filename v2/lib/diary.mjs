@@ -22,6 +22,9 @@ export function currentUser() {
   return new Promise((res) => { const off = x.auth.onAuthStateChanged((u) => { off(); res(u); }); });
 }
 
+/* every change of the signed-in user (sign in, sign out, session restored); returns the unsubscribe */
+export function onUser(cb) { const x = init(); return x ? x.auth.onAuthStateChanged(cb) : () => {}; }
+
 export async function signIn() {
   const x = init();
   if (!x) throw new Error("Accesso non disponibile");
