@@ -3,6 +3,8 @@
 // whole file, Pubblica. Edit HERE first; the console must always equal this file.
 // Checked with the emulator: test/firestore-rules.emu.mjs (how to run: see that file).
 // Last published: 30/10/2026 (reports added, users/{uid} self-admin hole closed).
+// 01/11/2026 (to publish): ratings/votes/shared validated - any verified user could overwrite or
+// delete the aggregate ratings of a climb, and votes/shared took any field of any size.
 
 rules_version = '2';
 service cloud.firestore {
@@ -53,22 +55,60 @@ service cloud.firestore {
       }
     }
 
-    // ------------------------------------------ valutazioni aggregate (come prima)
+    // ------------------------------------------------ valutazioni della community
+    // ratings/{passo} tiene le somme, ratings/{passo}/votes/{utente} il voto: le due scritture
+    // avvengono nella stessa transazione (js/reviews.js, v2/lib/diary.mjs). Prima chiunque con la
+    // mail confermata poteva riscrivere o cancellare le somme di una salita. Ora le somme possono
+    // cambiare SOLO di quanto cambia il voto di chi scrive (prima e dopo la transazione), e il
+    // documento delle somme non si cancella.
+    function myVote(passId) {
+      return /databases/$(database)/documents/ratings/$(passId)/votes/$(request.auth.uid);
+    }
+    function was(passId, k) { return exists(myVote(passId)) ? get(myVote(passId)).data[k] : 0; }
+    function now(passId, k) { return existsAfter(myVote(passId)) ? getAfter(myVote(passId)).data[k] : 0; }
+    function sumsFollowMyVote(passId) {
+      let old = resource == null ? { 'n': 0, 'eSum': 0, 'pSum': 0, 'tSum': 0, 'aSum': 0 } : resource.data;
+      let d = request.resource.data;
+      return d.keys().hasOnly(['n', 'eSum', 'pSum', 'tSum', 'aSum'])
+        && d.n == old.n + (existsAfter(myVote(passId)) ? 1 : 0) - (exists(myVote(passId)) ? 1 : 0)
+        && d.eSum == old.eSum + now(passId, 'e') - was(passId, 'e')
+        && d.pSum == old.pSum + now(passId, 'p') - was(passId, 'p')
+        && d.tSum == old.tSum + now(passId, 't') - was(passId, 't')
+        && d.aSum == old.aSum + now(passId, 'a') - was(passId, 'a');
+    }
+    function score(v) { return v is number && v >= 1 && v <= 5; }
+    function voteOk(v) {
+      return v.keys().hasAll(['e', 'p', 't', 'a'])
+        && v.keys().hasOnly(['e', 'p', 't', 'a', 'txt', 'by', 'ts'])
+        && score(v.e) && score(v.p) && score(v.t) && score(v.a)
+        && (!('txt' in v) || (v.txt is string && v.txt.size() <= 300))
+        && (!('by' in v) || (v.by is string && v.by.size() <= 60))
+        && (!('ts' in v) || v.ts is number);
+    }
     match /ratings/{passId} {
       allow read: if true;
-      allow write: if verified();
+      allow create, update: if verified() && sumsFollowMyVote(passId);
 
       match /votes/{uid} {
         allow read: if true;
-        allow write: if verified() && request.auth.uid == uid;
+        allow create, update: if verified() && request.auth.uid == uid && voteOk(request.resource.data);
+        allow delete: if verified() && request.auth.uid == uid;
       }
     }
 
     // --------------------------------------- giri condivisi via link (come prima)
+    // solo i campi che l'app scrive, con tetti (e' pubblico: niente contenuti arbitrari)
     match /shared/{sid} {
       allow read: if true;
-      allow create: if verified() && request.resource.data.owner == request.auth.uid;
-      allow update, delete: if signedIn() && resource.data.owner == request.auth.uid;
+      allow create: if verified() && request.resource.data.owner == request.auth.uid
+                    && request.resource.data.keys().hasOnly(['owner', 'author', 'name', 'stops', 'track', 'distKm', 'ascent', 'createdAt'])
+                    && request.resource.data.name is string && request.resource.data.name.size() <= 120
+                    && (!('author' in request.resource.data) || (request.resource.data.author is string && request.resource.data.author.size() <= 60))
+                    && (!('stops' in request.resource.data) || (request.resource.data.stops is list && request.resource.data.stops.size() <= 40));
+      allow delete: if signedIn() && resource.data.owner == request.auth.uid;
+      allow update: if signedIn() && resource.data.owner == request.auth.uid
+                    && request.resource.data.owner == resource.data.owner
+                    && request.resource.data.keys().hasOnly(['owner', 'author', 'name', 'stops', 'track', 'distKm', 'ascent', 'createdAt']);
     }
 
     // --------------------------------------------- proposte di salite (nuovo)
