@@ -11,7 +11,7 @@ function lrcUser() { try { return window.firebase && firebase.apps.length ? fire
 function lrcDb() { try { return window.firebase && firebase.apps.length ? firebase.firestore() : null; } catch (e) { return null; } }
 function lrcModal(html) {
   var d = document.getElementById("dlg"); if (!d) return;
-  d.innerHTML = '<div class="dform lrc"><div class="dh"><span></span><button type="button" class="ib" onclick="lrcClose()" aria-label="Chiudi">&#x2715;</button></div>' + html + "</div>";
+  d.innerHTML = '<div class="dform lrc"><div class="dh"><span></span><button type="button" class="ib" data-lrc="lrcClose" aria-label="Chiudi">&#x2715;</button></div>' + html + "</div>";
   if (!d.open) d.showModal();
 }
 function lrcClose() { var d = document.getElementById("dlg"); if (d && d.open) d.close(); if (LRC_V2.onSaved) LRC_V2.onSaved(); }

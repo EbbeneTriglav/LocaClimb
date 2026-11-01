@@ -1,11 +1,31 @@
-# Cloudflare response headers. CSP starts as REPORT-ONLY: it never blocks anything, it only
-# logs violations in the browser console. Tighten + enforce later, after a week of clean logs.
+# Cloudflare response headers.
+# Content-Security-Policy (01/11/2026): ENFORCED on the pages of the main app (/, the v2 redirect,
+# privacy). Scripts only from our origin, the Firebase SDK (gstatic), Google sign-in (apis.google.com)
+# and Cloudflare Web Analytics; inline scripts only by sha256 (the two in index.html, the v2 redirect,
+# the road book's print script in v2/lib/rideout.mjs); no inline onclick (js/lrcact.js). Images,
+# fetches and styles stay open to https (map tiles, weather, routing come from many hosts).
+# test/csp.test.mjs keeps the hashes and hosts in sync with the pages: change both together.
+# The classic app (/classica/) keeps the old REPORT-ONLY policy until it is switched off.
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: camera=(), microphone=(), payment=(), geolocation=(self)
+
+/
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ceDaBD6v2Yj9arvvjcjBomw5MCauupLFcrFPAu4An8M=' 'sha256-G/EmKd0cEPxcy+kjY2DAU+etXstjC1JH3+1YllRP+8M=' 'sha256-D37QyHjzxZJ5o8Cu8+gpssa7+fY0uvHfFaFzYn8ZZCQ=' 'sha256-tLUa/xmAjXIol16wRGbM901X4NZI6U4pV4TmEwVZ3xI=' https://www.gstatic.com https://apis.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' https://locaride-ce1ad.firebaseapp.com https://accounts.google.com https://apis.google.com; manifest-src 'self'; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
+/index.html
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ceDaBD6v2Yj9arvvjcjBomw5MCauupLFcrFPAu4An8M=' 'sha256-G/EmKd0cEPxcy+kjY2DAU+etXstjC1JH3+1YllRP+8M=' 'sha256-D37QyHjzxZJ5o8Cu8+gpssa7+fY0uvHfFaFzYn8ZZCQ=' 'sha256-tLUa/xmAjXIol16wRGbM901X4NZI6U4pV4TmEwVZ3xI=' https://www.gstatic.com https://apis.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' https://locaride-ce1ad.firebaseapp.com https://accounts.google.com https://apis.google.com; manifest-src 'self'; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
+/v2/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ceDaBD6v2Yj9arvvjcjBomw5MCauupLFcrFPAu4An8M=' 'sha256-G/EmKd0cEPxcy+kjY2DAU+etXstjC1JH3+1YllRP+8M=' 'sha256-D37QyHjzxZJ5o8Cu8+gpssa7+fY0uvHfFaFzYn8ZZCQ=' 'sha256-tLUa/xmAjXIol16wRGbM901X4NZI6U4pV4TmEwVZ3xI=' https://www.gstatic.com https://apis.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' https://locaride-ce1ad.firebaseapp.com https://accounts.google.com https://apis.google.com; manifest-src 'self'; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
+/privacy.html
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ceDaBD6v2Yj9arvvjcjBomw5MCauupLFcrFPAu4An8M=' 'sha256-G/EmKd0cEPxcy+kjY2DAU+etXstjC1JH3+1YllRP+8M=' 'sha256-D37QyHjzxZJ5o8Cu8+gpssa7+fY0uvHfFaFzYn8ZZCQ=' 'sha256-tLUa/xmAjXIol16wRGbM901X4NZI6U4pV4TmEwVZ3xI=' https://www.gstatic.com https://apis.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' https://locaride-ce1ad.firebaseapp.com https://accounts.google.com https://apis.google.com; manifest-src 'self'; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
+/classica/*
   Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; frame-src https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'
 
 

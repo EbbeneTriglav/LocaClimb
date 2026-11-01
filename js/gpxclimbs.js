@@ -342,7 +342,7 @@ function gcShow(res, fname) {
         ? gcT("Il file non ha le quote. Da Strava, Garmin Connect o Komoot esporta il GPX originale dell'attivita': contiene l'altitudine.",
               "The file has no elevation. Export the original activity GPX from Strava, Garmin Connect or Komoot: it includes altitude.")
         : gcT("Nel file ci sono troppo pochi punti per essere un giro.", "Too few points in the file to be a ride."))
-      + '</p><div class="lrc-btns"><button onclick="lrcClose()">' + gcT("Chiudi", "Close") + "</button></div>");
+      + '</p><div class="lrc-btns"><button data-lrc="lrcClose">' + gcT("Chiudi", "Close") + "</button></div>");
     return;
   }
   var nNew = 0, h = "<h3>" + gcT("Salite nel giro", "Climbs in this ride") + "</h3>"
@@ -351,12 +351,12 @@ function gcShow(res, fname) {
   if (!res.climbs.length) h += '<div class="lrc-empty">' + gcT("Nessuna salita sopra 1,5 km e 100 m di dislivello.", "No climbs above 1.5 km and 100 m of gain.") + "</div>";
   res.climbs.forEach(function (c, i) {
     var m = c.match, p = m.pass, title, st, act = "";
-    if (m.kind === "known") { title = gcEsc(p.name) + (m.side ? " &middot; " + gcEsc(m.side) : ""); st = '<span class="lrc-st approved">' + gcT("gia' in LocaRide", "already in LocaRide") + "</span>"; act = '<button onclick="gcOpen(' + i + ')">' + gcT("Apri", "Open") + "</button>"; }
+    if (m.kind === "known") { title = gcEsc(p.name) + (m.side ? " &middot; " + gcEsc(m.side) : ""); st = '<span class="lrc-st approved">' + gcT("gia' in LocaRide", "already in LocaRide") + "</span>"; act = '<button data-lrc="gcOpen" data-i="' + i + '">' + gcT("Apri", "Open") + "</button>"; }
     else if (m.kind === "via") { title = gcT("Sale verso ", "Climbs past ") + gcEsc(p.name); st = '<span class="lrc-st approved">' + gcT("nota", "known") + "</span>"; }
-    else if (m.kind === "newside") { nNew++; title = gcEsc(p.name) + " &middot; " + gcT("versante nuovo", "new side"); st = '<span class="lrc-st pending">' + gcT("manca", "missing") + "</span>"; act = '<button class="lrc-go" onclick="gcPropose(' + i + ')">' + gcT("Proponi", "Suggest") + "</button>"; }
-    else { nNew++; title = gcT("Salita senza nome", "Unnamed climb") + " &middot; " + gcT("cima a ", "top at ") + Math.round(c.top[2]) + " m"; st = '<span class="lrc-st pending">' + gcT("manca", "missing") + "</span>"; act = '<button class="lrc-go" onclick="gcPropose(' + i + ')">' + gcT("Proponi", "Suggest") + "</button>"; }
+    else if (m.kind === "newside") { nNew++; title = gcEsc(p.name) + " &middot; " + gcT("versante nuovo", "new side"); st = '<span class="lrc-st pending">' + gcT("manca", "missing") + "</span>"; act = '<button class="lrc-go" data-lrc="gcPropose" data-i="' + i + '">' + gcT("Proponi", "Suggest") + "</button>"; }
+    else { nNew++; title = gcT("Salita senza nome", "Unnamed climb") + " &middot; " + gcT("cima a ", "top at ") + Math.round(c.top[2]) + " m"; st = '<span class="lrc-st pending">' + gcT("manca", "missing") + "</span>"; act = '<button class="lrc-go" data-lrc="gcPropose" data-i="' + i + '">' + gcT("Proponi", "Suggest") + "</button>"; }
     c.title = title.replace(/<[^>]+>/g, "").replace(/&middot;/g, "-").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
-    act = '<button onclick="gcPreview(' + i + ')">&#x1F441;&#xFE0F; ' + gcT("Vedi", "View") + "</button>" + act;
+    act = '<button data-lrc="gcPreview" data-i="' + i + '">&#x1F441;&#xFE0F; ' + gcT("Vedi", "View") + "</button>" + act;
     h += '<div class="lrc-item">' + st + "<h4>" + title + "</h4>"
       + '<div class="lrc-meta">' + gcNum(c.km) + " km &middot; +" + c.gain + " m &middot; " + gcNum(c.avg) + "% " + gcT("medio", "avg")
       + (c.timing ? " &middot; <b>&#x23F1; " + gcDur(c.timing.sec) + "</b>" + (c.timing.vam ? " &middot; VAM " + c.timing.vam : "") : "") + "</div>"
@@ -364,11 +364,11 @@ function gcShow(res, fname) {
   });
   if (nNew) h += '<p class="lrc-sub" style="margin-top:10px">' + gcT("Le salite che mancano passano dalla revisione prima di comparire nella mappa.", "Missing climbs are reviewed before they appear on the map.") + "</p>";
   var nDone = res.climbs.filter(function (c) { return c.match.pass; }).length;
-  h += '<div class="lrc-btns"><button onclick="lrcClose()">' + gcT("Chiudi", "Close") + "</button>"
-    + (res.climbs.length ? '<button onclick="gcDraw()">' + gcT("Vedi sulla mappa", "Show on map") + "</button>" : "") + "</div>";
+  h += '<div class="lrc-btns"><button data-lrc="lrcClose">' + gcT("Chiudi", "Close") + "</button>"
+    + (res.climbs.length ? '<button data-lrc="gcDraw">' + gcT("Vedi sulla mappa", "Show on map") + "</button>" : "") + "</div>";
   /* le salite di passi noti possono finire tra "Le mie salite" (myclimbs.js) */
   if (nDone && typeof mcSaveFromGpx === "function")
-    h += '<div class="lrc-btns" style="margin-top:8px"><button class="lrc-go" id="gc-save" onclick="mcSaveFromGpx()">&#x2705; '
+    h += '<div class="lrc-btns" style="margin-top:8px"><button class="lrc-go" id="gc-save" data-lrc="mcSaveFromGpx">&#x2705; '
       + gcT("Segna come fatte", "Mark as climbed") + " (" + nDone + ")</button></div>"
       + '<div class="lrc-msg" id="gc-save-msg"></div>';
   lrcModal(h);
@@ -405,8 +405,8 @@ function gcPreview(i) {
       : gcT("Nessun passo noto entro 5 km dalla cima.", "No known pass within 5 km of the top."))
     + "</div>"
     + '<div class="lrc-btns" style="margin-top:8px">'
-    + '<button onclick="gcShow(GC_LAST)">&#x2190; ' + gcT("Lista", "List") + "</button>"
-    + (canProp ? '<button class="lrc-go" onclick="gcPropose(' + i + ')">' + gcT("Proponi", "Suggest") + "</button>" : "")
+    + '<button data-lrc="gcShow">&#x2190; ' + gcT("Lista", "List") + "</button>"
+    + (canProp ? '<button class="lrc-go" data-lrc="gcPropose" data-i="' + i + '">' + gcT("Proponi", "Suggest") + "</button>" : "")
     + "</div>";
   var body = document.querySelector("#dp .dp-body");
   if (body) body.insertBefore(box, body.firstChild);
