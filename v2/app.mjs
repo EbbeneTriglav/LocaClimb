@@ -3,16 +3,17 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=22";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=22";
-import { poisNear } from "./lib/poi.mjs?v=22";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=22";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=22";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=22";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=22";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=22";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=22";
-import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=22";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=23";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=23";
+import { poisNear } from "./lib/poi.mjs?v=23";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=23";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=23";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=23";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=23";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=23";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=23";
+import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=23";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=23";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -671,8 +672,8 @@ function climbGpx(c, v) {
   const name = c.name + (v.side ? " - " + v.side : "");
   return { name: name.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().replace(/\s+/g, "_") + ".gpx", text: gpx(name, trackWithEle(v)) };
 }
-function saveFile(fname, text) {
-  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "application/gpx+xml" }));
+function saveFile(fname, text, type = "application/gpx+xml") {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type }));
   a.download = fname; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 function downloadGpx(c, v) { const f = climbGpx(c, v); saveFile(f.name, f.text); }
@@ -989,6 +990,7 @@ function openSaved(r) {
   if (track.length < 2) { toast("Traccia non valida"); return; }
   G.seq++; G.err = ""; G.busy = false;
   G.stops = (r.stops || []).map((s) => ({ lat: +s.lat, lon: +s.lon, id: null, name: s.type === "pass" ? s.name : null })).slice(0, MAX_STOPS);
+  G.title = r.name || "";
   saveGiro(); syncMarkers();
   location.hash = "#/giro";
   applyRoute({ track, km: +r.distKm || 0, gain: r.ascent ?? null, surf: null, segs: [], noEle: !track.some((q) => q[2] != null) }, G.seq);
@@ -1153,8 +1155,8 @@ function renderGiro() {
   const gsv = $("#gsave"); if (gsv) gsv.addEventListener("click", saveGiroDialog);
   const gpr = $("#gprop"); if (gpr) gpr.addEventListener("click", proposeDialog);
   const gsd = $("#gsend"); if (gsd) gsd.addEventListener("click", () => { const f = giroFile(); if (f) sendToDevice(f.title, f.name, f.text); });
-  const gh = $("#gshare"); if (gh) gh.addEventListener("click", async () => { const url = location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops); try { if (navigator.share) await navigator.share({ title: "Il mio giro · LocaRide", url }); else { await navigator.clipboard.writeText(url); toast("Link copiato"); } } catch { /* cancelled */ } });
-  const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });
+  const gh = $("#gshare"); if (gh) gh.addEventListener("click", shareGiroDialog);
+  const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.title = ""; G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });
   if (G.wx) paintGiroWeather();
   if (G.water) paintGiroWater();
   setSheet(S.giroOpen ? S.sheet : "peek", true); S.giroOpen = true;
@@ -1226,6 +1228,63 @@ function giroFile() {
 }
 // the saved ride is drawn and routed only inside the Giro (outside it stayed on the map, 31/10)
 map.once("load", () => { syncMarkers(); });
+
+/* ------------------------------------------------------------------ share the ride: link, image, road book (lib/rideout.mjs) */
+const giroUrl = () => location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops);
+function rideData() {
+  if (!G.res || !G.side) return null;
+  const w = G.wx && G.wx.h ? weatherRows() : null;
+  return {
+    title: G.title || "", date: new Date(Date.now() + G.day * 864e5).toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "short", year: "numeric" }), lang: LANG,
+    start: G.start, wkg: myWkg() || 3, url: giroUrl(), km: G.res.km, gain: G.res.gain, minutes: G.eta ? G.eta[G.eta.length - 1] : null,
+    side: G.side, eta: G.eta, climbs: G.on.map((x) => ({ name: x.c.name, km: x.km, elevation: x.c.elevation, difficulty: x.c.difficulty })),
+    water: ((G.water && G.water.list) || []).map((x) => ({ km: x.km, name: x.p.name || x.p.label || "" })),
+    stops: G.stops.map((s, i) => ({ lat: s.lat, lon: s.lon, name: s.name || (i === 0 ? "Partenza" : i === G.stops.length - 1 ? "Arrivo" : "") })), weather: w
+  };
+}
+/* the same numbers as the weather table of the Giro, for the road book */
+function weatherRows() {
+  const { pts, h } = G.wx, [hh, mm] = (G.start || "08:00").split(":").map(Number), t0 = hh * 60 + (mm || 0);
+  const base = new Date(); base.setHours(0, 0, 0, 0); base.setDate(base.getDate() + G.day);
+  return pts.map((p, k) => {
+    const at = new Date(base.getTime() + (t0 + p.min) * 60000), hk = at.getFullYear() + "-" + String(at.getMonth() + 1).padStart(2, "0") + "-" + String(at.getDate()).padStart(2, "0") + "T" + String(at.getHours()).padStart(2, "0") + ":00";
+    const H = h[k] || {}, i = (H.time || []).indexOf(hk);
+    return { name: p.name, km: p.km, temp: i >= 0 ? H.temperature_2m?.[i] : null, wind: i >= 0 ? H.wind_speed_10m?.[i] : null, pp: i >= 0 ? H.precipitation_probability?.[i] : null };
+  });
+}
+function shareGiroDialog() {
+  openDialog(`<div class="dform shr"><div class="dh"><h2>Condividi il giro</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
+    <button type="button" class="opt" id="shLink"><span class="oi">${ICON.share}</span><span><b>Link del giro</b><small>Chi lo apre vede lo stesso percorso in LocaRide</small></span></button>
+    <button type="button" class="opt" id="shImg"><span class="oi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></span><span><b>Immagine</b><small>Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri</small></span></button>
+    <button type="button" class="opt" id="shBook"><span class="oi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg></span><span><b>Road book da stampare</b><small>Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF</small></span></button>
+    <div id="shOut"></div></div>`);
+  $("#shLink").addEventListener("click", async () => { const url = giroUrl(); try { if (navigator.share) await navigator.share({ title: "Il mio giro · LocaRide", url }); else { await navigator.clipboard.writeText(url); toast("Link copiato"); } } catch { /* cancelled */ } });
+  $("#shImg").addEventListener("click", shareImage);
+  $("#shBook").addEventListener("click", printRoadbook);
+}
+async function shareImage() {
+  const d = rideData(), out = $("#shOut"); if (!d || !out) return;
+  out.innerHTML = `<p class="note">Preparo l'immagine…</p>`;
+  try { await Promise.all([document.fonts.load("italic 800 80px 'Barlow Condensed'"), document.fonts.load("800 80px 'Barlow Condensed'"), document.fonts.load("600 30px Barlow")]); } catch { /* system font */ }
+  const cv = document.createElement("canvas"); cv.width = CARD_W; cv.height = CARD_H;
+  drawCard(cv.getContext("2d"), d);
+  const blob = await new Promise((r) => cv.toBlob(r, "image/png"));
+  if (!blob || !$("#shOut")) return;
+  const name = "giro_locaride_" + num(d.km, 0) + "km.png", file = new File([blob], name, { type: "image/png" }), url = URL.createObjectURL(blob);
+  const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
+  out.innerHTML = `<img class="shimg" src="${url}" alt="Anteprima dell'immagine del giro">
+    <div class="actions" style="position:static">${canShare ? `<button type="button" class="btn pri" id="shGo">Condividi</button>` : ""}<button type="button" class="btn ${canShare ? "" : "pri"}" id="shDl">Scarica</button></div>`;
+  const go = $("#shGo"); if (go) go.addEventListener("click", async () => { try { await navigator.share({ files: [file], title: "Il mio giro · LocaRide" }); } catch { /* cancelled */ } });
+  requestAnimationFrame(() => { const dl = $("#shDl"); if (dl) dl.scrollIntoView({ block: "end", behavior: "smooth" }); });
+  $("#shDl").addEventListener("click", () => { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); });
+}
+function printRoadbook() {
+  const d = rideData(); if (!d) return;
+  const html = roadbookHtml(d), url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+  const w = window.open(url, "_blank");
+  if (!w) { saveFile("roadbook_locaride_" + num(d.km, 0) + "km.html", html, "text/html"); toast("Road book scaricato: aprilo e stampa"); }
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
 
 /* ------------------------------------------------------------------ install (lib/install.mjs)
    One tap where the browser allows it (beforeinstallprompt, captured in index.html), the Share-sheet
