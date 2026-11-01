@@ -69,12 +69,12 @@ function addOurLayers() {
   map.addSource("climbs", { type: "geojson", data: GJ || EMPTY });
   map.addSource("sel", { type: "geojson", data: SEL });
   // the other sides of the climb (and the admin preview): thin, under the chosen one; no blur (it made the line look out of focus)
-  map.addLayer({ id: "sel-glow", type: "line", source: "sel", filter: ["==", ["get", "sel"], 1], layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 5, 14, 10], "line-opacity": 0.9 } });
-  map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], ["interpolate", ["linear"], ["zoom"], 9, 3, 14, 6], 2.5], "line-opacity": ["case", ["==", ["get", "sel"], 1], 1, 0.45] } });
+  map.addLayer({ id: "sel-glow", type: "line", source: "sel", filter: ["==", ["get", "sel"], 1], layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 6, 14, 11], "line-opacity": 0.9 } });
+  map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], ["interpolate", ["linear"], ["zoom"], 9, 3.5, 14, 7], ["interpolate", ["linear"], ["zoom"], 9, 1.2, 14, 2.5]], "line-opacity": ["case", ["==", ["get", "sel"], 1], 1, 0.4] } });
   // the chosen side: ONE line, dark border + colour shading along the climb (style "C", lib/profile.mjs lineGradient)
   map.addSource("selm", { type: "geojson", data: SELM, lineMetrics: true });
-  map.addLayer({ id: "selm-case", type: "line", source: "selm", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 5, 14, 10], "line-opacity": 0.9 } });
-  map.addLayer({ id: "selm-line", type: "line", source: "selm", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 3, 14, 6] } });
+  map.addLayer({ id: "selm-case", type: "line", source: "selm", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 6, 14, 11], "line-opacity": 0.9 } });
+  map.addLayer({ id: "selm-line", type: "line", source: "selm", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 3.5, 14, 7] } });
   if (SELG) map.setPaintProperty("selm-line", "line-gradient", SELG);
   map.addSource("route", { type: "geojson", data: EMPTY });
   map.addSource("route-surf", { type: "geojson", data: EMPTY });

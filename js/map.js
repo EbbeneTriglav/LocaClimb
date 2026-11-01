@@ -13,6 +13,11 @@ function initMap(){
      leaving the map visually empty until something (a zoom) forced a redraw. Bulk + chunked add
      paints them progressively instead. removeOutsideVisibleBounds keeps panning cheap. */
   markers=L.markerClusterGroup({maxClusterRadius:50,chunkedLoading:true,chunkInterval:120,chunkDelay:16,removeOutsideVisibleBounds:true});
+  /* chunkedLoading keeps adding markers across frames, and its last step draws on this._map: if
+     mapux.js takes the group off the map meanwhile ("dots" zoom), MarkerCluster crashes ("getMinZoom"
+     of null - the flaky desktop smoke test). markersWhenIdle() runs such a removal after the chunks. */
+  var _mcAdds=markers.addLayers;markers.addLayers=function(ls,s){if(this._map&&ls&&ls.length)this._lrBusy=(this._lrBusy||0)+1;return _mcAdds.call(this,ls,s);};   // batches can overlap: count them
+  markers.options.chunkProgress=function(done,total){if(done>=total&&markers._lrBusy){markers._lrBusy--;if(!markers._lrBusy)setTimeout(function(){if(markers._lrBusy)return;var q=markers._lrQueue||[];markers._lrQueue=[];q.forEach(function(f){f();});},0);}};   // after the batch's last draw, which follows this callback
   map.addLayer(markers);
   addMarkers(PASSES_DATA);populateRegions();
   /* The map is created on DOMContentLoaded, before the layout has necessarily settled: if the
@@ -251,3 +256,5 @@ function addFountain(el){
   var pop="&#x1F4A7; <b>"+(nm||"Fontanella")+"</b><br>"+pot+(t.operator?"<br><span style='color:#888'>"+t.operator+"</span>":"");
   L.marker([el.lat,el.lon],{icon:getFountIcon()}).bindPopup(pop).addTo(fountLayer);
 }
+/* run f now, or after MarkerCluster has finished adding a chunked batch (see initMap) */
+function markersWhenIdle(f){if(typeof markers!=="undefined"&&markers&&markers._lrBusy){(markers._lrQueue=markers._lrQueue||[]).push(f);setTimeout(function(){var q=markers._lrQueue||[];if(q.indexOf(f)>=0){markers._lrBusy=0;markers._lrQueue=[];q.forEach(function(g){g();});}},5000);return;}f();}   // 5 s: never stuck
