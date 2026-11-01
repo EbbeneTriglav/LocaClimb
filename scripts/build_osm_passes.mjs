@@ -26,6 +26,7 @@ import { hwKeep } from "./lib/highways.mjs";
 import { hintKeyFor } from "./lib/hints.mjs";
 import { fillStruct } from "./lib/structdem.mjs";
 import { loadNotClimbs } from "./lib/notclimbs.mjs";
+import { difficultyOf } from "./lib/difficulty.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
@@ -239,14 +240,7 @@ function edgeExtra(nb) {
   else if (hw === "unclassified" || hw === "unclassified_link") e += 1.2;
   return e;
 }
-function estDiff(distKm, gain, top) {
-  if (!distKm || distKm <= 0) return 1;
-  const avg = gain / (distKm * 10);
-  let d = avg * 0.85 + Math.min(distKm / 6, 2.5);
-  if (avg >= 12) d += 2; else if (avg >= 9) d += 1;
-  if (top >= 2000) d += 1;
-  return Math.max(1, Math.min(10, Math.round(d)));
-}
+function estDiff(distKm, gain, top) { return difficultyOf(distKm, gain, top); }   // scripts/lib/difficulty.mjs (FIETS-based, 01/11/2026)
 function nameTokens(n) {
   return (n || "").toLowerCase()
     .replace(/passo|colle|col|della|dello|del|di|monte|giogo|sella|forcella/g, " ")

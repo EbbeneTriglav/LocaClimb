@@ -16,6 +16,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { implausibleClimb } from "./lib/plausible.mjs";
 import { dataPath } from "./lib/paths.mjs";
 import { loadNotClimbs } from "./lib/notclimbs.mjs";
+import { passDifficulty } from "./lib/difficulty.mjs";
 
 const J5 = (k, v) => (typeof v === "number" && !Number.isInteger(v)) ? Math.round(v * 1e5) / 1e5 : v;
 
@@ -46,7 +47,8 @@ for (const [fi, f] of regions.entries()) {
     const hasV = !!(p.versanti && p.versanti.length);
     if (!hasV && !p.snapped) continue;                                   // the frontend would not draw it anyway
     const r = { id: p.id, name: decodeEntities(p.name), lat: p.lat, lon: p.lon, elevation: p.elevation || 0 };
-    if (p.difficulty) r.difficulty = p.difficulty;
+    const dd = hasV ? passDifficulty(p.versanti) : null;               // one scale for every file, old or new (scripts/lib/difficulty.mjs)
+    if (dd || p.difficulty) r.difficulty = dd || p.difficulty;
     if (p.cat) r.cat = p.cat;
     if (p.surfaceLabel) r.surfaceLabel = p.surfaceLabel;
     if (p.trucks && p.trucks !== "rari") r.tk = p.trucks;                // trucks filter in v2 ("rari" = the default, left out)

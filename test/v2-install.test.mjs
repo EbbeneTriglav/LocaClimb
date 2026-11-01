@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import vm from "node:vm";
-import { installMode, shouldNudge, countVisit, snooze, SNOOZE_DAYS } from "../v2/lib/install.mjs";
+import { installMode, shouldNudge, countVisit, snooze, SNOOZE_DAYS, SEEN_DAYS } from "../v2/lib/install.mjs";
 
 const ANDROID = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36";
 const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
@@ -33,6 +33,9 @@ test("the card: never on a first look, yes when engaged or back on another day, 
   const sn = snooze(st, t0);
   assert.equal(shouldNudge("prompt", sn, t0 + (SNOOZE_DAYS - 1) * 864e5, true), false);
   assert.equal(shouldNudge("prompt", sn, t0 + (SNOOZE_DAYS + 1) * 864e5, true), true);
+  const seen = snooze(st, t0, SEEN_DAYS);                               // hid itself after 10 s: back in 3 days, not 30
+  assert.equal(shouldNudge("prompt", seen, t0 + 2 * 864e5, true), false);
+  assert.equal(shouldNudge("prompt", seen, t0 + 4 * 864e5, true), true);
 });
 
 test("manifest: what Chrome needs to offer the install, and the files it points to exist", () => {

@@ -7,7 +7,7 @@
  *            the browser menu still has "Installa app" / "Apri app"
  *   none     installed and running as an app, or a browser that cannot install
  */
-export const SNOOZE_DAYS = 30, MIN_VISITS = 2;
+export const SNOOZE_DAYS = 30, MIN_VISITS = 2, SEEN_DAYS = 3;   // "Non ora" = 30 days; left alone until it hides by itself = 3
 
 export function installMode({ standalone = false, prompt = false, ua = "" } = {}) {
   if (standalone) return "none";
@@ -32,6 +32,6 @@ export function countVisit(st = {}, now = Date.now()) {
   return st.last === day ? st : { ...st, last: day, days: (st.days || 0) + 1 };
 }
 
-export function snooze(st = {}, now = Date.now()) {
-  return { ...st, snoozedUntil: now + SNOOZE_DAYS * 864e5 };
+export function snooze(st = {}, now = Date.now(), days = SNOOZE_DAYS) {
+  return { ...st, snoozedUntil: now + days * 864e5 };
 }

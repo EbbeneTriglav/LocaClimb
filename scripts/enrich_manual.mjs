@@ -17,6 +17,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dataPath } from "./lib/paths.mjs";
+import { difficultyOf } from "./lib/difficulty.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
@@ -39,14 +40,7 @@ function compass(la1, lo1, la2, lo2) {
   const br = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
   return ["Nord","Nord-Est","Est","Sud-Est","Sud","Sud-Ovest","Ovest","Nord-Ovest"][Math.round(br / 45) % 8];
 }
-function estDiff(distKm, gain, top) {
-  if (!distKm || distKm <= 0) return 1;
-  const avg = gain / (distKm * 10);
-  let d = avg * 0.85 + Math.min(distKm / 6, 2.5);
-  if (avg >= 12) d += 2; else if (avg >= 9) d += 1;
-  if (top >= 2000) d += 1;
-  return Math.max(1, Math.min(10, Math.round(d)));
-}
+function estDiff(distKm, gain, top) { return difficultyOf(distKm, gain, top); }   // scripts/lib/difficulty.mjs
 function catRank(c) { return { HC: 5, "1": 4, "2": 3, "3": 2, "4": 1 }[c] || 0; }
 function climbCat(distKm, gain, top) {
   if (gain < 150 || distKm < 1) return null;

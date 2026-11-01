@@ -6,7 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=25";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=26";
+import { passDifficulty } from "./difficulty.mjs?v=26";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -27,9 +28,10 @@ export async function loadIndex() {
   // curated passes with everything the pipeline rebuilt (position, sides, difficulty, category),
   // exactly as the classic app applies curated_overrides.json
   const curated = (globalThis.PASSES_DATA || []).map((p) => {
-    const o = overrides[p.id] || {};
-    return { ...p, lat: o.lat ?? p.lat, lon: o.lon ?? p.lon, difficulty: o.difficulty ?? p.difficulty, cat: o.cat ?? p.cat,
-      versanti: o.versanti && o.versanti.length ? o.versanti : p.versanti, curated: true, twins: [] };
+    const o = overrides[p.id] || {}, versanti = o.versanti && o.versanti.length ? o.versanti : p.versanti;
+    // difficulty from the sides, on the same scale as the index (lib/difficulty.mjs), not the old stored one
+    return { ...p, lat: o.lat ?? p.lat, lon: o.lon ?? p.lon, difficulty: passDifficulty(versanti) ?? o.difficulty ?? p.difficulty, cat: o.cat ?? p.cat,
+      versanti, curated: true, twins: [] };
   });
   const climbs = curated.concat(mergeIndex(idx, curated));
   for (const c of climbs) { if (!c.curated) c.name = displayName(c); c._n = norm(c.name); }
