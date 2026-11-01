@@ -31,7 +31,7 @@ addEventListener("appinstalled", function () { LR_INSTALL.prompt = null; LR_INST
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="v2/vendor/maplibre-gl-5.24.0/maplibre-gl.css">
-<link rel="stylesheet" href="v2/app.css?v=26">
+<link rel="stylesheet" href="v2/app.css?v=27">
 </head>
 <body>
 <div id="map" aria-label="Mappa delle salite"></div>
@@ -58,7 +58,7 @@ addEventListener("appinstalled", function () { LR_INSTALL.prompt = null; LR_INST
   <span class="lg-t">Difficoltà</span>
   <i style="background:#5B8DEF"></i><i style="background:#F2C14E"></i><i style="background:#F28C38"></i><i style="background:#E5484D"></i><i style="background:#C04BD6"></i>
   <span class="lg-n">1 · 4 · 6 · 8 · 10</span>
-  <span id="trafLeg" class="lg-tr" hidden><span class="lg-t">Strade</span><i style="background:#E5484D"></i>autostrade <i style="background:#F28C38"></i>statali <i style="background:#F2C14E"></i>provinciali</span>
+  <span id="trafLeg" class="lg-tr" role="button" tabindex="0" aria-expanded="false" aria-label="Legenda delle strade" hidden><span class="lg-t">Strade</span><i style="background:#E5484D"></i><span class="nm">autostrade</span><i style="background:#F28C38"></i><span class="nm">statali</span><i style="background:#F2C14E"></i><span class="nm">provinciali</span></span>
 </div>
 
 <div class="mapbtns">
@@ -96,6 +96,6 @@ addEventListener("appinstalled", function () { LR_INSTALL.prompt = null; LR_INST
 <script src="js/gpxclimbs.js?v=1793290000" defer></script>
 <script src="js/myclimbs.js?v=1793290000" defer></script>
 <script src="js/rideimport.js?v=1793290000" defer></script>
-<script type="module" src="v2/app.mjs?v=26"></script>
+<script type="module" src="v2/app.mjs?v=27"></script>
 </body>
 </html>

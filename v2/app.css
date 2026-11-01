@@ -393,9 +393,16 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .shm .on { color: var(--tx); font-weight: 600; }
 
 /* ---------- strade trafficate (app.mjs setTraffic) ---------- */
-.legend .lg-tr { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding-left: 8px; border-left: 1px solid var(--line); }
+/* phone: compact ("Strade" + three colours), a tap shows the names (Rick, 01/11: option B); desktop: always open */
+.legend { flex-wrap: wrap; max-width: calc(100vw - 24px); row-gap: 4px; }
+.legend .lg-tr { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 2px 4px 2px 8px; border-left: 1px solid var(--line); cursor: pointer; border-radius: 0 6px 6px 0; }
 .legend .lg-tr[hidden] { display: none; }
-.legend .lg-tr i { width: 14px; height: 4px; }
+.legend .lg-tr i { width: 12px; height: 4px; }
+.legend .lg-tr .nm { display: none; margin-right: 4px; }
+.legend .lg-tr.open .nm { display: inline; }
+.legend .lg-tr:not(.open) .lg-t::after { content: " ›"; color: var(--tx); }
+.legend .lg-tr:focus-visible { outline: 2px solid var(--acc); }
+@media (min-width: 900px) { .legend .lg-tr .nm { display: inline; } .legend .lg-tr .lg-t::after { content: none !important; } .legend .lg-tr { cursor: default; } }
 .maps .tgl { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--s2); margin: 0 0 10px; cursor: pointer; }
 .maps .tgl input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--acc); flex: none; }
 .maps .tgl b { display: block; font-family: var(--cond); font-weight: 800; font-size: 18px; text-transform: uppercase; color: var(--tx); }
