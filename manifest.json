@@ -40,6 +40,36 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "screenshots/mappa.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Migliaia di salite sulla mappa, colorate per difficoltà"
+    },
+    {
+      "src": "screenshots/salita.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "La scheda della salita: numeri, verdetto meteo, profilo"
+    },
+    {
+      "src": "screenshots/giro.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Costruisci il giro sulla mappa ciclabile"
+    },
+    {
+      "src": "screenshots/desktop.jpg",
+      "sizes": "1280x800",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Passo dello Stelvio in 3D con il road book"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Dove salire oggi",
