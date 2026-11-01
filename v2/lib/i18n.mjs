@@ -119,6 +119,10 @@ export const DICT = {
   "Scarica il GPX e importalo come percorso su Strava: se il ciclocomputer è collegato a Strava, il percorso arriva da solo.": "Download the GPX and import it as a route on Strava: if your bike computer is linked to Strava, the route arrives by itself.",
   "Bryton, Coros, Sigma, Apple Watch...: «Condividi con un'app» e scegli l'app del tuo dispositivo, oppure scarica il GPX e aprilo con lei.": "Bryton, Coros, Sigma, Apple Watch...: «Share with an app» and pick your device's app, or download the GPX and open it with it.",
   "GPX scaricato": "GPX downloaded", "Apri Garmin Connect": "Open Garmin Connect", "Apri la dashboard": "Open the dashboard", "Apri Komoot": "Open Komoot", "Apri Strava": "Open Strava",
+  // profile (app.mjs renderDiario)
+  "Profilo": "Profile", "Il tuo profilo": "Your profile", "Accedi o crea un account": "Sign in or create an account", "Esci": "Sign out",
+  "Con un account ritrovi le salite che hai fatto davvero con i tuoi tempi, salvi i giri, voti le salite e ne proponi di nuove. Gratis.": "With an account you get back the climbs you really rode with your times, save rides, rate climbs and suggest new ones. Free.",
+  "Impostazioni": "Settings", "Lingua": "Language", "Watt per kg": "Watts per kg", "per i tempi stimati in salita": "for the estimated climbing times", "Salvato": "Saved",
   // install (app.mjs: card, Diario, dialog)
   "LocaRide sul telefono": "LocaRide on your phone", "App LocaRide": "LocaRide app", "Dalla Home, a tutto schermo": "From your home screen, full screen",
   "Installa": "Install", "Come fare": "How to", "Non ora": "Not now", "Installa LocaRide": "Install LocaRide", "Come installarla": "How to install it",

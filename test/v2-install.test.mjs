@@ -48,7 +48,7 @@ test("manifest: what Chrome needs to offer the install, and the files it points 
     const [w, h] = s.sizes.split("x").map(Number);
     assert.ok(Math.max(w, h) / Math.min(w, h) <= 2.3 && Math.min(w, h) >= 320, s.src + ": Chrome ignores screenshots outside 320 px / 2.3:1");
   }
-  for (const s of m.shortcuts) assert.match(s.url, /^\.\/#\/(oggi|giro|diario)$/);
+  for (const s of m.shortcuts) assert.match(s.url, /^\.\/#\/(oggi|giro|profilo)$/);
 });
 
 test("sw.js: pages and unversioned code always fresh; versioned files and vendor/ from the HTTP cache", () => {

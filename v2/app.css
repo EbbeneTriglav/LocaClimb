@@ -340,3 +340,24 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .inst .steps { margin: 14px 0 6px; padding-left: 22px; display: grid; gap: 12px; font-size: 16px; }
 .inst .steps li::marker { color: var(--acc); font-family: var(--cond); font-weight: 800; }
 .inst .key { display: inline-grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 8px; background: var(--s2); border: 1px solid var(--line); vertical-align: middle; color: var(--acc); }
+
+/* ---------- profile (app.mjs renderDiario) ---------- */
+.who { padding-top: 4px; }
+.who .note { margin: 6px 0 14px; }
+.me { display: flex; align-items: center; gap: 14px; padding: 6px 0 4px; }
+.me .mi { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.me .mi b { font-family: var(--cond); font-weight: 800; font-style: italic; font-size: 32px; line-height: 1; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.me .mi .mu { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.me .linkbtn { flex: none; }
+.av { width: 64px; height: 64px; border-radius: 50%; flex: none; object-fit: cover; border: 2px solid var(--acc); }
+.ini { display: grid; place-items: center; background: var(--acc); color: var(--acc-tx); font-family: var(--cond); font-weight: 800; font-size: 30px; }
+.tabav { display: grid; place-items: center; width: 24px; height: 24px; }
+.tabav .tav { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 0; font-size: 13px; }
+.tabs a[aria-current="page"] .tabav.in .tav { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--acc); }
+.setrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line2); }
+.setrow label, .setrow > span { font-size: 15px; }
+.setrow small { display: block; color: var(--mu); font-size: 12px; }
+.setrow input { width: 84px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--tx); padding: 0 10px; text-align: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.seg button { border: 0; background: none; padding: 8px 14px; font-size: 14px; }
+.seg button[aria-pressed="true"] { background: var(--acc); color: var(--acc-tx); font-weight: 600; }
