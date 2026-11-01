@@ -123,6 +123,11 @@ export const DICT = {
   "Profilo": "Profile", "Il tuo profilo": "Your profile", "Accedi o crea un account": "Sign in or create an account", "Esci": "Sign out",
   "Con un account ritrovi le salite che hai fatto davvero con i tuoi tempi, salvi i giri, voti le salite e ne proponi di nuove. Gratis.": "With an account you get back the climbs you really rode with your times, save rides, rate climbs and suggest new ones. Free.",
   "Impostazioni": "Settings", "Lingua": "Language", "Watt per kg": "Watts per kg", "per i tempi stimati in salita": "for the estimated climbing times", "Salvato": "Saved",
+  // share the ride (app.mjs shareGiroDialog)
+  "Condividi il giro": "Share the ride", "Link del giro": "Link to the ride", "Chi lo apre vede lo stesso percorso in LocaRide": "Whoever opens it sees the same route in LocaRide",
+  "Immagine": "Image", "Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri": "For Instagram, WhatsApp, Strava: route, profile and numbers",
+  "Road book da stampare": "Printable road book", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "One A4 page with profile, climbs, times, water and weather. PDF too",
+  "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print",
   // install (app.mjs: card, Diario, dialog)
   "LocaRide sul telefono": "LocaRide on your phone", "App LocaRide": "LocaRide app", "Dalla Home, a tutto schermo": "From your home screen, full screen",
   "Installa": "Install", "Come fare": "How to", "Non ora": "Not now", "Installa LocaRide": "Install LocaRide", "Come installarla": "How to install it",

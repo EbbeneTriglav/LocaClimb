@@ -46,7 +46,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | Funzione v1 | v1 | v2 |
 |---|---|---|
 | Route builder (waypoint, calcolo, asfalto/gravel) | presente (non provato fino in fondo) | ✅ scheda **Giro**: tappe toccando la mappa o una salita («+ Giro» nella scheda), trascinabili, ordine ↑↓; BRouter (Solo asfalto / Anche sterrato / Più corto) con riserva OSRM; linea colorata per pendenza, sterrato tratteggiato; km, dislivello, tempo stimato (W/kg), profilo, fondo %, salite sul percorso; link condivisibile `#/giro?p=…` |
-| GPX + punti utili, roadbook stampabile, immagine da condividere | presenti (non provati) | 🟡 GPX con cime e acqua come waypoint; roadbook stampabile e immagine ⏭️ |
+| GPX + punti utili, roadbook stampabile, immagine da condividere | presenti (non provati) | ✅ GPX con cime e acqua come waypoint; «Condividi» nel Giro: link, **immagine** 1080×1350 (tracciato e profilo colorati per pendenza, numeri, salite) e **road book A4** stampabile/PDF (salite, orari di passaggio, acqua, meteo) - `v2/lib/rideout.mjs` |
 | Meteo del percorso (vento lungo il giro) | presente (non provato) | ✅ partenza, ogni salita, punto più alto e arrivo all'ora in cui ci passi (oggi/domani/dopodomani, ora di partenza); acqua lungo il giro e tratto più lungo senza |
 | Importa GPX / Le mie salite (GPX, FIT, zip) | ok | 🟡 il Diario le mostra; l'import si fa ancora dalla v1 |
 | I miei giri | presente | ✅ «Salva» nel Giro, elenco nel Diario (apri, manda al dispositivo, elimina); stessi dati della v1 (users/{uid}/routes) |
