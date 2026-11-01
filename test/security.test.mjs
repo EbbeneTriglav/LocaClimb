@@ -26,6 +26,17 @@ test("privacy notice exists and is reachable from the app", () => {
   assert.match(app, /href="privacy\.html"/);
 });
 
+test("visit statistics: only Cloudflare Web Analytics (cookieless), declared in the privacy notice in both languages", () => {
+  const priv = readFileSync(new URL("../privacy.html", import.meta.url), "utf8");
+  const it = priv.slice(0, priv.indexOf("In English")), en = priv.slice(priv.indexOf("In English"));
+  assert.match(it, /Cloudflare Web Analytics/); assert.match(it, /Non usa cookie/);
+  assert.match(en, /Cloudflare Web Analytics \(no cookies/);
+  for (const f of ["../index.html", "../classica/index.html"]) {
+    const html = readFileSync(new URL(f, import.meta.url), "utf8");
+    assert.ok(!/googletagmanager|google-analytics|gtag\(|facebook\.net|hotjar|clarity\.ms/.test(html), f + ": an undeclared tracker");
+  }
+});
+
 test("Firestore: the community sums can only follow one's own vote, never be rewritten or deleted", () => {
   const block = rules.slice(rules.indexOf("match /ratings/{passId}"), rules.indexOf("match /shared/"));
   assert.ok(!/allow write: if verified\(\);/.test(block), "blanket write on ratings is back");
