@@ -1,5 +1,9 @@
 [
  { "id": "sanluca", "name": "San Luca (Bologna)", "lat": 44.4787, "lon": 11.2992, "region": "Emilia-Romagna" },
  { "id": "puianello", "name": "Puianello (Modena)", "lat": 44.4262, "lon": 10.9293, "region": "Emilia-Romagna" },
- { "id": "albinea-casina", "name": "Albinea - Casina", "lat": 44.5092, "lon": 10.4977, "region": "Emilia-Romagna" }
+ { "id": "albinea-casina", "name": "Albinea - Casina", "lat": 44.5092, "lon": 10.4977, "region": "Emilia-Romagna" },
+ { "id": "alpe-dhuez", "name": "Alpe d'Huez", "lat": 45.0924, "lon": 6.0699, "region": "Auvergne-Rhône-Alpes", "from": ["Le Bourg-d'Oisans"] },
+ { "id": "hautacam", "name": "Hautacam", "lat": 42.97199, "lon": -0.00755, "region": "Occitanie", "from": ["Argelès-Gazost"] },
+ { "id": "plateau-de-beille", "name": "Plateau de Beille", "lat": 42.72668, "lon": 1.69078, "region": "Occitanie", "from": ["Les Cabannes"] },
+ { "id": "lagos-de-covadonga", "name": "Lagos de Covadonga", "lat": 43.27608, "lon": -4.98609, "region": "Asturias", "from": ["Covadonga"] }
 ]

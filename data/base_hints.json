@@ -505,7 +505,7 @@
   "Escot",
   "Bielle"
  ],
- "Portet-d'Aspet": [
+ "Salita presso Portet-d'Aspet": [
   "Saint-Girons",
   "Aspet"
  ],
@@ -706,5 +706,9 @@
  "Passo San Pellegrino": [
   "Cencenighe Agordino",
   "Moena"
- ]
+ ],
+ "Simplon": ["Domodossola", "Iselle", "Brig"],
+ "Ventoux": ["Bédoin", "Malaucène", "Sault"],
+ "Angliru": [[43.23074, -5.88201, "La Vega"]],
+ "Coll dels Reis": ["Sa Calobra"]
 }
