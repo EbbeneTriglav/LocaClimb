@@ -208,7 +208,7 @@ jobs:
           osmium export /tmp/forest.pbf -f geojsonseq --geometry-types=polygon \
             -o /tmp/forest.geojsonseq --overwrite || exit 0
           node scripts/build_shade.mjs --forest /tmp/forest.geojsonseq \
-            --passes "data/${{ steps.cfg.outputs.out }}" --minutes 60 || true
+            --passes "data/${{ steps.cfg.outputs.out }}" --also data/curated_overrides.json --minutes 60 || true
           rm -f /tmp/forest.pbf /tmp/forest.geojsonseq
 
       - name: Gate 1 - validate data + 24 MB limit (never bypassable)
@@ -245,11 +245,14 @@ jobs:
           git config user.name  "locaclimb-bot"
           git config user.email "locaclimb-bot@users.noreply.github.com"
           cp "data/$OUTF" "$RUNNER_TEMP/$OUTF"     # metti al sicuro il file appena costruito
+          cp data/shade.json "$RUNNER_TEMP/shade.json" 2>/dev/null || true   # e l'ombra calcolata in questo run
           ok=0
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main           # base = remoto pulito, SENZA autostash/merge
             cp "$RUNNER_TEMP/$OUTF" "data/$OUTF"    # rimetti il tuo region file sopra la base
+            # l'ombra: prima andava persa qui (reset) e non era nel git add -> sole/ombra "n/d" quasi ovunque
+            if [ -f "$RUNNER_TEMP/shade.json" ]; then node scripts/merge_shade.mjs "$RUNNER_TEMP/shade.json"; fi
             # meta bbox: aggiorna la sola voce di questo target
             node -e '
               const fs=require("fs"),p="data/osm_regions_meta.json";
@@ -265,7 +268,7 @@ jobs:
             if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then
               echo "ERRORE: marcatori di conflitto nei dati, non pubblico."; exit 1
             fi
-            git add "data/$OUTF" data/osm_regions.json data/osm_index.json data/osm_regions_meta.json
+            git add "data/$OUTF" data/osm_regions.json data/osm_index.json data/osm_regions_meta.json data/shade.json
             if git diff --staged --quiet; then echo "Nessuna variazione da committare."; ok=1; break; fi
             git commit -m "data: OSM passes $TGT"
             if git push; then ok=1; break; fi

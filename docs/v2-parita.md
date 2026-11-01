@@ -8,7 +8,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 
 | Funzione v1 | v1 | v2 |
 |---|---|---|
-| Profilo colorato per pendenza, versanti, GPX per versante | ok | ✅ (profilo alle distanze vere, come la v1) |
+| Profilo colorato per pendenza, versanti, GPX per versante | ok | ✅ (profilo alle distanze vere, come la v1) + **cursore** su profilo e strada (mouse o dito) e asse delle quote leggero |
 | Road book km per km | – | ✅ nuovo |
 | Tornanti + tempi a 2-5 W/kg + "il tuo tempo" | ok | ✅ stessi modelli, stessa impostazione W/kg condivisa con la v1 |
 | Confronto versanti | ok | ✅ distanza, dislivello, media, max, esposizione |
@@ -22,7 +22,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | Valutazioni community | ok (lettura e voto) | ✅ lettura, voto (stessa transazione della v1), ultimi commenti |
 | Strava: segmenti noti | link ai 6 segmenti | ✅ |
 | Strava: "Cerca segmenti" | ❌ **non funziona**: Strava ha chiuso la pagina pubblica di ricerca segmenti | ⏭️ torna con il collegamento Strava (API segments/explore) |
-| Sole / ombra (indice di ombra) | ⚠️ "n/d" sullo Stelvio | ⏭️ da portare, prima va capito perché è n/d |
+| Sole / ombra (indice di ombra) | ⚠️ "n/d" sullo Stelvio | ✅ **Sole e ombra** nella scheda (% di ombra del mese, causa, 12 mesi). Il n/d era un bug della pipeline: osm-expand calcolava l'ombra e la buttava (reset + niente `git add`); corretto, si riempie regione per regione con la rotazione. Limite: l'orizzonte dei rilievi (`sun_horizon.json`) c'è solo per pochi passi |
 | Segnala informazione | ❌ **finto**: mostra "Grazie!" ma non invia niente | ✅ invia davvero (`reports`), regole in `firestore.rules` |
 | Modalità salita (manubrio) | – | 🅿️ in soffitta (31/10): sostituita da **Manda al dispositivo** (condivisione del GPX con Garmin Connect, Wahoo, Karoo, Strava, Komoot + istruzioni per dispositivo); il codice resta, spento |
 
@@ -34,7 +34,7 @@ Aggiornato al 30/10/2026 (dopo la PR "v2 parity 2"). Verifica v1 fatta su locari
 | Ricerca salite | ok | ✅ |
 | Ricerca località (paesi) | ok | ✅ nella stessa barra (Nominatim, come la v1) |
 | Strati acqua 💧 e cibo 🍽️ sulla mappa | ok | ✅ bottone goccia, da zoom 11 (acqua azzurra, bar bianchi) |
-| Strato traffico | presente (non provato) | ⏭️ |
+| Strato traffico | presente: colorava le salite con un traffico stimato | ✅ **Strade trafficate** in «Mappe»: autostrade, statali e provinciali principali su ogni mappa, dalla classe della strada (dato reale per ogni strada, non un conteggio) |
 | Mappe di base (Topo, ecc.) | ok | ✅ bottone «Mappe»: Notte+ (di partenza, strade leggibili), Chiara, Ciclabile (CyclOSM), Topografica (OpenTopoMap), Satellite (Sentinel-2 2016); nel Giro passa da sola a Ciclabile |
 | Lingua inglese 🌐 | ok | ✅ bottone EN/IT nella pila della mappa, stessa impostazione della v1 (default: lingua del browser). Descrizioni e consigli dei passi curati restano in italiano (sono dati) |
 | Errori in console `getMinZoom` (ripetuti) | ❌ bug v1 | – |
