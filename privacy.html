@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0F14">
+<title>Privacy · LocaRide</title>
+<meta name="description" content="Quali dati usa LocaRide, perché, e come cancellarli.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+@font-face { font-family: "Barlow"; font-weight: 400; font-display: swap; src: url("fonts/barlow/barlow-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 600; font-display: swap; src: url("fonts/barlow/barlow-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 800; font-display: swap; src: url("fonts/barlow/barlow-condensed-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 800; font-style: italic; font-display: swap; src: url("fonts/barlow/barlow-condensed-latin-800-italic.woff2") format("woff2"); }
+:root { --bg: #0B0F14; --s1: #141A22; --line: #243344; --tx: #E8EDF2; --mu: #A9B4C0; --acc: #C8F560; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--tx); font: 16px/1.6 "Barlow", system-ui, sans-serif; }
+main { max-width: 760px; margin: 0 auto; padding: 28px 18px 60px; }
+a { color: var(--acc); }
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.top a { font: 800 18px "Barlow Condensed", sans-serif; text-transform: uppercase; text-decoration: none; }
+h1 { font: italic 800 clamp(40px, 9vw, 64px)/0.95 "Barlow Condensed", sans-serif; text-transform: uppercase; margin: 0 0 8px; }
+h2 { font: 800 22px "Barlow Condensed", sans-serif; text-transform: uppercase; margin: 28px 0 6px; }
+.mu { color: var(--mu); }
+.box { background: var(--s1); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin: 14px 0; }
+ul { padding-left: 20px; } li { margin: 4px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--mu); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+.tw { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><a href="./">← LocaRide</a><span class="mu">Aggiornata il 1 novembre 2026</span></div>
+  <h1>Privacy</h1>
+  <p class="mu">LocaRide (locaride.app) è un progetto personale, in versione beta, per chi va in bici in salita. Qui trovi, in breve, quali dati usa, perché e come cancellarli.</p>
+
+  <div class="box">
+    <b>In una riga:</b> senza account non raccogliamo nulla che ti riguardi; niente pubblicità, niente statistiche, niente cookie di profilazione. Con l'account salviamo solo quello che serve alle funzioni che usi.
+  </div>
+
+  <h2>Chi è il titolare</h2>
+  <p>Il gestore di LocaRide. Per qualsiasi richiesta sui tuoi dati: <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>.</p>
+
+  <h2>Senza account</h2>
+  <ul>
+    <li><b>Preferenze nel tuo browser</b> (lingua, mappa scelta, watt per kg, giro in costruzione, scelte sull'installazione dell'app): restano sul tuo dispositivo, nella memoria del browser, e non ci vengono inviate.</li>
+    <li><b>Posizione</b>: solo se tocchi il pulsante di localizzazione o apri «Oggi», e solo con il tuo permesso. Serve a centrare la mappa e a cercare le salite vicine; non viene salvata né inviata a noi.</li>
+    <li><b>I file dei tuoi giri</b> (GPX, FIT, export di Strava o Garmin) vengono letti nel browser e non lasciano il dispositivo: salviamo solo le salite riconosciute e i tempi, e solo se hai un account.</li>
+  </ul>
+
+  <h2>Con un account</h2>
+  <p>Accesso e dati dell'account usano Firebase Authentication e Cloud Firestore di Google. Salviamo:</p>
+  <ul>
+    <li>email, nome visualizzato e, se entri con Google, la foto del profilo;</li>
+    <li>le salite che hai fatto e i tuoi tempi, i giri che salvi, le tue proposte di nuove salite e le segnalazioni che invii (visibili solo a te e, per proposte e segnalazioni, al gestore);</li>
+    <li>voti e commenti alle salite: <b>pubblici</b>, con il tuo nome visualizzato;</li>
+    <li>i giri che condividi con un link: <b>pubblici</b> per chi ha il link, finché non ritiri la condivisione.</li>
+  </ul>
+  <p class="mu">Base giuridica: l'esecuzione del servizio che chiedi creando l'account (art. 6.1.b GDPR). Conserviamo i dati finché tieni l'account.</p>
+
+  <h2>Servizi esterni</h2>
+  <p>Per mostrarti mappe, meteo e percorsi il tuo browser contatta direttamente questi servizi, che ricevono il tuo indirizzo IP come per qualsiasi pagina web:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Servizio</th><th>A cosa serve</th></tr></thead>
+    <tbody>
+      <tr><td>Cloudflare</td><td>ospita il sito</td></tr>
+      <tr><td>OpenFreeMap</td><td>mappe di base</td></tr>
+      <tr><td>Amazon Web Services (Terrain Tiles)</td><td>rilievo e 3D</td></tr>
+      <tr><td>CyclOSM, OpenTopoMap, EOX</td><td>mappe Ciclabile, Topografica, Satellite (solo se le scegli)</td></tr>
+      <tr><td>Open-Meteo</td><td>meteo in quota</td></tr>
+      <tr><td>Nominatim (OpenStreetMap)</td><td>ricerca di paesi e località</td></tr>
+      <tr><td>BRouter, OSRM</td><td>calcolo del percorso nel Giro</td></tr>
+      <tr><td>Google (Firebase)</td><td>accesso, account, voti e giri salvati</td></tr>
+      <tr><td>Overpass API, unpkg, jsDelivr, cdnjs, Esri</td><td>solo la versione classica (/classica/), finché resta attiva</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>I tuoi diritti</h2>
+  <p>Puoi chiedere in ogni momento di vedere, correggere, esportare o cancellare i tuoi dati, oppure di chiudere l'account: scrivi a <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>. Voti, giri salvati e condivisioni puoi anche cancellarli da solo, dall'app. Se ritieni che i tuoi dati siano trattati in modo scorretto puoi rivolgerti al <a href="https://www.garanteprivacy.it" rel="noopener">Garante per la protezione dei dati personali</a>.</p>
+
+  <h2>In English</h2>
+  <p class="mu">No account: nothing about you is collected; no ads, no analytics, no tracking cookies; your preferences and location stay in your browser. With an account (Google Firebase): email, display name, your climbs and times, saved rides, proposals and reports; ratings, comments and shared rides are public. Map, weather and routing services listed above receive your IP address. Requests and account deletion: <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>.</p>
+</main>
+</body>
+</html>
