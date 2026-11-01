@@ -24,6 +24,7 @@ import { createRequire } from "node:module";
 import { dataPath, DATA_DIR } from "./lib/paths.mjs";
 import { hwKeep } from "./lib/highways.mjs";
 import { hintKeyFor } from "./lib/hints.mjs";
+import { weakerOf } from "./lib/crossdedup.mjs";
 import { fillStruct } from "./lib/structdem.mjs";
 import { loadNotClimbs } from "./lib/notclimbs.mjs";
 import { difficultyOf } from "./lib/difficulty.mjs";
@@ -1297,7 +1298,7 @@ async function main() {
   // --- D: cross-pass overlap dedup ------------------------------------------------
   // Two pass nodes on the SAME road (e.g. Passo delle Radici and the lesser-known Foce di
   // Terrarossa, both up Casoni di Profecchia) generate near-identical versanti. For each pair
-  // of summits within 4 km, a versante of the weaker (lower) OSM pass that shares > 60% of its
+  // of summits within 4 km, a versante of the weaker OSM pass (crossdedup.mjs) that shares > 60% of its
   // track with a versante of the stronger one is removed; an OSM pass emptied this way is
   // absorbed. Curated/extra (x-) climbs are never stripped. Disable with --no-crossdedup.
   if (!NO_XDEDUP) {
@@ -1307,7 +1308,7 @@ async function main() {
     for (const r of recs) { const k = Math.floor(r.lat / 0.05) + ":" + Math.floor(r.lon / 0.05); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(r); }
     const near = (r) => { const ci = Math.floor(r.lat / 0.05), cj = Math.floor(r.lon / 0.05), out = []; for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (const o of (grid.get((ci + a) + ":" + (cj + b)) || [])) if (o !== r) out.push(o); return out; };
     const trkOverlap = (va, vb) => { if (!va.track || !vb.track) return 0; let hit = 0, tot = 0; for (let i = 0; i < va.track.length; i += 4) { tot++; const pa = va.track[i]; for (let j = 0; j < vb.track.length; j += 4) if (hav(pa[0], pa[1], vb.track[j][0], vb.track[j][1]) < 0.15) { hit++; break; } } return tot ? hit / tot : 0; };
-    const weakerOf = (r, o) => { if ((r.elevation || 0) !== (o.elevation || 0)) return (r.elevation || 0) < (o.elevation || 0) ? r : o; return (r.versanti.length <= o.versanti.length) ? r : o; };
+    // weakerOf: scripts/lib/crossdedup.mjs - the node whose height is the top of the road wins (01/11/2026)
     let removedV = 0, absorbed = 0;
     for (const r of recs) for (const o of near(r)) {
       if (hav(r.lat, r.lon, o.lat, o.lon) > 1.5) continue; // only truly adjacent summits (Radici/Foce di Terrarossa), not distinct climbs sharing a lower road
