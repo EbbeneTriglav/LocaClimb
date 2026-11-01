@@ -3,19 +3,19 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=25";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=25";
-import { poisNear } from "./lib/poi.mjs?v=25";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=25";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=25";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=25";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=25";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=25";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=25";
-import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=25";
-import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=25";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear } from "./lib/profile.mjs?v=25";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=25";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=26";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=26";
+import { poisNear } from "./lib/poi.mjs?v=26";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=26";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=26";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=26";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=26";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=26";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=26";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=26";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=26";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear } from "./lib/profile.mjs?v=26";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=26";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -285,12 +285,14 @@ function route() {
   if (tab === "profilo") return renderDiario();
   if (tab === "giro") return openGiro(h);
   renderList();
+  if (S.engaged) setTimeout(() => nudgeInstall(true), 1500);
 }
 
 function setMode(m) {
   if (m !== "giro") S.giroOpen = false;
   if (m === "giro" && panel.dataset.mode !== "giro") setBase(GIRO_MAP, true);              // building a ride: roads first
   else if (m !== "giro" && panel.dataset.mode === "giro") setBase(mapPref, true);          // back to the rider's map
+  if (m === "climb" || m === "giro") hideInstallCard();          // the card never sits on a climb or a ride
   panel.dataset.mode = m; panel.scrollTop = 0;
   document.body.classList.toggle("inner", m === "climb" || m === "giro");
   document.body.classList.toggle("ingiro", m === "giro"); rideVisible(m === "giro");
@@ -390,7 +392,7 @@ async function openClimb(id) {
   if (S.sel !== c) { S.sel = c; S.side = 0; }
   renderClimb();
   loadVerdict(c);
-  setTimeout(() => nudgeInstall(true), 8000);      // someone reading a climb page: suggest the app, not on top of the first look
+  S.engaged = true;                                 // someone reading a climb: suggest the app when back on the map, never on top of the climb
 }
 
 function renderClimb() {
@@ -1423,8 +1425,8 @@ function wireInstallSec() { const b = $("#instBtn"); if (b) b.addEventListener("
 
 function hideInstallCard() { const c = $("#instCard"); if (c) { c.classList.remove("on"); setTimeout(() => c.remove(), 250); } }
 function nudgeInstall(engaged = false) {
-  const m = instMode(), st = instState();
-  if ($("#instCard") || !shouldNudge(m, st, Date.now(), engaged)) return;
+  const m = instMode(), st = instState(), md = panel.dataset.mode;
+  if ($("#instCard") || md === "climb" || md === "giro" || !shouldNudge(m, st, Date.now(), engaged)) return;
   const c = document.createElement("div");
   c.id = "instCard"; c.className = "instcard"; c.setAttribute("role", "dialog"); c.setAttribute("aria-label", "Installa LocaRide");
   c.innerHTML = `<img src="apple-touch-icon.png" width="48" height="48" alt=""><div class="it"><b>App LocaRide</b><span>Dalla Home, a tutto schermo</span></div>
@@ -1433,6 +1435,7 @@ function nudgeInstall(engaged = false) {
   requestAnimationFrame(() => c.classList.add("on"));
   $("#instGo").addEventListener("click", doInstall);
   $("#instNo").addEventListener("click", () => { instSave(snooze(instState())); hideInstallCard(); });
+  setTimeout(() => { if ($("#instCard")) { instSave(snooze(instState(), Date.now(), SEEN_DAYS)); hideInstallCard(); } }, 10000);   // a hint, not a wall: gone after 10 s
 }
 addEventListener("lr-install", () => {
   if (window.LR_INSTALL.installed) { hideInstallCard(); const s = $("#instSec"); if (s) s.remove(); return; }
