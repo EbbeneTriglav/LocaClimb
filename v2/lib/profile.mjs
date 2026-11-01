@@ -3,7 +3,7 @@
  * the cursor that follows the mouse or the finger on the profile and, on the map, along the road.
  * Pure: x/km/elevation/position maths. The SVG and the events live in app.mjs.
  */
-import { profileDist, eleAt, havKm } from "./climb.mjs?v=26";
+import { profileDist, eleAt, havKm, gradeColor } from "./climb.mjs?v=28";
 
 export const AXIS_W = 46;   // px of the viewBox kept on the left for the elevation labels
 
@@ -68,4 +68,16 @@ export function kmNear(v, lat, lon) {
   let bi = 0, bd = Infinity;
   for (let i = 0; i < t.length; i++) { const d = (t[i][0] - lat) ** 2 + ((t[i][1] - lon) * k) ** 2; if (d < bd) { bd = d; bi = i; } }
   return c[bi];
+}
+
+/* the climb on the map as ONE line coloured by gradient (MapLibre line-gradient over line-progress):
+   gradient smoothed over ~500 m, so the colours read as stretches of the climb, not as 20-m noise.
+   Rick, 01/11/2026: style "C" - dark border + this shading (was 471 two-point pieces with a blur). */
+export function lineGradient(v, n = 64) {
+  const L = profileLength(v);
+  if (!(L > 0)) return null;
+  const at = (km) => { const a = Math.max(0, km - 0.25), b = Math.min(L, km + 0.25), ea = eleAt(v, a), eb = eleAt(v, b); return b > a && ea != null && eb != null ? (eb - ea) / ((b - a) * 10) : 0; };
+  const stops = [];
+  for (let i = 0; i <= n; i++) stops.push(+(i / n).toFixed(4), gradeColor(at(i / n * L)));
+  return ["interpolate", ["linear"], ["line-progress"], ...stops];
 }

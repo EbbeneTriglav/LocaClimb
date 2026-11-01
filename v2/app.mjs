@@ -3,19 +3,19 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=26";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=26";
-import { poisNear } from "./lib/poi.mjs?v=26";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=26";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=26";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=26";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=26";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=26";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=26";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=26";
-import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=26";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear } from "./lib/profile.mjs?v=26";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=26";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=28";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=28";
+import { poisNear } from "./lib/poi.mjs?v=28";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=28";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=28";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=28";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=28";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=28";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=28";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=28";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=28";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=28";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=28";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -31,7 +31,7 @@ const MAP_KEY = "lr_map";
 let mapPref = DEFAULT_MAP; try { mapPref = basemap(localStorage.getItem(MAP_KEY)).id; } catch { /* private mode */ }
 let BASE = basemap(mapPref);
 const EMPTY = { type: "FeatureCollection", features: [] };
-let GJ = null, SEL = EMPTY;                       // our data, re-added after every basemap switch
+let GJ = null, SEL = EMPTY, SELM = EMPTY, SELG = null;                      // our data, re-added after every basemap switch
 const map = new maplibregl.Map({
   container: "map", style: BASE.style,
   center: [10.6, 45.6], zoom: 6.4, maxPitch: 75, attributionControl: { compact: true }, hash: false
@@ -68,8 +68,14 @@ function addOurLayers() {
   if (map.getSource("climbs")) return;
   map.addSource("climbs", { type: "geojson", data: GJ || EMPTY });
   map.addSource("sel", { type: "geojson", data: SEL });
-  map.addLayer({ id: "sel-glow", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], 14, 8], "line-opacity": ["case", ["==", ["get", "sel"], 1], 0.28, 0.08], "line-blur": 4 } });
-  map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], 4.5, 2.5], "line-opacity": ["case", ["==", ["get", "sel"], 1], 1, 0.45] } });
+  // the other sides of the climb (and the admin preview): thin, under the chosen one; no blur (it made the line look out of focus)
+  map.addLayer({ id: "sel-glow", type: "line", source: "sel", filter: ["==", ["get", "sel"], 1], layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 6, 14, 11], "line-opacity": 0.9 } });
+  map.addLayer({ id: "sel-line", type: "line", source: "sel", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": ["case", ["==", ["get", "sel"], 1], ["interpolate", ["linear"], ["zoom"], 9, 3.5, 14, 7], ["interpolate", ["linear"], ["zoom"], 9, 1.2, 14, 2.5]], "line-opacity": ["case", ["==", ["get", "sel"], 1], 1, 0.4] } });
+  // the chosen side: ONE line, dark border + colour shading along the climb (style "C", lib/profile.mjs lineGradient)
+  map.addSource("selm", { type: "geojson", data: SELM, lineMetrics: true });
+  map.addLayer({ id: "selm-case", type: "line", source: "selm", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 6, 14, 11], "line-opacity": 0.9 } });
+  map.addLayer({ id: "selm-line", type: "line", source: "selm", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 3.5, 14, 7] } });
+  if (SELG) map.setPaintProperty("selm-line", "line-gradient", SELG);
   map.addSource("route", { type: "geojson", data: EMPTY });
   map.addSource("route-surf", { type: "geojson", data: EMPTY });
   map.addLayer({ id: "route-case", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 8, "line-opacity": 0.85 } });
@@ -107,7 +113,11 @@ function setTraffic(on) {
   } else if (!on && map.getLayer("traffic")) map.removeLayer("traffic");
   const lg = $("#trafLeg"); if (lg) lg.hidden = !on;
 }
-{ const lg = $("#trafLeg"); if (lg) lg.hidden = !trafficOn; }
+{ const lg = $("#trafLeg"); if (lg) {
+  lg.hidden = !trafficOn;
+  const tg = () => { const o = lg.classList.toggle("open"); lg.setAttribute("aria-expanded", String(o)); };
+  lg.addEventListener("click", tg); lg.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tg(); } });
+} }
 $("#bmaps").addEventListener("click", () => {
   const d = openDialog(`<form method="dialog" class="dform maps"><h2>Mappe</h2>
     <div class="mlist">${BASEMAPS.map((b) => `<button type="button" data-map="${b.id}" aria-pressed="${b.id === BASE.id}"><i style="background:${b.swatch}"></i><b>${esc(b.label)}</b><span>${esc(b.sub)}</span></button>`).join("")}</div>
@@ -653,26 +663,14 @@ async function fillNews(c) {
 
 /* every side of the climb on the map, coloured by gradient; the selected one bright, the others
    dimmed (the classic app showed all sides too: drawing only one looked like missing sides) */
-function sideFeatures(v, sel) {
-  const t = trackWithEle(v), L = +v.distance_km || 1, feats = [];
-  if (t.length < 2) return feats;
-  let cum = 0; const tot = t.reduce((a, q2, i) => i ? a + Math.hypot(q2[0] - t[i - 1][0], (q2[1] - t[i - 1][1]) * Math.cos(q2[0] * Math.PI / 180)) : 0, 0) || 1;
-  for (let i = 1; i < t.length; i++) {
-    const seg = Math.hypot(t[i][0] - t[i - 1][0], (t[i][1] - t[i - 1][1]) * Math.cos(t[i][0] * Math.PI / 180));
-    const a = cum / tot * L, b = (cum + seg) / tot * L; cum += seg;
-    const g = b > a ? (eleAt(v, b) - eleAt(v, a)) / ((b - a) * 10) : 0;
-    feats.push({ type: "Feature", properties: { c: gradeColor(g), sel: sel ? 1 : 0 }, geometry: { type: "LineString", coordinates: [[t[i - 1][1], t[i - 1][0]], [t[i][1], t[i][0]]] } });
-  }
-  return feats;
-}
 function flyToClimb(c, v) {
   clearPad();
   const src = map.getSource("sel");
   if (!v || !src) { map.flyTo({ center: [c.lon, c.lat], zoom: 12 }); return; }
   const all = (c.versanti || []).filter((x) => x.track && x.track.length > 1);
-  const feats = all.filter((x) => x !== v).flatMap((x) => sideFeatures(x, false)).concat(sideFeatures(v, true));
-  SEL = { type: "FeatureCollection", features: feats };
+  SEL = { type: "FeatureCollection", features: all.filter((x) => x !== v).map((x) => ({ type: "Feature", properties: { c: "#A9B4C0", sel: 0 }, geometry: { type: "LineString", coordinates: x.track.map((q) => [q[1], q[0]]) } })) };
   src.setData(SEL);
+  setChosenLine(v);
   const t = v.track || [];
   if (t.length > 1) {
     const pts = all.flatMap((x) => x.track), lons = pts.map((x) => x[1]), lats = pts.map((x) => x[0]);
@@ -687,7 +685,14 @@ function bearingOf(t) {
   const x = Math.cos(a[0] * Math.PI / 180) * Math.sin(b[0] * Math.PI / 180) - Math.sin(a[0] * Math.PI / 180) * Math.cos(b[0] * Math.PI / 180) * Math.cos((b[1] - a[1]) * Math.PI / 180);
   return Math.atan2(y, x) * 180 / Math.PI;
 }
-function clearSel() { SEL = EMPTY; const s = map.getSource && map.getSource("sel"); if (s) s.setData(EMPTY); const c = map.getSource && map.getSource("cur"); if (c) c.setData(EMPTY); S.sel = null; }
+function setChosenLine(v) {
+  const t = (v && v.track) || [];
+  SELM = t.length > 1 ? { type: "FeatureCollection", features: [{ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: t.map((q) => [q[1], q[0]]) } }] } : EMPTY;
+  SELG = t.length > 1 ? lineGradient(v) : null;
+  const s = map.getSource && map.getSource("selm"); if (s) s.setData(SELM);
+  if (SELG && map.getLayer && map.getLayer("selm-line")) map.setPaintProperty("selm-line", "line-gradient", SELG);
+}
+function clearSel() { SEL = EMPTY; setChosenLine(null); const s = map.getSource && map.getSource("sel"); if (s) s.setData(EMPTY); const c = map.getSource && map.getSource("cur"); if (c) c.setData(EMPTY); S.sel = null; }
 
 async function loadVerdict(c) {
   try {
@@ -1323,12 +1328,12 @@ function hideCursor() {
 function mapCursor(e) {
   const P = PROF; if (!P || !P.fig.isConnected) return;
   const f = e.features && e.features[0];
-  if (f && f.layer.id === "sel-line" && f.properties.sel !== 1) return;
+  if (f && f.layer.id === "sel-line" && f.properties.sel !== 1) return;   // the admin preview; the climb itself is selm-line
   const km = kmNear(P.v, e.lngLat.lat, e.lngLat.lng); if (km == null) return;
   const src = map.getSource("cur"); if (src) src.setData({ type: "Feature", geometry: { type: "Point", coordinates: [e.lngLat.lng, e.lngLat.lat] }, properties: {} });
   showCursor(km, true);
 }
-map.once("style.load", () => { for (const id of ["sel-line", "route-line"]) { map.on("mousemove", id, mapCursor); map.on("mouseleave", id, hideCursor); } });
+map.once("style.load", () => { for (const id of ["selm-line", "route-line"]) { map.on("mousemove", id, mapCursor); map.on("mouseleave", id, hideCursor); } });
 
 /* ------------------------------------------------------------------ share the ride: link, image, road book (lib/rideout.mjs) */
 const giroUrl = () => location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops);

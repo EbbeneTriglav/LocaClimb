@@ -44,9 +44,10 @@ export function notteRoads(layer) {
    provinciali principali) highlighted over any basemap, from OpenFreeMap's vector tiles. It is the road
    class, not a traffic count - said so in the picker - but it is real data for every road, and the
    class is what decides cars and trucks on a climb (the same rule as the "trucks" field). */
+/* turquoise, a hue the climbs never use: red/orange/yellow roads read as climb gradients (Rick, 01/11) */
 export const TRAFFIC_CLASSES = [
-  { k: "motorway", c: "#E5484D", label: "autostrade" }, { k: "trunk", c: "#E5484D", label: "superstrade" },
-  { k: "primary", c: "#F28C38", label: "statali" }, { k: "secondary", c: "#F2C14E", label: "provinciali" }
+  { k: "motorway", c: "#2DD4BF", label: "autostrade" }, { k: "trunk", c: "#2DD4BF", label: "superstrade" },
+  { k: "primary", c: "#5EEAD4", label: "statali" }, { k: "secondary", c: "#99F6E4", label: "provinciali" }
 ];
 export const TRAFFIC_SOURCE = { type: "vector", url: "https://tiles.openfreemap.org/planet" };
 export function trafficLayer() {
@@ -55,9 +56,9 @@ export function trafficLayer() {
     filter: ["all", ["in", ["get", "class"], ["literal", TRAFFIC_CLASSES.map((x) => x.k)]], ["!=", ["get", "brunnel"], "tunnel"]],
     layout: { "line-cap": "round", "line-join": "round" },
     paint: {
-      "line-color": ["match", ["get", "class"], ...TRAFFIC_CLASSES.flatMap((x) => [x.k, x.c]), "#F2C14E"],
+      "line-color": ["match", ["get", "class"], ...TRAFFIC_CLASSES.flatMap((x) => [x.k, x.c]), "#99F6E4"],
       "line-width": ["interpolate", ["linear"], ["zoom"], 6, 1, 10, 2.2, 14, 5],
-      "line-opacity": 0.8
+      "line-opacity": 0.85
     }
   };
 }

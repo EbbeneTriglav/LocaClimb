@@ -12,4 +12,7 @@ test("overlay: OpenMapTiles transportation, only the main classes, no tunnels, o
   const m = l.paint["line-color"];
   for (const c of TRAFFIC_CLASSES) assert.equal(m[m.indexOf(c.k) + 1], c.c);
   assert.ok(!TRAFFIC_CLASSES.some((c) => c.k === "tertiary" || c.k === "minor"), "minor roads are where we want riders: never highlighted");
+  // never a gradient colour: roads must not read as climbs
+  const GRADE = ["#5B8DEF", "#F2C14E", "#F28C38", "#E5484D", "#C04BD6"];
+  for (const c of TRAFFIC_CLASSES) assert.ok(!GRADE.includes(c.c.toUpperCase()), c.k + " uses a gradient colour");
 });

@@ -157,7 +157,7 @@ function muxDrawLines() {
   MUX.layer.clearLayers(); MUX.byId = {};
   var z = map.getZoom(), on = z >= MUX.DOTS_Z, withLines = z >= MUX.LINES_Z;
   if (typeof markers !== "undefined" && markers) {
-    if (on && map.hasLayer(markers)) map.removeLayer(markers);
+    if (on && map.hasLayer(markers)) markersWhenIdle(function () { if (map.getZoom() >= MUX.DOTS_Z && map.hasLayer(markers)) map.removeLayer(markers); });
     if (!on && !map.hasLayer(markers)) map.addLayer(markers);
   }
   document.body.classList.toggle("mux-lines", on);
@@ -330,7 +330,7 @@ function muxStart() {
   if (MUX.sel) { try { applyFilters(); } catch (e) {} }
   map.on("moveend zoomend", muxRefresh);
   /* chi rimette le bolle sulla mappa mentre siamo in modalita' tracce viene "corretto" */
-  map.on("layeradd", function (e) { if (typeof markers !== "undefined" && e.layer === markers && map.getZoom() >= MUX.DOTS_Z) setTimeout(function () { if (map.getZoom() >= MUX.DOTS_Z) map.removeLayer(markers); }, 0); });
+  map.on("layeradd", function (e) { if (typeof markers !== "undefined" && e.layer === markers && map.getZoom() >= MUX.DOTS_Z) setTimeout(function () { markersWhenIdle(function () { if (map.getZoom() >= MUX.DOTS_Z && map.hasLayer(markers)) map.removeLayer(markers); }); }, 0); });
   /* i filtri cambiano cosa e' visibile */
   if (typeof applyFilters === "function" && !applyFilters._mux) {
     var af = applyFilters;
