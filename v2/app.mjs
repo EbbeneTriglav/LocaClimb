@@ -3,19 +3,19 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=24";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=24";
-import { poisNear } from "./lib/poi.mjs?v=24";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=24";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=24";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=24";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS } from "./lib/maps.mjs?v=24";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=24";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=24";
-import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=24";
-import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=24";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear } from "./lib/profile.mjs?v=24";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=24";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=25";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=25";
+import { poisNear } from "./lib/poi.mjs?v=25";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=25";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=25";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=25";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=25";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=25";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=25";
+import { installMode, shouldNudge, countVisit, snooze } from "./lib/install.mjs?v=25";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=25";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear } from "./lib/profile.mjs?v=25";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=25";
 
 const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -80,6 +80,7 @@ function addOurLayers() {
   map.addLayer({ id: "c-glow", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 9, 13, 16], "circle-opacity": 0.22, "circle-blur": 0.8 } });
   map.addLayer({ id: "c-dot", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 1.6, 9, 4, 13, 7], "circle-stroke-color": "#0B0F14", "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 5, 0, 9, 1.2] } });
   map.addLayer({ id: "c-lab", type: "symbol", source: "climbs", minzoom: 9.5, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true, "symbol-sort-key": ["-", 0, ["get", "d"]] }, paint: { "text-color": "#E8EDF2", "text-halo-color": "#0B0F14", "text-halo-width": 1.4 } });
+  setTraffic(trafficOn);
   map.addSource("cur", { type: "geojson", data: EMPTY });
   map.addLayer({ id: "cur-dot", type: "circle", source: "cur", paint: { "circle-radius": 7, "circle-color": "#E8EDF2", "circle-stroke-color": "#0B0F14", "circle-stroke-width": 3 } });
   applyFilter(); paintRoute(); rideVisible(panel.dataset.mode === "giro"); if (S.poi) loadPoi();
@@ -93,12 +94,28 @@ function setBase(id, auto = false) {
   if (b.id === BASE.id) return;
   BASE = b; map.setStyle(b.style, { diff: false });
 }
+/* main roads over any basemap (lib/maps.mjs trafficLayer), remembered like the basemap */
+const TRAFFIC_KEY = "lr_traffic";
+let trafficOn = (() => { try { return localStorage.getItem(TRAFFIC_KEY) === "1"; } catch { return false; } })();
+function setTraffic(on) {
+  trafficOn = on;
+  try { localStorage.setItem(TRAFFIC_KEY, on ? "1" : "0"); } catch { /* private mode */ }
+  if (!map.isStyleLoaded() && !map.getSource("climbs")) return;            // addOurLayers() calls it again
+  if (on && !map.getLayer("traffic")) {
+    if (!map.getSource("traffic")) map.addSource("traffic", TRAFFIC_SOURCE);
+    map.addLayer(trafficLayer(), map.getLayer("sel-glow") ? "sel-glow" : undefined);   // under the climbs and the ride
+  } else if (!on && map.getLayer("traffic")) map.removeLayer("traffic");
+  const lg = $("#trafLeg"); if (lg) lg.hidden = !on;
+}
+{ const lg = $("#trafLeg"); if (lg) lg.hidden = !trafficOn; }
 $("#bmaps").addEventListener("click", () => {
   const d = openDialog(`<form method="dialog" class="dform maps"><h2>Mappe</h2>
     <div class="mlist">${BASEMAPS.map((b) => `<button type="button" data-map="${b.id}" aria-pressed="${b.id === BASE.id}"><i style="background:${b.swatch}"></i><b>${esc(b.label)}</b><span>${esc(b.sub)}</span></button>`).join("")}</div>
+    <label class="tgl"><input type="checkbox" id="trafChk" ${trafficOn ? "checked" : ""}><span><b>Strade trafficate</b><small>Autostrade, statali e provinciali principali in evidenza, su ogni mappa: di solito più auto e camion. È la classe della strada, non un conteggio del traffico.</small></span></label>
     <p class="note small mu">Nel Giro la mappa passa da sola a Ciclabile; uscendo torna la tua.</p>
     <button class="btn" value="x">Chiudi</button></form>`);
   d.querySelectorAll("[data-map]").forEach((b) => b.addEventListener("click", () => { setBase(b.dataset.map); closeDialog(); }));
+  $("#trafChk").addEventListener("change", (e) => setTraffic(e.target.checked));
 });
 
 map.on("load", async () => {

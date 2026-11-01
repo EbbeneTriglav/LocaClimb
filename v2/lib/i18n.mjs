@@ -128,6 +128,9 @@ export const DICT = {
   "Immagine": "Image", "Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri": "For Instagram, WhatsApp, Strava: route, profile and numbers",
   "Road book da stampare": "Printable road book", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "One A4 page with profile, climbs, times, water and weather. PDF too",
   "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print",
+  // main roads overlay (app.mjs setTraffic)
+  "Strade trafficate": "Busy roads", "Strade": "Roads", "autostrade": "motorways", "statali": "main roads", "provinciali": "secondary",
+  "Autostrade, statali e provinciali principali in evidenza, su ogni mappa: di solito più auto e camion. È la classe della strada, non un conteggio del traffico.": "Motorways, main and secondary roads highlighted on any map: usually more cars and trucks. It is the road class, not a traffic count.",
   // sun and shade (app.mjs fillShade)
   "Sole e ombra": "Sun and shade", "Pieno sole": "Full sun", "Poca ombra": "Little shade", "Ombra a tratti": "Shade in places", "Molta ombra": "Lots of shade", "Quasi sempre ombra": "Shade almost all the way",
   "Ombra media sul tracciato nelle ore di luce: rilievi intorno, bosco (con le foglie della stagione) ed esposizione del versante.": "Average shade on the road during daylight: surrounding terrain, forest (with the season's leaves) and the slope's aspect.",

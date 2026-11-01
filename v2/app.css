@@ -391,3 +391,12 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .shy i.on { opacity: 1; box-shadow: 0 0 0 2px var(--s1), 0 0 0 3px var(--tx); }
 .shm { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; font-size: 11px; color: var(--mu); text-align: center; margin-top: 4px; }
 .shm .on { color: var(--tx); font-weight: 600; }
+
+/* ---------- strade trafficate (app.mjs setTraffic) ---------- */
+.legend .lg-tr { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding-left: 8px; border-left: 1px solid var(--line); }
+.legend .lg-tr[hidden] { display: none; }
+.legend .lg-tr i { width: 14px; height: 4px; }
+.maps .tgl { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--s2); margin: 0 0 10px; cursor: pointer; }
+.maps .tgl input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--acc); flex: none; }
+.maps .tgl b { display: block; font-family: var(--cond); font-weight: 800; font-size: 18px; text-transform: uppercase; color: var(--tx); }
+.maps .tgl small { display: block; color: var(--mu); font-size: 13px; line-height: 1.35; }

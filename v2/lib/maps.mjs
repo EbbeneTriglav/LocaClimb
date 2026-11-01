@@ -39,3 +39,26 @@ export function notteRoads(layer) {
   if (layer.type === "fill" && /landcover|landuse|park|wood/.test(layer.id)) return { "fill-opacity": 0.35 };
   return null;
 }
+
+/* "Strade trafficate": the main roads (motorway, trunk = superstrade, primary = statali, secondary =
+   provinciali principali) highlighted over any basemap, from OpenFreeMap's vector tiles. It is the road
+   class, not a traffic count - said so in the picker - but it is real data for every road, and the
+   class is what decides cars and trucks on a climb (the same rule as the "trucks" field). */
+export const TRAFFIC_CLASSES = [
+  { k: "motorway", c: "#E5484D", label: "autostrade" }, { k: "trunk", c: "#E5484D", label: "superstrade" },
+  { k: "primary", c: "#F28C38", label: "statali" }, { k: "secondary", c: "#F2C14E", label: "provinciali" }
+];
+export const TRAFFIC_SOURCE = { type: "vector", url: "https://tiles.openfreemap.org/planet" };
+export function trafficLayer() {
+  return {
+    id: "traffic", type: "line", source: "traffic", "source-layer": "transportation", minzoom: 6,
+    filter: ["all", ["in", ["get", "class"], ["literal", TRAFFIC_CLASSES.map((x) => x.k)]], ["!=", ["get", "brunnel"], "tunnel"]],
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: {
+      "line-color": ["match", ["get", "class"], ...TRAFFIC_CLASSES.flatMap((x) => [x.k, x.c]), "#F2C14E"],
+      "line-width": ["interpolate", ["linear"], ["zoom"], 6, 1, 10, 2.2, 14, 5],
+      "line-opacity": 0.8
+    }
+  };
+}
+
