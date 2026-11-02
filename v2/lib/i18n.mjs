@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=35";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=36";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -52,7 +52,7 @@ export const DICT = {
   "Nessun punto acqua mappato entro 100 m: parti con le borracce piene.": "No water point mapped within 100 m: leave with full bottles.",
   "nessun bar lungo la salita": "no bar along the climb", " · nessun bar lungo la salita": " · no bar along the climb", "Acqua potabile": "Drinking water", "Rubinetto": "Tap", "Sorgente": "Spring",
   "Fontana": "Fountain", "Bar": "Bar", "Ristorante": "Restaurant", "Gelateria": "Ice cream", "Forno": "Bakery", "Alimentari": "Grocery",
-  "Meteo 7 giorni in cima": "7-day weather at the top", "Meteo non disponibile ora.": "Weather not available now.", "Carico…": "Loading…",
+  "Meteo 7 giorni in cima": "7-day weather at the top", "Meteo non disponibile ora.": "Weather not available now.", "Fonte meteo: MET Norway (Yr)": "Weather source: MET Norway (Yr)", "Carico…": "Loading…",
   "Sereno": "Clear", "Nuvoloso": "Cloudy", "Nebbia": "Fog", "Pioviggine": "Drizzle", "Neve": "Snow", "Rovesci": "Showers",
   "Esposizione": "Exposure", "Fondo": "Surface", "Km più duro": "Hardest km", "Da sapere": "Good to know",
   "Asfalto": "Paved", "Sterrato/gravel": "Gravel", "Nord": "North", "Sud": "South", "Est": "East", "Ovest": "West",

@@ -41,7 +41,7 @@ export const DICT_ES = {
   "nessun bar lungo la salita": "ningún bar en la subida", " · nessun bar lungo la salita": " · ningún bar en la subida",
   "Acqua potabile": "Agua potable", "Rubinetto": "Grifo", "Sorgente": "Manantial", "Fontana": "Fuente", "Bar": "Bar", "Ristorante": "Restaurante",
   "Gelateria": "Heladería", "Forno": "Panadería", "Alimentari": "Tienda de alimentación",
-  "Meteo 7 giorni in cima": "El tiempo a 7 días en la cima", "Meteo non disponibile ora.": "El tiempo no está disponible ahora.", "Carico…": "Cargando…",
+  "Meteo 7 giorni in cima": "El tiempo a 7 días en la cima", "Meteo non disponibile ora.": "El tiempo no está disponible ahora.", "Fonte meteo: MET Norway (Yr)": "Fuente del tiempo: MET Norway (Yr)", "Carico…": "Cargando…",
   "Sereno": "Despejado", "Nuvoloso": "Nublado", "Nebbia": "Niebla", "Pioviggine": "Llovizna", "Neve": "Nieve", "Rovesci": "Chubascos",
   "Esposizione": "Orientación", "Fondo": "Firme", "Km più duro": "Km más duro", "Da sapere": "A tener en cuenta",
   "Asfalto": "Asfalto", "Sterrato/gravel": "Tierra/gravel",
