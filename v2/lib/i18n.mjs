@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=36";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=37";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -52,7 +52,7 @@ export const DICT = {
   "Nessun punto acqua mappato entro 100 m: parti con le borracce piene.": "No water point mapped within 100 m: leave with full bottles.",
   "nessun bar lungo la salita": "no bar along the climb", " · nessun bar lungo la salita": " · no bar along the climb", "Acqua potabile": "Drinking water", "Rubinetto": "Tap", "Sorgente": "Spring",
   "Fontana": "Fountain", "Bar": "Bar", "Ristorante": "Restaurant", "Gelateria": "Ice cream", "Forno": "Bakery", "Alimentari": "Grocery",
-  "Meteo 7 giorni in cima": "7-day weather at the top", "Meteo non disponibile ora.": "Weather not available now.", "Fonte meteo: MET Norway (Yr)": "Weather source: MET Norway (Yr)", "Carico…": "Loading…",
+  "Meteo 7 giorni in cima": "7-day weather at the top", "Meteo non disponibile ora.": "Weather not available now.", "VESTIARIO": "WHAT TO WEAR", "Niente temporali, vento e temperatura buoni in quota.": "No storms, good wind and temperature at the top.", "Estivo: maglia e pantaloncini, gilet antivento per la discesa.": "Summer kit: jersey and shorts, a windproof gilet for the descent.", "Manicotti, gambali e gilet antivento per la discesa.": "Arm and leg warmers, a windproof gilet for the descent.", "Maglia termica a maniche lunghe, gambali, guanti lunghi e giacca antivento per scendere. In cima cambia la maglia sudata con una asciutta.": "Long-sleeve thermal jersey, leg warmers, full-finger gloves and a windproof jacket for the descent. At the top, swap your sweaty base layer for a dry one.", "Da inverno: calzamaglia, giacca termica, guanti invernali, copriscarpe e scaldacollo. Porta una maglia asciutta e cambiati in cima prima di scendere: sudato, in discesa si gela.": "Winter kit: tights, thermal jacket, winter gloves, overshoes and a neck warmer. Bring a dry base layer and change at the top before descending: sweaty, you freeze on the way down.", "Gelo in discesa: possibile ghiaccio sulla strada in ombra. Valuta un giro più basso; se sali, abbigliamento invernale completo e maglia asciutta di ricambio.": "Freezing on the descent: ice possible on shaded roads. Consider a lower ride; if you go up, full winter kit and a spare dry base layer.", "Fonte meteo: MET Norway (Yr)": "Weather source: MET Norway (Yr)", "Carico…": "Loading…",
   "Sereno": "Clear", "Nuvoloso": "Cloudy", "Nebbia": "Fog", "Pioviggine": "Drizzle", "Neve": "Snow", "Rovesci": "Showers",
   "Esposizione": "Exposure", "Fondo": "Surface", "Km più duro": "Hardest km", "Da sapere": "Good to know",
   "Asfalto": "Paved", "Sterrato/gravel": "Gravel", "Nord": "North", "Sud": "South", "Est": "East", "Ovest": "West",
@@ -209,7 +209,8 @@ export const RULES = [
   [/^2 · Apri (.+)$/, (m, x) => "2 · Open " + x.replace(/^la dashboard$/, "the dashboard")],
   [/^(.+): il file va direttamente all'app che scegli\.$/, "$1: the file goes straight to the app you pick."],
   [/^(.+): nessun sito può inviare il file da solo a questo servizio: servono questi due passaggi\.$/, "$1: no website can send the file to this service by itself: these two steps are needed."],
-  [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`]
+  [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`],
+  [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "At the top $1° · descent feels like $2°"]
 ];
 
 const TABLES = { en: [DICT, RULES], es: [DICT_ES, RULES_ES] };
