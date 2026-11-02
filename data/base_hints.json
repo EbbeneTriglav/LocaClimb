@@ -710,5 +710,11 @@
  "Simplon": ["Domodossola", "Iselle", "Brig"],
  "Ventoux": ["Bédoin", "Malaucène", "Sault"],
  "Angliru": [[43.23074, -5.88201, "La Vega"]],
- "Coll dels Reis": ["Sa Calobra"]
+ "Coll dels Reis": ["Sa Calobra"],
+ "Navacerrada": ["Cercedilla", "Navacerrada", [40.899, -4.004, "La Granja de San Ildefonso"]],
+ "Morcuera": ["Miraflores de la Sierra", "Rascafría"],
+ "Canencia": ["Miraflores de la Sierra", "Canencia"],
+ "Coll de Rates": ["Parcent", "Tàrbena"],
+ "Covatilla": ["Béjar"],
+ "Camperona": ["Sotillos de Sabero"]
 }

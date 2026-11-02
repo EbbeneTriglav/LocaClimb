@@ -7,10 +7,15 @@ name: OSM rotate (auto - una zona a giro)
 # L'indice del giro e' calcolato dal tempo (floor(epoch/7200) % N): gli scatti sono a intervalli
 # fissi di 2h, quindi ogni scatto prende un indice diverso e crescente -> ruota tutte le zone.
 # Niente file di stato, niente git push: cosi' evita il problema del detached-HEAD sui run cron.
+#
+# CODA DI PRIORITA' (02/11/2026): se data/osm_priority.json elenca zone non ancora ricostruite dopo
+# la sua data "since" (scripts/osm_priority.mjs, guarda builtAt in osm_regions_meta.json), lo scatto
+# prende la prima di quelle (in ordine; uno scatto su 4 a turno, per non bloccarsi su una zona
+# che fallisce); quando sono tutte fatte torna al giro normale.
 
 on:
   schedule:
-    - cron: "0 5,7,9,11,13,15 * * *"   # 6 volte/giorno, ogni 2 ore (UTC). 05->07->...->15 UTC
+    - cron: "0 5,7,9,11,13,15,17,19,21 * * *"   # 9 volte/giorno, ogni 2 ore (UTC). 05->07->...->21 UTC
   workflow_dispatch: {}                # per provarlo a mano quando vuoi
 
 permissions:
@@ -39,7 +44,15 @@ jobs:
           IDX=$(( $(date +%s) / 7200 ))
           POS=$(( IDX % N ))
           T="${TARGETS[$POS]}"
-          echo "Zona $(( POS + 1 ))/$N : $T   (idx $IDX, totale zone $N)"
+          echo "Giro normale: zona $(( POS + 1 ))/$N : $T   (idx $IDX, totale zone $N)"
+
+          # 2b) coda di priorita': prima le zone in data/osm_priority.json non ancora ricostruite
+          PRIO=( $(TARGETS="${TARGETS[*]}" node scripts/osm_priority.mjs) )
+          if [ "${#PRIO[@]}" -gt 0 ]; then
+            # in ordine (la Spagna prima); uno scatto su 4 a turno, cosi' una zona che fallisce non blocca la coda
+            if [ $(( IDX % 4 )) -eq 3 ]; then T="${PRIO[$(( IDX % ${#PRIO[@]} ))]}"; else T="${PRIO[0]}"; fi
+            echo "Coda di priorita': ${#PRIO[@]} zone da fare (${PRIO[*]}) -> $T"
+          fi
 
           # 3) lancia osm-expand su quella zona (dry_run ha default false)
           gh workflow run osm-expand.yml -f target="$T"
