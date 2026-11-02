@@ -3,21 +3,21 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=33";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=33";
-import { poisNear } from "./lib/poi.mjs?v=33";
-import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=33";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=33";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=33";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=33";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=33";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=33";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=33";
-import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=33";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=33";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=33";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=34";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=34";
+import { poisNear } from "./lib/poi.mjs?v=34";
+import { dayVerdict, advice, fetchForecast, fetchDaily, hourState } from "./lib/weather.mjs?v=34";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=34";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=34";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=34";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=34";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=34";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=34";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=34";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=34";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=34";
 
-const LANG = getLang(), LOC = LANG === "en" ? "en-GB" : "it-IT";
+const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -209,9 +209,17 @@ $("#bzone").addEventListener("click", async () => {
     if (panel.dataset.mode === "list") renderList();
   }));
 });
-$("#blang").textContent = LANG === "en" ? "IT" : "EN";
-$("#blang").setAttribute("aria-label", LANG === "en" ? "Passa all'italiano" : "Switch to English");
-$("#blang").addEventListener("click", () => { setLang(LANG === "en" ? "it" : "en"); location.reload(); });
+/* the map button cycles the three languages: it -> en -> es -> it; it shows the next one */
+const NEXT_LANG = { it: "en", en: "es", es: "it" }[LANG] || "en";
+$("#blang").textContent = NEXT_LANG.toUpperCase();
+$("#blang").setAttribute("aria-label", { it: "Passa all'italiano", en: "Switch to English", es: "Cambiar a español" }[NEXT_LANG]);
+$("#blang").setAttribute("data-noi18n", "");
+$("#blang").addEventListener("click", () => { setLang(NEXT_LANG); location.reload(); });
+/* "Oggi" title: an h1 (never auto-translated, h1 holds climb names), so it is written in every language here */
+const OG_TITLE = { it: ["Dove salire oggi", "Dove salire domani", "Dove salire dopodomani"], en: ["Where to climb today", "Where to climb tomorrow", "Where to climb the day after tomorrow"], es: ["Dónde subir hoy", "Dónde subir mañana", "Dónde subir pasado mañana"] };
+/* default names of the ride stops: shown inside name slots (.nm, never auto-translated) and in the road book */
+const STOP_L = { it: ["Partenza", "Arrivo", "Tappa"], en: ["Start", "Finish", "Stop"], es: ["Salida", "Llegada", "Punto"] }[LANG] || ["Partenza", "Arrivo", "Tappa"];
+function ogTitle(day) { return (OG_TITLE[LANG] || OG_TITLE.it)[day] || OG_TITLE.it[0]; }
 $("#b3d").addEventListener("click", (e) => set3d(!S.three, e.currentTarget));
 function set3d(on, btn = $("#b3d")) {
   S.three = on; btn.setAttribute("aria-pressed", String(on));
@@ -236,7 +244,7 @@ q.addEventListener("input", () => {
   placeT = setTimeout(async () => {
     placeCtl = new AbortController();
     try {
-      const r = await fetch("https://nominatim.openstreetmap.org/search?" + new URLSearchParams({ q: txt, format: "jsonv2", limit: "5", "accept-language": "it" }), { signal: placeCtl.signal, headers: { Accept: "application/json" } });
+      const r = await fetch("https://nominatim.openstreetmap.org/search?" + new URLSearchParams({ q: txt, format: "jsonv2", limit: "5", "accept-language": LANG }), { signal: placeCtl.signal, headers: { Accept: "application/json" } });
       const j = await r.json();
       if (q.value.trim() !== txt) return;
       placeHits = (Array.isArray(j) ? j : []).map(placeHit).filter(Boolean); paintResults();
@@ -822,7 +830,7 @@ function stopRide() {
 async function renderOggi() {
   setMode("oggi");
   const days = ["Oggi", "Domani", "Dopodomani"];
-  panel.innerHTML = `<div class="og"><div class="handle"></div><h1>Dove salire ${S.day === 0 ? "oggi" : S.day === 1 ? "domani" : "dopodomani"}</h1>
+  panel.innerHTML = `<div class="og"><div class="handle"></div><h1>${esc(ogTitle(S.day))}</h1>
     <p class="note" id="ogWhere">Le salite più belle vicino a te, ordinate per meteo in cima: temporali, pioggia, vento e freddo.</p>
     <div class="days" role="group" aria-label="Giorno">${days.map((d, i) => `<button type="button" data-day="${i}" aria-pressed="${i === S.day}">${d}</button>`).join("")}</div>
     <div id="ogList" class="loading">Cerco le salite intorno a te…</div></div>`;
@@ -848,7 +856,7 @@ function paintOggi() {
   const rows = list.map((c, i) => ({ c, v: dayVerdict(hs[i] || {}, S.day) })).sort((a, b) => b.v.score - a.v.score || (b.c.difficulty || 0) - (a.c.difficulty || 0));
   const w = $("#ogWhere"); if (w) w.textContent = (here.src === "gps" ? "Entro 60 km da te" : "Intorno al centro della mappa") + ", ordinate per meteo in cima.";
   panel.querySelectorAll("[data-day]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.day === S.day)));
-  const h1 = panel.querySelector("h1"); if (h1) h1.textContent = "Dove salire " + (S.day === 0 ? "oggi" : S.day === 1 ? "domani" : "dopodomani");
+  const h1 = panel.querySelector("h1"); if (h1) h1.textContent = ogTitle(S.day);
   $("#ogList").className = "";
   $("#ogList").innerHTML = rows.map((r, i) => `<a class="row" href="#/s/${esc(encodeURIComponent(r.c.id))}" style="text-decoration:none;color:inherit">
       <span class="n">${String(i + 1).padStart(2, "0")}</span>
@@ -873,7 +881,7 @@ function paintTabAvatar(u) {
 function settingsHtml() {
   const w = myWkg();
   return `<section class="sec" id="setSec"><h3>Impostazioni</h3>
-    <div class="setrow"><span>Lingua</span><div class="seg" role="group" aria-label="Lingua"><button type="button" data-lang="it" aria-pressed="${LANG === "it"}">Italiano</button><button type="button" data-lang="en" aria-pressed="${LANG === "en"}">English</button></div></div>
+    <div class="setrow"><span>Lingua</span><div class="seg" role="group" aria-label="Lingua"><button type="button" data-lang="it" aria-pressed="${LANG === "it"}">Italiano</button><button type="button" data-lang="en" aria-pressed="${LANG === "en"}">English</button><button type="button" data-lang="es" aria-pressed="${LANG === "es"}">Español</button></div></div>
     <div class="setrow"><label for="setWkg">Watt per kg <small>per i tempi stimati in salita</small></label><input id="setWkg" type="number" inputmode="decimal" min="1" max="8" step="0.1" placeholder="3,0" value="${w ? esc(String(w)) : ""}"></div>
     <p class="note small"><a href="privacy.html">Privacy</a> · niente pubblicità, visite contate senza cookie · <a href="mailto:privacy@locaride.app">privacy@locaride.app</a></p>
     <p class="note small">Protetto da reCAPTCHA: valgono la <a href="https://policies.google.com/privacy" rel="noopener">Privacy</a> e i <a href="https://policies.google.com/terms" rel="noopener">Termini</a> di Google.</p>
@@ -894,7 +902,7 @@ async function renderDiario() {
   if (!who.isConnected) return;                               // the user left the tab, or a newer render replaced this one
   who.className = "who";
   if (!u) {
-    who.innerHTML = `<div class="ov">Il tuo profilo</div><h1>${LANG === "en" ? "Join LocaRide" : "Entra in LocaRide"}</h1>
+    who.innerHTML = `<div class="ov">Il tuo profilo</div><h1>${{ en: "Join LocaRide", es: "Únete a LocaRide" }[LANG] || "Entra in LocaRide"}</h1>
       <p class="note">Con un account ritrovi le salite che hai fatto davvero con i tuoi tempi, salvi i giri, voti le salite e ne proponi di nuove. Gratis.</p>
       <div class="actions" style="position:static"><button type="button" class="btn pri" id="login">Accedi o crea un account</button></div>`;
     body.innerHTML = settingsHtml() + installSec();
@@ -945,7 +953,7 @@ function saveGiro() {
   try { localStorage.setItem(GIRO_KEY, JSON.stringify({ stops: G.stops, profile: G.profile })); } catch { /* private mode */ }
   if (giroOn()) history.replaceState(null, "", G.stops.length ? "#/giro?p=" + encodeStops(G.stops) : "#/giro");
 }
-function stopName(s, i) { return s.name || (i === 0 ? "Partenza" : i === G.stops.length - 1 ? "Arrivo" : "Tappa " + (i + 1)); }
+function stopName(s, i) { return s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : STOP_L[2] + " " + (i + 1)); }
 function addStop(s) {
   if (G.stops.length >= MAX_STOPS) { toast(`Massimo ${MAX_STOPS} tappe`); return; }
   G.stops.push({ lat: +(+s.lat).toFixed(5), lon: +(+s.lon).toFixed(5), id: s.id || null, name: s.name || null });
@@ -1215,11 +1223,11 @@ function renderGiro() {
 /* weather at the start, at every climb on the way, at the top and at the finish - at the hour you get there */
 function keyPoints() {
   const sd = G.side, L = sd.distance_km, n = sd.elevationProfile.length, at = (km) => Math.max(0, Math.min(n - 1, Math.round(km / L * (n - 1))));
-  const pts = [{ name: "Partenza", i: 0 }];
+  const pts = [{ name: STOP_L[0], i: 0 }];
   for (const x of G.on.slice(0, 6)) pts.push({ name: x.c.name, i: at(x.km) });
   const hi = highestIdx(sd.elevationProfile);
   if (!pts.some((p) => Math.abs(p.i - hi) <= 3)) pts.push({ name: "Punto più alto", i: hi });
-  pts.push({ name: "Arrivo", i: n - 1 });
+  pts.push({ name: STOP_L[1], i: n - 1 });
   return pts.sort((a, b) => a.i - b.i).map((p) => ({ ...p, lat: sd.track[p.i][0], lon: sd.track[p.i][1], ele: sd.elevationProfile[p.i], km: p.i / (n - 1) * L, min: G.eta ? G.eta[p.i] : p.i / (n - 1) * L / 24 * 60 }));
 }
 async function fillGiroWeather(seq) {
@@ -1348,7 +1356,7 @@ function rideData() {
     start: G.start, wkg: myWkg() || 3, url: giroUrl(), km: G.res.km, gain: G.res.gain, minutes: G.eta ? G.eta[G.eta.length - 1] : null,
     side: G.side, eta: G.eta, climbs: G.on.map((x) => ({ name: x.c.name, km: x.km, elevation: x.c.elevation, difficulty: x.c.difficulty })),
     water: ((G.water && G.water.list) || []).map((x) => ({ km: x.km, name: x.p.name || x.p.label || "" })),
-    stops: G.stops.map((s, i) => ({ lat: s.lat, lon: s.lon, name: s.name || (i === 0 ? "Partenza" : i === G.stops.length - 1 ? "Arrivo" : "") })), weather: w
+    stops: G.stops.map((s, i) => ({ lat: s.lat, lon: s.lon, name: s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : "") })), weather: w
   };
 }
 /* the same numbers as the weather table of the Giro, for the road book */
