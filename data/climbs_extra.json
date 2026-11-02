@@ -53,5 +53,7 @@
  { "id": "balcon-de-alicante", "name": "Balcón de Alicante", "lat": 38.50098, "lon": -0.62527, "region": "Comunitat Valenciana" },
  { "id": "bola-del-mundo", "name": "Bola del Mundo (Alto de las Guarramillas)", "lat": 40.78469, "lon": -3.97975, "region": "Comunidad de Madrid" },
  { "id": "puerto-de-pajares", "name": "Puerto de Pajares", "lat": 42.99267, "lon": -5.7595, "region": "Asturias" },
- { "id": "la-alfaguara", "name": "Sierra de la Alfaguara", "lat": 37.26038, "lon": -3.5296, "region": "Andalucía", "from": ["Alfacar"] }
+ { "id": "la-alfaguara", "name": "Sierra de la Alfaguara", "lat": 37.26038, "lon": -3.5296, "region": "Andalucía", "from": ["Alfacar"] },
+ { "id": "kolovrat", "name": "Kolovrat", "lat": 46.18548, "lon": 13.66087, "region": "Slovenija" },
+ { "id": "laguna-negra", "name": "Laguna Negra (Vinuesa)", "lat": 41.99595, "lon": -2.84794, "region": "Castilla y León", "from": ["Vinuesa"] }
 ]

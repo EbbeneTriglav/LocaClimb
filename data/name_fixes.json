@@ -3,5 +3,10 @@
  "osm-1585564523": { "name": "Passo del Cerreto", "why": "OSM node 'Passo Crocetta' 600 m from the Cerreto summit, same climbs (Fivizzano / Acquabona)" },
  "osm-1608715841": { "name": "Passo delle Radici - San Pellegrino in Alpe", "why": "no 'Radici' node in OSM; these are the Radici climbs (Castelnuovo, Pievepelago, Piandelagotti)" },
  "osm-428627679": { "sides": { "Da Sestriere": "Da Usseaux" }, "why": "start is at Usseaux 1416 m (OSM reverse geocode: Balboutet, Usseaux); the base_hints label said Sestriere" },
- "osm-1365010693": { "name": "Prato Nevoso (Monte Malanotte)", "why": "Giro 2018 summit finish; the OSM node is Monte Malanotte, cyclists know the climb as Prato Nevoso (grand-tour KOM audit 02/11/2026)" }
+ "osm-1365010693": { "name": "Prato Nevoso (Monte Malanotte)", "why": "Giro 2018 summit finish; the OSM node is Monte Malanotte, cyclists know the climb as Prato Nevoso (grand-tour KOM audit 02/11/2026)" },
+ "osm-1773676261": { "name": "Passo del Bracco (Monte San Nicolao)", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
+ "osm-8554076814": { "name": "Port de Larrau (Larraineko mendatea)", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
+ "osm-1242947186": { "name": "Alto del Cordal (La Segá)", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
+ "osm-705312051": { "name": "Puerto de Leitariegos", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
+ "osm-1866808245": { "name": "Alto de la Colladiella", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" }
 }
