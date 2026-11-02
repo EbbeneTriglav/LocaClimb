@@ -31,3 +31,9 @@ test("base_hints.json has no duplicate keys (JSON.parse would silently keep only
   const keys = [...raw.matchAll(/^ "((?:[^"\\]|\\.)*)":/gm)].map((m) => m[1]);
   assert.equal(keys.length, Object.keys(hints).length);
 });
+test("Spain: classic bases for the Madrid passes, Coll de Rates, La Covatilla", () => {
+  assert.deepEqual(hints[hintKeyFor("Puerto de la Morcuera", hints)], ["Miraflores de la Sierra", "Rascafría"]);
+  assert.equal(hintKeyFor("Puerto de Navacerrada", hints), "Navacerrada");
+  assert.deepEqual(hints[hintKeyFor("Coll de Rates", hints)], ["Parcent", "Tàrbena"]);
+  assert.deepEqual(hints[hintKeyFor("La Covatilla", hints)], ["Béjar"]);
+});

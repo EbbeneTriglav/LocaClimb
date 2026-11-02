@@ -5,5 +5,9 @@
  { "id": "alpe-dhuez", "name": "Alpe d'Huez", "lat": 45.0924, "lon": 6.0699, "region": "Auvergne-Rhône-Alpes", "from": ["Le Bourg-d'Oisans"] },
  { "id": "hautacam", "name": "Hautacam", "lat": 42.97199, "lon": -0.00755, "region": "Occitanie", "from": ["Argelès-Gazost"] },
  { "id": "plateau-de-beille", "name": "Plateau de Beille", "lat": 42.72668, "lon": 1.69078, "region": "Occitanie", "from": ["Les Cabannes"] },
- { "id": "lagos-de-covadonga", "name": "Lagos de Covadonga", "lat": 43.27608, "lon": -4.98609, "region": "Asturias", "from": ["Covadonga"] }
+ { "id": "lagos-de-covadonga", "name": "Lagos de Covadonga", "lat": 43.27608, "lon": -4.98609, "region": "Asturias", "from": ["Covadonga"] },
+ { "id": "sierra-nevada", "name": "Sierra Nevada (Hoya de la Mora)", "lat": 37.09341, "lon": -3.38693, "region": "Andalucía", "from": ["Monachil"] },
+ { "id": "la-pandera", "name": "La Pandera", "lat": 37.63042, "lon": -3.77504, "region": "Andalucía", "from": ["Los Villares"] },
+ { "id": "pena-cabarga", "name": "Peña Cabarga", "lat": 43.35843, "lon": -3.82219, "region": "Cantabria", "from": ["Heras"] },
+ { "id": "los-machucos", "name": "Los Machucos", "lat": 43.26918, "lon": -3.648, "region": "Cantabria" }
 ]
