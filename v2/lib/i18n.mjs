@@ -1,5 +1,5 @@
 /*
- * i18n.mjs - Italiano / English for v2.
+ * i18n.mjs - Italiano / English / Español for v2 (Spanish dictionary in i18n_es.mjs, 02/11/2026).
  *
  * Same idea as the classic app (js/i18n.js): the UI is written in Italian and translated AFTER it
  * is drawn, text node by text node, only on an EXACT match with the dictionary or with one of the
@@ -9,7 +9,10 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=34";
+
 export const LANG_KEY = "locaride_lang";
+export const LANGS = ["it", "en", "es"];
 
 export const DICT = {
   // shell, map, filters
@@ -47,7 +50,7 @@ export const DICT = {
   "Acqua e ristori sulla salita": "Water and food on the climb", "Cerco fontane e bar lungo la strada…": "Looking for fountains and bars along the road…",
   "Dati non ancora disponibili in questa zona.": "No data for this area yet.",
   "Nessun punto acqua mappato entro 100 m: parti con le borracce piene.": "No water point mapped within 100 m: leave with full bottles.",
-  " · nessun bar lungo la salita": " · no bar along the climb", "Acqua potabile": "Drinking water", "Rubinetto": "Tap", "Sorgente": "Spring",
+  "nessun bar lungo la salita": "no bar along the climb", " · nessun bar lungo la salita": " · no bar along the climb", "Acqua potabile": "Drinking water", "Rubinetto": "Tap", "Sorgente": "Spring",
   "Fontana": "Fountain", "Bar": "Bar", "Ristorante": "Restaurant", "Gelateria": "Ice cream", "Forno": "Bakery", "Alimentari": "Grocery",
   "Meteo 7 giorni in cima": "7-day weather at the top", "Meteo non disponibile ora.": "Weather not available now.", "Carico…": "Loading…",
   "Sereno": "Clear", "Nuvoloso": "Cloudy", "Nebbia": "Fog", "Pioviggine": "Drizzle", "Neve": "Snow", "Rovesci": "Showers",
@@ -170,6 +173,8 @@ export const DICT = {
 export const RULES = [
   [/^([\d.,]+) salite qui$/, "$1 climbs here"],
   [/^Difficoltà (\d+)\/10$/, "Difficulty $1/10"],
+  [/^difficoltà (\d+|–)\/10$/, "difficulty $1/10"],
+  [/^(Entro 60 km da te|Intorno al centro della mappa), ordinate per meteo in cima\.$/, (m, w) => (w === "Entro 60 km da te" ? "Within 60 km of you" : "Around the map centre") + ", sorted by weather at the top."],
   [/^cat\. (.+)$/, "cat. $1"],
   [/^Da (.+)$/, "From $1"],
   [/^Versante (\d+)$/, "Side $1"],
@@ -207,21 +212,23 @@ export const RULES = [
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`]
 ];
 
-function one(s) {
-  if (Object.prototype.hasOwnProperty.call(DICT, s)) return DICT[s];
-  for (const [re, rep] of RULES) if (re.test(s)) return s.replace(re, rep);
+const TABLES = { en: [DICT, RULES], es: [DICT_ES, RULES_ES] };
+function one(s, lang) {
+  const [dict, rules] = TABLES[lang] || TABLES.en;
+  if (Object.prototype.hasOwnProperty.call(dict, s)) return dict[s];
+  for (const [re, rep] of rules) if (re.test(s)) return s.replace(re, rep);
   return null;
 }
-/* pure: Italian label -> English, or the input unchanged. Keeps surrounding spaces; a " · "-joined
-   label is translated piece by piece when the whole is not known. */
-export function translate(s) {
+/* pure: Italian label -> English (or Spanish with lang "es"), or the input unchanged. Keeps surrounding
+   spaces; a " · "-joined label is translated piece by piece when the whole is not known. */
+export function translate(s, lang = "en") {
   if (typeof s !== "string") return s;
   // "· 17 m dalla strada", "punti acqua entro 100 m ·": the separator belongs to the layout, not the label
   const m = /^(\s*(?:·\s+)?)([\s\S]*?)((?:\s+·)?\s*)$/.exec(s), core = m[2];
   if (!core) return s;
-  let t = one(core);
+  let t = one(core, lang);
   if (t == null && core.includes(" · ")) {
-    const parts = core.split(" · "), out = parts.map((p) => one(p) ?? p);
+    const parts = core.split(" · "), out = parts.map((p) => one(p, lang) ?? p);
     if (out.some((p, i) => p !== parts[i])) t = out.join(" · ");
   }
   return t == null ? s : m[1] + t + m[3];
@@ -229,33 +236,36 @@ export function translate(s) {
 
 /* ---------------------------------------------------------------- DOM side */
 export function getLang() {
-  try { const v = localStorage.getItem(LANG_KEY); if (v === "it" || v === "en") return v; } catch { /* private mode */ }
-  return /^it\b/i.test(navigator.language || "it") ? "it" : "en";
+  try { const v = localStorage.getItem(LANG_KEY); if (LANGS.includes(v)) return v; } catch { /* private mode */ }
+  const nav = navigator.language || "it";
+  return /^it\b/i.test(nav) ? "it" : /^es\b/i.test(nav) ? "es" : "en";
 }
 export function setLang(l) { try { localStorage.setItem(LANG_KEY, l); } catch { /* private mode */ } }
 
 const SKIP = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "SELECT"]);
 function skipEl(el) { return !el || SKIP.has(el.tagName) || el.closest("[data-noi18n], .nm, h1, .maplibregl-canvas-container"); }
-export function translateTree(root) {
+let CUR = "en";
+export function translateTree(root, lang = CUR) {
   if (!root) return;
-  if (root.nodeType === 3) { if (!skipEl(root.parentElement)) { const t = translate(root.nodeValue); if (t !== root.nodeValue) root.nodeValue = t; } return; }
+  if (root.nodeType === 3) { if (!skipEl(root.parentElement)) { const t = translate(root.nodeValue, lang); if (t !== root.nodeValue) root.nodeValue = t; } return; }
   if (root.nodeType !== 1 || skipEl(root)) return;
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let n = w.nextNode(); n; n = w.nextNode()) {
     if (skipEl(n.parentElement)) continue;
-    const t = translate(n.nodeValue); if (t !== n.nodeValue) n.nodeValue = t;
+    const t = translate(n.nodeValue, lang); if (t !== n.nodeValue) n.nodeValue = t;
   }
   for (const el of [root, ...root.querySelectorAll("[placeholder],[aria-label],[title]")]) {
     for (const a of ["placeholder", "aria-label", "title"]) {
       const v = el.getAttribute && el.getAttribute(a);
-      if (v) { const t = translate(v); if (t !== v) el.setAttribute(a, t); }
+      if (v) { const t = translate(v, lang); if (t !== v) el.setAttribute(a, t); }
     }
   }
 }
 let obs = null;
 export function startI18n(lang) {
   document.documentElement.lang = lang;
-  if (lang !== "en") return;
+  if (lang === "it") return;
+  CUR = lang;
   translateTree(document.body);
   obs = new MutationObserver((ms) => { for (const m of ms) for (const n of m.addedNodes) translateTree(n); });
   obs.observe(document.body, { childList: true, subtree: true });

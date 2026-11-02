@@ -11,12 +11,12 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes } from "./climb.mjs?v=33";
+import { gradeColor, difficultyColor, profileShapes } from "./climb.mjs?v=34";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const n0 = (x, d = 0, lang = "it") => (x == null || !isFinite(x)) ? "–" : Number(x).toLocaleString(lang === "en" ? "en-GB" : "it-IT", { minimumFractionDigits: d, maximumFractionDigits: d });
+const n0 = (x, d = 0, lang = "it") => (x == null || !isFinite(x)) ? "–" : Number(x).toLocaleString({ en: "en-GB", es: "es-ES" }[lang] || "it-IT", { minimumFractionDigits: d, maximumFractionDigits: d });
 export function hm(min) { if (min == null || !isFinite(min)) return "–"; const m = Math.round(min); return Math.floor(m / 60) + ":" + String(m % 60).padStart(2, "0"); }
 
 const TXT = {
@@ -25,9 +25,13 @@ const TXT = {
     est: (w) => `Tempi stimati a ${w} W/kg, soste escluse.`, depart: "partenza", diff: "difficoltà", src: "Dati © OpenStreetMap contributors · quote: modello del terreno · meteo: Open-Meteo" },
   en: { ride: "My ride", km: "km", m: "metres", time: "riding", top: "highest", climbs: "Climbs", water: "Water", route: "The route", start: "Start", end: "Finish", hi: "Highest point",
     when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", print: "Print or save as PDF",
-    est: (w) => `Times estimated at ${w} W/kg, stops excluded.`, depart: "start", diff: "difficulty", src: "Data © OpenStreetMap contributors · elevation: terrain model · weather: Open-Meteo" }
+    est: (w) => `Times estimated at ${w} W/kg, stops excluded.`, depart: "start", diff: "difficulty", src: "Data © OpenStreetMap contributors · elevation: terrain model · weather: Open-Meteo" },
+  es: { ride: "Mi ruta", km: "km", m: "metros", time: "en bici", top: "altitud máx", climbs: "Subidas", water: "Agua", route: "La ruta", start: "Salida", end: "Llegada", hi: "Punto más alto",
+    when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", print: "Imprimir o guardar en PDF",
+    est: (w) => `Tiempos estimados a ${w} W/kg, sin paradas.`, depart: "salida", diff: "dificultad", src: "Datos © colaboradores de OpenStreetMap · altitud: modelo del terreno · tiempo: Open-Meteo" }
 };
-const tx = (d) => TXT[d.lang === "en" ? "en" : "it"];
+const langOf = (d) => (d.lang === "en" || d.lang === "es" ? d.lang : "it");
+const tx = (d) => TXT[langOf(d)];
 
 /* lat/lon -> x/y in a w*h box, north up, true proportions (cos of the mean latitude), centred */
 export function routeShape(track, w, h, pad = 0) {
@@ -94,7 +98,7 @@ export function waterGap(d) {
 
 /* ------------------------------------------------------------------ printable road book (A4, light) */
 export function roadbookHtml(d) {
-  const T = tx(d), L = d.lang === "en" ? "en" : "it";
+  const T = tx(d), L = langOf(d);
   const sh = smoothProfile(d.side, 1000, 190, 6), pts = routeShape(d.side.track, 300, 300, 14), gr = sampleGrades(d.side);
   const route = pts.slice(1).map((p, i) => `<path d="M${pts[i][0]} ${pts[i][1]}L${p[0]} ${p[1]}" stroke="${gradeColor(gr[i + 1])}"/>`).join("");
   const L0 = d.side.distance_km || d.km || 1;
@@ -166,7 +170,7 @@ export const RB_SCRIPT = 'addEventListener("load",function(){var b=document.getE
 
 /* ------------------------------------------------------------------ the image (1080 x 1350, dark) */
 export function drawCard(ctx, d, fonts = { cond: "'Barlow Condensed', 'Arial Narrow', sans-serif", body: "Barlow, system-ui, sans-serif" }) {
-  const T = tx(d), L = d.lang === "en" ? "en" : "it", W = CARD_W, H = CARD_H;
+  const T = tx(d), L = langOf(d), W = CARD_W, H = CARD_H;
   const BG = "#0B0F14", TXc = "#E8EDF2", MU = "#93A1B0", ACC = "#C8F560", LINE = "#243344";
   const font = (w, px, fam, it = false) => `${it ? "italic " : ""}${w} ${px}px ${fam}`;
   const fit = (s, max, w, px, fam, it) => { let p = px; ctx.font = font(w, p, fam, it); while (ctx.measureText(s).width > max && p > 28) { p -= 2; ctx.font = font(w, p, fam, it); } return p; };
