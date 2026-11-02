@@ -55,5 +55,8 @@
  { "id": "puerto-de-pajares", "name": "Puerto de Pajares", "lat": 42.99267, "lon": -5.7595, "region": "Asturias" },
  { "id": "la-alfaguara", "name": "Sierra de la Alfaguara", "lat": 37.26038, "lon": -3.5296, "region": "Andalucía", "from": ["Alfacar"] },
  { "id": "kolovrat", "name": "Kolovrat", "lat": 46.18548, "lon": 13.66087, "region": "Slovenija" },
- { "id": "laguna-negra", "name": "Laguna Negra (Vinuesa)", "lat": 41.99595, "lon": -2.84794, "region": "Castilla y León", "from": ["Vinuesa"] }
+ { "id": "laguna-negra", "name": "Laguna Negra (Vinuesa)", "lat": 41.99595, "lon": -2.84794, "region": "Castilla y León", "from": ["Vinuesa"] },
+ { "id": "roncola-alta", "name": "Roncola Alta", "lat": 45.78003, "lon": 9.5451, "region": "Lombardia", "from": ["Almenno San Bartolomeo"] },
+ { "id": "miragolo", "name": "Miragolo San Salvatore", "lat": 45.81102, "lon": 9.71986, "region": "Lombardia" },
+ { "id": "matassone", "name": "Matassone", "lat": 45.81562, "lon": 11.07846, "region": "Trentino-Alto Adige" }
 ]
