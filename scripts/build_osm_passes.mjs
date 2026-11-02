@@ -30,6 +30,7 @@ import { loadNotClimbs } from "./lib/notclimbs.mjs";
 import { difficultyOf } from "./lib/difficulty.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 import { climbFloor } from "./lib/climbfloor.mjs";
+import { reachable, pickTop } from "./lib/seektop.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -1272,7 +1273,13 @@ async function main() {
     for (const x of extra) {
       const ch = snap(x.lat, x.lon, 0.5);
       if (!ch) { console.log("    - " + x.name + ": no road"); continue; }
-      const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
+      let slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
+      if (x.short) { // walls/côtes: OSM gives the street's midpoint -> climb the road graph to the real top (<= 0.8 km)
+        const nodes = reachable(vkey(slat, slon), neighbors, 0.8);
+        const ev = nodes.length > 1 ? await elevations(nodes.map((n) => [n.lat, n.lon])) : null;
+        const tp = ev ? pickTop(nodes, ev) : null;
+        if (tp && (tp.lat !== slat || tp.lon !== slon)) { console.log("    ~ " + x.name + ": top moved " + Math.round(tp.d * 1000) + " m along the road (" + Math.round(tp.ele) + " m)"); slat = tp.lat; slon = tp.lon; }
+      }
       const xtg = x.from ? resolveTowns([].concat(x.from), slat, slon) : null; // pin the historic base(s) if given
       const vs = await buildVersanti(slat, slon, xtg ? 16 : 12, x.short ? "short" : true, nameTokens(x.name), xtg); // short: walls/côtes floor (climbfloor.mjs)
       if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
