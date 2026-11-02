@@ -7,7 +7,9 @@
  * in quota) > good. CAPE is used as the physical value at the hour (never averaged).
  */
 export const RIDE_HOURS = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-export const T = { STORM_PP: 50, STORM_CAPE: 800, STORM_CAPE_PP: 25, WET_PP: 30, WIND_KMH: 35, COLD_C: 3, MIN_WINDOW_H: 3 };
+// COLD_C: below 8 °C at the summit an hour is not "ideal" any more (03/11/2026, Rick): you reach the top
+// sweaty and the descent at ~40 km/h feels a few degrees above zero - see descentFeel() / clothing().
+export const T = { STORM_PP: 50, STORM_CAPE: 800, STORM_CAPE_PP: 25, WET_PP: 30, WIND_KMH: 35, COLD_C: 8, MIN_WINDOW_H: 3, DESCENT_KMH: 40 };
 
 export function hourState(x) {
   const pp = x.pp ?? 0, cape = x.cape ?? 0;
@@ -57,13 +59,41 @@ export function dayVerdict(hourly, day = 0) {
   return { cells, window: null, label, tone, score: len * 10 - count("storm") * 5 };
 }
 
+/* Wind chill (Environment Canada / NWS formula, °C, km/h) of the descent: the air speed is the
+   descent speed plus the wind (worst case, head wind). Used up to 20 °C (officially it stops at
+   10 °C, but a sweaty rider at 40 km/h feels it well above that); above, a degree or two. */
+export function descentFeel(temp, wind = 0, speed = T.DESCENT_KMH) {
+  if (temp == null) return null;
+  const v = speed + Math.max(0, wind || 0);
+  if (temp > 20) return Math.round(temp - v / 40); // summer: a degree or two
+  const k = Math.pow(v, 0.16);
+  return Math.round(13.12 + 0.6215 * temp - 11.37 * k + 0.3965 * temp * k);
+}
+
+/* What to wear, from the coldest summit hour of the ride window (or of the day): the descent decides */
+export function clothing(v) {
+  if (!v || !v.cells.length) return null;
+  const hrs = v.window ? v.cells.filter((c) => c.h >= v.window.from && c.h < v.window.to) : v.cells;
+  const withT = hrs.filter((c) => c.temp != null);
+  if (!withT.length) return null;
+  const cold = withT.reduce((a, c) => (c.temp < a.temp ? c : a));
+  const top = Math.round(cold.temp), feel = descentFeel(cold.temp, cold.wind);
+  let text;
+  if (feel >= 16) text = "Estivo: maglia e pantaloncini, gilet antivento per la discesa.";
+  else if (feel >= 10) text = "Manicotti, gambali e gilet antivento per la discesa.";
+  else if (feel >= 4) text = "Maglia termica a maniche lunghe, gambali, guanti lunghi e giacca antivento per scendere. In cima cambia la maglia sudata con una asciutta.";
+  else if (feel >= 0) text = "Da inverno: calzamaglia, giacca termica, guanti invernali, copriscarpe e scaldacollo. Porta una maglia asciutta e cambiati in cima prima di scendere: sudato, in discesa si gela.";
+  else text = "Gelo in discesa: possibile ghiaccio sulla strada in ombra. Valuta un giro più basso; se sali, abbigliamento invernale completo e maglia asciutta di ricambio.";
+  return { top, feel, text, line: `In cima ${top}° · in discesa percepiti ${feel}°` };
+}
+
 /* "Parti entro le 10:30"-style advice for the climb page */
 export function advice(v) {
   if (!v || !v.cells.length) return null;
   if (v.window) {
     const stormAfter = v.cells.find((c) => c.h >= v.window.to && c.state === "storm");
     if (v.window.to <= 19 && stormAfter) return { head: `Parti entro le ${v.window.to - 2}:00`, sub: `Dalle ${stormAfter.h} sale il rischio temporali.` };
-    return { head: v.label, sub: "Niente temporali, vento e temperatura nella norma in quota." };
+    return { head: v.label, sub: "Niente temporali, vento e temperatura buoni in quota." };
   }
   return { head: v.label, sub: "Guarda la fascia oraria qui sotto prima di partire." };
 }

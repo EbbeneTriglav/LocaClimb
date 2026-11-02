@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { gradeColor, difficultyColor, num, eleAt, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, sideStats, profileDist, hairpins, climbMinutes, clock, traffic, alongTrack } from "../v2/lib/climb.mjs";
-import { hourState, dayVerdict, advice } from "../v2/lib/weather.mjs";
+import { hourState, dayVerdict, advice, clothing, descentFeel } from "../v2/lib/weather.mjs";
 import { diaryStats, bestOf, dur } from "../v2/lib/diary.mjs";
 import { cleanLabel } from "../v2/lib/data.mjs";
 
@@ -109,6 +109,31 @@ test("verdict: a stormy day says so", () => {
   assert.equal(v.window, null);
   assert.equal(v.label, "Temporali dalle 10");
   assert.equal(v.tone, "bad");
+});
+
+test("cold at the summit: 6-7 °C in November is not 'ideal' (sweaty descent)", () => {
+  assert.equal(hourState({ temp: 7, wind: 5, pp: 0 }), "cold");
+  assert.equal(hourState({ temp: 8, wind: 5, pp: 0 }), "good");
+  const v = dayVerdict(hourly("2026-11-03", () => ({ temp: 6, wind: 10 })), 0);
+  assert.equal(v.window, null);
+  assert.equal(v.label, "Freddo in quota");
+  assert.equal(v.tone, "warn");
+});
+
+test("descent wind chill and what to wear", () => {
+  assert.equal(descentFeel(7, 0), 2);      // 7 °C at 40 km/h feels ~2 °C
+  assert.ok(descentFeel(0, 10) <= -7);
+  assert.equal(descentFeel(20, 0), 19);
+  const nov = clothing(dayVerdict(hourly("2026-11-03", (d, hr) => ({ temp: hr < 11 ? 4 : 7, wind: 10 })), 0));
+  assert.equal(nov.top, 4);
+  assert.ok(nov.feel < 0);
+  assert.match(nov.text, /^Gelo in discesa/);
+  const mild = clothing(dayVerdict(hourly("2026-11-03", () => ({ temp: 12, wind: 5 })), 0));
+  assert.match(mild.text, /^Maglia termica/);   // 12 °C at the top still feels ~8 °C going down
+  assert.equal(mild.line, "In cima 12° · in discesa percepiti 8°");
+  const summer = clothing(dayVerdict(hourly("2026-07-12", () => ({ temp: 22, wind: 5 })), 0));
+  assert.match(summer.text, /^Estivo/);
+  assert.equal(clothing(null), null);
 });
 
 test("verdict without data", () => {

@@ -423,3 +423,6 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .maps .tgl small { display: block; color: var(--mu); font-size: 13px; line-height: 1.35; }
 /* reCAPTCHA (App Check) badge: hidden, the required attribution is in Impostazioni and privacy.html */
 .grecaptcha-badge { visibility: hidden !important; }
+/* what to wear (verdict box): the descent decides */
+.wear { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.08); }
+.wear p { margin: 4px 0 0; font-size: 13px; }
