@@ -69,6 +69,26 @@ export function advice(v) {
 }
 
 /* points: [{ lat, lon, ele }] (summits). Returns one hourly block per point, same order. */
+/* On locaride.app the weather goes through our Worker (/api/meteo, cf/meteo.js): Open-Meteo first,
+   MET Norway (Yr) when it is down, cached ~30 min. Elsewhere (local server, previews) Open-Meteo direct. */
+let SOURCE = "open-meteo";
+export function meteoSource() { return SOURCE; }
+export function meteoUrl(q, host = globalThis.location && globalThis.location.hostname) {
+  if (host === "locaride.app") {
+    let tz = "Europe/Rome";
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || tz; } catch { /* default */ }
+    return "/api/meteo?" + q.toString() + "&tz=" + encodeURIComponent(tz);
+  }
+  return "https://api.open-meteo.com/v1/forecast?" + q.toString();
+}
+async function meteoJson(q) {
+  const r = await fetch(meteoUrl(q));
+  if (!r.ok) throw new Error("meteo " + r.status);
+  const j = await r.json();
+  SOURCE = (Array.isArray(j) ? j[0] : j)?.source === "met.no" ? "met.no" : "open-meteo";
+  return j;
+}
+
 export async function fetchForecast(points, days = 3) {
   if (!points.length) return [];
   const q = new URLSearchParams({
@@ -78,9 +98,7 @@ export async function fetchForecast(points, days = 3) {
     hourly: "temperature_2m,precipitation_probability,wind_speed_10m,cape",
     timezone: "auto", forecast_days: String(days)
   });
-  const r = await fetch("https://api.open-meteo.com/v1/forecast?" + q.toString());
-  if (!r.ok) throw new Error("meteo " + r.status);
-  const j = await r.json();
+  const j = await meteoJson(q);
   return (Array.isArray(j) ? j : [j]).map((x) => x.hourly || {});
 }
 
@@ -102,7 +120,5 @@ export async function fetchDaily(p) {
     daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max",
     timezone: "auto", forecast_days: "7"
   });
-  const r = await fetch("https://api.open-meteo.com/v1/forecast?" + q.toString());
-  if (!r.ok) throw new Error("meteo " + r.status);
-  return dailyRows((await r.json()).daily || {});
+  return dailyRows((await meteoJson(q)).daily || {});
 }

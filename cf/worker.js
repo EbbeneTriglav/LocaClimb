@@ -1,5 +1,5 @@
 /*
- * LocaRide - Cloudflare Worker (runs only for /__/* thanks to run_worker_first).
+ * LocaRide - Cloudflare Worker (runs only for /__/* and /api/* thanks to run_worker_first).
  *
  * Firebase Auth reverse proxy, "option 3" of Firebase's guide "Best practices for using
  * signInWithRedirect on browsers that block third-party storage".
@@ -7,11 +7,14 @@
  * redirect result is not lost when the browser partitions third-party storage.
  * Everything that is not /__/auth or /__/firebase goes back to the static assets.
  */
+import { handleMeteo } from "./meteo.js";
+
 const FIREBASE_HOST = "locaride-ce1ad.firebaseapp.com";
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === "/api/meteo") return handleMeteo(request, ctx); // weather with fallback + cache (cf/meteo.js)
     if (url.pathname.startsWith("/__/auth/") || url.pathname.startsWith("/__/firebase/")) {
       const target = new URL(url.pathname + url.search, "https://" + FIREBASE_HOST);
       // keep method, headers, body; do not follow redirects here (the browser must see them)
