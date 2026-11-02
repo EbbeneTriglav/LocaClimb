@@ -8,5 +8,6 @@
  "osm-8554076814": { "name": "Port de Larrau (Larraineko mendatea)", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
  "osm-1242947186": { "name": "Alto del Cordal (La Segá)", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
  "osm-705312051": { "name": "Puerto de Leitariegos", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
- "osm-1866808245": { "name": "Alto de la Colladiella", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" }
+ "osm-1866808245": { "name": "Alto de la Colladiella", "why": "grand-tour KOM audit 02/11/2026: OSM name differs from the name cyclists and the race books use" },
+ "osm-786900537": { "name": "Madonnina del Domm (Monte Caludranza)", "why": "grand-tour KOM audit 02/11/2026: Giro 2020 climb; the OSM node is Monte Caludranza" }
 }
