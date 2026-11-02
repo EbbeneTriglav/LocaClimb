@@ -421,3 +421,5 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .maps .tgl input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--acc); flex: none; }
 .maps .tgl b { display: block; font-family: var(--cond); font-weight: 800; font-size: 18px; text-transform: uppercase; color: var(--tx); }
 .maps .tgl small { display: block; color: var(--mu); font-size: 13px; line-height: 1.35; }
+/* reCAPTCHA (App Check) badge: hidden, the required attribution is in Impostazioni and privacy.html */
+.grecaptcha-badge { visibility: hidden !important; }

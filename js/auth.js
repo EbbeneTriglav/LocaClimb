@@ -3,7 +3,7 @@ function fbReady(){return !!(FIREBASE_CONFIG.apiKey&&window.firebase);}
 function fbInit(){
   var b=document.getElementById("acct");if(b)b.addEventListener("click",acctOpen);
   if(!fbReady())return;
-  try{firebase.initializeApp(FIREBASE_CONFIG);FB={auth:firebase.auth(),db:firebase.firestore()};}catch(e){return;}
+  try{firebase.initializeApp(FIREBASE_CONFIG);if(location.hostname==="locaride.app"&&firebase.appCheck){try{firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider(APPCHECK_KEY),true);}catch(e){}}FB={auth:firebase.auth(),db:firebase.firestore()};}catch(e){return;}
   FB.auth.onAuthStateChanged(function(u){FBUSER=u;acctUpdate();if(CUR_PASS)renderRatings(CUR_PASS);});
 }
 function acctUpdate(){var b=document.getElementById("acct");if(!b)return;var lab=b.querySelector(".bl");if(lab)lab.textContent=FBUSER?(FBUSER.displayName||"Account").substring(0,12):"Accedi";}

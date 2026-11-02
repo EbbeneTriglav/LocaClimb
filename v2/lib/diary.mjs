@@ -6,12 +6,20 @@
  */
 const FIREBASE_CONFIG = { apiKey: "AIzaSyB96EFYEWv1fvWdsHScZA_VCJiQcud7sAg", authDomain: "locaride-ce1ad.firebaseapp.com", projectId: "locaride-ce1ad", storageBucket: "locaride-ce1ad.firebasestorage.app", messagingSenderId: "723776991350", appId: "1:723776991350:web:21b21900ab15ada61c2f57" };
 let fb = null;
+/* App Check (reCAPTCHA Enterprise, key in Google Cloud "Fraud Defense"): proves to Firestore that a request
+   comes from this app, not from a script reusing the public API key. Only on the real domain - the key is
+   bound to locaride.app (elsewhere it would only fail). Same key in js/state.js (classic app). */
+export const APPCHECK_KEY = "6LfyaQwuAAAAAOzBrSHQJjMf-rfFPZX6hPS0wkQn";
+function appCheck(f) {
+  if (globalThis.location?.hostname !== "locaride.app" || !f.appCheck) return;
+  try { f.appCheck().activate(new f.appCheck.ReCaptchaEnterpriseProvider(APPCHECK_KEY), true); } catch { /* already active */ }
+}
 
 function init() {
   if (fb) return fb;
   const f = globalThis.firebase;
   if (!f) return null;
-  try { if (!f.apps.length) f.initializeApp(FIREBASE_CONFIG); fb = { auth: f.auth(), db: f.firestore(), f }; } catch { return null; }
+  try { if (!f.apps.length) { f.initializeApp(FIREBASE_CONFIG); appCheck(f); } fb = { auth: f.auth(), db: f.firestore(), f }; } catch { return null; }
   return fb;
 }
 
