@@ -8,8 +8,10 @@ const FIREBASE_CONFIG = { apiKey: "AIzaSyB96EFYEWv1fvWdsHScZA_VCJiQcud7sAg", aut
 let fb = null;
 /* App Check (reCAPTCHA Enterprise, key in Google Cloud "Fraud Defense"): proves to Firestore that a request
    comes from this app, not from a script reusing the public API key. Only on the real domain - the key is
-   bound to locaride.app (elsewhere it would only fail). Same key in js/state.js (classic app). */
-export const APPCHECK_KEY = "6LfyaQwuAAAAAOzBrSHQJjMf-rfFPZX6hPS0wkQn";
+   bound to locaride.app (elsewhere it would only fail). Same key in js/state.js (classic app).
+   It must be a score-based reCAPTCHA Enterprise key (Cloud "Fraud Defense", no secret key): a classic
+   v3 key (with a secret) makes the invisible widget fail and every token request ends in recaptcha-error. */
+export const APPCHECK_KEY = "6LexOwwuAAAAAI51qWcpeSN4rLQ15xvEF4hwd-YD";
 function appCheck(f) {
   if (globalThis.location?.hostname !== "locaride.app" || !f.appCheck) return;
   try { f.appCheck().activate(new f.appCheck.ReCaptchaEnterpriseProvider(APPCHECK_KEY), true); } catch { /* already active */ }
