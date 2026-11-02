@@ -19,7 +19,7 @@ function headers() {
   return out;
 }
 const H = headers();
-const PAGES = ["/", "/index.html", "/v2/*", "/privacy.html"];
+const PAGES = ["/", "/index.html", "/v2/*", "/privacy.html", "/privacy"];   // Cloudflare redirects /privacy.html -> /privacy
 const csp = H["/"]["Content-Security-Policy"];
 const dir = (name) => (csp.split(";").map((d) => d.trim().split(/\s+/)).find((d) => d[0] === name) || []).slice(1);
 

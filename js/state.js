@@ -38,7 +38,7 @@ var VPS_API_CONFIG={endpoint:""};
 /* ===== Accounts + community ratings (Firebase) ============================== */
 /* Incolla qui la config del tuo progetto Firebase (Console -> Impostazioni progetto -> Le tue app -> Web). */
 var FIREBASE_CONFIG={apiKey:"AIzaSyB96EFYEWv1fvWdsHScZA_VCJiQcud7sAg",authDomain:"locaride-ce1ad.firebaseapp.com",projectId:"locaride-ce1ad",storageBucket:"locaride-ce1ad.firebasestorage.app",messagingSenderId:"723776991350",appId:"1:723776991350:web:21b21900ab15ada61c2f57"};
-var APPCHECK_KEY="6LfyaQwuAAAAAOzBrSHQJjMf-rfFPZX6hPS0wkQn"; /* App Check (reCAPTCHA Enterprise), same key as v2/lib/diary.mjs */
+var APPCHECK_KEY="6LexOwwuAAAAAI51qWcpeSN4rLQ15xvEF4hwd-YD"; /* App Check (reCAPTCHA Enterprise), same key as v2/lib/diary.mjs */
 var CUR_PASS=null,FB=null,FBUSER=null;
 /* ===== Fontanelle / drinking water from OSM via Overpass ==================== */
 var fountOn=false,fountLayer=null,fountIds={},fountTimer=null,fountIcon=null;
