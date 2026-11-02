@@ -134,6 +134,7 @@ export function validateClimbsExtra(arr) {
     if (!isNonEmptyString(c.name)) errs.push(`${label}: missing/empty "name"`);
     if (!isLat(c.lat)) errs.push(`${label}: lat is not a valid latitude (${c.lat})`);
     if (!isLon(c.lon)) errs.push(`${label}: lon is not a valid longitude (${c.lon})`);
+    if (c.short !== undefined && typeof c.short !== "boolean") errs.push(`${label}: "short" must be true or false`);
   });
   return errs;
 }

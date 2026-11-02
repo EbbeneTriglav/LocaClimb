@@ -29,6 +29,7 @@ import { fillStruct } from "./lib/structdem.mjs";
 import { loadNotClimbs } from "./lib/notclimbs.mjs";
 import { difficultyOf } from "./lib/difficulty.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
+import { climbFloor } from "./lib/climbfloor.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -564,11 +565,12 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
   if (pin) base = 0; // manual override: base is fixed at the pinned town (path start), use whole climb
   const segPts = pts.slice(base), segEl = el.slice(base), segCum = cum.slice(base).map((c) => c - cum[base]);
   const dist = segCum[segCum.length - 1];
-  if (dist < (relax ? 1.2 : FLATCOUNTRY ? 0.3 : MIN_DIST_KM)) return null;
+  const floor = climbFloor(relax, FLATCOUNTRY, MIN_DIST_KM, MIN_GAIN_M); // scripts/lib/climbfloor.mjs
+  if (dist < floor.distKm) return null;
   const gain = segEl[segEl.length - 1] - segEl[0];
-  if (gain < (relax ? 140 : FLATCOUNTRY ? 50 : MIN_GAIN_M)) return null;
+  if (gain < floor.gainM) return null;
   const avg = gain / (dist * 1000) * 100;
-  if (avg < (relax ? 2 : 2.5)) return null;
+  if (avg < floor.avgPct) return null;
   let maxg = 0; // windowed (>=300m) to kill DEM noise
   for (let i = 0; i < segPts.length - 1; i++) {
     let j = i; while (j < segPts.length - 1 && segCum[j] - segCum[i] < 0.3) j++;
@@ -1006,8 +1008,9 @@ async function main() {
           pth = resampleByDist(rp.slice().reverse(), 0.05); // summit -> town
         }
         var ev = await climbHeights(pth); if (!ev) continue;
-        var pv = buildSide(pth, ev, lat, lon, true, true);     // 1st try: base pinned at the town
-        if (!pv) pv = buildSide(pth, ev, lat, lon, true, false); // fallback: valley-trim finds the base near the town
+        var pr = relax === "short" ? "short" : true;          // short walls keep their own floor when pinned too
+        var pv = buildSide(pth, ev, lat, lon, pr, true);       // 1st try: base pinned at the town
+        if (!pv) pv = buildSide(pth, ev, lat, lon, pr, false); // fallback: valley-trim finds the base near the town
         if (!pv) { console.log("    . hint " + tg.name + ": salita non valida"); continue; }
         pv.side = "Da " + tg.name;
         // dedup by ORIGIN, not by track overlap: drop a side only if it starts in (nearly) the same
@@ -1271,7 +1274,7 @@ async function main() {
       if (!ch) { console.log("    - " + x.name + ": no road"); continue; }
       const slat = gx(ch.w,ch.idx), slon = gy(ch.w,ch.idx);
       const xtg = x.from ? resolveTowns([].concat(x.from), slat, slon) : null; // pin the historic base(s) if given
-      const vs = await buildVersanti(slat, slon, xtg ? 16 : 12, true, nameTokens(x.name), xtg);
+      const vs = await buildVersanti(slat, slon, xtg ? 16 : 12, x.short ? "short" : true, nameTokens(x.name), xtg); // short: walls/côtes floor (climbfloor.mjs)
       if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
       const id = "x-" + x.id;
       const rec = byId.get(id) || { id };
