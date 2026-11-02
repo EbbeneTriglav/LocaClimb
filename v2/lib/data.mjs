@@ -6,8 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=34";
-import { passDifficulty } from "./difficulty.mjs?v=34";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=35";
+import { passDifficulty } from "./difficulty.mjs?v=35";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -23,7 +23,8 @@ export async function loadIndex() {
   const [idx, regions, overrides] = await Promise.all([
     fetch(DATA + "osm_index.json", { cache: "no-cache" }).then((r) => r.json()),
     fetch(DATA + "osm_regions.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => []),
-    fetch(DATA + "curated_overrides.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => ({}))
+    fetch(DATA + "curated_overrides.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => ({})),
+    fetch(DATA + "name_fixes.json", { cache: "no-cache" }).then((r) => r.json()).then((o) => { FIXES = o || {}; }).catch(() => {})
   ]);
   // curated passes with everything the pipeline rebuilt (position, sides, difficulty, category),
   // exactly as the classic app applies curated_overrides.json
@@ -80,7 +81,13 @@ export function mergeIndex(idx, curated) {
    name of a nearby feature that is not the climb: fixed by id (position-based, stable). */
 const GENERIC = /^(passo|pass|colle|col|sella|forcella|valico|sattel|joch|bocchetta|coll|collado|puerto|prevoj|sedlo|przelecz|salita)$/i;
 const NAME_FIX = { "osm-rt4692440x1094453": "Ötztaler Gletscherstraße (Tiefenbach)" };
+/* data/name_fixes.json (by id, as the classic app's js/data.js): the name cyclists and race books
+   use when OSM's differs (Prato Nevoso for the Monte Malanotte node), and side relabels */
+let FIXES = {};
+export function setNameFixes(o) { FIXES = o || {}; }
 export function displayName(c) {
+  const fx = FIXES[c.id];
+  if (fx && fx.name) return fx.name;
   if (NAME_FIX[c.id]) return NAME_FIX[c.id];
   const n = String(c.name || "").trim();
   if (!n) return c.elevation ? `Salita a ${c.elevation} m` : "Salita senza nome";
@@ -119,6 +126,13 @@ export function nearby(lat, lon, km, limit) {
   const dLat = km / 111, dLon = km / (111 * Math.cos(lat * Math.PI / 180));
   return state.climbs.filter((c) => Math.abs(c.lat - lat) < dLat && Math.abs(c.lon - lon) < dLon && (c.difficulty || 0) >= 5)
     .sort((a, b) => (b.difficulty || 0) - (a.difficulty || 0)).slice(0, limit);
+}
+
+/* name_fixes.json "sides": { old label: new label } (e.g. "Da Sestriere" -> "Da Usseaux") */
+export function fixSides(vs, fx) {
+  if (!fx || !fx.sides) return vs;
+  for (const v of vs || []) if (v && fx.sides[v.side]) v.side = fx.sides[v.side];
+  return vs;
 }
 
 /* full record of one index entry, from its region file(s) */
@@ -165,6 +179,7 @@ export async function getClimb(id) {
       const r = await fullRecord(o).catch(() => null);
       for (const v of (r && r.versanti) || []) if (!vs.some((w) => sameOrigin(v, w))) vs.push(v);
     }
+    fixSides(vs, FIXES[c.id]);
     Object.assign(c, { versanti: vs, surfaceLabel: full.surfaceLabel, trafFeriale: full.trafFeriale, trafWeekend: full.trafWeekend, trucks: full.trucks });
   }
   c._full = true;
