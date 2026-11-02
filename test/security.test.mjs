@@ -43,3 +43,21 @@ test("Firestore: the community sums can only follow one's own vote, never be rew
   assert.match(block, /allow create, update: if verified\(\) && sumsFollowMyVote\(passId\);/);
   assert.ok(!/allow delete/.test(block.slice(0, block.indexOf("match /votes/"))), "the sums must not be deletable");
 });
+
+test("App Check: one reCAPTCHA Enterprise key for both apps, active only on locaride.app, declared in the privacy notice", () => {
+  const v2 = readFileSync(new URL("../v2/lib/diary.mjs", import.meta.url), "utf8"), st = readFileSync(new URL("../js/state.js", import.meta.url), "utf8");
+  const k1 = v2.match(/APPCHECK_KEY = "([^"]+)"/)[1], k2 = st.match(/var APPCHECK_KEY="([^"]+)"/)[1];
+  assert.equal(k1, k2);
+  assert.match(v2, /hostname !== "locaride\.app"/);
+  assert.match(v2, /ReCaptchaEnterpriseProvider\(APPCHECK_KEY\), true\)/, "Enterprise provider with token auto-refresh");
+  assert.match(page, /firebase-app-check-compat\.js" integrity="sha384-/);
+  const priv = readFileSync(new URL("../privacy.html", import.meta.url), "utf8");
+  assert.match(priv.slice(0, priv.indexOf("In English")), /Google reCAPTCHA/); assert.match(priv.slice(priv.indexOf("In English")), /Google reCAPTCHA/);
+});
+test("the reCAPTCHA badge is hidden only because the attribution is shown in the settings", () => {
+  const css = readFileSync(new URL("../v2/app.css", import.meta.url), "utf8"), app = readFileSync(new URL("../v2/app.mjs", import.meta.url), "utf8");
+  if (/\.grecaptcha-badge\s*\{[^}]*visibility:\s*hidden/.test(css)) {
+    assert.match(app, /Protetto da reCAPTCHA/);
+    assert.match(app, /policies\.google\.com\/privacy/); assert.match(app, /policies\.google\.com\/terms/);
+  }
+});
