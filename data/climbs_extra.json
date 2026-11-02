@@ -26,7 +26,7 @@
  { "id": "alpe-motta", "name": "Alpe Motta", "lat": 46.49892, "lon": 9.45271, "region": "Lombardia", "from": ["Campodolcino"] },
  { "id": "cari", "name": "Carì", "lat": 46.49332, "lon": 8.82123, "region": "Ticino", "from": ["Faido"] },
  { "id": "isola-2000", "name": "Isola 2000", "lat": 44.18662, "lon": 7.15789, "region": "Provence-Alpes-Côte d'Azur", "from": ["Isola"] },
- { "id": "la-rosiere", "name": "La Rosière", "lat": 45.6286, "lon": 6.84784, "region": "Auvergne-Rhône-Alpes", "from": ["Séez"] },
+ { "id": "la-rosiere", "name": "La Rosière", "lat": 45.6286, "lon": 6.84784, "region": "Auvergne-Rhône-Alpes", "from": ["Séez", [[45.62299, 6.80019], [45.62709, 6.82435], "Séez (D1090)"]] },
  { "id": "orcieres-merlette", "name": "Orcières-Merlette", "lat": 44.70005, "lon": 6.32911, "region": "Provence-Alpes-Côte d'Azur", "from": ["Orcières"] },
  { "id": "puy-de-dome", "name": "Puy de Dôme", "lat": 45.77265, "lon": 2.96441, "region": "Auvergne-Rhône-Alpes" },
  { "id": "mende-croix-neuve", "name": "Côte de la Croix Neuve (Montée Laurent Jalabert)", "lat": 44.5088, "lon": 3.51612, "region": "Occitanie", "from": ["Mende"] },
