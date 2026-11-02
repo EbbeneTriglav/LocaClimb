@@ -129,7 +129,7 @@ export const DICT = {
   "Road book da stampare": "Printable road book", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "One A4 page with profile, climbs, times, water and weather. PDF too",
   "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print",
   // main roads overlay (app.mjs setTraffic)
-  "Privacy": "Privacy", "niente pubblicità, niente statistiche": "no ads, no analytics", "informativa privacy": "privacy notice",
+  "Privacy": "Privacy", "niente pubblicità, visite contate senza cookie": "no ads, visits counted without cookies", "informativa privacy": "privacy notice",
   "Con l'account salviamo solo ciò che serve alle funzioni che usi:": "With an account we only store what the features you use need:",
   "Strade trafficate": "Busy roads", "Legenda delle strade": "Roads legend", "Strade": "Roads", "autostrade": "motorways", "statali": "main roads", "provinciali": "secondary",
   "Autostrade, statali e provinciali principali in evidenza, su ogni mappa: di solito più auto e camion. È la classe della strada, non un conteggio del traffico.": "Motorways, main and secondary roads highlighted on any map: usually more cars and trucks. It is the road class, not a traffic count.",

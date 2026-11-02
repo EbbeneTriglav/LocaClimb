@@ -136,13 +136,13 @@ function mcFmtDate(iso) { if (!iso) return ""; var p = iso.split("-"); return p.
 
 function mcOpenList() {
   var u = typeof lrcUser === "function" ? lrcUser() : null, db = typeof lrcDb === "function" ? lrcDb() : null;
-  if (!u || !db) { lrcModal("<h3>" + mcT("Le mie salite", "My climbs") + '</h3><p class="lrc-sub">' + mcT("Accedi per vedere le tue salite.", "Sign in to see your climbs.") + '</p><div class="lrc-btns"><button onclick="lrcClose()">' + mcT("Chiudi", "Close") + "</button></div>"); return; }
+  if (!u || !db) { lrcModal("<h3>" + mcT("Le mie salite", "My climbs") + '</h3><p class="lrc-sub">' + mcT("Accedi per vedere le tue salite.", "Sign in to see your climbs.") + '</p><div class="lrc-btns"><button data-lrc="lrcClose">' + mcT("Chiudi", "Close") + "</button></div>"); return; }
   lrcModal("<h3>" + mcT("Le mie salite", "My climbs") + "</h3><p class=\"lrc-sub\">" + mcT("Carico...", "Loading...") + "</p>");
   db.collection("users").doc(u.uid).collection("climbs").get().then(function (qs) {
     var list = []; qs.forEach(function (d) { var o = d.data(); o._doc = d.id; list.push(o); });
     list.sort(function (a, b) { return String(b.lastAt || "").localeCompare(String(a.lastAt || "")); });
     MC.cache = list; mcRender();
-  }).catch(function (e) { lrcModal("<h3>" + mcT("Le mie salite", "My climbs") + '</h3><p class="lrc-msg lrc-err">' + mcE(e && e.message ? e.message : e) + '</p><div class="lrc-btns"><button onclick="lrcClose()">OK</button></div>'); });
+  }).catch(function (e) { lrcModal("<h3>" + mcT("Le mie salite", "My climbs") + '</h3><p class="lrc-msg lrc-err">' + mcE(e && e.message ? e.message : e) + '</p><div class="lrc-btns"><button data-lrc="lrcClose">OK</button></div>'); });
 }
 
 function mcRender() {
@@ -164,12 +164,12 @@ function mcRender() {
         + '<div class="lrc-meta">' + (sides.length ? mcE(sides.join(", ")) + " &middot; " : "")
         + (d.lastAt ? mcT("ultima ", "last ") + mcFmtDate(d.lastAt) : mcT("senza data", "no date")) + "</div>"
         + mcBestHtml(d)
-        + '<div class="lrc-btns" style="margin-top:6px"><button onclick="mcOpen(' + i + ')">' + mcT("Apri", "Open") + "</button>"
-        + '<button onclick="mcDel(' + i + ')">' + mcT("Rimuovi", "Remove") + "</button></div></div>";
+        + '<div class="lrc-btns" style="margin-top:6px"><button data-lrc="mcOpen" data-i="' + i + '">' + mcT("Apri", "Open") + "</button>"
+        + '<button data-lrc="mcDel" data-i="' + i + '">' + mcT("Rimuovi", "Remove") + "</button></div></div>";
     });
   }
-  h += '<div class="lrc-btns"><button onclick="lrcClose()">' + mcT("Chiudi", "Close") + "</button>"
-    + (typeof gcPick === "function" ? '<button class="lrc-go" onclick="lrcClose();gcPick()">' + mcT("Carica un giro", "Load a ride") + "</button>" : "") + "</div>";
+  h += '<div class="lrc-btns"><button data-lrc="lrcClose">' + mcT("Chiudi", "Close") + "</button>"
+    + (typeof gcPick === "function" ? '<button class="lrc-go" data-lrc="lrcClose gcPick">' + mcT("Carica un giro", "Load a ride") + "</button>" : "") + "</div>";
   lrcModal(h);
 }
 

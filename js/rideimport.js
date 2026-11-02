@@ -244,7 +244,7 @@ function riHandleFiles(files) {
     RI.busy = false;
     lrcModal("<h3>" + riT("Non riesco a leggere i file", "Can't read the files") + '</h3><p class="lrc-msg lrc-err">'
       + gcEsc(e && e.message === "nodecomp" ? riT("Il browser non sa decomprimere: aggiornalo o usa Chrome, Edge, Firefox o Safari recenti.", "This browser can't decompress: update it or use a recent Chrome, Edge, Firefox or Safari.") : (e && e.message ? e.message : e))
-      + '</p><div class="lrc-btns"><button onclick="lrcClose()">' + riT("Chiudi", "Close") + "</button></div>");
+      + '</p><div class="lrc-btns"><button data-lrc="lrcClose">' + riT("Chiudi", "Close") + "</button></div>");
   });
 }
 
@@ -260,8 +260,8 @@ function riSummary(st) {
     + '<p class="lrc-sub">' + riT("I file restano sul tuo dispositivo: si salvano solo le salite note, con data, versante e tempi.", "Files stay on your device: only known climbs are saved, with date, side and times.")
     + (st.unknown ? " " + st.unknown + " " + riT("salite non sono ancora in LocaRide: caricando il singolo giro puoi proporle.", "climbs aren't in LocaRide yet: load that single ride to suggest them.") : "")
     + (st.bad ? " " + st.bad + " " + riT("file senza traccia o quote, saltati.", "files without track or elevation, skipped.") : "") + "</p>"
-    + '<div class="lrc-btns"><button onclick="lrcClose()">' + riT("Chiudi", "Close") + "</button>"
-    + (st.ens.length ? '<button class="lrc-go" id="ri-save" onclick="riSave()">&#x2705; ' + riT("Salva in Le mie salite", "Save to My climbs") + " (" + n + ")</button>" : "")
+    + '<div class="lrc-btns"><button data-lrc="lrcClose">' + riT("Chiudi", "Close") + "</button>"
+    + (st.ens.length ? '<button class="lrc-go" id="ri-save" data-lrc="riSave">&#x2705; ' + riT("Salva in Le mie salite", "Save to My climbs") + " (" + n + ")</button>" : "")
     + '</div><div class="lrc-msg" id="ri-msg"></div>';
   lrcModal(h);
 }

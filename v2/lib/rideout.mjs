@@ -11,7 +11,7 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes } from "./climb.mjs?v=29";
+import { gradeColor, difficultyColor, profileShapes } from "./climb.mjs?v=30";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
@@ -154,10 +154,15 @@ ${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
 <table><thead><tr><th style="text-align:right">km</th><th style="text-align:right">${T.when}</th><th>${T.where}</th><th style="text-align:right">${T.ele}</th><th>${d.weather ? T.wx : ""}</th></tr></thead><tbody>${rows}</tbody></table>
 <h2>${T.water}</h2><p>${water}</p>
 <footer><span>${esc(T.src)}</span><span>${d.url ? `<b>${esc(d.url.replace(/^https?:\/\//, "").slice(0, 60))}${d.url.length > 68 ? "…" : ""}</b>` : "locaride.app"}</span></footer>
-<button class="noprint" type="button" onclick="print()">${T.print}</button>
-<script>addEventListener("load", function () { setTimeout(function () { try { print(); } catch (e) {} }, 600); });</script>
+<button class="noprint" type="button" id="rbPrint">${T.print}</button>
+<script>${RB_SCRIPT}</script>
 </body></html>`;
 }
+
+/* The road book's only script, always the same text: the page opens as a blob: URL and inherits
+   the Content-Security-Policy of the app, which allows inline scripts only by hash. Its sha256 is
+   in _headers (test/csp.test.mjs keeps them in sync). No inline onclick: the button is wired here. */
+export const RB_SCRIPT = 'addEventListener("load",function(){var b=document.getElementById("rbPrint");if(b)b.addEventListener("click",function(){print()});setTimeout(function(){try{print()}catch(e){}},600)});';
 
 /* ------------------------------------------------------------------ the image (1080 x 1350, dark) */
 export function drawCard(ctx, d, fonts = { cond: "'Barlow Condensed', 'Arial Narrow', sans-serif", body: "Barlow, system-ui, sans-serif" }) {

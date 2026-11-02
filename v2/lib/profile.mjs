@@ -3,7 +3,7 @@
  * the cursor that follows the mouse or the finger on the profile and, on the map, along the road.
  * Pure: x/km/elevation/position maths. The SVG and the events live in app.mjs.
  */
-import { profileDist, eleAt, havKm, gradeColor } from "./climb.mjs?v=29";
+import { profileDist, eleAt, havKm, gradeColor } from "./climb.mjs?v=30";
 
 export const AXIS_W = 46;   // px of the viewBox kept on the left for the elevation labels
 
