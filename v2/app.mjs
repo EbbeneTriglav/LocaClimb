@@ -3,19 +3,20 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES } from "./lib/data.mjs?v=38";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=38";
-import { poisNear } from "./lib/poi.mjs?v=38";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=38";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=38";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=38";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=38";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=38";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat } from "./lib/propose.mjs?v=38";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=38";
-import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=38";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=38";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=38";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=39";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=39";
+import { poisNear } from "./lib/poi.mjs?v=39";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=39";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=39";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=39";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=39";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=39";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=39";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=39";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=39";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=39";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=39";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=39";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -1095,12 +1096,20 @@ async function fillProposals(u) {
   let rows = [], me = null;
   try { [rows, me] = await Promise.all([myProposals(u.uid), whoAmI(u)]); } catch { el.innerHTML = `<h3>Le mie proposte</h3><p class="note">Non riesco a leggere le tue proposte ora.</p>`; return; }
   if (!$("#props")) return;
-  const pts = points(rows), lv = levelOf(pts), nx = nextLevel(pts), en = document.documentElement.lang === "en";
-  const pct = nx ? Math.max(0, Math.min(100, Math.round((pts - lv.min) / ((nx.min - lv.min) || 1) * 100))) : 100;
+  // two badges (03/11/2026): the level of the region where you contributed most, and the global one
+  const reg = await loadRegions().catch(() => null);
+  if (!$("#props")) return;
+  const areaOf = (r) => (r.lat == null ? null : regionAt(reg, +r.lat, +r.lon) || COUNTRIES[countryNear(+r.lat, +r.lon)] || null);
+  const areas = pointsByArea(rows, areaOf), top = areas[0] || { area: null, pts: 0, lv: levelOf(0) };
+  const pts = points(rows), en = document.documentElement.lang === "en";
+  const pctOf = (p, lv, nx) => (nx ? Math.max(0, Math.min(100, Math.round((p - lv.min) / ((nx.min - lv.min) || 1) * 100))) : 100);
+  const badge = (title, lv, nx, p, where) => `<div class="lvl"><span class="lic">${lv.ic}</span><div><small class="mu">${esc(title)}</small><b>${esc(en ? lv.en : lv.it)}${where ? ` · ${esc(where)}` : ""}</b><i><u style="width:${pctOf(p, lv, nx)}%"></u></i>
+      <span class="mu">${nx ? `Ancora ${esc(nx.min - p)} ${nx.min - p === 1 ? "salita accettata" : "salite accettate"}${where ? ` in ${esc(where)}` : ""} per diventare ${esc(en ? nx.en : nx.it)}` : "Livello massimo. Grazie."}</span></div></div>`;
+  const glv = levelOf(pts, GLOBAL_LEVELS), gnx = nextLevel(pts, GLOBAL_LEVELS);
   const st = (r) => (r.status === "approved" ? "Pubblicata" : r.status === "rejected" ? "Non accolta" : "In revisione");
   el.innerHTML = `<h3>Le mie proposte</h3>
-    <div class="lvl"><span class="lic">${lv.ic}</span><div><b>${esc(en ? lv.en : lv.it)}</b><i><u style="width:${pct}%"></u></i>
-      <span class="mu">${nx ? `Ancora ${esc(nx.min - pts)} ${nx.min - pts === 1 ? "salita accettata" : "salite accettate"} per diventare ${esc(en ? nx.en : nx.it)}` : "Livello massimo. Grazie."}</span></div></div>
+    <div class="lvls">${badge("Livello in regione", top.lv, nextLevel(top.pts), top.pts, top.area)}${badge("Livello globale", glv, gnx, pts, "")}</div>
+    ${areas.length > 1 ? `<p class="mu lvareas">${areas.map((a) => `${esc(a.area)}: ${esc(en ? a.lv.en : a.lv.it)} (${esc(a.pts)})`).join(" · ")}</p>` : ""}
     ${rows.length ? `<ul class="rides">${rows.map((r, i) => `<li><div><b>${esc(r.name)}</b><span class="mu"><span class="pst ${esc(r.status)}">${st(r)}</span> · ${esc(r.side || "")} · ${num(+r.km || 0, 1)} km · +${esc(r.gain || 0)} m${r.reviewNote ? " · Nota: " + esc(r.reviewNote) : ""}</span></div>
       ${r.status === "pending" ? `<div class="ra"><button type="button" class="btn" data-wd="${i}">Ritira</button></div>` : ""}</li>`).join("")}</ul>`
     : `<p class="note">${me && me.canPropose ? "Nessuna proposta ancora. Disegna nel Giro una salita che manca (dalla base alla cima) e premi «Proponi salita»." : "Le proposte sono su invito durante la beta."}</p>`}`;

@@ -6,8 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=38";
-import { passDifficulty } from "./difficulty.mjs?v=38";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=39";
+import { passDifficulty } from "./difficulty.mjs?v=39";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -274,6 +274,17 @@ export function assignCountries(climbs, regions) {
     c.cc = best ? best.cc : null;
   }
   return climbs;
+}
+/* country code of a point: the nearest loaded climb that has one (state from loadIndex) */
+export function countryNear(lat, lon) {
+  if (!state) return null;
+  let best = null, bd = Infinity;
+  for (const c of state.climbs) {
+    if (!c.cc) continue;
+    const d = (c.lat - lat) ** 2 + ((c.lon - lon) * Math.cos(lat * Math.PI / 180)) ** 2;
+    if (d < bd) { bd = d; best = c.cc; }
+  }
+  return bd < 1 ? best : null; // within ~100 km
 }
 /* trucks on the climb: "no" (forbidden), "rari" (default), "possibili", "si" */
 export function fewTrucks(c) { const t = c.tk || c.trucks; return t !== "possibili" && t !== "si"; }
