@@ -20,7 +20,7 @@ export const DICT_ES = {
   "Italia": "Italia", "Austria": "Austria", "Svizzera": "Suiza", "Francia": "Francia", "Germania": "Alemania", "Spagna": "España",
   "Slovenia": "Eslovenia", "Croazia": "Croacia", "Belgio": "Bélgica", "Bosnia ed Erzegovina": "Bosnia y Herzegovina", "Cechia": "Chequia",
   "Grecia": "Grecia", "Irlanda": "Irlanda", "Marocco": "Marruecos", "Montenegro, Albania, Macedonia": "Montenegro, Albania, Macedonia",
-  "Norvegia": "Noruega", "Paesi Bassi e Lussemburgo": "Países Bajos y Luxemburgo", "Polonia": "Polonia", "Portogallo": "Portugal",
+  "Norvegia": "Noruega", "Stati Uniti": "Estados Unidos", "Canada": "Canadá", "Messico": "México", "Perù": "Perú", "Brasile": "Brasil", "Cile": "Chile", "Paesi Bassi e Lussemburgo": "Países Bajos y Luxemburgo", "Polonia": "Polonia", "Portogallo": "Portugal",
   "Regno Unito": "Reino Unido", "Romania": "Rumanía", "Serbia": "Serbia", "Slovacchia": "Eslovaquia", "Svezia": "Suecia", "Turchia": "Turquía",
   "Ungheria": "Hungría", "Bulgaria": "Bulgaria", "Andorra": "Andorra", "Estonia": "Estonia", "Finlandia": "Finlandia", "Lettonia": "Letonia",
   "Lituania": "Lituania",
