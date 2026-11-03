@@ -101,6 +101,46 @@ on:
           - confine-me-al
           - confine-es-pt
           - confine-ro-rs
+          # --- Americhe (03/11/2026) ---
+          - usa-colorado
+          - usa-california-nord
+          - usa-california-sud
+          - usa-utah
+          - usa-arizona
+          - usa-new-mexico
+          - usa-nevada
+          - usa-idaho
+          - usa-montana
+          - usa-wyoming
+          - usa-washington
+          - usa-oregon
+          - usa-north-carolina
+          - usa-tennessee
+          - usa-virginia
+          - usa-west-virginia
+          - usa-vermont
+          - usa-new-hampshire
+          - usa-new-york
+          - usa-pennsylvania
+          - usa-georgia
+          - usa-kentucky
+          - usa-maine
+          - usa-massachusetts
+          - canada-british-columbia
+          - canada-alberta
+          - canada-quebec
+          - mexico
+          - costa-rica
+          - guatemala
+          - colombia
+          - ecuador
+          - venezuela
+          - peru
+          - bolivia
+          - chile
+          - argentina
+          - brazil-sul
+          - brazil-sudeste
       dry_run:
         description: "Solo verifica: risolve il target e si ferma"
         required: false

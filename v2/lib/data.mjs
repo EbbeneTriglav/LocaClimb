@@ -6,8 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=37";
-import { passDifficulty } from "./difficulty.mjs?v=37";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=38";
+import { passDifficulty } from "./difficulty.mjs?v=38";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -227,18 +227,24 @@ export const COUNTRIES = {
   BE: "Belgio", BG: "Bulgaria", CH: "Svizzera", CZ: "Cechia", DE: "Germania", EE: "Estonia", ES: "Spagna",
   FI: "Finlandia", FR: "Francia", GB: "Regno Unito", GR: "Grecia", HR: "Croazia", HU: "Ungheria", IE: "Irlanda",
   LT: "Lituania", LV: "Lettonia", MA: "Marocco", NLLU: "Paesi Bassi e Lussemburgo", NO: "Norvegia", PL: "Polonia",
-  PT: "Portogallo", RO: "Romania", RS: "Serbia", SE: "Svezia", SI: "Slovenia", SK: "Slovacchia", TR: "Turchia"
+  PT: "Portogallo", RO: "Romania", RS: "Serbia", SE: "Svezia", SI: "Slovenia", SK: "Slovacchia", TR: "Turchia",
+  // the Americas (03/11/2026)
+  US: "Stati Uniti", CA: "Canada", MX: "Messico", CR: "Costa Rica", GT: "Guatemala", CO: "Colombia", EC: "Ecuador",
+  VE: "Venezuela", PE: "Perù", BO: "Bolivia", CL: "Cile", AR: "Argentina", BR: "Brasile"
 };
 const CODE = { ad: "AD", at: "AT", ba: "BA", bal: "BAL", be: "BE", bg: "BG", ch: "CH", cz: "CZ", de: "DE", ee: "EE", es: "ES", fi: "FI",
   fr: "FR", gb: "GB", gr: "GR", hr: "HR", hu: "HU", ie: "IE", lt: "LT", lv: "LV", ma: "MA", nl: "NLLU", no: "NO", pl: "PL", pt: "PT",
-  ro: "RO", rs: "RS", se: "SE", si: "SI", sk: "SK", tr: "TR", sud: "IT" };
+  ro: "RO", rs: "RS", se: "SE", si: "SI", sk: "SK", tr: "TR", sud: "IT",
+  us: "US", ca: "CA", mx: "MX", cr: "CR", gt: "GT", co: "CO", ec: "EC", ve: "VE", pe: "PE", bo: "BO", cl: "CL", ar: "AR", br: "BR" };
 // discover zones are named after the country (or an Italian region)
 const DISC = { andorra: "AD", austria: "AT", slovenia: "SI", switzerland: "CH", france: "FR", spain: "ES", germany: "DE", portugal: "PT",
   croatia: "HR", poland: "PL", czech: "CZ", slovakia: "SK", romania: "RO", bulgaria: "BG", greece: "GR", norway: "NO", sweden: "SE",
   belgium: "BE", netherlands: "NLLU", luxembourg: "NLLU", hungary: "HU", serbia: "RS", bosnia: "BA", ireland: "IE", gb: "GB", england: "GB",
   scotland: "GB", wales: "GB", turkey: "TR", morocco: "MA", finland: "FI", estonia: "EE", latvia: "LV", lithuania: "LT",
   italy: "IT", er: "IT", lombardia: "IT", liguria: "IT", piemonte: "IT", toscana: "IT", trentino: "IT", veneto: "IT", colli: "IT", marche: "IT",
-  lazio: "IT", abruzzo: "IT", campania: "IT", sicilia: "IT", sardegna: "IT", calabria: "IT", puglia: "IT", umbria: "IT", friuli: "IT" };
+  lazio: "IT", abruzzo: "IT", campania: "IT", sicilia: "IT", sardegna: "IT", calabria: "IT", puglia: "IT", umbria: "IT", friuli: "IT",
+  usa: "US", canada: "CA", mexico: "MX", costa: "CR", guatemala: "GT", colombia: "CO", ecuador: "EC", venezuela: "VE", peru: "PE",
+  bolivia: "BO", chile: "CL", argentina: "AR", brazil: "BR" };
 export function countryOfFile(file) {
   const m = /^osm_passes(?:_(.+))?\.json$/.exec(String(file || ""));
   if (!m) return null;

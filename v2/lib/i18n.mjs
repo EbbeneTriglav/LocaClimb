@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=37";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=38";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -31,7 +31,7 @@ export const DICT = {
   "Italia": "Italy", "Austria": "Austria", "Svizzera": "Switzerland", "Francia": "France", "Germania": "Germany", "Spagna": "Spain",
   "Slovenia": "Slovenia", "Croazia": "Croatia", "Belgio": "Belgium", "Bosnia ed Erzegovina": "Bosnia and Herzegovina", "Cechia": "Czechia",
   "Grecia": "Greece", "Irlanda": "Ireland", "Marocco": "Morocco", "Montenegro, Albania, Macedonia": "Montenegro, Albania, Macedonia",
-  "Norvegia": "Norway", "Paesi Bassi e Lussemburgo": "Netherlands and Luxembourg", "Polonia": "Poland", "Portogallo": "Portugal",
+  "Norvegia": "Norway", "Stati Uniti": "United States", "Canada": "Canada", "Messico": "Mexico", "Perù": "Peru", "Cile": "Chile", "Brasile": "Brazil", "Paesi Bassi e Lussemburgo": "Netherlands and Luxembourg", "Polonia": "Poland", "Portogallo": "Portugal",
   "Regno Unito": "United Kingdom", "Romania": "Romania", "Serbia": "Serbia", "Slovacchia": "Slovakia", "Svezia": "Sweden", "Turchia": "Turkey",
   "Ungheria": "Hungary", "Bulgaria": "Bulgaria", "Andorra": "Andorra", "Estonia": "Estonia", "Finlandia": "Finland", "Lettonia": "Latvia", "Lituania": "Lithuania",
   // climb page
