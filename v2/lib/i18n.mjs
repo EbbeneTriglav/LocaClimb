@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=38";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=39";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -161,7 +161,7 @@ export const DICT = {
   "Nome della salita": "Climb name", "Da dove si sale": "Which side", "Note per chi controlla (facoltative)": "Notes for the reviewer (optional)", "Invia proposta": "Send suggestion",
   "Manca il nome della salita.": "The climb name is missing.", "Proposta inviata · la trovi nel Diario": "Suggestion sent · you'll find it in the Diary",
   "Le mie proposte": "My suggestions", "Non riesco a leggere le tue proposte ora.": "Can't read your suggestions right now.", "Pubblicata": "Published", "Non accolta": "Declined", "In revisione": "Under review",
-  "Ritira": "Withdraw", "Non ritirata": "Not withdrawn", "Livello massimo. Grazie.": "Top level. Thank you.", "Le proposte sono su invito durante la beta.": "Suggestions are invite-only during the beta.",
+  "Ritira": "Withdraw", "Non ritirata": "Not withdrawn", "Livello in regione": "Level in your region", "Livello globale": "Global level", "Ciclista": "Rider", "Esploratore": "Explorer", "Cartografo": "Cartographer", "Leggenda LocaRide": "LocaRide Legend", "Livello massimo. Grazie.": "Top level. Thank you.", "Le proposte sono su invito durante la beta.": "Suggestions are invite-only during the beta.",
   "Nessuna proposta ancora. Disegna nel Giro una salita che manca (dalla base alla cima) e premi «Proponi salita».": "No suggestions yet. Draw a missing climb in the Ride tab (base to top) and press «Suggest a climb».",
   "Vedi": "Show", "Approva": "Approve", "Rifiuta": "Reject", "Conferma rifiuto": "Confirm rejection", "Approvata": "Approved", "Rifiutata": "Rejected", "Non salvata": "Not saved", "Coda vuota.": "Queue is empty.",
   "Foresto": "Out-of-Towner", "Turista del pedale": "Pedal Tourist", "Cane Sciolto": "Stray Dog", "Servono le quote: ricalcola il percorso": "Elevations needed: recompute the route",
@@ -210,7 +210,8 @@ export const RULES = [
   [/^(.+): il file va direttamente all'app che scegli\.$/, "$1: the file goes straight to the app you pick."],
   [/^(.+): nessun sito può inviare il file da solo a questo servizio: servono questi due passaggi\.$/, "$1: no website can send the file to this service by itself: these two steps are needed."],
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`],
-  [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "At the top $1° · descent feels like $2°"]
+  [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "At the top $1° · descent feels like $2°"],
+  [/^Ancora ([\d.]+) salit[ae] accettat[ae] in (.+) per diventare (.+)$/, (m, n, x, l) => `${n} more accepted climb${n === "1" ? "" : "s"} in ${x} to become ${l}`]
 ];
 
 const TABLES = { en: [DICT, RULES], es: [DICT_ES, RULES_ES] };

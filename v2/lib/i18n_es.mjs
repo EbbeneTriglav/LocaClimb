@@ -168,7 +168,7 @@ export const DICT_ES = {
   "Invia proposta": "Enviar propuesta", "Manca il nome della salita.": "Falta el nombre de la subida.",
   "Proposta inviata · la trovi nel Diario": "Propuesta enviada · la tienes en el Diario", "Le mie proposte": "Mis propuestas",
   "Non riesco a leggere le tue proposte ora.": "Ahora no puedo leer tus propuestas.", "Pubblicata": "Publicada", "Non accolta": "No aceptada",
-  "In revisione": "En revisión", "Ritira": "Retirar", "Non ritirata": "No retirada", "Livello massimo. Grazie.": "Nivel máximo. Gracias.",
+  "In revisione": "En revisión", "Ritira": "Retirar", "Non ritirata": "No retirada", "Livello in regione": "Nivel en tu región", "Livello globale": "Nivel global", "Ciclista": "Ciclista", "Esploratore": "Explorador", "Cartografo": "Cartógrafo", "Leggenda LocaRide": "Leyenda LocaRide", "Livello massimo. Grazie.": "Nivel máximo. Gracias.",
   "Le proposte sono su invito durante la beta.": "Las propuestas son por invitación durante la beta.",
   "Nessuna proposta ancora. Disegna nel Giro una salita che manca (dalla base alla cima) e premi «Proponi salita».": "Aún no hay propuestas. Dibuja en Ruta una subida que falte (de la base a la cima) y pulsa «Proponer subida».",
   "Vedi": "Ver", "Approva": "Aprobar", "Rifiuta": "Rechazar", "Conferma rifiuto": "Confirmar rechazo", "Approvata": "Aprobada", "Rifiutata": "Rechazada",
@@ -219,5 +219,6 @@ export const RULES_ES = [
   [/^(.+): il file va direttamente all'app che scegli\.$/, "$1: el archivo va directamente a la app que elijas."],
   [/^(.+): nessun sito può inviare il file da solo a questo servizio: servono questi due passaggi\.$/, "$1: ninguna web puede enviar el archivo sola a este servicio: hacen falta estos dos pasos."],
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Pendientes poco creíbles para una carretera asfaltada (${x.replace(" su ", " en ")}): probablemente un error del modelo del terreno (túnel, puente) o un tramo que no es carretera asfaltada. Por eso no está entre las subidas más duras.`],
-  [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "En la cima $1° · en la bajada sensación de $2°"]
+  [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "En la cima $1° · en la bajada sensación de $2°"],
+  [/^Ancora ([\d.]+) salit[ae] accettat[ae] in (.+) per diventare (.+)$/, (m, n, x, l) => `${n} subida${n === "1" ? "" : "s"} aceptada${n === "1" ? "" : "s"} más en ${x} para ser ${l}`]
 ];

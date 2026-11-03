@@ -5,7 +5,7 @@
  * approves; scripts/import_proposals.mjs moves approved ones into data/osm_passes_user.json.
  * Pure and tested (test/v2-propose.test.mjs).
  */
-import { havKm } from "./climb.mjs?v=38";
+import { havKm } from "./climb.mjs?v=39";
 
 export const MAXPTS = 800, MINKM = 1.5, MINGAIN = 100;
 /* levels count ACCEPTED climbs (a second side of the same pass counts half), as the classic app */
@@ -15,8 +15,27 @@ export const LEVELS = [
   { min: 5, it: "Cane Sciolto", en: "Stray Dog", ic: "🐕" },
   { min: 15, it: "Local Rider", en: "Local Rider", ic: "🏅" }
 ];
-export function levelOf(pts) { let lv = LEVELS[0]; for (const l of LEVELS) if (pts >= l.min) lv = l; return lv; }
-export function nextLevel(pts) { return LEVELS.find((l) => l.min > pts) || null; }
+/* 03/11/2026 (Rick): two badges. The levels above are earned REGION BY REGION (Italian region, elsewhere
+   the country): 15 accepted climbs in Emilia-Romagna = Local Rider there. The global badge counts every
+   accepted climb, with higher thresholds. */
+export const GLOBAL_LEVELS = [
+  { min: 0, it: "Ciclista", en: "Rider", ic: "🚲" },
+  { min: 10, it: "Esploratore", en: "Explorer", ic: "🧭" },
+  { min: 30, it: "Cartografo", en: "Cartographer", ic: "🗺️" },
+  { min: 75, it: "Leggenda LocaRide", en: "LocaRide Legend", ic: "🌍" }
+];
+export function levelOf(pts, list = LEVELS) { let lv = list[0]; for (const l of list) if (pts >= l.min) lv = l; return lv; }
+export function nextLevel(pts, list = LEVELS) { return list.find((l) => l.min > pts) || null; }
+/* accepted points per area (region or country), best first; areaOf(row) -> name */
+export function pointsByArea(rows, areaOf) {
+  const m = new Map();
+  for (const r of rows) {
+    if (r.status !== "approved") continue;
+    const a = areaOf(r) || "Altro";
+    m.set(a, (m.get(a) || 0) + (r.secondSide ? 0.5 : 1));
+  }
+  return [...m].map(([area, pts]) => ({ area, pts, lv: levelOf(pts) })).sort((a, b) => b.pts - a.pts || a.area.localeCompare(b.area));
+}
 export function points(rows) { return rows.reduce((a, r) => a + (r.status === "approved" ? (r.secondSide ? 0.5 : 1) : 0), 0); }
 
 const DIRS = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];

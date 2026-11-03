@@ -426,3 +426,9 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 /* what to wear (verdict box): the descent decides */
 .wear { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.08); }
 .wear p { margin: 4px 0 0; font-size: 13px; }
+/* two level badges: by region and global (03/11/2026) */
+.lvls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lvls .lvl { margin: 6px 0 4px; }
+.lvl small { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.lvareas { font-size: 12px; margin: 2px 0 10px; }
+@media (max-width: 420px) { .lvls { grid-template-columns: 1fr; } }
