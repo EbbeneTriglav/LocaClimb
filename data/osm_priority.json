@@ -1,10 +1,10 @@
 {
  "since": "2026-11-03",
- "note": "02/11/2026 (Rick): prima la Spagna (lancio europeo, salite spagnole migliorate), poi la Francia; insieme ricostruiscono anche i passi corretti dalla PR climbs-europe. osm-rotate le fa per prime, poi torna al giro normale. Per una nuova coda: cambia since e targets.",
+ "note": "02/11/2026 (Rick): prima la Spagna (lancio europeo, salite spagnole migliorate), poi la Francia; insieme ricostruiscono anche i passi corretti dalla PR climbs-europe. osm-rotate le fa per prime, poi torna al giro normale. 03/11/2026: aggiunte italy-sud (Blockhaus, Roccaraso, Campo Imperatore, Etna, Sirino), belgium, netherlands-luxembourg e france-nord (muri delle Classiche) dopo la Spagna. Per una nuova coda: cambia since e targets.",
  "targets": [
-  "spain-nord", "spain-centro", "spain-sud", "spain-baleari", "spain-canarie", "andorra", "confine-es-pt", "confine-fr-es",
+  "spain-nord", "spain-centro", "spain-sud", "spain-baleari", "spain-canarie", "andorra", "italy-sud", "belgium", "netherlands-luxembourg", "france-nord", "confine-es-pt", "confine-fr-es",
   "france-alps", "france-rhone-alpes", "france-paca", "france-midi-pyrenees", "france-languedoc", "france-aquitaine", "france-auvergne",
-  "france-corse", "france-jura", "france-est", "france-centro-ovest", "france-nord", "france-bretagne-idf", "confine-fr-ch", "confine-fr-de", "confine-it-fr",
+  "france-corse", "france-jura", "france-est", "france-centro-ovest", "france-bretagne-idf", "confine-fr-ch", "confine-fr-de", "confine-it-fr",
   "switzerland", "slovenia"
  ]
 }

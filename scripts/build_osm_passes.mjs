@@ -1280,8 +1280,10 @@ async function main() {
         const tp = ev ? pickTop(nodes, ev) : null;
         if (tp && (tp.lat !== slat || tp.lon !== slon)) { console.log("    ~ " + x.name + ": top moved " + Math.round(tp.d * 1000) + " m along the road (" + Math.round(tp.ele) + " m)"); slat = tp.lat; slon = tp.lon; }
       }
-      const xtg = x.from ? resolveTowns([].concat(x.from), slat, slon) : null; // pin the historic base(s) if given
-      const vs = await buildVersanti(slat, slon, xtg ? 16 : 12, x.short ? "short" : true, nameTokens(x.name), xtg); // short: walls/côtes floor (climbfloor.mjs)
+      // pin the historic base(s) if given. Road range 35 km (was 16: Cogne came out 15.9 km instead of 22, and a base
+      // farther than 16 x 1.3 km in a straight line - Châtillon for Cervinia, Assergi for Campo Imperatore - was dropped)
+      const xtg = x.from ? resolveTowns([].concat(x.from), slat, slon) : null;
+      const vs = await buildVersanti(slat, slon, xtg ? 35 : 12, x.short ? "short" : true, nameTokens(x.name), xtg); // short: walls/côtes floor (climbfloor.mjs)
       if (!vs.length) { console.log("    - " + x.name + ": no climb"); continue; }
       const id = "x-" + x.id;
       const rec = byId.get(id) || { id };
