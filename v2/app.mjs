@@ -3,20 +3,21 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=39";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=39";
-import { poisNear } from "./lib/poi.mjs?v=39";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=39";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=39";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=39";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=39";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=39";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=39";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=39";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=39";
-import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=39";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=39";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=39";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=40";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=40";
+import { poisNear } from "./lib/poi.mjs?v=40";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=40";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=40";
+import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=40";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=40";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=40";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=40";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=40";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=40";
+import { CARD_W, CARD_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=40";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=40";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=40";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=40";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -465,11 +466,12 @@ function renderClimb() {
     <section class="sec" id="news" hidden></section>
     <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
     ${stravaHtml(c)}
-    <div class="actions"><button type="button" class="btn pri" id="sendBtn">Manda al dispositivo</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
+    <div class="actions acts4"><button type="button" class="btn pri" id="sendBtn">Manda al dispositivo</button><button type="button" class="btn" id="postBtn">Crea post</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
   </div>`;
   wireProfile($("#climbProf"), v, 220, 10);
   panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; S.sideSwitch = true; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
+  $("#postBtn").addEventListener("click", () => postDialog(c, v));
   $("#sendBtn").addEventListener("click", () => { const f = climbGpx(c, v); sendToDevice(c.name + (v.side ? " · " + v.side : ""), f.name, f.text); });
   $("#share").addEventListener("click", () => share(c));
   const wr = $("#warnRep"); if (wr) wr.addEventListener("click", () => openReport(c));
@@ -1361,6 +1363,69 @@ function mapCursor(e) {
   showCursor(km, true);
 }
 map.once("style.load", () => { for (const id of ["selm-line", "route-line"]) { map.on("mousemove", id, mapCursor); map.on("mouseleave", id, hideCursor); } });
+
+/* ------------------------------------------------------------------ "Crea post": the climb as a picture (lib/postcard.mjs)
+   A second, hidden MapLibre map (fixed size, preserveDrawingBuffer) shows the chosen side in 3D, looking from the
+   start towards the summit; its canvas is the background of the picture. Tiles and DEM come with CORS: no tainted
+   canvas. If the snapshot fails (offline, WebGL lost) the picture is drawn on the plain dark background. */
+async function snapClimb(v, w, h) {
+  const t = v.track || [];
+  if (t.length < 2 || typeof maplibregl === "undefined") return null;
+  const pr = 2, box = document.createElement("div");
+  box.style.cssText = `position:fixed;left:-${w + 200}px;top:0;width:${w / pr}px;height:${h / pr}px;pointer-events:none;opacity:0`;
+  document.body.appendChild(box);
+  let m = null;
+  try {
+    m = new maplibregl.Map({ container: box, style: BASE.style, interactive: false, attributionControl: false, preserveDrawingBuffer: true, pixelRatio: pr, fadeDuration: 0, maxPitch: 75 });
+    const ok = await new Promise((res) => { m.once("load", () => res(true)); setTimeout(() => res(false), 15000); });
+    if (!ok) return null;
+    m.addSource("dem", TERRAIN);
+    m.addLayer({ id: "hillshade", type: "hillshade", source: "dem", paint: { "hillshade-shadow-color": "#05080C", "hillshade-highlight-color": "#3A4D63", "hillshade-accent-color": "#1A2531", "hillshade-exaggeration": 0.55 } }, m.getStyle().layers.find((x) => x.type === "symbol")?.id);
+    m.setTerrain({ source: "dem", exaggeration: 1.35 });
+    const coords = t.map((q) => [q[1], q[0]]);
+    m.addSource("p", { type: "geojson", lineMetrics: true, data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } } });
+    m.addLayer({ id: "p-case", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 13, "line-opacity": 0.9 } });
+    m.addLayer({ id: "p-line", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": 7.5, "line-gradient": lineGradient(v) } });
+    const b = coords.reduce((bb, q) => bb.extend(q), new maplibregl.LngLatBounds(coords[0], coords[0]));
+    const H = h / pr, cam = m.cameraForBounds(b, { padding: { top: H * 0.40, bottom: H * 0.30, left: 50, right: 50 }, bearing: bearingOf(t) });
+    if (cam) m.jumpTo({ center: cam.center, zoom: cam.zoom - 0.25, bearing: cam.bearing, pitch: 55 });
+    await new Promise((res) => { m.once("idle", res); setTimeout(res, 20000); });
+    const out = document.createElement("canvas"); out.width = w; out.height = h;
+    out.getContext("2d").drawImage(m.getCanvas(), 0, 0, w, h);
+    return out;
+  } catch { return null; } finally { try { if (m) m.remove(); } catch { /* gone */ } box.remove(); }
+}
+async function postDialog(c, v) {
+  openDialog(`<div class="dform shr"><div class="dh"><h2>Crea post</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
+    <p class="note">${esc(c.name)}${v.side ? " · " + esc(v.side) : ""}: la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava.</p>
+    <div class="seg" role="group" aria-label="Formato"><button type="button" data-fmt="post" aria-pressed="true">Post 4:5</button><button type="button" data-fmt="story" aria-pressed="false">Storia 9:16</button></div>
+    <div id="pcOut"></div></div>`);
+  const cache = {};
+  const paint = async (fmt) => {
+    const out = $("#pcOut"); if (!out) return;
+    out.innerHTML = `<p class="note">Preparo l'immagine… (qualche secondo: carico la vista 3D)</p>`;
+    const sz = fmt === "story" ? STORY : POST;
+    if (!cache[fmt]) {
+      try { await Promise.all([document.fonts.load("italic 800 80px 'Barlow Condensed'"), document.fonts.load("700 40px Barlow"), document.fonts.load("500 30px Barlow")]); } catch { /* system font */ }
+      const bg = await snapClimb(v, sz.w, sz.h);
+      const cv = document.createElement("canvas"); cv.width = sz.w; cv.height = sz.h;
+      drawPost(cv.getContext("2d"), c, v, { w: sz.w, h: sz.h, lang: LANG, bg });
+      cache[fmt] = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.92));
+    }
+    const blob = cache[fmt], o2 = $("#pcOut"); if (!blob || !o2) return;
+    const name = "locaride_" + String(c.name || "salita").normalize("NFD").replace(/[^\w]+/g, "_").replace(/^_|_$/g, "").toLowerCase() + (fmt === "story" ? "_storia" : "") + ".jpg";
+    const file = new File([blob], name, { type: "image/jpeg" }), url = URL.createObjectURL(blob);
+    const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
+    o2.innerHTML = `<img class="shimg" src="${url}" alt="Anteprima del post">
+      <div class="actions" style="position:static">${canShare ? `<button type="button" class="btn pri" id="pcGo">Condividi</button>` : ""}<button type="button" class="btn ${canShare ? "" : "pri"}" id="pcDl">Scarica</button></div>`;
+    const go = $("#pcGo"); if (go) go.addEventListener("click", async () => { try { await navigator.share({ files: [file], title: c.name + " · LocaRide" }); } catch { /* cancelled */ } });
+    $("#pcDl").addEventListener("click", () => { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); });
+  };
+  dlg.querySelectorAll("[data-fmt]").forEach((b) => b.addEventListener("click", () => {
+    dlg.querySelectorAll("[data-fmt]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); paint(b.dataset.fmt);
+  }));
+  paint("post");
+}
 
 /* ------------------------------------------------------------------ share the ride: link, image, road book (lib/rideout.mjs) */
 const giroUrl = () => location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops);
