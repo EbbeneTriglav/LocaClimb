@@ -87,7 +87,7 @@ export function drawPost(ctx, c, v, opt = {}) {
   ctx.textAlign = "left"; ctx.fillStyle = TXc; fit(t.small, W - 128, 700, 46, body); ctx.fillText(t.small, 64, py + ph + 70);
   if (t.from) { ctx.fillStyle = MU; fit(t.from, W - 128, 500, 34, body); ctx.fillText(t.from, 64, py + ph + 122); }
   ctx.fillStyle = MU; ctx.font = font(500, 22, body);
-  ctx.fillText(opt.credit || (opt.photo ? "© OpenStreetMap" : "© OpenStreetMap · OpenFreeMap · Mapzen"), 64, H - 52);
+  ctx.fillText(opt.credit || (opt.photo ? "© OpenStreetMap" : opt.bg ? "© OpenStreetMap · Sentinel-2 cloudless 2016 EOX (CC BY 4.0) · Mapzen" : "© OpenStreetMap"), 64, H - 52);
   ctx.fillStyle = ACC; ctx.font = font(800, 40, cond, true); ctx.textAlign = "right"; ctx.fillText("locaride.app", W - 64, H - 48);
   return t;
 }

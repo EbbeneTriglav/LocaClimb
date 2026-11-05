@@ -1365,7 +1365,8 @@ function mapCursor(e) {
 map.once("style.load", () => { for (const id of ["selm-line", "route-line"]) { map.on("mousemove", id, mapCursor); map.on("mouseleave", id, hideCursor); } });
 
 /* ------------------------------------------------------------------ "Crea post": the climb as a picture (lib/postcard.mjs)
-   A second, hidden MapLibre map (fixed size, preserveDrawingBuffer) shows the chosen side in 3D, looking from the
+   A second, hidden MapLibre map on the satellite basemap (Sentinel-2 cloudless 2016, CC BY 4.0: it looks like a photo;
+   the dark style read as a black slab) (fixed size, preserveDrawingBuffer) shows the chosen side in 3D, looking from the
    start towards the summit; its canvas is the background of the picture. Tiles and DEM come with CORS: no tainted
    canvas. If the snapshot fails (offline, WebGL lost) the picture is drawn on the plain dark background. */
 async function snapClimb(v, w, h) {
@@ -1376,19 +1377,19 @@ async function snapClimb(v, w, h) {
   document.body.appendChild(box);
   let m = null;
   try {
-    m = new maplibregl.Map({ container: box, style: BASE.style, interactive: false, attributionControl: false, preserveDrawingBuffer: true, pixelRatio: pr, fadeDuration: 0, maxPitch: 75 });
+    m = new maplibregl.Map({ container: box, style: basemap("satellite").style, interactive: false, attributionControl: false, preserveDrawingBuffer: true, pixelRatio: pr, fadeDuration: 0, maxPitch: 75 });
     const ok = await new Promise((res) => { m.once("load", () => res(true)); setTimeout(() => res(false), 15000); });
     if (!ok) return null;
     m.addSource("dem", TERRAIN);
-    m.addLayer({ id: "hillshade", type: "hillshade", source: "dem", paint: { "hillshade-shadow-color": "#05080C", "hillshade-highlight-color": "#3A4D63", "hillshade-accent-color": "#1A2531", "hillshade-exaggeration": 0.55 } }, m.getStyle().layers.find((x) => x.type === "symbol")?.id);
     m.setTerrain({ source: "dem", exaggeration: 1.35 });
     const coords = t.map((q) => [q[1], q[0]]);
     m.addSource("p", { type: "geojson", lineMetrics: true, data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } } });
-    m.addLayer({ id: "p-case", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 13, "line-opacity": 0.9 } });
-    m.addLayer({ id: "p-line", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": 7.5, "line-gradient": lineGradient(v) } });
+    m.addLayer({ id: "p-case", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 15, "line-opacity": 0.85 } });
+    m.addLayer({ id: "p-line", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": 9, "line-gradient": lineGradient(v) } });
     const b = coords.reduce((bb, q) => bb.extend(q), new maplibregl.LngLatBounds(coords[0], coords[0]));
-    const H = h / pr, cam = m.cameraForBounds(b, { padding: { top: H * 0.40, bottom: H * 0.30, left: 50, right: 50 }, bearing: bearingOf(t) });
-    if (cam) m.jumpTo({ center: cam.center, zoom: cam.zoom - 0.25, bearing: cam.bearing, pitch: 55 });
+    // the climb fills the space between the logo and the profile (the title sits on it, with a shadow)
+    const H = h / pr, cam = m.cameraForBounds(b, { padding: { top: H * 0.14, bottom: H * 0.36, left: 30, right: 30 }, bearing: bearingOf(t) });
+    if (cam) m.jumpTo({ center: cam.center, zoom: cam.zoom + 0.15, bearing: cam.bearing, pitch: 60 });
     await new Promise((res) => { m.once("idle", res); setTimeout(res, 20000); });
     const out = document.createElement("canvas"); out.width = w; out.height = h;
     out.getContext("2d").drawImage(m.getCanvas(), 0, 0, w, h);
