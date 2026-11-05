@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=39";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=40";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -161,7 +161,7 @@ export const DICT = {
   "Nome della salita": "Climb name", "Da dove si sale": "Which side", "Note per chi controlla (facoltative)": "Notes for the reviewer (optional)", "Invia proposta": "Send suggestion",
   "Manca il nome della salita.": "The climb name is missing.", "Proposta inviata · la trovi nel Diario": "Suggestion sent · you'll find it in the Diary",
   "Le mie proposte": "My suggestions", "Non riesco a leggere le tue proposte ora.": "Can't read your suggestions right now.", "Pubblicata": "Published", "Non accolta": "Declined", "In revisione": "Under review",
-  "Ritira": "Withdraw", "Non ritirata": "Not withdrawn", "Livello in regione": "Level in your region", "Livello globale": "Global level", "Ciclista": "Rider", "Esploratore": "Explorer", "Cartografo": "Cartographer", "Leggenda LocaRide": "LocaRide Legend", "Livello massimo. Grazie.": "Top level. Thank you.", "Le proposte sono su invito durante la beta.": "Suggestions are invite-only during the beta.",
+  "Ritira": "Withdraw", "Non ritirata": "Not withdrawn", "Livello in regione": "Level in your region", "Livello globale": "Global level", "Ciclista": "Rider", "Esploratore": "Explorer", "Cartografo": "Cartographer", "Leggenda LocaRide": "LocaRide Legend", "Crea post": "Create post", "Post 4:5": "Post 4:5", "Storia 9:16": "Story 9:16", "Formato": "Format", "Preparo l'immagine… (qualche secondo: carico la vista 3D)": "Preparing the picture… (a few seconds: loading the 3D view)", "Anteprima del post": "Post preview", "Sfondo": "Background", "Vista 3D": "3D view", "La tua foto": "Your photo", "Sposta la foto": "Move the photo", "La foto resta sul tuo telefono: l'immagine si crea qui, non viene caricata da nessuna parte.": "The photo stays on your phone: the picture is made here, nothing is uploaded.", "Non riesco ad aprire questa foto": "I can't open this photo", "Livello massimo. Grazie.": "Top level. Thank you.", "Le proposte sono su invito durante la beta.": "Suggestions are invite-only during the beta.",
   "Nessuna proposta ancora. Disegna nel Giro una salita che manca (dalla base alla cima) e premi «Proponi salita».": "No suggestions yet. Draw a missing climb in the Ride tab (base to top) and press «Suggest a climb».",
   "Vedi": "Show", "Approva": "Approve", "Rifiuta": "Reject", "Conferma rifiuto": "Confirm rejection", "Approvata": "Approved", "Rifiutata": "Rejected", "Non salvata": "Not saved", "Coda vuota.": "Queue is empty.",
   "Foresto": "Out-of-Towner", "Turista del pedale": "Pedal Tourist", "Cane Sciolto": "Stray Dog", "Servono le quote: ricalcola il percorso": "Elevations needed: recompute the route",
@@ -211,7 +211,8 @@ export const RULES = [
   [/^(.+): nessun sito può inviare il file da solo a questo servizio: servono questi due passaggi\.$/, "$1: no website can send the file to this service by itself: these two steps are needed."],
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`],
   [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "At the top $1° · descent feels like $2°"],
-  [/^Ancora ([\d.]+) salit[ae] accettat[ae] in (.+) per diventare (.+)$/, (m, n, x, l) => `${n} more accepted climb${n === "1" ? "" : "s"} in ${x} to become ${l}`]
+  [/^Ancora ([\d.]+) salit[ae] accettat[ae] in (.+) per diventare (.+)$/, (m, n, x, l) => `${n} more accepted climb${n === "1" ? "" : "s"} in ${x} to become ${l}`],
+  [/^(.+): la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava\.$/, "$1: the climb in 3D with its numbers, ready for Instagram, WhatsApp or Strava."]
 ];
 
 const TABLES = { en: [DICT, RULES], es: [DICT_ES, RULES_ES] };

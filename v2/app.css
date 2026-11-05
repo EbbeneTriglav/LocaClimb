@@ -432,3 +432,9 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .lvl small { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
 .lvareas { font-size: 12px; margin: 2px 0 10px; }
 @media (max-width: 420px) { .lvls { grid-template-columns: 1fr; } }
+/* climb actions with "Crea post" (04/11/2026): on a phone the main button takes the first row */
+@media (max-width: 520px) {
+  .actions.acts4 { flex-wrap: wrap; }
+  .actions.acts4 .btn { flex: 1 1 0; min-width: 0; white-space: nowrap; }
+  .actions.acts4 .btn.pri { flex-basis: 100%; }
+}
