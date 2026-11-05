@@ -1399,21 +1399,27 @@ async function postDialog(c, v) {
   openDialog(`<div class="dform shr"><div class="dh"><h2>Crea post</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
     <p class="note">${esc(c.name)}${v.side ? " · " + esc(v.side) : ""}: la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava.</p>
     <div class="seg" role="group" aria-label="Formato"><button type="button" data-fmt="post" aria-pressed="true">Post 4:5</button><button type="button" data-fmt="story" aria-pressed="false">Storia 9:16</button></div>
+    <div class="seg" role="group" aria-label="Sfondo" style="margin-top:8px"><button type="button" data-src="3d" aria-pressed="true">Vista 3D</button><button type="button" data-src="photo" aria-pressed="false">La tua foto</button></div>
+    <input type="file" id="pcFile" accept="image/*" hidden>
+    <div id="pcFocus" hidden><label class="note small">Sposta la foto <input type="range" id="pcRange" min="0" max="100" value="50" style="width:100%"></label></div>
+    <p class="note small mu" id="pcPriv" hidden>La foto resta sul tuo telefono: l'immagine si crea qui, non viene caricata da nessuna parte.</p>
     <div id="pcOut"></div></div>`);
-  const cache = {};
-  const paint = async (fmt) => {
-    const out = $("#pcOut"); if (!out) return;
-    out.innerHTML = `<p class="note">Preparo l'immagine… (qualche secondo: carico la vista 3D)</p>`;
-    const sz = fmt === "story" ? STORY : POST;
-    if (!cache[fmt]) {
-      try { await Promise.all([document.fonts.load("italic 800 80px 'Barlow Condensed'"), document.fonts.load("700 40px Barlow"), document.fonts.load("500 30px Barlow")]); } catch { /* system font */ }
-      const bg = await snapClimb(v, sz.w, sz.h);
-      const cv = document.createElement("canvas"); cv.width = sz.w; cv.height = sz.h;
-      drawPost(cv.getContext("2d"), c, v, { w: sz.w, h: sz.h, lang: LANG, bg });
-      cache[fmt] = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.92));
-    }
-    const blob = cache[fmt], o2 = $("#pcOut"); if (!blob || !o2) return;
-    const name = "locaride_" + String(c.name || "salita").normalize("NFD").replace(/[^\w]+/g, "_").replace(/^_|_$/g, "").toLowerCase() + (fmt === "story" ? "_storia" : "") + ".jpg";
+  const st = { fmt: "post", src: "3d", photo: null, focus: 0.5 }, snaps = {};
+  let seq = 0;
+  const paint = async () => {
+    const my = ++seq, out = $("#pcOut"); if (!out) return;
+    const sz = st.fmt === "story" ? STORY : POST;
+    out.innerHTML = `<p class="note">${st.src === "3d" && !snaps[st.fmt] ? "Preparo l'immagine… (qualche secondo: carico la vista 3D)" : "Preparo l'immagine…"}</p>`;
+    try { await Promise.all([document.fonts.load("italic 800 80px 'Barlow Condensed'"), document.fonts.load("700 40px Barlow"), document.fonts.load("500 30px Barlow")]); } catch { /* system font */ }
+    let bg = null;
+    if (st.src === "photo" && st.photo) bg = st.photo;
+    else if (st.src === "3d") { if (!(st.fmt in snaps)) snaps[st.fmt] = await snapClimb(v, sz.w, sz.h); bg = snaps[st.fmt]; }
+    if (my !== seq) return;                          // the user changed something meanwhile
+    const cv = document.createElement("canvas"); cv.width = sz.w; cv.height = sz.h;
+    drawPost(cv.getContext("2d"), c, v, { w: sz.w, h: sz.h, lang: LANG, bg, focus: st.focus, photo: st.src === "photo" && !!st.photo });
+    const blob = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.92));
+    const o2 = $("#pcOut"); if (!blob || !o2 || my !== seq) return;
+    const name = "locaride_" + String(c.name || "salita").normalize("NFD").replace(/[^\w]+/g, "_").replace(/^_|_$/g, "").toLowerCase() + (st.fmt === "story" ? "_storia" : "") + ".jpg";
     const file = new File([blob], name, { type: "image/jpeg" }), url = URL.createObjectURL(blob);
     const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
     o2.innerHTML = `<img class="shimg" src="${url}" alt="Anteprima del post">
@@ -1421,10 +1427,23 @@ async function postDialog(c, v) {
     const go = $("#pcGo"); if (go) go.addEventListener("click", async () => { try { await navigator.share({ files: [file], title: c.name + " · LocaRide" }); } catch { /* cancelled */ } });
     $("#pcDl").addEventListener("click", () => { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); });
   };
-  dlg.querySelectorAll("[data-fmt]").forEach((b) => b.addEventListener("click", () => {
-    dlg.querySelectorAll("[data-fmt]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); paint(b.dataset.fmt);
+  const press = (sel, b) => dlg.querySelectorAll(sel).forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  const showPhotoUi = () => { $("#pcFocus").hidden = !(st.src === "photo" && st.photo); $("#pcPriv").hidden = st.src !== "photo"; };
+  dlg.querySelectorAll("[data-fmt]").forEach((b) => b.addEventListener("click", () => { press("[data-fmt]", b); st.fmt = b.dataset.fmt; paint(); }));
+  dlg.querySelectorAll("[data-src]").forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.src === "photo" && !st.photo) { $("#pcFile").click(); return; }   // pick first, switch when a photo is there
+    press("[data-src]", b); st.src = b.dataset.src; showPhotoUi(); paint();
   }));
-  paint("post");
+  $("#pcFile").addEventListener("change", async (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    try { st.photo = await createImageBitmap(f, { imageOrientation: "from-image" }); }
+    catch { try { st.photo = await createImageBitmap(f); } catch { toast("Non riesco ad aprire questa foto"); return; } }
+    st.src = "photo"; st.focus = 0.5; $("#pcRange").value = 50;
+    press("[data-src]", dlg.querySelector('[data-src="photo"]')); showPhotoUi(); paint();
+  });
+  let rt = 0;
+  $("#pcRange").addEventListener("input", (e) => { st.focus = +e.target.value / 100; clearTimeout(rt); rt = setTimeout(paint, 120); });
+  paint();
 }
 
 /* ------------------------------------------------------------------ share the ride: link, image, road book (lib/rideout.mjs) */

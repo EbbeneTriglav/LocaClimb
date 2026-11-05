@@ -6,7 +6,7 @@
  * drawPost() only calls the 2D-canvas API it is given (tested with a recorder).
  */
 import { gradeColor } from "./climb.mjs?v=40";
-import { smoothProfile } from "./rideout.mjs?v=40";
+import { smoothProfile, routeShape, sampleGrades } from "./rideout.mjs?v=40";
 
 export const POST = { w: 1080, h: 1350 }, STORY = { w: 1080, h: 1920 };
 const TX = {
@@ -41,8 +41,22 @@ export function drawPost(ctx, c, v, opt = {}) {
   const fit = (s, max, w, px, fam, it) => { let p = px; ctx.font = font(w, p, fam, it); while (ctx.measureText(s).width > max && p > 30) { p -= 3; ctx.font = font(w, p, fam, it); } return p; };
   ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
   if (opt.bg) {
-    const bw = opt.bg.width, bh = opt.bg.height, s = Math.max(W / bw, H / bh);
-    ctx.drawImage(opt.bg, (W - bw * s) / 2, (H - bh * s) / 2, bw * s, bh * s);
+    // cover; opt.focus (0..1) moves a tall photo up/down, a wide one left/right
+    const bw = opt.bg.width, bh = opt.bg.height, s = Math.max(W / bw, H / bh), f = opt.focus == null ? 0.5 : opt.focus;
+    ctx.drawImage(opt.bg, (W - bw * s) * (bw * s > W ? f : 0.5), (H - bh * s) * (bh * s > H ? f : 0.5), bw * s, bh * s);
+  } else {
+    // no 3D view (offline, no WebGL): not a black slab - a night-blue sky and the climb's own shape, big and soft
+    const sky = ctx.createRadialGradient(W * 0.5, H * 0.38, 40, W * 0.5, H * 0.45, H * 0.8);
+    sky.addColorStop(0, "#2B4A66"); sky.addColorStop(0.55, "#16283A"); sky.addColorStop(1, "#0B0F14");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    const pts = routeShape(v.track, W - 160, H * 0.62, 30).map((q) => [q[0] + 80, q[1] + H * 0.12]), gr = sampleGrades(v);
+    if (pts.length > 1) {
+      ctx.save(); ctx.globalAlpha = 0.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.strokeStyle = "rgba(0,0,0,.6)"; ctx.lineWidth = 34; ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]))); ctx.stroke();
+      ctx.lineWidth = 18;
+      for (let i = 1; i < pts.length; i++) { ctx.strokeStyle = gradeColor(gr[Math.min(gr.length - 1, Math.round(i / (pts.length - 1) * (gr.length - 1)))]); ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); }
+      ctx.restore();
+    }
   }
   // shade top and bottom so white text reads on any terrain
   const gt = ctx.createLinearGradient(0, 0, 0, H * 0.3); gt.addColorStop(0, "rgba(11,15,20,.75)"); gt.addColorStop(1, "rgba(11,15,20,0)");
@@ -72,7 +86,8 @@ export function drawPost(ctx, c, v, opt = {}) {
   ctx.restore();
   ctx.textAlign = "left"; ctx.fillStyle = TXc; fit(t.small, W - 128, 700, 46, body); ctx.fillText(t.small, 64, py + ph + 70);
   if (t.from) { ctx.fillStyle = MU; fit(t.from, W - 128, 500, 34, body); ctx.fillText(t.from, 64, py + ph + 122); }
-  ctx.fillStyle = MU; ctx.font = font(500, 22, body); ctx.fillText("© OpenStreetMap · OpenFreeMap · Mapzen", 64, H - 52);
+  ctx.fillStyle = MU; ctx.font = font(500, 22, body);
+  ctx.fillText(opt.credit || (opt.photo ? "© OpenStreetMap" : "© OpenStreetMap · OpenFreeMap · Mapzen"), 64, H - 52);
   ctx.fillStyle = ACC; ctx.font = font(800, 40, cond, true); ctx.textAlign = "right"; ctx.fillText("locaride.app", W - 64, H - 48);
   return t;
 }
