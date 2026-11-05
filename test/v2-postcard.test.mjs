@@ -21,7 +21,8 @@ test("drawPost draws title, numbers and credits on post and story sizes", () => 
     const grad = { addColorStop: noop };
     const ctx = new Proxy({}, { get: (_, k) => k === "fillText" ? (s) => texts.push(s) : k === "measureText" ? (s) => ({ width: s.length * 20 }) : (k === "createLinearGradient" || k === "createRadialGradient") ? () => grad : noop, set: () => true });
     drawPost(ctx, c, v, { w: sz.w, h: sz.h, lang: "it", bg: null });
-    for (const s of ["LOCARIDE", "PASSO GAVIA", "17,3 km al 7,9%", "locaride.app", "Da Ponte di Legno"]) assert.ok(texts.includes(s), sz.h + " " + s);
+    for (const s of ["LOCARIDE", "RIDE LIKE", "A LOCAL", "PASSO GAVIA", "17,3 km al 7,9%", "locaride.app", "Da Ponte di Legno"]) assert.ok(texts.includes(s), sz.h + " " + s);
     assert.ok(texts.some((s) => /OpenStreetMap/.test(s)));
+    assert.ok(!texts.includes("SALITA"), "the motto replaces the SALITA tag");
   }
 });

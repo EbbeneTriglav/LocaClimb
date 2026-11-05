@@ -14,6 +14,7 @@ const TX = {
   en: { at: "at", gain: "elevation gain", max: "max", top: "summit", from: "From", tag: "CLIMB" },
   es: { at: "al", gain: "desnivel", max: "máx", top: "cima", from: "Desde", tag: "PUERTO" }
 };
+export const MOTTO = ["RIDE LIKE", "A LOCAL"];
 const LOC = { it: "it-IT", en: "en-GB", es: "es-ES" };
 export const n0 = (x, d, lang = "it") => (x == null || !isFinite(x)) ? "–" : Number(x).toLocaleString(LOC[lang] || "it-IT", { minimumFractionDigits: d, maximumFractionDigits: d });
 
@@ -38,6 +39,7 @@ export function drawPost(ctx, c, v, opt = {}) {
   const cond = opt.cond || "'Barlow Condensed', 'Arial Narrow', sans-serif", body = opt.body || "Barlow, system-ui, sans-serif";
   const BG = "#0B0F14", TXc = "#F4F7FA", MU = "#B9C4CF", ACC = "#C8F560";
   const font = (w, px, fam, it = false) => `${it ? "italic " : ""}${w} ${px}px ${fam}`;
+  const spaced = (px) => { if ("letterSpacing" in ctx) ctx.letterSpacing = px + "px"; };
   const fit = (s, max, w, px, fam, it) => { let p = px; ctx.font = font(w, p, fam, it); while (ctx.measureText(s).width > max && p > 30) { p -= 3; ctx.font = font(w, p, fam, it); } return p; };
   ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
   if (opt.bg) {
@@ -59,24 +61,24 @@ export function drawPost(ctx, c, v, opt = {}) {
     }
   }
   // shade top and bottom so white text reads on any terrain
-  const gt = ctx.createLinearGradient(0, 0, 0, H * 0.3); gt.addColorStop(0, "rgba(11,15,20,.75)"); gt.addColorStop(1, "rgba(11,15,20,0)");
+  const gt = ctx.createLinearGradient(0, 0, 0, H * 0.3); gt.addColorStop(0, "rgba(11,15,20,.6)"); gt.addColorStop(1, "rgba(11,15,20,0)");
   ctx.fillStyle = gt; ctx.fillRect(0, 0, W, H * 0.3);
-  const gb = ctx.createLinearGradient(0, H * 0.58, 0, H); gb.addColorStop(0, "rgba(11,15,20,0)"); gb.addColorStop(0.45, "rgba(11,15,20,.82)"); gb.addColorStop(1, "rgba(11,15,20,.96)");
-  ctx.fillStyle = gb; ctx.fillRect(0, H * 0.58, W, H * 0.42);
+  const g0 = H > W * 1.5 ? 0.6 : 0.52, gb = ctx.createLinearGradient(0, H * g0, 0, H); gb.addColorStop(0, "rgba(11,15,20,0)"); gb.addColorStop(0.4, "rgba(11,15,20,.78)"); gb.addColorStop(1, "rgba(11,15,20,.96)");
+  ctx.fillStyle = gb; ctx.fillRect(0, H * g0, W, H * (1 - g0));
   // logo
   ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
   ctx.fillStyle = ACC; ctx.fillRect(64, 62, 26, 26);
   ctx.fillStyle = TXc; ctx.font = font(800, 40, cond, true); ctx.fillText("LOCARIDE", 104, 88);
-  ctx.fillStyle = ACC; ctx.font = font(800, 30, cond, true); ctx.textAlign = "right"; ctx.fillText(t.tag, W - 64, 86);
-  // the big title and "17,3 km al 7,9%", centred a bit above the middle, with a soft shadow
-  const cy = Math.round(H * (H > W * 1.5 ? 0.40 : 0.42));
-  ctx.save(); ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 3;
-  ctx.fillStyle = TXc; ctx.textAlign = "center";
-  fit(t.title, W - 120, 800, 132, cond, true); ctx.fillText(t.title, W / 2, cy);
-  fit(t.big, W - 160, 800, 104, cond, true); ctx.fillText(t.big, W / 2, cy + 118);
+  // the motto, small, on two lines (Rick, 05/11: instead of "SALITA")
+  ctx.fillStyle = ACC; ctx.textAlign = "right"; ctx.font = font(600, 23, cond); spaced(2);
+  ctx.fillText(MOTTO[0], W - 64, 70); ctx.fillText(MOTTO[1], W - 64, 96); spaced(0);
+  // bottom band, not over the picture: name, "17,3 km al 7,9%", profile, numbers, where it starts
+  const tall = H > W * 1.5, pw = W - 128, ph = tall ? 190 : 130, py = H - (tall ? 450 : 360);
+  ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 2;
+  ctx.fillStyle = TXc; ctx.textAlign = "left"; spaced(1);
+  fit(t.title, W - 128, 600, tall ? 76 : 68, cond); ctx.fillText(t.title, 64, py - (tall ? 92 : 84)); spaced(0);
+  ctx.fillStyle = ACC; fit(t.big, W - 128, 600, tall ? 48 : 44, cond); ctx.fillText(t.big, 64, py - 30);
   ctx.restore();
-  // bottom: profile coloured by gradient, then the numbers and where it starts
-  const pw = W - 128, ph = H > W * 1.5 ? 210 : 150, py = H - (H > W * 1.5 ? 470 : 380);
   const sh = smoothProfile(v, pw, ph, 6);
   ctx.save(); ctx.translate(64, py);
   if (typeof Path2D === "function" && sh.segs.length) {
@@ -84,8 +86,8 @@ export function drawPost(ctx, c, v, opt = {}) {
     ctx.strokeStyle = TXc; ctx.lineWidth = 3; ctx.stroke(new Path2D(sh.line));
   }
   ctx.restore();
-  ctx.textAlign = "left"; ctx.fillStyle = TXc; fit(t.small, W - 128, 700, 46, body); ctx.fillText(t.small, 64, py + ph + 70);
-  if (t.from) { ctx.fillStyle = MU; fit(t.from, W - 128, 500, 34, body); ctx.fillText(t.from, 64, py + ph + 122); }
+  ctx.textAlign = "left"; ctx.fillStyle = TXc; fit(t.small, W - 128, 600, 40, body); ctx.fillText(t.small, 64, py + ph + 62);
+  if (t.from) { ctx.fillStyle = MU; fit(t.from, W - 128, 500, 30, body); ctx.fillText(t.from, 64, py + ph + 108); }
   ctx.fillStyle = MU; ctx.font = font(500, 22, body);
   ctx.fillText(opt.credit || (opt.photo ? "© OpenStreetMap" : opt.bg ? "© OpenStreetMap · Sentinel-2 cloudless 2016 EOX (CC BY 4.0) · Mapzen" : "© OpenStreetMap"), 64, H - 52);
   ctx.fillStyle = ACC; ctx.font = font(800, 40, cond, true); ctx.textAlign = "right"; ctx.fillText("locaride.app", W - 64, H - 48);
