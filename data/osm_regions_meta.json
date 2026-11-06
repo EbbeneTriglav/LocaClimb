@@ -483,5 +483,10 @@
   ],
   "target": "andorra",
   "builtAt": "2026-11-04"
+ },
+ "osm_passes_us_co.json": {
+  "bbox": null,
+  "target": "usa-colorado",
+  "builtAt": "2026-11-06"
  }
 }
