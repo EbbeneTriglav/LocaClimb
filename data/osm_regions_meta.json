@@ -488,5 +488,10 @@
   "bbox": null,
   "target": "usa-colorado",
   "builtAt": "2026-11-06"
+ },
+ "osm_passes_us_canord.json": {
+  "bbox": null,
+  "target": "usa-california-nord",
+  "builtAt": "2026-11-06"
  }
 }
