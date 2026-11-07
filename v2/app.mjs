@@ -3,22 +3,22 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=47";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=47";
-import { poisNear } from "./lib/poi.mjs?v=47";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=47";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=47";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=47";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=47";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=47";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=47";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=47";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=47";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=47";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=47";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=47";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=47";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=47";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=48";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=48";
+import { poisNear } from "./lib/poi.mjs?v=48";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=48";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=48";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=48";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=48";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=48";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=48";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=48";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=48";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=48";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=48";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=48";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=48";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=48";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -1442,7 +1442,14 @@ async function snapClimb(v, w, h, o = {}) {
     const coords = t.map((q) => [q[1], q[0]]);
     m.addSource("p", { type: "geojson", lineMetrics: true, data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } } });
     m.addLayer({ id: "p-case", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": bm.id === "export" ? "#F5F7FA" : "#0B0F14", "line-width": 15, "line-opacity": 0.85 } });
-    m.addLayer({ id: "p-line", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": 9, "line-gradient": lineGradient(v) } });
+    if (o.risk && o.risk.length) {   // road book of a ride: steep, twisty descents under the line, as on the Giro map
+      m.addSource("rk", { type: "geojson", data: { type: "FeatureCollection", features: o.risk } });
+      m.addLayer({ id: "rk", type: "line", source: "rk", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#FFD60A", "line-width": 26, "line-opacity": 0.75 } }, "p-case");
+    }
+    if (o.feats && o.feats.length) {   // a ride: the same two-scale line as the Giro map (route.mjs rideFeatures)
+      m.addSource("rf", { type: "geojson", data: { type: "FeatureCollection", features: o.feats } });
+      m.addLayer({ id: "p-line", type: "line", source: "rf", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 9 } });
+    } else m.addLayer({ id: "p-line", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": 9, "line-gradient": lineGradient(v) } });
     if (o.marks && o.marks.length) {   // numbered climbs (road book): same numbers as the list and the profile
       m.addSource("mk", { type: "geojson", data: { type: "FeatureCollection", features: o.marks.map((k) => ({ type: "Feature", properties: { n: String(k.n) }, geometry: { type: "Point", coordinates: [k.lon, k.lat] } })) } });
       m.addLayer({ id: "mk-c", type: "circle", source: "mk", paint: { "circle-radius": 13, "circle-color": "#0B0F14", "circle-stroke-color": "#C8F560", "circle-stroke-width": 2.5 } });
@@ -1570,7 +1577,8 @@ async function printRoadbook() {
   const d = rideData(); if (!d) return;
   toast("Preparo il road book…");
   const marks = G.on.map((x, i) => ({ n: i + 1, lat: x.c.lat, lon: x.c.lon })).filter((k) => Number.isFinite(k.lat) && Number.isFinite(k.lon));
-  const snap = await snapClimb(d.side, 1200, 900, { base: basemap("chiara"), pitch: 0, terrain: false, pad: { top: 40, bottom: 40, left: 40, right: 40 }, marks }).catch(() => null);
+  const snap = await snapClimb(d.side, 1200, 900, { base: basemap("chiara"), pitch: 0, terrain: false, pad: { top: 40, bottom: 40, left: 40, right: 40 }, marks,
+    feats: G.rp ? rideFeatures(G.rp) : null, risk: G.rp && G.risk.length ? riskyFeatures(G.rp, G.risk) : null }).catch(() => null);
   if (snap) try { d.mapImg = snap.toDataURL("image/jpeg", 0.85); } catch { /* tainted canvas: SVG route instead */ }
   const html = roadbookHtml(d), url = URL.createObjectURL(new Blob([html], { type: "text/html" })), name = "roadbook_locaride_" + num(d.km, 0) + "km.html";
   openDialog(`<div class="dform shr"><div class="dh"><h2>Road book</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>

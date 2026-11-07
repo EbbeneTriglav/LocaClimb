@@ -11,7 +11,8 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=47";
+import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=48";
+import { rideColor, FLAT_COLOR, UP_STOPS, DOWN_STOPS } from "./route.mjs?v=48";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
@@ -22,15 +23,15 @@ export function hm(min) { if (min == null || !isFinite(min)) return "–"; const
 const TXT = {
   it: { ride: "Il mio giro", km: "km", m: "metri", time: "in sella", top: "quota max", climbs: "Salite", water: "Acqua", route: "Il percorso", start: "Partenza", end: "Arrivo", hi: "Punto più alto",
     risk: "Discese impegnative", riskTip: "Oltre il 9% con curve strette: i freni scaldano. Frena a tratti, non tenerli sempre tirati, rallenta prima delle curve.", riskNote: "Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.", riskAt: "punte",
-    when: "Ora", where: "Dove", ele: "Quota", wx: "Meteo", noWater: "Nessun punto acqua mappato entro 100 m: borracce piene.", gap: "tratto più lungo senza acqua", pts: "punti", onProf: "sul profilo: un cerchio grande raggruppa i punti vicini", print: "Stampa o salva PDF",
+    up: "Salita", flat: "Piano", down: "Discesa", when: "Ora", where: "Dove", ele: "Quota", wx: "Meteo", noWater: "Nessun punto acqua mappato entro 100 m: borracce piene.", gap: "tratto più lungo senza acqua", pts: "punti", onProf: "sul profilo: un cerchio grande raggruppa i punti vicini", print: "Stampa o salva PDF",
     est: (w) => `Tempi stimati a ${w} W/kg, soste escluse.`, depart: "partenza", diff: "difficoltà", src: "Dati © OpenStreetMap contributors · quote: modello del terreno · meteo: Open-Meteo" },
   en: { ride: "My ride", km: "km", m: "metres", time: "riding", top: "highest", climbs: "Climbs", water: "Water", route: "The route", start: "Start", end: "Finish", hi: "Highest point",
     risk: "Demanding descents", riskTip: "Steeper than 9% with tight bends: brakes heat up. Brake in bursts, don't drag them, slow down before the bends.", riskNote: "Automatic estimate from OSM and terrain data: it can't see gravel, roadworks or wet tarmac. It doesn't replace road signs or caution.", riskAt: "max",
-    when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", pts: "points", onProf: "on the profile: a big circle groups nearby points", print: "Print or save as PDF",
+    up: "Climb", flat: "Flat", down: "Descent", when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", pts: "points", onProf: "on the profile: a big circle groups nearby points", print: "Print or save as PDF",
     est: (w) => `Times estimated at ${w} W/kg, stops excluded.`, depart: "start", diff: "difficulty", src: "Data © OpenStreetMap contributors · elevation: terrain model · weather: Open-Meteo" },
   es: { ride: "Mi ruta", km: "km", m: "metros", time: "en bici", top: "altitud máx", climbs: "Subidas", water: "Agua", route: "La ruta", start: "Salida", end: "Llegada", hi: "Punto más alto",
     risk: "Bajadas exigentes", riskTip: "Más del 9% con curvas cerradas: los frenos se calientan. Frena a intervalos, no los lleves siempre apretados, reduce antes de las curvas.", riskNote: "Estimación automática con datos de OSM y del terreno: no ve grava, obras ni asfalto mojado. No sustituye la señalización ni la prudencia.", riskAt: "máx.",
-    when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", pts: "puntos", onProf: "en el perfil: un círculo grande agrupa los puntos cercanos", print: "Imprimir o guardar en PDF",
+    up: "Subida", flat: "Llano", down: "Bajada", when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", pts: "puntos", onProf: "en el perfil: un círculo grande agrupa los puntos cercanos", print: "Imprimir o guardar en PDF",
     est: (w) => `Tiempos estimados a ${w} W/kg, sin paradas.`, depart: "salida", diff: "dificultad", src: "Datos © colaboradores de OpenStreetMap · altitud: modelo del terreno · tiempo: Open-Meteo" }
 };
 const langOf = (d) => (d.lang === "en" || d.lang === "es" ? d.lang : "it");
@@ -63,9 +64,9 @@ export function sampleGrades(side) {
 }
 
 /* the profile with colours from the smoothed gradient (raw 50-m steps flicker on a 100-km ride) */
-export function smoothProfile(side, w, h, pad) {
+export function smoothProfile(side, w, h, pad, col = gradeColor) {
   const sh = profileShapes(side, w, h, pad), gr = sampleGrades(side), p = side.elevationProfile || [];
-  if (p.length > 1) sh.segs.forEach((sg) => { sg.color = gradeColor((gr[sg.i - 1] + gr[sg.i]) / 2); });
+  if (p.length > 1) sh.segs.forEach((sg) => { sg.color = col((gr[sg.i - 1] + gr[sg.i]) / 2); });
   return sh;
 }
 
@@ -136,11 +137,16 @@ export function labelLanes(xs, gap = 30, lanes = 3) {
 }
 
 /* ------------------------------------------------------------------ printable road book (A4, light) */
+/* road book on paper: the map's two scales (route.mjs rideColor), flat in light grey because white vanishes on paper */
+const FLAT_PAPER = "#CDD3DB";
+export const paperColor = (g) => { const c = rideColor(g); return c === FLAT_COLOR ? FLAT_PAPER : c; };
 export function roadbookHtml(d) {
   const T = tx(d), L = langOf(d);
-  const sh = smoothProfile(d.side, 1000, 190, 6), pts = routeShape(d.side.track, 300, 300, 14), gr = sampleGrades(d.side);
+  const sh = smoothProfile(d.side, 1000, 190, 6, paperColor), pts = routeShape(d.side.track, 300, 300, 14), gr = sampleGrades(d.side);
   const gAt = (i) => gr[Math.min(gr.length - 1, Math.round(i / Math.max(1, pts.length - 1) * (gr.length - 1)))];   // track and profile differ in length
-  const route = pts.slice(1).map((p, i) => `<path d="M${pts[i][0]} ${pts[i][1]}L${p[0]} ${p[1]}" stroke="${gradeColor(gAt(i + 1))}"/>`).join("");
+  const route = pts.slice(1).map((p, i) => `<path d="M${pts[i][0]} ${pts[i][1]}L${p[0]} ${p[1]}" stroke="${paperColor(gAt(i + 1))}"/>`).join("");
+  const sw = (c, l) => `<span class="sw"><i style="background:${c}"></i>${esc(l)}</span>`;
+  const legend = `<p class="leg"><b>${T.up}</b>${UP_STOPS.map((g) => sw(g.color, g.label)).join("")}<b>${T.flat}</b>${sw(FLAT_PAPER, "")}<b>${T.down}</b>${DOWN_STOPS.map((g) => sw(g.color, g.label)).join("")}</p>`;
   const L0 = d.side.distance_km || d.km || 1;
   const TOPB = 66;   // band above the profile for the numbered climb markers (3 lanes)
   const mx = (d.climbs || []).map((c) => +Math.min(988, Math.max(12, c.km / L0 * 1000)).toFixed(1)), lanes = labelLanes(mx);
@@ -199,6 +205,8 @@ td.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-num
 tr.climb td { background: #F4FBE3; } tr.water td { color: #1F5FA8; } tr.start td, tr.end td { font-weight: 600; }
 tr { break-inside: avoid; }
 footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font-size: 8.5pt; color: #56616D; display: flex; justify-content: space-between; gap: 10px; }
+.leg { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: 9pt; color: #4A5560; margin: 2px 0 6px; }
+.leg b { color: #0B0F14; margin-left: 6px; } .leg .sw i { display: inline-block; width: 18px; height: 8px; border-radius: 4px; margin-right: 3px; vertical-align: 0; border: 1px solid rgba(0,0,0,.25); }
 .prof .rk { fill: rgba(255, 214, 10, .28); stroke: #B08900; stroke-dasharray: 4 4; }
 .risk { border-left: 5px solid #FFD60A; padding: 2px 0 2px 12px; margin-top: 14px; page-break-inside: avoid; }
 .risk h2 { margin-top: 4px; } .risk ul { margin: 4px 0; padding-left: 18px; } .risk p { margin: 4px 0; }
@@ -212,6 +220,7 @@ footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font
 <div class="fig${okImg(d.mapImg) ? " wide" : ""}">${okImg(d.mapImg) ? `<img class="map" src="${esc(d.mapImg)}" alt="${esc(T.route)}">` : `<svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>`}
 <div><h2 style="margin-top:0">${T.climbs}</h2>${climbList}</div></div>
 <svg class="prof" viewBox="0 0 1000 ${TOPB + 210}" role="img" aria-label="Profilo"><g transform="translate(0 ${TOPB})">${bands}${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></g>${marks}</svg>
+${legend}
 ${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
 ${riskBlock}
 <h2>${T.route}</h2>

@@ -1,7 +1,7 @@
 // v2/lib/rideout.mjs - the ride outside the app: share image and printable road book.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { routeShape, sampleGrades, waterSpots, stopKms, bookRows, waterGap, roadbookHtml, drawCard, hm, CARD_W, CARD_H } from "../v2/lib/rideout.mjs";
+import { routeShape, sampleGrades, waterSpots, stopKms, bookRows, waterGap, roadbookHtml, drawCard, hm, CARD_W, CARD_H, paperColor } from "../v2/lib/rideout.mjs";
 
 // 20 km going north-east: 10 km flat at 500 m, then 10 km climbing to 1300 m (8%); 21 samples
 const N = 21, side = {
@@ -127,4 +127,14 @@ test("roadbookHtml: demanding descents get a block and a band on the profile, na
   assert.match(roadbookHtml({ ...D, lang: "en", risky: [{ fromKm: 2, toKm: 4.5, km: 2.5, avg: -10.4, max: -16, after: "" }] }), /Demanding descents/);
   const none = roadbookHtml(D);
   assert.ok(!/Discese impegnative/.test(none) && !/class="rk"/.test(none));
+});
+
+test("roadbookHtml: the map's two colour scales on paper, flat in grey, with a legend", () => {
+  assert.equal(paperColor(2), "#CDD3DB");
+  assert.equal(paperColor(-12), "#1B2A8A");
+  assert.equal(paperColor(9), "#F28C38");
+  const h = roadbookHtml(D);
+  assert.match(h, /class="leg"><b>Salita<\/b>/);
+  assert.ok(!h.includes('fill="#5B8DEF"'), "no old all-blue flat/descent on the profile");
+  assert.match(roadbookHtml({ ...D, lang: "es" }), /<b>Bajada<\/b>/);
 });
