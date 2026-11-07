@@ -513,5 +513,15 @@
   "bbox": null,
   "target": "usa-utah",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_ca_qc.json": {
+  "bbox": [
+   -79.8,
+   45,
+   -64,
+   49.5
+  ],
+  "target": "canada-quebec",
+  "builtAt": "2026-11-07"
  }
 }
