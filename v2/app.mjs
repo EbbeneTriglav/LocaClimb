@@ -3,21 +3,21 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=41";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=41";
-import { poisNear } from "./lib/poi.mjs?v=41";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=41";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=41";
-import { getLang, setLang, startI18n } from "./lib/i18n.mjs?v=41";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=41";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=41";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=41";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=41";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=41";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=41";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=41";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=41";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=41";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=42";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=42";
+import { poisNear } from "./lib/poi.mjs?v=42";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=42";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=42";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=42";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=42";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=42";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=42";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=42";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=42";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=42";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=42";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=42";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=42";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -551,7 +551,9 @@ async function fillWater(c, v) {
     ${food.length ? `<ul class="tips food">${food.slice(0, 8).map(li).join("")}</ul>` : ""}`;
 }
 /* Sole e ombra (lib/shade.mjs): shown only where the pipeline has computed it - no "n/d" box */
-const MONTHS = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+/* month names come in the page language (i18n.mjs monthsFor): the i18n layer only translates whole labels,
+   so the month inside "di ombra a nov", the bar titles and the initials are written in the right language here */
+const MONTHS = monthsFor(LANG);
 async function fillShade(c, v) {
   const m = await loadShade(), el = $("#shade");
   if (!el || S.sel !== c) return;
@@ -560,10 +562,10 @@ async function fillShade(c, v) {
   const mi = new Date().getMonth(), cur = rows[mi], cz = shadeCauses(cur);
   el.hidden = false;
   el.innerHTML = `<h3>Sole e ombra</h3>
-    <div class="shx"><div class="shn" style="color:${shadeTone(cur.shade)}"><b>${esc(cur.shade)}%</b><span>di ombra a ${esc(MONTHS[mi].toLowerCase())}</span></div>
+    <div class="shx"><div class="shn" style="color:${shadeTone(cur.shade)}"><b>${esc(cur.shade)}%</b><span>di ombra a ${esc(LANG === "en" ? MONTHS[mi] : MONTHS[mi].toLowerCase())}</span></div>
       <div class="shw"><b>${esc(shadeWord(cur.shade))}</b><span class="mu">${cz.length ? cz.map((x) => `${x.k} ${x.pct}%`).join(" · ") : "sole diretto " + num(cur.sun, 1) + " h"}</span></div></div>
     <div class="shy" role="img" aria-label="Ombra mese per mese">${rows.map((r, i) => `<i class="${i === mi ? "on" : ""}" style="height:${Math.max(4, Math.round(4 + r.shade * 0.4))}px;background:${shadeTone(r.shade)}" title="${MONTHS[i]}: ${r.shade}%"></i>`).join("")}</div>
-    <div class="shm">${MONTHS.map((x, i) => `<span class="${i === mi ? "on" : ""}">${x[0]}</span>`).join("")}</div>
+    <div class="shm" data-noi18n>${MONTHS.map((x, i) => `<span class="${i === mi ? "on" : ""}">${x[0]}</span>`).join("")}</div>
     <p class="note small mu">Ombra media sul tracciato nelle ore di luce: rilievi intorno, bosco (con le foglie della stagione) ed esposizione del versante.</p>`;
 }
 async function fillWeek(c) {
