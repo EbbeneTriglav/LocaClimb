@@ -1,9 +1,12 @@
 /* Optional Firebase auth + community ratings (inert until FIREBASE_CONFIG is filled in). */
-function fbReady(){return !!(FIREBASE_CONFIG.apiKey&&window.firebase);}
+/* Firebase only on locaride.app and beta.locaride.app (App Check), or on other hosts with
+   localStorage lr_dev_firebase="1" (App Check debug token): same rule as v2/lib/diary.mjs fbMode. */
+function fbHostMode(){var h=location.hostname;if(h==="locaride.app"||h==="beta.locaride.app")return "prod";try{if(localStorage.getItem("lr_dev_firebase")==="1")return "dev";}catch(e){}return "off";}
+function fbReady(){return !!(FIREBASE_CONFIG.apiKey&&window.firebase&&fbHostMode()!=="off");}
 function fbInit(){
   var b=document.getElementById("acct");if(b)b.addEventListener("click",acctOpen);
   if(!fbReady())return;
-  try{firebase.initializeApp(FIREBASE_CONFIG);if(location.hostname==="locaride.app"&&firebase.appCheck){try{firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider(APPCHECK_KEY),true);}catch(e){}}FB={auth:firebase.auth(),db:firebase.firestore()};}catch(e){return;}
+  try{firebase.initializeApp(FIREBASE_CONFIG);if(firebase.appCheck){if(fbHostMode()==="dev")window.FIREBASE_APPCHECK_DEBUG_TOKEN=true;try{firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider(APPCHECK_KEY),true);}catch(e){}}FB={auth:firebase.auth(),db:firebase.firestore()};}catch(e){return;}
   FB.auth.onAuthStateChanged(function(u){FBUSER=u;acctUpdate();if(CUR_PASS)renderRatings(CUR_PASS);});
 }
 function acctUpdate(){var b=document.getElementById("acct");if(!b)return;var lab=b.querySelector(".bl");if(lab)lab.textContent=FBUSER?(FBUSER.displayName||"Account").substring(0,12):"Accedi";}

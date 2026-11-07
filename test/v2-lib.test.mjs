@@ -352,3 +352,14 @@ test("export map: the shared ride image keeps the relief and only city/town name
   assert.ok(!exportLayer({ id: "place_village", type: "symbol" }));
   assert.ok(!exportLayer(null));
 });
+
+test("firebase only where App Check works: production hosts, or a local opt-in with a debug token", async () => {
+  const { fbMode, FB_HOSTS } = await import("../v2/lib/diary.mjs");
+  assert.deepEqual(FB_HOSTS, ["locaride.app", "beta.locaride.app"]);
+  assert.equal(fbMode("locaride.app", false), "prod");
+  assert.equal(fbMode("beta.locaride.app", false), "prod");
+  assert.equal(fbMode("localhost", false), "off", "e2e and local runs stay out of Firestore");
+  assert.equal(fbMode("locaride-preview.workers.dev", false), "off");
+  assert.equal(fbMode("localhost", true), "dev");
+  assert.equal(fbMode("evil-locaride.app", false), "off");
+});
