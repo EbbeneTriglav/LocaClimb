@@ -129,6 +129,9 @@ export const DICT_ES = {
   "Condividi il giro": "Compartir la ruta", "Link del giro": "Enlace de la ruta", "Chi lo apre vede lo stesso percorso in LocaRide": "Quien lo abra verá la misma ruta en LocaRide",
   "Immagine": "Imagen", "Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri": "Para Instagram, WhatsApp, Strava: trazado, perfil y datos",
   "Road book da stampare": "Road book para imprimir", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "Una página A4 con perfil, subidas, horarios, agua y tiempo. También en PDF",
+  "Piano": "Llano", "Discesa": "Bajada", "Discese impegnative": "Bajadas exigentes",
+  "I freni scaldano: frena a tratti, non tenerli sempre tirati, e rallenta prima delle curve.": "Los frenos se calientan: frena a intervalos, no los lleves siempre apretados y reduce antes de las curvas.",
+  "Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.": "Estimación automática con datos de OSM y del terreno: no ve grava, obras ni asfalto mojado. No sustituye la señalización ni la prudencia.",
   "Preparo l'immagine…": "Preparando la imagen…", "Scarica": "Descargar", "Road book scaricato: aprilo e stampa": "Road book descargado: ábrelo e imprímelo", "Preparo il road book…": "Preparando el road book…", "Pronto: mappa, salite numerate, profilo, orari e meteo lungo il giro. Da stampare o salvare in PDF.": "Listo: mapa, subidas numeradas, perfil, horarios y tiempo a lo largo de la ruta. Para imprimir o guardar en PDF.", "Apri": "Abrir",
   // privacy
   "Privacy": "Privacidad", "Protetto da reCAPTCHA: valgono la": "Protegido por reCAPTCHA: se aplican la", "e i": "y los", "Termini": "Condiciones",

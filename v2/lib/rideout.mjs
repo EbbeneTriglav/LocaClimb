@@ -11,7 +11,7 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=46";
+import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=47";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
@@ -21,12 +21,15 @@ export function hm(min) { if (min == null || !isFinite(min)) return "–"; const
 
 const TXT = {
   it: { ride: "Il mio giro", km: "km", m: "metri", time: "in sella", top: "quota max", climbs: "Salite", water: "Acqua", route: "Il percorso", start: "Partenza", end: "Arrivo", hi: "Punto più alto",
+    risk: "Discese impegnative", riskTip: "Oltre il 9% con curve strette: i freni scaldano. Frena a tratti, non tenerli sempre tirati, rallenta prima delle curve.", riskNote: "Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.", riskAt: "punte",
     when: "Ora", where: "Dove", ele: "Quota", wx: "Meteo", noWater: "Nessun punto acqua mappato entro 100 m: borracce piene.", gap: "tratto più lungo senza acqua", pts: "punti", onProf: "sul profilo: un cerchio grande raggruppa i punti vicini", print: "Stampa o salva PDF",
     est: (w) => `Tempi stimati a ${w} W/kg, soste escluse.`, depart: "partenza", diff: "difficoltà", src: "Dati © OpenStreetMap contributors · quote: modello del terreno · meteo: Open-Meteo" },
   en: { ride: "My ride", km: "km", m: "metres", time: "riding", top: "highest", climbs: "Climbs", water: "Water", route: "The route", start: "Start", end: "Finish", hi: "Highest point",
+    risk: "Demanding descents", riskTip: "Steeper than 9% with tight bends: brakes heat up. Brake in bursts, don't drag them, slow down before the bends.", riskNote: "Automatic estimate from OSM and terrain data: it can't see gravel, roadworks or wet tarmac. It doesn't replace road signs or caution.", riskAt: "max",
     when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", pts: "points", onProf: "on the profile: a big circle groups nearby points", print: "Print or save as PDF",
     est: (w) => `Times estimated at ${w} W/kg, stops excluded.`, depart: "start", diff: "difficulty", src: "Data © OpenStreetMap contributors · elevation: terrain model · weather: Open-Meteo" },
   es: { ride: "Mi ruta", km: "km", m: "metros", time: "en bici", top: "altitud máx", climbs: "Subidas", water: "Agua", route: "La ruta", start: "Salida", end: "Llegada", hi: "Punto más alto",
+    risk: "Bajadas exigentes", riskTip: "Más del 9% con curvas cerradas: los frenos se calientan. Frena a intervalos, no los lleves siempre apretados, reduce antes de las curvas.", riskNote: "Estimación automática con datos de OSM y del terreno: no ve grava, obras ni asfalto mojado. No sustituye la señalización ni la prudencia.", riskAt: "máx.",
     when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", pts: "puntos", onProf: "en el perfil: un círculo grande agrupa los puntos cercanos", print: "Imprimir o guardar en PDF",
     est: (w) => `Tiempos estimados a ${w} W/kg, sin paradas.`, depart: "salida", diff: "dificultad", src: "Datos © colaboradores de OpenStreetMap · altitud: modelo del terreno · tiempo: Open-Meteo" }
 };
@@ -153,6 +156,9 @@ export function roadbookHtml(d) {
     return `<tr class="${r.kind}${r.climb ? " climb" : ""}"><td class="n">${n0(r.km, 0, L)}</td><td class="n">${esc(r.time)}</td><td><b>${esc(r.name)}</b>${r.note ? ` <span class="mu">${esc(r.note)}</span>` : ""}</td><td class="n">${r.ele != null ? esc(r.ele) + " m" : ""}</td><td>${w && w.temp != null ? `${n0(w.temp, 0, L)}° · ${n0(w.wind, 0, L)} km/h · ${esc(w.pp ?? "–")}%` : ""}</td></tr>`;
   }).join("");
   const climbList = (d.climbs || []).length ? `<ul class="cl">${d.climbs.map((c, i) => `<li><span class="no">${i + 1}</span>${c.difficulty ? `<span class="d" style="background:${difficultyColor(c.difficulty)}">${esc(c.difficulty)}/10</span>` : ""}<b>${esc(c.name)}</b> <span class="mu">km ${n0(c.km, 0, L)}${c.elevation ? ` · ${esc(c.elevation)} m` : ""}</span></li>`).join("")}</ul>` : `<p class="mu">–</p>`;
+  const risky = (d.risky || []).filter((r) => isFinite(r.fromKm) && isFinite(r.toKm));
+  const bands = risky.map((r) => `<rect class="rk" x="${+Math.min(1000, r.fromKm / L0 * 1000).toFixed(1)}" y="0" width="${+Math.max(3, (r.toKm - r.fromKm) / L0 * 1000).toFixed(1)}" height="190"/>`).join("");
+  const riskBlock = risky.length ? `<div class="risk"><h2>⚠ ${T.risk}</h2><ul>${risky.map((r) => `<li><b>km ${n0(r.fromKm, 1, L)}–${n0(r.toKm, 1, L)}</b>${r.after ? ` · ${esc(r.after)} →` : ""} ${n0(r.km, 1, L)} km · ${n0(r.avg, 1, L)}% · ${T.riskAt} ${n0(r.max, 0, L)}%</li>`).join("")}</ul><p>${esc(T.riskTip)}</p><p class="mu">${esc(T.riskNote)}</p></div>` : "";
   const water = (d.water || []).length ? `${(d.water || []).length} · ${T.gap}: <b>${n0(waterGap(d), 0, L)} km</b> · <span class="wl">●</span> ${esc(T.onProf)}` : esc(T.noWater);
   return `<!doctype html><html lang="${L}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Road book · ${esc(d.title || T.ride)}</title>
@@ -193,6 +199,9 @@ td.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-num
 tr.climb td { background: #F4FBE3; } tr.water td { color: #1F5FA8; } tr.start td, tr.end td { font-weight: 600; }
 tr { break-inside: avoid; }
 footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font-size: 8.5pt; color: #56616D; display: flex; justify-content: space-between; gap: 10px; }
+.prof .rk { fill: rgba(255, 214, 10, .28); stroke: #B08900; stroke-dasharray: 4 4; }
+.risk { border-left: 5px solid #FFD60A; padding: 2px 0 2px 12px; margin-top: 14px; page-break-inside: avoid; }
+.risk h2 { margin-top: 4px; } .risk ul { margin: 4px 0; padding-left: 18px; } .risk p { margin: 4px 0; }
 .noprint { position: fixed; right: 16px; bottom: 16px; padding: 12px 18px; border-radius: 24px; border: 0; background: #C8F560; color: #0B0F14; font: 800 13pt "Barlow Condensed", "Arial Narrow", sans-serif; text-transform: uppercase; box-shadow: 0 4px 14px rgba(0,0,0,.25); cursor: pointer; }
 @media print { .noprint { display: none; } body { padding: 0; } }
 @media (max-width: 600px) { .fig { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } }
@@ -202,8 +211,9 @@ footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font
 <div class="stats"><div><b>${n0(d.km, d.km < 100 ? 1 : 0, L)}</b><span>${T.km}</span></div><div><b>${d.gain != null ? "+" + n0(d.gain, 0, L) : "–"}</b><span>${T.m}</span></div><div><b>${hm(d.minutes)}</b><span>${T.time}</span></div><div><b>${sh.hi != null ? n0(sh.hi, 0, L) : "–"}</b><span>${T.top}</span></div></div>
 <div class="fig${okImg(d.mapImg) ? " wide" : ""}">${okImg(d.mapImg) ? `<img class="map" src="${esc(d.mapImg)}" alt="${esc(T.route)}">` : `<svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>`}
 <div><h2 style="margin-top:0">${T.climbs}</h2>${climbList}</div></div>
-<svg class="prof" viewBox="0 0 1000 ${TOPB + 210}" role="img" aria-label="Profilo"><g transform="translate(0 ${TOPB})">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></g>${marks}</svg>
+<svg class="prof" viewBox="0 0 1000 ${TOPB + 210}" role="img" aria-label="Profilo"><g transform="translate(0 ${TOPB})">${bands}${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></g>${marks}</svg>
 ${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
+${riskBlock}
 <h2>${T.route}</h2>
 <table><thead><tr><th style="text-align:right">km</th><th style="text-align:right">${T.when}</th><th>${T.where}</th><th style="text-align:right">${T.ele}</th><th>${d.weather ? T.wx : ""}</th></tr></thead><tbody>${rows}</tbody></table>
 <h2>${T.water}</h2><p>${water}</p>
