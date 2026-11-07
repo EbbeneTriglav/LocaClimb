@@ -508,5 +508,10 @@
   "bbox": null,
   "target": "canada-alberta",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_us_ut.json": {
+  "bbox": null,
+  "target": "usa-utah",
+  "builtAt": "2026-11-07"
  }
 }
