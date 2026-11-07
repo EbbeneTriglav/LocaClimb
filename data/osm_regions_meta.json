@@ -498,5 +498,10 @@
   "bbox": null,
   "target": "usa-california-sud",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_co.json": {
+  "bbox": null,
+  "target": "colombia",
+  "builtAt": "2026-11-07"
  }
 }
