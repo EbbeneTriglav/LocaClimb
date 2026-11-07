@@ -5,8 +5,8 @@
  * profile and locaride.app at the bottom. Post 1080x1350 (4:5) or story 1080x1920 (9:16).
  * drawPost() only calls the 2D-canvas API it is given (tested with a recorder).
  */
-import { gradeColor } from "./climb.mjs?v=40";
-import { smoothProfile, routeShape, sampleGrades } from "./rideout.mjs?v=40";
+import { gradeColor, profileShapes } from "./climb.mjs?v=41";
+import { routeShape, sampleGrades } from "./rideout.mjs?v=41";
 
 export const POST = { w: 1080, h: 1350 }, STORY = { w: 1080, h: 1920 };
 const TX = {
@@ -79,7 +79,7 @@ export function drawPost(ctx, c, v, opt = {}) {
   fit(t.title, W - 128, 600, tall ? 76 : 68, cond); ctx.fillText(t.title, 64, py - (tall ? 92 : 84)); spaced(0);
   ctx.fillStyle = ACC; fit(t.big, W - 128, 600, tall ? 48 : 44, cond); ctx.fillText(t.big, 64, py - 30);
   ctx.restore();
-  const sh = smoothProfile(v, pw, ph, 6);
+  const sh = profileShapes(v, pw, ph, 6);   // the same profile and colours as the climb page (Rick, 07/11)
   ctx.save(); ctx.translate(64, py);
   if (typeof Path2D === "function" && sh.segs.length) {
     for (const s of sh.segs) { ctx.fillStyle = s.color || gradeColor(0); ctx.fill(new Path2D(s.d)); }

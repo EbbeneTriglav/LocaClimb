@@ -1,7 +1,7 @@
 // v2/lib/rideout.mjs - the ride outside the app: share image and printable road book.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { routeShape, sampleGrades, stopKms, bookRows, waterGap, roadbookHtml, drawCard, hm, CARD_W, CARD_H } from "../v2/lib/rideout.mjs";
+import { routeShape, sampleGrades, waterSpots, stopKms, bookRows, waterGap, roadbookHtml, drawCard, hm, CARD_W, CARD_H } from "../v2/lib/rideout.mjs";
 
 // 20 km going north-east: 10 km flat at 500 m, then 10 km climbing to 1300 m (8%); 21 samples
 const N = 21, side = {
@@ -73,4 +73,25 @@ test("drawCard paints the whole 1080x1350 card without throwing (recorded 2D con
   assert.ok(texts.includes("GIRO <B>DEL LAGO</B>"));                 // canvas text, not HTML: nothing to escape
   assert.ok(texts.includes("locaride.app") && texts.includes("+800") && texts.includes("1:15"));
   assert.ok(texts.some((t) => /^SALITE {2}Passo Alto/.test(t)));
+});
+
+test("sampleGrades reads samples at their true distance (dense track on hairpins)", () => {
+  // 4 km: the first 10 samples squeezed in 1 km (hairpins) climbing 100 m = 10%, then 3 km flat
+  const pts = [], prof = [];
+  for (let i = 0; i <= 10; i++) { pts.push([45 + i * 0.0009, 9]); prof.push(500 + i * 10); }
+  for (let i = 1; i <= 10; i++) { pts.push([45.009 + i * 0.0027, 9]); prof.push(600); }
+  const g = sampleGrades({ distance_km: 4, track: pts, elevationProfile: prof });
+  assert.ok(g[5] > 8 && g[5] < 12, "hairpin section ~10%, got " + g[5]);
+  assert.ok(Math.abs(g[18]) < 0.5, "flat part ~0%");
+});
+
+test("waterSpots: nearby points become one spot, spread along the whole ride", () => {
+  const w = [{ km: 1, name: "Sorgente" }, { km: 1.2, name: "Acqua potabile" }, { km: 2.5, name: "Sorgente" }, { km: 15, name: "Sorgente" }, { km: 35, name: "Acqua potabile" }, { km: 35.4 }];
+  const s = waterSpots({ water: w });
+  assert.deepEqual(s.map((x) => [x.km, x.n]), [[1, 3], [15, 1], [35, 2]]);
+  assert.equal(s[0].name, "Acqua potabile", "drinking water preferred to a spring as the group's name");
+  const many = Array.from({ length: 30 }, (_, i) => ({ km: i < 25 ? i * 0.1 : 20 + i, name: "Fontana" }));
+  const rows = bookRows({ ...D, water: many }).filter((r) => r.kind === "water");
+  assert.ok(rows.some((r) => r.km > 40), "water late in the ride is not cut off");
+  assert.match(rows[0].note, /25 punti/);
 });
