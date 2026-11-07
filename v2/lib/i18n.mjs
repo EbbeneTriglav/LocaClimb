@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=45";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=46";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -130,7 +130,7 @@ export const DICT = {
   "Condividi il giro": "Share the ride", "Link del giro": "Link to the ride", "Chi lo apre vede lo stesso percorso in LocaRide": "Whoever opens it sees the same route in LocaRide",
   "Immagine": "Image", "Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri": "For Instagram, WhatsApp, Strava: route, profile and numbers",
   "Road book da stampare": "Printable road book", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "One A4 page with profile, climbs, times, water and weather. PDF too",
-  "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print",
+  "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print", "Preparo il road book…": "Preparing the road book…", "Pronto: mappa, salite numerate, profilo, orari e meteo lungo il giro. Da stampare o salvare in PDF.": "Ready: map, numbered climbs, profile, times and weather along the ride. Print it or save it as PDF.", "Apri": "Open",
   // main roads overlay (app.mjs setTraffic)
   "Privacy": "Privacy", "Protetto da reCAPTCHA: valgono la": "Protected by reCAPTCHA: the Google", "e i": "and", "Termini": "Terms", "di Google.": "apply.", "niente pubblicità, visite contate senza cookie": "no ads, visits counted without cookies", "informativa privacy": "privacy notice",
   "Con l'account salviamo solo ciò che serve alle funzioni che usi:": "With an account we only store what the features you use need:",
