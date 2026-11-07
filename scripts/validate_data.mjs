@@ -139,6 +139,28 @@ export function validateClimbsExtra(arr) {
   return errs;
 }
 
+/* data/road_events.json (v2/lib/events.mjs): every event needs a known type, a yyyy-mm-dd date (end not before it),
+   at least one climb id and a source; climb ids must exist when the caller passes the known ids */
+export function validateRoadEvents(obj, knownIds) {
+  const errs = [], TYPES = ["chiusura", "bikeday", "granfondo", "gara"], ISO = /^\d{4}-\d{2}-\d{2}$/, seen = new Set();
+  if (!obj || typeof obj !== "object" || !Array.isArray(obj.events)) return ["road_events.json: root must be an object with an \"events\" array"];
+  obj.events.forEach((e, i) => {
+    const label = `road_events.json[${i}]`;
+    if (!e || typeof e !== "object") { errs.push(`${label}: not an object`); return; }
+    if (!isNonEmptyString(e.id)) errs.push(`${label}: missing/empty "id"`);
+    else if (seen.has(e.id)) errs.push(`${label}: duplicate id "${e.id}"`); else seen.add(e.id);
+    if (!TYPES.includes(e.type)) errs.push(`${label}: type must be one of ${TYPES.join(", ")}`);
+    if (!isNonEmptyString(e.name)) errs.push(`${label}: missing/empty "name"`);
+    if (!ISO.test(e.date || "")) errs.push(`${label}: date "${e.date}" is not yyyy-mm-dd`);
+    if (e.end != null && (!ISO.test(e.end) || e.end < e.date)) errs.push(`${label}: end "${e.end}" is not a yyyy-mm-dd date on or after date`);
+    if (!Array.isArray(e.climbs) || !e.climbs.length) errs.push(`${label}: "climbs" must list at least one climb id`);
+    else if (knownIds) for (const c of e.climbs) if (!knownIds.has(String(c))) errs.push(`${label}: unknown climb id "${c}"`);
+    if (!isNonEmptyString(e.url) || !/^https:\/\//.test(e.url)) errs.push(`${label}: "url" must be an https link to the source`);
+    if (!isNonEmptyString(e.source)) errs.push(`${label}: missing/empty "source"`);
+  });
+  return errs;
+}
+
 export function validateOsmRegions(arr) {
   if (!Array.isArray(arr)) return ["osm_regions.json: root must be an array"];
   const errs = [];
@@ -199,6 +221,13 @@ async function main() {
   const manualOverrides = await readJson("manual_overrides.json");
   if (!manualEnriched.__missing) errors.push(...validateManualOverrides(manualEnriched, "manual_enriched.json"));
   if (!manualOverrides.__missing) errors.push(...validateManualOverrides(manualOverrides, "manual_overrides.json"));
+
+  const roadEvents = await readJson("road_events.json");
+  if (!roadEvents.__missing) {
+    const osmIndex = await readJson("osm_index.json");
+    const ids = new Set([...knownIds, ...(Array.isArray(osmIndex) ? osmIndex.map((c) => String(c.id)) : [])]);
+    errors.push(...validateRoadEvents(roadEvents, ids));
+  }
 
   const climbsExtra = await readJson("climbs_extra.json");
   if (!climbsExtra.__missing) errors.push(...validateClimbsExtra(climbsExtra));

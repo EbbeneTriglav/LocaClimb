@@ -438,3 +438,7 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
   .actions.acts4 .btn { flex: 1 1 0; min-width: 0; white-space: nowrap; }
   .actions.acts4 .btn.pri { flex-basis: 100%; }
 }
+
+/* roads closed and events (lib/events.mjs) */
+.evs .pill { font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 6px; margin: 0 4px; white-space: nowrap; }
+.evs.warn { border-left: 3px solid var(--g4); padding-left: 10px; }
