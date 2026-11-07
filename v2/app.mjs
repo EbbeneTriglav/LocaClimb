@@ -3,22 +3,22 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=46";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=46";
-import { poisNear } from "./lib/poi.mjs?v=46";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=46";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=46";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=46";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=46";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=46";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=46";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=46";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=46";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=46";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=46";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=46";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=46";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=46";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=47";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=47";
+import { poisNear } from "./lib/poi.mjs?v=47";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=47";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=47";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=47";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=47";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=47";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=47";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=47";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=47";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=47";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=47";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=47";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=47";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=47";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -84,9 +84,13 @@ function addOurLayers() {
   if (SELG) map.setPaintProperty("selm-line", "line-gradient", SELG);
   map.addSource("route", { type: "geojson", data: EMPTY });
   map.addSource("route-surf", { type: "geojson", data: EMPTY });
+  map.addSource("route-risk", { type: "geojson", data: EMPTY });
+  // steep, twisty descents: a yellow band under the line + a dot where each one starts
+  map.addLayer({ id: "route-risk", type: "line", source: "route-risk", filter: ["==", ["geometry-type"], "LineString"], layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#FFD60A", "line-width": 16, "line-opacity": 0.7 } });
   map.addLayer({ id: "route-case", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 8, "line-opacity": 0.85 } });
   map.addLayer({ id: "route-line", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 4.5 } });
   map.addLayer({ id: "route-surf", type: "line", source: "route-surf", paint: { "line-color": "#E8EDF2", "line-width": 2, "line-dasharray": [1, 2.5] } });
+  map.addLayer({ id: "route-riskpt", type: "circle", source: "route-risk", filter: ["==", ["geometry-type"], "Point"], paint: { "circle-color": "#FFD60A", "circle-radius": 8, "circle-stroke-color": "#0B0F14", "circle-stroke-width": 3 } });
   map.addSource("poi", { type: "geojson", data: EMPTY });
   map.addLayer({ id: "poi-dot", type: "circle", source: "poi", minzoom: POI_ZOOM, layout: { visibility: S.poi ? "visible" : "none" }, paint: { "circle-color": ["match", ["get", "k"], "water", "#38BDF8", "#E8EDF2"], "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 3, 15, 6], "circle-stroke-color": "#0B0F14", "circle-stroke-width": 1.2 } });
   map.addLayer({ id: "c-glow", type: "circle", source: "climbs", paint: { "circle-color": DIFF_COLOR, "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 9, 13, 16], "circle-opacity": 0.22, "circle-blur": 0.8 } });
@@ -976,7 +980,7 @@ loadIndex().then((s) => { _idx = s; });
 
 /* ------------------------------------------------------------------ il tuo giro (route builder) */
 const GIRO_KEY = "lr_v2_giro";
-const G = { stops: [], profile: "fastbike", res: null, side: null, eta: null, on: [], markers: [], seq: 0, err: "", day: 0, start: "08:00", wx: null, water: null };
+const G = { stops: [], profile: "fastbike", res: null, side: null, rp: null, risk: [], eta: null, on: [], markers: [], seq: 0, err: "", day: 0, start: "08:00", wx: null, water: null };
 try { const o = JSON.parse(localStorage.getItem(GIRO_KEY) || "null"); if (o && Array.isArray(o.stops)) { G.stops = o.stops.slice(0, MAX_STOPS); G.profile = o.profile || G.profile; } } catch { /* private mode */ }
 function giroOn() { return panel.dataset.mode === "giro"; }
 function saveGiro() {
@@ -1026,7 +1030,7 @@ let calcT = null;
 function calcSoon() { clearTimeout(calcT); calcT = setTimeout(calcRoute, 350); }
 async function calcRoute() {
   const seq = ++G.seq;
-  if (G.stops.length < 2) { G.res = null; G.side = null; paintRoute(); if (giroOn()) renderGiro(); return; }
+  if (G.stops.length < 2) { G.res = null; G.side = null; G.rp = null; G.risk = []; paintRoute(); if (giroOn()) renderGiro(); return; }
   G.busy = true; G.err = ""; if (giroOn()) renderGiro();
   let res = null;
   try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, G.profile))).json()); } catch { res = null; }
@@ -1040,11 +1044,11 @@ async function calcRoute() {
   }
   if (seq !== G.seq) return;
   G.busy = false;
-  if (!res) { G.res = null; G.side = null; G.err = "Percorso non trovato: sposta una tappa su una strada."; paintRoute(); if (giroOn()) renderGiro(); return; }
+  if (!res) { G.res = null; G.side = null; G.rp = null; G.risk = []; G.err = "Percorso non trovato: sposta una tappa su una strada."; paintRoute(); if (giroOn()) renderGiro(); return; }
   applyRoute(res, seq);
 }
 function applyRoute(res, seq) {
-  G.res = res; G.side = asSide(res.track, 300); G.eta = G.side && !res.noEle ? etaMinutes(G.side, myWkg() || 3) : null;
+  G.res = res; G.side = asSide(res.track, 300); G.rp = res.noEle ? null : rideProfile(res.track); G.risk = riskyDescents(G.rp, G.stops); G.eta = G.side && !res.noEle ? etaMinutes(G.side, myWkg() || 3) : null;
   G.on = climbsOnRoute(res.track, (_idx && _idx.climbs) || [], 0.25).filter((x) => !G.stops.some((s, i) => i === 0 && Math.abs(s.lat - x.c.lat) < 1e-4)).slice(0, 40);
   G.wx = null; G.water = null;
   paintRoute(); if (giroOn()) { renderGiro(); fitRoute(); }
@@ -1191,12 +1195,14 @@ async function fillRides(u) {
   }));
 }
 function rideVisible(on) {
-  for (const id of ["route-case", "route-line", "route-surf"]) if (map.getLayer && map.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+  for (const id of ["route-risk", "route-case", "route-line", "route-surf", "route-riskpt"]) if (map.getLayer && map.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
 }
 function paintRoute() {
   const a = map.getSource && map.getSource("route"), b = map.getSource && map.getSource("route-surf");
   if (!a || !b) return;
-  a.setData({ type: "FeatureCollection", features: G.side ? (G.res.noEle ? [{ type: "Feature", properties: { c: "#C8F560" }, geometry: { type: "LineString", coordinates: G.res.track.map((q) => [q[1], q[0]]) } }] : routeFeatures(G.side)) : [] });
+  a.setData({ type: "FeatureCollection", features: G.side ? (G.res.noEle ? [{ type: "Feature", properties: { c: "#C8F560" }, geometry: { type: "LineString", coordinates: G.res.track.map((q) => [q[1], q[0]]) } }] : G.rp ? rideFeatures(G.rp) : routeFeatures(G.side)) : [] });
+  const k = map.getSource && map.getSource("route-risk");
+  if (k) k.setData({ type: "FeatureCollection", features: G.rp && G.risk.length ? [...riskyFeatures(G.rp, G.risk), ...G.risk.map((r) => ({ type: "Feature", properties: {}, geometry: { type: "Point", coordinates: [G.rp.side.track[r.a][1], G.rp.side.track[r.a][0]] } }))] : [] });
   b.setData({ type: "FeatureCollection", features: G.res ? surfaceFeatures(G.res.track, G.res.segs) : [] });
 }
 function fitRoute() {
@@ -1213,6 +1219,20 @@ function giroEventsHtml() {
   const ids = G.on.flatMap((x) => [x.c.id, ...((x.c.twins || []).map((t) => t.id))]), ev = onDay(EV, ids, day);
   return ev.length ? `<section class="sec evs warn"><h3>Attenzione: strade chiuse o eventi nel giorno scelto</h3><ul class="tips">${ev.map((e) => evItem(e, true)).join("")}</ul></section>` : "";
 }
+/* where a descent comes from: the climb whose top is just before it, else a stop with a real name */
+function riskFrom(x) {
+  const c = (G.on || []).filter((o) => o.km >= x.fromKm - 2 && o.km <= x.fromKm + 0.5).pop();
+  if (c) return c.c.name;
+  const st = x.after >= 0 && G.stops[x.after];
+  return st && st.name ? st.name : "";
+}
+/* steep, twisty descents of the ride (route.mjs riskyDescents): a tip, never an alarm */
+function riskHtml() {
+  if (!G.risk || !G.risk.length) return "";
+  return `<section class="sec risk"><h3>Discese impegnative</h3><ul>${G.risk.map((x) => `<li><b>km ${num(x.fromKm, 1)}–${num(x.toKm, 1)}</b>${riskFrom(x) ? ` · ${esc(riskFrom(x))} →` : ""} ${num(x.km, 1)} km al ${num(x.avg, 1)}%, punte ${num(x.max, 0)}%</li>`).join("")}</ul>
+    <p class="note small">I freni scaldano: frena a tratti, non tenerli sempre tirati, e rallenta prima delle curve.</p>
+    <p class="note small mu">Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.</p></section>`;
+}
 function renderGiro() {
   const n = G.stops.length, r = G.res, sd = G.side;
   const stops = G.stops.map((s, i) => `<li><span class="wp ${i === 0 ? "a" : i === n - 1 && i ? "z" : ""}">${i + 1}</span><span class="nm">${esc(stopName(s, i))}</span>
@@ -1228,8 +1248,10 @@ function renderGiro() {
         <div><b>${r.noEle ? "–" : clock(tot)}</b><span>in sella</span></div>
         <div><b>${sh ? esc(sh.hi) : "–"}</b><span>quota max</span></div></div>`;
     body = `${r.noEle ? `<p class="note small">Percorso di riserva (OSRM): senza quote né fondo.</p>` : ""}
-      ${sh ? `<figure class="prof" id="giroProf">${profSvg(sd, 170, 8, "Profilo del giro")}
+      ${sh ? `<figure class="prof" id="giroProf">${profSvg(sd, 170, 8, "Profilo del giro", G.risk, G.rp ? rideColor : null)}
         <figcaption><span>0 km</span><span>${num(r.km, 0)} km</span></figcaption></figure>` : ""}
+      ${G.rp ? `<div class="gleg rleg"><b>Salita</b>${UP_STOPS.map((g) => `<span style="--c:${g.color}">${esc(g.label)}</span>`).join("")}<i class="br"></i><b>Piano</b><span style="--c:#FFFFFF"></span><b>Discesa</b>${DOWN_STOPS.map((g) => `<span style="--c:${g.color}">${esc(g.label)}</span>`).join("")}</div>` : ""}
+      ${riskHtml()}
       ${shares.length ? `<div class="surf">${shares.map((x) => `<span class="${esc(x.k)}">${esc(x.k)} ${x.pct}%</span>`).join("")}</div>` : ""}
       <p class="note small mu">Tempo stimato a ${num(myWkg() || 3)} W/kg${myWkg() ? "" : " (impostalo nella scheda di una salita)"}, soste escluse.</p>
       ${G.on.length ? `<section class="sec"><h3>Salite sul percorso</h3><div class="cards">${G.on.map((x) => `<a class="card" href="#/s/${esc(encodeURIComponent(x.c.id))}" style="text-decoration:none;color:inherit"><span class="badge" style="background:${difficultyColor(x.c.difficulty || 0)}">${x.c.difficulty ? x.c.difficulty + "/10" : "–"}</span><span class="nm">${esc(x.c.name)}</span><span class="mt">km ${num(x.km, 0)}${x.c.elevation ? " · " + esc(x.c.elevation) + " m" : ""}</span></a>`).join("")}</div></section>` : ""}
@@ -1259,7 +1281,7 @@ function renderGiro() {
   const gsd = $("#gsend"); if (gsd) gsd.addEventListener("click", () => { const f = giroFile(); if (f) sendToDevice(f.title, f.name, f.text); });
   const gh = $("#gshare"); if (gh) gh.addEventListener("click", shareGiroDialog);
   const gb = $("#gbook"); if (gb) gb.addEventListener("click", printRoadbook);
-  const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.title = ""; G.stops = []; G.res = null; G.side = null; G.on = []; paintRoute(); giroChanged(); });
+  const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.title = ""; G.stops = []; G.res = null; G.side = null; G.rp = null; G.risk = []; G.on = []; paintRoute(); giroChanged(); });
   const gp = $("#giroProf"); if (gp) wireProfile(gp, sd, 170, 8);
   if (G.wx) paintGiroWeather();
   if (G.water) paintGiroWater();
@@ -1339,12 +1361,12 @@ map.once("load", () => { syncMarkers(); });
    move the mouse along the road on the map and the cursor follows on the profile. */
 const PW = 680 - AXIS_W;
 let PROF = null;   // { v, fig, h, pad, lo, hi } of the profile on screen
-function profSvg(v, h, pad, label) {
+function profSvg(v, h, pad, label, bands = [], colorOf = null) {
   const sh = profileShapes(v, PW, h, pad), p = v.elevationProfile || [];
   const ticks = yTicks(p[0], p[p.length - 1], sh.lo, sh.hi, h, pad);
   return `<svg class="pf" viewBox="0 0 680 ${h}" role="img" aria-label="${esc(label)}">
     <g class="ax">${ticks.map((t) => `<line x1="${AXIS_W}" x2="680" y1="${t.y}" y2="${t.y}"/><text x="${AXIS_W - 6}" y="${Math.max(11, Math.min(h - 2, t.y + 4))}" class="${t.kind}">${esc(t.e)}</text>`).join("")}</g>
-    <g transform="translate(${AXIS_W},0)">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#E8EDF2" stroke-width="2"/>
+    <g transform="translate(${AXIS_W},0)">${bands.map((b) => { const L = v.distance_km || 1, x = +(b.fromKm / L * PW).toFixed(1); return `<rect class="rk" x="${x}" y="0" width="${+Math.max(3, (b.toKm - b.fromKm) / L * PW).toFixed(1)}" height="${h}"/>`; }).join("")}${sh.segs.map((s) => `<path d="${s.d}" fill="${colorOf ? colorOf(s.g) : s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#E8EDF2" stroke-width="2"/>
     <g class="cur" visibility="hidden"><line x1="0" x2="0" y1="0" y2="${h}"/><circle r="5.5" cx="0" cy="0"/></g></g></svg><div class="ptip" hidden></div>`;
 }
 function wireProfile(fig, v, h, pad) {
@@ -1498,7 +1520,8 @@ function rideData() {
     start: G.start, wkg: myWkg() || 3, url: giroUrl(), km: G.res.km, gain: G.res.gain, minutes: G.eta ? G.eta[G.eta.length - 1] : null,
     side: G.side, eta: G.eta, climbs: G.on.map((x) => ({ name: x.c.name, km: x.km, elevation: x.c.elevation, difficulty: x.c.difficulty })),
     water: ((G.water && G.water.list) || []).map((x) => ({ km: x.km, name: x.p.name || x.p.label || "" })),
-    stops: G.stops.map((s, i) => ({ lat: s.lat, lon: s.lon, name: s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : "") })), weather: w
+    stops: G.stops.map((s, i) => ({ lat: s.lat, lon: s.lon, name: s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : "") })), weather: w,
+    risky: (G.risk || []).map((x) => ({ fromKm: x.fromKm, toKm: x.toKm, km: x.km, avg: x.avg, max: x.max, after: riskFrom(x) }))
   };
 }
 /* the same numbers as the weather table of the Giro, for the road book */

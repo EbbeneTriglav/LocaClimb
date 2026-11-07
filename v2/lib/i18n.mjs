@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=46";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=47";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -130,6 +130,9 @@ export const DICT = {
   "Condividi il giro": "Share the ride", "Link del giro": "Link to the ride", "Chi lo apre vede lo stesso percorso in LocaRide": "Whoever opens it sees the same route in LocaRide",
   "Immagine": "Image", "Per Instagram, WhatsApp, Strava: tracciato, profilo e numeri": "For Instagram, WhatsApp, Strava: route, profile and numbers",
   "Road book da stampare": "Printable road book", "Una pagina A4 con profilo, salite, orari, acqua e meteo. Anche in PDF": "One A4 page with profile, climbs, times, water and weather. PDF too",
+  "Piano": "Flat", "Discesa": "Descent", "Discese impegnative": "Demanding descents",
+  "I freni scaldano: frena a tratti, non tenerli sempre tirati, e rallenta prima delle curve.": "Brakes heat up: brake in bursts, don't drag them, and slow down before the bends.",
+  "Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.": "Automatic estimate from OSM and terrain data: it can't see gravel, roadworks or wet tarmac. It doesn't replace road signs or caution.",
   "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print", "Preparo il road book…": "Preparing the road book…", "Pronto: mappa, salite numerate, profilo, orari e meteo lungo il giro. Da stampare o salvare in PDF.": "Ready: map, numbered climbs, profile, times and weather along the ride. Print it or save it as PDF.", "Apri": "Open",
   // main roads overlay (app.mjs setTraffic)
   "Privacy": "Privacy", "Protetto da reCAPTCHA: valgono la": "Protected by reCAPTCHA: the Google", "e i": "and", "Termini": "Terms", "di Google.": "apply.", "niente pubblicità, visite contate senza cookie": "no ads, visits counted without cookies", "informativa privacy": "privacy notice",

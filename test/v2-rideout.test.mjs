@@ -116,3 +116,15 @@ test("road book: only an inline jpeg/png snapshot becomes the map", async () => 
   assert.match(h, /<span class="no">1<\/span>/);
   assert.ok(!/<img class="map"/.test(roadbookHtml({ ...d, mapImg: "javascript:x" })));
 });
+
+test("roadbookHtml: demanding descents get a block and a band on the profile, names escaped", () => {
+  const h = roadbookHtml({ ...D, risky: [{ fromKm: 2, toKm: 4.5, km: 2.5, avg: -10.4, max: -16, after: "<Mortirolo>" }] });
+  assert.match(h, /Discese impegnative/);
+  assert.match(h, /km 2,0–4,5/);
+  assert.match(h, /&lt;Mortirolo&gt;/);
+  assert.ok(!/<Mortirolo>/.test(h));
+  assert.match(h, /<rect class="rk"/);
+  assert.match(roadbookHtml({ ...D, lang: "en", risky: [{ fromKm: 2, toKm: 4.5, km: 2.5, avg: -10.4, max: -16, after: "" }] }), /Demanding descents/);
+  const none = roadbookHtml(D);
+  assert.ok(!/Discese impegnative/.test(none) && !/class="rk"/.test(none));
+});

@@ -442,3 +442,11 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 /* roads closed and events (lib/events.mjs) */
 .evs .pill { font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 6px; margin: 0 4px; white-space: nowrap; }
 .evs.warn { border-left: 3px solid var(--g4); padding-left: 10px; }
+/* ride line legend + steep, twisty descents (Giro) */
+.rleg b { font-weight: 700; color: var(--tx, #E8EDF2); margin-left: 4px; }
+.rleg span:empty::before { border: 1px solid #0B0F14; }
+.sec.risk { border-left: 4px solid #FFD60A; padding-left: 10px; }
+.sec.risk h3::before { content: "⚠ "; color: #FFD60A; }
+.sec.risk ul { margin: 4px 0; padding-left: 18px; }
+.pf .rk { fill: rgba(255, 214, 10, .16); stroke: rgba(255, 214, 10, .6); stroke-dasharray: 4 4; }
+.rleg .br { flex-basis: 100%; height: 0; }

@@ -3,7 +3,7 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor } from "./climb.mjs?v=46";
+import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=47";
 
 export const BROUTER = "https://brouter.de/brouter";
 export const PROFILES = [["fastbike", "Solo asfalto"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
@@ -132,6 +132,88 @@ export function routeFeatures(side) {
     cur.geometry.coordinates.push([t[i][1], t[i][0]]);
   }
   return out;
+}
+/* --- the ride line on the map: two colour scales (up / down) and steep, twisty descents ---
+   The map line is sampled every 25 m (asSide with 300 samples is one point every 400 m on a long ride,
+   and a 300 m wall vanished in the average). Up: the climb scale from 4%; flat (-4..4%): white;
+   down: three blues. Grade over 200 m for the colour, over 500 m for the warnings. */
+export const UP_STOPS = GRADE_STOPS.slice(1);
+export const FLAT_COLOR = "#FFFFFF";
+export const DOWN_STOPS = [{ min: -7, color: "#8FD3FF", label: "4–7" }, { min: -10, color: "#2F7CF6", label: "7–10" }, { min: -Infinity, color: "#1B2A8A", label: "10+" }];
+export function rideColor(g) {
+  if (g >= 4) { for (const s of UP_STOPS) if (g < s.max) return s.color; return UP_STOPS[UP_STOPS.length - 1].color; }
+  if (g > -4) return FLAT_COLOR;
+  for (const s of DOWN_STOPS) if (g > s.min) return s.color;
+  return DOWN_STOPS[DOWN_STOPS.length - 1].color;
+}
+const bearingDeg = (a, b) => {
+  const r = Math.PI / 180, y = Math.sin((b[1] - a[1]) * r) * Math.cos(b[0] * r);
+  const x = Math.cos(a[0] * r) * Math.sin(b[0] * r) - Math.sin(a[0] * r) * Math.cos(b[0] * r) * Math.cos((b[1] - a[1]) * r);
+  return Math.atan2(y, x) / r;
+};
+const wrap180 = (d) => ((d + 540) % 360) - 180;
+/* track -> { side (25 m samples), step, g (grade % over 200 m), g5 (over 500 m), turn (degrees of heading change in 500 m) } */
+export function rideProfile(track) {
+  const L = trackKm(track || []);
+  if (!(L > 0)) return null;
+  const n = Math.min(8000, Math.max(50, Math.round(L / 0.025))), side = asSide(track, n);
+  if (!side) return null;
+  const p = side.elevationProfile, t = side.track, step = side.distance_km / (n - 1);
+  const grade = (half) => { const k = Math.max(1, Math.round(half / step)); return p.map((_, i) => { const a = Math.max(0, i - k), b = Math.min(n - 1, i + k); return (p[b] - p[a]) / ((b - a) * step * 10); }); };
+  const tu = [0]; for (let i = 1; i < n - 1; i++) tu.push(Math.abs(wrap180(bearingDeg(t[i], t[i + 1]) - bearingDeg(t[i - 1], t[i])))); tu.push(0);
+  const kw = Math.max(1, Math.round(0.25 / step)), cs = [0]; for (const x of tu) cs.push(cs[cs.length - 1] + x);
+  return { side, step, g: grade(0.1), g5: grade(0.25), turn: tu.map((_, i) => cs[Math.min(n, i + kw + 1)] - cs[Math.max(0, i - kw)]) };
+}
+/* colour per sample; a gentle run shorter than minKm takes the gentle colour next to it (no barcode),
+   a run at 7%+ up or down always stays (a short wall must remain visible) */
+const KEEP = new Set([...UP_STOPS.slice(1), ...DOWN_STOPS.slice(1)].map((s) => s.color));
+export function rideColors(rp, minKm = 0.15) {
+  const c = rp.g.map(rideColor), min = Math.max(1, Math.round(minKm / rp.step));
+  for (let i = 0; i < c.length;) {
+    let j = i; while (j < c.length && c[j] === c[i]) j++;
+    if (j - i < min && i > 0 && !KEEP.has(c[i])) {
+      const to = !KEEP.has(c[i - 1]) ? c[i - 1] : j < c.length && !KEEP.has(c[j]) ? c[j] : null;   // never paint a gentle bit as steep
+      if (to) for (let k = i; k < j; k++) c[k] = to;
+    }
+    i = j;
+  }
+  return c;
+}
+export function rideFeatures(rp) {
+  const t = rp.side.track, c = rideColors(rp), out = [];
+  let cur = null;
+  for (let i = 1; i < t.length; i++) {
+    if (!cur || cur.properties.c !== c[i]) { cur = { type: "Feature", properties: { c: c[i] }, geometry: { type: "LineString", coordinates: [[t[i - 1][1], t[i - 1][0]]] } }; out.push(cur); }
+    cur.geometry.coordinates.push([t[i][1], t[i][0]]);
+  }
+  return out;
+}
+/* steep AND twisty descents: 500 m windows steeper than -9% with at least 200 degrees of turning
+   (about one hairpin), runs of 400 m+, merged when less than 3 km apart (one warning per descent).
+   stops (optional): index of the last stop before each descent, as "after". */
+export function riskyDescents(rp, stops = [], o = {}) {
+  if (!rp) return [];
+  const { g, g5, turn, step, side } = rp, n = g.length, p = side.elevationProfile, t = side.track;
+  const steep = o.steep != null ? o.steep : -9, curvy = o.curvy != null ? o.curvy : 200, kw = Math.max(1, Math.round(0.25 / step));
+  const runs = []; let cur = null;
+  for (let i = 0; i < n; i++) if (g5[i] <= steep && turn[i] >= curvy) { if (cur && (i - cur.b) * step <= 0.3) cur.b = i; else runs.push(cur = { a: i, b: i }); }
+  const merged = [];
+  for (const r of runs) {
+    if ((r.b - r.a) * step < 0.4) continue;
+    const a = Math.max(0, r.a - kw), b = Math.min(n - 1, r.b + kw), m = merged[merged.length - 1];
+    if (m && (a - m.b) * step <= 3) m.b = Math.max(m.b, b); else merged.push({ a, b });
+  }
+  let from = 0;
+  const at = stops.map((q) => { let bi = from, bd = Infinity; for (let i = from; i < n; i++) { const d = (t[i][0] - q.lat) ** 2 + (t[i][1] - q.lon) ** 2; if (d < bd) { bd = d; bi = i; } } return (from = bi); });
+  return merged.map(({ a, b }) => {
+    const km = (b - a) * step;
+    let after = -1; at.forEach((i, j) => { if (i <= a + Math.round(1 / step)) after = j; });
+    return { a, b, fromKm: a * step, toKm: b * step, km, avg: (p[b] - p[a]) / (km * 10), max: Math.min(...g.slice(a, b + 1)), after };
+  });
+}
+export function riskyFeatures(rp, risky) {
+  const t = rp.side.track;
+  return risky.map((r) => ({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: t.slice(r.a, r.b + 1).map((q) => [q[1], q[0]]) } }));
 }
 /* the stretches that are not tarmac, as lines (for a dashed overlay) */
 export function surfaceFeatures(track, segs) {

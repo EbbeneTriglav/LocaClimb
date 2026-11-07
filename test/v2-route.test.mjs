@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { brouterUrl, parseBrouter, surfCat, ascent, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, trackKm } from "../v2/lib/route.mjs";
+import { brouterUrl, parseBrouter, surfCat, ascent, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, trackKm, rideColor, rideProfile, rideColors, rideFeatures, riskyDescents, riskyFeatures, cumKm } from "../v2/lib/route.mjs";
 
 // a 10 km northward line: 5 km flat at 500 m, then 5 km climbing to 1000 m (10%)
 const D = 10 / 111.195; // degrees of latitude for 10 km
@@ -107,4 +107,49 @@ test("saved rides: resampled keeping both ends; the document has the classic fie
   const d = rideDoc("  ", [{ lat: 46.5, lon: 10.4, id: "stelvio", name: "Passo dello Stelvio" }, { lat: 46.4, lon: 10.3 }], long, 70.04, 1939.6, 123);
   assert.equal(d.name, "Il mio giro"); assert.equal(d.pts, 6000); assert.equal(d.distKm, 70.04); assert.equal(d.ascent, 1940); assert.equal(d.savedAt, 123);
   assert.deepEqual(d.stops.map((s) => s.type), ["pass", "point"]);
+});
+
+// a descent at `grade` %: hairpin legs of 150 m (switchbacks) or one straight line, `km` long
+function descent(grade, km, twisty) {
+  const pts = [], leg = 0.15, dLon = leg / (111.32 * Math.cos(46 * Math.PI / 180)), dLat = 0.02 / 111.195;
+  if (twisty) { for (let l = 0; l * leg < km; l++) for (let k = 0; k <= 6; k++) pts.push([46 + l * dLat, 10 + (l % 2 ? (6 - k) : k) / 6 * dLon]); }
+  else for (let i = 0; i * 0.025 <= km; i++) pts.push([46 + i * 0.025 / 111.195, 10]);
+  const c = cumKm(pts);
+  return pts.map((q, i) => [q[0], q[1], Math.round(2000 + c[i] * 10 * grade)]);
+}
+
+test("rideColor: climb scale from 4%, white flat, three blues down", () => {
+  assert.equal(rideColor(2), "#FFFFFF"); assert.equal(rideColor(-3.9), "#FFFFFF");
+  assert.equal(rideColor(5), "#F2C14E"); assert.equal(rideColor(14), "#C04BD6");
+  assert.equal(rideColor(-5), "#8FD3FF"); assert.equal(rideColor(-8), "#2F7CF6"); assert.equal(rideColor(-12), "#1B2A8A");
+});
+
+test("rideProfile: 25 m samples, so a 300 m wall keeps its colour on a long ride", () => {
+  // 150 km flat with a 300 m wall at 12% in the middle (300 samples = one every 500 m)
+  const D1 = 1 / 111.195, pts = [];
+  for (let i = 0; i <= 6000; i++) { const km = i * 0.025, e = km < 75 ? 100 : km < 75.3 ? 100 + (km - 75) * 120 : 136; pts.push([45 + km * D1, 10, e]); }
+  const rp = rideProfile(pts);
+  assert.ok(Math.abs(rp.step - 0.025) < 0.001);
+  const c = rideColors(rp);
+  assert.ok(c.includes("#E5484D"), "the wall is still red");
+  assert.equal(routeFeatures(asSide(pts)).some((f) => f.properties.c === "#E5484D"), false, "300 samples lose it (why the map line changed)");
+  assert.ok(rideFeatures(rp).every((f) => f.geometry.coordinates.length >= 2));
+});
+
+test("rideColors: a short gentle blip takes the colour before it, steep runs stay", () => {
+  const rp = { step: 0.025, g: [1, 1, 1, 5, 1, 1, 1, 12, 1, 1] };
+  assert.deepEqual(rideColors(rp), ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#E5484D", "#FFFFFF", "#FFFFFF"]);
+  assert.deepEqual(rideColors({ step: 0.025, g: [12, 12, 12, 1, 12, 12] }).slice(2, 5), ["#E5484D", "#FFFFFF", "#E5484D"], "between two walls a flat bit stays flat");
+});
+
+test("riskyDescents: only steep AND twisty descents, one warning per descent, after the right stop", () => {
+  const twisty = rideProfile(descent(-11, 3, true));
+  const r = riskyDescents(twisty, [{ lat: 46, lon: 10 }]);
+  assert.equal(r.length, 1);
+  assert.ok(r[0].avg <= -9 && r[0].km >= 2, JSON.stringify(r[0]));
+  assert.equal(r[0].after, 0);
+  assert.equal(riskyFeatures(twisty, r).length, 1);
+  assert.deepEqual(riskyDescents(rideProfile(descent(-11, 3, false))), [], "straight: steep but not twisty");
+  assert.deepEqual(riskyDescents(rideProfile(descent(-6, 3, true))), [], "twisty but not steep");
+  assert.deepEqual(riskyDescents(null), []);
 });
