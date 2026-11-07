@@ -31,6 +31,7 @@ import { difficultyOf } from "./lib/difficulty.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 import { climbFloor } from "./lib/climbfloor.mjs";
 import { reachable, pickTop } from "./lib/seektop.mjs";
+import { fwdGrade, trimValley, trimParams } from "./lib/walltrim.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -533,17 +534,14 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
   // It can never cut mid-climb (a real climb is >= VFLOOR from its base up) and always
   // keeps >= VMIN_KEEP km. Generalizes the "2km / 4%" idea: Radici needs ~10km trimmed,
   // so the floor (not a fixed cap) decides where the valley ends.
-  const VFLOOR = 4.0, VMIN_KEEP = 3.0;
-  function fwdG(i, winKm) { let j = i; while (j < end && cum[j] - cum[i] < winKm) j++; const dd = cum[j] - cum[i]; return dd > 0 ? (el[j] - el[i]) / (dd * 1000) * 100 : 0; }
+  function fwdG(i, winKm) { return fwdGrade(cum, el, end, i, winKm); }
   // Trim the valley approach until the SUSTAINED real climb begins. A short steep connector
   // (>=4% over 0.6km but flat beyond) must NOT stop the trim - only a ramp that holds >=4%
   // over BOTH 0.6km and 1.4km does. This rides through valley-floor ramps so the base lands
   // at the town where the climb truly starts (Bormio not Cepina; Ponte di Legno not Vezza;
   // Monno/Mazzo not Edolo) instead of anchoring far down the main valley.
-  while (base < end - 1 && (cum[end] - cum[base]) > VMIN_KEEP) {
-    if (fwdG(base, 0.6) >= VFLOOR && fwdG(base, 1.4) >= VFLOOR) break;
-    base++;
-  }
+  // Short walls (relax "short") use 0.2 + 0.4 km windows and keep >= 0.3 km (scripts/lib/walltrim.mjs).
+  base = trimValley(cum, el, base, end, trimParams(relax));
   // Town-anchor: walk UP from the trimmed base through the gentle valley (local grade < 4.5%
   // over 1km) and snap the base to the HIGHEST town reached before the real climb. Encodes the
   // local truth "a climb starts at the valley-floor town" (Ponte di Legno on Gavia, Mazzo on
