@@ -523,5 +523,15 @@
   ],
   "target": "canada-quebec",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_ca_bc.json": {
+  "bbox": [
+   -130,
+   48.2,
+   -114,
+   54.5
+  ],
+  "target": "canada-british-columbia",
+  "builtAt": "2026-11-07"
  }
 }
