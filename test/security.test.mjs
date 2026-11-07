@@ -44,11 +44,14 @@ test("Firestore: the community sums can only follow one's own vote, never be rew
   assert.ok(!/allow delete/.test(block.slice(0, block.indexOf("match /votes/"))), "the sums must not be deletable");
 });
 
-test("App Check: one reCAPTCHA Enterprise key for both apps, active only on locaride.app, declared in the privacy notice", () => {
+test("App Check: one reCAPTCHA Enterprise key for both apps, Firebase only on locaride.app / beta.locaride.app (else off or debug token), declared in the privacy notice", () => {
   const v2 = readFileSync(new URL("../v2/lib/diary.mjs", import.meta.url), "utf8"), st = readFileSync(new URL("../js/state.js", import.meta.url), "utf8");
   const k1 = v2.match(/APPCHECK_KEY = "([^"]+)"/)[1], k2 = st.match(/var APPCHECK_KEY="([^"]+)"/)[1];
   assert.equal(k1, k2);
-  assert.match(v2, /hostname !== "locaride\.app"/);
+  assert.match(v2, /export const FB_HOSTS = \["locaride\.app", "beta\.locaride\.app"\];/, "production hosts changed");
+  assert.match(v2, /if \(!f \|\| mode === "off"\) return null;/, "other hosts must not reach Firestore without App Check");
+  const au = readFileSync(new URL("../js/auth.js", import.meta.url), "utf8");
+  assert.match(au, /h==="locaride\.app"\|\|h==="beta\.locaride\.app"/); assert.match(au, /fbHostMode\(\)!=="off"/);
   assert.match(v2, /ReCaptchaEnterpriseProvider\(APPCHECK_KEY\), true\)/, "Enterprise provider with token auto-refresh");
   assert.match(page, /firebase-app-check-compat\.js" integrity="sha384-/);
   const priv = readFileSync(new URL("../privacy.html", import.meta.url), "utf8");

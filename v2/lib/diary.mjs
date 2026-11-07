@@ -12,16 +12,28 @@ let fb = null;
    It must be a score-based reCAPTCHA Enterprise key (Cloud "Fraud Defense", no secret key): a classic
    v3 key (with a secret) makes the invisible widget fail and every token request ends in recaptcha-error. */
 export const APPCHECK_KEY = "6LexOwwuAAAAAI51qWcpeSN4rLQ15xvEF4hwd-YD";
-function appCheck(f) {
-  if (globalThis.location?.hostname !== "locaride.app" || !f.appCheck) return;
+/* Where Firebase runs (07/11/2026, before making App Check mandatory): half of the Firestore requests came
+   without a token - the e2e tests on localhost, local runs, beta.locaride.app, branch previews. Once App Check
+   is enforced they would all fail anyway, so:
+   - "prod": locaride.app and beta.locaride.app -> Firebase with App Check (the reCAPTCHA key covers the subdomain);
+   - "dev": any other host, only if localStorage lr_dev_firebase = "1" -> Firebase with an App Check DEBUG token
+     (printed in the console once: register it in Firebase -> App Check -> Gestisci token di debug);
+   - "off": any other host by default -> no Firebase at all (no login, no ratings): tests and previews stay
+     out of the App Check numbers and never touch the real database. */
+export const FB_HOSTS = ["locaride.app", "beta.locaride.app"];
+export function fbMode(hostname, devFlag) { return FB_HOSTS.includes(hostname) ? "prod" : devFlag ? "dev" : "off"; }
+function devFlag() { try { return globalThis.localStorage?.getItem("lr_dev_firebase") === "1"; } catch { return false; } }
+function appCheck(f, mode) {
+  if (!f.appCheck) return;
+  if (mode === "dev") globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
   try { f.appCheck().activate(new f.appCheck.ReCaptchaEnterpriseProvider(APPCHECK_KEY), true); } catch { /* already active */ }
 }
 
 function init() {
   if (fb) return fb;
-  const f = globalThis.firebase;
-  if (!f) return null;
-  try { if (!f.apps.length) { f.initializeApp(FIREBASE_CONFIG); appCheck(f); } fb = { auth: f.auth(), db: f.firestore(), f }; } catch { return null; }
+  const f = globalThis.firebase, mode = fbMode(globalThis.location?.hostname, devFlag());
+  if (!f || mode === "off") return null;
+  try { if (!f.apps.length) { f.initializeApp(FIREBASE_CONFIG); appCheck(f, mode); } fb = { auth: f.auth(), db: f.firestore(), f }; } catch { return null; }
   return fb;
 }
 
