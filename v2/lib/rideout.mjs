@@ -11,7 +11,7 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=45";
+import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=46";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
@@ -117,6 +117,21 @@ export function waterGap(d) {
   return Math.max(gap, (d.km || 0) - prev);
 }
 
+/* climb markers on the road book profile: numbers instead of names (names collided on rides with walls
+   a few km apart - Kruisberg, Ronse, Hotond on top of each other, 07/11 Rick). Greedy lanes: each number
+   goes in the first lane where it keeps "gap" units from the previous one; past the last lane, the emptiest. */
+/* the road book map is a snapshot made by the app: only an inline jpeg/png is accepted */
+export const okImg = (u) => typeof u === "string" && /^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(u);
+export function labelLanes(xs, gap = 30, lanes = 3) {
+  const last = Array(lanes).fill(-Infinity), out = Array(xs.length);
+  xs.map((x, i) => [x, i]).sort((a, b) => a[0] - b[0]).forEach(([x, i]) => {
+    let l = last.findIndex((v) => x - v >= gap);
+    if (l < 0) l = last.indexOf(Math.min(...last));
+    out[i] = l; last[l] = x;
+  });
+  return out;
+}
+
 /* ------------------------------------------------------------------ printable road book (A4, light) */
 export function roadbookHtml(d) {
   const T = tx(d), L = langOf(d);
@@ -124,7 +139,9 @@ export function roadbookHtml(d) {
   const gAt = (i) => gr[Math.min(gr.length - 1, Math.round(i / Math.max(1, pts.length - 1) * (gr.length - 1)))];   // track and profile differ in length
   const route = pts.slice(1).map((p, i) => `<path d="M${pts[i][0]} ${pts[i][1]}L${p[0]} ${p[1]}" stroke="${gradeColor(gAt(i + 1))}"/>`).join("");
   const L0 = d.side.distance_km || d.km || 1;
-  const marks = (d.climbs || []).map((c) => { const x = +(c.km / L0 * 1000).toFixed(1); return `<g><line x1="${x}" x2="${x}" y1="0" y2="190" stroke="#0B0F14" stroke-dasharray="3 3" stroke-width="1"/><text x="${Math.min(990, Math.max(10, x))}" y="12" text-anchor="${x > 900 ? "end" : x < 100 ? "start" : "middle"}">${esc(c.name)}</text></g>`; }).join("");
+  const TOPB = 66;   // band above the profile for the numbered climb markers (3 lanes)
+  const mx = (d.climbs || []).map((c) => +Math.min(988, Math.max(12, c.km / L0 * 1000)).toFixed(1)), lanes = labelLanes(mx);
+  const marks = (d.climbs || []).map((c, i) => { const x = mx[i], y = 12 + lanes[i] * 21; return `<g class="mk"><line x1="${x}" x2="${x}" y1="${y + 10}" y2="${TOPB + 190}" stroke="#0B0F14" stroke-dasharray="3 3" stroke-width="1"/><circle cx="${x}" cy="${y}" r="10"/><text x="${x}" y="${y + 4}">${i + 1}</text></g>`; }).join("");
   const Yp = (e) => +(184 - (e - sh.lo) / ((sh.hi - sh.lo) || 1) * 178).toFixed(1);
   const drops = waterSpots(d).map((w) => {
     const x = +Math.min(992, Math.max(8, w.km / L0 * 1000)).toFixed(1), e = eleAt(d.side, w.km), y = e == null ? 170 : Math.max(14, Yp(e) - 13), r = w.n > 1 ? 10 : 6.5;
@@ -135,7 +152,7 @@ export function roadbookHtml(d) {
     const w = r.kind !== "water" ? wx.get(Math.round(r.km)) : null;
     return `<tr class="${r.kind}${r.climb ? " climb" : ""}"><td class="n">${n0(r.km, 0, L)}</td><td class="n">${esc(r.time)}</td><td><b>${esc(r.name)}</b>${r.note ? ` <span class="mu">${esc(r.note)}</span>` : ""}</td><td class="n">${r.ele != null ? esc(r.ele) + " m" : ""}</td><td>${w && w.temp != null ? `${n0(w.temp, 0, L)}° · ${n0(w.wind, 0, L)} km/h · ${esc(w.pp ?? "–")}%` : ""}</td></tr>`;
   }).join("");
-  const climbList = (d.climbs || []).length ? `<ul class="cl">${d.climbs.map((c) => `<li>${c.difficulty ? `<span class="d" style="background:${difficultyColor(c.difficulty)}">${esc(c.difficulty)}/10</span>` : ""}<b>${esc(c.name)}</b> <span class="mu">km ${n0(c.km, 0, L)}${c.elevation ? ` · ${esc(c.elevation)} m` : ""}</span></li>`).join("")}</ul>` : `<p class="mu">–</p>`;
+  const climbList = (d.climbs || []).length ? `<ul class="cl">${d.climbs.map((c, i) => `<li><span class="no">${i + 1}</span>${c.difficulty ? `<span class="d" style="background:${difficultyColor(c.difficulty)}">${esc(c.difficulty)}/10</span>` : ""}<b>${esc(c.name)}</b> <span class="mu">km ${n0(c.km, 0, L)}${c.elevation ? ` · ${esc(c.elevation)} m` : ""}</span></li>`).join("")}</ul>` : `<p class="mu">–</p>`;
   const water = (d.water || []).length ? `${(d.water || []).length} · ${T.gap}: <b>${n0(waterGap(d), 0, L)} km</b> · <span class="wl">●</span> ${esc(T.onProf)}` : esc(T.noWater);
   return `<!doctype html><html lang="${L}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Road book · ${esc(d.title || T.ride)}</title>
@@ -157,6 +174,11 @@ h2 { font: 800 14pt "Barlow Condensed", "Arial Narrow", sans-serif; text-transfo
 .cl { margin: 0; padding: 0; list-style: none; }
 .cl li { padding: 6px 0; border-bottom: 1px solid #E3E7EB; }
 .cl li b { font: 800 13pt "Barlow Condensed", "Arial Narrow", sans-serif; text-transform: uppercase; }
+.cl .no, .mk circle { background: #0B0F14; color: #C8F560; fill: #0B0F14; }
+.cl .no { display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; text-align: center; margin-right: 6px; font: 800 10pt "Barlow Condensed", "Arial Narrow", sans-serif; }
+.prof .mk text { fill: #C8F560; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; text-anchor: middle; }
+img.map { width: 100%; height: auto; display: block; }
+.fig.wide { grid-template-columns: 1.35fr 1fr; }
 .cl .d { display: inline-block; min-width: 34px; text-align: center; margin-right: 6px; padding: 1px 5px; border-radius: 5px; color: #fff; font: 700 9pt "Barlow", sans-serif; }
 .wd circle { fill: #1F78D1; stroke: #fff; stroke-width: 2; } .wd text { fill: #fff; font: 700 10px "Barlow", sans-serif; text-anchor: middle; } .wl { color: #1F78D1; }
 svg.prof { width: 100%; height: auto; display: block; margin-top: 10px; }
@@ -178,9 +200,9 @@ footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font
 <div class="top"><span class="brand"><i></i>LocaRide · Road book</span><span class="mu">${esc(d.date || "")}${d.eta ? ` · ${T.depart} ${esc(d.start)}` : ""}</span></div>
 <h1>${esc(d.title || T.ride)}</h1>
 <div class="stats"><div><b>${n0(d.km, d.km < 100 ? 1 : 0, L)}</b><span>${T.km}</span></div><div><b>${d.gain != null ? "+" + n0(d.gain, 0, L) : "–"}</b><span>${T.m}</span></div><div><b>${hm(d.minutes)}</b><span>${T.time}</span></div><div><b>${sh.hi != null ? n0(sh.hi, 0, L) : "–"}</b><span>${T.top}</span></div></div>
-<div class="fig"><svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>
+<div class="fig${okImg(d.mapImg) ? " wide" : ""}">${okImg(d.mapImg) ? `<img class="map" src="${esc(d.mapImg)}" alt="${esc(T.route)}">` : `<svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>`}
 <div><h2 style="margin-top:0">${T.climbs}</h2>${climbList}</div></div>
-<svg class="prof" viewBox="0 0 1000 210" role="img" aria-label="Profilo">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${marks}${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></svg>
+<svg class="prof" viewBox="0 0 1000 ${TOPB + 210}" role="img" aria-label="Profilo"><g transform="translate(0 ${TOPB})">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></g>${marks}</svg>
 ${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
 <h2>${T.route}</h2>
 <table><thead><tr><th style="text-align:right">km</th><th style="text-align:right">${T.when}</th><th>${T.where}</th><th style="text-align:right">${T.ele}</th><th>${d.weather ? T.wx : ""}</th></tr></thead><tbody>${rows}</tbody></table>

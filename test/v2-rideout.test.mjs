@@ -95,3 +95,24 @@ test("waterSpots: nearby points become one spot, spread along the whole ride", (
   assert.ok(rows.some((r) => r.km > 40), "water late in the ride is not cut off");
   assert.match(rows[0].note, /25 punti/);
 });
+
+test("road book: climb numbers never pile up on the profile", async () => {
+  const { labelLanes } = await import("../v2/lib/rideout.mjs");
+  assert.deepEqual(labelLanes([100, 400, 700]), [0, 0, 0], "far apart: one lane");
+  assert.deepEqual(labelLanes([300, 310, 320, 335]), [0, 1, 2, 0], "Kruisberg, Ronse, Hotond, Knokteberg: stacked, the 4th back on the first free lane");
+  assert.deepEqual(labelLanes([300, 305, 310, 315]), [0, 1, 2, 0], "more than 3 within the gap: the emptiest (oldest) lane");
+  assert.deepEqual(labelLanes([500, 100]), [0, 0], "order of the climbs does not matter");
+});
+
+test("road book: only an inline jpeg/png snapshot becomes the map", async () => {
+  const { okImg, roadbookHtml } = await import("../v2/lib/rideout.mjs");
+  assert.ok(okImg("data:image/jpeg;base64,/9j/4AAQ"));
+  assert.ok(!okImg("https://evil.example/x.jpg"));
+  assert.ok(!okImg('data:image/png;base64,AA" onerror="x'));
+  const side = { distance_km: 2, elevationProfile: [10, 20, 30], track: [[45, 9], [45.01, 9.01], [45.02, 9.02]] };
+  const d = { km: 2, side, climbs: [{ name: "A", km: 1 }], mapImg: "data:image/png;base64,iVBOR" };
+  const h = roadbookHtml(d);
+  assert.match(h, /<img class="map" src="data:image\/png;base64,iVBOR"/);
+  assert.match(h, /<span class="no">1<\/span>/);
+  assert.ok(!/<img class="map"/.test(roadbookHtml({ ...d, mapImg: "javascript:x" })));
+});
