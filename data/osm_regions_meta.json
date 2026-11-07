@@ -493,5 +493,10 @@
   "bbox": null,
   "target": "usa-california-nord",
   "builtAt": "2026-11-06"
+ },
+ "osm_passes_us_casud.json": {
+  "bbox": null,
+  "target": "usa-california-sud",
+  "builtAt": "2026-11-07"
  }
 }
