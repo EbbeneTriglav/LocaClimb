@@ -503,5 +503,10 @@
   "bbox": null,
   "target": "colombia",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_ca_ab.json": {
+  "bbox": null,
+  "target": "canada-alberta",
+  "builtAt": "2026-11-07"
  }
 }
