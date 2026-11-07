@@ -337,3 +337,18 @@ test("alongTrack (grid) finds the same points as a full scan", () => {
   assert.deepEqual(fast.map((x) => x.p.id).sort((a, b) => a - b), ref.sort((a, b) => a - b));
   assert.ok(ref.length > 10);
 });
+
+test("export map: the shared ride image keeps the relief and only city/town names", async () => {
+  const { EXPORT_MAP, exportLayer } = await import("../v2/lib/maps.mjs");
+  assert.equal(EXPORT_MAP.id, "export");
+  assert.match(EXPORT_MAP.style, /openfreemap\.org\/styles\/dark$/);
+  assert.ok(EXPORT_MAP.hillshade["hillshade-exaggeration"] > 0);
+  assert.ok(exportLayer({ id: "road_primary", type: "line" }));
+  assert.ok(exportLayer({ id: "water", type: "fill" }));
+  assert.ok(exportLayer({ id: "place_city", type: "symbol" }));
+  assert.ok(exportLayer({ id: "place_town", type: "symbol" }));
+  assert.ok(!exportLayer({ id: "poi_r1", type: "symbol" }));
+  assert.ok(!exportLayer({ id: "highway_name_other", type: "symbol" }));
+  assert.ok(!exportLayer({ id: "place_village", type: "symbol" }));
+  assert.ok(!exportLayer(null));
+});
