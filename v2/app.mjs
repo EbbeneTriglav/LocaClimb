@@ -9,7 +9,7 @@ import { poisNear } from "./lib/poi.mjs?v=42";
 import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=42";
 import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=42";
 import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=42";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=42";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=42";
 import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=42";
 import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=42";
 import { loadRegions, regionAt } from "./lib/regions.mjs?v=42";
@@ -1386,10 +1386,15 @@ async function snapClimb(v, w, h, o = {}) {
     const ok = await new Promise((res) => { m.once("load", () => res(true)); setTimeout(() => res(false), 15000); });
     if (!ok) return null;
     if (bm.id === "notte") for (const l of m.getStyle().layers) { const pt = notteRoads(l); if (pt) for (const [k, x] of Object.entries(pt)) { try { m.setPaintProperty(l.id, k, x); } catch { /* not this layer */ } } }
+    if (bm.id === "export") {   // the shared ride image: no icons or small labels, relief under the roads (lib/maps.mjs EXPORT_MAP)
+      for (const l of m.getStyle().layers) if (!exportLayer(l)) m.removeLayer(l.id);
+      const under = m.getStyle().layers.find((l) => l.type === "line" || l.type === "symbol");
+      m.addSource("hsdem", TERRAIN); m.addLayer({ id: "hs", type: "hillshade", source: "hsdem", paint: bm.hillshade }, under && under.id);
+    }
     if (o.terrain !== false) { m.addSource("dem", TERRAIN); m.setTerrain({ source: "dem", exaggeration: 1.35 }); }
     const coords = t.map((q) => [q[1], q[0]]);
     m.addSource("p", { type: "geojson", lineMetrics: true, data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } } });
-    m.addLayer({ id: "p-case", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 15, "line-opacity": 0.85 } });
+    m.addLayer({ id: "p-case", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": bm.id === "export" ? "#F5F7FA" : "#0B0F14", "line-width": 15, "line-opacity": 0.85 } });
     m.addLayer({ id: "p-line", type: "line", source: "p", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#F28C38", "line-width": 9, "line-gradient": lineGradient(v) } });
     const b = coords.reduce((bb, q) => bb.extend(q), new maplibregl.LngLatBounds(coords[0], coords[0]));
     // the climb fills the space between the logo and the profile (the title sits on it, with a shadow)
@@ -1490,9 +1495,9 @@ async function shareImage() {
   try { await Promise.all([document.fonts.load("italic 800 80px 'Barlow Condensed'"), document.fonts.load("800 80px 'Barlow Condensed'"), document.fonts.load("600 30px Barlow")]); } catch { /* system font */ }
   const cv = document.createElement("canvas"); cv.width = CARD_W; cv.height = CARD_H;
   // behind the route: the map the user is looking at, from above (Rick, 07/11); plain dark if it fails
-  const bg = await snapClimb(d.side, CARD_W, MAP_H, { base: BASE, pitch: 0, terrain: false, pad: { top: 100, bottom: 40, left: 30, right: 30 } });
+  const bg = await snapClimb(d.side, CARD_W, MAP_H, { base: EXPORT_MAP, pitch: 0, terrain: false, pad: { top: 100, bottom: 40, left: 30, right: 30 } });
   if (!$("#shOut")) return;
-  const credit = BASE.id === "notte" || BASE.id === "chiara" ? "© OpenFreeMap · OpenMapTiles · OpenStreetMap" : String(BASE.style.sources.base.attribution || "").replace(/<[^>]+>/g, "");
+  const credit = EXPORT_MAP.credit;
   drawCard(cv.getContext("2d"), d, undefined, { bg, credit: bg ? credit : null });
   const blob = await new Promise((r) => cv.toBlob(r, "image/png"));
   if (!blob || !$("#shOut")) return;

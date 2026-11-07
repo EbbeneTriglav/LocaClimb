@@ -27,6 +27,18 @@ export const BASEMAPS = [
 export const DEFAULT_MAP = "notte", GIRO_MAP = "ciclabile";
 export function basemap(id) { return BASEMAPS.find((b) => b.id === id) || BASEMAPS[0]; }
 
+/* The background of the shared ride image ("Condividi" in the Giro): always the dark map with the relief
+   and only city/town names, whatever map the user is looking at. Ciclabile/CyclOSM or Topografica behind the
+   ride did not read (07/11, Rick): labels, icons and coloured roads fought with the route and the header.
+   The dark relief also matches the card (#0B0F14) and lets the route colours stand out. */
+export const EXPORT_MAP = {
+  id: "export", style: "https://tiles.openfreemap.org/styles/dark",
+  hillshade: { "hillshade-shadow-color": "#000000", "hillshade-highlight-color": "#4A5A6C", "hillshade-exaggeration": 0.7 },
+  credit: "© OpenFreeMap · OpenMapTiles · OpenStreetMap · rilievo: AWS Terrain Tiles"
+};
+/* layers kept on the export map: everything but text and icons, except the names of cities and towns */
+export function exportLayer(layer) { return !!layer && (layer.type !== "symbol" || /(^|_)(city|town)($|_)/.test(layer.id)); }
+
 /* "Notte+": the dark style with readable roads and labels (the plain dark one was black on black) */
 export function notteRoads(layer) {
   if (layer.type === "background") return { "background-color": "#0E141B" };
