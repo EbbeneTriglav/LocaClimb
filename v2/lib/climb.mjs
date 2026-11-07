@@ -102,7 +102,7 @@ export function profileShapes(v, w, h, pad = 8) {
     const dm = (pd[i] - pd[i - 1]) * 1000;
     if (!(dm > 0)) continue;
     const g = (p[i] - p[i - 1]) / dm * 100;
-    segs.push({ d: `M${X(i - 1)} ${Y(p[i - 1])} L${X(i)} ${Y(p[i])} L${X(i)} ${h} L${X(i - 1)} ${h} Z`, color: gradeColor(g), g: +g.toFixed(1) });
+    segs.push({ d: `M${X(i - 1)} ${Y(p[i - 1])} L${X(i)} ${Y(p[i])} L${X(i)} ${h} L${X(i - 1)} ${h} Z`, color: gradeColor(g), g: +g.toFixed(1), i });
   }
   const line = p.map((e, i) => (i ? "L" : "M") + X(i) + " " + Y(e)).join(" ");
   return { segs, line, lo: Math.round(lo), hi: Math.round(hi) };

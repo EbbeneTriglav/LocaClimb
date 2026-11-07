@@ -11,7 +11,7 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes } from "./climb.mjs?v=40";
+import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=41";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
@@ -21,13 +21,13 @@ export function hm(min) { if (min == null || !isFinite(min)) return "–"; const
 
 const TXT = {
   it: { ride: "Il mio giro", km: "km", m: "metri", time: "in sella", top: "quota max", climbs: "Salite", water: "Acqua", route: "Il percorso", start: "Partenza", end: "Arrivo", hi: "Punto più alto",
-    when: "Ora", where: "Dove", ele: "Quota", wx: "Meteo", noWater: "Nessun punto acqua mappato entro 100 m: borracce piene.", gap: "tratto più lungo senza acqua", print: "Stampa o salva PDF",
+    when: "Ora", where: "Dove", ele: "Quota", wx: "Meteo", noWater: "Nessun punto acqua mappato entro 100 m: borracce piene.", gap: "tratto più lungo senza acqua", pts: "punti", onProf: "sul profilo: un cerchio grande raggruppa i punti vicini", print: "Stampa o salva PDF",
     est: (w) => `Tempi stimati a ${w} W/kg, soste escluse.`, depart: "partenza", diff: "difficoltà", src: "Dati © OpenStreetMap contributors · quote: modello del terreno · meteo: Open-Meteo" },
   en: { ride: "My ride", km: "km", m: "metres", time: "riding", top: "highest", climbs: "Climbs", water: "Water", route: "The route", start: "Start", end: "Finish", hi: "Highest point",
-    when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", print: "Print or save as PDF",
+    when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", pts: "points", onProf: "on the profile: a big circle groups nearby points", print: "Print or save as PDF",
     est: (w) => `Times estimated at ${w} W/kg, stops excluded.`, depart: "start", diff: "difficulty", src: "Data © OpenStreetMap contributors · elevation: terrain model · weather: Open-Meteo" },
   es: { ride: "Mi ruta", km: "km", m: "metros", time: "en bici", top: "altitud máx", climbs: "Subidas", water: "Agua", route: "La ruta", start: "Salida", end: "Llegada", hi: "Punto más alto",
-    when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", print: "Imprimir o guardar en PDF",
+    when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", pts: "puntos", onProf: "en el perfil: un círculo grande agrupa los puntos cercanos", print: "Imprimir o guardar en PDF",
     est: (w) => `Tiempos estimados a ${w} W/kg, sin paradas.`, depart: "salida", diff: "dificultad", src: "Datos © colaboradores de OpenStreetMap · altitud: modelo del terreno · tiempo: Open-Meteo" }
 };
 const langOf = (d) => (d.lang === "en" || d.lang === "es" ? d.lang : "it");
@@ -45,16 +45,24 @@ export function routeShape(track, w, h, pad = 0) {
 
 /* gradient (%) at every sample of the profile, smoothed over ~0.6 km so the colours read as climbs, not noise */
 export function sampleGrades(side) {
-  const p = side.elevationProfile || [], n = p.length, step = (side.distance_km || 0) / Math.max(1, n - 1) * 1000;
-  if (n < 2 || !(step > 0)) return p.map(() => 0);
-  const k = Math.max(1, Math.round(300 / step));
-  return p.map((_, i) => { const a = Math.max(0, i - k), b = Math.min(n - 1, i + k); return (p[b] - p[a]) / ((b - a) * step) * 100; });
+  const p = side.elevationProfile || [], n = p.length;
+  if (n < 2) return p.map(() => 0);
+  // samples sit at their TRUE distance (dense on hairpins): reading them as evenly spaced painted
+  // hairpin sections blue (07/11, Stelvio from Bormio)
+  const pd = profileDist(side);
+  return p.map((_, i) => {
+    let a = i, b = i;
+    while (a > 0 && pd[i] - pd[a] < 0.3) a--;
+    while (b < n - 1 && pd[b] - pd[i] < 0.3) b++;
+    const dm = (pd[b] - pd[a]) * 1000;
+    return dm > 0 ? (p[b] - p[a]) / dm * 100 : 0;
+  });
 }
 
 /* the profile with colours from the smoothed gradient (raw 50-m steps flicker on a 100-km ride) */
 export function smoothProfile(side, w, h, pad) {
   const sh = profileShapes(side, w, h, pad), gr = sampleGrades(side), p = side.elevationProfile || [];
-  if (sh.segs.length === p.length - 1) sh.segs.forEach((sg, i) => { sg.color = gradeColor(gr[i + 1]); });
+  if (p.length > 1) sh.segs.forEach((sg) => { sg.color = gradeColor((gr[sg.i - 1] + gr[sg.i]) / 2); });
   return sh;
 }
 
@@ -85,9 +93,22 @@ export function bookRows(d) {
   let hi = 0; sd.elevationProfile.forEach((e, i) => { if (e > sd.elevationProfile[hi]) hi = i; });
   const hiKm = hi / Math.max(1, n - 1) * L;
   if (!rows.some((r) => Math.abs(r.km - hiKm) < 1.5)) add(hiKm, "hi", T.hi);
-  for (const w of (d.water || []).slice(0, 20)) add(w.km, "water", w.name || T.water);
+  for (const w of waterSpots(d)) add(w.km, "water", w.name || T.water, w.n > 1 ? `${w.n} ${T.pts}` : "");
   const order = { start: 0, stop: 1, climb: 1, hi: 1, water: 2, end: 3 };
   return rows.sort((a, b) => (a.kind === "end") - (b.kind === "end") || (a.kind === "start" ? -1 : b.kind === "start" ? 1 : a.km - b.km || order[a.kind] - order[b.kind]));
+}
+
+/* the water points worth a mark: points closer than R km to the first of a group become ONE spot
+   (with how many), so a ride shows the main stops along its whole length, not 20 fountains in the
+   first village (07/11, Rick). Prefer a drinking-water name over "Sorgente" for the group. */
+export function waterSpots(d, R = 3) {
+  const out = [];
+  for (const w of [...(d.water || [])].sort((a, b) => a.km - b.km)) {
+    const g = out[out.length - 1];
+    if (g && w.km - g.km <= R) { g.n++; if (/sorgent|spring|fuente|manantial/i.test(g.name || "") && w.name && !/sorgent|spring|fuente|manantial/i.test(w.name)) g.name = w.name; }
+    else out.push({ km: w.km, name: w.name, n: 1 });
+  }
+  return out;
 }
 
 export function waterGap(d) {
@@ -100,16 +121,22 @@ export function waterGap(d) {
 export function roadbookHtml(d) {
   const T = tx(d), L = langOf(d);
   const sh = smoothProfile(d.side, 1000, 190, 6), pts = routeShape(d.side.track, 300, 300, 14), gr = sampleGrades(d.side);
-  const route = pts.slice(1).map((p, i) => `<path d="M${pts[i][0]} ${pts[i][1]}L${p[0]} ${p[1]}" stroke="${gradeColor(gr[i + 1])}"/>`).join("");
+  const gAt = (i) => gr[Math.min(gr.length - 1, Math.round(i / Math.max(1, pts.length - 1) * (gr.length - 1)))];   // track and profile differ in length
+  const route = pts.slice(1).map((p, i) => `<path d="M${pts[i][0]} ${pts[i][1]}L${p[0]} ${p[1]}" stroke="${gradeColor(gAt(i + 1))}"/>`).join("");
   const L0 = d.side.distance_km || d.km || 1;
   const marks = (d.climbs || []).map((c) => { const x = +(c.km / L0 * 1000).toFixed(1); return `<g><line x1="${x}" x2="${x}" y1="0" y2="190" stroke="#0B0F14" stroke-dasharray="3 3" stroke-width="1"/><text x="${Math.min(990, Math.max(10, x))}" y="12" text-anchor="${x > 900 ? "end" : x < 100 ? "start" : "middle"}">${esc(c.name)}</text></g>`; }).join("");
+  const Yp = (e) => +(184 - (e - sh.lo) / ((sh.hi - sh.lo) || 1) * 178).toFixed(1);
+  const drops = waterSpots(d).map((w) => {
+    const x = +Math.min(992, Math.max(8, w.km / L0 * 1000)).toFixed(1), e = eleAt(d.side, w.km), y = e == null ? 170 : Math.max(14, Yp(e) - 13), r = w.n > 1 ? 10 : 6.5;
+    return `<g class="wd"><circle cx="${x}" cy="${y}" r="${r}"/>${w.n > 1 ? `<text x="${x}" y="${y + 3.5}">${w.n}</text>` : ""}</g>`;
+  }).join("");
   const wx = new Map((d.weather || []).map((w) => [Math.round(w.km), w]));
   const rows = bookRows(d).map((r) => {
     const w = r.kind !== "water" ? wx.get(Math.round(r.km)) : null;
     return `<tr class="${r.kind}${r.climb ? " climb" : ""}"><td class="n">${n0(r.km, 0, L)}</td><td class="n">${esc(r.time)}</td><td><b>${esc(r.name)}</b>${r.note ? ` <span class="mu">${esc(r.note)}</span>` : ""}</td><td class="n">${r.ele != null ? esc(r.ele) + " m" : ""}</td><td>${w && w.temp != null ? `${n0(w.temp, 0, L)}° · ${n0(w.wind, 0, L)} km/h · ${esc(w.pp ?? "–")}%` : ""}</td></tr>`;
   }).join("");
   const climbList = (d.climbs || []).length ? `<ul class="cl">${d.climbs.map((c) => `<li>${c.difficulty ? `<span class="d" style="background:${difficultyColor(c.difficulty)}">${esc(c.difficulty)}/10</span>` : ""}<b>${esc(c.name)}</b> <span class="mu">km ${n0(c.km, 0, L)}${c.elevation ? ` · ${esc(c.elevation)} m` : ""}</span></li>`).join("")}</ul>` : `<p class="mu">–</p>`;
-  const water = (d.water || []).length ? `${(d.water || []).length} · ${T.gap}: <b>${n0(waterGap(d), 0, L)} km</b>` : esc(T.noWater);
+  const water = (d.water || []).length ? `${(d.water || []).length} · ${T.gap}: <b>${n0(waterGap(d), 0, L)} km</b> · <span class="wl">●</span> ${esc(T.onProf)}` : esc(T.noWater);
   return `<!doctype html><html lang="${L}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Road book · ${esc(d.title || T.ride)}</title>
 <style>
@@ -131,6 +158,7 @@ h2 { font: 800 14pt "Barlow Condensed", "Arial Narrow", sans-serif; text-transfo
 .cl li { padding: 6px 0; border-bottom: 1px solid #E3E7EB; }
 .cl li b { font: 800 13pt "Barlow Condensed", "Arial Narrow", sans-serif; text-transform: uppercase; }
 .cl .d { display: inline-block; min-width: 34px; text-align: center; margin-right: 6px; padding: 1px 5px; border-radius: 5px; color: #fff; font: 700 9pt "Barlow", sans-serif; }
+.wd circle { fill: #1F78D1; stroke: #fff; stroke-width: 2; } .wd text { fill: #fff; font: 700 10px "Barlow", sans-serif; text-anchor: middle; } .wl { color: #1F78D1; }
 svg.prof { width: 100%; height: auto; display: block; margin-top: 10px; }
 .fig svg { width: 100%; height: auto; display: block; }
 .map { border: 1px solid #D5DBE1; border-radius: 8px; background: #F5F7F9; }
@@ -152,7 +180,7 @@ footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font
 <div class="stats"><div><b>${n0(d.km, d.km < 100 ? 1 : 0, L)}</b><span>${T.km}</span></div><div><b>${d.gain != null ? "+" + n0(d.gain, 0, L) : "–"}</b><span>${T.m}</span></div><div><b>${hm(d.minutes)}</b><span>${T.time}</span></div><div><b>${sh.hi != null ? n0(sh.hi, 0, L) : "–"}</b><span>${T.top}</span></div></div>
 <div class="fig"><svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>
 <div><h2 style="margin-top:0">${T.climbs}</h2>${climbList}</div></div>
-<svg class="prof" viewBox="0 0 1000 210" role="img" aria-label="Profilo">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${marks}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></svg>
+<svg class="prof" viewBox="0 0 1000 210" role="img" aria-label="Profilo">${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${marks}${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></svg>
 ${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
 <h2>${T.route}</h2>
 <table><thead><tr><th style="text-align:right">km</th><th style="text-align:right">${T.when}</th><th>${T.where}</th><th style="text-align:right">${T.ele}</th><th>${d.weather ? T.wx : ""}</th></tr></thead><tbody>${rows}</tbody></table>
@@ -169,26 +197,39 @@ ${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
 export const RB_SCRIPT = 'addEventListener("load",function(){var b=document.getElementById("rbPrint");if(b)b.addEventListener("click",function(){print()});setTimeout(function(){try{print()}catch(e){}},600)});';
 
 /* ------------------------------------------------------------------ the image (1080 x 1350, dark) */
-export function drawCard(ctx, d, fonts = { cond: "'Barlow Condensed', 'Arial Narrow', sans-serif", body: "Barlow, system-ui, sans-serif" }) {
+/* opt.bg: a W x MAP_H snapshot of the app's map with the ride on it (app.mjs), drawn behind the header;
+   without it the route is drawn on the dark background. opt.credit: the map's attribution. */
+export const MAP_H = 840;
+export function drawCard(ctx, d, fonts = { cond: "'Barlow Condensed', 'Arial Narrow', sans-serif", body: "Barlow, system-ui, sans-serif" }, opt = {}) {
   const T = tx(d), L = langOf(d), W = CARD_W, H = CARD_H;
   const BG = "#0B0F14", TXc = "#E8EDF2", MU = "#93A1B0", ACC = "#C8F560", LINE = "#243344";
   const font = (w, px, fam, it = false) => `${it ? "italic " : ""}${w} ${px}px ${fam}`;
   const fit = (s, max, w, px, fam, it) => { let p = px; ctx.font = font(w, p, fam, it); while (ctx.measureText(s).width > max && p > 28) { p -= 2; ctx.font = font(w, p, fam, it); } return p; };
   ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  if (opt.bg) {
+    ctx.drawImage(opt.bg, 0, 0, W, MAP_H);
+    const gt = ctx.createLinearGradient(0, 0, 0, 260); gt.addColorStop(0, "rgba(11,15,20,.85)"); gt.addColorStop(1, "rgba(11,15,20,0)");
+    ctx.fillStyle = gt; ctx.fillRect(0, 0, W, 260);
+    const gb = ctx.createLinearGradient(0, MAP_H - 160, 0, MAP_H); gb.addColorStop(0, "rgba(11,15,20,0)"); gb.addColorStop(1, BG);
+    ctx.fillStyle = gb; ctx.fillRect(0, MAP_H - 160, W, 160);
+  }
   // header
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = ACC; ctx.fillRect(72, 58, 26, 26);
   ctx.fillStyle = TXc; ctx.font = font(800, 40, fonts.cond, true); ctx.textAlign = "left"; ctx.fillText("LOCARIDE", 112, 84);
   ctx.fillStyle = MU; ctx.font = font(500, 30, fonts.body); ctx.textAlign = "right"; ctx.fillText(d.date || "", W - 72, 84);
   const title = String(d.title || T.ride).toUpperCase();
-  ctx.fillStyle = TXc; ctx.textAlign = "left"; fit(title, W - 144, 800, 84, fonts.cond, true); ctx.fillText(title, 72, 178);
+  ctx.save(); if (opt.bg) { ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 12; }
+  ctx.fillStyle = TXc; ctx.textAlign = "left"; fit(title, W - 144, 800, 72, fonts.cond, true); ctx.fillText(title, 72, 170); ctx.restore();
   // route, coloured by gradient, on a dark outline
   const bx = 90, by = 220, bw = W - 180, bh = 600, pts = routeShape(d.side.track, bw, bh, 20).map((p) => [p[0] + bx, p[1] + by]), gr = sampleGrades(d.side);
   ctx.lineCap = "round"; ctx.lineJoin = "round";
-  if (pts.length > 1) {
+  // gradient of the profile sample at the same fraction of the ride (track and profile have different lengths)
+  const gAt = (i) => gr[Math.min(gr.length - 1, Math.round(i / Math.max(1, pts.length - 1) * (gr.length - 1)))];
+  if (pts.length > 1 && !opt.bg) {
     ctx.strokeStyle = "rgba(0,0,0,.55)"; ctx.lineWidth = 24; ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.stroke();
     ctx.lineWidth = 12;
-    for (let i = 1; i < pts.length; i++) { ctx.strokeStyle = gradeColor(gr[i]); ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); }
+    for (let i = 1; i < pts.length; i++) { ctx.strokeStyle = gradeColor(gAt(i)); ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); }
     const a = pts[0], z = pts[pts.length - 1];
     ctx.fillStyle = BG; ctx.strokeStyle = TXc; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(a[0], a[1], 15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     if (Math.hypot(a[0] - z[0], a[1] - z[1]) > 30) { ctx.fillStyle = ACC; ctx.strokeStyle = BG; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(z[0], z[1], 15, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
@@ -219,6 +260,6 @@ export function drawCard(ctx, d, fonts = { cond: "'Barlow Condensed', 'Arial Nar
     if (shown < cl.length) s += "  +" + (cl.length - shown);
     ctx.fillText(s, 72, 1262);
   }
-  ctx.fillStyle = MU; ctx.font = font(500, 22, fonts.body); ctx.textAlign = "left"; ctx.fillText("© OpenStreetMap", 72, 1306);
+  ctx.fillStyle = MU; ctx.font = font(500, 22, fonts.body); ctx.textAlign = "left"; fit(opt.credit || "© OpenStreetMap", W - 420, 500, 22, fonts.body); ctx.fillText(opt.credit || "© OpenStreetMap", 72, 1306);
   ctx.fillStyle = ACC; ctx.font = font(800, 34, fonts.cond, true); ctx.textAlign = "right"; ctx.fillText("locaride.app", W - 72, 1308);
 }
