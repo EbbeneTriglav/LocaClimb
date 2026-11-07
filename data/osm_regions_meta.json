@@ -533,5 +533,10 @@
   ],
   "target": "canada-british-columbia",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_ec.json": {
+  "bbox": null,
+  "target": "ecuador",
+  "builtAt": "2026-11-07"
  }
 }
