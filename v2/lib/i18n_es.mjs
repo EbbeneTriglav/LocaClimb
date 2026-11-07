@@ -49,7 +49,7 @@ export const DICT_ES = {
   "Traffico feriale / weekend": "Tráfico laborables / fin de semana",
   "Camion": "Camiones", "Niente camion": "Sin camiones", "Camion rari": "Pocos camiones", "Possibili camion": "Posibles camiones", "Camion frequenti": "Camiones frecuentes",
   "basso": "bajo", "medio": "medio", "alto": "alto",
-  "Bike Day: strada solo per bici": "Bike Day: carretera solo para bicis", "News e stato della strada": "Noticias y estado de la carretera",
+  "Bike Day: strada solo per bici": "Bike Day: carretera solo para bicis", "Strade chiuse ed eventi": "Carreteras cortadas y eventos", "Strada chiusa": "Carretera cortada", "Solo bici": "Solo bicis", "Granfondo": "Marcha", "Corsa": "Carrera", "fonte": "fuente", "Nessuna chiusura o evento nei prossimi 60 giorni.": "Ningún corte ni evento en los próximos 60 días.", "Attenzione: strade chiuse o eventi nel giorno scelto": "Atención: cortes o eventos el día elegido", "Strada chiusa al traffico al passaggio della corsa: orari nelle ordinanze dei comuni.": "Carretera cortada al tráfico al paso de la carrera: horarios en los bandos municipales.", "Strade chiuse al traffico al passaggio della corsa: orari nelle ordinanze dei comuni.": "Carreteras cortadas al tráfico al paso de la carrera: horarios en los bandos municipales.", "News e stato della strada": "Noticias y estado de la carretera",
   // ratings, reports
   "Valutazioni della community": "Valoraciones de la comunidad", "Non disponibili ora.": "No disponibles ahora.",
   "Ancora nessun voto: il primo è tuo.": "Aún no hay votos: el primero es tuyo.", "Emozione": "Emoción", "Paesaggio": "Paisaje", "Traffico": "Tráfico",

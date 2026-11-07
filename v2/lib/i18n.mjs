@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=43";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=44";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -59,7 +59,7 @@ export const DICT = {
   "Nord-Est": "North-East", "Nord-Ovest": "North-West", "Sud-Est": "South-East", "Sud-Ovest": "South-West",
   "Traffico feriale / weekend": "Traffic weekdays / weekend", "Camion": "Trucks", "Niente camion": "No trucks", "Camion rari": "Few trucks",
   "Possibili camion": "Trucks possible", "Camion frequenti": "Frequent trucks", "basso": "low", "medio": "medium", "alto": "high",
-  "Bike Day: strada solo per bici": "Bike Day: road for bikes only", "News e stato della strada": "News and road status",
+  "Bike Day: strada solo per bici": "Bike Day: road for bikes only", "Strade chiuse ed eventi": "Road closures and events", "Strada chiusa": "Road closed", "Solo bici": "Bikes only", "Granfondo": "Gran fondo", "Corsa": "Race", "fonte": "source", "Nessuna chiusura o evento nei prossimi 60 giorni.": "No closures or events in the next 60 days.", "Attenzione: strade chiuse o eventi nel giorno scelto": "Heads up: closures or events on the chosen day", "Strada chiusa al traffico al passaggio della corsa: orari nelle ordinanze dei comuni.": "Road closed to traffic while the race passes: times in the local council orders.", "Strade chiuse al traffico al passaggio della corsa: orari nelle ordinanze dei comuni.": "Roads closed to traffic while the race passes: times in the local council orders.", "News e stato della strada": "News and road status",
   "Valutazioni della community": "Community ratings", "Non disponibili ora.": "Not available now.",
   "Ancora nessun voto: il primo è tuo.": "No votes yet: be the first.", "Emozione": "Thrill", "Paesaggio": "Scenery", "Traffico": "Traffic",
   "Il tuo voto": "Your vote", "Il tuo voto (puoi cambiarlo)": "Your vote (you can change it)", "Commento": "Comment", "Invia voto": "Send vote",

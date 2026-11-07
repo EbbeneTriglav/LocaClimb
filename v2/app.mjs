@@ -3,27 +3,31 @@
  * road book, "Oggi si sale", profile + diary, ride mode, route builder. Hash routes: #/  #/s/<id>  #/oggi  #/profilo (#/diario)  #/giro
  * Data: the classic app's files (lib/data.mjs). Pure logic lives in lib/*.mjs (tested).
  */
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=43";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=43";
-import { poisNear } from "./lib/poi.mjs?v=43";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=43";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=43";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=43";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=43";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=43";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=43";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=43";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=43";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=43";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=43";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=43";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=43";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=44";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=44";
+import { poisNear } from "./lib/poi.mjs?v=44";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=44";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack } from "./lib/route.mjs?v=44";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=44";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=44";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=44";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=44";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=44";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=44";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=44";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=44";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=44";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=44";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=44";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const panel = $("#panel");
+/* roads closed and events on the climbs (lib/events.mjs): loaded once, used by the climb page, Oggi and the Giro */
+let EV = [];
+loadEvents().then((e) => { EV = e; }).catch(() => { /* optional file */ });
 const DESKTOP = () => matchMedia("(min-width: 900px)").matches;
 const S = { paved: false, trucks: false, cc: "", poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null };
 
@@ -462,7 +466,7 @@ function renderClimb() {
     </div>
     ${c.description || (c.tips && c.tips.length) ? `<section class="sec"><h3>Da sapere</h3>${c.description ? `<p class="note">${esc(c.description)}</p>` : ""}${c.tips && c.tips.length ? `<ul class="tips">${c.tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}</section>` : ""}
     <section class="sec" id="shade" hidden></section>
-    ${bikeDayHtml(c)}
+    ${eventsHtml(c)}
     <section class="sec" id="news" hidden></section>
     <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
     ${stravaHtml(c)}
@@ -520,10 +524,19 @@ function trafficFacts(v, c) {
   if (!t) return "";
   return `<div><span>Traffico feriale / weekend</span><b>${esc(t.fer)} / ${esc(t.wkd)} su 10</b></div><div><span>Camion</span><b>${esc(TRUCKS[t.trucks] || TRUCKS.rari)}</b></div>`;
 }
-function bikeDayHtml(c) {
-  const ev = (globalThis.BIKE_EVENTS || []).filter((e) => (e.passes || []).includes(c.id) && new Date(e.date) >= new Date(new Date().toDateString())).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 4);
+/* "Strade chiuse ed eventi": the climb's own upcoming events (road_events.json + the classic BIKE_EVENTS) */
+function evDate(e) {
+  const f = (d) => new Date(d + "T12:00:00").toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "long" });
+  return e.end && e.end !== e.date ? f(e.date) + " – " + f(e.end) : f(e.date);
+}
+function evItem(e, link) {
+  const t = EVENT_TYPES[e.type];
+  return `<li><b>${esc(evDate(e))}</b> <span class="pill ${t.tone}">${esc(t.label)}</span> ${link && e.climbs[0] ? `<a href="#/s/${esc(encodeURIComponent(e.climbs[0]))}">${esc(e.name)}</a>` : esc(e.name)}${e.hours ? ` · ${esc(e.hours)}` : ""}${e.note ? `<br><small class="mu">${esc(e.note)}</small>` : ""}${e.url ? ` · <a href="${esc(e.url)}" target="_blank" rel="noopener">fonte</a>` : ""}</li>`;
+}
+function eventsHtml(c) {
+  const ev = forClimb(EV, [c.id, ...((c.twins || []).map((t) => t.id))], isoDay(new Date())).slice(0, 4);
   if (!ev.length) return "";
-  return `<section class="sec"><h3>Bike Day: strada solo per bici</h3><ul class="tips">${ev.map((e) => `<li><b>${esc(new Date(e.date).toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "long" }))}</b> · ${esc(e.name)} · ${esc(e.hours || "")}${e.url ? ` · <a href="${esc(e.url)}" target="_blank" rel="noopener">sito</a>` : ""}</li>`).join("")}</ul></section>`;
+  return `<section class="sec evs"><h3>Strade chiuse ed eventi</h3><ul class="tips">${ev.map((e) => evItem(e, false)).join("")}</ul></section>`;
 }
 /* known Strava segments per curated pass (same table as the classic app, js/state.js). Strava
    closed its public segment explorer page, so the old "Cerca segmenti" link is gone: segment search
@@ -845,7 +858,7 @@ async function renderOggi() {
   panel.innerHTML = `<div class="og"><div class="handle"></div><h1>${esc(ogTitle(S.day))}</h1>
     <p class="note" id="ogWhere">Le salite più belle vicino a te, ordinate per meteo in cima: temporali, pioggia, vento e freddo.</p>
     <div class="days" role="group" aria-label="Giorno">${days.map((d, i) => `<button type="button" data-day="${i}" aria-pressed="${i === S.day}">${d}</button>`).join("")}</div>
-    <div id="ogList" class="loading">Cerco le salite intorno a te…</div></div>`;
+    <div id="ogList" class="loading">Cerco le salite intorno a te…</div>${ogEventsHtml()}</div>`;
   panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { S.day = +b.dataset.day; if (S.oggi) paintOggi(); else renderOggi(); }));
   await loadIndex();
   const here = await new Promise((res) => {
@@ -862,6 +875,11 @@ async function renderOggi() {
     S.oggi = { here, list, hs };
   } catch { const ol = $("#ogList"); if (ol) ol.textContent = "Meteo non disponibile ora. Riprova tra poco."; return; }
   if (panel.dataset.mode === "oggi") paintOggi();
+}
+/* Oggi: the next closures and events anywhere (60 days), the classic app's "Prossimi Bike Day" */
+function ogEventsHtml() {
+  const ev = upcoming(EV, isoDay(new Date()), 60).slice(0, 8);
+  return `<section class="sec evs" id="ogEv"><h3>Strade chiuse ed eventi</h3>${ev.length ? `<ul class="tips">${ev.map((e) => evItem(e, true)).join("")}</ul>` : `<p class="note small mu">Nessuna chiusura o evento nei prossimi 60 giorni.</p>`}</section>`;
 }
 function paintOggi() {
   const { here, list, hs } = S.oggi;
@@ -1189,6 +1207,12 @@ function fitRoute() {
   map.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding: pad, duration: 900, maxZoom: 13 });
 }
 
+/* Giro: the climbs on the route that are closed or busy on the chosen day */
+function giroEventsHtml() {
+  const day = isoDay(new Date(Date.now() + G.day * 864e5));
+  const ids = G.on.flatMap((x) => [x.c.id, ...((x.c.twins || []).map((t) => t.id))]), ev = onDay(EV, ids, day);
+  return ev.length ? `<section class="sec evs warn"><h3>Attenzione: strade chiuse o eventi nel giorno scelto</h3><ul class="tips">${ev.map((e) => evItem(e, true)).join("")}</ul></section>` : "";
+}
 function renderGiro() {
   const n = G.stops.length, r = G.res, sd = G.side;
   const stops = G.stops.map((s, i) => `<li><span class="wp ${i === 0 ? "a" : i === n - 1 && i ? "z" : ""}">${i + 1}</span><span class="nm">${esc(stopName(s, i))}</span>
@@ -1209,6 +1233,7 @@ function renderGiro() {
       ${shares.length ? `<div class="surf">${shares.map((x) => `<span class="${esc(x.k)}">${esc(x.k)} ${x.pct}%</span>`).join("")}</div>` : ""}
       <p class="note small mu">Tempo stimato a ${num(myWkg() || 3)} W/kg${myWkg() ? "" : " (impostalo nella scheda di una salita)"}, soste escluse.</p>
       ${G.on.length ? `<section class="sec"><h3>Salite sul percorso</h3><div class="cards">${G.on.map((x) => `<a class="card" href="#/s/${esc(encodeURIComponent(x.c.id))}" style="text-decoration:none;color:inherit"><span class="badge" style="background:${difficultyColor(x.c.difficulty || 0)}">${x.c.difficulty ? x.c.difficulty + "/10" : "–"}</span><span class="nm">${esc(x.c.name)}</span><span class="mt">km ${num(x.km, 0)}${x.c.elevation ? " · " + esc(x.c.elevation) + " m" : ""}</span></a>`).join("")}</div></section>` : ""}
+      ${giroEventsHtml()}
       <section class="sec" id="gwx"><h3>Meteo lungo il giro</h3>
         <div class="when"><div class="sides" role="group" aria-label="Giorno">${["Oggi", "Domani", "Dopodomani"].map((l, i) => `<button type="button" data-day="${i}" aria-pressed="${G.day === i}">${l}</button>`).join("")}</div>
         <label>Partenza <input type="time" id="gstart" value="${esc(G.start)}" step="900"></label></div>
