@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=41";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=42";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -137,7 +137,7 @@ export const DICT = {
   "Strade trafficate": "Busy roads", "Legenda delle strade": "Roads legend", "Strade": "Roads", "autostrade": "motorways", "statali": "main roads", "provinciali": "secondary",
   "Autostrade, statali e provinciali principali in evidenza, su ogni mappa: di solito più auto e camion. È la classe della strada, non un conteggio del traffico.": "Motorways, main and secondary roads highlighted on any map: usually more cars and trucks. It is the road class, not a traffic count.",
   // sun and shade (app.mjs fillShade)
-  "Sole e ombra": "Sun and shade", "Pieno sole": "Full sun", "Poca ombra": "Little shade", "Ombra a tratti": "Shade in places", "Molta ombra": "Lots of shade", "Quasi sempre ombra": "Shade almost all the way",
+  "Sole e ombra": "Sun and shade", "Ombra mese per mese": "Shade month by month", "Pieno sole": "Full sun", "Poca ombra": "Little shade", "Ombra a tratti": "Shade in places", "Molta ombra": "Lots of shade", "Quasi sempre ombra": "Shade almost all the way",
   "Ombra media sul tracciato nelle ore di luce: rilievi intorno, bosco (con le foglie della stagione) ed esposizione del versante.": "Average shade on the road during daylight: surrounding terrain, forest (with the season's leaves) and the slope's aspect.",
   // install (app.mjs: card, Diario, dialog)
   "LocaRide sul telefono": "LocaRide on your phone", "App LocaRide": "LocaRide app", "Dalla Home, a tutto schermo": "From your home screen, full screen",
@@ -212,8 +212,21 @@ export const RULES = [
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Gradients not credible for a paved road (${x.replace("media", "avg").replace(" su ", " over ")}): most likely a terrain-model error (tunnel, bridge) or a stretch that is not a paved road. That is why it is not among the hardest climbs.`],
   [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "At the top $1° · descent feels like $2°"],
   [/^Ancora ([\d.]+) salit[ae] accettat[ae] in (.+) per diventare (.+)$/, (m, n, x, l) => `${n} more accepted climb${n === "1" ? "" : "s"} in ${x} to become ${l}`],
-  [/^(.+): la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava\.$/, "$1: the climb in 3D with its numbers, ready for Instagram, WhatsApp or Strava."]
+  [/^(.+): la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava\.$/, "$1: the climb in 3D with its numbers, ready for Instagram, WhatsApp or Strava."],
+  // sun and shade (app.mjs fillShade): the month is already in the page language (monthsFor)
+  [/^di ombra a (\S+)$/, "shade in $1"],
+  [/^bosco (\d+)%$/, "forest $1%"],
+  [/^rilievi (\d+)%$/, "terrain $1%"],
+  [/^sole diretto (.+) h$/, "direct sun $1 h"]
 ];
+
+/* month abbreviations by page language (Sole e ombra) */
+export const MONTHS_BY_LANG = {
+  it: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+};
+export function monthsFor(lang) { return MONTHS_BY_LANG[lang] || MONTHS_BY_LANG.it; }
 
 const TABLES = { en: [DICT, RULES], es: [DICT_ES, RULES_ES] };
 function one(s, lang) {

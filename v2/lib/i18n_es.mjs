@@ -138,7 +138,7 @@ export const DICT_ES = {
   "Strade trafficate": "Carreteras con tráfico", "Legenda delle strade": "Leyenda de carreteras", "Strade": "Carreteras", "autostrade": "autopistas",
   "statali": "nacionales", "provinciali": "secundarias",
   "Autostrade, statali e provinciali principali in evidenza, su ogni mappa: di solito più auto e camion. È la classe della strada, non un conteggio del traffico.": "Autopistas, nacionales y secundarias principales resaltadas en todos los mapas: suelen tener más coches y camiones. Es el tipo de carretera, no un recuento del tráfico.",
-  "Sole e ombra": "Sol y sombra", "Pieno sole": "Pleno sol", "Poca ombra": "Poca sombra", "Ombra a tratti": "Sombra a ratos", "Molta ombra": "Mucha sombra",
+  "Sole e ombra": "Sol y sombra", "Ombra mese per mese": "Sombra mes a mes", "Pieno sole": "Pleno sol", "Poca ombra": "Poca sombra", "Ombra a tratti": "Sombra a ratos", "Molta ombra": "Mucha sombra",
   "Quasi sempre ombra": "Casi siempre a la sombra",
   "Ombra media sul tracciato nelle ore di luce: rilievi intorno, bosco (con le foglie della stagione) ed esposizione del versante.": "Sombra media en el trazado durante las horas de luz: relieve alrededor, bosque (con las hojas de la temporada) y orientación de la vertiente.",
   // install
@@ -221,5 +221,10 @@ export const RULES_ES = [
   [/^Pendenze non credibili per una strada asfaltata \((.+)\): probabile errore .*$/, (m, x) => `Pendientes poco creíbles para una carretera asfaltada (${x.replace(" su ", " en ")}): probablemente un error del modelo del terreno (túnel, puente) o un tramo que no es carretera asfaltada. Por eso no está entre las subidas más duras.`],
   [/^In cima (-?\d+)° · in discesa percepiti (-?\d+)°$/, "En la cima $1° · en la bajada sensación de $2°"],
   [/^Ancora ([\d.]+) salit[ae] accettat[ae] in (.+) per diventare (.+)$/, (m, n, x, l) => `${n} subida${n === "1" ? "" : "s"} aceptada${n === "1" ? "" : "s"} más en ${x} para ser ${l}`],
-  [/^(.+): la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava\.$/, "$1: la subida en 3D con sus cifras, lista para Instagram, WhatsApp o Strava."]
+  [/^(.+): la salita in 3D con i numeri, pronta per Instagram, WhatsApp o Strava\.$/, "$1: la subida en 3D con sus cifras, lista para Instagram, WhatsApp o Strava."],
+  // sol y sombra (app.mjs fillShade)
+  [/^di ombra a (\S+)$/, "de sombra en $1"],
+  [/^bosco (\d+)%$/, "bosque $1%"],
+  [/^rilievi (\d+)%$/, "relieve $1%"],
+  [/^sole diretto (.+) h$/, "sol directo $1 h"]
 ];

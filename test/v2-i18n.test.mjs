@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { translate, DICT } from "../v2/lib/i18n.mjs";
+import { translate, DICT, monthsFor } from "../v2/lib/i18n.mjs";
 
 test("exact labels are translated, unknown text (names, comments) is left alone", () => {
   assert.equal(translate("Solo asfalto"), "Paved only");
@@ -57,4 +57,20 @@ test("Spanish: labels, rules and the English default", () => {
   assert.equal(tr("Oggi", "es"), "Hoy");
   assert.equal(tr("Oggi"), "Today", "English stays the default of translate()");
   assert.equal(tr("Passo del Mortirolo", "es"), "Passo del Mortirolo", "names are never translated");
+});
+
+test("Sole e ombra: month names in the page language, dynamic labels translated", () => {
+  assert.equal(monthsFor("it")[10], "Nov");
+  assert.equal(monthsFor("en")[0], "Jan");
+  assert.equal(monthsFor("es")[0], "Ene");
+  assert.equal(monthsFor("xx"), monthsFor("it"), "unknown language falls back to Italian");
+  for (const l of ["it", "en", "es"]) assert.equal(monthsFor(l).length, 12, l);
+  assert.equal(translate("di ombra a Nov"), "shade in Nov");
+  assert.equal(translate("di ombra a nov", "es"), "de sombra en nov");
+  assert.equal(translate("bosco 41% · rilievi 12%"), "forest 41% · terrain 12%");
+  assert.equal(translate("bosco 41% · rilievi 12%", "es"), "bosque 41% · relieve 12%");
+  assert.equal(translate("sole diretto 6,5 h"), "direct sun 6,5 h");
+  assert.equal(translate("sole diretto 6,5 h", "es"), "sol directo 6,5 h");
+  assert.equal(translate("Ombra mese per mese"), "Shade month by month");
+  assert.equal(translate("Ombra mese per mese", "es"), "Sombra mes a mes");
 });
