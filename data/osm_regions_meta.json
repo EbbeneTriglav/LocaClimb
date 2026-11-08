@@ -543,5 +543,10 @@
   "bbox": null,
   "target": "usa-arizona",
   "builtAt": "2026-11-07"
+ },
+ "osm_passes_ar.json": {
+  "bbox": null,
+  "target": "argentina",
+  "builtAt": "2026-11-08"
  }
 }
