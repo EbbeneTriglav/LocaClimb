@@ -548,5 +548,10 @@
   "bbox": null,
   "target": "argentina",
   "builtAt": "2026-11-08"
+ },
+ "osm_passes_us_nv.json": {
+  "bbox": null,
+  "target": "usa-nevada",
+  "builtAt": "2026-11-09"
  }
 }
