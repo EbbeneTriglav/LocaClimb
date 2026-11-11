@@ -1,0 +1,14 @@
+@font-face{font-family:BC;src:url(/fonts/barlow/barlow-condensed-latin-800-italic.woff2) format("woff2");font-weight:800;font-style:italic;font-display:swap}
+@font-face{font-family:BC;src:url(/fonts/barlow/barlow-condensed-latin-ext-800-italic.woff2) format("woff2");font-weight:800;font-style:italic;font-display:swap;unicode-range:U+0100-024F,U+1E00-1EFF}
+*{box-sizing:border-box}body{margin:0;background:#0d1014;color:#e8edf2;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:#c6f135}header,main,footer{max-width:760px;margin:0 auto;padding:0 16px}
+header{display:flex;justify-content:space-between;align-items:center;padding-top:16px;padding-bottom:8px}
+.logo{font:800 italic 26px BC,sans-serif;color:#e8edf2;text-decoration:none}.logo:before{content:"";display:inline-block;width:14px;height:14px;background:#c6f135;margin-right:8px}
+.crumbs{font-size:14px;color:#8a9aad}.kick{font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#a9b4c0;margin:24px 0 0}
+h1{font:800 italic 46px/1 BC,sans-serif;text-transform:uppercase;margin:8px 0 12px}h2{font:800 italic 28px BC,sans-serif;text-transform:uppercase;margin:32px 0 8px}
+h3{margin:20px 0 4px;font-size:18px}.lead{font-size:18px;color:#c9d2dc}
+.cta{display:block;text-align:center;background:#c6f135;color:#0d1014;font:800 italic 22px BC,sans-serif;text-transform:uppercase;text-decoration:none;padding:14px;border-radius:28px;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid #232a33}th{color:#8a9aad;font-weight:600}
+td.n{text-align:right;white-space:nowrap}svg{width:100%;height:auto;display:block;background:#11161c;border-radius:12px}.t{fill:#8a9aad;font-size:12px}
+ul.list{list-style:none;padding:0;columns:2;column-gap:24px}ul.list li{break-inside:avoid;padding:4px 0}small{color:#8a9aad}
+footer{color:#8a9aad;font-size:13px;padding-top:24px;padding-bottom:40px}@media(max-width:520px){h1{font-size:36px}ul.list{columns:1}}
