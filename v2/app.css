@@ -443,8 +443,11 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 /* climb actions with "Crea post" (04/11/2026): on a phone the main button takes the first row */
 @media (max-width: 520px) {
   .actions.acts4 { flex-wrap: wrap; }
-  .actions.acts4 .btn { flex: 1 1 0; min-width: 0; white-space: nowrap; }
+  .actions.acts4 .btn { flex: 1 1 calc(50% - 4px); min-width: 0; white-space: nowrap; }   /* 2 x 2 under the main one: 4 in a row overlapped at 390 px */
   .actions.acts4 .btn.pri { flex-basis: 100%; }
+  .nl li { flex-wrap: wrap; row-gap: 8px; }   /* "Vicino a me": the name gets the whole row, the buttons go under it */
+  .nl .nb { width: 100%; padding-left: 48px; }
+  .nl .nb .btn { flex: 1; }
 }
 
 /* roads closed and events (lib/events.mjs) */

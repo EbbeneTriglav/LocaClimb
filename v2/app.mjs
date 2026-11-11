@@ -425,6 +425,7 @@ map.on("moveend", () => { if (S.poi) loadPoi(); });
 window.addEventListener("hashchange", route);
 function route() {
   const h = location.hash || "#/";
+  results.hidden = true; if (h !== "#/" && h !== "#") q.value = "";   // search results never follow the rider to another page
   document.querySelectorAll(".tabs a").forEach((a) => a.removeAttribute("aria-current"));
   const tab = h.startsWith("#/oggi") ? "oggi" : h.startsWith("#/profilo") || h.startsWith("#/diario") ? "profilo" : h.startsWith("#/giro") ? "giro" : "map";
   const t = document.querySelector(`.tabs a[data-tab="${tab}"]`); if (t) t.setAttribute("aria-current", "page");
