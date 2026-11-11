@@ -363,3 +363,19 @@ test("firebase only where App Check works: production hosts, or a local opt-in w
   assert.equal(fbMode("localhost", true), "dev");
   assert.equal(fbMode("evil-locaride.app", false), "off");
 });
+
+// ---------------------------------------------------------------- locate.mjs (live position, 11/11/2026)
+import { mPerPx, haloPx, compassOf, headingOf, nextMode } from "../v2/lib/locate.mjs";
+test("locate: halo from accuracy, heading from GPS or compass, button cycle", () => {
+  assert.ok(Math.abs(mPerPx(0, 0) - 78271.5) < 1, "512-px tiles at the equator");
+  assert.equal(haloPx(10, 46, 15), Math.round(20 / mPerPx(46, 15)));          // ~10 m -> a few px
+  assert.equal(haloPx(5000, 46, 15), 700, "a network fix is capped");
+  assert.equal(haloPx(null, 46, 15), 0);
+  assert.equal(compassOf({ webkitCompassHeading: 90 }), 90);
+  assert.equal(compassOf({ absolute: true, alpha: 90 }), 270, "Android alpha runs counter-clockwise");
+  assert.equal(compassOf({ absolute: false, alpha: 90 }), null, "relative alpha is not a compass");
+  assert.equal(headingOf({ heading: 120, speed: 5 }, 30), 120, "riding: GPS course");
+  assert.equal(headingOf({ heading: 120, speed: 0.5 }, 30), 30, "standing: compass");
+  assert.equal(headingOf({ heading: null, speed: 0 }, null), null);
+  assert.equal(nextMode("off"), "follow"); assert.equal(nextMode("free"), "follow"); assert.equal(nextMode("follow"), "off");
+});

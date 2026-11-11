@@ -11,8 +11,8 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=49";
-import { rideColor, FLAT_COLOR, UP_STOPS, DOWN_STOPS } from "./route.mjs?v=49";
+import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=50";
+import { rideColor, FLAT_COLOR, UP_STOPS, DOWN_STOPS } from "./route.mjs?v=50";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 

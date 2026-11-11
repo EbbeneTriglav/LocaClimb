@@ -5,23 +5,24 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=49";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=49";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=49";
-import { poisNear } from "./lib/poi.mjs?v=49";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=49";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=49";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=49";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=49";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=49";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=49";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=49";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=49";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=49";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=49";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=49";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=49";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=49";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=50";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=50";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=50";
+import { poisNear } from "./lib/poi.mjs?v=50";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=50";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=50";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=50";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=50";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=50";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=50";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=50";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=50";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=50";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=50";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=50";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=50";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=50";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=50";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -240,10 +241,72 @@ function set3d(on, btn = $("#b3d")) {
   map.setTerrain(on ? { source: "dem", exaggeration: 1.35 } : null);
   map.easeTo({ pitch: on ? 58 : 0, duration: 900 });
 }
-$("#bloc").addEventListener("click", () => {
-  if (!navigator.geolocation) return;
-  navigator.geolocation.getCurrentPosition((p) => map.flyTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 10 }), () => {}, { enableHighAccuracy: false, timeout: 8000 });
+/* ---- my position: a blue dot, live (Rick, 11/11/2026; lib/locate.mjs). One DOM marker moved on every fix,
+   no style layers (it survives basemap switches). The GPS stops when the page is hidden (battery) and restarts. */
+const ME = { mode: "off", watch: null, pos: null, mk: null, el: null, compass: null, raf: 0, first: true };
+const blocBtn = $("#bloc");
+function meButton() {
+  blocBtn.setAttribute("aria-pressed", String(ME.mode === "follow"));
+  blocBtn.classList.toggle("trk", ME.mode === "free");
+  blocBtn.setAttribute("aria-label", ME.mode === "follow" ? "Nascondi la mia posizione" : "Mostra e segui la mia posizione");
+}
+function mePaint() {
+  ME.raf = 0;
+  const p = ME.pos; if (!p) return;
+  if (!ME.mk) {
+    ME.el = document.createElement("div"); ME.el.className = "me";
+    ME.el.innerHTML = '<i class="halo"></i><i class="cone"></i><i class="dot"></i>';
+    ME.mk = new maplibregl.Marker({ element: ME.el, rotationAlignment: "map", pitchAlignment: "map" }).setLngLat([p.lon, p.lat]).addTo(map);
+  }
+  ME.mk.setLngLat([p.lon, p.lat]);
+  ME.el.style.setProperty("--halo", haloPx(p.acc, p.lat, map.getZoom()) + "px");
+  const hd = headingOf(p, ME.compass);
+  ME.el.classList.toggle("hd", hd != null); if (hd != null) ME.el.style.setProperty("--hd", Math.round(hd) + "deg");
+  ME.el.classList.toggle("stale", Date.now() - p.t > STALE_MS);
+}
+const meSoon = () => { if (!ME.raf) ME.raf = requestAnimationFrame(mePaint); };
+function meFix(g) {
+  const c = g.coords;
+  ME.pos = { lat: c.latitude, lon: c.longitude, acc: c.accuracy, heading: c.heading, speed: c.speed, t: Date.now() };
+  meSoon();
+  if (ME.mode !== "follow") return;
+  const at = [ME.pos.lon, ME.pos.lat];
+  if (ME.first) { ME.first = false; map.flyTo({ center: at, zoom: Math.max(map.getZoom(), 14), duration: 900 }); }
+  else if (!map.isMoving()) map.easeTo({ center: at, duration: 500 });
+}
+function meError(e) {
+  if (e && e.code === 1) { toast("Posizione non consentita: attivala nelle impostazioni del browser"); meStop(); }
+  else if (!ME.pos) toast("Cerco il segnale GPS…");
+}
+function meWatch(on) {
+  if (on && ME.watch == null) ME.watch = navigator.geolocation.watchPosition(meFix, meError, { enableHighAccuracy: true, maximumAge: 3000, timeout: 20000 });
+  if (!on && ME.watch != null) { navigator.geolocation.clearWatch(ME.watch); ME.watch = null; }
+}
+function onCompass(e) { const h = compassOf(e, (screen.orientation && screen.orientation.angle) || 0); if (h != null) { ME.compass = h; meSoon(); } }
+function meCompass(on) {
+  const ev = "ondeviceorientationabsolute" in window ? "deviceorientationabsolute" : "deviceorientation";
+  if (!on) { removeEventListener(ev, onCompass); ME.compass = null; return; }
+  const go = () => addEventListener(ev, onCompass);
+  // iOS asks once, and only from a tap: no answer = no cone, the dot works the same
+  if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") DeviceOrientationEvent.requestPermission().then((r) => { if (r === "granted") go(); }).catch(() => {});
+  else go();
+}
+function meStop() {
+  ME.mode = "off"; ME.first = true; meWatch(false); meCompass(false);
+  if (ME.mk) { ME.mk.remove(); ME.mk = null; ME.el = null; }
+  ME.pos = null; meButton();
+}
+blocBtn.addEventListener("click", () => {
+  if (!navigator.geolocation) { toast("Posizione non disponibile su questo dispositivo"); return; }
+  if (nextMode(ME.mode) === "off") { meStop(); return; }
+  const was = ME.mode; ME.mode = "follow"; meButton();
+  if (was === "off") { ME.first = true; meWatch(true); meCompass(true); }
+  else if (ME.pos) map.flyTo({ center: [ME.pos.lon, ME.pos.lat], zoom: Math.max(map.getZoom(), 14), duration: 700 });
 });
+map.on("dragstart", () => { if (ME.mode === "follow") { ME.mode = "free"; meButton(); } });   // you moved the map: stop following, keep the dot
+map.on("zoom", () => { if (ME.mk) meSoon(); });
+document.addEventListener("visibilitychange", () => { if (ME.mode !== "off") meWatch(!document.hidden); });
+
 
 /* ------------------------------------------------------------------ search */
 const q = $("#q"), results = $("#results");
