@@ -85,5 +85,7 @@
  { "id": "gulperberg", "name": "Gulperberg", "lat": 50.81344, "lon": 5.89956, "region": "Limburg", "short": true },
  { "id": "mont-cassel", "name": "Mont Cassel", "lat": 50.80166, "lon": 2.48405, "region": "Hauts-de-France", "short": true },
  { "id": "mont-des-cats", "name": "Mont des Cats", "lat": 50.78309, "lon": 2.6678, "region": "Hauts-de-France", "short": true },
- { "id": "mont-noir", "name": "Mont Noir", "lat": 50.77888, "lon": 2.73288, "region": "Hauts-de-France", "short": true }
+ { "id": "mont-noir", "name": "Mont Noir", "lat": 50.77888, "lon": 2.73288, "region": "Hauts-de-France", "short": true },
+ { "id": "monte-livata", "name": "Monte Livata", "lat": 41.93912, "lon": 13.14635, "region": "Lazio", "from": ["Subiaco"] },
+ { "id": "madesimo", "name": "Madesimo", "lat": 46.4366, "lon": 9.35842, "region": "Lombardia", "from": ["Chiavenna"] }
 ]
