@@ -5,26 +5,26 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=52";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=52";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=52";
-import { poisNear } from "./lib/poi.mjs?v=52";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=52";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=52";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=52";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=52";
-import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=52";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=52";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=52";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=52";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=52";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=52";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=52";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=52";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=52";
-import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=52";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=52";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=52";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=53";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=53";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=53";
+import { poisNear } from "./lib/poi.mjs?v=53";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=53";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=53";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=53";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=53";
+import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=53";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=53";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=53";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=53";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=53";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=53";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=53";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=53";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=53";
+import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=53";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=53";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=53";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -99,6 +99,8 @@ function addOurLayers() {
   map.addLayer({ id: "route-case", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#0B0F14", "line-width": 8, "line-opacity": 0.85 } });
   map.addLayer({ id: "route-line", type: "line", source: "route", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "c"], "line-width": 4.5 } });
   map.addLayer({ id: "route-surf", type: "line", source: "route-surf", paint: { "line-color": "#E8EDF2", "line-width": 2, "line-dasharray": [1, 2.5] } });
+  map.addSource("route-tun", { type: "geojson", data: EMPTY });
+  map.addLayer({ id: "route-tun", type: "line", source: "route-tun", layout: { "line-cap": "butt" }, paint: { "line-color": "#0B0F14", "line-width": 7, "line-opacity": 0.9 } });
   map.addLayer({ id: "route-riskpt", type: "circle", source: "route-risk", filter: ["==", ["geometry-type"], "Point"], paint: { "circle-color": "#FFD60A", "circle-radius": 8, "circle-stroke-color": "#0B0F14", "circle-stroke-width": 3 } });
   map.addSource("poi", { type: "geojson", data: EMPTY });
   map.addLayer({ id: "poi-dot", type: "circle", source: "poi", minzoom: POI_ZOOM, layout: { visibility: S.poi ? "visible" : "none" }, paint: { "circle-color": ["match", ["get", "k"], "water", "#38BDF8", "#E8EDF2"], "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 3, 15, 6], "circle-stroke-color": "#0B0F14", "circle-stroke-width": 1.2 } });
@@ -1198,12 +1200,29 @@ function syncMarkers() {
 
 let calcT = null;
 function calcSoon() { clearTimeout(calcT); calcT = setTimeout(calcRoute, 350); }
+/* the base profile + the tunnel rule (route.mjs patchProfile), uploaded once per session; null = use the base */
+const BRP = {};
+async function customProfile(base) {
+  const key = "lr_brp_" + base;
+  try { const k = sessionStorage.getItem(key); if (k) return k; } catch { /* private mode */ }
+  if (BRP[base] !== undefined) return BRP[base];
+  try {
+    const src = await fetch(profileSrcUrl(base)), brf = src.ok ? patchProfile(await src.text()) : "";
+    const j = /lr_tunnel/.test(brf) ? await (await fetch(BROUTER + "/profile", { method: "POST", headers: { "Content-Type": "text/plain" }, body: brf })).json() : null;
+    BRP[base] = j && !j.error && /^custom_\d+$/.test(j.profileid || "") ? j.profileid : null;
+  } catch { BRP[base] = null; }
+  try { if (BRP[base]) sessionStorage.setItem(key, BRP[base]); } catch { /* private mode */ }
+  return BRP[base];
+}
 async function calcRoute() {
   const seq = ++G.seq;
   if (G.stops.length < 2) { G.res = null; G.side = null; G.rp = null; G.risk = []; paintRoute(); if (giroOn()) renderGiro(); return; }
   G.busy = true; G.err = ""; if (giroOn()) renderGiro();
   let res = null;
-  try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, G.profile))).json()); } catch { res = null; }
+  const cp = await customProfile(G.profile);
+  if (cp) { try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, cp))).json()); } catch { res = null; } }
+  if (cp && !res) { try { sessionStorage.removeItem("lr_brp_" + G.profile); } catch { /* private mode */ } BRP[G.profile] = undefined; }
+  if (!res) { try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, G.profile))).json()); } catch { res = null; } if (res) res.noTun = true; }
   if (!res) {
     // BRouter down or no route with this profile: OSRM gives the geometry only (no heights, no surface)
     try {
@@ -1365,7 +1384,7 @@ async function fillRides(u) {
   }));
 }
 function rideVisible(on) {
-  for (const id of ["route-risk", "route-case", "route-line", "route-surf", "route-riskpt"]) if (map.getLayer && map.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+  for (const id of ["route-risk", "route-case", "route-line", "route-surf", "route-tun", "route-riskpt"]) if (map.getLayer && map.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
 }
 function paintRoute() {
   const a = map.getSource && map.getSource("route"), b = map.getSource && map.getSource("route-surf");
@@ -1374,6 +1393,8 @@ function paintRoute() {
   const k = map.getSource && map.getSource("route-risk");
   if (k) k.setData({ type: "FeatureCollection", features: G.rp && G.risk.length ? [...riskyFeatures(G.rp, G.risk), ...G.risk.map((r) => ({ type: "Feature", properties: {}, geometry: { type: "Point", coordinates: [G.rp.side.track[r.a][1], G.rp.side.track[r.a][0]] } }))] : [] });
   b.setData({ type: "FeatureCollection", features: G.res ? surfaceFeatures(G.res.track, G.res.segs) : [] });
+  const tn = map.getSource && map.getSource("route-tun");
+  if (tn) tn.setData({ type: "FeatureCollection", features: G.res ? tunnelFeatures(G.res.track, G.res.tunnels) : [] });
 }
 function fitRoute() {
   if (!G.res) return;
@@ -1406,6 +1427,18 @@ function riskFrom(x) {
   const st = x.after >= 0 && G.stops[x.after];
   return st && st.name ? st.name : "";
 }
+/* tunnels and cycle lanes on the route (BRouter way tags): for someone who does not know the area */
+function tunnelHtml() {
+  const r = G.res; if (!r || r.noEle) return "";
+  const t = tunnelSummary(r.tunnels), cyc = r.cycM || 0;
+  if (!t && cyc < 200) return r.noTun ? "" : `<p class="note small mu" id="gtun">Nessuna galleria sul percorso.</p>`;
+  return `<section class="sec" id="gtun"><h3>Gallerie e ciclabili</h3>
+    ${t ? `<p><b data-noi18n>${t.n} ${t.n === 1 ? "galleria" : "gallerie"} · ${num(t.m / 1000, 1)} km</b> <span class="mu" data-noi18n>· la più lunga ${esc(t.long.m)} m al km ${num(t.long.km, 1)}</span></p>
+      <ul class="tips tunl">${t.list.slice(0, 8).map((x) => `<li data-noi18n>km ${num(x.km, 1)} · ${esc(x.m)} m</li>`).join("")}${t.list.length > 8 ? "<li>…</li>" : ""}</ul>
+      <p class="note small">In galleria: luci accese davanti e dietro, anche di giorno, e qualcosa di chiaro o riflettente.</p>` : ""}
+    ${cyc >= 200 ? `<p data-noi18n><b>${num(cyc / 1000, 1)} km su ciclabile</b> <span class="mu">(${Math.round(cyc / (r.km * 10))}% del giro)</span></p>` : ""}
+    ${G.profile !== "safety" ? `<p class="note small mu">«Più ciclabili» cerca piste e strade tranquille, a costo di qualche km in più.</p>` : ""}</section>`;
+}
 /* steep, twisty descents of the ride (route.mjs riskyDescents): a tip, never an alarm */
 function riskHtml() {
   if (!G.risk || !G.risk.length) return "";
@@ -1432,6 +1465,7 @@ function renderGiro() {
         <figcaption><span>0 km</span><span>${num(r.km, 0)} km</span></figcaption></figure>` : ""}
       ${G.rp ? `<div class="gleg rleg"><b>Salita</b>${UP_STOPS.map((g) => `<span style="--c:${g.color}">${esc(g.label)}</span>`).join("")}<i class="br"></i><b>Piano</b><span style="--c:#FFFFFF"></span><b>Discesa</b>${DOWN_STOPS.map((g) => `<span style="--c:${g.color}">${esc(g.label)}</span>`).join("")}</div>` : ""}
       ${riskHtml()}
+      ${tunnelHtml()}
       ${shares.length ? `<div class="surf">${shares.map((x) => `<span class="${esc(x.k)}">${esc(x.k)} ${x.pct}%</span>`).join("")}</div>` : ""}
       <p class="note small mu">Tempo stimato a ${num(myWkg() || 3)} W/kg${myWkg() ? "" : " (impostalo nella scheda di una salita)"}, soste escluse.</p>
       ${G.on.length ? `<section class="sec"><h3>Salite sul percorso</h3><div class="cards">${G.on.map((x) => `<a class="card" href="#/s/${esc(encodeURIComponent(x.c.id))}" style="text-decoration:none;color:inherit"><span class="badge" style="background:${difficultyColor(x.c.difficulty || 0)}">${x.c.difficulty ? x.c.difficulty + "/10" : "–"}</span><span class="nm">${esc(x.c.name)}</span><span class="mt">km ${num(x.km, 0)}${x.c.elevation ? " · " + esc(x.c.elevation) + " m" : ""}</span></a>`).join("")}</div></section>` : ""}

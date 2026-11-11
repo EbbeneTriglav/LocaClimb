@@ -3,10 +3,10 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=52";
+import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=53";
 
 export const BROUTER = "https://brouter.de/brouter";
-export const PROFILES = [["fastbike", "Solo asfalto"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
+export const PROFILES = [["fastbike", "Solo asfalto"], ["safety", "Più ciclabili"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
 export const MAX_STOPS = 30;
 
 export function brouterUrl(stops, profile = "fastbike") {
@@ -16,6 +16,19 @@ export function brouterUrl(stops, profile = "fastbike") {
 export function osrmUrl(stops) {
   return "https://router.project-osrm.org/route/v1/bike/" + stops.map((s) => (+s.lon).toFixed(5) + "," + (+s.lat).toFixed(5)).join(";") + "?overview=full&geometries=geojson";
 }
+
+/* The standard BRouter profiles do not report tunnel=yes in the WayTags (only the tags a profile uses are kept).
+   A copy of the profile with one dummy rule that reads the tag does: it is uploaded once (POST /profile ->
+   "custom_<n>") and used instead of the base profile; if the upload or the custom route fails the base one is used. */
+/* brouter.de serves the .brf files without CORS: the same files come from the BRouter repository (MIT) on GitHub */
+export const PROFILE_SRC = "https://raw.githubusercontent.com/abrensch/brouter/master/misc/profiles2/";
+export function profileSrcUrl(base) { return PROFILE_SRC + encodeURIComponent(base) + ".brf"; }
+export function patchProfile(brf) {
+  if (!/---context:way/.test(brf) || /lr_tunnel/.test(brf)) return brf;
+  return brf.replace(/(---context:way[^\n]*\n)/, "$1assign lr_tunnel = if tunnel=yes then 1 else 0\n");
+}
+const CYCLE = /(^| )highway=cycleway( |$)|(^| )cycleway(:both|:right|:left)?=(lane|track|opposite_lane|opposite_track)( |$)/;
+const TUNNEL = /(^| )tunnel=(yes|building_passage|avalanche_protector)( |$)/;
 
 /* OSM way tags -> surface class (as the classic app's surfCat) */
 export function surfCat(wt) {
@@ -36,17 +49,40 @@ export function parseBrouter(j) {
   const pr = f.properties || {};
   const km = pr["track-length"] ? +pr["track-length"] / 1000 : trackKm(track);
   const gain = pr["filtered ascend"] != null ? Math.round(+pr["filtered ascend"]) : ascent(track);
-  const segs = [], surf = {};
+  const segs = [], surf = {}, tunnels = [];
+  let cyc = 0;
   const msgs = pr.messages;
   if (Array.isArray(msgs) && msgs.length > 1) {
     const di = msgs[0].indexOf("Distance"), wi = msgs[0].indexOf("WayTags");
     let cum = 0;
     if (di >= 0 && wi >= 0) for (const row of msgs.slice(1)) {
-      const d = parseFloat(row[di]) || 0, cat = surfCat(row[wi] || "");
-      surf[cat] = (surf[cat] || 0) + d; segs.push({ from: cum, to: cum + d, cat }); cum += d;
+      const wt = row[wi] || "", d = parseFloat(row[di]) || 0, cat = surfCat(wt);
+      surf[cat] = (surf[cat] || 0) + d; segs.push({ from: cum, to: cum + d, cat });
+      if (TUNNEL.test(wt)) { const l = tunnels[tunnels.length - 1]; if (l && cum - l.to < 30) l.to = cum + d; else tunnels.push({ from: cum, to: cum + d }); }
+      if (CYCLE.test(wt)) cyc += d;
+      cum += d;
     }
   }
-  return { track, km, gain, surf: segs.length ? surf : null, segs };
+  return { track, km, gain, surf: segs.length ? surf : null, segs, tunnels, cycM: Math.round(cyc) };
+}
+
+/* tunnels (m, along the route) -> what the Giro says: count, total, the longest, the list in km */
+export function tunnelSummary(tunnels) {
+  const list = (tunnels || []).map((t) => ({ km: t.from / 1000, m: Math.round(t.to - t.from) })).filter((t) => t.m >= 15);
+  if (!list.length) return null;
+  const long = list.reduce((a, b) => (b.m > a.m ? b : a));
+  return { n: list.length, m: list.reduce((a, b) => a + b.m, 0), long, list };
+}
+/* tunnel stretches as map lines */
+export function tunnelFeatures(track, tunnels) {
+  if (!tunnels || !tunnels.length) return [];
+  const c = cumKm(track).map((x) => x * 1000), out = [];
+  for (const t of tunnels) {
+    const coords = [];
+    for (let i = 0; i < track.length; i++) if (c[i] >= t.from - 1 && c[i] <= t.to + 1) coords.push([track[i][1], track[i][0]]);
+    if (coords.length > 1) out.push({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } });
+  }
+  return out;
 }
 
 export function trackKm(t) { let d = 0; for (let i = 1; i < t.length; i++) d += havKm(t[i - 1][0], t[i - 1][1], t[i][0], t[i][1]); return d; }

@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=52";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=53";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -61,6 +61,7 @@ export const DICT = {
   "Traffico feriale / weekend": "Traffic weekdays / weekend", "Camion": "Trucks", "Niente camion": "No trucks", "Camion rari": "Few trucks",
   "Possibili camion": "Trucks possible", "Camion frequenti": "Frequent trucks", "basso": "low", "medio": "medium", "alto": "high",
   "chiuso d'inverno": "closed for the winter", "Chiuso per l'inverno": "Closed for the winter", "Di solito chiuso in questo periodo": "Usually closed at this time of year", "Possibile chiusura invernale": "Possible winter closure", "Chiusura invernale": "Winter closure", "Le date cambiano con la neve: verifica prima di partire": "Dates change with the snow: check before you go", "verificato il": "checked on", "Chiusi per l'inverno, non in lista:": "Closed for the winter, not listed:", "Attenzione: passi chiusi d'inverno sul percorso": "Warning: passes closed in winter on the route",
+  "Più ciclabili": "More bike lanes", "Gallerie e ciclabili": "Tunnels and bike lanes", "Nessuna galleria sul percorso.": "No tunnels on the route.", "In galleria: luci accese davanti e dietro, anche di giorno, e qualcosa di chiaro o riflettente.": "In tunnels: front and rear lights on, even by day, and something bright or reflective.", "«Più ciclabili» cerca piste e strade tranquille, a costo di qualche km in più.": "\"More bike lanes\" looks for bike paths and quiet roads, at the cost of a few extra km.",
   "Bike Day: strada solo per bici": "Bike Day: road for bikes only", "Strade chiuse ed eventi": "Road closures and events", "Strada chiusa": "Road closed", "Solo bici": "Bikes only", "Granfondo": "Gran fondo", "Corsa": "Race", "fonte": "source", "Nessuna chiusura o evento nei prossimi 60 giorni.": "No closures or events in the next 60 days.", "Attenzione: strade chiuse o eventi nel giorno scelto": "Heads up: closures or events on the chosen day", "Strada chiusa al traffico al passaggio della corsa: orari nelle ordinanze dei comuni.": "Road closed to traffic while the race passes: times in the local council orders.", "Strade chiuse al traffico al passaggio della corsa: orari nelle ordinanze dei comuni.": "Roads closed to traffic while the race passes: times in the local council orders.", "News e stato della strada": "News and road status",
   "Valutazioni della community": "Community ratings", "Non disponibili ora.": "Not available now.",
   "Ancora nessun voto: il primo è tuo.": "No votes yet: be the first.", "Emozione": "Thrill", "Paesaggio": "Scenery", "Traffico": "Traffic",
