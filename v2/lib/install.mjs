@@ -35,3 +35,17 @@ export function countVisit(st = {}, now = Date.now()) {
 export function snooze(st = {}, now = Date.now(), days = SNOOZE_DAYS) {
   return { ...st, snoozedUntil: now + days * 864e5 };
 }
+
+/* Updates without reinstalling (Rick 11/11/2026). The installed app already loads the newest page on every cold
+   start (sw.js: network-first, cache:"reload"); the gap is an app left open in the background for days, which
+   resumes the old version. On return the page reads the published index.html: a higher ?v= on app.mjs = a new
+   release. -> the release number, or null */
+export function releaseOf(text) {
+  const m = /app\.mjs\?v=(\d+)/.exec(String(text || ""));
+  return m ? +m[1] : null;
+}
+export const UPDATE_AFTER_MS = 20 * 60 * 1000;   // look only after 20 minutes in the background
+export function newerRelease(html, current) {
+  const v = releaseOf(html), c = releaseOf(current);
+  return v != null && c != null && v > c;
+}

@@ -5,27 +5,27 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=55";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=55";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=55";
-import { poisNear } from "./lib/poi.mjs?v=55";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=55";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=55";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=55";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=55";
-import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=55";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=55";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=55";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=55";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=55";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=55";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=55";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=55";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=55";
-import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=55";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=55";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=55";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText } from "./lib/nav.mjs?v=55";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=56";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=56";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=56";
+import { poisNear } from "./lib/poi.mjs?v=56";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=56";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=56";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=56";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=56";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=56";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=56";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=56";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=56";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=56";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=56";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=56";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=56";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=56";
+import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=56";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=56";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=56";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText } from "./lib/nav.mjs?v=56";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -52,6 +52,8 @@ const map = new maplibregl.Map({
   container: "map", style: BASE.style,
   center: [10.6, 45.6], zoom: 6.4, maxPitch: 75, attributionControl: { compact: true }, hash: false
 });
+/* the credits start folded on the "i" (MapLibre opens them at load, a grey band across the map on a phone) */
+map.once("idle", () => { const a = document.querySelector(".maplibregl-ctrl-attrib.maplibregl-compact-show"); if (a) a.classList.remove("maplibregl-compact-show"); });
 /* our own control stack (zoom, north, 3D, locate) - MapLibre's NavigationControl overlapped it */
 document.getElementById("bzin").addEventListener("click", () => map.zoomIn());
 document.getElementById("bzout").addEventListener("click", () => map.zoomOut());
@@ -161,7 +163,10 @@ map.on("load", async () => {
   // delegated handlers: registered once, they follow the layer ids through every basemap switch
   map.on("click", "poi-dot", (e) => {
     const f = e.features && e.features[0]; if (!f || giroOn()) return;
-    new maplibregl.Popup({ closeButton: false, className: "pop" }).setLngLat(e.lngLat).setHTML(`<b>${esc(f.properties.n)}</b>${f.properties.n !== f.properties.l ? `<br><span>${esc(f.properties.l)}</span>` : ""}`).addTo(map);
+    const at = f.geometry && f.geometry.coordinates ? f.geometry.coordinates : [e.lngLat.lng, e.lngLat.lat];
+    const pop = new maplibregl.Popup({ closeButton: false, className: "pop" }).setLngLat(at)
+      .setHTML(`<div class="popn"><div><b>${esc(f.properties.n)}</b>${f.properties.n !== f.properties.l ? `<br><span>${esc(f.properties.l)}</span>` : ""}</div><button type="button" class="ib sm navgo" aria-label="Naviga fin qui" title="Naviga fin qui">${ICON.nav}</button></div>`).addTo(map);
+    pop.getElement().querySelector(".navgo").addEventListener("click", () => { pop.remove(); navTo({ lat: at[1], lon: at[0] }); });
   });
   for (const id of ["c-dot", "c-glow"]) {
     map.on("click", id, (e) => { if (giroOn()) return; const f = e.features && e.features[0]; if (f) location.hash = "#/s/" + encodeURIComponent(f.properties.id); });
@@ -272,7 +277,6 @@ function mePaint() {
   const hd = headingOf(p, ME.compass);
   ME.el.classList.toggle("hd", hd != null); if (hd != null) ME.el.style.setProperty("--hd", Math.round(hd) + "deg");
   ME.el.classList.toggle("stale", Date.now() - p.t > STALE_MS);
-  guidePaint();
 }
 const meSoon = () => { if (!ME.raf) ME.raf = requestAnimationFrame(mePaint); };
 function meFix(g) {
@@ -304,7 +308,7 @@ function meCompass(on) {
 function meStop() {
   ME.mode = "off"; ME.first = true; meWatch(false); meCompass(false);
   if (ME.mk) { ME.mk.remove(); ME.mk = null; ME.el = null; }
-  ME.pos = null; guideStop(); meButton();
+  ME.pos = null; meButton();
 }
 blocBtn.addEventListener("click", () => {
   if (!navigator.geolocation) { toast("Posizione non disponibile su questo dispositivo"); return; }
@@ -318,9 +322,10 @@ map.on("zoom", () => { if (ME.mk) meSoon(); });
 document.addEventListener("visibilitychange", () => { if (ME.mode !== "off") meWatch(!document.hidden); });
 
 /* ---- "Vicino a me" (Rick, 11/11/2026; lib/near.mjs): from the blue dot to water, a bar or a climb.
-   "Guidami": an arrow + metres over the map (light: no turn-by-turn, no extra layers). "Percorso": the
-   bike route from the Giro (BRouter), ready for the bike computer. Climbs: "Apri" + "Percorso". */
-const NEAR = { kind: "water", target: null, mk: null, el: null, done: false };
+   "Naviga": the real bike navigator (BRouter route from where you are, turn by turn, voice), the same one as the
+   Giro and the climbs; it replaced "Guidami" (a straight-line arrow). "Percorso": the route in the Giro, ready for
+   the bike computer. Climbs: "Apri" (the green ▲ there navigates to the bottom of a side) + "Percorso". */
+const NEAR = { kind: "water" };
 const bnear = $("#bnear");
 const ARROW = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l7 18-7-4.2-7 4.2z" fill="currentColor"/></svg>';
 async function nearList(kind) {
@@ -348,46 +353,16 @@ async function nearDialog(kind = NEAR.kind) {
   const hd = headingOf(ME.pos, ME.compass) ?? map.getBearing();
   out.innerHTML = `<ul class="nl">${items.map((x, i) => `<li><span class="na" style="transform:rotate(${Math.round(arrowDeg(x.brg, hd))}deg)">${ARROW}</span>
       <span class="nt"><b>${esc(x.name || x.label)}</b><small>${esc(fmtDist(x.km, LANG))}${x.name && x.label ? " · " + esc(x.label) : ""}${x.sub ? " · " + esc(x.sub) : ""}</small></span>
-      <span class="nb">${x.id ? `<button type="button" class="btn" data-open="${i}">Apri</button>` : `<button type="button" class="btn" data-go="${i}">Guidami</button>`}<button type="button" class="btn" data-route="${i}">Percorso</button></span></li>`).join("")}</ul>
-    <p class="note small">Distanze in linea d'aria. «Percorso» calcola la strada in bici e la puoi mandare al ciclocomputer.</p>`;
-  out.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { closeDialog(); guideTo(items[+b.dataset.go]); }));
+      <span class="nb">${x.id ? `<button type="button" class="btn" data-open="${i}">Apri</button>` : `<button type="button" class="btn pri navb" data-go="${i}">${ICON.nav}Naviga</button>`}<button type="button" class="btn" data-route="${i}">Percorso</button></span></li>`).join("")}</ul>
+    <p class="note small">Distanze in linea d'aria. «Naviga» ti guida svolta per svolta sulla strada in bici; «Percorso» la mette nel Giro, pronta per il ciclocomputer.</p>`;
+  out.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { closeDialog(); const x = items[+b.dataset.go]; navTo({ lat: x.lat, lon: x.lon }); }));
   out.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => { closeDialog(); location.hash = "#/s/" + encodeURIComponent(items[+b.dataset.open].id); }));
   out.querySelectorAll("[data-route]").forEach((b) => b.addEventListener("click", () => {
     const x = items[+b.dataset.route], p = ME.pos; if (!p) return;
     closeDialog(); location.hash = "#/giro?p=" + encodeStops([{ lat: p.lat, lon: p.lon }, { lat: x.lat, lon: x.lon, id: x.id || null }]);
   }));
 }
-function guideTo(x) {
-  guideStop();
-  NEAR.target = x; NEAR.done = false;
-  NEAR.el = document.createElement("div"); NEAR.el.className = "guide"; NEAR.el.setAttribute("role", "status");
-  NEAR.el.innerHTML = `<span class="ga">${ARROW}</span><span class="gt"><b></b><small></small></span><button type="button" class="ib" aria-label="Chiudi la guida">${ICON.close}</button>`;
-  NEAR.el.querySelector("button").addEventListener("click", guideStop);
-  document.body.appendChild(NEAR.el);
-  const pin = document.createElement("div"); pin.className = "neardest"; pin.innerHTML = "<i></i>";
-  NEAR.mk = new maplibregl.Marker({ element: pin, anchor: "bottom" }).setLngLat([x.lon, x.lat]).addTo(map);
-  if (ME.pos) {   // both on screen; the map stops following so the frame stays
-    ME.mode = "free"; meButton();
-    map.fitBounds(new maplibregl.LngLatBounds([ME.pos.lon, ME.pos.lat], [ME.pos.lon, ME.pos.lat]).extend([x.lon, x.lat]), { padding: { top: 150, bottom: 300, left: 60, right: 80 }, maxZoom: 16, duration: 700 });
-  }
-  guidePaint();
-}
-function guidePaint() {
-  const x = NEAR.target, p = ME.pos;
-  if (!x || !NEAR.el || !p) return;
-  const km = distKm(p.lat, p.lon, x.lat, x.lon), hd = headingOf(p, ME.compass) ?? map.getBearing();
-  NEAR.el.querySelector(".ga").style.transform = `rotate(${Math.round(arrowDeg(bearing(p.lat, p.lon, x.lat, x.lon), hd))}deg)`;
-  NEAR.el.querySelector("b").textContent = km < ARRIVED_KM ? "Sei arrivato" : fmtDist(km, LANG);
-  NEAR.el.querySelector("small").textContent = x.name || x.label || "";
-  if (km < ARRIVED_KM && !NEAR.done) { NEAR.done = true; try { if (navigator.vibrate) navigator.vibrate(200); } catch { /* not supported */ } setTimeout(guideStop, 6000); }
-}
-function guideStop() {
-  if (NEAR.el) NEAR.el.remove();
-  if (NEAR.mk) NEAR.mk.remove();
-  NEAR.el = NEAR.mk = NEAR.target = null;
-}
 bnear.addEventListener("click", () => nearDialog());
-map.on("rotate", () => { if (NEAR.el && headingOf(ME.pos, ME.compass) == null) guidePaint(); });
 
 
 /* ------------------------------------------------------------------ search */
@@ -452,6 +427,7 @@ map.on("moveend", () => { if (S.poi) loadPoi(); });
 window.addEventListener("hashchange", route);
 function route() {
   const h = location.hash || "#/";
+  results.hidden = true; if (h !== "#/" && h !== "#") q.value = "";   // search results never follow the rider to another page
   document.querySelectorAll(".tabs a").forEach((a) => a.removeAttribute("aria-current"));
   const tab = h.startsWith("#/oggi") ? "oggi" : h.startsWith("#/profilo") || h.startsWith("#/diario") ? "profilo" : h.startsWith("#/giro") ? "giro" : "map";
   const t = document.querySelector(`.tabs a[data-tab="${tab}"]`); if (t) t.setAttribute("aria-current", "page");
@@ -466,7 +442,6 @@ function route() {
 
 function setMode(m) {
   if (m !== "giro") S.giroOpen = false;
-  if (m === "giro") guideStop();   // "Guidami" is for the map: building a ride (or navigating it) replaces it
   if (m === "giro" && panel.dataset.mode !== "giro") setBase(GIRO_MAP, true);              // building a ride: roads first
   else if (m !== "giro" && panel.dataset.mode === "giro") setBase(mapPref, true);          // back to the rider's map
   if (m === "climb" || m === "giro") hideInstallCard();          // the card never sits on a climb or a ride
@@ -1031,7 +1006,7 @@ function stopRide() {
    on a climb link) to the hash at load: the route is ridden at 30 km/h x 6. */
 const NAVSIM = /[?&]navsim=1/.test(location.hash);   // read at load: the Giro rewrites the hash
 const NAV_VOICE_KEY = "lr_navvoice";
-const NAV = { on: false, t: null, c: null, ms: [], g: null, last: 0, el: null, mk: null, watch: null, sim: null, lock: null, cue: {}, off: {}, busy: false, stops: [], profile: "", own: false, voice: true, done: false };
+const NAV = { on: false, t: null, c: null, ms: [], g: null, last: 0, el: null, mk: null, watch: null, sim: null, lock: null, cue: {}, off: {}, busy: false, stops: [], profile: "", own: false, voice: true, done: false, follow: true, p: null, along: 0 };
 const NAV_ICON = {
   arrow: (deg) => `<svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><g transform="rotate(${Math.max(-160, Math.min(160, deg))} 24 24)"><path d="M24 6l10 12h-7v20h-6V18h-7z" fill="currentColor"/></g></svg>`,
   round: (n) => `<svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><circle cx="24" cy="26" r="10" fill="none" stroke="currentColor" stroke-width="4"/><path d="M24 4l8 10h-5v6h-6v-6h-5z" fill="currentColor"/><text x="24" y="31" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">${n || ""}</text></svg>`,
@@ -1066,18 +1041,19 @@ function navDraw(track) {
 function navStart(res, stops, profile) {
   if (!res || !res.track || res.track.length < 2) return;
   if (NAV.on) navStop();
-  guideStop();
   navLoad(res);
-  NAV.on = true; NAV.stops = stops; NAV.profile = profile; NAV.own = false;
+  NAV.on = true; NAV.stops = stops; NAV.profile = profile; NAV.own = false; NAV.follow = true; NAV.p = null;
   document.body.classList.add("navon");
   NAV.el = document.createElement("div"); NAV.el.className = "nav"; NAV.el.setAttribute("role", "status");
   NAV.el.innerHTML = `<div class="navtop"><span class="nvi"></span><div class="nvx"><b class="nvd"></b><span class="nvt"></span></div></div>
     <div class="navthen" hidden></div>
+    <button type="button" class="btn navre" id="navR" hidden>${ICON.nav}Ricentra</button>
     <div class="navbot"><div><b class="nvk"></b><span>km</span></div><div><b class="nvg"></b><span>metri</span></div><div><b class="nva"></b><span>arrivo</span></div>
       <button type="button" class="ib nvv" id="navV" aria-label="Voce" aria-pressed="${NAV.voice}">${NAV_ICON.voice(NAV.voice)}</button>
       <button type="button" class="btn" id="navX">Fine</button></div>`;
   document.body.appendChild(NAV.el);
   $("#navX").addEventListener("click", navStop);
+  $("#navR").addEventListener("click", () => navFollow(true));
   $("#navV").addEventListener("click", (e) => {
     NAV.voice = !NAV.voice; try { localStorage.setItem(NAV_VOICE_KEY, NAV.voice ? "1" : "0"); } catch { /* private mode */ }
     e.currentTarget.setAttribute("aria-pressed", String(NAV.voice)); e.currentTarget.innerHTML = NAV_ICON.voice(NAV.voice);
@@ -1141,6 +1117,18 @@ async function navReroute(p) {
   navLoad(res); navDraw(res.track);
   navBanner("");
 }
+/* the rider moves the map with the fingers: stop following until "Ricentra" */
+function navFollow(on) {
+  NAV.follow = on;
+  const r = NAV.el && NAV.el.querySelector("#navR"); if (r) r.hidden = on;
+  if (on && NAV.p) navCamera(NAV.p, NAV.along, 700);
+}
+function navCamera(p, along, ms = 450) {
+  const brg = routeBearing(NAV.t, NAV.c, along);
+  NAV.mk.setRotation(brg);
+  if (NAV.follow) map.easeTo({ center: [p.lon, p.lat], bearing: brg, pitch: 55, zoom: 16.3, duration: ms, offset: [0, 140] });
+}
+for (const ev of ["dragstart", "zoomstart", "rotatestart", "pitchstart"]) map.on(ev, (e) => { if (NAV.on && NAV.follow && e.originalEvent) navFollow(false); });
 function navBanner(t) { const th = NAV.el && NAV.el.querySelector(".navthen"); if (!th) return; th.hidden = !t; if (t) th.textContent = t; }
 function navPaint(L, p) {
   if (!NAV.el) return;
@@ -1163,31 +1151,44 @@ function navPaint(L, p) {
     navSpeak(voiceText(tr(u.next.text), cue === "far" ? u.distM : null, LANG));
     if (cue === "near") { try { if (navigator.vibrate) navigator.vibrate([120, 80, 120]); } catch { /* not supported */ } }
   }
-  if (p) {   // camera and arrow follow the road ahead, not the GPS jitter
-    const brg = routeBearing(NAV.t, NAV.c, along);
-    NAV.mk.setRotation(brg);
-    map.easeTo({ center: [p.lon, p.lat], bearing: brg, pitch: 55, zoom: 16.3, duration: 450, offset: [0, 140] });
-  }
+  if (p) { NAV.p = p; NAV.along = along; navCamera(p, along); }   // camera and arrow follow the road ahead, not the GPS jitter
 }
 /* the Giro's "Naviga" */
 function navGiro() { navStart(G.res, G.stops.map((s) => ({ lat: s.lat, lon: s.lon })), G.profile); }
+/* where the rider is now: the blue dot if fresh, else one GPS fix (null = no position) */
+async function hereNow() {
+  if (ME.pos && Date.now() - ME.pos.t < 30000) return { lat: ME.pos.lat, lon: ME.pos.lon };
+  if (!navigator.geolocation) return null;
+  return new Promise((res) => navigator.geolocation.getCurrentPosition((g) => res({ lat: g.coords.latitude, lon: g.coords.longitude }), () => res(null), { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }));
+}
+/* route the stops with BRouter and start navigating; the first stop is "here" */
+async function navGo(stops) {
+  const prof = G.profile || "fastbike";
+  const res = await navRoute(stops, prof);
+  if (!res) { toast("Percorso non trovato: riprova tra poco"); return; }
+  navDraw(res.track);
+  navStart(res, stops, prof);
+  NAV.own = true;
+}
+/* "Naviga" to a point (water, bar, a pin): from the blue dot */
+async function navTo(dest) {
+  toast("Calcolo il percorso…");
+  const here = await hereNow();
+  if (!here) { toast("Posizione non disponibile: attiva il GPS"); return; }
+  if (distKm(here.lat, here.lon, dest.lat, dest.lon) < 0.03) { toast("Sei arrivato"); return; }
+  navGo([here, { lat: dest.lat, lon: dest.lon }]);
+}
 /* a climb's "Naviga": from the blue dot to the bottom of the chosen side, then up its road to the top
    (a point halfway up keeps BRouter on this side). Already at the bottom: straight up. */
 async function navClimb(c, v) {
   const t = (v && v.track) || [];
   if (t.length < 2) { toast("Questo versante non ha il tracciato"); return; }
-  if (!navigator.geolocation && !NAVSIM) { toast("Posizione non disponibile su questo dispositivo"); return; }
   toast("Calcolo il percorso…");
-  const here = NAVSIM ? null : await new Promise((res) => navigator.geolocation.getCurrentPosition((g) => res({ lat: g.coords.latitude, lon: g.coords.longitude }), () => res(null), { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }));
+  const here = NAVSIM ? null : await hereNow();
   if (!here && !NAVSIM) { toast("Posizione non disponibile: attiva il GPS"); return; }
   const pt = (q) => ({ lat: q[0], lon: q[1] }), base = pt(t[0]), mid = pt(t[Math.floor(t.length / 2)]), top = pt(t[t.length - 1]);
   const far = here && distKm(here.lat, here.lon, base.lat, base.lon) > 0.3;
-  const stops = [...(far ? [here, base] : [here || base]), mid, top];
-  const res = await navRoute(stops, G.profile || "fastbike");
-  if (!res) { toast("Percorso non trovato: riprova tra poco"); return; }
-  navDraw(res.track);
-  navStart(res, stops, G.profile || "fastbike");
-  NAV.own = true;
+  navGo([...(far ? [here, base] : [here || base]), mid, top]);
 }
 
 /* ------------------------------------------------------------------ oggi */
@@ -2042,6 +2043,19 @@ if (instMode() !== "none") setTimeout(() => nudgeInstall(false), 20000);   // th
 
 /* Service worker (sw.js, shared with the classic app): installable everywhere and a last copy of the page
    and the climbs for a mountain without signal. Registered after the first paint, never in its way. */
+/* a new release while the app sat in the background: a bar to reload (never during navigation; never forced) */
+let hiddenAt = 0, updBar = null;
+document.addEventListener("visibilitychange", async () => {
+  if (document.hidden) { hiddenAt = Date.now(); return; }
+  if (!hiddenAt || Date.now() - hiddenAt < UPDATE_AFTER_MS || updBar || NAV.on) return;
+  let html = ""; try { html = await (await fetch(new URL("../index.html", import.meta.url), { cache: "no-store" })).text(); } catch { return; }
+  if (!newerRelease(html, import.meta.url) || updBar) return;
+  updBar = document.createElement("div"); updBar.className = "updbar"; updBar.setAttribute("role", "status");
+  updBar.innerHTML = `<span>È uscita una nuova versione di LocaRide</span><button type="button" class="btn pri">Aggiorna</button><button type="button" class="ib sm" aria-label="Chiudi">${ICON.close}</button>`;
+  updBar.querySelector(".pri").addEventListener("click", () => location.reload());
+  updBar.querySelector(".ib").addEventListener("click", () => { updBar.remove(); });
+  document.body.appendChild(updBar);
+});
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
   addEventListener("load", () => setTimeout(() => navigator.serviceWorker.register(new URL("../sw.js", import.meta.url)).catch(() => { /* not fatal */ }), 4000), { once: true });
 }
