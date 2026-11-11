@@ -5,26 +5,27 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=54";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=54";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=54";
-import { poisNear } from "./lib/poi.mjs?v=54";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=54";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=54";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=54";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=54";
-import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=54";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=54";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=54";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=54";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=54";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=54";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=54";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=54";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=54";
-import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=54";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=54";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=54";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=55";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=55";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=55";
+import { poisNear } from "./lib/poi.mjs?v=55";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=55";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=55";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=55";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=55";
+import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=55";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=55";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=55";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=55";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=55";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=55";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=55";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=55";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=55";
+import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=55";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=55";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=55";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText } from "./lib/nav.mjs?v=55";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -465,6 +466,7 @@ function route() {
 
 function setMode(m) {
   if (m !== "giro") S.giroOpen = false;
+  if (m === "giro") guideStop();   // "Guidami" is for the map: building a ride (or navigating it) replaces it
   if (m === "giro" && panel.dataset.mode !== "giro") setBase(GIRO_MAP, true);              // building a ride: roads first
   else if (m !== "giro" && panel.dataset.mode === "giro") setBase(mapPref, true);          // back to the rider's map
   if (m === "climb" || m === "giro") hideInstallCard();          // the card never sits on a climb or a ride
@@ -583,7 +585,7 @@ function renderClimb() {
   const maxG = Math.max(12, ...rows.map((r) => r.g));
   panel.innerHTML = `<div class="handle"></div><div class="cl">
     <div class="cl-top"><a class="ib" href="#/" aria-label="Torna alla mappa">${ICON.back}</a>
-      <div style="display:flex;gap:8px"><button type="button" class="ib" id="share" aria-label="Condividi">${ICON.share}</button></div></div>
+      <div style="display:flex;gap:8px"><button type="button" class="ib navgo" id="navTop" aria-label="Naviga fino alla salita" title="Naviga fino alla salita">${ICON.nav}</button><button type="button" class="ib" id="share" aria-label="Condividi">${ICON.share}</button></div></div>
     <div class="ov">${d ? "Difficoltà " + d + "/10" : "Salita"}${c.cat ? " · cat. " + esc(c.cat) : ""}${c.status === "seasonal" ? " · stagionale" : ""}${wcKicker(c)}</div>
     <h1>${top}</h1>
     <p class="sub">${esc(v.side || "")}${st.start != null ? " · " + esc(st.start) + " → " + esc(st.top) + " m" : ""}</p>
@@ -622,12 +624,14 @@ function renderClimb() {
     <section class="sec" id="news" hidden></section>
     <section class="sec" id="rating"><h3>Valutazioni della community</h3><p class="note">Carico…</p></section>
     ${stravaHtml(c)}
-    <div class="actions acts4"><button type="button" class="btn pri" id="sendBtn">Manda al dispositivo</button><button type="button" class="btn" id="postBtn">Crea post</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
+    <div class="actions acts4"><button type="button" class="btn pri" id="sendBtn">Manda al dispositivo</button><button type="button" class="btn" id="navBtn">Naviga</button><button type="button" class="btn" id="postBtn">Crea post</button><button type="button" class="btn" id="gpxBtn">GPX</button><button type="button" class="btn" id="giroAdd">+ Giro</button></div>
   </div>`;
   wireProfile($("#climbProf"), v, 220, 10);
   panel.querySelectorAll("[data-side]").forEach((b) => b.addEventListener("click", () => { S.side = +b.dataset.side; S.sideSwitch = true; renderClimb(); if (S.verdict) paintVerdict(S.verdict); }));
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
   $("#postBtn").addEventListener("click", () => postDialog(c, v));
+  $("#navBtn").addEventListener("click", () => navClimb(c, v));
+  $("#navTop").addEventListener("click", () => navClimb(c, v));
   $("#sendBtn").addEventListener("click", () => { const f = climbGpx(c, v); sendToDevice(c.name + (v.side ? " · " + v.side : ""), f.name, f.text); });
   $("#share").addEventListener("click", () => share(c));
   const wr = $("#warnRep"); if (wr) wr.addEventListener("click", () => openReport(c));
@@ -1016,6 +1020,174 @@ function startRide(c, v) {
 function stopRide() {
   if (S.ride) { if (S.ride.watch != null) navigator.geolocation.clearWatch(S.ride.watch); if (S.ride.lock) S.ride.lock.release().catch(() => {}); }
   S.ride = null; $("#ride").hidden = true;
+}
+
+/* ------------------------------------------------------------------ navigazione (lib/nav.mjs)
+   Rick 11/11/2026: a bike navigator, "come Google Maps, ma per bici". BRouter's turn hints (timode=2) -> big
+   arrow + distance to the turn + the turn after; the map follows the road ahead in 3D; off the route for 3 fixes
+   -> new route from here to the stops still ahead. Voice prompts (speechSynthesis, toggle on screen), screen kept
+   on (wake lock), vibration near each turn. Two ways in: "Naviga" in the Giro, "Naviga" on a climb (from where
+   you are to the bottom of the chosen side, then up to the top). Test without GPS: add &navsim=1 (or ?navsim=1
+   on a climb link) to the hash at load: the route is ridden at 30 km/h x 6. */
+const NAVSIM = /[?&]navsim=1/.test(location.hash);   // read at load: the Giro rewrites the hash
+const NAV_VOICE_KEY = "lr_navvoice";
+const NAV = { on: false, t: null, c: null, ms: [], g: null, last: 0, el: null, mk: null, watch: null, sim: null, lock: null, cue: {}, off: {}, busy: false, stops: [], profile: "", own: false, voice: true, done: false };
+const NAV_ICON = {
+  arrow: (deg) => `<svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><g transform="rotate(${Math.max(-160, Math.min(160, deg))} 24 24)"><path d="M24 6l10 12h-7v20h-6V18h-7z" fill="currentColor"/></g></svg>`,
+  round: (n) => `<svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><circle cx="24" cy="26" r="10" fill="none" stroke="currentColor" stroke-width="4"/><path d="M24 4l8 10h-5v6h-6v-6h-5z" fill="currentColor"/><text x="24" y="31" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">${n || ""}</text></svg>`,
+  uturn: `<svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><path d="M30 40V18a8 8 0 0 0-16 0v6h-6l9 11 9-11h-6v-6a2 2 0 0 1 4 0v22z" fill="currentColor"/></svg>`,
+  flag: `<svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><path d="M12 6v36h4V28h20l-4-8 4-8H16V6z" fill="currentColor"/></svg>`,
+  voice: (on) => `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/>${on ? '<path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' : '<path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}</svg>`
+};
+try { NAV.voice = localStorage.getItem(NAV_VOICE_KEY) !== "0"; } catch { /* private mode */ }
+function navIcon(m) {
+  if (!m) return NAV_ICON.flag;
+  if (m.k === "roundabout") return NAV_ICON.round(m.exit);
+  if (m.k === "uturn") return NAV_ICON.uturn;
+  const a = { straight: 0, "slight-left": -40, left: -90, "sharp-left": -135, "slight-right": 40, right: 90, "sharp-right": 135, "keep-left": -25, "keep-right": 25, "exit-left": -45, "exit-right": 45 }[m.k];
+  return NAV_ICON.arrow(a ?? m.angle);
+}
+const tr = (s) => (LANG === "it" ? s : translate(s, LANG));
+function navSpeak(s) {
+  if (!NAV.voice || !s || typeof speechSynthesis === "undefined") return;
+  try { const u = new SpeechSynthesisUtterance(s); u.lang = LOC; u.rate = 1.05; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch { /* no voice */ }
+}
+function navLoad(res) {
+  NAV.t = res.track; NAV.c = navCum(res.track); NAV.ms = maneuvers(res.hints, res.track.length); NAV.g = gainLeft(res.track); NAV.last = 0; NAV.cue = {}; NAV.off = {}; NAV.done = false;
+}
+/* own = the route is not the Giro's (climb navigation, or a new route after leaving the line): drawn as one line */
+function navDraw(track) {
+  const src = map.getSource && map.getSource("route");
+  if (!src) return;
+  src.setData({ type: "FeatureCollection", features: [{ type: "Feature", properties: { c: "#C8F560" }, geometry: { type: "LineString", coordinates: track.map((q) => [q[1], q[0]]) } }] });
+  for (const id of ["route-surf", "route-tun", "route-risk"]) { const s = map.getSource(id); if (s) s.setData(EMPTY); }
+  rideVisible(true); NAV.own = true;
+}
+function navStart(res, stops, profile) {
+  if (!res || !res.track || res.track.length < 2) return;
+  if (NAV.on) navStop();
+  guideStop();
+  navLoad(res);
+  NAV.on = true; NAV.stops = stops; NAV.profile = profile; NAV.own = false;
+  document.body.classList.add("navon");
+  NAV.el = document.createElement("div"); NAV.el.className = "nav"; NAV.el.setAttribute("role", "status");
+  NAV.el.innerHTML = `<div class="navtop"><span class="nvi"></span><div class="nvx"><b class="nvd"></b><span class="nvt"></span></div></div>
+    <div class="navthen" hidden></div>
+    <div class="navbot"><div><b class="nvk"></b><span>km</span></div><div><b class="nvg"></b><span>metri</span></div><div><b class="nva"></b><span>arrivo</span></div>
+      <button type="button" class="ib nvv" id="navV" aria-label="Voce" aria-pressed="${NAV.voice}">${NAV_ICON.voice(NAV.voice)}</button>
+      <button type="button" class="btn" id="navX">Fine</button></div>`;
+  document.body.appendChild(NAV.el);
+  $("#navX").addEventListener("click", navStop);
+  $("#navV").addEventListener("click", (e) => {
+    NAV.voice = !NAV.voice; try { localStorage.setItem(NAV_VOICE_KEY, NAV.voice ? "1" : "0"); } catch { /* private mode */ }
+    e.currentTarget.setAttribute("aria-pressed", String(NAV.voice)); e.currentTarget.innerHTML = NAV_ICON.voice(NAV.voice);
+    if (!NAV.voice && typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
+  });
+  const me = document.createElement("div"); me.className = "navme"; me.innerHTML = "<i></i>";
+  NAV.mk = new maplibregl.Marker({ element: me, rotationAlignment: "map", pitchAlignment: "map" }).setLngLat([NAV.t[0][1], NAV.t[0][0]]).addTo(map);
+  try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then((w) => { NAV.lock = w; }).catch(() => {}); } catch { /* optional */ }
+  navSpeak(tr("Navigazione avviata"));   // from the tap: iOS lets the page speak only after a user gesture
+  if (NAVSIM || window.LR_NAVSIM) navSim();
+  else if (navigator.geolocation) NAV.watch = navigator.geolocation.watchPosition((g) => navFix({ lat: g.coords.latitude, lon: g.coords.longitude, speed: g.coords.speed }), () => toast("Posizione non disponibile: attiva il GPS"), { enableHighAccuracy: true, maximumAge: 1000, timeout: 20000 });
+  navPaint(null);
+}
+function navStop() {
+  NAV.on = false;
+  if (NAV.watch != null) navigator.geolocation.clearWatch(NAV.watch);
+  if (NAV.sim) clearInterval(NAV.sim);
+  if (NAV.lock) NAV.lock.release().catch(() => {});
+  if (NAV.el) NAV.el.remove(); if (NAV.mk) NAV.mk.remove();
+  try { if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel(); } catch { /* no voice */ }
+  NAV.watch = NAV.sim = NAV.lock = NAV.el = NAV.mk = null;
+  document.body.classList.remove("navon");
+  map.easeTo({ pitch: 0, bearing: 0, duration: 600 });
+  if (NAV.own) { paintRoute(); rideVisible(panel.dataset.mode === "giro"); NAV.own = false; }   // the Giro's own colours back
+  if (panel.dataset.mode === "giro" && G.res) fitRoute();
+}
+/* simulated ride: 30 km/h, 6x faster, a fix every 0.5 s (window.LR_NAVSIM_X changes the speed-up) */
+function navSim() {
+  let km = 0; const v = 30 / 3600 * (window.LR_NAVSIM_X || 6) * 0.5;
+  NAV.sim = setInterval(() => {
+    km += v; const c = NAV.c, t = NAV.t; if (km >= c[c.length - 1]) { clearInterval(NAV.sim); NAV.sim = null; navFix({ lat: t[t.length - 1][0], lon: t[t.length - 1][1], speed: 0 }); return; }
+    let i = 0; while (i < c.length - 2 && c[i + 1] < km) i++;
+    const f = (km - c[i]) / ((c[i + 1] - c[i]) || 1);
+    navFix({ lat: t[i][0] + (t[i + 1][0] - t[i][0]) * f, lon: t[i][1] + (t[i + 1][1] - t[i][1]) * f, speed: 30 / 3.6 });
+  }, 500);
+}
+function navFix(p) {
+  if (!NAV.on) return;
+  const L = locate(NAV.t, NAV.c, p, NAV.last);
+  if (!L) return;
+  NAV.mk.setLngLat([p.lon, p.lat]);
+  if (offRoute(NAV.off, L.off) && !NAV.busy) { navReroute(p); return; }
+  if (L.off < 60) NAV.last = L.seg;
+  navPaint(L, p);
+}
+async function navRoute(stops, profile) {
+  const cp = await customProfile(profile);
+  for (const pr of cp ? [cp, profile] : [profile]) {
+    try { const r = parseBrouter(await (await fetch(brouterUrl(stops, pr))).json()); if (r && r.track && r.track.length > 1) return r; } catch { /* next */ }
+  }
+  return null;
+}
+/* new route from here to the stops still ahead */
+async function navReroute(p) {
+  NAV.busy = true; navBanner("Ricalcolo il percorso…"); navSpeak(tr("Ricalcolo il percorso…"));
+  const along = NAV.c[NAV.last] || 0, ahead = NAV.stops.filter((s) => { const L = locate(NAV.t, NAV.c, s, 0); return L && L.along > along + 0.05; });
+  const res = await navRoute([{ lat: p.lat, lon: p.lon }, ...(ahead.length ? ahead : [NAV.stops[NAV.stops.length - 1]])], NAV.profile);
+  NAV.busy = false;
+  if (!NAV.on) return;
+  if (!res) { navBanner("Fuori percorso: torna sulla linea"); NAV.off = {}; return; }
+  navLoad(res); navDraw(res.track);
+  navBanner("");
+}
+function navBanner(t) { const th = NAV.el && NAV.el.querySelector(".navthen"); if (!th) return; th.hidden = !t; if (t) th.textContent = t; }
+function navPaint(L, p) {
+  if (!NAV.el) return;
+  const along = L ? L.along : 0, u = navNext(NAV.ms, NAV.c, along), total = NAV.c[NAV.c.length - 1];
+  const left = Math.max(0, total - along), done = left < 0.03;
+  NAV.el.querySelector(".nvi").innerHTML = done ? NAV_ICON.flag : navIcon(u.next);
+  NAV.el.querySelector(".nvd").textContent = done ? "Sei arrivato" : fmtDistNav(u.distM, globalThis.LR_DEC);
+  NAV.el.querySelector(".nvt").textContent = done ? "" : u.next ? u.next.text : "Arrivo";
+  if (!NAV.busy) {
+    const th = NAV.el.querySelector(".navthen"); th.hidden = !(u.then && u.distM < 600);
+    if (!th.hidden) th.innerHTML = `<span>poi</span> <span class="nvs">${navIcon(u.then)}</span> <span class="nvtt">${esc(u.then.text)}</span>`;
+  }
+  NAV.el.querySelector(".nvk").textContent = num(left, left < 10 ? 1 : 0);
+  NAV.el.querySelector(".nvg").textContent = "+" + Math.round(L ? NAV.g[L.seg] : NAV.g[0]);
+  const v = p && p.speed > 1 ? p.speed * 3.6 : 20, at = new Date(Date.now() + left / v * 3600e3);
+  NAV.el.querySelector(".nva").textContent = at.toLocaleTimeString(LOC, { hour: "2-digit", minute: "2-digit" });
+  if (L && done && !NAV.done) { NAV.done = true; navSpeak(tr("Sei arrivato")); try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch { /* not supported */ } }
+  const cue = L && !done ? voiceCue(NAV.cue, u.next, u.distM) : null;
+  if (cue) {
+    navSpeak(voiceText(tr(u.next.text), cue === "far" ? u.distM : null, LANG));
+    if (cue === "near") { try { if (navigator.vibrate) navigator.vibrate([120, 80, 120]); } catch { /* not supported */ } }
+  }
+  if (p) {   // camera and arrow follow the road ahead, not the GPS jitter
+    const brg = routeBearing(NAV.t, NAV.c, along);
+    NAV.mk.setRotation(brg);
+    map.easeTo({ center: [p.lon, p.lat], bearing: brg, pitch: 55, zoom: 16.3, duration: 450, offset: [0, 140] });
+  }
+}
+/* the Giro's "Naviga" */
+function navGiro() { navStart(G.res, G.stops.map((s) => ({ lat: s.lat, lon: s.lon })), G.profile); }
+/* a climb's "Naviga": from the blue dot to the bottom of the chosen side, then up its road to the top
+   (a point halfway up keeps BRouter on this side). Already at the bottom: straight up. */
+async function navClimb(c, v) {
+  const t = (v && v.track) || [];
+  if (t.length < 2) { toast("Questo versante non ha il tracciato"); return; }
+  if (!navigator.geolocation && !NAVSIM) { toast("Posizione non disponibile su questo dispositivo"); return; }
+  toast("Calcolo il percorso…");
+  const here = NAVSIM ? null : await new Promise((res) => navigator.geolocation.getCurrentPosition((g) => res({ lat: g.coords.latitude, lon: g.coords.longitude }), () => res(null), { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }));
+  if (!here && !NAVSIM) { toast("Posizione non disponibile: attiva il GPS"); return; }
+  const pt = (q) => ({ lat: q[0], lon: q[1] }), base = pt(t[0]), mid = pt(t[Math.floor(t.length / 2)]), top = pt(t[t.length - 1]);
+  const far = here && distKm(here.lat, here.lon, base.lat, base.lon) > 0.3;
+  const stops = [...(far ? [here, base] : [here || base]), mid, top];
+  const res = await navRoute(stops, G.profile || "fastbike");
+  if (!res) { toast("Percorso non trovato: riprova tra poco"); return; }
+  navDraw(res.track);
+  navStart(res, stops, G.profile || "fastbike");
+  NAV.own = true;
 }
 
 /* ------------------------------------------------------------------ oggi */
@@ -1488,7 +1660,7 @@ function renderGiro() {
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
     <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${body}
-    <div class="actions">${r ? `<button type="button" class="btn pri" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="gsave">Salva</button><button type="button" class="btn" id="gprop">Proponi salita</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gbook">Road book</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
+    <div class="actions">${r ? `<button type="button" class="btn pri" id="gnav">Naviga</button><button type="button" class="btn" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="gsave">Salva</button><button type="button" class="btn" id="gprop">Proponi salita</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gbook">Road book</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
   </div>`;
   panel.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { G.stops.splice(+b.dataset.rm, 1); giroChanged(); }));
   panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => { const [i, d] = b.dataset.mv.split(":").map(Number); const t = G.stops[i]; G.stops[i] = G.stops[i + d]; G.stops[i + d] = t; giroChanged(); }));
@@ -1499,6 +1671,7 @@ function renderGiro() {
   const gsv = $("#gsave"); if (gsv) gsv.addEventListener("click", saveGiroDialog);
   const gpr = $("#gprop"); if (gpr) gpr.addEventListener("click", proposeDialog);
   const gsd = $("#gsend"); if (gsd) gsd.addEventListener("click", () => { const f = giroFile(); if (f) sendToDevice(f.title, f.name, f.text); });
+  const gnv = $("#gnav"); if (gnv) gnv.addEventListener("click", navGiro);
   const gh = $("#gshare"); if (gh) gh.addEventListener("click", shareGiroDialog);
   const gb = $("#gbook"); if (gb) gb.addEventListener("click", printRoadbook);
   const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.title = ""; G.stops = []; G.res = null; G.side = null; G.rp = null; G.risk = []; G.on = []; paintRoute(); giroChanged(); });
@@ -1875,6 +2048,7 @@ if ("serviceWorker" in navigator && (location.protocol === "https:" || location.
 
 /* ------------------------------------------------------------------ icons */
 const ICON = {
+  nav: `<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l7.5 18.5-7.5-4.3-7.5 4.3z" fill="currentColor"/></svg>`,
   back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>`,
   share: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg>`,
   close: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`
