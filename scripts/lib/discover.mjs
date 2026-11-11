@@ -52,6 +52,17 @@ for (const z of ZONES) {
   if (!z.discover || DISCOVER_REGIONS[z.id]) continue;
   DISCOVER_REGIONS[z.id] = { ...(z.terrain === "alps" ? ALPS : HILLS), label: z.label || z.id, pbf: z.pbf.slice(), bbox: z.discoverBbox || z.bbox || "", zone: true };
 }
+/* A zone whose discover output is too big for one file (Cloudflare: 25 MiB per file, see
+   test/asset-size.test.mjs) is searched in parts: discover:false + discoverParts [{ id, label,
+   bbox }]. Each part is a region of its own (same extracts and thresholds, its own bbox and its
+   own data/discover_<part>.json); parts should overlap a little so a climb on the cut is whole -
+   the second run sees the first one's published tops as known and drops them. */
+for (const z of ZONES) {
+  for (const p of (z.discoverParts || [])) {
+    if (DISCOVER_REGIONS[p.id]) continue;
+    DISCOVER_REGIONS[p.id] = { ...(z.terrain === "alps" ? ALPS : HILLS), label: p.label || p.id, pbf: z.pbf.slice(), bbox: p.bbox, zone: true, partOf: z.id };
+  }
+}
 /* Regions: bbox = osmium "minlon,minlat,maxlon,maxlat". Optional masks to leave out a plain:
    southOf / northOf = polyline [lon,lat] west->east; tops must lie on that side of it (the Po
    plain has nothing to climb, and leaving it out keeps memory low). */
