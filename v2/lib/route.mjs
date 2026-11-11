@@ -3,7 +3,7 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=54";
+import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=55";
 
 export const BROUTER = "https://brouter.de/brouter";
 export const PROFILES = [["fastbike", "Solo asfalto"], ["safety", "Più ciclabili"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
@@ -11,7 +11,7 @@ export const MAX_STOPS = 30;
 
 export function brouterUrl(stops, profile = "fastbike") {
   const ll = stops.map((s) => (+s.lon).toFixed(5) + "," + (+s.lat).toFixed(5)).join("|");
-  return `${BROUTER}?lonlats=${ll}&profile=${encodeURIComponent(profile)}&alternativeidx=0&format=geojson`;
+  return `${BROUTER}?lonlats=${ll}&profile=${encodeURIComponent(profile)}&alternativeidx=0&format=geojson&timode=2`;   // timode: turn hints (lib/nav.mjs)
 }
 export function osrmUrl(stops) {
   return "https://router.project-osrm.org/route/v1/bike/" + stops.map((s) => (+s.lon).toFixed(5) + "," + (+s.lat).toFixed(5)).join(";") + "?overview=full&geometries=geojson";
@@ -63,7 +63,7 @@ export function parseBrouter(j) {
       cum += d;
     }
   }
-  return { track, km, gain, surf: segs.length ? surf : null, segs, tunnels, cycM: Math.round(cyc) };
+  return { track, km, gain, surf: segs.length ? surf : null, segs, tunnels, cycM: Math.round(cyc), hints: Array.isArray(pr.voicehints) ? pr.voicehints : [] };
 }
 
 /* tunnels (m, along the route) -> what the Giro says: count, total, the longest, the list in km */

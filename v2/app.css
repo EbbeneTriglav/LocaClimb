@@ -492,3 +492,26 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .guide .gt b { font-family: var(--cond); font-weight: 800; font-size: 24px; line-height: 1; }
 .guide .gt small { color: var(--mu); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52vw; }
 .neardest i { display: block; width: 22px; height: 22px; margin-bottom: 4px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--acc); border: 3px solid #0B0F14; box-shadow: 0 2px 6px rgba(0, 0, 0, .5); }
+
+/* navigazione (lib/nav.mjs): the bike navigator over the map, everything else hidden */
+body.navon .top, body.navon .chips, body.navon .legend, body.navon .mapbtns, body.navon .panel, body.navon .tabs, body.navon .guide, body.navon .mepos { display: none !important; }
+.nav { position: fixed; inset: 0; z-index: 20; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: calc(var(--safe-t, 0px) + 10px) 10px calc(var(--safe-b, 0px) + 10px); }
+.nav > * { pointer-events: auto; }
+.navtop { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 18px; background: #0E6B3C; color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
+.navtop .nvi { flex: none; width: 64px; height: 64px; display: grid; place-items: center; }
+.navtop .nvx { display: flex; flex-direction: column; min-width: 0; }
+.navtop .nvd { font-family: var(--cond); font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: .01em; }
+.navtop .nvt { font-size: 18px; font-weight: 600; opacity: .95; }
+.navthen { align-self: flex-start; margin-top: 6px; padding: 6px 12px 6px 8px; border-radius: 0 0 14px 14px; background: #0A4F2C; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.navthen[hidden] { display: none; }
+.navthen .nvs svg { width: 26px; height: 26px; }
+.navthen .nvtt { text-transform: lowercase; }
+.navbot .nvv { width: 44px; height: 44px; border-radius: 22px; border: 1px solid var(--line2); display: grid; place-items: center; color: var(--tx); }
+.navbot .nvv[aria-pressed="false"] { color: var(--mu); }
+.nav > .navthen + .navbot, .nav > .navbot { margin-top: auto; }
+.navbot { display: grid; grid-template-columns: repeat(3, 1fr) auto auto; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 18px; background: var(--s1); border: 1px solid var(--line2); box-shadow: 0 -6px 24px rgba(0, 0, 0, .4); }
+.navbot div { display: flex; flex-direction: column; align-items: center; }
+.navbot b { font-family: var(--cond); font-weight: 800; font-size: 26px; line-height: 1; }
+.navbot span { font-size: 12px; color: var(--mu); }
+.navbot .btn { height: 44px; }
+.navme i { display: block; width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-bottom: 30px solid #4285F4; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 2px 4px rgba(0, 0, 0, .6)); }
