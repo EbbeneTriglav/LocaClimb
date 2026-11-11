@@ -553,5 +553,10 @@
   "bbox": null,
   "target": "usa-nevada",
   "builtAt": "2026-11-09"
+ },
+ "osm_passes_cr.json": {
+  "bbox": null,
+  "target": "costa-rica",
+  "builtAt": "2026-11-11"
  }
 }
