@@ -149,8 +149,14 @@
    ],
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
-    "https://www.alpen-paesse.ch/en/alpenpaesse/gotthardpass"
-   ]
+    "https://www.alpen-paesse.ch/en/alpenpaesse/gotthardpass",
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   }
   },
   {
    "id": "klausen",
@@ -221,12 +227,13 @@
    ],
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
-    "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass"
+    "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass",
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    ],
    "now": {
     "closed": true,
     "checked": "2026-11-11",
-    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass"
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
   {
@@ -306,13 +313,14 @@
    "note": "SS300: nel 2026 chiusa da Anas il 23/10 per neve, riaperta il 22/5 (lato bresciano) e il 27/5 (lato valtellinese); nel 2024 riaperta il 14/6.",
    "sources": [
     "https://valtellinamobile.it/apertura-passo-gavia/",
-    "https://valtellinamobile.it/date-apertura-passi-alpini/"
+    "https://valtellinamobile.it/date-apertura-passi-alpini/",
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    ],
    "now": {
     "closed": true,
+    "since": "2026-10-23",
     "checked": "2026-11-11",
-    "source": "https://valtellinamobile.it/apertura-passo-gavia/",
-    "since": "2026-10-23"
+    "source": "https://valtellinamobile.it/apertura-passo-gavia/"
    }
   },
   {
@@ -329,7 +337,12 @@
    "sources": [
     "https://www.meteomontagnavaltellina.it/passi_alpini_info.html",
     "https://valtellinamobile.it/date-apertura-passi-alpini/"
-   ]
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   }
   },
   {
    "id": "san-marco",
@@ -345,7 +358,12 @@
    "sources": [
     "https://www.meteomontagnavaltellina.it/passi_alpini_info.html",
     "https://valtellinamobile.it/date-apertura-passi-alpini/"
-   ]
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   }
   },
   {
    "id": "vivione",
@@ -360,7 +378,12 @@
    "note": "Chiuso d'inverno; riapre verso fine maggio.",
    "sources": [
     "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
-   ]
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   }
   },
   {
    "id": "crocedomini",
@@ -372,7 +395,12 @@
    "note": "Chiuso d'inverno.",
    "sources": [
     "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
-   ]
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   }
   },
   {
    "id": "rombo",
