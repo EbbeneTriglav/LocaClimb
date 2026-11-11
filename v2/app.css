@@ -450,3 +450,18 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .sec.risk ul { margin: 4px 0; padding-left: 18px; }
 .pf .rk { fill: rgba(255, 214, 10, .16); stroke: rgba(255, 214, 10, .6); stroke-dasharray: 4 4; }
 .rleg .br { flex-basis: 100%; height: 0; }
+
+/* my position (11/11/2026): blue dot + accuracy halo + direction cone, like the maps people know */
+.me { width: 0; height: 0; }
+.me i { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
+.me .halo { width: var(--halo, 0); height: var(--halo, 0); background: rgba(66, 133, 244, .16); border: 1px solid rgba(66, 133, 244, .4); transition: width .3s, height .3s; }
+.me .dot { width: 18px; height: 18px; background: #4285F4; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0, 0, 0, .5); }
+.me .dot::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid #4285F4; animation: mepulse 2s ease-out infinite; }
+.me .cone { display: none; width: 72px; height: 72px; border-radius: 0; background: conic-gradient(from -28deg, rgba(66, 133, 244, .5) 0 56deg, transparent 56deg);
+  -webkit-mask: radial-gradient(circle, #000 0 30%, transparent 70%); mask: radial-gradient(circle, #000 0 30%, transparent 70%); transform: translate(-50%, -50%) rotate(var(--hd, 0deg)); }
+.me.hd .cone { display: block; }
+.me.stale .dot { background: #8A9AAD; } .me.stale .dot::after { display: none; }
+@keyframes mepulse { from { transform: scale(1); opacity: .8; } to { transform: scale(2.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .me .dot::after { animation: none; display: none; } }
+.mapbtns button.trk { color: #4285F4; }
+.mapbtns #bloc[aria-pressed="true"] { background: #4285F4; color: #fff; border-color: #4285F4; }
