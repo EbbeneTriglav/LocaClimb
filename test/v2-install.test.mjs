@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import vm from "node:vm";
-import { installMode, shouldNudge, countVisit, snooze, SNOOZE_DAYS, SEEN_DAYS } from "../v2/lib/install.mjs";
+import { installMode, shouldNudge, countVisit, snooze, SNOOZE_DAYS, SEEN_DAYS, releaseOf, newerRelease, UPDATE_AFTER_MS } from "../v2/lib/install.mjs";
 
 const ANDROID = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36";
 const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
@@ -64,4 +64,18 @@ test("sw.js: pages and unversioned code always fresh; versioned files and vendor
   assert.equal(fresh("/v2/app.mjs?v=21"), false);
   assert.equal(fresh("/v2/vendor/maplibre-gl-6.17.0/maplibre-gl.mjs"), false);
   assert.equal(fresh("/data/osm_index.json"), false);
+});
+
+test("updates without reinstalling: a higher ?v= on the published page is a new release", () => {
+  const page = (v) => `<script type="module" src="v2/app.mjs?v=${v}"></script>`;
+  assert.equal(releaseOf(page(56)), 56);
+  assert.equal(releaseOf("https://locaride.app/v2/app.mjs?v=57"), 57);
+  assert.equal(releaseOf("<html>no app</html>"), null);
+  assert.equal(newerRelease(page(57), "https://locaride.app/v2/app.mjs?v=56"), true);
+  assert.equal(newerRelease(page(56), "https://locaride.app/v2/app.mjs?v=56"), false);
+  assert.equal(newerRelease(page(55), "https://locaride.app/v2/app.mjs?v=56"), false, "an old cached page never asks to go back");
+  assert.equal(newerRelease("offline", "https://locaride.app/v2/app.mjs?v=56"), false);
+  assert.ok(UPDATE_AFTER_MS >= 5 * 60 * 1000);
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  assert.ok(releaseOf(html) > 0, "index.html carries the release on app.mjs");
 });

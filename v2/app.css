@@ -485,18 +485,15 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .nl .nt small { color: var(--mu); }
 .nl .nb { flex: none; display: flex; gap: 6px; }
 .nl .btn { height: 38px; padding: 0 12px; font-size: 14px; border-radius: 19px; }
-.guide { position: fixed; left: 50%; top: calc(var(--safe-t, 0px) + 122px); transform: translateX(-50%); z-index: 7; display: flex; align-items: center; gap: 12px;
-  padding: 7px 7px 7px 10px; max-width: calc(100vw - 32px); background: var(--s1); border: 1px solid var(--line2); border-radius: 30px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45); }
-.guide .ga { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #4285F4; color: #fff; transition: transform .4s ease; }
-.guide .gt { display: flex; flex-direction: column; min-width: 0; }
-.guide .gt b { font-family: var(--cond); font-weight: 800; font-size: 24px; line-height: 1; }
-.guide .gt small { color: var(--mu); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52vw; }
-.neardest i { display: block; width: 22px; height: 22px; margin-bottom: 4px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--acc); border: 3px solid #0B0F14; box-shadow: 0 2px 6px rgba(0, 0, 0, .5); }
 
 /* navigazione (lib/nav.mjs): the bike navigator over the map, everything else hidden */
-body.navon .top, body.navon .chips, body.navon .legend, body.navon .mapbtns, body.navon .panel, body.navon .tabs, body.navon .guide, body.navon .mepos { display: none !important; }
+body.navon .top, body.navon .chips, body.navon .legend, body.navon .mapbtns, body.navon .panel, body.navon .tabs, body.navon .mepos { display: none !important; }
 body.navon .maplibregl-ctrl-bottom-right { bottom: calc(var(--safe-b, 0px) + 96px); }
 .ib.navgo { background: var(--acc); color: var(--acc-tx); border-color: transparent; }
+.btn.navb { display: inline-flex; align-items: center; gap: 6px; } .btn.navb svg { width: 16px; height: 16px; }
+.popn { display: flex; align-items: center; gap: 10px; } .popn .ib.sm { flex: none; }
+.navre { align-self: flex-start; margin-top: auto; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 22px; background: #4285F4; color: #fff; border: 0; font-weight: 700; box-shadow: 0 6px 18px rgba(0, 0, 0, .45); }
+.navre[hidden] { display: none; } .nav > .navre:not([hidden]) + .navbot { margin-top: 0; } .navre svg { width: 18px; height: 18px; }
 .nav { position: fixed; inset: 0; z-index: 20; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: calc(var(--safe-t, 0px) + 10px) 10px calc(var(--safe-b, 0px) + 10px); }
 .nav > * { pointer-events: auto; }
 .navtop { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 18px; background: #0E6B3C; color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
@@ -517,3 +514,9 @@ body.navon .maplibregl-ctrl-bottom-right { bottom: calc(var(--safe-b, 0px) + 96p
 .navbot span { font-size: 12px; color: var(--mu); }
 .navbot .btn { height: 44px; }
 .navme i { display: block; width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-bottom: 30px solid #4285F4; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 2px 4px rgba(0, 0, 0, .6)); }
+
+/* "Aggiorna": a new release found when the installed app comes back from the background */
+.updbar { position: fixed; left: 12px; right: 12px; top: calc(var(--safe-t, 0px) + 10px); z-index: 25; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--s1); border: 1px solid var(--acc); box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
+.updbar span { flex: 1; font-weight: 600; }
+.updbar .btn { height: 38px; }
+@media (min-width: 900px) { .updbar { left: auto; width: 420px; } }
