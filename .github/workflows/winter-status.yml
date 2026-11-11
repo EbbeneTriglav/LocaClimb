@@ -1,0 +1,59 @@
+name: Winter status (passi chiusi)
+
+# Stato attuale dei passi d'inverno (data/winter_closures.json, campo "now") letto dai siti che lo
+# pubblicano in modo regolare: alpen-paesse.ch (Svizzera + Umbrail), meteomontagnavaltellina.it
+# (semafori: Gavia, Mortirolo, San Marco, Vivione, Crocedomini; arancione = neve, nessun aggiornamento),
+# cols-cyclisme.com (colli francesi). Nessuna AI: scripts/winter_status.mjs (test/winter-status.test.mjs).
+# Se un sito cambia formato lo script segnala l'errore: i passi letti bene vengono comunque aggiornati,
+# poi il run finisce in ROSSO, cosi' si vede. Chiesto da Rick l'11/11/2026.
+
+on:
+  schedule:
+    - cron: "37 5,15 * * *"   # 2 volte al giorno: 06:37 e 16:37 ora italiana (inverno)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: osm-data          # come gli altri job che scrivono in data/
+  cancel-in-progress: false
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Leggi i siti
+        run: |
+          set +e
+          node scripts/winter_status.mjs --fetch "$RUNNER_TEMP/status.json"
+          echo "FETCH_RC=$?" >> "$GITHUB_ENV"
+          node scripts/winter_status.mjs --show "$RUNNER_TEMP/status.json"
+      - name: Aggiorna e pubblica
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          ok=0
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/winter_status.mjs --apply "$RUNNER_TEMP/status.json"
+            node scripts/validate_data.mjs || { echo "dati non validi, non pubblico"; exit 1; }
+            if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then echo "marcatori di conflitto"; exit 1; fi
+            git add data/winter_closures.json
+            if git diff --staged --quiet; then echo "Nessun cambiamento."; ok=1; break; fi
+            git commit -m "data: stato passi d'inverno $(date -u +%Y-%m-%d)"
+            if git push; then ok=1; break; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
+          done
+          [ "$ok" = 1 ] || { echo "push fallito dopo 5 tentativi"; exit 1; }
+      - name: Errori di lettura
+        if: env.FETCH_RC != '0'
+        run: |
+          echo "Uno o piu' siti non sono stati letti (formato cambiato o sito giu'): vedi 'Leggi i siti'."
+          exit 1
