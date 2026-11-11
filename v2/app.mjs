@@ -5,26 +5,26 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=53";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=53";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=53";
-import { poisNear } from "./lib/poi.mjs?v=53";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=53";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=53";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=53";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=53";
-import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=53";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=53";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=53";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=53";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=53";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=53";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=53";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=53";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=53";
-import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=53";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=53";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=53";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=54";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=54";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=54";
+import { poisNear } from "./lib/poi.mjs?v=54";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=54";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=54";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=54";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=54";
+import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=54";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=54";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=54";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=54";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=54";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=54";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=54";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=54";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=54";
+import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=54";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=54";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=54";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -1036,7 +1036,7 @@ async function renderOggi() {
   if (panel.dataset.mode !== "oggi") return;   // the rider moved on while we waited for the GPS
   await wcReady;
   const today = isoDay(new Date()), shut = [];
-  const open = (cs) => cs.filter((c) => { const p = closureFor(WC, c.lat, c.lon); if (p && blocked(p, today)) { if (!shut.some((x) => x.name === p.name)) shut.push(p); return false; } return true; }).slice(0, 12);
+  const open = (cs) => cs.filter((c) => { const p = closureFor(WC, c.lat, c.lon); if (p && blocked(p, today)) { if (!shut.some((x) => x.p === p)) shut.push({ p, id: c.id }); return false; } return true; }).slice(0, 12);
   let list = open(nearby(here.lat, here.lon, 60, 40));
   if (list.length < 4) list = open(nearby(here.lat, here.lon, 120, 40));
   const os = $("#ogShut"); if (os) os.innerHTML = ogShutHtml(shut);
@@ -1054,7 +1054,13 @@ function ogEventsHtml() {
 }
 function paintOggi() {
   const { here, list, hs } = S.oggi;
-  const rows = list.map((c, i) => ({ c, v: dayVerdict(hs[i] || {}, S.day) })).sort((a, b) => b.v.score - a.v.score || (b.c.difficulty || 0) - (a.c.difficulty || 0));
+  // a pass in its usual closing/reopening window stays in the list, tagged and after the open ones
+  const day = isoDay(new Date(Date.now() + S.day * 864e5));
+  const rows = list.map((c, i) => {
+    const v = dayVerdict(hs[i] || {}, S.day), p = closureFor(WC, c.lat, c.lon), wc = p ? closureInfo(p, day, LANG) : null;
+    const maybe = !!(wc && wc.state);
+    return { c, v, maybe, score: v.score - (maybe ? 150 : 0) };
+  }).sort((a, b) => b.score - a.score || (b.c.difficulty || 0) - (a.c.difficulty || 0));
   const w = $("#ogWhere"); if (w) w.textContent = (here.src === "gps" ? "Entro 60 km da te" : "Intorno al centro della mappa") + ", ordinate per meteo in cima.";
   panel.querySelectorAll("[data-day]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.day === S.day)));
   const h1 = panel.querySelector("h1"); if (h1) h1.textContent = ogTitle(S.day);
@@ -1062,11 +1068,11 @@ function paintOggi() {
   $("#ogList").innerHTML = rows.map((r, i) => `<a class="row" href="#/s/${esc(encodeURIComponent(r.c.id))}" style="text-decoration:none;color:inherit">
       <span class="n">${String(i + 1).padStart(2, "0")}</span>
       <span class="t">${esc(r.c.name)}<small>${r.c.elevation ? esc(r.c.elevation) + " m · " : ""}difficoltà ${esc(r.c.difficulty || "–")}/10</small></span>
-      <span class="pill ${r.v.tone}">${esc(r.v.label)}</span>${r.v.cells.length ? `<div class="hw">${hoursHtml(r.v)}</div>` : ""}</a>`).join("");
+      <span class="pill ${r.v.tone}">${esc(r.v.label)}</span>${r.maybe ? `<span class="pill warn wcp">Chiusura invernale?</span>` : ""}${r.v.cells.length ? `<div class="hw">${hoursHtml(r.v)}</div>` : ""}</a>`).join("");
 }
 /* Oggi: the passes left out because they are closed for the winter (data/winter_closures.json) */
 function ogShutHtml(shut) {
-  return shut && shut.length ? `<p class="note small wcshut"><b>Chiusi per l'inverno, non in lista:</b> <span data-noi18n>${shut.slice(0, 8).map((p) => esc(p.name)).join(", ")}${shut.length > 8 ? "…" : ""}</span></p>` : "";
+  return shut && shut.length ? `<p class="note small wcshut"><b>Chiusi per l'inverno, non in lista:</b> <span data-noi18n>${shut.slice(0, 8).map((x) => `<a href="#/s/${esc(encodeURIComponent(x.id))}">${esc(x.p.name)}</a>`).join(", ")}${shut.length > 8 ? "…" : ""}</span></p>` : "";
 }
 
 /* ------------------------------------------------------------------ profilo (+ diario)
