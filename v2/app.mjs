@@ -585,7 +585,7 @@ function renderClimb() {
   const maxG = Math.max(12, ...rows.map((r) => r.g));
   panel.innerHTML = `<div class="handle"></div><div class="cl">
     <div class="cl-top"><a class="ib" href="#/" aria-label="Torna alla mappa">${ICON.back}</a>
-      <div style="display:flex;gap:8px"><button type="button" class="ib" id="share" aria-label="Condividi">${ICON.share}</button></div></div>
+      <div style="display:flex;gap:8px"><button type="button" class="ib navgo" id="navTop" aria-label="Naviga fino alla salita" title="Naviga fino alla salita">${ICON.nav}</button><button type="button" class="ib" id="share" aria-label="Condividi">${ICON.share}</button></div></div>
     <div class="ov">${d ? "Difficoltà " + d + "/10" : "Salita"}${c.cat ? " · cat. " + esc(c.cat) : ""}${c.status === "seasonal" ? " · stagionale" : ""}${wcKicker(c)}</div>
     <h1>${top}</h1>
     <p class="sub">${esc(v.side || "")}${st.start != null ? " · " + esc(st.start) + " → " + esc(st.top) + " m" : ""}</p>
@@ -631,6 +631,7 @@ function renderClimb() {
   $("#gpxBtn").addEventListener("click", () => downloadGpx(c, v));
   $("#postBtn").addEventListener("click", () => postDialog(c, v));
   $("#navBtn").addEventListener("click", () => navClimb(c, v));
+  $("#navTop").addEventListener("click", () => navClimb(c, v));
   $("#sendBtn").addEventListener("click", () => { const f = climbGpx(c, v); sendToDevice(c.name + (v.side ? " · " + v.side : ""), f.name, f.text); });
   $("#share").addEventListener("click", () => share(c));
   const wr = $("#warnRep"); if (wr) wr.addEventListener("click", () => openReport(c));
@@ -1162,7 +1163,11 @@ function navPaint(L, p) {
     navSpeak(voiceText(tr(u.next.text), cue === "far" ? u.distM : null, LANG));
     if (cue === "near") { try { if (navigator.vibrate) navigator.vibrate([120, 80, 120]); } catch { /* not supported */ } }
   }
-  if (p) map.easeTo({ center: [p.lon, p.lat], bearing: routeBearing(NAV.t, NAV.c, along), pitch: 55, zoom: 16.3, duration: 450, offset: [0, 140] });
+  if (p) {   // camera and arrow follow the road ahead, not the GPS jitter
+    const brg = routeBearing(NAV.t, NAV.c, along);
+    NAV.mk.setRotation(brg);
+    map.easeTo({ center: [p.lon, p.lat], bearing: brg, pitch: 55, zoom: 16.3, duration: 450, offset: [0, 140] });
+  }
 }
 /* the Giro's "Naviga" */
 function navGiro() { navStart(G.res, G.stops.map((s) => ({ lat: s.lat, lon: s.lon })), G.profile); }
@@ -2043,6 +2048,7 @@ if ("serviceWorker" in navigator && (location.protocol === "https:" || location.
 
 /* ------------------------------------------------------------------ icons */
 const ICON = {
+  nav: `<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l7.5 18.5-7.5-4.3-7.5 4.3z" fill="currentColor"/></svg>`,
   back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>`,
   share: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg>`,
   close: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`

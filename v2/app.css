@@ -495,6 +495,8 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 
 /* navigazione (lib/nav.mjs): the bike navigator over the map, everything else hidden */
 body.navon .top, body.navon .chips, body.navon .legend, body.navon .mapbtns, body.navon .panel, body.navon .tabs, body.navon .guide, body.navon .mepos { display: none !important; }
+body.navon .maplibregl-ctrl-bottom-right { bottom: calc(var(--safe-b, 0px) + 96px); }
+.ib.navgo { background: var(--acc); color: var(--acc-tx); border-color: transparent; }
 .nav { position: fixed; inset: 0; z-index: 20; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: calc(var(--safe-t, 0px) + 10px) 10px calc(var(--safe-b, 0px) + 10px); }
 .nav > * { pointer-events: auto; }
 .navtop { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 18px; background: #0E6B3C; color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
