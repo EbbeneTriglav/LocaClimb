@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=50";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=51";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -21,6 +21,7 @@ export const DICT = {
   "Pochi camion": "Few trucks", "Zona ▾": "Zone ▾", "Zona": "Zone", "Tutte le zone": "All zones",
   "Le salite vicino a un confine possono stare nella zona del Paese accanto.": "Climbs near a border may sit in the neighbouring country's zone.",
   "Difficoltà": "Difficulty", "Legenda difficoltà": "Difficulty legend", "Avvicina": "Zoom in", "Allontana": "Zoom out",
+  "Mostra e segui la mia posizione": "Show and follow my position", "Nascondi la mia posizione": "Hide my position", "Posizione non consentita: attivala nelle impostazioni del browser": "Location not allowed: turn it on in your browser settings", "Cerco il segnale GPS…": "Looking for GPS signal…", "Posizione non disponibile su questo dispositivo": "Location not available on this device", "Vicino a me": "Near me", "Vicino a me: acqua, bar, salite": "Near me: water, bars, climbs", "Bar e cibo": "Bars and food", "Salite": "Climbs", "Cosa cerchi": "What are you looking for", "Cerco intorno a te…": "Looking around you…", "Niente qui intorno.": "Nothing around here.", "Qui non abbiamo ancora acqua e bar: li aggiungiamo zona per zona.": "No water and bars here yet: we add them area by area.", "Guidami": "Guide me", "Percorso": "Route", "Distanze in linea d'aria. «Percorso» calcola la strada in bici e la puoi mandare al ciclocomputer.": "Straight-line distances. \"Route\" works out the bike road, ready for your bike computer.", "Chiudi la guida": "Close the guide", "Sei arrivato": "You're there", "Versione classica": "Classic version", "la vecchia app, ancora disponibile per qualche settimana": "the old app, still available for a few weeks",
   "Nord in alto": "North up", "Rilievo 3D": "3D relief", "Centra sulla mia posizione": "Center on my position",
   "Acqua e bar": "Water and bars", "Acqua e bar sulla mappa": "Water and bars on the map", "Avvicinati per vedere acqua e bar": "Zoom in to see water and bars",
   "Località": "Places", "Sezioni": "Sections", "Mappa": "Map", "Oggi": "Today", "Giro": "Ride", "Diario": "Diary", "Classica": "Classic",
