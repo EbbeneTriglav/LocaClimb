@@ -87,7 +87,7 @@ jobs:
 
       - name: Install tools
         run: |
-          sudo apt-get update && sudo apt-get install -y osmium-tool
+          bash scripts/ci/install_osmium.sh
           npm install pngjs --no-save
 
       - name: Test della ricerca (veloce, prima dei download)

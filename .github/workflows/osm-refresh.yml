@@ -41,7 +41,7 @@ jobs:
 
       - name: Install osmium + pngjs
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+          bash scripts/ci/install_osmium.sh
           npm init -y >/dev/null && npm install pngjs@7 --no-audit --no-fund
 
       - name: Build data (PBF + DEM)
