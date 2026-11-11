@@ -161,6 +161,42 @@ export function validateRoadEvents(obj, knownIds) {
   return errs;
 }
 
+/* data/winter_closures.json (v2/lib/closures.mjs): every pass needs a name, the top as lat/lon (it must match a
+   climb we publish when the caller passes them), usual windows as two MM-DD, at least one https source; "now"
+   (the checked state) needs closed true/false, a yyyy-mm-dd check day and its source */
+export function validateWinterClosures(obj, climbs) {
+  const errs = [], MD = /^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, ISO = /^\d{4}-\d{2}-\d{2}$/, seen = new Set();
+  if (!obj || typeof obj !== "object" || !Array.isArray(obj.passes)) return ["winter_closures.json: root must be an object with a \"passes\" array"];
+  obj.passes.forEach((p, i) => {
+    const label = `winter_closures.json[${i}]` + (p && p.id ? ` (${p.id})` : "");
+    if (!p || typeof p !== "object") { errs.push(`${label}: not an object`); return; }
+    if (!isNonEmptyString(p.id)) errs.push(`${label}: missing/empty "id"`);
+    else if (seen.has(p.id)) errs.push(`${label}: duplicate id`); else seen.add(p.id);
+    if (!isNonEmptyString(p.name)) errs.push(`${label}: missing/empty "name"`);
+    if (!isLat(p.lat) || !isLon(p.lon)) errs.push(`${label}: lat/lon not valid`);
+    for (const k of ["closes", "opens"]) {
+      const w = p[k];
+      if (w !== null && w !== undefined && !(Array.isArray(w) && w.length === 2 && MD.test(w[0]) && MD.test(w[1]))) errs.push(`${label}: "${k}" must be null or two MM-DD dates`);
+    }
+    if (!Array.isArray(p.sources) || !p.sources.length || p.sources.some((u) => !/^https:\/\//.test(u))) errs.push(`${label}: "sources" must list https links`);
+    if (p.now !== undefined) {
+      const n = p.now;
+      if (!n || typeof n.closed !== "boolean") errs.push(`${label}: now.closed must be true or false`);
+      else {
+        if (!ISO.test(n.checked || "")) errs.push(`${label}: now.checked must be yyyy-mm-dd`);
+        if (!/^https:\/\//.test(n.source || "")) errs.push(`${label}: now.source must be an https link`);
+        for (const k of ["since", "reopens"]) if (n[k] != null && !ISO.test(n[k])) errs.push(`${label}: now.${k} must be yyyy-mm-dd`);
+        if (n.since && n.reopens && n.reopens <= n.since) errs.push(`${label}: now.reopens must come after now.since`);
+      }
+    }
+    if (climbs && isLat(p.lat) && isLon(p.lon)) {
+      const r = Math.PI / 180, near = climbs.some((c) => c && typeof c.lat === "number" && 6371 * Math.hypot((c.lat - p.lat) * r, (c.lon - p.lon) * r * Math.cos(p.lat * r)) <= 1.0);
+      if (!near) errs.push(`${label}: no published climb within 1 km of ${p.lat},${p.lon}`);
+    }
+  });
+  return errs;
+}
+
 export function validateOsmRegions(arr) {
   if (!Array.isArray(arr)) return ["osm_regions.json: root must be an array"];
   const errs = [];
@@ -227,6 +263,12 @@ async function main() {
     const osmIndex = await readJson("osm_index.json");
     const ids = new Set([...knownIds, ...(Array.isArray(osmIndex) ? osmIndex.map((c) => String(c.id)) : [])]);
     errors.push(...validateRoadEvents(roadEvents, ids));
+  }
+
+  const winter = await readJson("winter_closures.json");
+  if (!winter.__missing) {
+    const osmIndex = await readJson("osm_index.json");
+    errors.push(...validateWinterClosures(winter, Array.isArray(osmIndex) ? osmIndex : null));
   }
 
   const climbsExtra = await readJson("climbs_extra.json");
