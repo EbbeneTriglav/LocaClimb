@@ -62,6 +62,6 @@ test("sw.js: pages and unversioned code always fresh; versioned files and vendor
   assert.equal(fresh("/js/state.js"), true);
   assert.equal(fresh("/classica/index.html"), true);
   assert.equal(fresh("/v2/app.mjs?v=21"), false);
-  assert.equal(fresh("/v2/vendor/maplibre-gl-5.24.0/maplibre-gl.js"), false);
+  assert.equal(fresh("/v2/vendor/maplibre-gl-6.17.0/maplibre-gl.mjs"), false);
   assert.equal(fresh("/data/osm_index.json"), false);
 });

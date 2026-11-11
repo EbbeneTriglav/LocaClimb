@@ -5,8 +5,8 @@
  * profile and locaride.app at the bottom. Post 1080x1350 (4:5) or story 1080x1920 (9:16).
  * drawPost() only calls the 2D-canvas API it is given (tested with a recorder).
  */
-import { gradeColor, profileShapes } from "./climb.mjs?v=48";
-import { routeShape, sampleGrades } from "./rideout.mjs?v=48";
+import { gradeColor, profileShapes } from "./climb.mjs?v=49";
+import { routeShape, sampleGrades } from "./rideout.mjs?v=49";
 
 export const POST = { w: 1080, h: 1350 }, STORY = { w: 1080, h: 1920 };
 const TX = {
