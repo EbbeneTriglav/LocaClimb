@@ -1,0 +1,1018 @@
+{
+ "_doc": "Chiusure invernali dei passi (LocaRide). closes/opens = intervallo tipico MM-DD in cui il passo chiude/riapre (null = non noto: allora vale almeno 1 dicembre - 31 marzo). now = stato attuale verificato (closed, since, reopens, checked, source): lo aggiorna l'agente o una action quando un sito ufficiale annuncia chiusura o riapertura. lat/lon = cima del passo: valgono per ogni salita che arriva entro 1 km.",
+ "updated": "2026-11-11",
+ "passes": [
+  {
+   "id": "umbrail",
+   "name": "Pass Umbrail - Giogo di Santa Maria",
+   "lat": 46.54165,
+   "lon": 10.43318,
+   "closes": [
+    "11-06",
+    "11-13"
+   ],
+   "opens": [
+    "05-20",
+    "06-06"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/umbrailpass"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html",
+    "since": "2026-11-12"
+   }
+  },
+  {
+   "id": "spluga",
+   "name": "Passo dello Spluga - Splügenpass",
+   "lat": 46.50561,
+   "lon": 9.33034,
+   "closes": [
+    "11-15",
+    "12-01"
+   ],
+   "opens": [
+    "04-22",
+    "05-03"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/spluegenpass"
+   ]
+  },
+  {
+   "id": "furka",
+   "name": "Furkapass",
+   "lat": 46.57269,
+   "lon": 8.41518,
+   "closes": [
+    "10-28",
+    "11-09"
+   ],
+   "opens": [
+    "05-25",
+    "06-18"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/furkapass"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/furkapass",
+    "since": "2026-10-28"
+   }
+  },
+  {
+   "id": "grimsel",
+   "name": "Grimselpass",
+   "lat": 46.56152,
+   "lon": 8.3377,
+   "closes": [
+    "10-28",
+    "11-09"
+   ],
+   "opens": [
+    "05-28",
+    "06-14"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/grimselpass"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grimselpass",
+    "since": "2026-11-06"
+   }
+  },
+  {
+   "id": "susten",
+   "name": "Sustenpass",
+   "lat": 46.72919,
+   "lon": 8.44671,
+   "closes": [
+    "10-28",
+    "11-09"
+   ],
+   "opens": [
+    "06-06",
+    "06-26"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/sustenpass"
+   ]
+  },
+  {
+   "id": "nufenen",
+   "name": "Nufenenpass / Passo della Novena",
+   "lat": 46.47712,
+   "lon": 8.38783,
+   "closes": [
+    "10-27",
+    "11-07"
+   ],
+   "opens": [
+    "05-28",
+    "06-20"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/nufenenpass"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/nufenenpass",
+    "since": "2026-11-05"
+   }
+  },
+  {
+   "id": "gotthard",
+   "name": "Passo del San Gottardo",
+   "lat": 46.55923,
+   "lon": 8.56134,
+   "closes": [
+    "10-29",
+    "11-10"
+   ],
+   "opens": [
+    "05-17",
+    "05-29"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/gotthardpass"
+   ]
+  },
+  {
+   "id": "klausen",
+   "name": "Klausenpass",
+   "lat": 46.8682,
+   "lon": 8.85548,
+   "closes": [
+    "10-31",
+    "11-11"
+   ],
+   "opens": [
+    "05-04",
+    "06-02"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/klausenpass"
+   ]
+  },
+  {
+   "id": "oberalp",
+   "name": "Oberalppass",
+   "lat": 46.65867,
+   "lon": 8.67122,
+   "closes": [
+    "11-11",
+    "12-02"
+   ],
+   "opens": [
+    "04-20",
+    "05-01"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/oberalppass"
+   ]
+  },
+  {
+   "id": "albula",
+   "name": "Albulapass",
+   "lat": 46.58229,
+   "lon": 9.83769,
+   "closes": [
+    "11-26",
+    "12-12"
+   ],
+   "opens": [
+    "04-29",
+    "06-10"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/albulapass"
+   ]
+  },
+  {
+   "id": "sanbernardino",
+   "name": "Passo del San Bernardino",
+   "lat": 46.49699,
+   "lon": 9.17104,
+   "closes": [
+    "11-03",
+    "11-11"
+   ],
+   "opens": [
+    "05-02",
+    "05-24"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass"
+   }
+  },
+  {
+   "id": "gsbernardo",
+   "name": "Colle del Gran San Bernardo",
+   "lat": 45.86906,
+   "lon": 7.1704,
+   "closes": [
+    "10-14",
+    "10-20"
+   ],
+   "opens": [
+    "05-30",
+    "06-06"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/grosser-sankt-bernhard"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grosser-sankt-bernhard"
+   }
+  },
+  {
+   "id": "forcola",
+   "name": "Passo Forcola di Livigno",
+   "lat": 46.44094,
+   "lon": 10.05619,
+   "closes": [
+    "11-18",
+    "11-29"
+   ],
+   "opens": [
+    "06-03",
+    "06-07"
+   ],
+   "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
+   "sources": [
+    "https://www.alpen-paesse.ch/en/alpenpaesse/forcola-di-livigno"
+   ]
+  },
+  {
+   "id": "stelvio",
+   "name": "Passo dello Stelvio",
+   "lat": 46.52862,
+   "lon": 10.45321,
+   "closes": [
+    "10-25",
+    "11-10"
+   ],
+   "opens": [
+    "05-20",
+    "06-10"
+   ],
+   "note": "Chiude di solito tra fine ottobre e i primi di novembre (2024: 4/11), riapre tra fine maggio e inizio giugno (2024: 6/6, 2026: 22/5). Dipende dalla neve.",
+   "sources": [
+    "https://valtellinamobile.it/data-apertura-chiusura-stelvio/",
+    "https://www.voloscontato.it/informazioni-utili/chiusura-invernale-passi-alpini-2024-2025.php",
+    "https://www.suedtirol.info/it/it/informazioni/mobilita/passi-in-alto-adige"
+   ]
+  },
+  {
+   "id": "gavia",
+   "name": "Passo di Gavia",
+   "lat": 46.34348,
+   "lon": 10.48733,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-22",
+    "06-14"
+   ],
+   "note": "SS300: nel 2026 chiusa da Anas il 23/10 per neve, riaperta il 22/5 (lato bresciano) e il 27/5 (lato valtellinese); nel 2024 riaperta il 14/6.",
+   "sources": [
+    "https://valtellinamobile.it/apertura-passo-gavia/",
+    "https://valtellinamobile.it/date-apertura-passi-alpini/"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://valtellinamobile.it/apertura-passo-gavia/",
+    "since": "2026-10-23"
+   }
+  },
+  {
+   "id": "mortirolo",
+   "name": "Passo del Mortirolo",
+   "lat": 46.24935,
+   "lon": 10.30737,
+   "closes": null,
+   "opens": [
+    "05-15",
+    "05-20"
+   ],
+   "note": "Chiuso d'inverno; nel 2024 riaperto il 17/5.",
+   "sources": [
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html",
+    "https://valtellinamobile.it/date-apertura-passi-alpini/"
+   ]
+  },
+  {
+   "id": "san-marco",
+   "name": "Passo San Marco",
+   "lat": 46.04726,
+   "lon": 9.62303,
+   "closes": null,
+   "opens": [
+    "05-15",
+    "05-27"
+   ],
+   "note": "Chiuso d'inverno; riapre a metà-fine maggio (2024: 27/5).",
+   "sources": [
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html",
+    "https://valtellinamobile.it/date-apertura-passi-alpini/"
+   ]
+  },
+  {
+   "id": "vivione",
+   "name": "Passo del Vivione",
+   "lat": 46.03659,
+   "lon": 10.19927,
+   "closes": null,
+   "opens": [
+    "05-20",
+    "05-31"
+   ],
+   "note": "Chiuso d'inverno; riapre verso fine maggio.",
+   "sources": [
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   ]
+  },
+  {
+   "id": "crocedomini",
+   "name": "Passo di Croce Domini",
+   "lat": 45.89973,
+   "lon": 10.40448,
+   "closes": null,
+   "opens": null,
+   "note": "Chiuso d'inverno.",
+   "sources": [
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   ]
+  },
+  {
+   "id": "rombo",
+   "name": "Passo del Rombo - Timmelsjoch",
+   "lat": 46.90535,
+   "lon": 11.09732,
+   "closes": [
+    "10-25",
+    "11-10"
+   ],
+   "opens": [
+    "05-25",
+    "06-15"
+   ],
+   "note": "Aperto solo d'estate, di solito da giugno a ottobre; nel 2026 chiuso dall'8/11.",
+   "sources": [
+    "https://www.suedtirol.info/it/it/informazioni/mobilita/passi-in-alto-adige",
+    "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print",
+    "since": "2026-11-08"
+   }
+  },
+  {
+   "id": "pennes",
+   "name": "Passo di Pennes",
+   "lat": 46.81878,
+   "lon": 11.44125,
+   "closes": null,
+   "opens": null,
+   "note": "Chiuso d'inverno.",
+   "sources": [
+    "https://www.suedtirol.info/it/it/informazioni/mobilita/passi-in-alto-adige"
+   ]
+  },
+  {
+   "id": "stalle",
+   "name": "Passo di Stalle",
+   "lat": 46.8877,
+   "lon": 12.19956,
+   "closes": null,
+   "opens": null,
+   "note": "Chiuso d'inverno; nel 2026 dal 9/11.",
+   "sources": [
+    "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print",
+    "since": "2026-11-09"
+   }
+  },
+  {
+   "id": "nivolet",
+   "name": "Colle del Nivolet",
+   "lat": 45.47911,
+   "lon": 7.1423,
+   "closes": [
+    "10-15",
+    "10-15"
+   ],
+   "opens": null,
+   "note": "SP50: nel 2025 chiusa dal 15/10 fino alla riapertura primaverile.",
+   "sources": [
+    "https://www.mentelocale.it/torino/95371-torino-chiuse-le-strade-di-montagna-ecco-dove-e-quando.htm"
+   ]
+  },
+  {
+   "id": "finestre",
+   "name": "Colle delle Finestre",
+   "lat": 45.07203,
+   "lon": 7.05334,
+   "closes": [
+    "10-21",
+    "11-01"
+   ],
+   "opens": null,
+   "note": "SP172: chiusura stagionale prevista il 1/11, nel 2025 anticipata al 21/10.",
+   "sources": [
+    "https://www.mentelocale.it/torino/95371-torino-chiuse-le-strade-di-montagna-ecco-dove-e-quando.htm"
+   ]
+  },
+  {
+   "id": "agnello",
+   "name": "Colle dell'Agnello - Col Agnel",
+   "lat": 44.68388,
+   "lon": 6.97959,
+   "closes": [
+    "10-20",
+    "10-31"
+   ],
+   "opens": [
+    "05-29",
+    "06-15"
+   ],
+   "note": "Nel 2025 chiuso il 24/10; riapertura concordata tra Italia e Francia (2024: 15/6, 2026: 29/5).",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cuneodice.it/varie/cuneo-e-valli/riapertura-dei-colli-alpini-il-14-giugno-il-colle-della-lombarda-il-15-il-colle-dellagnello_88831.html"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "lombarda",
+   "name": "Colle della Lombarda - Col de la Lombarde",
+   "lat": 44.20261,
+   "lon": 7.1501,
+   "closes": null,
+   "opens": [
+    "06-01",
+    "06-15"
+   ],
+   "note": "Chiuso d'inverno; nel 2024 riaperto il 14/6.",
+   "sources": [
+    "https://www.cuneodice.it/varie/cuneo-e-valli/riapertura-dei-colli-alpini-il-14-giugno-il-colle-della-lombarda-il-15-il-colle-dellagnello_88831.html"
+   ]
+  },
+  {
+   "id": "psbernardo",
+   "name": "Colle del Piccolo San Bernardo",
+   "lat": 45.67925,
+   "lon": 6.88294,
+   "closes": [
+    "11-01",
+    "11-10"
+   ],
+   "opens": [
+    "05-20",
+    "05-31"
+   ],
+   "note": "Chiusura prevista a inizio novembre (nel 2025 anticipata al 22/9 per lavori); nel 2026 riaperto il 23/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "moncenisio",
+   "name": "Colle del Moncenisio - Col du Mont-Cenis",
+   "lat": 45.25983,
+   "lon": 6.90088,
+   "closes": [
+    "11-10",
+    "11-20"
+   ],
+   "opens": [
+    "05-10",
+    "05-20"
+   ],
+   "note": "Chiuso da novembre a maggio (2025: 14/11; riaperto il 16/5/2025 e il 13/5/2026).",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "galibier",
+   "name": "Col du Galibier",
+   "lat": 45.06414,
+   "lon": 6.40786,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-29",
+    "06-10"
+   ],
+   "note": "Nel 2025 chiuso il 22/10 per neve; nel 2026 riaperto il 5/6 (galleria dal 29/5).",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "iseran",
+   "name": "Col de l'Iseran",
+   "lat": 45.41711,
+   "lon": 7.03085,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "06-05",
+    "06-20"
+   ],
+   "note": "Nel 2025 chiuso il 20/10; nel 2026 riaperto il 12/6, tra gli ultimi.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "bonette",
+   "name": "Cime de la Bonette - Col de Restefond",
+   "lat": 44.32052,
+   "lon": 6.80746,
+   "closes": [
+    "10-20",
+    "10-31"
+   ],
+   "opens": [
+    "05-15",
+    "06-01"
+   ],
+   "note": "Nel 2025 chiuso il 20/10; nel 2026 riaperto il 19/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "izoard",
+   "name": "Col d'Izoard",
+   "lat": 44.81966,
+   "lon": 6.73497,
+   "closes": [
+    "11-01",
+    "11-20"
+   ],
+   "opens": [
+    "05-10",
+    "05-20"
+   ],
+   "note": "Nel 2025 chiuso il 14/11; riapre verso il 15/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "cayolle",
+   "name": "Col de la Cayolle",
+   "lat": 44.25914,
+   "lon": 6.74397,
+   "closes": [
+    "11-15",
+    "11-30"
+   ],
+   "opens": [
+    "04-25",
+    "05-10"
+   ],
+   "note": "Nel 2025 chiuso il 21/11; nel 2026 riaperto il 29/4.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "croixdefer",
+   "name": "Col de la Croix-de-Fer",
+   "lat": 45.22749,
+   "lon": 6.20333,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-25",
+    "06-05"
+   ],
+   "note": "Nel 2025 chiuso il 22/10; nel 2026 riaperto il 29/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "glandon",
+   "name": "Col du Glandon",
+   "lat": 45.23953,
+   "lon": 6.17556,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-25",
+    "06-20"
+   ],
+   "note": "Nel 2025 chiuso il 21/10; nel 2026 riaperto il 19/6.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "madeleine",
+   "name": "Col de la Madeleine",
+   "lat": 45.43495,
+   "lon": 6.37552,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-25",
+    "06-05"
+   ],
+   "note": "Nel 2025 chiuso il 23/10; nel 2026 riaperto il 29/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "roselend",
+   "name": "Cormet de Roselend",
+   "lat": 45.69133,
+   "lon": 6.69062,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-20",
+    "06-01"
+   ],
+   "note": "Nel 2025 chiuso il 23/10; nel 2026 riaperto il 23/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "granon",
+   "name": "Col du Granon",
+   "lat": 44.96251,
+   "lon": 6.61075,
+   "closes": [
+    "10-15",
+    "10-31"
+   ],
+   "opens": [
+    "05-30",
+    "06-10"
+   ],
+   "note": "Nel 2025 chiuso il 20/10; nel 2026 riaperto il 3/6.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "echelle",
+   "name": "Col de l'Échelle",
+   "lat": 45.02718,
+   "lon": 6.65683,
+   "closes": [
+    "10-20",
+    "11-05"
+   ],
+   "opens": [
+    "05-15",
+    "05-31"
+   ],
+   "note": "Nel 2025 chiuso il 23/10; nel 2026 riaperto il 22/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "allos",
+   "name": "Col d'Allos",
+   "lat": 44.29721,
+   "lon": 6.59375,
+   "closes": null,
+   "opens": [
+    "06-01",
+    "06-15"
+   ],
+   "note": "Chiuso d'inverno (nel 2025 già dal 29/9); nel 2026 riaperto il 12/6.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
+  },
+  {
+   "id": "colombiere",
+   "name": "Col de la Colombière",
+   "lat": 45.99225,
+   "lon": 6.47577,
+   "closes": [
+    "11-15",
+    "11-30"
+   ],
+   "opens": [
+    "04-30",
+    "05-10"
+   ],
+   "note": "Nel 2025 chiuso il 18-21/11; nel 2026 riaperto il 6/5.",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   ]
+  },
+  {
+   "id": "loze",
+   "name": "Col de la Loze",
+   "lat": 45.40761,
+   "lon": 6.60259,
+   "closes": [
+    "09-25",
+    "10-31"
+   ],
+   "opens": [
+    "06-25",
+    "07-05"
+   ],
+   "note": "Strada riservata alle bici: aperta da fine giugno a fine estate (2026: dal 30/6).",
+   "sources": [
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps"
+   ]
+  },
+  {
+   "id": "ventoux",
+   "name": "Mont Ventoux (vetta)",
+   "lat": 44.17332,
+   "lon": 5.27854,
+   "closes": [
+    "11-10",
+    "11-20"
+   ],
+   "opens": [
+    "05-01",
+    "05-20"
+   ],
+   "note": "Tratto Chalet Reynard - vetta e Mont Serein - vetta chiuso al traffico d'inverno (2023-24: 13/11-3/5; 2025: chiuso il 18/11, riaperto il 15-16/5).",
+   "sources": [
+    "https://www.ventouxprovence.fr/fileadmin/mediatheque/ventoux-provence/document/arrete-prefectoral-feremeture-sommet-ventoux-2023.pdf",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps"
+   ]
+  },
+  {
+   "id": "tourmalet",
+   "name": "Col du Tourmalet",
+   "lat": 42.90839,
+   "lon": 0.1453,
+   "closes": [
+    "11-01",
+    "11-30"
+   ],
+   "opens": [
+    "05-01",
+    "05-31"
+   ],
+   "note": "D918 chiusa da novembre a maggio (d'inverno è pista da sci).",
+   "sources": [
+    "https://en.tourisme-hautes-pyrenees.com/a-trip-to-the-pyrenees/major-sites/col-du-tourmalet/"
+   ]
+  },
+  {
+   "id": "aubisque",
+   "name": "Col d'Aubisque",
+   "lat": 42.97657,
+   "lon": -0.33979,
+   "closes": [
+    "11-10",
+    "11-20"
+   ],
+   "opens": [
+    "05-25",
+    "06-07"
+   ],
+   "note": "Aperto da fine maggio/inizio giugno a metà novembre.",
+   "sources": [
+    "https://www.tourisme64.com/en/our-destinations/welcome-to-bearn-pyrenees/must-sees-in-the-bearn-pyrenees/aubisque-pass/"
+   ]
+  },
+  {
+   "id": "glockner",
+   "name": "Großglockner Hochalpenstraße (Hochtor)",
+   "lat": 47.08119,
+   "lon": 12.84259,
+   "closes": [
+    "11-01",
+    "11-07"
+   ],
+   "opens": [
+    "05-01",
+    "05-07"
+   ],
+   "note": "Stagione da inizio maggio a inizio novembre (gestore).",
+   "sources": [
+    "https://www.news.at/regional/grossglockner-hochalpenstrasse-herbst-oeffnungszeiten-wintersperre",
+    "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   }
+  },
+  {
+   "id": "nockalm",
+   "name": "Nockalmstraße (Schiestelscharte)",
+   "lat": 46.89006,
+   "lon": 13.79351,
+   "closes": null,
+   "opens": null,
+   "note": "Chiusa d'inverno.",
+   "sources": [
+    "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   }
+  },
+  {
+   "id": "solk",
+   "name": "Sölkpass",
+   "lat": 47.27169,
+   "lon": 14.07967,
+   "closes": null,
+   "opens": null,
+   "note": "Chiuso d'inverno.",
+   "sources": [
+    "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   }
+  },
+  {
+   "id": "silvretta",
+   "name": "Silvretta-Hochalpenstraße (Bielerhöhe)",
+   "lat": 46.91801,
+   "lon": 10.09526,
+   "closes": null,
+   "opens": null,
+   "note": "Chiusa d'inverno; il lato del Vorarlberg è chiuso per lavori fino al 2030 circa.",
+   "sources": [
+    "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-11",
+    "source": "https://www.oeamtc.at/news/wintersperren-in-oesterreich-18388156/print"
+   }
+  }
+ ]
+}
