@@ -52,6 +52,8 @@ const map = new maplibregl.Map({
   container: "map", style: BASE.style,
   center: [10.6, 45.6], zoom: 6.4, maxPitch: 75, attributionControl: { compact: true }, hash: false
 });
+/* the credits start folded on the "i" (MapLibre opens them at load, a grey band across the map on a phone) */
+map.once("idle", () => { const a = document.querySelector(".maplibregl-ctrl-attrib.maplibregl-compact-show"); if (a) a.classList.remove("maplibregl-compact-show"); });
 /* our own control stack (zoom, north, 3D, locate) - MapLibre's NavigationControl overlapped it */
 document.getElementById("bzin").addEventListener("click", () => map.zoomIn());
 document.getElementById("bzout").addEventListener("click", () => map.zoomOut());
