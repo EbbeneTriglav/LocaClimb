@@ -3,11 +3,11 @@
  "note": "02/11/2026 (Rick): prima la Spagna (lancio europeo, salite spagnole migliorate), poi la Francia; insieme ricostruiscono anche i passi corretti dalla PR climbs-europe. osm-rotate le fa per prime, poi torna al giro normale. 03/11/2026: aggiunte italy-sud (Blockhaus, Roccaraso, Campo Imperatore, Etna, Sirino), belgium, netherlands-luxembourg e france-nord (muri delle Classiche) dopo la Spagna; poi le 10 zone principali delle Americhe, la Francia, e il resto delle Americhe (Rick, 03/11/2026). Per una nuova coda: cambia since e targets.",
  "targets": [
   "spain-nord", "spain-centro", "spain-sud", "spain-baleari", "spain-canarie", "andorra", "italy-sud", "belgium", "netherlands-luxembourg", "france-nord",
-  "usa-colorado", "usa-california-nord", "usa-california-sud", "colombia", "usa-utah", "usa-arizona", "canada-british-columbia", "mexico", "costa-rica", "ecuador",
+  "usa-colorado", "usa-california-nord", "usa-california-sud", "colombia", "usa-utah", "usa-arizona", "canada-british-columbia", "costa-rica", "ecuador",
   "confine-es-pt", "confine-fr-es",
   "france-alps", "france-rhone-alpes", "france-paca", "france-midi-pyrenees", "france-languedoc", "france-aquitaine", "france-auvergne",
   "france-corse", "france-jura", "france-est", "france-centro-ovest", "france-bretagne-idf", "confine-fr-ch", "confine-fr-de", "confine-it-fr",
-  "switzerland", "slovenia",
+  "switzerland", "slovenia", "confine-it-si", "confine-at-si",
   "usa-new-mexico", "usa-nevada", "usa-idaho", "usa-montana", "usa-wyoming", "usa-washington", "usa-oregon", "usa-north-carolina", "usa-tennessee", "usa-virginia", "usa-west-virginia", "usa-vermont", "usa-new-hampshire", "usa-new-york", "usa-pennsylvania", "usa-georgia", "usa-kentucky", "usa-maine", "usa-massachusetts", "canada-alberta", "canada-quebec", "guatemala", "venezuela", "peru", "bolivia", "chile", "argentina", "brazil-sul", "brazil-sudeste"
  ]
 }
