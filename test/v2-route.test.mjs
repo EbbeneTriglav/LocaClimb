@@ -153,3 +153,34 @@ test("riskyDescents: only steep AND twisty descents, one warning per descent, af
   assert.deepEqual(riskyDescents(rideProfile(descent(-6, 3, true))), [], "twisty but not steep");
   assert.deepEqual(riskyDescents(null), []);
 });
+
+import { patchProfile, profileSrcUrl, tunnelSummary, tunnelFeatures, PROFILES } from "../v2/lib/route.mjs";
+test("tunnels and cycle lanes from the way tags (Giro, 11/11/2026)", () => {
+  const H = ["Longitude", "Latitude", "Elevation", "Distance", "WayTags"];
+  const j = { features: [{ geometry: { coordinates: [[10, 46, 1000], [10.01, 46, 1010], [10.02, 46, 1020], [10.03, 46, 1030]] }, properties: { "track-length": "2300", "filtered ascend": "30", messages: [H,
+    ["", "", "", "500", "highway=secondary surface=asphalt"],
+    ["", "", "", "120", "highway=secondary surface=asphalt tunnel=yes"],
+    ["", "", "", "20", "highway=secondary surface=asphalt"],
+    ["", "", "", "60", "highway=secondary surface=asphalt tunnel=yes"],
+    ["", "", "", "800", "highway=cycleway surface=asphalt"],
+    ["", "", "", "300", "highway=tertiary cycleway:right=lane"],
+    ["", "", "", "500", "highway=tertiary cycleway:both=shared_lane tunnelish=no"]] } }] };
+  const r = parseBrouter(j);
+  assert.deepEqual(r.tunnels, [{ from: 500, to: 700 }], "two tunnel ways 20 m apart are one tunnel");
+  assert.equal(r.cycM, 1100, "cycleway + painted lane; a shared lane is not a cycle lane");
+  const t = tunnelSummary(r.tunnels);
+  assert.deepEqual(t, { n: 1, m: 200, long: { km: 0.5, m: 200 }, list: [{ km: 0.5, m: 200 }] });
+  assert.equal(tunnelSummary([]), null);
+  assert.equal(tunnelSummary([{ from: 0, to: 8 }]), null, "a few metres under a bridge are not a tunnel");
+  assert.equal(tunnelFeatures([[46, 10], [46, 10.01]], []).length, 0);
+  assert.deepEqual(parseBrouter({ features: [{ geometry: { coordinates: [[10, 46, 1], [10.01, 46, 2]] }, properties: {} }] }).tunnels, []);
+});
+test("BRouter profile with the tunnel rule: one line after the way context, once", () => {
+  const brf = "---context:global\nassign x 1\n---context:way   # comment\nassign costfactor 1\n---context:node\n";
+  const p = patchProfile(brf);
+  assert.match(p, /---context:way {3}# comment\nassign lr_tunnel = if tunnel=yes then 1 else 0\nassign costfactor 1/);
+  assert.equal(patchProfile(p), p, "idempotent");
+  assert.equal(patchProfile("404: Not Found"), "404: Not Found", "not a profile: left alone, never uploaded");
+  assert.equal(profileSrcUrl("fastbike"), "https://raw.githubusercontent.com/abrensch/brouter/master/misc/profiles2/fastbike.brf");
+  assert.ok(PROFILES.some(([k]) => k === "safety"), "«Più ciclabili»");
+});
