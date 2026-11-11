@@ -1,0 +1,74 @@
+name: SEO pages (salite per Google)
+
+# Keeps the static climb pages (salite/, sitemap.xml, robots.txt) in step with the data the app shows.
+# No AI: node scripts/build_seo_pages.mjs is deterministic, so a run with unchanged data commits nothing.
+# Triggers:
+# - after every data build (osm-expand, Refresh OSM passes, osm-discover, osm-border) that succeeded:
+#   their commits are pushed with GITHUB_TOKEN, which never fires a push event, hence workflow_run;
+# - on a push to main touching the curated data or the generator (a merged PR);
+# - every Monday as a safety net, and by hand from the Actions tab.
+# Its own concurrency group (not osm-data): it writes only salite/, sitemap.xml and robots.txt, so it must
+# never sit in the data queue and push a pending data build out of it. A newer run replaces an older one.
+# Asked by Rick on 11/11/2026. Guarded by test/seo-pages.test.mjs.
+
+on:
+  workflow_run:
+    workflows: ["OSM expand (per country)", "Refresh OSM passes", "OSM discover (salite senza passo)", "osm-border"]
+    types: [completed]
+  push:
+    branches: [main]
+    paths:
+      - "data/passes_data.js"
+      - "data/curated_overrides.json"
+      - "data/name_fixes.json"
+      - "data/not_climbs.json"
+      - "data/osm_index.json"
+      - "data/osm_regions.json"
+      - "data/osm_passes*.json"
+      - "scripts/build_seo_pages.mjs"
+      - "scripts/lib/seo.mjs"
+      - "v2/lib/data.mjs"
+      - "v2/lib/climb.mjs"
+      - "v2/lib/difficulty.mjs"
+      - ".github/workflows/seo-pages.yml"   # the first run starts as soon as this is merged
+  schedule:
+    - cron: "23 4 * * 1"   # Monday 05:23 Italian time (winter)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seo-pages
+  cancel-in-progress: true
+
+jobs:
+  pages:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rigenera e pubblica
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          ok=0
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/build_seo_pages.mjs
+            node --test test/seo-pages.test.mjs || { echo "pagine non valide, non pubblico"; exit 1; }
+            git add -A salite sitemap.xml robots.txt
+            if git diff --staged --quiet; then echo "Pagine gia' aggiornate."; ok=1; break; fi
+            git diff --staged --stat | tail -1
+            git commit -q -m "seo: pagine delle salite rigenerate $(date -u +%Y-%m-%d)"
+            if git push; then ok=1; break; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
+          done
+          [ "$ok" = 1 ] || { echo "push fallito dopo 5 tentativi"; exit 1; }

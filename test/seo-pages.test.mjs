@@ -144,3 +144,19 @@ test("the published pages match the generator (when they have been written)", { 
   assert.ok(urls >= dirs + 2, `${urls} urls for ${dirs} pages`);
   assert.ok(read("robots.txt").includes("Sitemap:"));
 });
+
+test("the pages refresh themselves after every data build (.github/workflows/seo-pages.yml)", () => {
+  const wf = read(".github/workflows/seo-pages.yml");
+  const names = JSON.parse(wf.match(/workflows: (\[.*\])/)[1]);
+  const dataWorkflows = ["osm-expand.yml", "osm-refresh.yml", "osm-discover.yml", "osm-border.yml"]
+    .map((f) => read(".github/workflows/" + f).match(/^name: (.+)$/m)[1].trim());
+  assert.deepEqual(names.slice().sort(), dataWorkflows.slice().sort(), "workflow_run must list the data builds by their exact names");
+  assert.match(wf, /conclusion == 'success'/, "only after a build that succeeded");
+  assert.match(wf, /group: seo-pages\n\s+cancel-in-progress: true/, "own queue: never a pending data build pushed out of osm-data");
+  assert.ok(!/group: osm-data/.test(wf));
+  for (const p of ["data/passes_data.js", "data/curated_overrides.json", "data/name_fixes.json", "scripts/lib/seo.mjs", "v2/lib/data.mjs"]) assert.ok(wf.includes(`"${p}"`), p);
+  assert.match(wf, /node scripts\/build_seo_pages\.mjs/);
+  assert.match(wf, /node --test test\/seo-pages\.test\.mjs \|\| \{/, "pages are tested before they are published");
+  assert.match(wf, /git add -A salite sitemap\.xml robots\.txt/, "it commits only its own output");
+  assert.match(wf, /for attempt in 1 2 3 4 5; do\n\s+git fetch origin main\n\s+git reset --hard origin\/main/, "conflict-proof commit loop");
+});
