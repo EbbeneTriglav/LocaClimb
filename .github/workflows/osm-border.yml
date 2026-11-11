@@ -46,8 +46,7 @@ jobs:
           node-version: "22"
       - name: Install osmium + pngjs
         run: |
-          sudo apt-get update
-          sudo apt-get install -y osmium-tool
+          bash scripts/ci/install_osmium.sh
           npm i pngjs
       - name: Map zone -> PBF + bbox + out
         id: cfg
