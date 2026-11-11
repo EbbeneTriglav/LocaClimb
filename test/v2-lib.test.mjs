@@ -379,3 +379,18 @@ test("locate: halo from accuracy, heading from GPS or compass, button cycle", ()
   assert.equal(headingOf({ heading: null, speed: 0 }, null), null);
   assert.equal(nextMode("off"), "follow"); assert.equal(nextMode("free"), "follow"); assert.equal(nextMode("follow"), "off");
 });
+
+// ---------------------------------------------------------------- near.mjs ("Vicino a me", 11/11/2026)
+import { distKm, bearing, nearest, arrowDeg, fmtDist } from "../v2/lib/near.mjs";
+test("near: distance, bearing, nearest few, arrow and labels", () => {
+  assert.ok(Math.abs(distKm(46, 10, 46.009, 10) - 1.0) < 0.01, "0.009 deg of latitude ~ 1 km");
+  assert.ok(Math.abs(bearing(46, 10, 46.1, 10)) < 0.5 || Math.abs(bearing(46, 10, 46.1, 10) - 360) < 0.5, "north");
+  assert.ok(Math.abs(bearing(46, 10, 46, 10.1) - 90) < 0.5, "east");
+  const me = { lat: 46, lon: 10 };
+  const items = [{ name: "B", lat: 46.02, lon: 10 }, { name: "A", lat: 46.005, lon: 10 }, { name: "A", lat: 46.0051, lon: 10 }, { name: "far", lat: 47, lon: 10 }, { name: "bad", lat: NaN, lon: 10 }];
+  const r = nearest(me, items, 5, 15);
+  assert.deepEqual(r.map((x) => x.name), ["A", "B"], "sorted, far and duplicates dropped");
+  assert.ok(r[0].km < r[1].km && Math.abs(r[0].brg) < 1);
+  assert.equal(arrowDeg(90, null), 90); assert.equal(arrowDeg(90, 90), 0); assert.equal(arrowDeg(10, 350), 20);
+  assert.equal(fmtDist(0.347), "350 m"); assert.equal(fmtDist(0.001), "10 m"); assert.equal(fmtDist(1.24), "1,2 km"); assert.equal(fmtDist(1.24, "en"), "1.2 km"); assert.equal(fmtDist(12.4), "12 km");
+});

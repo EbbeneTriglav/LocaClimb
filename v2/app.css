@@ -56,7 +56,7 @@ a { color: var(--acc); }
 #bnorth svg { transition: transform .2s; }
 
 /* ---------- tabs ---------- */
-.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; height: calc(var(--tabs) + var(--safe-b)); padding-bottom: var(--safe-b); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: var(--bg); border-top: 1px solid var(--s2); }
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; height: calc(var(--tabs) + var(--safe-b)); padding-bottom: var(--safe-b); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--bg); border-top: 1px solid var(--s2); }
 .tabs a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: var(--mu); font-size: 11px; }
 .tabs a[aria-current="page"] { color: var(--acc); font-weight: 600; }
 
@@ -452,16 +452,35 @@ body.ingiro .wp.maplibregl-marker { display: grid; }
 .rleg .br { flex-basis: 100%; height: 0; }
 
 /* my position (11/11/2026): blue dot + accuracy halo + direction cone, like the maps people know */
-.me { width: 0; height: 0; }
-.me i { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
-.me .halo { width: var(--halo, 0); height: var(--halo, 0); background: rgba(66, 133, 244, .16); border: 1px solid rgba(66, 133, 244, .4); transition: width .3s, height .3s; }
-.me .dot { width: 18px; height: 18px; background: #4285F4; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0, 0, 0, .5); }
-.me .dot::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid #4285F4; animation: mepulse 2s ease-out infinite; }
-.me .cone { display: none; width: 72px; height: 72px; border-radius: 0; background: conic-gradient(from -28deg, rgba(66, 133, 244, .5) 0 56deg, transparent 56deg);
+.mepos { width: 0; height: 0; }
+.mepos i { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
+.mepos .halo { width: var(--halo, 0); height: var(--halo, 0); background: rgba(66, 133, 244, .16); border: 1px solid rgba(66, 133, 244, .4); transition: width .3s, height .3s; }
+.mepos .dot { width: 18px; height: 18px; background: #4285F4; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0, 0, 0, .5); }
+.mepos .dot::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid #4285F4; animation: mepulse 2s ease-out infinite; }
+.mepos .cone { display: none; width: 72px; height: 72px; border-radius: 0; background: conic-gradient(from -28deg, rgba(66, 133, 244, .5) 0 56deg, transparent 56deg);
   -webkit-mask: radial-gradient(circle, #000 0 30%, transparent 70%); mask: radial-gradient(circle, #000 0 30%, transparent 70%); transform: translate(-50%, -50%) rotate(var(--hd, 0deg)); }
-.me.hd .cone { display: block; }
-.me.stale .dot { background: #8A9AAD; } .me.stale .dot::after { display: none; }
+.mepos.hd .cone { display: block; }
+.mepos.stale .dot { background: #8A9AAD; } .mepos.stale .dot::after { display: none; }
 @keyframes mepulse { from { transform: scale(1); opacity: .8; } to { transform: scale(2.6); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .me .dot::after { animation: none; display: none; } }
+@media (prefers-reduced-motion: reduce) { .mepos .dot::after { animation: none; display: none; } }
 .mapbtns button.trk { color: #4285F4; }
 .mapbtns #bloc[aria-pressed="true"] { background: #4285F4; color: #fff; border-color: #4285F4; }
+
+/* "Vicino a me" (11/11/2026): list + light guide (arrow and metres) + destination pin */
+.mapbtns #bnear { color: #4285F4; }
+.near .seg { margin: 2px 0 10px; }
+.nl { list-style: none; margin: 0; padding: 0; }
+.nl li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--s2); }
+.nl .na { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: rgba(66, 133, 244, .16); color: #4285F4; }
+.nl .nt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nl .nt b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nl .nt small { color: var(--mu); }
+.nl .nb { flex: none; display: flex; gap: 6px; }
+.nl .btn { height: 38px; padding: 0 12px; font-size: 14px; border-radius: 19px; }
+.guide { position: fixed; left: 50%; top: calc(var(--safe-t, 0px) + 122px); transform: translateX(-50%); z-index: 7; display: flex; align-items: center; gap: 12px;
+  padding: 7px 7px 7px 10px; max-width: calc(100vw - 32px); background: var(--s1); border: 1px solid var(--line2); border-radius: 30px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45); }
+.guide .ga { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #4285F4; color: #fff; transition: transform .4s ease; }
+.guide .gt { display: flex; flex-direction: column; min-width: 0; }
+.guide .gt b { font-family: var(--cond); font-weight: 800; font-size: 24px; line-height: 1; }
+.guide .gt small { color: var(--mu); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52vw; }
+.neardest i { display: block; width: 22px; height: 22px; margin-bottom: 4px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--acc); border: 3px solid #0B0F14; box-shadow: 0 2px 6px rgba(0, 0, 0, .5); }

@@ -5,24 +5,25 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=50";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=50";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=50";
-import { poisNear } from "./lib/poi.mjs?v=50";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=50";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=50";
-import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=50";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=50";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=50";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=50";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=50";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=50";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=50";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=50";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=50";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=50";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=50";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=50";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=51";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=51";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=51";
+import { poisNear } from "./lib/poi.mjs?v=51";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=51";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS } from "./lib/route.mjs?v=51";
+import { getLang, setLang, startI18n, monthsFor } from "./lib/i18n.mjs?v=51";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=51";
+import { distKm, bearing, nearest, arrowDeg, fmtDist, ARRIVED_KM } from "./lib/near.mjs?v=51";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=51";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=51";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=51";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=51";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS } from "./lib/install.mjs?v=51";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=51";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=51";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=51";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=51";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=51";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -249,12 +250,13 @@ function meButton() {
   blocBtn.setAttribute("aria-pressed", String(ME.mode === "follow"));
   blocBtn.classList.toggle("trk", ME.mode === "free");
   blocBtn.setAttribute("aria-label", ME.mode === "follow" ? "Nascondi la mia posizione" : "Mostra e segui la mia posizione");
+  bnear.hidden = ME.mode === "off";
 }
 function mePaint() {
   ME.raf = 0;
   const p = ME.pos; if (!p) return;
   if (!ME.mk) {
-    ME.el = document.createElement("div"); ME.el.className = "me";
+    ME.el = document.createElement("div"); ME.el.className = "mepos";
     ME.el.innerHTML = '<i class="halo"></i><i class="cone"></i><i class="dot"></i>';
     ME.mk = new maplibregl.Marker({ element: ME.el, rotationAlignment: "map", pitchAlignment: "map" }).setLngLat([p.lon, p.lat]).addTo(map);
   }
@@ -263,6 +265,7 @@ function mePaint() {
   const hd = headingOf(p, ME.compass);
   ME.el.classList.toggle("hd", hd != null); if (hd != null) ME.el.style.setProperty("--hd", Math.round(hd) + "deg");
   ME.el.classList.toggle("stale", Date.now() - p.t > STALE_MS);
+  guidePaint();
 }
 const meSoon = () => { if (!ME.raf) ME.raf = requestAnimationFrame(mePaint); };
 function meFix(g) {
@@ -294,7 +297,7 @@ function meCompass(on) {
 function meStop() {
   ME.mode = "off"; ME.first = true; meWatch(false); meCompass(false);
   if (ME.mk) { ME.mk.remove(); ME.mk = null; ME.el = null; }
-  ME.pos = null; meButton();
+  ME.pos = null; guideStop(); meButton();
 }
 blocBtn.addEventListener("click", () => {
   if (!navigator.geolocation) { toast("Posizione non disponibile su questo dispositivo"); return; }
@@ -306,6 +309,78 @@ blocBtn.addEventListener("click", () => {
 map.on("dragstart", () => { if (ME.mode === "follow") { ME.mode = "free"; meButton(); } });   // you moved the map: stop following, keep the dot
 map.on("zoom", () => { if (ME.mk) meSoon(); });
 document.addEventListener("visibilitychange", () => { if (ME.mode !== "off") meWatch(!document.hidden); });
+
+/* ---- "Vicino a me" (Rick, 11/11/2026; lib/near.mjs): from the blue dot to water, a bar or a climb.
+   "Guidami": an arrow + metres over the map (light: no turn-by-turn, no extra layers). "Percorso": the
+   bike route from the Giro (BRouter), ready for the bike computer. Climbs: "Apri" + "Percorso". */
+const NEAR = { kind: "water", target: null, mk: null, el: null, done: false };
+const bnear = $("#bnear");
+const ARROW = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l7 18-7-4.2-7 4.2z" fill="currentColor"/></svg>';
+async function nearList(kind) {
+  const p = ME.pos;
+  if (!p) return { items: [], covered: true };
+  if (kind === "climb") {
+    const cs = nearby(p.lat, p.lon, 30, 400).map((c) => ({ id: c.id, name: c.name, lat: c.lat, lon: c.lon, sub: c.difficulty ? "difficoltà " + c.difficulty + "/10" : "" }));
+    return { items: nearest(p, cs, 5, 30), covered: true };
+  }
+  const d = 0.06;   // ~6 km around you: the 0.25-degree POI cells it touches
+  let r; try { r = await poisNear([[p.lat - d, p.lon - d], [p.lat + d, p.lon + d]]); } catch { r = { points: [], covered: false }; }
+  return { items: nearest(p, (r.points || []).filter((x) => x.kind === (kind === "bar" ? "food" : "water")), 5, 8), covered: r.covered };
+}
+async function nearDialog(kind = NEAR.kind) {
+  NEAR.kind = kind;
+  const K = [["water", "Acqua"], ["bar", "Bar e cibo"], ["climb", "Salite"]];
+  openDialog(`<div class="dform near"><div class="dh"><h2>Vicino a me</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
+    <div class="seg" role="group" aria-label="Cosa cerchi">${K.map(([k, l]) => `<button type="button" data-k="${k}" aria-pressed="${k === kind}">${l}</button>`).join("")}</div>
+    <div id="nearOut"><p class="note">Cerco intorno a te…</p></div></div>`);
+  dlg.querySelectorAll("[data-k]").forEach((b) => b.addEventListener("click", () => nearDialog(b.dataset.k)));
+  const { items, covered } = await nearList(kind);
+  const out = $("#nearOut");
+  if (!out || NEAR.kind !== kind) return;
+  if (!items.length) { out.innerHTML = `<p class="note">${covered ? "Niente qui intorno." : "Qui non abbiamo ancora acqua e bar: li aggiungiamo zona per zona."}</p>`; return; }
+  const hd = headingOf(ME.pos, ME.compass) ?? map.getBearing();
+  out.innerHTML = `<ul class="nl">${items.map((x, i) => `<li><span class="na" style="transform:rotate(${Math.round(arrowDeg(x.brg, hd))}deg)">${ARROW}</span>
+      <span class="nt"><b>${esc(x.name || x.label)}</b><small>${esc(fmtDist(x.km, LANG))}${x.name && x.label ? " · " + esc(x.label) : ""}${x.sub ? " · " + esc(x.sub) : ""}</small></span>
+      <span class="nb">${x.id ? `<button type="button" class="btn" data-open="${i}">Apri</button>` : `<button type="button" class="btn" data-go="${i}">Guidami</button>`}<button type="button" class="btn" data-route="${i}">Percorso</button></span></li>`).join("")}</ul>
+    <p class="note small">Distanze in linea d'aria. «Percorso» calcola la strada in bici e la puoi mandare al ciclocomputer.</p>`;
+  out.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { closeDialog(); guideTo(items[+b.dataset.go]); }));
+  out.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => { closeDialog(); location.hash = "#/s/" + encodeURIComponent(items[+b.dataset.open].id); }));
+  out.querySelectorAll("[data-route]").forEach((b) => b.addEventListener("click", () => {
+    const x = items[+b.dataset.route], p = ME.pos; if (!p) return;
+    closeDialog(); location.hash = "#/giro?p=" + encodeStops([{ lat: p.lat, lon: p.lon }, { lat: x.lat, lon: x.lon, id: x.id || null }]);
+  }));
+}
+function guideTo(x) {
+  guideStop();
+  NEAR.target = x; NEAR.done = false;
+  NEAR.el = document.createElement("div"); NEAR.el.className = "guide"; NEAR.el.setAttribute("role", "status");
+  NEAR.el.innerHTML = `<span class="ga">${ARROW}</span><span class="gt"><b></b><small></small></span><button type="button" class="ib" aria-label="Chiudi la guida">${ICON.close}</button>`;
+  NEAR.el.querySelector("button").addEventListener("click", guideStop);
+  document.body.appendChild(NEAR.el);
+  const pin = document.createElement("div"); pin.className = "neardest"; pin.innerHTML = "<i></i>";
+  NEAR.mk = new maplibregl.Marker({ element: pin, anchor: "bottom" }).setLngLat([x.lon, x.lat]).addTo(map);
+  if (ME.pos) {   // both on screen; the map stops following so the frame stays
+    ME.mode = "free"; meButton();
+    map.fitBounds(new maplibregl.LngLatBounds([ME.pos.lon, ME.pos.lat], [ME.pos.lon, ME.pos.lat]).extend([x.lon, x.lat]), { padding: { top: 150, bottom: 300, left: 60, right: 80 }, maxZoom: 16, duration: 700 });
+  }
+  guidePaint();
+}
+function guidePaint() {
+  const x = NEAR.target, p = ME.pos;
+  if (!x || !NEAR.el || !p) return;
+  const km = distKm(p.lat, p.lon, x.lat, x.lon), hd = headingOf(p, ME.compass) ?? map.getBearing();
+  NEAR.el.querySelector(".ga").style.transform = `rotate(${Math.round(arrowDeg(bearing(p.lat, p.lon, x.lat, x.lon), hd))}deg)`;
+  NEAR.el.querySelector("b").textContent = km < ARRIVED_KM ? "Sei arrivato" : fmtDist(km, LANG);
+  NEAR.el.querySelector("small").textContent = x.name || x.label || "";
+  if (km < ARRIVED_KM && !NEAR.done) { NEAR.done = true; try { if (navigator.vibrate) navigator.vibrate(200); } catch { /* not supported */ } setTimeout(guideStop, 6000); }
+}
+function guideStop() {
+  if (NEAR.el) NEAR.el.remove();
+  if (NEAR.mk) NEAR.mk.remove();
+  NEAR.el = NEAR.mk = NEAR.target = null;
+}
+bnear.addEventListener("click", () => nearDialog());
+map.on("rotate", () => { if (NEAR.el && headingOf(ME.pos, ME.compass) == null) guidePaint(); });
 
 
 /* ------------------------------------------------------------------ search */
@@ -983,6 +1058,7 @@ function settingsHtml() {
   return `<section class="sec" id="setSec"><h3>Impostazioni</h3>
     <div class="setrow"><span>Lingua</span><div class="seg" role="group" aria-label="Lingua"><button type="button" data-lang="it" aria-pressed="${LANG === "it"}">Italiano</button><button type="button" data-lang="en" aria-pressed="${LANG === "en"}">English</button><button type="button" data-lang="es" aria-pressed="${LANG === "es"}">Español</button></div></div>
     <div class="setrow"><label for="setWkg">Watt per kg <small>per i tempi stimati in salita</small></label><input id="setWkg" type="number" inputmode="decimal" min="1" max="8" step="0.1" placeholder="3,0" value="${w ? esc(String(w)) : ""}"></div>
+    <p class="note small"><a href="classica/">Versione classica</a> · la vecchia app, ancora disponibile per qualche settimana</p>
     <p class="note small"><a href="privacy.html">Privacy</a> · niente pubblicità, visite contate senza cookie · <a href="mailto:privacy@locaride.app">privacy@locaride.app</a></p>
     <p class="note small">Protetto da reCAPTCHA: valgono la <a href="https://policies.google.com/privacy" rel="noopener">Privacy</a> e i <a href="https://policies.google.com/terms" rel="noopener">Termini</a> di Google.</p>
   </section>`;
