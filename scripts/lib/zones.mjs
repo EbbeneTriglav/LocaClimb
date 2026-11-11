@@ -2,7 +2,7 @@
  * zones.mjs - the single catalogue of build zones (scripts/lib/zones.json).
  *
  * One entry per Geofabrik zone: { id, label?, pbf: [url], bbox?, out, terrain, discover,
- * discoverBbox?, discoverNote? }. Used by:
+ * discoverBbox?, discoverNote?, discoverParts?: [{ id, label?, bbox }] }. Used by:
  *   - osm-expand.yml   target -> pbf / bbox / out (its menu must list the same ids: see test)
  *   - osm-rotate.yml   rotates over that menu
  *   - lib/discover.mjs every zone with discover:true is a discover region (terrain picks the

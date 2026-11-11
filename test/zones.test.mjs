@@ -58,3 +58,29 @@ test("discover: every catalogue zone with discover:true is a region, with thresh
   }
   assert.equal(DISCOVER_REGIONS.poland.bbox, "14.1,49.0,24.2,51.0", "only the southern mountain band");
 });
+
+test("discover: a zone split in discoverParts is searched as its parts, never as a whole", () => {
+  const zoneIds = new Set(ZONES.map((z) => z.id)), seen = new Set();
+  for (const z of ZONES) {
+    if (!z.discoverParts) continue;
+    assert.equal(z.discover, false, z.id + ": a split zone is not searched as a whole");
+    assert.ok(Array.isArray(z.discoverParts) && z.discoverParts.length >= 2, z.id);
+    const [za, zb, zc, zd] = (z.discoverBbox || z.bbox).split(",").map(Number);
+    for (const p of z.discoverParts) {
+      assert.match(p.id, /^[a-z][a-z0-9-]+$/, p.id);
+      assert.ok(!zoneIds.has(p.id) && !seen.has(p.id), "part id clashes: " + p.id); seen.add(p.id);
+      assert.match(p.bbox, BBOX, p.id);
+      const [a, b, c, d] = p.bbox.split(",").map(Number);
+      assert.ok(a < c && b < d, p.id + " min < max");
+      assert.ok(a >= za && b >= zb && c <= zc && d <= zd, p.id + " inside " + z.id);
+      const r = DISCOVER_REGIONS[p.id];
+      assert.ok(r && r.zone && r.partOf === z.id, p.id);
+      assert.deepEqual(r.pbf, z.pbf);
+      assert.equal(r.bbox, p.bbox);
+      assert.equal(r.prom, z.terrain === "alps" ? 150 : 120, p.id);
+    }
+  }
+  assert.equal(DISCOVER_REGIONS["turkey-est"], undefined, "25.3 MiB in one file: split");
+  assert.ok(DISCOVER_REGIONS["turkey-centro"] && DISCOVER_REGIONS["turkey-oriente"]);
+  assert.ok(!ITALY_REGIONS.includes("turkey-centro"));
+});
