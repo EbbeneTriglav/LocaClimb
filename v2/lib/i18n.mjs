@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=48";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=49";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
