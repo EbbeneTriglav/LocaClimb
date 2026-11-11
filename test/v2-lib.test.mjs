@@ -394,3 +394,19 @@ test("near: distance, bearing, nearest few, arrow and labels", () => {
   assert.equal(arrowDeg(90, null), 90); assert.equal(arrowDeg(90, 90), 0); assert.equal(arrowDeg(10, 350), 20);
   assert.equal(fmtDist(0.347), "350 m"); assert.equal(fmtDist(0.001), "10 m"); assert.equal(fmtDist(1.24), "1,2 km"); assert.equal(fmtDist(1.24, "en"), "1.2 km"); assert.equal(fmtDist(12.4), "12 km");
 });
+
+test("snow at the summit: 'Neve in quota', last in Oggi, never from missing data (11/11/2026)", () => {
+  const h = hourly("2026-11-11", () => ({ temp: 10 }));
+  assert.equal(dayVerdict(h, 0).label, "Ideale tutto il giorno", "no snow fields (MET Norway fallback): unchanged");
+  h.snow_depth = h.time.map(() => 0.1);
+  const v = dayVerdict(h, 0);
+  assert.equal(v.label, "Neve in quota"); assert.equal(v.tone, "bad"); assert.deepEqual(v.snow, { cm: 10, fall: false });
+  assert.ok(v.score < dayVerdict(hourly("2026-11-11", (d, hr) => (hr >= 10 ? { pp: 80 } : {})), 0).score, "below a stormy pass");
+  assert.match(advice(v).sub, /neve in cima/i);
+  h.snow_depth = h.time.map(() => 0.01);
+  assert.notEqual(dayVerdict(h, 0).label, "Neve in quota", "1 cm: a dusting is not a closed road");
+  h.snowfall = h.time.map((t) => (t.endsWith("T09:00") ? 3 : 0));
+  const f = dayVerdict(h, 0);
+  assert.equal(f.label, "Neve in quota"); assert.ok(f.snow.fall);
+  assert.match(advice(f).sub, /Nevica/);
+});

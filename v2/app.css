@@ -316,6 +316,8 @@ a { color: var(--acc); }
 .wcline { margin: 10px 0 0; } .wcline b { font-family: var(--cond); letter-spacing: .06em; text-transform: uppercase; color: var(--mu); }
 .wcshut { margin: 12px 0 0; }
 .wck { color: #FF8A8E; }
+.og .row .pill.wcp { margin-left: 6px; }
+.wcshut a { color: inherit; text-decoration: underline; text-decoration-color: var(--mu); }
 .send .steps { display: grid; gap: 8px; margin: 4px 0 10px; padding: 12px; border-radius: 12px; background: var(--s2); }
 .send .steps .btn { display: grid; place-items: center; text-decoration: none; color: var(--tx); }
 .send .steps .btn.pri { color: var(--acc-tx); }
