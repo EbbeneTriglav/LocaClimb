@@ -1,7 +1,7 @@
 // Bike navigator on the Giro (v2/lib/nav.mjs, Rick 11/11/2026)
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { maneuvers, cumKm, gainLeft, locate, upcoming, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, spokenDist } from "../v2/lib/nav.mjs";
+import { maneuvers, cumKm, gainLeft, locate, upcoming, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, spokenDist, fingerMoved } from "../v2/lib/nav.mjs";
 
 // a 2 km "L": 1 km north, then 1 km east (~ 0.009 deg lat = 1 km)
 const T = [];
@@ -69,4 +69,12 @@ test("nav: voice prompts once far, once near, in three languages", () => {
   assert.equal(voiceText("Gira a la derecha", 2400, "es"), "En 2,4 kilómetros, gira a la derecha");
   assert.equal(voiceText("Gira a destra", null), "Gira a destra");
   assert.equal(spokenDist(37), "40 metri");
+});
+
+test("fingerMoved: a tap stays a tap, a swipe stops the navigator following", () => {
+  const down = { x: 100, y: 200 };
+  assert.equal(fingerMoved(down, { clientX: 103, clientY: 204 }), false, "5 px: a tap");
+  assert.equal(fingerMoved(down, { clientX: 100, clientY: 207 }), true, "7 px: the map moves");
+  assert.equal(fingerMoved(down, { clientX: 60, clientY: 200 }), true);
+  assert.equal(fingerMoved(down, { clientX: 108, clientY: 200 }, 10), false, "custom threshold");
 });

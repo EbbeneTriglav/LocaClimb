@@ -9,7 +9,7 @@
      "maybe"  - inside one of the two windows: it may already be closed / still be closed
      null     - open season, or a recent check says it is open
    With an unknown bound the safe core is 1 December - 31 March: every pass of the file is shut then. */
-import { havKm } from "./climb.mjs?v=56";
+import { havKm } from "./climb.mjs?v=57";
 
 const MD = /^\d{2}-\d{2}$/, ISO = /^\d{4}-\d{2}-\d{2}$/;
 export const MATCH_KM = 1.0;
@@ -74,6 +74,13 @@ export function closureInfo(p, day, lang = "it") {
     ? [ISO.test(n.since || "") ? t.since.replace("%a", dm(n.since)) : "", ISO.test(n.reopens || "") ? t.reopensOn.replace("%a", dm(n.reopens)) : p.opens ? t.usually.replace("%s", span(p.opens, lang)) : ""].filter(Boolean).join(" · ")
     : [p.closes ? t.closes.replace("%s", span(p.closes, lang)) : "", p.opens ? t.opens.replace("%s", span(p.opens, lang)) : ""].filter(Boolean).join(" · ");
   return { state: st, label, when, tone: st === "closed" || st === "likely" ? "bad" : st === "maybe" ? "warn" : "mu", note: p.note || "", source: n.source || (p.sources || [])[0] || "", checked: n.checked || "" };
+}
+
+/* the tag every list shows next to a pass on that day (Rick 12/11/2026): "Chiusa" in red when closed or almost
+   surely closed, "Forse chiusa" in orange inside the closing/reopening window, nothing otherwise */
+export function closureTag(p, day) {
+  const s = p ? closureState(p, day) : null;
+  return s === "closed" || s === "likely" ? { text: "Chiusa", tone: "bad" } : s === "maybe" ? { text: "Forse chiusa", tone: "warn" } : null;
 }
 
 /* closed or almost surely closed on that day: Oggi leaves it out, the Giro warns */
