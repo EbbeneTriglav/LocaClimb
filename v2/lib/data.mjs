@@ -6,8 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=57";
-import { passDifficulty } from "./difficulty.mjs?v=57";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=58";
+import { passDifficulty } from "./difficulty.mjs?v=58";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -121,10 +121,11 @@ export function inBounds(b, limit = 40) {
   return { total: out.length, list: out.slice(0, limit) };
 }
 
-export function nearby(lat, lon, km, limit) {
+/* climbs around a point, hardest first; minD: the lowest difficulty kept (Oggi lets the rider choose it) */
+export function nearby(lat, lon, km, limit, minD = 5) {
   if (!state) return [];
   const dLat = km / 111, dLon = km / (111 * Math.cos(lat * Math.PI / 180));
-  return state.climbs.filter((c) => Math.abs(c.lat - lat) < dLat && Math.abs(c.lon - lon) < dLon && (c.difficulty || 0) >= 5)
+  return state.climbs.filter((c) => Math.abs(c.lat - lat) < dLat && Math.abs(c.lon - lon) < dLon && (c.difficulty || 0) >= minD)
     .sort((a, b) => (b.difficulty || 0) - (a.difficulty || 0)).slice(0, limit);
 }
 

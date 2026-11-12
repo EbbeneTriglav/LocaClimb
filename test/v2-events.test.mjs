@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { normalizeEvents, upcoming, forClimb, onDay, addDays, isoDay, EVENT_TYPES } from "../v2/lib/events.mjs";
+import { normalizeEvents, upcoming, forClimb, onDay, addDays, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "../v2/lib/events.mjs";
 import { validateRoadEvents } from "../scripts/validate_data.mjs";
 
 const J = { events: [
@@ -50,4 +50,29 @@ test("road_events.json: the shipped file is valid", () => {
   const j = JSON.parse(readFileSync(new URL("../data/road_events.json", import.meta.url), "utf8"));
   assert.deepEqual(validateRoadEvents(j), []);
   assert.ok(normalizeEvents(j, []).length === j.events.length);
+});
+
+test("Eventi page: filters, months, distance to the nearest climb of the event", () => {
+  const evs = normalizeEvents({ events: [
+    { id: "a", type: "granfondo", name: "GF", date: "2027-06-20", climbs: ["x", "y"], url: "https://a", source: "s" },
+    { id: "b", type: "bikeday", name: "Bike Day", date: "2027-06-05", climbs: ["y"], url: "https://a", source: "s" },
+    { id: "c", type: "gara", name: "Tappa", date: "2027-07-19", end: "2027-07-23", climbs: ["z"], url: "https://a", source: "s" },
+    { id: "d", type: "chiusura", name: "Frana", date: "2027-07-01", climbs: ["q"], url: "https://a", source: "s" }
+  ] });
+  assert.deepEqual(evs.filter(EVENT_FILTERS.granfondo).map((e) => e.id), ["a"]);
+  assert.deepEqual(evs.filter(EVENT_FILTERS.chiuse).map((e) => e.id), ["b", "d"], "bike days and closures: roads closed to cars");
+  assert.deepEqual(evs.filter(EVENT_FILTERS.corse).map((e) => e.id), ["c"]);
+  assert.equal(evs.filter(EVENT_FILTERS.tutti).length, 4);
+  assert.deepEqual(byMonth(evs).map((g) => [g.month, g.events.map((e) => e.id)]), [["2027-06", ["b", "a"]], ["2027-07", ["d", "c"]]]);
+  const at = { x: { lat: 46.0, lon: 11.0 }, y: { lat: 46.5, lon: 11.0 } }, flat = (a, b, c, d) => Math.abs(a - c) * 100 + Math.abs(b - d) * 100;
+  assert.equal(eventKm(evs[1], { lat: 46.4, lon: 11 }, (id) => at[id] || null, flat).toFixed(1), "10.0");
+  assert.equal(eventKm(evs.find((e) => e.id === "a"), { lat: 46.1, lon: 11 }, (id) => at[id] || null, flat).toFixed(1), "10.0", "the nearest of its climbs");
+  assert.equal(eventKm(evs.find((e) => e.id === "d"), { lat: 46, lon: 11 }, () => null, flat), null, "no known climb: no distance");
+});
+
+test("data/road_events.json: the Eventi page has granfondo and bike days with their official sites", () => {
+  const j = JSON.parse(readFileSync(new URL("../data/road_events.json", import.meta.url), "utf8"));
+  const gf = j.events.filter((e) => e.type === "granfondo" || e.type === "bikeday");
+  assert.ok(gf.length >= 5);
+  for (const e of gf) assert.match(e.url, /^https:\/\//, e.id);
 });
