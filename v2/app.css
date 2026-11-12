@@ -289,9 +289,11 @@ a { color: var(--acc); }
   .panel[data-sheet] { max-height: none; transition: height .25s ease; overflow: auto; }
   .panel[data-sheet="peek"] { overflow: hidden; }
   .panel.dragging { transition: none; user-select: none; }
+  .panel[data-sheet="peek"], .panel[data-sheet="half"] { touch-action: pan-x; }   /* a vertical swipe moves the sheet (v2/app.mjs sheetDrag); full height scrolls */
   .panel[data-sheet] .handle, .panel[data-sheet] .cl-top, .panel[data-sheet] .ph, .panel[data-sheet] .cl h1, .panel[data-sheet] .ov, .panel[data-sheet] .sub, .panel[data-sheet] .strip { touch-action: none; }
   .panel[data-sheet] .handle { width: 48px; height: 5px; margin: 8px auto 6px; cursor: grab; position: relative; }
   .panel[data-sheet] .handle::after { content: ""; position: absolute; inset: -12px -40px; }   /* bigger touch target */
+  .panel[data-sheet="full"] .handle { position: sticky; top: 4px; z-index: 4; box-shadow: 0 0 0 6px var(--s1); }   /* always there to pull the sheet down, also halfway through the content */
   body.inner .top, body.inner .chips, body.inner .legend { display: none; }
   body.inner .panel[data-sheet="full"] { border-radius: 0; }
   body.inner .panel[data-sheet="full"] ~ .mapbtns, body.inner:has(.panel[data-sheet="full"]) .mapbtns { visibility: hidden; }
@@ -317,6 +319,11 @@ a { color: var(--acc); }
 .wcshut { margin: 12px 0 0; }
 .wck { color: #FF8A8E; }
 .og .row .pill.wcp { margin-left: 6px; }
+/* "Chiusa" / "Forse chiusa" on list cards, search results, Vicino a me and Oggi (Rick 12/11/2026) */
+.shut { display: inline-block; vertical-align: middle; font-family: var(--cond); font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: .05em; font-size: 14px; line-height: 1; padding: 5px 8px 4px; border-radius: 6px; white-space: nowrap; }
+.shut.bad { background: #E5484D; color: #fff; } .shut.warn { background: var(--g2); color: #0B0F14; }
+.card .shut { align-self: flex-start; margin-top: auto; }
+.og .row .shut, .results .shut, .near .shut { margin-left: 6px; }
 .wcshut a { color: inherit; text-decoration: underline; text-decoration-color: var(--mu); }
 .send .steps { display: grid; gap: 8px; margin: 4px 0 10px; padding: 12px; border-radius: 12px; background: var(--s2); }
 .send .steps .btn { display: grid; place-items: center; text-decoration: none; color: var(--tx); }

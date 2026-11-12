@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { normalizeClosures, closureFor, closureState, closureInfo, blocked, inWindow, span, dm } from "../v2/lib/closures.mjs";
+import { normalizeClosures, closureFor, closureState, closureInfo, blocked, inWindow, span, dm, closureTag } from "../v2/lib/closures.mjs";
 import { validateWinterClosures } from "../scripts/validate_data.mjs";
 
 const STELVIO = { id: "stelvio", name: "Passo dello Stelvio", lat: 46.52862, lon: 10.45321, closes: ["10-25", "11-10"], opens: ["05-20", "06-10"], note: "n", sources: ["https://a"] };
@@ -95,4 +95,16 @@ test("validateWinterClosures: catches bad windows, missing sources and a pass fa
   assert.match(e, /\[3\] \(d\): now.reopens must come after now.since/);
   assert.match(e, /\[4\] \(e\): no published climb within 1 km/);
   assert.deepEqual(validateWinterClosures({}), ["winter_closures.json: root must be an object with a \"passes\" array"]);
+});
+
+test("closureTag: the red/orange tag of the lists (Oggi, map cards, search, Vicino a me)", () => {
+  assert.deepEqual(closureTag(STELVIO, "2026-11-11"), { text: "Chiusa", tone: "bad" }, "almost surely closed");
+  assert.deepEqual(closureTag(STELVIO, "2026-10-30"), { text: "Forse chiusa", tone: "warn" }, "closing window");
+  assert.equal(closureTag(STELVIO, "2026-07-15"), null, "summer: no tag");
+  assert.equal(closureTag(null, "2026-11-11"), null, "not a pass of the file");
+  const open = { ...STELVIO, now: { closed: false, checked: "2026-11-10", source: "https://a" } };
+  assert.equal(closureState(open, "2026-11-11"), null);
+  assert.equal(closureTag(open, "2026-11-11"), null, "a recent check says open: no tag");
+  const shut = { ...STELVIO, now: { closed: true, since: "2026-10-20", checked: "2026-10-21", source: "https://a" } };
+  assert.deepEqual(closureTag(shut, "2026-10-22"), { text: "Chiusa", tone: "bad" }, "closed now, even before the usual window");
 });

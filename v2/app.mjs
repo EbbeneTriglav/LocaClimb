@@ -5,27 +5,27 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=56";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=56";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=56";
-import { poisNear } from "./lib/poi.mjs?v=56";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=56";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=56";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=56";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=56";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=56";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=56";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=56";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=56";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=56";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=56";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=56";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=56";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=56";
-import { loadClosures, closureFor, closureInfo, blocked } from "./lib/closures.mjs?v=56";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=56";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=56";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText } from "./lib/nav.mjs?v=56";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=57";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=57";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=57";
+import { poisNear } from "./lib/poi.mjs?v=57";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=57";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=57";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=57";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=57";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=57";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=57";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=57";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=57";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=57";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=57";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=57";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=57";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES } from "./lib/events.mjs?v=57";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=57";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=57";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=57";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, fingerMoved } from "./lib/nav.mjs?v=57";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -283,7 +283,7 @@ function meFix(g) {
   const c = g.coords;
   ME.pos = { lat: c.latitude, lon: c.longitude, acc: c.accuracy, heading: c.heading, speed: c.speed, t: Date.now() };
   meSoon();
-  if (ME.mode !== "follow") return;
+  if (ME.mode !== "follow" || NAV.on) return;   // navigating: the navigator owns the camera
   const at = [ME.pos.lon, ME.pos.lat];
   if (ME.first) { ME.first = false; map.flyTo({ center: at, zoom: Math.max(map.getZoom(), 14), duration: 900 }); }
   else if (!map.isMoving()) map.easeTo({ center: at, duration: 500 });
@@ -332,7 +332,7 @@ async function nearList(kind) {
   const p = ME.pos;
   if (!p) return { items: [], covered: true };
   if (kind === "climb") {
-    const cs = nearby(p.lat, p.lon, 30, 400).map((c) => ({ id: c.id, name: c.name, lat: c.lat, lon: c.lon, sub: c.difficulty ? "difficoltà " + c.difficulty + "/10" : "" }));
+    const cs = nearby(p.lat, p.lon, 30, 400).map((c) => ({ id: c.id, name: c.name, lat: c.lat, lon: c.lon, sub: c.difficulty ? "difficoltà " + c.difficulty + "/10" : "", shut: shutTag(c) }));
     return { items: nearest(p, cs, 5, 30), covered: true };
   }
   const d = 0.06;   // ~6 km around you: the 0.25-degree POI cells it touches
@@ -352,7 +352,7 @@ async function nearDialog(kind = NEAR.kind) {
   if (!items.length) { out.innerHTML = `<p class="note">${covered ? "Niente qui intorno." : "Qui non abbiamo ancora acqua e bar: li aggiungiamo zona per zona."}</p>`; return; }
   const hd = headingOf(ME.pos, ME.compass) ?? map.getBearing();
   out.innerHTML = `<ul class="nl">${items.map((x, i) => `<li><span class="na" style="transform:rotate(${Math.round(arrowDeg(x.brg, hd))}deg)">${ARROW}</span>
-      <span class="nt"><b>${esc(x.name || x.label)}</b><small>${esc(fmtDist(x.km, LANG))}${x.name && x.label ? " · " + esc(x.label) : ""}${x.sub ? " · " + esc(x.sub) : ""}</small></span>
+      <span class="nt"><b>${esc(x.name || x.label)}</b>${x.shut || ""}<small>${esc(fmtDist(x.km, LANG))}${x.name && x.label ? " · " + esc(x.label) : ""}${x.sub ? " · " + esc(x.sub) : ""}</small></span>
       <span class="nb">${x.id ? `<button type="button" class="btn" data-open="${i}">Apri</button>` : `<button type="button" class="btn pri navb" data-go="${i}">${ICON.nav}Naviga</button>`}<button type="button" class="btn" data-route="${i}">Percorso</button></span></li>`).join("")}</ul>
     <p class="note small">Distanze in linea d'aria. «Naviga» ti guida svolta per svolta sulla strada in bici; «Percorso» la mette nel Giro, pronta per il ciclocomputer.</p>`;
   out.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { closeDialog(); const x = items[+b.dataset.go]; navTo({ lat: x.lat, lon: x.lon }); }));
@@ -387,7 +387,7 @@ q.addEventListener("input", () => {
 function paintResults() {
   const r = search(q.value);
   results.hidden = !r.length && !placeHits.length;
-  results.innerHTML = r.map((c) => `<li><button type="button" data-id="${esc(c.id)}"><span>${esc(c.name)}</span><small>${c.elevation ? esc(c.elevation) + " m" : ""}</small></button></li>`).join("")
+  results.innerHTML = r.map((c) => `<li><button type="button" data-id="${esc(c.id)}"><span>${esc(c.name)}${shutTag(c)}</span><small>${c.elevation ? esc(c.elevation) + " m" : ""}</small></button></li>`).join("")
     + (placeHits.length ? `<li class="rh">Località</li>` + placeHits.map((p, i) => `<li><button type="button" data-pl="${i}"><span>${esc(p.name)}</span><small>${esc(p.sub)}</small></button></li>`).join("") : "");
 }
 results.addEventListener("click", (e) => {
@@ -486,22 +486,37 @@ function setSheet(state, keepMap) {
   if (!keepMap && mapLoaded) map.easeTo({ padding: { top: 70, bottom: h + 10, left: 0, right: 0 }, duration: 350 });
 }
 (function sheetDrag() {
-  let y0 = 0, h0 = 0, t0 = 0, drag = false, moved = false, onHandle = false;
-  const grab = (t) => t.closest(".handle, .cl-top, .ph, .ov, .cl h1, .sub, .strip") && !t.closest("a, button, input, select, label");
+  /* Rick 12/11/2026: "scrolling the sheets down does not work much". Low or half open, a vertical swipe
+     anywhere on the sheet moves the sheet (as the big map apps do); only full height scrolls the content.
+     Grab zones (handle, title, numbers) start at once; elsewhere the drag starts after 8 px, so a tap on a
+     button stays a click. Sliders, carousels and the profile keep their own gestures. */
+  let y0 = 0, h0 = 0, t0 = 0, drag = false, moved = false, onHandle = false, cand = null;
+  const zone = (t) => t.closest(".handle, .cl-top, .ph, .ov, .cl h1, .sub, .strip") && !t.closest("a, button, input, select, label");
+  const own = (t) => t.closest("input, select, textarea, .cards, .sides, svg.pf, .seg");
+  const begin = (e) => {
+    drag = true; y0 = cand.y; t0 = cand.t; h0 = panel.getBoundingClientRect().height;
+    panel.classList.add("dragging"); try { panel.setPointerCapture(e.pointerId); } catch { /* pointer gone */ }
+  };
   panel.addEventListener("pointerdown", (e) => {
-    if (DESKTOP() || !panel.dataset.sheet || !grab(e.target)) return;
-    if (panel.dataset.sheet === "full" && panel.scrollTop > 0 && !e.target.closest(".handle")) return;
-    drag = true; moved = false; onHandle = !!e.target.closest(".handle"); y0 = e.clientY; h0 = panel.getBoundingClientRect().height; t0 = performance.now();
-    panel.classList.add("dragging"); panel.setPointerCapture(e.pointerId);
+    cand = null; drag = false;
+    if (DESKTOP() || !panel.dataset.sheet) return;
+    const t = e.target, z = zone(t), full = panel.dataset.sheet === "full";
+    if (full && panel.scrollTop > 0 && !t.closest(".handle")) return;   // reading: the content scrolls
+    if (!z && (full || own(t))) return;
+    cand = { y: e.clientY, t: performance.now() }; moved = false; onHandle = !!t.closest(".handle");
+    if (z) begin(e);
   });
   panel.addEventListener("pointermove", (e) => {
-    if (!drag) return;
-    const dy = e.clientY - y0; if (Math.abs(dy) > 6) moved = true;
+    if (!cand) return;
+    const dy = e.clientY - cand.y;
+    if (!drag) { if (Math.abs(dy) < 8) return; begin(e); }
+    if (Math.abs(dy) > 6) moved = true;
     const H = sheetHeights(); panel.style.height = Math.max(H.peek * 0.8, Math.min(H.full, h0 - dy)) + "px";
   });
   const end = (e) => {
-    if (!drag) return;
-    drag = false; panel.classList.remove("dragging");
+    const was = drag; drag = false; cand = null;
+    if (!was) return;
+    panel.classList.remove("dragging");
     const i = SHEETS.indexOf(S.sheet);
     if (!moved) { if (onHandle) setSheet(SHEETS[(i + 1) % 3]); else setSheet(S.sheet, true); return; }
     const H = sheetHeights(), h = panel.getBoundingClientRect().height, v = (e.clientY - y0) / Math.max(1, performance.now() - t0);
@@ -531,7 +546,12 @@ function card(c) {
   return `<a class="card" href="#/s/${esc(encodeURIComponent(c.id))}" style="text-decoration:none;color:inherit">
     <span class="badge" style="background:${difficultyColor(d)}">${d ? d + "/10" : "–"}</span>
     <span class="nm">${esc(c.name)}</span>
-    <span class="mt">${c.elevation ? esc(c.elevation) + " m" : ""}${c.cat ? " · cat. " + esc(c.cat) : ""}</span></a>`;
+    <span class="mt">${c.elevation ? esc(c.elevation) + " m" : ""}${c.cat ? " · cat. " + esc(c.cat) : ""}</span>${shutTag(c)}</a>`;
+}
+/* "Chiusa" / "Forse chiusa" on every list that shows or suggests a climb (Rick 12/11/2026) */
+function shutTag(c, day = isoDay(new Date())) {
+  const t = closureTag(closureFor(WC, c.lat, c.lon), day);
+  return t ? ` <span class="shut ${t.tone}">${esc(t.text)}</span>` : "";
 }
 
 /* ------------------------------------------------------------------ climb */
@@ -1126,9 +1146,27 @@ function navFollow(on) {
 function navCamera(p, along, ms = 450) {
   const brg = routeBearing(NAV.t, NAV.c, along);
   NAV.mk.setRotation(brg);
-  if (NAV.follow) map.easeTo({ center: [p.lon, p.lat], bearing: brg, pitch: 55, zoom: 16.3, duration: ms, offset: [0, 140] });
+  if (NAV.follow && !TOUCH.n) map.easeTo({ center: [p.lon, p.lat], bearing: brg, pitch: 55, zoom: 16.3, duration: ms, offset: [0, 140] });
 }
 for (const ev of ["dragstart", "zoomstart", "rotatestart", "pitchstart"]) map.on(ev, (e) => { if (NAV.on && NAV.follow && e.originalEvent) navFollow(false); });
+/* Rick 12/11/2026: moving the map during navigation still snapped back to the rider. A GPS fix every second
+   starts a 450 ms camera ease; a finger that lands during it was pulled back (and a fix before MapLibre's
+   "dragstart" re-centred the map under the finger). So the finger itself decides, at pointer level: it moves
+   (or a second finger, or the wheel) -> stop the running ease, stop following; while a finger is down no fix
+   moves the camera. The blue dot's "follow" stops the same way. */
+const TOUCH = { n: 0, x: 0, y: 0 };
+function userMovesMap() {
+  if (NAV.on && NAV.follow) { map.stop(); navFollow(false); }
+  if (ME.mode === "follow") { ME.mode = "free"; meButton(); }
+}
+(function fingerWatch() {
+  const mc = map.getCanvasContainer();
+  mc.addEventListener("pointerdown", (e) => { TOUCH.n++; TOUCH.x = e.clientX; TOUCH.y = e.clientY; if (TOUCH.n > 1) userMovesMap(); }, true);
+  mc.addEventListener("pointermove", (e) => { if (TOUCH.n && fingerMoved(TOUCH, e)) userMovesMap(); }, true);
+  const up = () => { TOUCH.n = Math.max(0, TOUCH.n - 1); };
+  for (const ev of ["pointerup", "pointercancel"]) mc.addEventListener(ev, up, true);
+  mc.addEventListener("wheel", userMovesMap, { capture: true, passive: true });
+})();
 function navBanner(t) { const th = NAV.el && NAV.el.querySelector(".navthen"); if (!th) return; th.hidden = !t; if (t) th.textContent = t; }
 function navPaint(L, p) {
   if (!NAV.el) return;
@@ -1241,7 +1279,7 @@ function paintOggi() {
   $("#ogList").innerHTML = rows.map((r, i) => `<a class="row" href="#/s/${esc(encodeURIComponent(r.c.id))}" style="text-decoration:none;color:inherit">
       <span class="n">${String(i + 1).padStart(2, "0")}</span>
       <span class="t">${esc(r.c.name)}<small>${r.c.elevation ? esc(r.c.elevation) + " m · " : ""}difficoltà ${esc(r.c.difficulty || "–")}/10</small></span>
-      <span class="pill ${r.v.tone}">${esc(r.v.label)}</span>${r.maybe ? `<span class="pill warn wcp">Chiusura invernale?</span>` : ""}${r.v.cells.length ? `<div class="hw">${hoursHtml(r.v)}</div>` : ""}</a>`).join("");
+      <span class="pill ${r.v.tone}">${esc(r.v.label)}</span>${shutTag(r.c, day)}${r.v.cells.length ? `<div class="hw">${hoursHtml(r.v)}</div>` : ""}</a>`).join("");
 }
 /* Oggi: the passes left out because they are closed for the winter (data/winter_closures.json) */
 function ogShutHtml(shut) {
