@@ -36,7 +36,19 @@ test("data/name_fixes.json: every entry is keyed by an OSM id and has name or si
   const o = JSON.parse(await readFile(new URL("../data/name_fixes.json", import.meta.url), "utf8"));
   for (const [k, v] of Object.entries(o)) {
     if (k.startsWith("_")) continue;
-    assert.match(k, /^osm-\d+$/, k);
+    assert.match(k, /^osm-(\d+|rt\d+x-?\d+)$/, k);   // an OSM node, or a climb found on the road network (osm-rt<lat>x<lon>)
     assert.ok(v.name || v.sides, k + ": needs name or sides");
+  }
+});
+
+test("data/name_fixes.json: every renamed road-network climb exists in the index, and no fix brings back a street name", async () => {
+  const o = JSON.parse(await readFile(new URL("../data/name_fixes.json", import.meta.url), "utf8"));
+  const idx = JSON.parse(await readFile(new URL("../data/osm_index.json", import.meta.url), "utf8"));
+  const ids = new Set((Array.isArray(idx) ? idx : idx.passes || []).map((p) => String(p.id)));
+  for (const [k, v] of Object.entries(o)) {
+    if (k.startsWith("_")) continue;
+    // road-network climbs are keyed by their summit (osm-rt<lat>x<lon>): a rebuild that moves the summit changes the id
+    if (k.startsWith("osm-rt")) assert.ok(ids.has(k), k + ": not in osm_index.json (typo, or the climb was rebuilt under another id)");
+    if (v.name) assert.ok(!/(stra(ss|ß)e|weg)\b|^(via|route|rue|chemin|strada)\b/i.test(v.name), k + ": " + v.name);
   }
 });
