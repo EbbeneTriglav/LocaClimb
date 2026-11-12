@@ -47,6 +47,33 @@ export function onDay(evs, ids, day) {
   return evs.filter((e) => e.date <= day && e.end >= day && e.climbs.some((c) => set.has(String(c))));
 }
 
+/* the Eventi page (Rick 12/11/2026): the filters, the events grouped by month, the distance to the rider */
+export const EVENT_FILTERS = {
+  tutti: () => true,
+  granfondo: (e) => e.type === "granfondo",
+  chiuse: (e) => e.type === "chiusura" || e.type === "bikeday",
+  corse: (e) => e.type === "gara"
+};
+/* [{ month: "yyyy-mm", events }] in date order (the input is already sorted by normalizeEvents) */
+export function byMonth(evs) {
+  const out = [];
+  for (const e of evs) {
+    const m = e.date.slice(0, 7), last = out[out.length - 1];
+    if (last && last.month === m) last.events.push(e); else out.push({ month: m, events: [e] });
+  }
+  return out;
+}
+/* km from a point to the nearest climb of the event (coordsOf(id) -> {lat, lon} or null); null when none is known */
+export function eventKm(e, here, coordsOf, km) {
+  let best = null;
+  for (const id of e.climbs || []) {
+    const c = coordsOf(id); if (!c) continue;
+    const d = km(here.lat, here.lon, c.lat, c.lon);
+    if (best == null || d < best) best = d;
+  }
+  return best;
+}
+
 export function loadEvents() {
   return fetch(new URL("../../data/road_events.json", import.meta.url), { cache: "no-cache" })
     .then((r) => (r.ok ? r.json() : {})).catch(() => ({}))

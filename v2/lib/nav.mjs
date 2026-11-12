@@ -1,7 +1,7 @@
 /* Turn-by-turn navigation along the Giro (Rick 11/11/2026: "come Google Maps, ma per bici").
    BRouter gives the turns with &timode=2: voicehints = [[track index, command, roundabout exit, distance, angle], ...].
    Pure helpers, tested in test/v2-nav.test.mjs; the screen, the GPS and the camera live in app.mjs. */
-import { havKm } from "./climb.mjs?v=57";
+import { havKm } from "./climb.mjs?v=58";
 
 /* BRouter VoiceHint commands */
 const CMD = {
