@@ -63,7 +63,7 @@
  "osm-rt4633226x1121917": {"name": "Corona (Cortaccia)", "why": "top at Corona / Graun above Cortaccia (Nominatim); was 'Jochweg - Via Joch' (12/11/2026)"},
  "osm-rt4682513x1190532": {"name": "Kofl (Falzes)", "why": "top on Via Kofl, Falzes (Nominatim); was 'Kofler Straße - Via Kofl' (12/11/2026)"},
  "osm-rt4681548x1152334": {"name": "Feudo (Le Cave)", "why": "top on Via Feudo / Lehen above Le Cave (Nominatim); was 'Lehensweg - Via Feudo' (12/11/2026)"},
- "osm-rt4643584x1159013": {"name": "Passo Nigra", "why": "Via Nigra / Nigerstraße between Nova Levante and Tires: the Nigra pass road; was 'Nigerstraße - Via Nigra' (12/11/2026)"},
+ "osm-rt4643584x1159013": {"name": "Passo Nigra, lato Nova Levante (1783 m)", "why": "high point of Via Nigra 2.3 km south of the pass (Nigerpass - Passo Nigra, 1690 m, osm id at 46.456,11.586 is a separate climb); was 'Nigerstraße - Via Nigra', then wrongly 'Passo Nigra' (12/11/2026)"},
  "osm-rt4692826x1199689": {"name": "Prati di Acereto", "why": "top at Prati di Acereto, Acereto (Nominatim); was 'Obergasse - Via Obergasse' (12/11/2026)"},
  "osm-rt4645332x1149058": {"name": "Gummer di Sopra", "why": "top at Obergummer, San Valentino in Campo (Nominatim); was 'Obergummer - Via Obergummer' (12/11/2026)"},
  "osm-rt4692440x1094453": {"name": "Tiefenbachferner (Sölden)", "why": "end of the Ötztaler Gletscherstraße at the Tiefenbach glacier (restaurant 120 m); was 'Ötztaler Gletscherstraße (Tiefenbach)' (12/11/2026)"},
