@@ -1,6 +1,6 @@
 {
  "_doc": "Chiusure invernali dei passi (LocaRide). closes/opens = intervallo tipico MM-DD in cui il passo chiude/riapre (null = non noto: allora vale almeno 1 dicembre - 31 marzo). now = stato attuale verificato (closed, since, reopens, checked, source): lo aggiorna l'agente o una action quando un sito ufficiale annuncia chiusura o riapertura. lat/lon = cima del passo: valgono per ogni salita che arriva entro 1 km.",
- "updated": "2026-11-11",
+ "updated": "2026-11-12",
  "passes": [
   {
    "id": "umbrail",
@@ -21,9 +21,9 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
-    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html",
-    "since": "2026-11-12"
+    "since": "2026-11-12",
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/umbrailpass"
    }
   },
   {
@@ -42,7 +42,12 @@
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
     "https://www.alpen-paesse.ch/en/alpenpaesse/spluegenpass"
-   ]
+   ],
+   "now": {
+    "closed": false,
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/spluegenpass"
+   }
   },
   {
    "id": "furka",
@@ -63,9 +68,9 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
-    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/furkapass",
-    "since": "2026-10-28"
+    "since": "2026-10-28",
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/furkapass"
    }
   },
   {
@@ -87,9 +92,9 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
-    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grimselpass",
-    "since": "2026-11-06"
+    "since": "2026-11-06",
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grimselpass"
    }
   },
   {
@@ -108,7 +113,12 @@
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
     "https://www.alpen-paesse.ch/en/alpenpaesse/sustenpass"
-   ]
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/sustenpass"
+   }
   },
   {
    "id": "nufenen",
@@ -129,9 +139,9 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
-    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/nufenenpass",
-    "since": "2026-11-05"
+    "since": "2026-11-05",
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/nufenenpass"
    }
   },
   {
@@ -154,8 +164,8 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
-    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/gotthardpass"
    }
   },
   {
@@ -174,7 +184,12 @@
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
     "https://www.alpen-paesse.ch/en/alpenpaesse/klausenpass"
-   ]
+   ],
+   "now": {
+    "closed": false,
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/klausenpass"
+   }
   },
   {
    "id": "oberalp",
@@ -192,7 +207,12 @@
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
     "https://www.alpen-paesse.ch/en/alpenpaesse/oberalppass"
-   ]
+   ],
+   "now": {
+    "closed": false,
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/oberalppass"
+   }
   },
   {
    "id": "albula",
@@ -210,7 +230,12 @@
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
     "https://www.alpen-paesse.ch/en/alpenpaesse/albulapass"
-   ]
+   ],
+   "now": {
+    "closed": false,
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/albulapass"
+   }
   },
   {
    "id": "sanbernardino",
@@ -232,8 +257,8 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
-    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass"
    }
   },
   {
@@ -255,7 +280,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grosser-sankt-bernhard"
    }
   },
@@ -275,7 +300,12 @@
    "note": "Date di chiusura e apertura 2016-2025 (alpen-paesse.ch): 8 stagioni su 10 cadono in questi intervalli.",
    "sources": [
     "https://www.alpen-paesse.ch/en/alpenpaesse/forcola-di-livigno"
-   ]
+   ],
+   "now": {
+    "closed": false,
+    "checked": "2026-11-12",
+    "source": "https://www.alpen-paesse.ch/en/alpenpaesse/forcola-di-livigno"
+   }
   },
   {
    "id": "stelvio",
@@ -294,8 +324,14 @@
    "sources": [
     "https://valtellinamobile.it/data-apertura-chiusura-stelvio/",
     "https://www.voloscontato.it/informazioni-utili/chiusura-invernale-passi-alpini-2024-2025.php",
-    "https://www.suedtirol.info/it/it/informazioni/mobilita/passi-in-alto-adige"
-   ]
+    "https://www.suedtirol.info/it/it/informazioni/mobilita/passi-in-alto-adige",
+    "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   ],
+   "now": {
+    "closed": true,
+    "checked": "2026-11-12",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
+   }
   },
   {
    "id": "gavia",
@@ -319,8 +355,8 @@
    "now": {
     "closed": true,
     "since": "2026-10-23",
-    "checked": "2026-11-11",
-    "source": "https://valtellinamobile.it/apertura-passo-gavia/"
+    "checked": "2026-11-12",
+    "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
   {
@@ -340,7 +376,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -361,7 +397,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -381,7 +417,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -398,7 +434,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -504,11 +540,12 @@
    "sources": [
     "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
     "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
-    "https://www.cuneodice.it/varie/cuneo-e-valli/riapertura-dei-colli-alpini-il-14-giugno-il-colle-della-lombarda-il-15-il-colle-dellagnello_88831.html"
+    "https://www.cuneodice.it/varie/cuneo-e-valli/riapertura-dei-colli-alpini-il-14-giugno-il-colle-della-lombarda-il-15-il-colle-dellagnello_88831.html",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -543,11 +580,12 @@
    "note": "Chiusura prevista a inizio novembre (nel 2025 anticipata al 22/9 per lavori); nel 2026 riaperto il 23/5.",
    "sources": [
     "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
-    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps"
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -567,11 +605,12 @@
    "note": "Chiuso da novembre a maggio (2025: 14/11; riaperto il 16/5/2025 e il 13/5/2026).",
    "sources": [
     "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
-    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps"
+    "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
+    "https://www.cols-cyclisme.com/ouverture-cols.htm"
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -596,7 +635,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -621,7 +660,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -646,7 +685,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -671,7 +710,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -696,7 +735,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -721,7 +760,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -746,7 +785,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -771,7 +810,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -796,7 +835,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -821,7 +860,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -846,7 +885,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -868,7 +907,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-11",
+    "checked": "2026-11-12",
     "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
    }
   },
@@ -890,7 +929,12 @@
     "https://www.alti-mag.com/en/travel-guide/alpine-pass-closing-dates-french-alps",
     "https://www.alti-mag.com/en/travel-guide/alpine-pass-opening-dates-french-alps",
     "https://www.cols-cyclisme.com/ouverture-cols.htm"
-   ]
+   ],
+   "now": {
+    "closed": false,
+    "checked": "2026-11-12",
+    "source": "https://www.cols-cyclisme.com/ouverture-cols.htm"
+   }
   },
   {
    "id": "loze",
