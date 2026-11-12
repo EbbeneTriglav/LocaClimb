@@ -558,5 +558,10 @@
   "bbox": null,
   "target": "costa-rica",
   "builtAt": "2026-11-11"
+ },
+ "osm_passes_us_or.json": {
+  "bbox": null,
+  "target": "usa-oregon",
+  "builtAt": "2026-11-12"
  }
 }
