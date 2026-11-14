@@ -9,7 +9,7 @@
      "maybe"  - inside one of the two windows: it may already be closed / still be closed
      null     - open season, or a recent check says it is open
    With an unknown bound the safe core is 1 December - 31 March: every pass of the file is shut then. */
-import { havKm } from "./climb.mjs?v=60";
+import { havKm } from "./climb.mjs?v=61";
 
 const MD = /^\d{2}-\d{2}$/, ISO = /^\d{4}-\d{2}-\d{2}$/;
 export const MATCH_KM = 1.0;

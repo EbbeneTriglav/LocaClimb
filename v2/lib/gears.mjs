@@ -22,7 +22,7 @@
  *   Eagle (mullet) 10-50 / 10-52.
  * The gear shown is the HARDEST combination that is still easy enough: one easier never hurts.
  */
-import { eleAt } from "./climb.mjs?v=60";
+import { eleAt } from "./climb.mjs?v=61";
 
 export const GEAR_WKG = [2, 2.5, 3, 3.5, 4, 5];
 export const RIDER_KG = 70;

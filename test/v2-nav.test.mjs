@@ -1,7 +1,7 @@
 // Bike navigator on the Giro (v2/lib/nav.mjs, Rick 11/11/2026)
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { maneuvers, cumKm, gainLeft, locate, upcoming, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, spokenDist, fingerMoved } from "../v2/lib/nav.mjs";
+import { maneuvers, cumKm, gainLeft, locate, upcoming, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, spokenDist, fingerMoved, REROUTE, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "../v2/lib/nav.mjs";
 
 // a 2 km "L": 1 km north, then 1 km east (~ 0.009 deg lat = 1 km)
 const T = [];
@@ -77,4 +77,33 @@ test("fingerMoved: a tap stays a tap, a swipe stops the navigator following", ()
   assert.equal(fingerMoved(down, { clientX: 100, clientY: 207 }), true, "7 px: the map moves");
   assert.equal(fingerMoved(down, { clientX: 60, clientY: 200 }), true);
   assert.equal(fingerMoved(down, { clientX: 108, clientY: 200 }, 10), false, "custom threshold");
+});
+
+test("reroute pacing: after a new route the rider gets time to join it, the voice does not repeat itself", () => {
+  // Rick 14/11/2026, by car near San Pellegrino Terme: off the line it re-routed every 3 s and the app felt stuck
+  const st = {};
+  assert.equal(rerouteDue(st, 80, 0), false); assert.equal(rerouteDue(st, 80, 1000), false);
+  assert.equal(rerouteDue(st, 80, 2000), true, "three fixes off the line: re-route");
+  rerouteDone(st, 2500, true);
+  for (let t = 3500; t < 2500 + REROUTE.calmOk; t += 1000) assert.equal(rerouteDue(st, 120, t), false, "calm after a new route at " + t);
+  const after = 2500 + REROUTE.calmOk;
+  assert.equal(rerouteDue(st, 120, after), false); assert.equal(rerouteDue(st, 120, after + 1000), false);
+  assert.equal(rerouteDue(st, 120, after + 2000), true, "still off after the calm: re-route again");
+  rerouteDone(st, 0, false);
+  assert.ok(st.calm === REROUTE.calmFail && REROUTE.calmFail > REROUTE.calmOk, "a failed request waits longer");
+  const v = {};
+  assert.equal(sayReroute(v, 0), true); assert.equal(sayReroute(v, 10000), false, "not again 10 s later");
+  assert.equal(sayReroute(v, REROUTE.sayEvery + 1), true);
+});
+
+test("sides by distance: the rider picks the side; the nearest base is marked, the shown one stays first choice", () => {
+  // Alino (San Pellegrino Terme): two sides end at the same top, the app took the first one
+  const vs = [{ side: "Da San Giovanni Bianco", startLat: 45.87014, startLon: 9.65219, track: [[45.87014, 9.65219], [45.84768, 9.64893]] },
+    { side: "Da San Pellegrino Terme", startLat: 45.83989, startLon: 9.66549, track: [[45.83989, 9.66549], [45.84768, 9.64893]] },
+    { side: "senza tracciato", startLat: 45.8, startLon: 9.6 }];
+  const r = sidesByDistance(vs, { lat: 45.8336, lon: 9.664 });
+  assert.deepEqual(r.map((x) => x.i), [0, 1], "only sides with a track, in the sheet's order");
+  assert.equal(r.find((x) => x.near).i, 1, "San Pellegrino is the nearest base");
+  assert.ok(r[1].km < 1 && r[0].km > 3);
+  assert.deepEqual(sidesByDistance(vs, null).map((x) => [x.i, x.km, x.near]), [[0, null, false], [1, null, false]], "no GPS: no distances");
 });
