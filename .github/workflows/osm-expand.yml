@@ -141,6 +141,37 @@ on:
           - argentina
           - brazil-sul
           - brazil-sudeste
+          - iceland
+          - cyprus
+          - kosovo
+          - georgia
+          - armenia
+          - azores
+          - reunion
+          - ukraine-carpazi
+          - south-africa
+          - lesotho
+          - new-zealand
+          - australia-sud-est
+          - japan-hokkaido
+          - japan-tohoku
+          - japan-kanto
+          - japan-chubu
+          - japan-kansai
+          - japan-chugoku
+          - japan-shikoku
+          - japan-kyushu
+          - taiwan
+          - korea-south
+          - usa-alaska
+          - usa-hawaii
+          - usa-arkansas
+          - usa-alabama
+          - usa-south-carolina
+          - usa-maryland
+          - canada-yukon
+          - canada-nova-scotia
+          - canada-newfoundland
       dry_run:
         description: "Solo verifica: risolve il target e si ferma"
         required: false
