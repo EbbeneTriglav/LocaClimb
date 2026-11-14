@@ -5,28 +5,28 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=62";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=62";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=62";
-import { poisNear } from "./lib/poi.mjs?v=62";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=62";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=62";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=62";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=62";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=62";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=62";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=62";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=62";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=62";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=62";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=62";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=62";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=62";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=62";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=62";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=62";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=62";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=62";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=63";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=63";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=63";
+import { poisNear } from "./lib/poi.mjs?v=63";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=63";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=63";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=63";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=63";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=63";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=63";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=63";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=63";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=63";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=63";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=63";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=63";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=63";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=63";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=63";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=63";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=63";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=63";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -700,12 +700,16 @@ function gearsHtml(c, v) {
   const why = [by.ramp ? `<span>rampa più dura</span> ${num(by.ramp.g)}% (${Math.round(by.ramp.m)} m) <span>a</span> ${CADENCE.ramp} rpm` : "",
     by.hard ? `<span>km più duro</span> ${num(by.hard.g)}% <span>a</span> ${CADENCE.hard} rpm` : "",
     by.avg ? `<span>media</span> ${num(by.avg.g)}% <span>a</span> ${CADENCE.avg} rpm` : ""].filter(Boolean).join(" · ");
-  const seg = (k, opts, label) => `<div class="seg" role="group" aria-label="${label}">${opts.map(([val, l]) => `<button type="button" data-gs="${k}:${val}" aria-pressed="${set[k] === val}">${l}</button>`).join("")}</div>`;
+  /* "La tua bici" (Rick 14/11/2026: the first selectors went unnoticed): a card with labelled rows and big
+     buttons - bike, groupset, crank (gravel) and the single ring's teeth (1x) - the choice stays on this device */
+  const row = (k, label, opts) => `<div class="grow"><span class="k">${label}</span><div class="gopt" role="group" aria-label="${label}" style="--n:${opts.length}">${opts.map(([val, l, sub]) => `<button type="button" data-gs="${k}:${val}" aria-pressed="${String(set[k]) === String(val)}"><b>${l}</b>${sub ? `<small>${sub}</small>` : ""}</button>`).join("")}</div></div>`;
   const rings1x = SETUPS.gravel1x.brands[set.brand].rings;
   return `<section class="sec" id="gears"><h3>Rapporti consigliati</h3>
-    <div class="gset">${seg("bike", [["road", "Strada"], ["gravel", "Gravel"]], "Bici")}${seg("brand", [["shimano", "Shimano"], ["sram", "SRAM"]], "Marca")}
-      ${set.bike === "gravel" ? seg("crank", [["2x", "Doppia"], ["1x", "Monocorona"]], "Guarnitura") : ""}
-      ${key === "gravel1x" ? `<label class="gring"><span>Corona</span> <select id="gRing">${rings1x.map((r) => `<option value="${r}"${r === set.ring ? " selected" : ""}>${r}</option>`).join("")}</select> <span>denti</span></label>` : ""}</div>
+    <div class="gbike"><div class="gh"><span>La tua bici</span><small>${esc(set.bike === "gravel" ? "Gravel" : "Strada")} · ${esc(set.brand === "sram" ? "SRAM" : "Shimano")}${set.bike === "gravel" ? " · " + (key === "gravel1x" ? set.ring + "T" : "2×") : ""}</small></div>
+      ${row("bike", "Bici", [["road", "Strada", "700×28"], ["gravel", "Gravel", "700×40"]])}
+      ${row("brand", "Cambio", ["shimano", "sram"].map((b) => { const s2 = SETUPS[key].brands[b]; return [b, b === "sram" ? "SRAM" : "Shimano", key === "gravel1x" ? "" : `<span>fino a</span> ${s2.rings[0]}×${Math.max(...s2.cogs)}`]; }))}
+      ${set.bike === "gravel" ? row("crank", "Guarnitura", [["2x", "Doppia", "2 corone"], ["1x", "Monocorona", "1 corona"]]) : ""}
+      ${key === "gravel1x" ? row("ring", "Denti corona", rings1x.map((r) => [r, String(r), ""])) : ""}</div>
     <table class="vt gr"><thead><tr><th>W/kg</th><th>Sviluppo minimo</th><th>Rapporto</th></tr></thead><tbody>${rows}
       <tr class="me" id="gearMe"><td>Tu</td>${my ? gearCell(gearsFor(v, my, set, opt)) : "<td>–</td><td>–</td>"}</tr></tbody></table>
     <p class="note small"><span>Versante</span> <span data-noi18n>${esc(v.side || "")}</span>: ${why}.</p>
@@ -719,7 +723,6 @@ function wireGears() {
   sec.querySelectorAll("[data-gs]").forEach((b) => b.addEventListener("click", () => {
     const [k, val] = b.dataset.gs.split(":"); save({ ...gearSet(), [k]: val }); repaint();
   }));
-  const ring = $("#gRing"); if (ring) ring.addEventListener("change", () => { save({ ...gearSet(), ring: +ring.value }); repaint(); });
 }
 function paintGearMe(w) {
   const row = $("#gearMe"); if (!row || !gearSide) return;

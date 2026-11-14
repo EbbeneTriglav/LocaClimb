@@ -132,10 +132,18 @@ a { color: var(--acc); }
 .vt tr.me { display: table-row; padding: 0; }   /* not the profile header's .me flex row */
 .vt tr.me td { color: var(--acc); font-weight: 600; }
 .vt.gr td:last-child b { font-family: var(--cond); font-size: 18px; font-weight: 800; } .vt.gr small { font-size: 12px; }
-.gset { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
-.gset .seg button { padding: 7px 12px; }
-.gring { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--mu); }
-.gring select { height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); color: var(--tx); padding: 0 8px; font-size: 15px; }
+/* "La tua bici": the gear choice above the table (Rick 14/11/2026) */
+.gbike { display: grid; gap: 12px; margin: 4px 0 14px; padding: 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--s2); }
+.gbike .gh { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.gbike .gh span { font-family: var(--cond); font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: .02em; }
+.gbike .gh small { font-size: 13px; color: var(--acc); font-weight: 600; text-align: right; }
+.grow { display: grid; gap: 6px; }
+.grow .k { font-family: var(--cond); font-weight: 600; font-size: 12px; letter-spacing: .14em; color: var(--mu); text-transform: uppercase; }
+.gopt { display: grid; grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); gap: 6px; }
+.gopt button { min-height: 48px; padding: 6px 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--s1); color: var(--tx); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; cursor: pointer; }
+.gopt button b { font-size: 16px; font-weight: 700; } .gopt button small { font-size: 12px; color: var(--mu); }
+.gopt button[aria-pressed="true"] { background: var(--acc); border-color: var(--acc); color: var(--acc-tx); }
+.gopt button[aria-pressed="true"] small { color: var(--acc-tx); opacity: .8; }
 .vt input { width: 58px; height: 32px; margin-left: 6px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); padding: 0 8px; }
 .tips { margin: 6px 0 0; padding-left: 18px; color: var(--tx); font-size: 14px; line-height: 1.5; }
 .tips.water li::marker { color: var(--g1); } .tips.food li::marker { color: var(--g2); }
