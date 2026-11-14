@@ -84,3 +84,17 @@ test("discover: a zone split in discoverParts is searched as its parts, never as
   assert.ok(DISCOVER_REGIONS["turkey-centro"] && DISCOVER_REGIONS["turkey-oriente"]);
   assert.ok(!ITALY_REGIONS.includes("turkey-centro"));
 });
+
+test("Mexico is built in slices (the whole extract ran out of a 6 GB heap, 14/11/2026)", () => {
+  assert.equal(zoneById("mexico"), null);
+  const mx = ZONES.filter((z) => z.id.startsWith("mexico-"));
+  assert.deepEqual(mx.map((z) => z.id), ["mexico-nord", "mexico-centro-ovest", "mexico-centro-est", "mexico-sud"]);
+  for (const z of mx) {
+    assert.ok(z.bbox, z.id + ": clipped");
+    assert.match(z.out, /^osm_passes_mx_/, z.id + ": the file still reads as Mexico (countryOfFile)");
+  }
+  const box = (id) => zoneById(id).bbox.split(",").map(Number);
+  assert.ok(box("mexico-centro-ovest")[2] > box("mexico-centro-est")[0], "the two centre slices overlap");
+  assert.ok(box("mexico-sud")[3] > box("mexico-centro-est")[1], "south overlaps the centre");
+  assert.ok(box("mexico-nord")[1] < box("mexico-centro-ovest")[3], "north overlaps the centre");
+});

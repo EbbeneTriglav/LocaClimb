@@ -1,4 +1,6 @@
 name: OSM expand (per country)
+# the run title carries the zone: osm-rotate reads it to set aside zones that just failed (14/11/2026)
+run-name: osm-expand ${{ inputs.target }}
 
 # Builds passes for one region at a time with the SAME heuristic, into a dedicated
 # osm_passes_<country>.json. Run one target per dispatch (avoids concurrent commit clashes).
@@ -129,7 +131,10 @@ on:
           - canada-british-columbia
           - canada-alberta
           - canada-quebec
-          - mexico
+          - mexico-nord
+          - mexico-centro-ovest
+          - mexico-centro-est
+          - mexico-sud
           - costa-rica
           - guatemala
           - colombia

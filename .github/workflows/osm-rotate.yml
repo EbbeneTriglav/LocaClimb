@@ -52,9 +52,16 @@ jobs:
           BUSY=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 20 --json status --jq '[.[] | select(.status != "completed")] | length')
           if [ "${BUSY:-0}" -gt 0 ]; then echo "osm-expand gia' in corso o in coda ($BUSY): salto questo scatto"; exit 0; fi
 
+          # 1c) le zone il cui ultimo osm-expand degli ultimi 3 giorni e' fallito (il titolo del run e'
+          #     "osm-expand <zona>"): vanno in fondo al loro gruppo. 14/11/2026: mexico finiva la memoria a ogni
+          #     scatto e restava in testa alle zone mai costruite.
+          FAILED=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 100 --json displayTitle,conclusion,createdAt \
+            --jq '[.[] | select(.displayTitle | startswith("osm-expand ")) | select(.createdAt > (now - 259200 | todate))] | sort_by(.createdAt) | group_by(.displayTitle) | map(last | select(.conclusion == "failure") | .displayTitle | ltrimstr("osm-expand ")) | join(" ")' || true)
+          echo "Fallite di recente (in fondo alla fila): ${FAILED:-nessuna}"
+
           # 2) la zona: coda di priorita', poi mai costruite, poi la piu' vecchia (scripts/osm_priority.mjs)
           IDX=$(( $(date +%s) / 3600 ))
-          T=$(TARGETS="${TARGETS[*]}" IDX=$IDX node scripts/osm_priority.mjs --next)
+          T=$(TARGETS="${TARGETS[*]}" IDX=$IDX FAILED="$FAILED" node scripts/osm_priority.mjs --next)
           if [ -z "$T" ]; then echo "Nessuna zona scelta"; exit 1; fi
           echo "Zona scelta: $T   (scatto $IDX, zone nel menu $N; in coda di priorita': $(TARGETS="${TARGETS[*]}" node scripts/osm_priority.mjs | wc -w))"
 
