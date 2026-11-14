@@ -17,12 +17,15 @@ export const BASEMAPS = [
     style: "https://tiles.openfreemap.org/styles/dark" },
   { id: "chiara", label: "Chiara", sub: "di giorno", hillshade: true, swatch: "linear-gradient(135deg,#F2EFE6 40%,#F6C445 41%,#F6C445 47%,#DDE8CF 48%)",
     style: "https://tiles.openfreemap.org/styles/liberty" },
-  { id: "ciclabile", label: "Ciclabile", sub: "per il Giro", hillshade: false, swatch: "linear-gradient(135deg,#D9E4C4 40%,#3B5BDB 41%,#3B5BDB 45%,#B7C99A 46%)",
-    style: raster(abc("https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"), '<a href="https://www.cyclosm.org">CyclOSM</a> · ' + OSM, 18) },
+  { id: "ciclabile", label: "Ciclabile", sub: "per il Giro", hillshade: true, cycle: true, swatch: "linear-gradient(135deg,#F2EFE6 40%,#2F54EB 41%,#2F54EB 45%,#DDE8CF 46%)",
+    style: "https://tiles.openfreemap.org/styles/liberty" },
   { id: "topo", label: "Topografica", sub: "terreno", hillshade: false, swatch: "repeating-radial-gradient(circle at 70% 30%,#E8E4C9 0 6px,#C9B98A 7px 8px)",
     style: raster(abc("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"), 'Stile © <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA) · ' + OSM, 17) },
-  { id: "satellite", label: "Satellite", sub: "dall'alto", hillshade: false, swatch: "radial-gradient(circle at 30% 30%,#4F6B3A,#1E2C17 70%)",
-    style: raster(["https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg"], '<a href="https://s2maps.eu">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH (dati Copernicus Sentinel, CC BY 4.0)', 15) }
+  /* Rick 14/11/2026: the orthophoto was blurry when zooming in - it was Sentinel-2 (10 m pixels, z15 at most).
+     Esri World Imagery has aerial photos down to z19 (~0.3-0.5 m in Italy): enough to see whether a road is
+     tarmac before riding it. Attribution as Esri asks. */
+  { id: "satellite", label: "Satellite", sub: "ortofoto", hillshade: false, swatch: "radial-gradient(circle at 30% 30%,#4F6B3A,#1E2C17 70%)",
+    style: raster(["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"], 'Immagini © <a href="https://www.esri.com">Esri</a>, Maxar, Earthstar Geographics e la comunità GIS', 19) }
 ];
 export const DEFAULT_MAP = "notte", GIRO_MAP = "ciclabile";
 export function basemap(id) { return BASEMAPS.find((b) => b.id === id) || BASEMAPS[0]; }
@@ -38,6 +41,26 @@ export const EXPORT_MAP = {
 };
 /* layers kept on the export map: everything but text and icons, except the names of cities and towns */
 export function exportLayer(layer) { return !!layer && (layer.type !== "symbol" || /(^|_)(city|town)($|_)/.test(layer.id)); }
+
+/* "Ciclabile" (Rick 14/11/2026: the CyclOSM raster loaded slowly from a volunteer server and drew badly over
+   3D terrain): OpenFreeMap's light vector map with the bike network drawn on top from the SAME vector tiles
+   (OpenMapTiles "transportation": subclass, bicycle, surface) - same fast CDN as the other maps, sharp at any
+   zoom. Blue with a white edge = cycleways and roads signed for bikes; brown dashes = unpaved roads and tracks
+   (hiking paths left out: too many in the mountains). */
+export const CYCLE_SOURCE = "openmaptiles";
+const BIKE = ["any", ["==", ["get", "subclass"], "cycleway"], ["==", ["get", "class"], "cycleway"], ["==", ["get", "bicycle"], "designated"]];
+export function cycleLayers(src = CYCLE_SOURCE) {
+  const tl = { source: src, "source-layer": "transportation" }, w = (a, b) => ["interpolate", ["linear"], ["zoom"], 11, a, 16, b];
+  return [
+    { id: "cyc-unpaved", type: "line", ...tl, minzoom: 11, layout: { "line-cap": "butt" },
+      filter: ["all", ["==", ["get", "surface"], "unpaved"], ["in", ["get", "class"], ["literal", ["track", "minor", "service", "tertiary", "secondary"]]], ["!", BIKE]],
+      paint: { "line-color": "#8A5A2B", "line-width": w(1, 3), "line-dasharray": [2, 1.5] } },
+    { id: "cyc-case", type: "line", ...tl, minzoom: 9, filter: BIKE, layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": "#FFFFFF", "line-width": w(2.5, 7) } },
+    { id: "cyc-line", type: "line", ...tl, minzoom: 9, filter: BIKE, layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": "#2F54EB", "line-width": w(1.2, 4) } }
+  ];
+}
 
 /* "Notte+": the dark style with readable roads and labels (the plain dark one was black on black) */
 export function notteRoads(layer) {

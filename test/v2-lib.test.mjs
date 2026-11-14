@@ -325,6 +325,21 @@ test("basemaps: Notte+ by default, Ciclabile for the Giro, every one attributed"
   assert.equal(notteRoads({ type: "circle", id: "x" }), null);
 });
 
+test("basemaps: Ciclabile is vector (bike network from OpenFreeMap's tiles), Satellite is a sharp orthophoto", async () => {
+  // Rick 14/11/2026: CyclOSM slow and glitchy, Sentinel-2 blurry when zooming in
+  const { basemap, cycleLayers, CYCLE_SOURCE } = await import("../v2/lib/maps.mjs");
+  const cy = basemap("ciclabile");
+  assert.equal(typeof cy.style, "string"); assert.match(cy.style, /openfreemap/); assert.equal(cy.cycle, true);
+  const ls = cycleLayers();
+  assert.deepEqual(ls.map((l) => l.id), ["cyc-unpaved", "cyc-case", "cyc-line"]);
+  for (const l of ls) { assert.equal(l.source, CYCLE_SOURCE); assert.equal(l["source-layer"], "transportation"); assert.equal(l.type, "line"); }
+  assert.match(JSON.stringify(ls[2].filter), /cycleway/);
+  assert.match(JSON.stringify(ls[0].filter), /unpaved/);
+  const sat = basemap("satellite").style.sources.base;
+  assert.ok(sat.maxzoom >= 18, "aerial photos down to street level");
+  assert.match(sat.attribution, /Esri/);
+});
+
 test("alongTrack (grid) finds the same points as a full scan", () => {
   const t = Array.from({ length: 400 }, (_, i) => [46 + i * 0.0009, 10 + Math.sin(i / 20) * 0.01]);
   const v = { track: t, distance_km: 40 };
