@@ -1,6 +1,6 @@
 {
  "_doc": "Chiusure invernali dei passi (LocaRide). closes/opens = intervallo tipico MM-DD in cui il passo chiude/riapre (null = non noto: allora vale almeno 1 dicembre - 31 marzo). now = stato attuale verificato (closed, since, reopens, checked, source): lo aggiorna l'agente o una action quando un sito ufficiale annuncia chiusura o riapertura. lat/lon = cima del passo: valgono per ogni salita che arriva entro 1 km.",
- "updated": "2026-11-13",
+ "updated": "2026-11-14",
  "passes": [
   {
    "id": "umbrail",
@@ -22,7 +22,7 @@
    "now": {
     "closed": true,
     "since": "2026-11-12",
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/umbrailpass"
    }
   },
@@ -45,7 +45,7 @@
    ],
    "now": {
     "closed": false,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/spluegenpass"
    }
   },
@@ -69,7 +69,7 @@
    "now": {
     "closed": true,
     "since": "2026-10-28",
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/furkapass"
    }
   },
@@ -93,7 +93,7 @@
    "now": {
     "closed": true,
     "since": "2026-11-06",
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grimselpass"
    }
   },
@@ -116,7 +116,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/sustenpass"
    }
   },
@@ -140,7 +140,7 @@
    "now": {
     "closed": true,
     "since": "2026-11-05",
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/nufenenpass"
    }
   },
@@ -164,7 +164,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/gotthardpass"
    }
   },
@@ -188,7 +188,7 @@
    "now": {
     "closed": true,
     "since": "2026-11-13",
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/klausenpass"
    }
   },
@@ -211,7 +211,7 @@
    ],
    "now": {
     "closed": false,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/oberalppass"
    }
   },
@@ -234,7 +234,7 @@
    ],
    "now": {
     "closed": false,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/albulapass"
    }
   },
@@ -258,7 +258,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/san-bernardinopass"
    }
   },
@@ -281,7 +281,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/grosser-sankt-bernhard"
    }
   },
@@ -304,7 +304,7 @@
    ],
    "now": {
     "closed": false,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/forcola-di-livigno"
    }
   },
@@ -330,7 +330,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -356,7 +356,7 @@
    "now": {
     "closed": true,
     "since": "2026-10-23",
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -377,7 +377,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -398,7 +398,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -418,7 +418,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
@@ -435,7 +435,7 @@
    ],
    "now": {
     "closed": true,
-    "checked": "2026-11-13",
+    "checked": "2026-11-14",
     "source": "https://www.meteomontagnavaltellina.it/passi_alpini_info.html"
    }
   },
