@@ -573,5 +573,10 @@
   "bbox": null,
   "target": "usa-massachusetts",
   "builtAt": "2026-11-14"
+ },
+ "osm_passes_us_vt.json": {
+  "bbox": null,
+  "target": "usa-vermont",
+  "builtAt": "2026-11-14"
  }
 }
