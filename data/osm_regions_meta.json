@@ -568,5 +568,10 @@
   "bbox": null,
   "target": "usa-wyoming",
   "builtAt": "2026-11-12"
+ },
+ "osm_passes_us_ma.json": {
+  "bbox": null,
+  "target": "usa-massachusetts",
+  "builtAt": "2026-11-14"
  }
 }
