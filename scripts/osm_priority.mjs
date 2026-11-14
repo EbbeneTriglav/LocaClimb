@@ -6,7 +6,7 @@
  * so a failing zone cannot block the queue), then goes back
  * to its normal round of every zone. No state file: each osm-expand run writes builtAt itself.
  * CLI: node scripts/osm_priority.mjs  -> prints the pending targets, space separated.
- *      TARGETS="..." IDX=n node scripts/osm_priority.mjs --next  -> the zone osm-rotate builds now.
+ *      TARGETS="..." IDX=n FAILED="..." node scripts/osm_priority.mjs --next  -> the zone osm-rotate builds now.
  */
 import { readFileSync } from "node:fs";
 import { dataPath } from "./lib/paths.mjs";
@@ -21,10 +21,16 @@ export function pendingTargets(queue, meta, known = null) {
 /* The zone osm-rotate builds next (14/11/2026, Rick: "non li vedo girare"). GitHub fires the scheduled runs only
    2-3 times a day of the 9 asked for, so a time-based round never reached half the menu (23 zones never built).
    Order: the priority queue, then the zones never built (in menu order), then the stalest build. One tick in 4
-   (idx % 4 === 3) takes another one of the same group, so a zone that keeps failing cannot block the others. */
-export function nextTarget(targets, queue, meta, idx = 0) {
+   (idx % 4 === 3) takes another one of the same group, so a zone that keeps failing cannot block the others.
+   failed: the zones whose last osm-expand run failed (osm-rotate reads the last 3 days of runs). They go to the end
+   of their group: mexico ran out of memory on every tick it got (14/11/2026) and held the head of "never built". */
+export function nextTarget(targets, queue, meta, idx = 0, failed = []) {
   if (!targets || !targets.length) return null;
-  const pick = (list, spread) => (idx % 4 === 3 && list.length > 1 ? list[1 + (idx % Math.min(spread, list.length - 1))] : list[0]);
+  const bad = new Set(failed || []);
+  const pick = (all, spread) => {
+    const list = [...all.filter((t) => !bad.has(t)), ...all.filter((t) => bad.has(t))];
+    return idx % 4 === 3 && list.length > 1 ? list[1 + (idx % Math.min(spread, list.length - 1))] : list[0];
+  };
   const pending = pendingTargets(queue, meta, targets);
   if (pending.length) return pick(pending, pending.length);
   const built = {};
@@ -38,6 +44,7 @@ export function nextTarget(targets, queue, meta, idx = 0) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const read = (f, d) => { try { return JSON.parse(readFileSync(dataPath(f), "utf8")); } catch { return d; } };
   const known = process.env.TARGETS ? process.env.TARGETS.split(/\s+/).filter(Boolean) : null;
-  if (process.argv.includes("--next")) process.stdout.write(nextTarget(known || [], read("osm_priority.json", null), read("osm_regions_meta.json", {}), +(process.env.IDX || 0)) || "");
+  const failed = (process.env.FAILED || "").split(/\s+/).filter(Boolean);
+  if (process.argv.includes("--next")) process.stdout.write(nextTarget(known || [], read("osm_priority.json", null), read("osm_regions_meta.json", {}), +(process.env.IDX || 0), failed) || "");
   else process.stdout.write(pendingTargets(read("osm_priority.json", null), read("osm_regions_meta.json", {}), known).join(" "));
 }

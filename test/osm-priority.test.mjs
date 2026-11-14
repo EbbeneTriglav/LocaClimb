@@ -32,3 +32,15 @@ test("next target (Rick 14/11/2026: zones never built or months old): priority q
   assert.notEqual(nextTarget(T, null, all, 7), "slovenia", "and one tick in 4 one of the next stalest");
   assert.equal(nextTarget([], null, all, 0), null);
 });
+
+test("a zone whose last build failed goes to the end of its group (mexico OOM, 14/11/2026)", () => {
+  const T = ["mexico-nord", "iceland", "taiwan", "slovenia"];
+  const m = { "d.json": { target: "slovenia", builtAt: "2026-08-23" } };
+  assert.equal(nextTarget(T, null, m, 0), "mexico-nord");
+  assert.equal(nextTarget(T, null, m, 0, ["mexico-nord"]), "iceland", "the failed one waits");
+  assert.equal(nextTarget(T, null, m, 0, ["mexico-nord", "iceland", "taiwan"]), "mexico-nord", "all failed: menu order again");
+  const q = { since: "2026-11-11", targets: ["taiwan", "iceland"] };
+  assert.equal(nextTarget(T, q, m, 0, ["taiwan"]), "iceland", "the priority queue too");
+  const all = { ...m, "a.json": { target: "mexico-nord", builtAt: "2026-11-01" }, "b.json": { target: "iceland", builtAt: "2026-11-10" }, "c.json": { target: "taiwan", builtAt: "2026-11-12" } };
+  assert.equal(nextTarget(T, null, all, 0, ["slovenia"]), "mexico-nord", "and the stalest builds");
+});
