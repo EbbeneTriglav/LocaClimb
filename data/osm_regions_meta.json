@@ -578,5 +578,15 @@
   "bbox": null,
   "target": "usa-vermont",
   "builtAt": "2026-11-14"
+ },
+ "osm_passes_mx_co.json": {
+  "bbox": [
+   -106,
+   18,
+   -100.4,
+   22.5
+  ],
+  "target": "mexico-centro-ovest",
+  "builtAt": "2026-11-14"
  }
 }
