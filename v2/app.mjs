@@ -5,28 +5,28 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=59";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=59";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=59";
-import { poisNear } from "./lib/poi.mjs?v=59";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=59";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=59";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=59";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=59";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=59";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=59";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=59";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=59";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=59";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=59";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=59";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=59";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=59";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=59";
-import { GEAR_WKG, CADENCE, gearChecks, gearsFor } from "./lib/gears.mjs?v=59";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=59";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=59";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, fingerMoved } from "./lib/nav.mjs?v=59";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=60";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=60";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=60";
+import { poisNear } from "./lib/poi.mjs?v=60";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=60";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=60";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=60";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=60";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=60";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=60";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=60";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=60";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=60";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=60";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=60";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=60";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=60";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=60";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=60";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=60";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=60";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, fingerMoved } from "./lib/nav.mjs?v=60";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -608,7 +608,7 @@ function renderClimb() {
       <tbody>${rows.map((r, i) => `<tr class="${i === hard ? "hard" : ""}"><td>${num(r.k, r.k % 1 ? 1 : 0)}</td><td><div class="bar"><i style="width:${Math.max(4, Math.min(70, r.g / maxG * 70)).toFixed(0)}%;background:${gradeColor(r.g)}"></i><b>${num(r.g)}%</b></div></td><td>${esc(r.e)}</td></tr>`).join("")}
       <tr class="summit"><td>⛰</td><td>${top}</td><td>${esc(st.top ?? c.elevation)}</td></tr></tbody></table>
     ${timesHtml(c, vs)}
-    ${gearsHtml(v)}
+    ${gearsHtml(c, v)}
     <section class="sec" id="water"><h3>Acqua e ristori sulla salita</h3><p class="note">Cerco fontane e bar lungo la strada…</p></section>
     ${vs.length > 1 ? compareHtml(c, vs) : ""}
     <section class="sec" id="week"><h3>Meteo 7 giorni in cima</h3><p class="note">Carico…</p></section>
@@ -637,7 +637,7 @@ function renderClimb() {
   const wr = $("#warnRep"); if (wr) wr.addEventListener("click", () => openReport(c));
   $("#giroAdd").addEventListener("click", () => { addStop({ lat: c.lat, lon: c.lon, id: String(c.id), name: c.name }); toast(`Aggiunta al giro · ${G.stops.length} ${G.stops.length === 1 ? "tappa" : "tappe"}`); });
   if (S.verdict && S.verdict.id === c.id) paintVerdict(S.verdict);
-  wireTimes(c, vs);
+  wireTimes(c, vs); wireGears();
   if (!WC.length) wcReady.then(() => { const vd = $("#verdict"), h = closureHtml(c); if (S.sel === c && vd && h && !panel.querySelector(".wc,.wcline")) vd.insertAdjacentHTML("beforebegin", h); });
   fillWater(c, v); fillWeek(c); fillRating(c); fillNews(c); fillShade(c, v);
   setSheet(S.sideSwitch ? S.sheet : "peek", true); S.sideSwitch = false;
@@ -669,33 +669,56 @@ function wireTimes(c, vs) {
 }
 /* ------------------------------------------------------------------ rapporti consigliati (Rick 14/11/2026)
    The easiest gear each W/kg needs on the side shown (lib/gears.mjs): ramp, hardest km and average, each at
-   its cadence floor; the smallest development wins and becomes the hardest common combination still easy enough. */
-let gearSide = null;
+   its cadence floor; the smallest development wins. The gear is picked among what the rider can fit (Rick, second
+   pass): road or gravel, Shimano or SRAM, double or single chainring and its teeth - remembered on this device.
+   First number = the small chainring, second = the biggest cog of the cassette. */
+const GEARSET_KEY = "lr_gearset";
+let gearSide = null, gearClimb = null;
+function gearSet() { try { return cleanSet(JSON.parse(localStorage.getItem(GEARSET_KEY) || "null")); } catch { return cleanSet(null); } }
+function gearOpts() { return { unpaved: !!(gearClimb && isGravel(gearClimb)) }; }
 function gearCell(r) {
   if (!r) return "<td>–</td><td>–</td>";
   const g = r.gear;
-  const lab = !g ? "<span>più agile di 30×36</span>" : g.any ? "<span>qualsiasi</span>" : `<b>${g.f}×${g.r}</b> <small class="mu">${num(g.dev, 2)} m</small>`;
+  const lab = g.none ? `<span>più agile di</span> ${g.easiest.f}×${g.easiest.r}`
+    : g.any ? `<span>qualsiasi</span> <small class="mu">(<span>anche</span> ${g.f}×${g.r})</small>`
+    : `<b>${g.f}×${g.r}</b> <small class="mu">${num(g.dev, 2)} m</small>`;
   return `<td>${num(r.dev, 2)} m</td><td>${lab}</td>`;
 }
-function gearsHtml(v) {
-  gearSide = null;
+function gearsHtml(c, v) {
+  gearSide = null; gearClimb = c;
   if (!v || implausible(v)) return "";
   const ck = gearChecks(v); if (!ck.length) return "";
   gearSide = v;
+  const set = gearSet(), key = setupKey(set), st = SETUPS[key], pt = parts(set), opt = gearOpts();
   const my = myWkg(), by = Object.fromEntries(ck.map((x) => [x.k, x]));
-  const rows = GEAR_WKG.map((w) => `<tr><td>${num(w, w % 1 ? 1 : 0)} W/kg</td>${gearCell(gearsFor(v, w))}</tr>`).join("");
+  const rows = GEAR_WKG.map((w) => `<tr><td>${num(w, w % 1 ? 1 : 0)} W/kg</td>${gearCell(gearsFor(v, w, set, opt))}</tr>`).join("");
   const why = [by.ramp ? `<span>rampa più dura</span> ${num(by.ramp.g)}% (${Math.round(by.ramp.m)} m) <span>a</span> ${CADENCE.ramp} rpm` : "",
     by.hard ? `<span>km più duro</span> ${num(by.hard.g)}% <span>a</span> ${CADENCE.hard} rpm` : "",
     by.avg ? `<span>media</span> ${num(by.avg.g)}% <span>a</span> ${CADENCE.avg} rpm` : ""].filter(Boolean).join(" · ");
+  const seg = (k, opts, label) => `<div class="seg" role="group" aria-label="${label}">${opts.map(([val, l]) => `<button type="button" data-gs="${k}:${val}" aria-pressed="${set[k] === val}">${l}</button>`).join("")}</div>`;
+  const rings1x = SETUPS.gravel1x.brands[set.brand].rings;
   return `<section class="sec" id="gears"><h3>Rapporti consigliati</h3>
+    <div class="gset">${seg("bike", [["road", "Strada"], ["gravel", "Gravel"]], "Bici")}${seg("brand", [["shimano", "Shimano"], ["sram", "SRAM"]], "Marca")}
+      ${set.bike === "gravel" ? seg("crank", [["2x", "Doppia"], ["1x", "Monocorona"]], "Guarnitura") : ""}
+      ${key === "gravel1x" ? `<label class="gring"><span>Corona</span> <select id="gRing">${rings1x.map((r) => `<option value="${r}"${r === set.ring ? " selected" : ""}>${r}</option>`).join("")}</select> <span>denti</span></label>` : ""}</div>
     <table class="vt gr"><thead><tr><th>W/kg</th><th>Sviluppo minimo</th><th>Rapporto</th></tr></thead><tbody>${rows}
-      <tr class="me" id="gearMe"><td>Tu</td>${my ? gearCell(gearsFor(v, my)) : "<td>–</td><td>–</td>"}</tr></tbody></table>
+      <tr class="me" id="gearMe"><td>Tu</td>${my ? gearCell(gearsFor(v, my, set, opt)) : "<td>–</td><td>–</td>"}</tr></tbody></table>
     <p class="note small"><span>Versante</span> <span data-noi18n>${esc(v.side || "")}</span>: ${why}.</p>
-    <p class="note small">Sviluppo = metri percorsi a ogni giro di pedali (ruota 700×28). Corridore di 70 kg, bici di 8 kg. È il rapporto più duro che basta: uno più agile non guasta, e sulle rampe brevi ci si può alzare sui pedali.</p></section>`;
+    <p class="note small"><span>Il primo numero è la corona piccola, il secondo il pignone più grande della cassetta.</span> <span>Corone</span> ${pt.rings.join(", ")} · <span>pignoni</span> ${pt.cogs.join(", ")}.</p>
+    <p class="note small"><span>Sviluppo = metri percorsi a ogni giro di pedali.</span> <span>Ruota</span> ${key === "road" ? "700×28" : "700×40"}, <span>bici di</span> ${num(st.bikeKg, st.bikeKg % 1 ? 1 : 0)} kg, <span>corridore di</span> 70 kg${opt.unpaved ? ", <span>fondo sterrato</span>" : ""}. <span>È il rapporto più duro che basta: uno più agile non guasta, e sulle rampe brevi ci si può alzare sui pedali.</span></p></section>`;
+}
+function wireGears() {
+  const sec = $("#gears"); if (!sec) return;
+  const save = (s) => { try { localStorage.setItem(GEARSET_KEY, JSON.stringify(cleanSet(s))); } catch { /* private mode */ } };
+  const repaint = () => { const n = $("#gears"); if (!n || !gearSide) return; n.outerHTML = gearsHtml(gearClimb, gearSide); wireGears(); };
+  sec.querySelectorAll("[data-gs]").forEach((b) => b.addEventListener("click", () => {
+    const [k, val] = b.dataset.gs.split(":"); save({ ...gearSet(), [k]: val }); repaint();
+  }));
+  const ring = $("#gRing"); if (ring) ring.addEventListener("change", () => { save({ ...gearSet(), ring: +ring.value }); repaint(); });
 }
 function paintGearMe(w) {
   const row = $("#gearMe"); if (!row || !gearSide) return;
-  row.innerHTML = `<td>Tu</td>${w ? gearCell(gearsFor(gearSide, w)) : "<td>–</td><td>–</td>"}`;
+  row.innerHTML = `<td>Tu</td>${w ? gearCell(gearsFor(gearSide, w, gearSet(), gearOpts())) : "<td>–</td><td>–</td>"}`;
 }
 function compareHtml(c, vs) {
   const cols = vs.slice(0, 3), row = (l, f) => `<tr><td>${l}</td>${cols.map((v) => `<td>${f(v)}</td>`).join("")}</tr>`;

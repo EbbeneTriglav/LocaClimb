@@ -132,6 +132,10 @@ a { color: var(--acc); }
 .vt tr.me { display: table-row; padding: 0; }   /* not the profile header's .me flex row */
 .vt tr.me td { color: var(--acc); font-weight: 600; }
 .vt.gr td:last-child b { font-family: var(--cond); font-size: 18px; font-weight: 800; } .vt.gr small { font-size: 12px; }
+.gset { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
+.gset .seg button { padding: 7px 12px; }
+.gring { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--mu); }
+.gring select { height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); color: var(--tx); padding: 0 8px; font-size: 15px; }
 .vt input { width: 58px; height: 32px; margin-left: 6px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); padding: 0 8px; }
 .tips { margin: 6px 0 0; padding-left: 18px; color: var(--tx); font-size: 14px; line-height: 1.5; }
 .tips.water li::marker { color: var(--g1); } .tips.food li::marker { color: var(--g2); }
