@@ -588,5 +588,15 @@
   ],
   "target": "mexico-centro-ovest",
   "builtAt": "2026-11-14"
+ },
+ "osm_passes_mx_ce.json": {
+  "bbox": [
+   -100.5,
+   18,
+   -95.9,
+   22.5
+  ],
+  "target": "mexico-centro-est",
+  "builtAt": "2026-11-14"
  }
 }
