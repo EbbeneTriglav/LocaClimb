@@ -5,27 +5,28 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=58";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=58";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=58";
-import { poisNear } from "./lib/poi.mjs?v=58";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=58";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=58";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=58";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=58";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=58";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=58";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=58";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=58";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=58";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=58";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=58";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=58";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=58";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=58";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=58";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=58";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, fingerMoved } from "./lib/nav.mjs?v=58";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=59";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=59";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=59";
+import { poisNear } from "./lib/poi.mjs?v=59";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=59";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=59";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=59";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=59";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=59";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=59";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=59";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=59";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=59";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=59";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=59";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=59";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=59";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=59";
+import { GEAR_WKG, CADENCE, gearChecks, gearsFor } from "./lib/gears.mjs?v=59";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=59";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=59";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, offRoute, voiceCue, voiceText, fingerMoved } from "./lib/nav.mjs?v=59";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -607,6 +608,7 @@ function renderClimb() {
       <tbody>${rows.map((r, i) => `<tr class="${i === hard ? "hard" : ""}"><td>${num(r.k, r.k % 1 ? 1 : 0)}</td><td><div class="bar"><i style="width:${Math.max(4, Math.min(70, r.g / maxG * 70)).toFixed(0)}%;background:${gradeColor(r.g)}"></i><b>${num(r.g)}%</b></div></td><td>${esc(r.e)}</td></tr>`).join("")}
       <tr class="summit"><td>⛰</td><td>${top}</td><td>${esc(st.top ?? c.elevation)}</td></tr></tbody></table>
     ${timesHtml(c, vs)}
+    ${gearsHtml(v)}
     <section class="sec" id="water"><h3>Acqua e ristori sulla salita</h3><p class="note">Cerco fontane e bar lungo la strada…</p></section>
     ${vs.length > 1 ? compareHtml(c, vs) : ""}
     <section class="sec" id="week"><h3>Meteo 7 giorni in cima</h3><p class="note">Carico…</p></section>
@@ -662,7 +664,38 @@ function wireTimes(c, vs) {
     const w = parseFloat(String(inp.value).replace(",", "."));
     if (w > 0.5 && w < 9) { try { localStorage.setItem(WKG_KEY, String(w)); } catch { /* private mode */ } }
     panel.querySelectorAll("td[data-my]").forEach((td, i) => { td.textContent = w > 0.5 && w < 9 ? clock(climbMinutes(vs[i], w)) : "–"; });
+    paintGearMe(w > 0.5 && w < 9 ? w : null);
   });
+}
+/* ------------------------------------------------------------------ rapporti consigliati (Rick 14/11/2026)
+   The easiest gear each W/kg needs on the side shown (lib/gears.mjs): ramp, hardest km and average, each at
+   its cadence floor; the smallest development wins and becomes the hardest common combination still easy enough. */
+let gearSide = null;
+function gearCell(r) {
+  if (!r) return "<td>–</td><td>–</td>";
+  const g = r.gear;
+  const lab = !g ? "<span>più agile di 30×36</span>" : g.any ? "<span>qualsiasi</span>" : `<b>${g.f}×${g.r}</b> <small class="mu">${num(g.dev, 2)} m</small>`;
+  return `<td>${num(r.dev, 2)} m</td><td>${lab}</td>`;
+}
+function gearsHtml(v) {
+  gearSide = null;
+  if (!v || implausible(v)) return "";
+  const ck = gearChecks(v); if (!ck.length) return "";
+  gearSide = v;
+  const my = myWkg(), by = Object.fromEntries(ck.map((x) => [x.k, x]));
+  const rows = GEAR_WKG.map((w) => `<tr><td>${num(w, w % 1 ? 1 : 0)} W/kg</td>${gearCell(gearsFor(v, w))}</tr>`).join("");
+  const why = [by.ramp ? `<span>rampa più dura</span> ${num(by.ramp.g)}% (${Math.round(by.ramp.m)} m) <span>a</span> ${CADENCE.ramp} rpm` : "",
+    by.hard ? `<span>km più duro</span> ${num(by.hard.g)}% <span>a</span> ${CADENCE.hard} rpm` : "",
+    by.avg ? `<span>media</span> ${num(by.avg.g)}% <span>a</span> ${CADENCE.avg} rpm` : ""].filter(Boolean).join(" · ");
+  return `<section class="sec" id="gears"><h3>Rapporti consigliati</h3>
+    <table class="vt gr"><thead><tr><th>W/kg</th><th>Sviluppo minimo</th><th>Rapporto</th></tr></thead><tbody>${rows}
+      <tr class="me" id="gearMe"><td>Tu</td>${my ? gearCell(gearsFor(v, my)) : "<td>–</td><td>–</td>"}</tr></tbody></table>
+    <p class="note small"><span>Versante</span> <span data-noi18n>${esc(v.side || "")}</span>: ${why}.</p>
+    <p class="note small">Sviluppo = metri percorsi a ogni giro di pedali (ruota 700×28). Corridore di 70 kg, bici di 8 kg. È il rapporto più duro che basta: uno più agile non guasta, e sulle rampe brevi ci si può alzare sui pedali.</p></section>`;
+}
+function paintGearMe(w) {
+  const row = $("#gearMe"); if (!row || !gearSide) return;
+  row.innerHTML = `<td>Tu</td>${w ? gearCell(gearsFor(gearSide, w)) : "<td>–</td><td>–</td>"}`;
 }
 function compareHtml(c, vs) {
   const cols = vs.slice(0, 3), row = (l, f) => `<tr><td>${l}</td>${cols.map((v) => `<td>${f(v)}</td>`).join("")}</tr>`;
