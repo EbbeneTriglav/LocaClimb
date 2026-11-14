@@ -1,7 +1,7 @@
 /* Turn-by-turn navigation along the Giro (Rick 11/11/2026: "come Google Maps, ma per bici").
    BRouter gives the turns with &timode=2: voicehints = [[track index, command, roundabout exit, distance, angle], ...].
    Pure helpers, tested in test/v2-nav.test.mjs; the screen, the GPS and the camera live in app.mjs. */
-import { havKm } from "./climb.mjs?v=60";
+import { havKm } from "./climb.mjs?v=61";
 
 /* BRouter VoiceHint commands */
 const CMD = {
@@ -89,6 +89,31 @@ export function routeBearing(t, c, along, aheadKm = 0.04) {
 }
 
 /* off the route: more than offM away on `need` fixes in a row */
+/* Reroute pacing (Rick 14/11/2026, by car near San Pellegrino Terme: off the line it re-routed every 3 s, the
+   banner always said "Ricalcolo" and the app felt stuck). A new route starts where the rider WAS when it was
+   asked for, so at car speed the next fixes are off it again: after a reroute the rider gets some seconds to
+   join the new line before the next one, longer if the request failed; the voice says it once in a while. */
+export const REROUTE = { calmOk: 10000, calmFail: 15000, sayEvery: 45000 };
+export function rerouteDue(st, off, now) {
+  if (now < (st.calm || 0)) { st.bad = 0; return false; }
+  return offRoute(st, off);
+}
+export function rerouteDone(st, now, ok) { st.calm = now + (ok ? REROUTE.calmOk : REROUTE.calmFail); st.bad = 0; }
+export function sayReroute(st, now) {
+  if (st.said != null && now - st.said < REROUTE.sayEvery) return false;
+  st.said = now; return true;
+}
+
+/* "Naviga" on a climb with more sides (Rick 14/11/2026: to Alino it took San Giovanni Bianco, he wanted San
+   Pellegrino): the sides that have a road drawn, in the sheet's order, with the km from the rider to each base
+   and the nearest marked. here = null (no GPS) -> no distances. [{ i, side, km, near }] */
+export function sidesByDistance(vs, here) {
+  const out = (vs || []).map((v, i) => ({ v, i })).filter((x) => x.v.track && x.v.track.length > 1)
+    .map(({ v, i }) => ({ i, side: v.side || "", km: here ? +havKm(here.lat, here.lon, v.track[0][0], v.track[0][1]).toFixed(1) : null, near: false }));
+  if (here && out.length) out.reduce((a, b) => (b.km < a.km ? b : a)).near = true;
+  return out;
+}
+
 export function offRoute(state, off, offM = 50, need = 3) {
   state.bad = off > offM ? (state.bad || 0) + 1 : 0;
   return state.bad >= need;
