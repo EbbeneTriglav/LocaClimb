@@ -129,7 +129,9 @@ a { color: var(--acc); }
 .vt th { text-align: left; font-weight: 600; color: var(--mu); font-size: 12px; padding: 0 6px 6px 0; }
 .vt td { border-top: 1px solid var(--line2); padding: 8px 6px 8px 0; font-variant-numeric: tabular-nums; }
 .vt td:first-child { color: var(--mu); }
+.vt tr.me { display: table-row; padding: 0; }   /* not the profile header's .me flex row */
 .vt tr.me td { color: var(--acc); font-weight: 600; }
+.vt.gr td:last-child b { font-family: var(--cond); font-size: 18px; font-weight: 800; } .vt.gr small { font-size: 12px; }
 .vt input { width: 58px; height: 32px; margin-left: 6px; border-radius: 8px; border: 1px solid var(--line); background: var(--s2); padding: 0 8px; }
 .tips { margin: 6px 0 0; padding-left: 18px; color: var(--tx); font-size: 14px; line-height: 1.5; }
 .tips.water li::marker { color: var(--g1); } .tips.food li::marker { color: var(--g2); }
