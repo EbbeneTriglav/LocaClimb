@@ -174,8 +174,23 @@ a { color: var(--acc); }
 .days button[aria-pressed="true"] { background: var(--tx); color: var(--bg); font-weight: 600; }
 /* Oggi: lowest difficulty to show */
 .ogd { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 10px; margin: 4px 0 12px; }
-.ogd label { color: var(--mu); font-size: 14px; } .ogd b { font-family: var(--cond); font-size: 20px; font-variant-numeric: tabular-nums; }
-.ogd input { grid-column: 1 / -1; width: 100%; accent-color: var(--acc); height: 28px; }
+.ogd .ogl { color: var(--mu); font-size: 14px; } .ogd b { font-family: var(--cond); font-size: 20px; font-variant-numeric: tabular-nums; }
+/* difficulty band (15/11/2026): two range inputs stacked on one track; only their thumbs take the pointer */
+.dual { --t: 26px; position: relative; grid-column: 1 / -1; height: 36px; }
+.dual::before, .dual::after { content: ""; position: absolute; top: 50%; height: 6px; margin-top: -3px; border-radius: 3px; pointer-events: none; }
+.dual::before { left: calc(var(--t) / 2); right: calc(var(--t) / 2); background: var(--line); }
+.dual::after { background: var(--acc);
+  left: calc(var(--t) / 2 + (100% - var(--t)) * (var(--a) - 1) / 9); right: calc(var(--t) / 2 + (100% - var(--t)) * (10 - var(--b)) / 9); }
+.dual input { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; }
+.dual input#ogMax { z-index: 2; } .dual.lotop input#ogMin { z-index: 3; }
+.dual input::-webkit-slider-runnable-track { height: 100%; background: none; }
+.dual input::-moz-range-track { background: none; }
+.dual input::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: var(--t); height: var(--t); margin-top: calc((36px - var(--t)) / 2);
+  border-radius: 50%; background: var(--acc); border: 3px solid var(--bg); box-shadow: 0 1px 4px rgba(0, 0, 0, .5); cursor: grab; }
+.dual input::-moz-range-thumb { pointer-events: auto; width: var(--t); height: var(--t); box-sizing: border-box;
+  border-radius: 50%; background: var(--acc); border: 3px solid var(--bg); box-shadow: 0 1px 4px rgba(0, 0, 0, .5); cursor: grab; }
+.dual input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--tx); outline-offset: 2px; }
+.dual input:focus-visible::-moz-range-thumb { outline: 2px solid var(--tx); outline-offset: 2px; }
 /* Eventi (Rick 12/11/2026): calendar by month */
 .evf { flex-wrap: wrap; }
 .evm { font-family: var(--cond); font-style: italic; font-weight: 800; font-size: 24px; text-transform: uppercase; margin: 18px 0 8px; color: var(--mu); }
