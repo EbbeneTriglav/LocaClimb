@@ -87,5 +87,21 @@
  { "id": "mont-des-cats", "name": "Mont des Cats", "lat": 50.78309, "lon": 2.6678, "region": "Hauts-de-France", "short": true },
  { "id": "mont-noir", "name": "Mont Noir", "lat": 50.77888, "lon": 2.73288, "region": "Hauts-de-France", "short": true },
  { "id": "monte-livata", "name": "Monte Livata", "lat": 41.93912, "lon": 13.14635, "region": "Lazio", "from": ["Subiaco"] },
- { "id": "madesimo", "name": "Madesimo", "lat": 46.4366, "lon": 9.35842, "region": "Lombardia", "from": ["Chiavenna"] }
+ { "id": "madesimo", "name": "Madesimo", "lat": 46.4366, "lon": 9.35842, "region": "Lombardia", "from": ["Chiavenna"] },
+ { "id": "prebeneg", "name": "Prebeneg (Prebenico)", "lat": 45.5868, "lon": 13.8493, "region": "Friuli-Venezia Giulia" },
+ { "id": "hrvatini", "name": "Hrvatini", "lat": 45.5828, "lon": 13.7567, "region": "Slovenija" },
+ { "id": "srgasi", "name": "Srgaši", "lat": 45.5092, "lon": 13.6936, "region": "Slovenija" },
+ { "id": "camerino", "name": "Camerino", "lat": 43.1386, "lon": 13.0678, "region": "Marche" },
+ { "id": "bellegra", "name": "Bellegra", "lat": 41.8817, "lon": 13.0286, "region": "Lazio" },
+ { "id": "piani-di-bobbio", "name": "Piani di Bobbio", "lat": 45.9643, "lon": 9.4948, "region": "Lombardia" },
+ { "id": "montaner", "name": "Montaner", "lat": 45.9982, "lon": 12.3787, "region": "Veneto" },
+ { "id": "castello-di-caneva", "name": "Castello di Caneva", "lat": 45.9815, "lon": 12.4489, "region": "Friuli-Venezia Giulia", "short": true },
+ { "id": "polenta", "name": "Polenta", "lat": 44.1174, "lon": 12.1319, "region": "Emilia-Romagna" },
+ { "id": "pieve-di-rivoschio", "name": "Pieve di Rivoschio", "lat": 44.0017, "lon": 12.0681, "region": "Emilia-Romagna" },
+ { "id": "ciola", "name": "Ciola", "lat": 43.9807, "lon": 12.1403, "region": "Emilia-Romagna" },
+ { "id": "barbotto", "name": "Barbotto", "lat": 43.9387, "lon": 12.2267, "region": "Emilia-Romagna" },
+ { "id": "montetiffi", "name": "Montetiffi", "lat": 43.953, "lon": 12.2756, "region": "Emilia-Romagna" },
+ { "id": "perticara", "name": "Perticara", "lat": 43.9057, "lon": 12.2416, "region": "Marche" },
+ { "id": "penrhys", "name": "Penrhys", "lat": 51.6463, "lon": -3.4402, "region": "Wales" },
+ { "id": "cadoudal", "name": "Côte de Cadoudal (Plumelec)", "lat": 47.8386, "lon": -2.6394, "region": "Bretagne", "short": true }
 ]
