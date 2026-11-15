@@ -6,8 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=63";
-import { passDifficulty } from "./difficulty.mjs?v=63";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=64";
+import { passDifficulty } from "./difficulty.mjs?v=64";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -121,13 +121,29 @@ export function inBounds(b, limit = 40) {
   return { total: out.length, list: out.slice(0, limit) };
 }
 
-/* climbs around a point, hardest first; minD: the lowest difficulty kept (Oggi lets the rider choose it) */
-export function nearby(lat, lon, km, limit, minD = 5) {
+/* climbs around a point, hardest first; minD..maxD: the difficulty band kept (Oggi lets the rider choose it) */
+export function nearby(lat, lon, km, limit, minD = 5, maxD = DIFF_HI) {
   if (!state) return [];
   const dLat = km / 111, dLon = km / (111 * Math.cos(lat * Math.PI / 180));
-  return state.climbs.filter((c) => Math.abs(c.lat - lat) < dLat && Math.abs(c.lon - lon) < dLon && (c.difficulty || 0) >= minD)
+  return state.climbs.filter((c) => Math.abs(c.lat - lat) < dLat && Math.abs(c.lon - lon) < dLon && (c.difficulty || 0) >= minD && (c.difficulty || 0) <= maxD)
     .sort((a, b) => (b.difficulty || 0) - (a.difficulty || 0)).slice(0, limit);
 }
+
+/* "Dove salire oggi": the difficulty band (Rick 15/11/2026: a minimum AND a maximum, one slider with two thumbs).
+   diffRange: a stored pair made safe (whole numbers in 1..10, min <= max; missing -> 5..10).
+   moveRange: one end moved; past the other end it pushes it along, so the band never turns inside out. */
+export const DIFF_LO = 1, DIFF_HI = 10;
+const diffClamp = (v) => Math.max(DIFF_LO, Math.min(DIFF_HI, Math.round(v)));
+export function diffRange(min, max) {
+  const ok = (v) => v != null && v !== "" && Number.isFinite(+v);
+  const a = ok(min) ? diffClamp(+min) : 5, b = ok(max) ? diffClamp(+max) : DIFF_HI;
+  return a <= b ? { min: a, max: b } : { min: b, max: a };
+}
+export function moveRange(r, end, v) {
+  const x = diffClamp(Number.isFinite(+v) ? +v : DIFF_LO);
+  return end === "min" ? { min: x, max: Math.max(x, r.max) } : { min: Math.min(x, r.min), max: x };
+}
+export const rangeText = (r) => (r.min === r.max ? String(r.min) : r.min + "–" + r.max) + "/10";
 
 /* name_fixes.json "sides": { old label: new label } (e.g. "Da Sestriere" -> "Da Usseaux") */
 export function fixSides(vs, fx) {

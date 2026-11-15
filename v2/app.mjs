@@ -5,28 +5,28 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=63";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear } from "./lib/data.mjs?v=63";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=63";
-import { poisNear } from "./lib/poi.mjs?v=63";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=63";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=63";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=63";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=63";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=63";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=63";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=63";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=63";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=63";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=63";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=63";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=63";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=63";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=63";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=63";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=63";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=63";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=63";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=64";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=64";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=64";
+import { poisNear } from "./lib/poi.mjs?v=64";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=64";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=64";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=64";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=64";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=64";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=64";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=64";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=64";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=64";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=64";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=64";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=64";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=64";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=64";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=64";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=64";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=64";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=64";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -40,9 +40,9 @@ const evReady = loadEvents().then((e) => { EV = e; }).catch(() => { /* optional 
 let WC = [];
 const wcReady = loadClosures().then((w) => { WC = w; }).catch(() => { /* optional file */ });
 const DESKTOP = () => matchMedia("(min-width: 900px)").matches;
-const S = { paved: false, trucks: false, cc: "", poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null, evf: "tutti", ogMin: ogMinSaved() };
-/* Oggi: the lowest difficulty to show (Rick 12/11/2026), remembered on this device */
-function ogMinSaved() { try { const v = +localStorage.getItem("lr_ogmin"); return v >= 1 && v <= 10 ? v : 5; } catch { return 5; } }
+const S = { paved: false, trucks: false, cc: "", poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null, evf: "tutti", ogR: ogRangeSaved() };
+/* Oggi: the difficulty band to show (Rick 12/11/2026 the minimum, 15/11/2026 also the maximum), remembered on this device */
+function ogRangeSaved() { try { return diffRange(localStorage.getItem("lr_ogmin"), localStorage.getItem("lr_ogmax")); } catch { return diffRange(); } }
 
 /* ------------------------------------------------------------------ map */
 const TERRAIN = { type: "raster-dem", tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], encoding: "terrarium", tileSize: 256, maxzoom: 14, attribution: "Rilievo: Mapzen / AWS Terrain Tiles" };
@@ -1303,7 +1303,7 @@ function navPickSide(c, vs, cur) {
     <p class="note small mu">Ti porto all'inizio del versante scelto e poi su per la sua strada fino in cima.</p>
     <div class="splist">${list.map((x) => { const v = vs[x.i]; return `<button type="button" class="spbtn${x.i === ci ? " cur" : ""}" data-si="${x.i}">
       <b data-noi18n>${esc(x.side)}</b><span>${num(v.distance_km)} km · ${num(v.avgGradient)}% · +${Math.round((v.endElevation || 0) - (v.startElevation || 0))} m</span>
-      <small>${x.km != null ? `<span>inizio a</span> ${num(x.km, x.km < 10 ? 1 : 0)} km <span>da te</span>` : ""}${x.near ? ` · <em>il più vicino</em>` : ""}${x.i === ci ? ` · <em>quello che stai guardando</em>` : ""}</small></button>`; }).join("")}</div></div>`);
+      <small>${[x.km != null ? `<span>inizio a</span> ${num(x.km, x.km < 10 ? 1 : 0)} km <span>da te</span>` : "", x.near ? "<em>il più vicino</em>" : "", x.i === ci ? "<em>quello che stai guardando</em>" : ""].filter(Boolean).join(" · ")}</small></button>`; }).join("")}</div></div>`);
   d.querySelectorAll("[data-si]").forEach((b) => b.addEventListener("click", () => {
     const i = +b.dataset.si; closeDialog();
     if (vs[i] !== cur) { S.side = i; renderClimb(); }   // the sheet shows the side the rider is going up
@@ -1330,14 +1330,14 @@ async function renderOggi() {
   panel.innerHTML = `<div class="og"><div class="handle"></div><h1>${esc(ogTitle(S.day))}</h1>
     <p class="note" id="ogWhere">Le salite più belle vicino a te, ordinate per meteo in cima: temporali, pioggia, vento e freddo.</p>
     <div class="days" role="group" aria-label="Giorno">${days.map((d, i) => `<button type="button" data-day="${i}" aria-pressed="${i === S.day}">${d}</button>`).join("")}</div>
-    <div class="ogd"><label for="ogMin">Difficoltà minima</label><b id="ogMinV">${esc(S.ogMin)}/10</b>
-      <input id="ogMin" type="range" min="1" max="10" step="1" value="${esc(S.ogMin)}"></div>
+    <div class="ogd"><span class="ogl">Difficoltà</span><b id="ogRV" data-noi18n>${esc(rangeText(S.ogR))}</b>
+      <div class="dual" id="ogDual" style="--a:${S.ogR.min};--b:${S.ogR.max}">
+        <input id="ogMin" type="range" min="1" max="10" step="1" value="${esc(S.ogR.min)}" aria-label="Difficoltà minima">
+        <input id="ogMax" type="range" min="1" max="10" step="1" value="${esc(S.ogR.max)}" aria-label="Difficoltà massima"></div></div>
     <div id="ogList" class="loading">Cerco le salite intorno a te…</div><div id="ogShut"></div>
     <p class="note small"><a href="#/eventi">Granfondo, bike day e strade chiuse: apri Eventi</a></p></div>`;
   panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { S.day = +b.dataset.day; if (S.oggi) paintOggi(); else renderOggi(); }));
-  const om = $("#ogMin");
-  om.addEventListener("input", () => { $("#ogMinV").textContent = om.value + "/10"; });
-  om.addEventListener("change", () => { S.ogMin = +om.value; try { localStorage.setItem("lr_ogmin", String(S.ogMin)); } catch { /* private mode */ } S.oggi = null; renderOggi(); });
+  ogRangeUi();
   await loadIndex();
   const here = await new Promise((res) => {
     const c = map.getCenter(), fallback = { lat: c.lat, lon: c.lng, src: "mappa" };
@@ -1348,15 +1348,38 @@ async function renderOggi() {
   await wcReady;
   const today = isoDay(new Date()), shut = [];
   const open = (cs) => cs.filter((c) => { const p = closureFor(WC, c.lat, c.lon); if (p && blocked(p, today)) { if (!shut.some((x) => x.p === p)) shut.push({ p, id: c.id }); return false; } return true; }).slice(0, 12);
-  let list = open(nearby(here.lat, here.lon, 60, 40, S.ogMin));
-  if (list.length < 4) list = open(nearby(here.lat, here.lon, 120, 40, S.ogMin));
+  let list = open(nearby(here.lat, here.lon, 60, 40, S.ogR.min, S.ogR.max));
+  if (list.length < 4) list = open(nearby(here.lat, here.lon, 120, 40, S.ogR.min, S.ogR.max));
   const os = $("#ogShut"); if (os) os.innerHTML = ogShutHtml(shut);
-  if (!list.length) { $("#ogList").textContent = "Nessuna salita con questa difficoltà entro 120 km: abbassa la difficoltà minima o sposta la mappa e riapri Oggi."; return; }
+  if (!list.length) { $("#ogList").textContent = "Nessuna salita con questa difficoltà entro 120 km: allarga l'intervallo di difficoltà o sposta la mappa e riapri Oggi."; return; }
   try {
     const hs = await fetchForecast(list.map((c) => ({ lat: c.lat, lon: c.lon, ele: c.elevation })), 3);
     S.oggi = { here, list, hs };
   } catch { const ol = $("#ogList"); if (ol) ol.textContent = "Meteo non disponibile ora. Riprova tra poco."; return; }
   if (panel.dataset.mode === "oggi") paintOggi();
+}
+/* the two thumbs of the difficulty slider: two range inputs on one track (the fill between them is CSS,
+   from --a/--b). Moving one past the other pushes it along. When both sit on 10 the minimum goes on top,
+   otherwise the maximum: the thumb on top can always move. The list reloads when a thumb is let go. */
+function ogRangeUi() {
+  const lo = $("#ogMin"), hi = $("#ogMax"), dual = $("#ogDual");
+  let r = S.ogR;
+  const show = () => {
+    lo.value = String(r.min); hi.value = String(r.max);
+    dual.style.setProperty("--a", r.min); dual.style.setProperty("--b", r.max);
+    dual.classList.toggle("lotop", r.min === r.max && r.max === DIFF_HI);
+    $("#ogRV").textContent = rangeText(r);
+  };
+  const commit = () => {
+    if (r.min === S.ogR.min && r.max === S.ogR.max) return;
+    S.ogR = r;
+    try { localStorage.setItem("lr_ogmin", String(r.min)); localStorage.setItem("lr_ogmax", String(r.max)); } catch { /* private mode */ }
+    S.oggi = null; renderOggi();
+  };
+  lo.addEventListener("input", () => { r = moveRange(r, "min", lo.value); show(); });
+  hi.addEventListener("input", () => { r = moveRange(r, "max", hi.value); show(); });
+  lo.addEventListener("change", commit); hi.addEventListener("change", commit);
+  show();
 }
 /* ------------------------------------------------------------------ eventi (Rick 12/11/2026)
    Granfondo, bike days, closed roads and races on the climbs (data/road_events.json, each with its official

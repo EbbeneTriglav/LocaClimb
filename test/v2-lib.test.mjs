@@ -425,3 +425,23 @@ test("snow at the summit: 'Neve in quota', last in Oggi, never from missing data
   assert.equal(f.label, "Neve in quota"); assert.ok(f.snow.fall);
   assert.match(advice(f).sub, /Nevica/);
 });
+
+/* "Dove salire oggi": the difficulty band, min AND max (Rick 15/11/2026) */
+test("oggi: the difficulty band is made safe, never inverted, and a thumb pushes the other along", async () => {
+  const { diffRange, moveRange, rangeText } = await import("../v2/lib/data.mjs");
+  assert.deepEqual(diffRange(null, null), { min: 5, max: 10 }, "nothing stored: 5..10 as before");
+  assert.deepEqual(diffRange("7", null), { min: 7, max: 10 }, "only the old minimum stored: kept");
+  assert.deepEqual(diffRange("3", "6"), { min: 3, max: 6 });
+  assert.deepEqual(diffRange("9", "4"), { min: 4, max: 9 }, "an inverted pair is put right");
+  assert.deepEqual(diffRange("0", "42"), { min: 1, max: 10 }, "clamped to 1..10");
+  assert.deepEqual(diffRange("abc", ""), { min: 5, max: 10 });
+  assert.deepEqual(diffRange(), { min: 5, max: 10 });
+  const r = { min: 4, max: 7 };
+  assert.deepEqual(moveRange(r, "min", "6"), { min: 6, max: 7 });
+  assert.deepEqual(moveRange(r, "min", "9"), { min: 9, max: 9 }, "the minimum past the maximum pushes it up");
+  assert.deepEqual(moveRange(r, "max", "2"), { min: 2, max: 2 }, "the maximum below the minimum pushes it down");
+  assert.deepEqual(moveRange(r, "max", "10"), { min: 4, max: 10 });
+  assert.deepEqual(moveRange(r, "max", "15"), { min: 4, max: 10 });
+  assert.equal(rangeText({ min: 5, max: 10 }), "5–10/10");
+  assert.equal(rangeText({ min: 8, max: 8 }), "8/10");
+});
