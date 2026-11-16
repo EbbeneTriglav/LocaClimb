@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { parseAlpenPaesse, parseMmv, parseCols, collect, nextNow, applyStatus, MAP, AP, MMV, COLS } from "../scripts/winter_status.mjs";
+import { parseAlpenPaesse, parseMmv, parseCols, collect, nextNow, applyStatus, MAP, AP, MMV, COLS, retryOnce } from "../scripts/winter_status.mjs";
 
 const apPage = (icons, h2) => `<div class="weather">x</div><div class="status-update-status"> ${icons.map((i) => `<div class="icon-circle"> <svg class="icon icon-status-${i} " > <use xlink:href="/_resources/themes/alpen-paesse/images/sprite_2026.svg#status-${i}"></use></svg> </div>`).join("")} </div></div><div class="status-update-content"> <h2>${h2}</h2> <div class="content "><p>Realp - Oberwald</p></div>`;
 const FURKA = apPage(["closed", "winter"], "Closed for the winter");
@@ -86,4 +86,17 @@ test("applyStatus on the real file: only 'now' and the sources change", () => {
   assert.equal(k.now.source, AP + "klausenpass");
   assert.deepEqual({ ...k, now: undefined }, { ...k0, now: undefined });
   assert.equal(doc.updated, "2026-11-11");
+});
+
+test("retryOnce: a timeout or 5xx is retried once after the wait, a 4xx is not", async () => {
+  const waits = [], sleep = async (ms) => { waits.push(ms); };
+  let n = 0;
+  assert.equal(await retryOnce(async () => { if (++n === 1) throw new Error("The operation was aborted due to timeout"); return "ok"; }, 5000, sleep), "ok");
+  assert.deepEqual(waits, [5000]); assert.equal(n, 2);
+  n = 0;
+  await assert.rejects(retryOnce(async () => { n++; throw new Error("https://x -> 503"); }, 5000, sleep), /503/);
+  assert.equal(n, 2, "5xx: two tries, then the error");
+  n = 0;
+  await assert.rejects(retryOnce(async () => { n++; throw new Error("https://x -> 404"); }, 5000, sleep), /404/);
+  assert.equal(n, 1, "4xx: no retry");
 });
