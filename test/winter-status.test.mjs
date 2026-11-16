@@ -78,7 +78,12 @@ test("applyStatus on the real file: only 'now' and the sources change", () => {
   const n = applyStatus(doc, { klausen: { closed: false, source: AP + "klausenpass" }, nope: { closed: true, source: "https://x" } }, "2026-11-11");
   assert.equal(n, 1);
   const k = doc.passes.find((p) => p.id === "klausen"), k0 = before.passes.find((p) => p.id === "klausen");
-  assert.deepEqual(k.now, { closed: false, checked: "2026-11-11", source: AP + "klausenpass" });
+  // the real file changes twice a day (winter-status.yml): "since" depends on Klausen's state today, so the
+  // expected "now" comes from the previous one (nextNow is tested on its own above)
+  assert.deepEqual(k.now, nextNow(k0.now, { closed: false, source: AP + "klausenpass" }, "2026-11-11"));
+  assert.equal(k.now.closed, false);
+  assert.equal(k.now.checked, "2026-11-11");
+  assert.equal(k.now.source, AP + "klausenpass");
   assert.deepEqual({ ...k, now: undefined }, { ...k0, now: undefined });
   assert.equal(doc.updated, "2026-11-11");
 });
