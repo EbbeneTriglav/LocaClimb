@@ -603,5 +603,10 @@
   "bbox": null,
   "target": "usa-north-carolina",
   "builtAt": "2026-11-15"
+ },
+ "osm_passes_us_ny.json": {
+  "bbox": null,
+  "target": "usa-new-york",
+  "builtAt": "2026-11-16"
  }
 }
