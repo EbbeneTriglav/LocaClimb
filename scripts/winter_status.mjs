@@ -123,11 +123,21 @@ export function applyStatus(doc, res, today) {
   return changed;
 }
 
-async function get(url) {
+async function get1(url) {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
   if (!r.ok) throw new Error(url + " -> " + r.status);
   return r.text();
 }
+/* one more try after 5 s on a timeout, a network error or a 5xx (14/11: a single cols-cyclisme timeout made the run red);
+   a 4xx is an answer, not a hiccup: no retry */
+export async function retryOnce(fn, waitMs = 5000, sleep = (ms) => new Promise((r) => setTimeout(r, ms))) {
+  try { return await fn(); } catch (e) {
+    if (/ -> 4\d\d$/.test(String(e && e.message))) throw e;
+    await sleep(waitMs);
+    return fn();
+  }
+}
+async function get(url) { return retryOnce(() => get1(url)); }
 
 if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("winter_status.mjs")) {
   const [cmd, file] = process.argv.slice(2);
