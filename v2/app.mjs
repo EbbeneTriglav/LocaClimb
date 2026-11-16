@@ -5,31 +5,45 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=64";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=64";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=64";
-import { poisNear } from "./lib/poi.mjs?v=64";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=64";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=64";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=64";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=64";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=64";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=64";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=64";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=64";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=64";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=64";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=64";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=64";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=64";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=64";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=64";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=64";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=64";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=64";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=65";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=65";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=65";
+import { poisNear } from "./lib/poi.mjs?v=65";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=65";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=65";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=65";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=65";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=65";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=65";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=65";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=65";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=65";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=65";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=65";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=65";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=65";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=65";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=65";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=65";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=65";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=65";
+import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=65";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
+
+/* anonymous usage counts (Rick 16/11/2026, privacy page): only on locaride.app, never with Do Not Track / GPC.
+   One small batch each time the page goes to the background; no cookie, no id. The Worker sums them per day. */
+const USE = createSession();
+if (location.hostname === "locaride.app" && statsAllowed(navigator) && navigator.sendBeacon) {
+  const flush = () => {
+    hidden(USE);
+    const b = takeBatch(USE, LANG);
+    if (b) { try { navigator.sendBeacon("/api/ev", JSON.stringify(b)); } catch { /* best effort */ } }
+  };
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") flush(); else shown(USE); });
+  window.addEventListener("pagehide", () => { if (USE.shownAt != null) flush(); });
+}
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const panel = $("#panel");
@@ -376,10 +390,14 @@ bnear.addEventListener("click", () => nearDialog());
 /* ------------------------------------------------------------------ search */
 const q = $("#q"), results = $("#results");
 let placeT = null, placeCtl = null, placeHits = [];
+let useT = null;
 q.addEventListener("input", () => {
   placeHits = []; paintResults();
   clearTimeout(placeT); if (placeCtl) placeCtl.abort();
   const txt = q.value.trim();
+  // anonymous count of what people look for, after a pause; "zero" = no climb and no place found (lib/stats.mjs)
+  clearTimeout(useT);
+  useT = setTimeout(() => { if (q.value.trim() === txt) addSearch(USE, txt, !search(txt).length && !placeHits.length); }, 1500);
   if (txt.length < 3) return;
   // places (towns, valleys, roads) from Nominatim, as the classic app: ~1 request/s, so debounced
   placeT = setTimeout(async () => {
@@ -407,6 +425,7 @@ results.addEventListener("click", (e) => {
     return;
   }
   const b = e.target.closest("button[data-id]"); if (!b) return;
+  clearTimeout(useT); addSearch(USE, q.value, false);
   results.hidden = true; q.value = ""; q.blur();
   location.hash = "#/s/" + encodeURIComponent(b.dataset.id);
 });
@@ -573,6 +592,7 @@ async function openClimb(id) {
   if (S.sel !== c) { S.sel = c; S.side = 0; }
   renderClimb();
   loadVerdict(c);
+  addClimb(USE, String(c.id));                      // anonymous count of opened climbs (lib/stats.mjs)
   S.engaged = true;                                 // someone reading a climb: suggest the app when back on the map, never on top of the climb
 }
 

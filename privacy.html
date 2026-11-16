@@ -32,12 +32,12 @@ th { color: var(--mu); font-weight: 600; font-size: 13px; text-transform: upperc
 </head>
 <body>
 <main>
-  <div class="top"><a href="./">← LocaRide</a><span class="mu">Aggiornata il 1 novembre 2026</span></div>
+  <div class="top"><a href="./">← LocaRide</a><span class="mu">Aggiornata il 16 novembre 2026</span></div>
   <h1>Privacy</h1>
   <p class="mu">LocaRide (locaride.app) è un progetto personale, in versione beta, per chi va in bici in salita. Qui trovi, in breve, quali dati usa, perché e come cancellarli.</p>
 
   <div class="box">
-    <b>In una riga:</b> senza account non raccogliamo nulla che ti riguardi: contiamo solo le visite in forma anonima, senza cookie; niente pubblicità, niente cookie di profilazione. Con l'account salviamo solo quello che serve alle funzioni che usi.
+    <b>In una riga:</b> senza account non raccogliamo nulla che ti riguardi: contiamo solo le visite e l'uso dell'app in forma anonima, senza cookie; niente pubblicità, niente cookie di profilazione. Con l'account salviamo solo quello che serve alle funzioni che usi.
   </div>
 
   <h2>Chi è il titolare</h2>
@@ -48,6 +48,7 @@ th { color: var(--mu); font-weight: 600; font-size: 13px; text-transform: upperc
     <li><b>Preferenze nel tuo browser</b> (lingua, mappa scelta, watt per kg, giro in costruzione, scelte sull'installazione dell'app): restano sul tuo dispositivo, nella memoria del browser, e non ci vengono inviate.</li>
     <li><b>Posizione</b>: solo se tocchi il pulsante di localizzazione o apri «Oggi», e solo con il tuo permesso. Serve a centrare la mappa e a cercare le salite vicine; non viene salvata né inviata a noi.</li>
     <li><b>Statistiche di visita</b>: usiamo Cloudflare Web Analytics per sapere quante persone usano LocaRide e quali pagine aprono. Non usa cookie, non salva nulla sul tuo dispositivo e non ti identifica: vediamo solo numeri aggregati (pagine viste, Paese, tipo di browser e dispositivo, sito da cui arrivi). Base giuridica: il nostro legittimo interesse a capire se il servizio funziona (art. 6.1.f GDPR).</li>
+    <li><b>Conteggi d'uso dell'app</b>: quando l'app va in secondo piano manda al nostro server (locaride.app/api/ev) un piccolo riepilogo anonimo: le salite che hai aperto, le parole cercate (in minuscolo, senza accenti, senza indirizzi email, @nomi e numeri di 4 o più cifre, al massimo 40 caratteri) e se la ricerca non ha trovato niente, la lingua dell'app e per quanto tempo è rimasta aperta, a fasce (meno di 30 secondi, fino a 2 minuti, fino a 10, oltre). Il server aggiunge il Paese, ricavato da Cloudflare, e somma tutto in totali giornalieri: non salviamo il tuo indirizzo IP, il browser, cookie o codici che ti riconoscano, e non possiamo collegare due visite tra loro. Se il browser ha attivo «Do Not Track» o «Global Privacy Control» non viene inviato nulla. Serve a capire quali salite interessano e quali mancano. Base giuridica: legittimo interesse (art. 6.1.f GDPR). Totali conservati al massimo 24 mesi.</li>
     <li><b>I file dei tuoi giri</b> (GPX, FIT, export di Strava o Garmin) vengono letti nel browser e non lasciano il dispositivo: salviamo solo le salite riconosciute e i tempi, e solo se hai un account.</li>
   </ul>
 
@@ -66,7 +67,7 @@ th { color: var(--mu); font-weight: 600; font-size: 13px; text-transform: upperc
   <div class="tw"><table>
     <thead><tr><th>Servizio</th><th>A cosa serve</th></tr></thead>
     <tbody>
-      <tr><td>Cloudflare</td><td>ospita il sito e conta le visite in forma anonima (Web Analytics, senza cookie)</td></tr>
+      <tr><td>Cloudflare</td><td>ospita il sito, conta le visite in forma anonima (Web Analytics, senza cookie) e conserva i totali giornalieri dei conteggi d'uso (database D1)</td></tr>
       <tr><td>OpenFreeMap</td><td>mappe di base</td></tr>
       <tr><td>Amazon Web Services (Terrain Tiles)</td><td>rilievo e 3D</td></tr>
       <tr><td>CyclOSM, OpenTopoMap, EOX</td><td>mappe Ciclabile, Topografica, Satellite (solo se le scegli)</td></tr>
@@ -84,10 +85,10 @@ th { color: var(--mu); font-weight: 600; font-size: 13px; text-transform: upperc
   <p>Puoi chiedere in ogni momento di vedere, correggere, esportare o cancellare i tuoi dati, oppure di chiudere l'account: scrivi a <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>. Voti, giri salvati e condivisioni puoi anche cancellarli da solo, dall'app. Se ritieni che i tuoi dati siano trattati in modo scorretto puoi rivolgerti al <a href="https://www.garanteprivacy.it" rel="noopener">Garante per la protezione dei dati personali</a>.</p>
 
   <h2>In English</h2>
-  <p class="mu">No account: nothing about you is collected; visits are counted anonymously with Cloudflare Web Analytics (no cookies, aggregate numbers only); no ads, no tracking cookies; your preferences and location stay in your browser. With an account (Google Firebase): email, display name, your climbs and times, saved rides, proposals and reports; ratings, comments and shared rides are public. Map, weather and routing services listed above receive your IP address; Google reCAPTCHA (Firebase App Check) checks that database requests come from the app (Google Privacy Policy and Terms apply). Requests and account deletion: <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>.</p>
+  <p class="mu">No account: nothing about you is collected; visits are counted anonymously with Cloudflare Web Analytics (no cookies, aggregate numbers only); the app also sends our server an anonymous summary when it goes to the background (climbs opened, searches cleaned of e-mails, @names and long numbers, app language, time on screen in bands; the country is added by Cloudflare), stored only as daily totals, with no IP, cookie or identifier, and nothing is sent with Do Not Track or Global Privacy Control on; no ads, no tracking cookies; your preferences and location stay in your browser. With an account (Google Firebase): email, display name, your climbs and times, saved rides, proposals and reports; ratings, comments and shared rides are public. Map, weather and routing services listed above receive your IP address; Google reCAPTCHA (Firebase App Check) checks that database requests come from the app (Google Privacy Policy and Terms apply). Requests and account deletion: <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>.</p>
 
   <h2>En español</h2>
-  <p class="mu">Sin cuenta: no recogemos nada sobre ti; las visitas se cuentan de forma anónima con Cloudflare Web Analytics (sin cookies, solo cifras agregadas); sin publicidad ni cookies de seguimiento; tus preferencias y tu ubicación se quedan en tu navegador. Con una cuenta (Google Firebase): email, nombre visible, tus subidas y tiempos, rutas guardadas, propuestas y avisos; las valoraciones, comentarios y rutas compartidas son públicos. Los servicios de mapas, tiempo y rutas de la tabla reciben tu dirección IP; Google reCAPTCHA (Firebase App Check) comprueba que las peticiones a la base de datos vienen de la app (se aplican la Política de privacidad y las Condiciones de Google). Solicitudes y borrado de la cuenta: <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>.</p>
+  <p class="mu">Sin cuenta: no recogemos nada sobre ti; las visitas se cuentan de forma anónima con Cloudflare Web Analytics (sin cookies, solo cifras agregadas); la app también envía a nuestro servidor un resumen anónimo cuando pasa a segundo plano (subidas abiertas, búsquedas sin emails, @nombres ni números largos, idioma de la app, tiempo en pantalla por franjas; el país lo añade Cloudflare), guardado solo como totales diarios, sin IP, cookies ni identificadores, y no se envía nada con Do Not Track o Global Privacy Control activados; sin publicidad ni cookies de seguimiento; tus preferencias y tu ubicación se quedan en tu navegador. Con una cuenta (Google Firebase): email, nombre visible, tus subidas y tiempos, rutas guardadas, propuestas y avisos; las valoraciones, comentarios y rutas compartidas son públicos. Los servicios de mapas, tiempo y rutas de la tabla reciben tu dirección IP; Google reCAPTCHA (Firebase App Check) comprueba que las peticiones a la base de datos vienen de la app (se aplican la Política de privacidad y las Condiciones de Google). Solicitudes y borrado de la cuenta: <a href="mailto:privacy@locaride.app">privacy@locaride.app</a>.</p>
 </main>
 </body>
 </html>

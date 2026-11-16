@@ -15,4 +15,9 @@
     "not_found_handling": "none",
     "run_worker_first": ["/__/*", "/api/*"]
   }
+  // Anonymous usage counts (cf/stats.js): a D1 database bound as STATS_DB, plus the secret STATS_TOKEN
+  // for GET /api/stats. Until the binding below is filled in, /api/ev stores nothing (answers 204).
+  // To enable: create the D1 database "locaride-stats" (dashboard: Storage & Databases -> D1), then
+  // uncomment and paste its id (an id, not a secret):
+  // ,"d1_databases": [{ "binding": "STATS_DB", "database_name": "locaride-stats", "database_id": "<id>" }]
 }

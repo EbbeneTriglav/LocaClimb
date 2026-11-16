@@ -8,6 +8,7 @@
  * Everything that is not /__/auth or /__/firebase goes back to the static assets.
  */
 import { handleMeteo } from "./meteo.js";
+import { handleEvent, handleStats } from "./stats.js";
 
 const FIREBASE_HOST = "locaride-ce1ad.firebaseapp.com";
 
@@ -15,6 +16,8 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === "/api/meteo") return handleMeteo(request, ctx); // weather with fallback + cache (cf/meteo.js)
+    if (url.pathname === "/api/ev") return handleEvent(request, env, ctx); // anonymous usage counts (cf/stats.js)
+    if (url.pathname === "/api/stats") return handleStats(request, env);   // the totals, behind a token
     if (url.pathname.startsWith("/__/auth/") || url.pathname.startsWith("/__/firebase/")) {
       const target = new URL(url.pathname + url.search, "https://" + FIREBASE_HOST);
       // keep method, headers, body; do not follow redirects here (the browser must see them)
