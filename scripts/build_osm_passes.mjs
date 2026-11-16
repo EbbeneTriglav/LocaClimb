@@ -30,6 +30,7 @@ import { loadNotClimbs } from "./lib/notclimbs.mjs";
 import { difficultyOf } from "./lib/difficulty.mjs";
 import { DISCOVER_REGIONS, inRegion, findRoadTops, dropKnown, nameTop, csrTyped, flatCutBase } from "./lib/discover.mjs";
 import { climbFloor } from "./lib/climbfloor.mjs";
+import { fetchWithRetry } from "./lib/download.mjs";
 import { reachable, pickTop } from "./lib/seektop.mjs";
 import { fwdGrade, trimValley, trimParams } from "./lib/walltrim.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
@@ -586,31 +587,10 @@ function buildSide(ptsOut, elevsOut, topLat, topLon, relax, pin) {
 /* ----- IO ------------------------------------------------------------------- */
 async function download(url, dest) {
   try { await access(dest); console.log("  cached " + dest); return; } catch {}
-  // Derive an osm.fr mirror from any geofabrik URL (works for any country/region, not just italy).
-  // geofabrik:  https://download.geofabrik.de/europe/<path>-latest.osm.pbf
-  // osm.fr:     https://download.openstreetmap.fr/extracts/europe/<path>.osm.pbf
-  const candidates = [url];
-  const m = url.match(/geofabrik\.de\/(.+?)-latest\.osm\.pbf$/);
-  if (m) {
-    const path = m[1];                       // e.g. "europe/france/rhone-alpes"
-    candidates.push("https://download.openstreetmap.fr/extracts/" + path + ".osm.pbf");
-    candidates.push("https://download.openstreetmap.fr/extracts/" + path.replace(/-/g, "_") + ".osm.pbf");
-  }
-  for (let attempt = 0; attempt < 10; attempt++) {
-    const u = candidates[attempt % candidates.length];
-    try {
-      console.log("  downloading " + u + (attempt ? " (try " + (attempt + 1) + ")" : ""));
-      const r = await fetch(u, { redirect: "follow" });
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      await new Promise((res, rej) => { Readable.fromWeb(r.body).pipe(createWriteStream(dest)).on("finish", res).on("error", rej); });
-      return;
-    } catch (e) {
-      const wait = Math.min(120000, 8000 * 2 ** Math.floor(attempt / candidates.length));
-      console.warn("  ! failed (" + e.message + "), retry in " + (wait / 1000) + "s");
-      await new Promise((s) => setTimeout(s, wait));
-    }
-  }
-  throw new Error("download exhausted: " + url);
+  // mirrors, retries and the dropped-404 rule: scripts/lib/download.mjs (tested)
+  const used = await fetchWithRetry(url, (r) => new Promise((res, rej) => { Readable.fromWeb(r.body).pipe(createWriteStream(dest)).on("finish", res).on("error", rej); }),
+    { log: (m) => console.warn(m) });
+  console.log("  downloaded " + used);
 }
 function osmium(args) { execFileSync("osmium", args, { stdio: ["ignore", "inherit", "inherit"] }); }
 function streamSeq(file, onF) {
