@@ -210,7 +210,8 @@
     "https://www.alpen-paesse.ch/en/alpenpaesse/oberalppass"
    ],
    "now": {
-    "closed": false,
+    "closed": true,
+    "since": "2026-11-17",
     "checked": "2026-11-17",
     "source": "https://www.alpen-paesse.ch/en/alpenpaesse/oberalppass"
    }
