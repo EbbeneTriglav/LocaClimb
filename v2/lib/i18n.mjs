@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=67";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=68";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -142,6 +142,8 @@ export const DICT = {
   "Preparo l'immagine…": "Preparing the image…", "Scarica": "Download", "Road book scaricato: aprilo e stampa": "Road book downloaded: open it and print", "Preparo il road book…": "Preparing the road book…", "Pronto: mappa, salite numerate, profilo, orari e meteo lungo il giro. Da stampare o salvare in PDF.": "Ready: map, numbered climbs, profile, times and weather along the ride. Print it or save it as PDF.", "Apri": "Open",
   // main roads overlay (app.mjs setTraffic)
   "Privacy": "Privacy", "Protetto da reCAPTCHA: valgono la": "Protected by reCAPTCHA: the Google", "e i": "and", "Termini": "Terms", "di Google.": "apply.", "niente pubblicità, visite contate senza cookie": "no ads, visits counted without cookies", "informativa privacy": "privacy notice", "Codice sorgente": "Source code", "licenza AGPL-3.0": "AGPL-3.0 licence",
+  // Giro: treno + bici (app.mjs trainHtml)
+  "Come ci arrivi": "How you get there", "Tagli la pianura in treno e parti in bici più vicino alle salite.": "Skip the flat part by train and start riding closer to the climbs.", "Cerca un treno": "Find a train", "Cerco stazioni e treni…": "Looking for stations and trains…", "Riprova": "Try again", "Tutto in bici": "All by bike", "da casa": "from home", "Treno + bici": "Train + bike", "Altri orari e ritorno": "Other times and return", "Andata": "Outbound", "Ritorno da": "Return from", "Cerco i treni del ritorno…": "Looking for trains back…", "Nessun treno con la bici dopo l'arrivo: valuta di tornare in bici o un'altra stazione.": "No train with bikes after you arrive: ride back or try another station.", "Dopo l'ultima tappa del giro; la strada fino alla stazione non è contata.": "After the last stop of the ride; the way back to the station is not counted.", "Nessuna stazione utile vicino alla prima tappa.": "No useful station near the first stop.", "Nessun treno regionale con la bici a quell'ora: prova un'altra partenza.": "No regional train with bikes at that time: try another start time.", "Bici a bordo": "Bike on board", "Bici: da verificare": "Bike: check the timetable", "Bici con prenotazione": "Bike with reservation", "Bici non ammessa": "No bikes", "Orari:": "Timetables:", "Regole bici degli operatori: verifica sempre sull'orario ufficiale.": "Bike rules from the operators: always check the official timetable.",
   "Con l'account salviamo solo ciò che serve alle funzioni che usi:": "With an account we only store what the features you use need:",
   "Strade trafficate": "Busy roads", "Legenda delle strade": "Roads legend", "Strade": "Roads", "autostrade": "motorways", "statali": "main roads", "provinciali": "secondary",
   "Autostrade, statali e provinciali principali in evidenza, su ogni mappa: di solito più auto e camion. È la classe della strada, non un conteggio del traffico.": "Motorways, main and secondary roads highlighted on any map: usually more cars and trucks. It is the road class, not a traffic count.",

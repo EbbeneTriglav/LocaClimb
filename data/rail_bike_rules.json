@@ -1,0 +1,27 @@
+{
+ "_note": "Bikes on trains, per operator, for the Giro 'Treno + bici' (v2/lib/transit.mjs bikeRule). Human-curated: every rule cites the operator page (or the article) it comes from and the day it was checked. 'match' is a case-insensitive regular expression on the agency name of the timetable (Transitous/HERE). 'regional' = regional and suburban trains, 'long' = high-speed and long-distance. bike: yes = an assembled bike rides with you (possibly with a ticket), reserve = only with a reservation, no = only folded or in a bag, check = depends on the train: look at the timetable.",
+ "operators": [
+  { "id": "trenord", "name": "Trenord", "match": "trenord",
+    "regional": { "bike": "yes", "price": "Gratis in Lombardia", "note": "Solo sui treni col simbolo della bici, una bici a testa. Se il treno è pieno il capotreno può dire di no." },
+    "ticket": "https://www.trenord.it/", "source": "https://www.trenord.it/biglietti/agevolazioni-e-supplementi/trasporto-biciclette/", "checked": "2026-11-18" },
+  { "id": "trenitalia", "name": "Trenitalia", "match": "trenitalia",
+    "regional": { "bike": "yes", "price": "Supplemento bici 3,50 € al giorno (gratis in alcune regioni)", "note": "Solo sui regionali col simbolo della bici nell'orario." },
+    "long": { "bike": "no", "price": "", "note": "Frecciarossa, Frecciargento, Frecciabianca: solo bici piegata o in sacca. Intercity: alcuni con prenotazione obbligatoria." },
+    "ticket": "https://www.trenitalia.com/", "source": "https://www.sicurauto.it/news/attualita-e-curiosita/trasporto-bici-in-treno-quanto-costa-e-condizioni/", "checked": "2026-11-18" },
+  { "id": "oebb", "name": "ÖBB", "match": "(^|\\W)(öbb|oebb|österreichische bundesbahnen)(\\W|$)",
+    "regional": { "bike": "yes", "price": "Biglietto bici: ~10% della tariffa, minimo 1,40 €", "note": "Senza prenotazione: se lo spazio è pieno non si sale." },
+    "long": { "bike": "reserve", "price": "Biglietto bici + prenotazione obbligatoria (3 € online)", "note": "Railjet, ICE, IC e Nightjet." },
+    "ticket": "https://www.oebb.at/", "source": "https://www.oebb.at/de/reiseplanung-services/im-zug/fahrradmitnahme", "checked": "2026-11-18" },
+  { "id": "db", "name": "Deutsche Bahn", "match": "(^|\\W)(db|deutsche bahn|db regio)(\\W|$)",
+    "regional": { "bike": "check", "price": "Biglietto bici regionale (tariffa del Land)", "note": "Alcune reti limitano le bici in certe ore: controlla l'orario." },
+    "long": { "bike": "reserve", "price": "Fahrradkarte 7,99–14,99 € con prenotazione obbligatoria", "note": "ICE, IC, EC." },
+    "ticket": "https://www.bahn.de/", "source": "https://www.bahn.de/angebot/zusatzticket/fahrrad/fahrradkarte-fernverkehr", "checked": "2026-11-18" },
+  { "id": "sncf", "name": "SNCF", "match": "(^|\\W)(sncf|ter|transilien)(\\W|$)",
+    "regional": { "bike": "yes", "price": "Gratis su gran parte dei TER", "note": "Alcune regioni chiedono la prenotazione: controlla la pagina TER della regione." },
+    "long": { "bike": "reserve", "price": "TGV INOUI e Intercités: prenotazione 10 € (5 € su alcune linee)", "note": "Bici smontata in sacca: gratis." },
+    "ticket": "https://www.sncf-connect.com/", "source": "https://www.sncf-voyageurs.com/fr/voyagez-avec-nous/train-et-velo/votre-velo-a-bord/", "checked": "2026-11-18" },
+  { "id": "ch", "name": "Ferrovie svizzere", "match": "(^|\\W)(sbb|cff|ffs|bls|rhb|rhätische|ferrovia retica|sob|thurbo|zentralbahn|tilo|matterhorn gotthard|mgb|regionalps|travys|tpf)(\\W|$)",
+    "regional": { "bike": "yes", "price": "Carta giornaliera bici CHF 15", "note": "Posti limitati con il bel tempo; su alcuni treni in estate serve la prenotazione: controlla l'orario." },
+    "ticket": "https://www.sbb.ch/", "source": "https://help.bls.ch/hc/it/articles/11001808259857-%C3%88-possibile-portare-sul-treno-la-propria-bicicletta", "checked": "2026-11-18" }
+ ]
+}
