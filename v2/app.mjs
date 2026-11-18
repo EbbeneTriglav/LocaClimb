@@ -1888,7 +1888,7 @@ async function trainSearch() {
   const [rules, st] = await Promise.all([loadBikeRules(), fetch(stopsUrl(b.lat, b.lon, 60)).then((r) => r.json()).catch(() => null)]);
   TRULES = rules;
   if (!G.tr || G.tr.key !== key) return;
-  const cand = pickStations((st && st.stations) || [], a, b, 3);
+  const cand = pickStations((st && st.stations) || [], a, b, 6);
   if (!cand.length) { G.tr.busy = false; G.tr.err = "Nessuna stazione utile vicino alla prima tappa."; renderGiro(); return; }
   const iso = departIso(G.day, G.start);
   const opts = await Promise.all(cand.map(async (s) => {
@@ -1897,7 +1897,10 @@ async function trainSearch() {
   }));
   if (!G.tr || G.tr.key !== key) return;
   G.tr.busy = false;
-  G.tr.opts = opts.filter((o) => o.its.length).sort((x, y) => Date.parse(x.its[0].arr) - Date.parse(y.its[0].arr)).slice(0, 2);
+  // closest station is not best (Milano -> Stelvio: the Engadin stations are nearer the top than Tirano but 6 hours of
+  // trains away): rank by the estimated time at the first stop, train arrival + the ride (straight line x1.4 at 18 km/h)
+  G.tr.opts = opts.filter((o) => o.its.length).map((o) => ({ ...o, eta: Date.parse(o.its[0].arr) + o.st.toT * 1.4 / 18 * 3600000 }))
+    .sort((x, y) => x.eta - y.eta).slice(0, 2);
   G.tr.src = (G.tr.opts[0] && G.tr.opts[0].src) || (st && st.source) || null;
   if (!G.tr.opts.length) G.tr.err = "Nessun treno regionale con la bici a quell'ora: prova un'altra partenza.";
   renderGiro();
@@ -1911,7 +1914,7 @@ function trainHtml() {
   if (t.busy) return `<section class="sec trn" id="gtrain"><h3>Come ci arrivi</h3><p class="note">Cerco stazioni e treni…</p></section>`;
   if (t.err) return `<section class="sec trn" id="gtrain"><h3>Come ci arrivi</h3><p class="note">${esc(t.err)}</p><button type="button" class="btn" id="trGo">Riprova</button>${src}</section>`;
   const tabs = [`<button type="button" data-tr="-1" aria-pressed="${t.sel < 0}"><b>Tutto in bici</b><small>da casa</small></button>`]
-    .concat(t.opts.map((o, i) => `<button type="button" data-tr="${i}" aria-pressed="${t.sel === i}"><b>Treno + bici</b><small data-noi18n>fino a ${esc(o.st.name)}</small></button>`)).join("");
+    .concat(t.opts.map((o, i) => `<button type="button" data-tr="${i}" aria-pressed="${t.sel === i}"><b>Treno + bici</b><small data-noi18n>${esc(o.st.name)} ${hm(itinView(o.its[o.pick], TRULES).arr)}</small></button>`)).join("");
   let card = "";
   const it = trainItin();
   if (it) {
@@ -1920,6 +1923,7 @@ function trainHtml() {
         <span class="mu" data-noi18n>${esc(v.from)} ${hm(v.dep)} → ${esc(v.to)} ${hm(v.arr)} · ${trDur((Date.parse(v.arr) - Date.parse(v.dep)) / 60000)}${v.changes ? " · " + v.changes + (v.changes === 1 ? " cambio" : " cambi") : ""}</span></div></div>
       <p class="trb"><span class="pill ${tone}"${v.prices[0] ? " data-noi18n" : ""}>${esc(v.prices[0] || { yes: "Bici a bordo", check: "Bici: da verificare", reserve: "Bici con prenotazione", no: "Bici non ammessa" }[v.bike])}</span></p>
       <p class="note small mu" data-noi18n>${esc(v.rule.note || "")}</p>
+      ${G.eta && !G.busy ? `<p class="note small" data-noi18n>${esc(tr("In bici dalla stazione: all'arrivo verso le"))} <b>${hm(new Date(Date.parse(v.arr) + (G.eta[G.eta.length - 1] + 5) * 60000).toISOString())}</b></p>` : ""}
       <div class="actions"><button type="button" class="btn" id="trMore">Altri orari e ritorno</button>${v.tickets.map((x) => `<a class="btn pri" href="${esc(x.url)}" target="_blank" rel="noopener" data-noi18n>Biglietto ${esc(x.op)}</a>`).join("")}</div></div>`;
   }
   return `<section class="sec trn" id="gtrain"><h3>Come ci arrivi</h3><div class="sides trs" role="group" aria-label="Come ci arrivi">${tabs}</div>${card}${src}</section>`;
