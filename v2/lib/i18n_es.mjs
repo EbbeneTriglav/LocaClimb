@@ -140,7 +140,7 @@ export const DICT_ES = {
   "Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.": "Estimación automática con datos de OSM y del terreno: no ve grava, obras ni asfalto mojado. No sustituye la señalización ni la prudencia.",
   "Preparo l'immagine…": "Preparando la imagen…", "Scarica": "Descargar", "Road book scaricato: aprilo e stampa": "Road book descargado: ábrelo e imprímelo", "Preparo il road book…": "Preparando el road book…", "Pronto: mappa, salite numerate, profilo, orari e meteo lungo il giro. Da stampare o salvare in PDF.": "Listo: mapa, subidas numeradas, perfil, horarios y tiempo a lo largo de la ruta. Para imprimir o guardar en PDF.", "Apri": "Abrir",
   // privacy
-  "Privacy": "Privacidad", "Protetto da reCAPTCHA: valgono la": "Protegido por reCAPTCHA: se aplican la", "e i": "y los", "Termini": "Condiciones",
+  "Privacy": "Privacidad", "Codice sorgente": "Código fuente", "licenza AGPL-3.0": "licencia AGPL-3.0", "Protetto da reCAPTCHA: valgono la": "Protegido por reCAPTCHA: se aplican la", "e i": "y los", "Termini": "Condiciones",
   "di Google.": "de Google.", "niente pubblicità, visite contate senza cookie": "sin publicidad, visitas contadas sin cookies", "informativa privacy": "política de privacidad",
   "Con l'account salviamo solo ciò che serve alle funzioni che usi:": "Con la cuenta solo guardamos lo que necesitan las funciones que usas:",
   // roads, shade

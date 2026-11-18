@@ -94,7 +94,13 @@ C'e' anche un secondo modo di fare deploy, pensato per chi preferisce un proprio
 
 ## Licenza
 
-MIT License
+Codice: **GNU Affero General Public License v3.0** (AGPL-3.0-only), testo completo in [LICENSE](LICENSE).
+Puoi usarlo, studiarlo e modificarlo; se lo usi per offrire un servizio in rete (anche un'app web) devi pubblicare
+il tuo codice con la stessa licenza e citare LocaRide. Dal 18/11/2026; le versioni precedenti erano state pubblicate
+come MIT.
+
+Non coperti dalla AGPL (licenze proprie): i dati derivati da OpenStreetMap (ODbL), i font Barlow (SIL OFL 1.1),
+MapLibre GL in `v2/vendor/` (BSD-3) e le altre librerie e fonti elencate sopra.
 
 ---
 
