@@ -74,6 +74,7 @@ test("clock helpers and URLs", () => {
   assert.equal(dur(153), "2h33"); assert.equal(dur(42), "42 min");
   assert.equal(stopsUrl(46.46694, 10.37051, 60), "/api/transit/stops?lat=46.4669&lon=10.3705&km=60");
   assert.match(planUrl(MILANO, STELVIO, "2026-11-21T06:30:00.000Z"), /^\/api\/transit\/plan\?from=45\.46420,9\.19000&to=46\.52850,10\.45320&time=2026-11-21T06%3A30%3A00\.000Z&n=3$/);
+  assert.match(planUrl(STELVIO, MILANO, "2026-11-21T16:00:00.000Z", 3, true), /&n=3&post=bike$/, "the trip back ends riding home from the station");
 });
 
 test("road distance decides which stations get a timetable query (Milano -> Stelvio: Tirano, not the Engadin)", () => {

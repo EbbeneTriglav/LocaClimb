@@ -2,7 +2,8 @@
  * /api/transit/* - trains for the Giro ("Treno + bici", 18/11/2026), behind our own origin.
  *
  *   GET /api/transit/stops?lat=..&lon=..&km=40          rail stations around a point
- *   GET /api/transit/plan?from=lat,lon&to=lat,lon&time=ISO&n=3   regional-train journeys
+ *   GET /api/transit/plan?from=lat,lon&to=lat,lon&time=ISO&n=3[&post=bike]   regional-train journeys
+ *     (post=bike: the last stretch from the station is ridden - the trip back home; else walked: to the station)
  *
  * 1) Transitous (MOTIS 2, https://transitous.org/api/): Europe-wide, free, NOT for commercial use; it asks for
  *    an identifying User-Agent, a visible link to its sources (the app shows "Orari: Transitous") and a word on
@@ -140,7 +141,7 @@ const r3 = (v) => (Math.round(+v * 200) / 200).toFixed(3);
 export function planKey(origin, q) {
   const ll = (s) => String(s || "").split(",").map(r3).join(",");
   const t = Date.parse(q.get("time") || "") || 0, quarter = new Date(Math.floor(t / 9e5) * 9e5).toISOString();
-  return origin + "/api/transit/plan?from=" + ll(q.get("from")) + "&to=" + ll(q.get("to")) + "&time=" + quarter + "&n=" + (q.get("n") || 3);
+  return origin + "/api/transit/plan?from=" + ll(q.get("from")) + "&to=" + ll(q.get("to")) + "&time=" + quarter + "&n=" + (q.get("n") || 3) + (q.get("post") === "bike" ? "&post=bike" : "");
 }
 export function stopsKey(origin, q) {
   return origin + "/api/transit/stops?lat=" + (+q.get("lat")).toFixed(2) + "&lon=" + (+q.get("lon")).toFixed(2) + "&km=" + Math.round(+q.get("km") || 40);
@@ -155,7 +156,8 @@ const json = (body, status, extra) => new Response(JSON.stringify(body), { statu
 async function motisPlan(q) {
   const n = Math.min(4, Math.max(1, +(q.get("n") || 3)));
   const p = new URLSearchParams({ fromPlace: q.get("from"), toPlace: q.get("to"), time: new Date(Date.parse(q.get("time"))).toISOString(), numItineraries: String(n),
-    transitModes: MOTIS_MODES, preTransitModes: "BIKE", maxPreTransitTime: "1800", postTransitModes: "WALK", maxPostTransitTime: "900" });
+    transitModes: MOTIS_MODES, preTransitModes: "BIKE", maxPreTransitTime: "1800",
+    postTransitModes: q.get("post") === "bike" ? "BIKE" : "WALK", maxPostTransitTime: q.get("post") === "bike" ? "1800" : "900" });
   const r = await fetch(MOTIS + "/v1/plan?" + p, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(7000) });
   if (!r.ok) throw new Error("transitous " + r.status);
   const j = await r.json();

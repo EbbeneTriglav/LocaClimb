@@ -11,8 +11,9 @@ export const MIN_KM = 25;          // shorter than this from home to the first s
 const RANK = { no: 3, reserve: 2, check: 1, yes: 0 };
 
 export function stopsUrl(lat, lon, km = 45) { return `${TRANSIT}/stops?lat=${(+lat).toFixed(4)}&lon=${(+lon).toFixed(4)}&km=${Math.round(km)}`; }
-export function planUrl(from, to, iso, n = 3) {
-  return `${TRANSIT}/plan?from=${(+from.lat).toFixed(5)},${(+from.lon).toFixed(5)}&to=${(+to.lat).toFixed(5)},${(+to.lon).toFixed(5)}&time=${encodeURIComponent(iso)}&n=${n}`;
+/* rideHome: the trip back, the last stretch from the station is ridden (the Worker's post=bike) */
+export function planUrl(from, to, iso, n = 3, rideHome = false) {
+  return `${TRANSIT}/plan?from=${(+from.lat).toFixed(5)},${(+from.lon).toFixed(5)}&to=${(+to.lat).toFixed(5)},${(+to.lon).toFixed(5)}&time=${encodeURIComponent(iso)}&n=${n}${rideHome ? "&post=bike" : ""}`;
 }
 
 /* the moment the rider leaves home: day offset (0 today) + "HH:MM", local time -> ISO (UTC) */

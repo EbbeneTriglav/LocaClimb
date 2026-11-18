@@ -1948,7 +1948,7 @@ async function trainDialog() {
   wire();
   if (G.tr.back == null) {
     const it = o.its[o.pick], end = Date.parse(itinView(it, TRULES).arr) + ((G.eta ? G.eta[G.eta.length - 1] : 0) + 5) * 60000;
-    const j = await fetch(planUrl(o.st, G.stops[0], new Date(end).toISOString(), 3)).then((r) => r.json()).catch(() => null);
+    const j = await fetch(planUrl(o.st, G.stops[0], new Date(end).toISOString(), 3, true)).then((r) => r.json()).catch(() => null);
     G.tr.back = bikeable((j && j.itineraries) || [], TRULES);
     if (dlg.open) { draw(); wire(); }
   }

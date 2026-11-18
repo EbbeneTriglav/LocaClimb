@@ -64,6 +64,7 @@ test("cache keys: ~500 m and a quarter of an hour share one upstream call; bad r
   const q = (s) => new URLSearchParams(s);
   assert.equal(planKey("https://x", q("from=45.4642,9.19&to=46.2158,10.1657&time=2026-11-21T07:04:00Z")), planKey("https://x", q("from=45.4651,9.1911&to=46.2161,10.1659&time=2026-11-21T07:12:00Z")));
   assert.notEqual(planKey("https://x", q("from=45.4642,9.19&to=46.2158,10.1657&time=2026-11-21T07:04:00Z")), planKey("https://x", q("from=45.4642,9.19&to=46.2158,10.1657&time=2026-11-21T07:20:00Z")));
+  assert.notEqual(planKey("https://x", q("from=45.4642,9.19&to=46.2158,10.1657&time=2026-11-21T07:04:00Z")), planKey("https://x", q("from=45.4642,9.19&to=46.2158,10.1657&time=2026-11-21T07:04:00Z&post=bike")));
   assert.equal(validPlan(q("from=45.46,9.19&to=46.21,10.16&time=2026-11-21T07:00:00Z")), true);
   assert.equal(validPlan(q("from=x&to=46.21,10.16&time=2026-11-21")), false);
   const r = await handleTransit(new Request("https://locaride.app/api/transit/plan?from=1&to=2"), {}, null);
