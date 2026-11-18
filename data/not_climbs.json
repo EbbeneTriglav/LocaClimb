@@ -1,4 +1,5 @@
 {
  "_note": "OSM passes that are not road-bike climbs (glacier cols, ski pistes, hiking saddles) and must never reach the app. Keyed by OSM id; build_osm_passes.mjs drops them from region files, build_osm_index.mjs from the index (and so from v1 and v2). Human-curated: add one only after checking the place.",
- "osm-94950235": { "name": "Schnalser Schartl", "why": "3127 m glacier col above the Val Senales ski area: no road reaches it (computed side 2.3 km at 31.7% avg, 72.6% max, on ski pistes). Removed at Rick's request, 31/10/2026." }
+ "osm-94950235": { "name": "Schnalser Schartl", "why": "3127 m glacier col above the Val Senales ski area: no road reaches it (computed side 2.3 km at 31.7% avg, 72.6% max, on ski pistes). Removed at Rick's request, 31/10/2026." },
+ "osm-9573882634": { "name": "Cime des Trois Serrières", "why": "2749 m natural=peak above the D64 (Bonette road): the road tops out about 50 m below it (computed sides end at 2702 m). As a peak candidate it absorbed Col de la Cime de la Bonette (osm-301808070) and Col de Restefond (osm-1741531447) in the confine-it-fr build of 18/11/2026. Agent, 18/11/2026." }
 }

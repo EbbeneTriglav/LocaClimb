@@ -1285,6 +1285,17 @@ async function main() {
   for (const [id] of [...byId]) { if (id.indexOf("osm-") === 0 && !liveOsm.has(id)) { byId.delete(id); pruned++; } }
   if (pruned) console.log("  pruned stale OSM orphans: " + pruned);
 
+  // data/not_climbs.json: places a human checked and found are no road climb (glacier cols, pistes,
+  // a peak above the road). Dropped BEFORE the cross-pass dedup: one of them must never absorb the
+  // real pass next to it (18/11/2026: the peak "Cime des Trois Serrieres" took the Bonette roads and
+  // the dedup removed Col de la Cime de la Bonette and Col de Restefond).
+  {
+    const NOT = await loadNotClimbs();
+    let gone = 0;
+    for (const id of NOT) if (byId.delete(id)) gone++;
+    if (gone) console.log("  not_climbs.json: dropped " + gone);
+  }
+
   // --- D: cross-pass overlap dedup ------------------------------------------------
   // Two pass nodes on the SAME road (e.g. Passo delle Radici and the lesser-known Foce di
   // Terrarossa, both up Casoni di Profecchia) generate near-identical versanti. For each pair
@@ -1326,14 +1337,6 @@ async function main() {
       if (!vs.length || best < CAND_MIN_GAIN) { byId.delete(id); dropped++; }
     }
     if (dropped) console.log("  dropped " + dropped + " candidate(s)" + (CAND_MIN_GAIN > 0 ? ": no climb or gain < " + CAND_MIN_GAIN + " m" : ": no climb computed"));
-  }
-
-  // data/not_climbs.json: places a human checked and found are no road climb (glacier cols, pistes).
-  {
-    const NOT = await loadNotClimbs();
-    let gone = 0;
-    for (const id of NOT) if (byId.delete(id)) gone++;
-    if (gone) console.log("  not_climbs.json: dropped " + gone);
   }
 
   const result = [...byId.values()].sort((a, b) => (b.elevation || 0) - (a.elevation || 0));

@@ -39,3 +39,10 @@ test("both builders apply the list", async () => {
     assert.match(src, /loadNotClimbs\(\)/, f);
   }
 });
+
+test("build_osm_passes drops not_climbs before the cross-pass dedup (a non-climb must not absorb a real pass)", async () => {
+  const src = await readFile(new URL("../scripts/build_osm_passes.mjs", import.meta.url), "utf8");
+  const drop = src.indexOf("loadNotClimbs()"), dedup = src.indexOf("--- D: cross-pass overlap dedup");
+  assert.ok(drop > 0 && dedup > 0 && drop < dedup, "not_climbs must be applied before the cross-pass dedup");
+  assert.ok((await loadNotClimbs()).has("osm-9573882634"), "Cime des Trois Serrieres (peak above the Bonette road)");
+});
