@@ -14,7 +14,7 @@ test("climbs_extra: added, moved and removed entries count; untouched ones do no
 test("not_climbs: changed keys, notes ignored", () => {
   const prev = { _note: "x", "osm-1": { name: "A", why: "w" } };
   const cur = { _note: "y", "osm-1": { name: "A", why: "w" }, "osm-2": { name: "B", why: "w" } };
-  assert.deepEqual(changedEntries(prev, cur, "not"), [{ kind: "not", id: "osm-2" }]);
+  assert.deepEqual(changedEntries(prev, cur, "not"), [{ kind: "not", key: "osm-2", id: "osm-2" }]);
 });
 
 test("a place belongs to the file that holds its id or a pass within 5 km", () => {
@@ -28,22 +28,27 @@ test("a place belongs to the file that holds its id or a pass within 5 km", () =
   assert.deepEqual(filesFor({ id: "x-col-de-peyresourde", lat: 42.802, lon: 0.463 }, files), ["osm_passes_fr_mp.json"], "new x-: nearest region");
 });
 
-test("dirty = the file's last commit is older than the change; Italy goes to osm-refresh; no duplicates", () => {
-  const zones = [{ id: "confine-it-fr", out: "osm_passes_xb_fr.json" }, { id: "france-midi-pyrenees", out: "osm_passes_fr_mp.json" }];
+test("dirty = the entry at the file's last build differs from now (content, not dates); Italy goes to osm-refresh", () => {
+  const zones = [{ id: "confine-it-fr", out: "osm_passes_xb_fr.json" }, { id: "france-midi-pyrenees", out: "osm_passes_fr_mp.json" }, { id: "france-est", out: "osm_passes_fr_est.json" }];
   const files = {
     "osm_passes_xb_fr.json": [{ id: "osm-9573882634", lat: 44.33, lon: 6.81 }],
     "osm_passes_fr_mp.json": [{ id: "osm-1", lat: 42.80, lon: 0.50 }],
+    "osm_passes_fr_est.json": [{ id: "osm-4", lat: 47.97, lon: 7.05 }],
     "osm_passes.json": [{ id: "osm-3", lat: 45.9, lon: 9.4 }]
   };
-  const changes = [
-    { time: "2026-11-16T18:01:29Z", entries: [{ id: "x-col-de-peyresourde", lat: 42.802, lon: 0.463 }, { id: "x-poggio", lat: 45.91, lon: 9.41 }] },
-    { time: "2026-11-18T18:57:05Z", entries: [{ id: "osm-9573882634" }] }
-  ];
-  const built = { "osm_passes_xb_fr.json": "2026-11-18T05:04:36Z", "osm_passes_fr_mp.json": "2026-11-13T10:00:00Z", "osm_passes.json": "2026-11-16T18:43:40Z" };
-  assert.deepEqual(dirtyTargets(changes, files, (f) => built[f], zones), ["france-midi-pyrenees", "confine-it-fr"]);
-  built["osm_passes.json"] = "2026-11-10T00:00:00Z";
-  built["osm_passes_xb_fr.json"] = "2026-11-18T21:00:00Z";   // rebuilt after the fix: clean again
-  assert.deepEqual(dirtyTargets(changes, files, (f) => built[f], zones), ["france-midi-pyrenees", "@refresh"]);
+  const pey = { id: "col-de-peyresourde", lat: 42.80231, lon: 0.46308 }, platz = { id: "col-du-platzerwasel", lat: 47.9695, lon: 7.04289 };
+  const ts = { name: "Cime des Trois Serrieres", why: "peak above the road" };
+  const before = { extra: [], not: {} }, now = { extra: [pey, platz], not: { "osm-9573882634": ts } };
+  const entries = [...changedEntries(before.extra, now.extra, "extra"), ...changedEntries(before.not, now.not, "not")];
+  // france-est was rebuilt AFTER the PR commit but BEFORE its merge: built with the old file -> still dirty
+  const builtWith = { "osm_passes_xb_fr.json": before, "osm_passes_fr_mp.json": before, "osm_passes_fr_est.json": before, "osm_passes.json": now };
+  assert.deepEqual(dirtyTargets(entries, files, now, (f) => builtWith[f], zones), ["france-midi-pyrenees", "france-est", "confine-it-fr"]);
+  builtWith["osm_passes_xb_fr.json"] = now;   // rebuilt with the fix: clean
+  builtWith["osm_passes_fr_mp.json"] = null;  // never built: dirty
+  const poggio = { kind: "extra", key: "poggio", id: "x-poggio", lat: 45.91, lon: 9.41 };
+  builtWith["osm_passes.json"] = before;
+  assert.deepEqual(dirtyTargets([...entries, poggio], files, { ...now, extra: [...now.extra, { id: "poggio", lat: 45.91, lon: 9.41 }] }, (f) => builtWith[f], zones),
+    ["france-midi-pyrenees", "france-est", "@refresh"]);
 });
 
 test("osm-rotate asks osm_dirty.mjs before its normal choice and Gate 1 rebuilds the index before validating", () => {
