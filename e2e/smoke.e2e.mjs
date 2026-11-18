@@ -54,7 +54,10 @@ if (!chromium) {
   test("map boots with curated markers", async () => {
     await page.waitForSelector("#map.leaflet-container", { timeout: 15000 });
     await page.waitForFunction(() => typeof PASSES_DATA !== "undefined" && PASSES_DATA.length > 0, null, { timeout: 15000 });
-    const n = await page.locator("#map .leaflet-marker-icon, #map path.leaflet-interactive").count();
+    // MarkerCluster re-adds every marker in chunks (chunkedLoading, js/map.js) when the OSM index lands:
+    // for a few seconds the map can be empty. A single count() raced that window; wait for markers instead.
+    const n = await page.waitForFunction(() => document.querySelectorAll("#map .leaflet-marker-icon, #map path.leaflet-interactive").length, null, { timeout: 15000 })
+      .then((h) => h.jsonValue()).catch(() => 0);
     assert.ok(n > 0, "no markers or clusters rendered on the map");
   });
 

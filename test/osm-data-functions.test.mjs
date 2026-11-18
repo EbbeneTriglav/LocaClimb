@@ -57,6 +57,25 @@ test("mergeColocated() unions versanti of border passes within ~1km without dupl
   assert.equal(merged[0].name, "Colle Test", "keeps the name from whichever side has one");
 });
 
+test("mergeColocated() joins across a grid-cell edge and keeps the FIRST co-located entry in list order", () => {
+  // 0.009-deg grid since 18/11/2026: two passes on either side of a cell edge are still ~100 m apart
+  const a = { id: "a", lat: 45.0089, lon: 7.0089, versanti: [] };
+  const far = { id: "far", lat: 45.5, lon: 7.5, versanti: [] };
+  const b = { id: "b", lat: 45.0091, lon: 7.0091, versanti: [] };     // next cell, ~30 m from a
+  const c = { id: "c", lat: 45.0170, lon: 7.0170, versanti: [] };     // 0.0081 from a: a wins (first in order)
+  const m = app.mergeColocated([a, far, b, c]);
+  assert.deepEqual(Array.from(m, (p) => p.id), ["a", "far"]);
+  const d = { id: "d", lat: 45.0179, lon: 7.0179, versanti: [] };     // 0.009 from a: not co-located (strict <)
+  assert.equal(app.mergeColocated([{ ...a }, d]).length, 2);
+});
+
+test("mergeColocated() is not quadratic: 40k passes merge in well under a second", () => {
+  const arr = Array.from({ length: 40000 }, (_, i) => ({ id: "p" + i, lat: 40 + (i % 200) * 0.05, lon: 5 + Math.floor(i / 200) * 0.05, versanti: [] }));
+  const t = Date.now();
+  assert.equal(app.mergeColocated(arr).length, 40000);
+  assert.ok(Date.now() - t < 3000, "took " + (Date.now() - t) + " ms (the old linear scan took ~15 s in a browser)");
+});
+
 test("mergeColocated() leaves distant passes separate", () => {
   const a = { lat: 46.5, lon: 7.0, versanti: [] };
   const b = { lat: 47.5, lon: 8.0, versanti: [] };

@@ -137,14 +137,31 @@ function loadNameFixes(){
     NAME_FIX=o||{};if(osmPasses.length){applyNameFixes();applyFilters();}
   }).catch(function(){NAME_FIX={};});
 }
+/* First entry of a growing list within 0.009 deg (~1 km) of a point, in LIST order - what a linear scan
+   returned, but through a 0.009-deg grid: the scan was quadratic and froze the page for ~15 s with 45k
+   passes (18/11/2026, also the cause of the flaky e2e "map boots" timeout). add() appends to the list. */
+function colocGrid(list){
+  var G=0.009,grid={};
+  function key(a,b){return a+":"+b;}
+  function add(p){var k=key(Math.floor(p.lat/G),Math.floor(p.lon/G));(grid[k]=grid[k]||[]).push(list.length);list.push(p);}
+  function find(p){
+    var a=Math.floor(p.lat/G),b=Math.floor(p.lon/G),best=-1;
+    for(var i=a-1;i<=a+1;i++)for(var j=b-1;j<=b+1;j++){
+      var c=grid[key(i,j)];if(!c)continue;
+      for(var k=0;k<c.length;k++){if(best>=0&&c[k]>best)break;var q=list[c[k]];
+        if(Math.abs(q.lat-p.lat)<G&&Math.abs(q.lon-p.lon)<G){best=c[k];break;}}
+    }
+    return best<0?null:list[best];
+  }
+  return {add:add,find:find};
+}
 function mergeColocated(arr){
   // Border passes: the same valico appears in two region files (e.g. Italia + Francia), each carrying
   // only its in-country versante. Union the versanti of co-located OSM passes (<~1km) so both sides show.
-  var out=[];
+  var out=[],cg=colocGrid(out);
   arr.forEach(function(op){
-    var hit=null;
-    for(var i=0;i<out.length;i++){var q=out[i];if(Math.abs(q.lat-op.lat)<0.009&&Math.abs(q.lon-op.lon)<0.009){hit=q;break;}}
-    if(!hit){out.push(op);return;}
+    var hit=cg.find(op);
+    if(!hit){cg.add(op);return;}
     hit.versanti=hit.versanti||[];
     (op.versanti||[]).forEach(function(v){if(!hit.versanti.some(function(w){return versSameOrigin(v,w);}))hit.versanti.push(v);});
     if((op.elevation||0)>(hit.elevation||0))hit.elevation=op.elevation;
@@ -203,13 +220,14 @@ function loadOsmFull(){
 function hydrateOsm(arr){
   if(!arr||!arr.length)return;
   if(!osmPasses.length){adoptOsm(arr);osmFull=true;return;}   // index absent: full data is the source
-  var by={};osmPasses.forEach(function(p){by[p.id]=p;});
+  var by={},cg=null;osmPasses.forEach(function(p){by[p.id]=p;});
   arr.forEach(function(full){
     var t=by[full.id];
     if(!t){
       // dropped as a curated duplicate, or folded into a co-located twin by mergeColocated
       if(adoptCuratedSides(full))return;
-      for(var i=0;i<osmPasses.length;i++){var q=osmPasses[i];if(Math.abs(q.lat-full.lat)<0.009&&Math.abs(q.lon-full.lon)<0.009){t=q;break;}}
+      if(!cg){cg=colocGrid([]);osmPasses.forEach(cg.add);}   // same first-in-order match as the old linear scan
+      t=cg.find(full);
       if(!t)return;
       (full.versanti||[]).forEach(function(v){t.versanti=t.versanti||[];if(!t.versanti.some(function(w){return versSameOrigin(v,w);}))t.versanti.push(v);});
       return;
