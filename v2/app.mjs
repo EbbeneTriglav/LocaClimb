@@ -5,30 +5,30 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=68";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=68";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=68";
-import { poisNear } from "./lib/poi.mjs?v=68";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=68";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=68";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=68";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=68";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=68";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=68";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=68";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=68";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=68";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=68";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=68";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=68";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=68";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=68";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=68";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=68";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=68";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=68";
-import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=68";
-import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours } from "./lib/transit.mjs?v=68";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=69";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=69";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=69";
+import { poisNear } from "./lib/poi.mjs?v=69";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=69";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=69";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=69";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=69";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=69";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=69";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=69";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=69";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=69";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=69";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=69";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=69";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=69";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=69";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=69";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=69";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=69";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=69";
+import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=69";
+import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours } from "./lib/transit.mjs?v=69";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -55,7 +55,7 @@ const evReady = loadEvents().then((e) => { EV = e; }).catch(() => { /* optional 
 let WC = [];
 const wcReady = loadClosures().then((w) => { WC = w; }).catch(() => { /* optional file */ });
 const DESKTOP = () => matchMedia("(min-width: 900px)").matches;
-const S = { paved: false, trucks: false, cc: "", poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null, evf: "tutti", ogR: ogRangeSaved() };
+const S = { paved: false, trucks: false, cc: "", poi: false, filter: "all", sel: null, side: 0, day: 0, three: false, ride: null, oggi: null, evf: "tutti", ogR: ogRangeSaved(), ogW: ogWhereSaved() };
 /* Oggi: the difficulty band to show (Rick 12/11/2026 the minimum, 15/11/2026 also the maximum), remembered on this device */
 function ogRangeSaved() { try { return diffRange(localStorage.getItem("lr_ogmin"), localStorage.getItem("lr_ogmax")); } catch { return diffRange(); } }
 
@@ -1353,11 +1353,39 @@ async function navClimb(c, v) {
 }
 
 /* ------------------------------------------------------------------ oggi */
+/* Oggi: where to look (Rick, 18/11): "Vicino a me" (GPS / the live dot) or "Zona della mappa" (what you are exploring) */
+const OGW_KEY = "lr_ogwhere";
+function ogWhereSaved() { try { return localStorage.getItem(OGW_KEY) === "map" ? "map" : "me"; } catch { return "me"; } }
+function ogSetWhere(w) { S.ogW = w; try { localStorage.setItem(OGW_KEY, w); } catch { /* private mode */ } }
+function ogHere() {
+  const c = map.getCenter(), mapC = { lat: c.lat, lon: c.lng, src: "mappa" };
+  if (S.ogW === "map") return Promise.resolve(mapC);
+  if (ME.pos && Date.now() - ME.pos.t < 600000) return Promise.resolve({ lat: ME.pos.lat, lon: ME.pos.lon, src: "gps" });
+  return new Promise((res) => {
+    if (!navigator.geolocation) return res({ ...mapC, nogps: true });
+    navigator.geolocation.getCurrentPosition((p) => res({ lat: p.coords.latitude, lon: p.coords.longitude, src: "gps" }), () => res({ ...mapC, nogps: true }), { timeout: 6000, maximumAge: 600000 });
+  });
+}
+/* the map moved away from the area of the list: a "Cerca in questa zona" pill, like the maps people know */
+let ogPill = null;
+function ogAreaPill() {
+  const show = panel.dataset.mode === "oggi" && S.oggi && S.oggi.here && (() => { const c = map.getCenter(); return distKm(c.lat, c.lng, S.oggi.here.lat, S.oggi.here.lon) > 15; })();
+  if (!show) { if (ogPill) { ogPill.remove(); ogPill = null; } return; }
+  if (ogPill) return;
+  // inside the sheet, under the "where" line: visible with the sheet open or lowered (a floating pill covered the title)
+  const w = $("#ogWhere"); if (!w) return;
+  ogPill = document.createElement("button"); ogPill.type = "button"; ogPill.className = "ogpill"; ogPill.textContent = "Cerca in questa zona";
+  ogPill.addEventListener("click", () => { ogSetWhere("map"); if (ogPill) { ogPill.remove(); ogPill = null; } renderOggi(); });
+  w.after(ogPill);
+}
+map.on("moveend", ogAreaPill);
 async function renderOggi() {
+  if (ogPill) { ogPill.remove(); ogPill = null; }
   setMode("oggi");
   const days = ["Oggi", "Domani", "Dopodomani"];
   panel.innerHTML = `<div class="og"><div class="handle"></div><h1>${esc(ogTitle(S.day))}</h1>
     <p class="note" id="ogWhere">Le salite più belle vicino a te, ordinate per meteo in cima: temporali, pioggia, vento e freddo.</p>
+    <div class="seg ogw" role="group" aria-label="Dove cercare"><button type="button" data-w="me" aria-pressed="${S.ogW === "me"}">Vicino a me</button><button type="button" data-w="map" aria-pressed="${S.ogW === "map"}">Zona della mappa</button></div>
     <div class="days" role="group" aria-label="Giorno">${days.map((d, i) => `<button type="button" data-day="${i}" aria-pressed="${i === S.day}">${d}</button>`).join("")}</div>
     <div class="ogd"><span class="ogl">Difficoltà</span><b id="ogRV" data-noi18n>${esc(rangeText(S.ogR))}</b>
       <div class="dual" id="ogDual" style="--a:${S.ogR.min};--b:${S.ogR.max}">
@@ -1366,13 +1394,11 @@ async function renderOggi() {
     <div id="ogList" class="loading">Cerco le salite intorno a te…</div><div id="ogShut"></div>
     <p class="note small"><a href="#/eventi">Granfondo, bike day e strade chiuse: apri Eventi</a></p></div>`;
   panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { S.day = +b.dataset.day; if (S.oggi) paintOggi(); else renderOggi(); }));
+  panel.querySelectorAll(".ogw [data-w]").forEach((b) => b.addEventListener("click", () => { if (b.dataset.w !== S.ogW) { ogSetWhere(b.dataset.w); S.oggi = null; renderOggi(); } }));
   ogRangeUi();
   await loadIndex();
-  const here = await new Promise((res) => {
-    const c = map.getCenter(), fallback = { lat: c.lat, lon: c.lng, src: "mappa" };
-    if (!navigator.geolocation) return res(fallback);
-    navigator.geolocation.getCurrentPosition((p) => res({ lat: p.coords.latitude, lon: p.coords.longitude, src: "gps" }), () => res(fallback), { timeout: 6000, maximumAge: 600000 });
-  });
+  const here = await ogHere();
+  { const ow = $("#ogWhere"); if (ow) ow.textContent = here.src === "gps" ? "Entro 60 km da te, ordinate per meteo in cima." : (here.nogps ? "Posizione non disponibile: intorno al centro della mappa" : "Intorno al centro della mappa") + ", ordinate per meteo in cima."; }
   if (panel.dataset.mode !== "oggi") return;   // the rider moved on while we waited for the GPS
   await wcReady;
   const today = isoDay(new Date()), shut = [];
@@ -1380,7 +1406,7 @@ async function renderOggi() {
   let list = open(nearby(here.lat, here.lon, 60, 40, S.ogR.min, S.ogR.max));
   if (list.length < 4) list = open(nearby(here.lat, here.lon, 120, 40, S.ogR.min, S.ogR.max));
   const os = $("#ogShut"); if (os) os.innerHTML = ogShutHtml(shut);
-  if (!list.length) { $("#ogList").textContent = "Nessuna salita con questa difficoltà entro 120 km: allarga l'intervallo di difficoltà o sposta la mappa e riapri Oggi."; return; }
+  if (!list.length) { $("#ogList").textContent = "Nessuna salita con questa difficoltà entro 120 km: allarga l'intervallo di difficoltà o sposta la mappa e tocca «Cerca in questa zona»."; return; }
   try {
     const hs = await fetchForecast(list.map((c) => ({ lat: c.lat, lon: c.lon, ele: c.elevation })), 3);
     S.oggi = { here, list, hs };
@@ -1470,7 +1496,7 @@ function paintOggi() {
     const maybe = !!(wc && wc.state);
     return { c, v, maybe, score: v.score - (maybe ? 150 : 0) };
   }).sort((a, b) => b.score - a.score || (b.c.difficulty || 0) - (a.c.difficulty || 0));
-  const w = $("#ogWhere"); if (w) w.textContent = (here.src === "gps" ? "Entro 60 km da te" : "Intorno al centro della mappa") + ", ordinate per meteo in cima.";
+  const w = $("#ogWhere"); if (w) w.textContent = (here.src === "gps" ? "Entro 60 km da te" : here.nogps ? "Posizione non disponibile: intorno al centro della mappa" : "Intorno al centro della mappa") + ", ordinate per meteo in cima.";
   panel.querySelectorAll("[data-day]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.day === S.day)));
   const h1 = panel.querySelector("h1"); if (h1) h1.textContent = ogTitle(S.day);
   $("#ogList").className = "";
