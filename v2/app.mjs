@@ -28,7 +28,7 @@ import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/prof
 import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=68";
 import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=68";
 import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=68";
-import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules } from "./lib/transit.mjs?v=68";
+import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours } from "./lib/transit.mjs?v=68";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -1888,8 +1888,10 @@ async function trainSearch() {
   const [rules, st] = await Promise.all([loadBikeRules(), fetch(stopsUrl(b.lat, b.lon, 60)).then((r) => r.json()).catch(() => null)]);
   TRULES = rules;
   if (!G.tr || G.tr.key !== key) return;
-  const cand = pickStations((st && st.stations) || [], a, b, 6);
+  let cand = pickStations((st && st.stations) || [], a, b, 15);
   if (!cand.length) { G.tr.busy = false; G.tr.err = "Nessuna stazione utile vicino alla prima tappa."; renderGiro(); return; }
+  const rk = roadKm(await fetch(roadTableUrl(cand, b)).then((r) => r.json()).catch(() => null), cand.length);
+  cand = cand.map((s, i) => ({ ...s, road: rk[i] })).sort((x, y) => guessHours(x) - guessHours(y)).slice(0, 5);
   const iso = departIso(G.day, G.start);
   const opts = await Promise.all(cand.map(async (s) => {
     const j = await fetch(planUrl(a, s, iso, 3)).then((r) => r.json()).catch(() => null);
@@ -1898,8 +1900,8 @@ async function trainSearch() {
   if (!G.tr || G.tr.key !== key) return;
   G.tr.busy = false;
   // closest station is not best (Milano -> Stelvio: the Engadin stations are nearer the top than Tirano but 6 hours of
-  // trains away): rank by the estimated time at the first stop, train arrival + the ride (straight line x1.4 at 18 km/h)
-  G.tr.opts = opts.filter((o) => o.its.length).map((o) => ({ ...o, eta: Date.parse(o.its[0].arr) + o.st.toT * 1.4 / 18 * 3600000 }))
+  // trains away): rank by the estimated time at the first stop, train arrival + the ride (road km at 18 km/h)
+  G.tr.opts = opts.filter((o) => o.its.length).map((o) => ({ ...o, eta: Date.parse(o.its[0].arr) + (o.st.road != null ? o.st.road : o.st.toT * 1.4) / 18 * 3600000 }))
     .sort((x, y) => x.eta - y.eta).slice(0, 2);
   G.tr.src = (G.tr.opts[0] && G.tr.opts[0].src) || (st && st.source) || null;
   if (!G.tr.opts.length) G.tr.err = "Nessun treno regionale con la bici a quell'ora: prova un'altra partenza.";

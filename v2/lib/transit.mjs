@@ -27,8 +27,8 @@ export function hm(iso) { const d = new Date(iso); return String(d.getHours()).p
 export function dur(min) { const h = Math.floor(min / 60), m = Math.round(min % 60); return h ? `${h}h${String(m).padStart(2, "0")}` : `${m} min`; }
 
 /* stations worth a train: clearly closer to the climb than home is, at most maxKm from it; small halts lose
-   against a real station a few km further (importance from the timetable), two stations 2 km apart count once and
-   one within 6 km of a better one adds nothing */
+   against a real station a few km further (importance from the timetable); of two stations within 6 km only the more
+   important one stays */
 export function pickStations(stations, home, target, max = 3, maxKm = 60) {
   const direct = havKm(home.lat, home.lon, target.lat, target.lon);
   const ok = (stations || []).map((s) => ({ ...s, toT: havKm(s.lat, s.lon, target.lat, target.lon), toH: havKm(s.lat, s.lon, home.lat, home.lon) }))
@@ -37,9 +37,10 @@ export function pickStations(stations, home, target, max = 3, maxKm = 60) {
     .sort((a, b) => a.score - b.score);
   const out = [];
   for (const s of ok) {
-    const k = out.findIndex((o) => havKm(o.lat, o.lon, s.lat, s.lon) < 2);   // the same station twice (RhB and FS at Tirano)
+    // the same place twice (RhB and FS at Tirano) or a halt next to a real station (Campocologno, Villa di Tirano
+    // next to Tirano): one of them, the more important - the halt comes first in distance but is the worse train stop
+    const k = out.findIndex((o) => havKm(o.lat, o.lon, s.lat, s.lon) < 6);
     if (k >= 0) { if ((s.imp || 0) > (out[k].imp || 0)) out[k] = s; continue; }
-    if (out.some((o) => havKm(o.lat, o.lon, s.lat, s.lon) < 6)) continue;        // Villa di Tirano next to Tirano: nothing new
     out.push(s);
   }
   return out.slice(0, max);
@@ -89,3 +90,17 @@ export function loadBikeRules() {
   if (!RULES) RULES = fetch(new URL("../../data/rail_bike_rules.json", import.meta.url), { cache: "no-cache" }).then((r) => (r.ok ? r.json() : { operators: [] })).catch(() => ({ operators: [] }));
   return RULES;
 }
+
+/* OSRM table (one call): road km from every station to the first stop. Distance by road, not in a straight line:
+   from the Engadin the Stelvio is 34 km away as the crow flies but behind two passes. null = use the straight line */
+export function roadTableUrl(stations, target) {
+  const pts = [...stations, target].map((p) => (+p.lon).toFixed(5) + "," + (+p.lat).toFixed(5)).join(";");
+  return `https://router.project-osrm.org/table/v1/driving/${pts}?sources=${stations.map((_, i) => i).join(";")}&destinations=${stations.length}&annotations=distance`;
+}
+export function roadKm(j, n) {
+  const d = j && j.code === "Ok" && j.distances;
+  return Array.from({ length: n }, (_, i) => (d && d[i] && d[i][0] != null ? d[i][0] / 1000 : null));
+}
+/* which stations to ask the timetable for: the quickest guess of the day, train (straight line from home at 60 km/h)
+   + ride (road km, else straight x1.4, at 18 km/h), in hours */
+export function guessHours(s) { return s.toH / 60 + (s.road != null ? s.road : s.toT * 1.4) / 18; }

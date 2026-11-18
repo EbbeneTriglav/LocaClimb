@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { pickStations, bikeRule, itinView, bikeable, departIso, minuteOfDay, hm, dur, trainFeatures, planUrl, stopsUrl } from "../v2/lib/transit.mjs";
+import { pickStations, bikeRule, itinView, bikeable, departIso, minuteOfDay, hm, dur, trainFeatures, planUrl, stopsUrl, roadTableUrl, roadKm, guessHours } from "../v2/lib/transit.mjs";
 
 const RULES = JSON.parse(readFileSync(new URL("../data/rail_bike_rules.json", import.meta.url), "utf8"));
 const MILANO = { lat: 45.4642, lon: 9.19 }, STELVIO = { lat: 46.5285, lon: 10.4532 };
@@ -35,12 +35,14 @@ test("stations: the real one near the climb, not the halt next to it nor one beh
     { name: "Tirano", lat: 46.2158, lon: 10.1657, imp: 1.1e-3 },
     { name: "Tirano, RhB", lat: 46.2157, lon: 10.1667, imp: 1e-3 },
     { name: "Sondrio", lat: 46.1696, lon: 9.8693, imp: 8e-4 },
-    { name: "Monza", lat: 45.5779, lon: 9.2723, imp: 1e-3 }
+    { name: "Monza", lat: 45.5779, lon: 9.2723, imp: 1e-3 },
+    { name: "Campocologno", lat: 46.2334, lon: 10.1419, imp: 5.2e-4 }
   ];
   const p = pickStations(st, MILANO, { lat: 46.4669, lon: 10.3705 }, 3);
   assert.equal(p[0].name, "Tirano");
   assert.ok(!p.some((s) => s.name === "Tirano, RhB"), "two stations 100 m apart count once");
   assert.ok(!p.some((s) => s.name === "Monza"), "a station near home is no shortcut");
+  assert.ok(!p.some((s) => s.name === "Campocologno"), "a halt 3 km from Tirano gives way to Tirano, even if a bit closer to the climb");
   assert.ok(p.findIndex((s) => s.name === "Villa Di Tirano") === -1 || p.findIndex((s) => s.name === "Villa Di Tirano") > p.findIndex((s) => s.name === "Sondrio"), "a small halt ranks after a real station a bit farther");
 });
 
@@ -72,4 +74,14 @@ test("clock helpers and URLs", () => {
   assert.equal(dur(153), "2h33"); assert.equal(dur(42), "42 min");
   assert.equal(stopsUrl(46.46694, 10.37051, 60), "/api/transit/stops?lat=46.4669&lon=10.3705&km=60");
   assert.match(planUrl(MILANO, STELVIO, "2026-11-21T06:30:00.000Z"), /^\/api\/transit\/plan\?from=45\.46420,9\.19000&to=46\.52850,10\.45320&time=2026-11-21T06%3A30%3A00\.000Z&n=3$/);
+});
+
+test("road distance decides which stations get a timetable query (Milano -> Stelvio: Tirano, not the Engadin)", () => {
+  const st = [{ name: "Zernez", lat: 46.6987, lon: 10.0926, toT: 34, toH: 150 }, { name: "Tirano", lat: 46.2158, lon: 10.1657, toT: 45, toH: 120 }];
+  assert.equal(roadTableUrl(st, STELVIO), "https://router.project-osrm.org/table/v1/driving/10.09260,46.69870;10.16570,46.21580;10.45320,46.52850?sources=0;1&destinations=2&annotations=distance");
+  assert.deepEqual(roadKm({ code: "Ok", distances: [[55000], [60500]] }, 2), [55, 60.5]);
+  assert.deepEqual(roadKm(null, 2), [null, null], "OSRM down: straight lines");
+  const g = (s, road) => guessHours({ ...s, road });
+  assert.ok(g(st[0], null) < g(st[1], null), "in a straight line the Engadin looks better...");
+  assert.ok(g(st[1], 60.5) < g(st[0], 55), "...by road and from Milano, Tirano is");
 });
