@@ -26,7 +26,8 @@ on:
   workflow_dispatch: {}                # per provarlo a mano quando vuoi
 
 permissions:
-  actions: write      # basta questo: serve solo a lanciare osm-expand
+  actions: write      # lanciare osm-expand / osm-refresh
+  contents: read      # osm_dirty.mjs legge la storia di climbs_extra/not_climbs (API commits)
 
 concurrency:
   group: osm-rotate
@@ -58,6 +59,34 @@ jobs:
           FAILED=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 100 --json displayTitle,conclusion,createdAt \
             --jq '[.[] | select(.displayTitle | startswith("osm-expand ")) | select(.createdAt > (now - 259200 | todate))] | sort_by(.createdAt) | group_by(.displayTitle) | map(last | select(.conclusion == "failure") | .displayTitle | ltrimstr("osm-expand ")) | join(" ")' || true)
           echo "Fallite di recente (in fondo alla fila): ${FAILED:-nessuna}"
+
+          # 1d) ZONE "SPORCHE" (18/11/2026, Rick: "non devo far partire cose in manuale"): una voce di
+          #     climbs_extra.json o not_climbs.json cambiata DOPO l'ultima build del file che la contiene
+          #     (scripts/osm_dirty.mjs, API GitHub). Passano davanti a tutto: niente lanci a mano dopo una PR
+          #     di dati. "@refresh" = l'Italia (osm_passes.json), che ricostruisce osm-refresh.yml: al massimo
+          #     un lancio ogni 20 ore. Una zona sporca fallita nelle ultime 6 ore aspetta (niente giri a vuoto).
+          DIRTY=$(GITHUB_REPOSITORY="${{ github.repository }}" node scripts/osm_dirty.mjs || true)
+          echo "Zone sporche (dati curati cambiati dopo l'ultima build): ${DIRTY:-nessuna}"
+          if [[ " $DIRTY " == *" @refresh "* ]]; then
+            RECENT=$(gh run list --repo "${{ github.repository }}" --workflow osm-refresh.yml --limit 5 --json createdAt \
+              --jq '[.[] | select(.createdAt > (now - 72000 | todate))] | length' || echo 1)
+            if [ "${RECENT:-1}" -eq 0 ]; then echo "Italia sporca: lancio osm-refresh"; gh workflow run osm-refresh.yml; fi
+          fi
+          FAILED6=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 100 --json displayTitle,conclusion,createdAt \
+            --jq '[.[] | select(.displayTitle | startswith("osm-expand ")) | select(.createdAt > (now - 21600 | todate)) | select(.conclusion == "failure") | .displayTitle | ltrimstr("osm-expand ")] | join(" ")' || true)
+          T=""
+          for d in $DIRTY; do
+            [ "$d" = "@refresh" ] && continue
+            [[ " ${TARGETS[*]} " == *" $d "* ]] || continue
+            [[ " $FAILED6 " == *" $d "* ]] && { echo "  $d e' fallita da meno di 6 ore: aspetta"; continue; }
+            T="$d"; break
+          done
+          if [ -n "$T" ]; then
+            echo "Zona sporca scelta: $T"
+            echo "### Zona sporca: $T (dati curati cambiati dopo l'ultima build)" >> "$GITHUB_STEP_SUMMARY"
+            gh workflow run osm-expand.yml -f target="$T"
+            exit 0
+          fi
 
           # 2) la zona: coda di priorita', poi mai costruite, poi la piu' vecchia (scripts/osm_priority.mjs)
           IDX=$(( $(date +%s) / 3600 ))
