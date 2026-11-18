@@ -1,0 +1,57 @@
+name: Security guard (sito live)
+
+# Weekly security check of https://locaride.app, asked by Rick on 18/11/2026: the fixed checks of the
+# "Guardiano sicurezza" no longer depend on Rick's PC being on. No AI, no secrets: scripts/security_guard.mjs
+# (tested in test/security-guard.test.mjs). Read-only: the one write is an anonymous Firestore PATCH that
+# must be refused. The repo is public, so the logs are too: the script prints only statuses, never bodies.
+# A red run = something to look at (GitHub mails the failure); the table is in the run summary.
+# Only schedule and manual runs (never pull_request): no code from a fork ever runs here.
+# GitHub-only on purpose: NOT mirrored to .gitea/workflows/.
+
+on:
+  schedule:
+    - cron: "23 5 * * 3"   # Wednesday 06:23 Italian time (winter), before the Claude guardian (07:33)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-guard
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262   # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020   # v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Header, chiave API, Firestore, Worker
+        id: http
+        continue-on-error: true
+        run: node scripts/security_guard.mjs
+
+      - name: Install Playwright (ad-hoc, --no-save, versione fissa)
+        id: install
+        continue-on-error: true
+        run: |
+          npm install playwright@1.64.1 --no-save --no-audit --no-fund
+          npx --no-install playwright install --with-deps chromium
+
+      - name: Browser (CSP, errori JS, App Check)
+        id: browser
+        if: steps.install.outcome == 'success'
+        continue-on-error: true
+        run: node scripts/security_guard.mjs --browser
+
+      - name: Esito
+        run: |
+          echo "header e servizi: ${{ steps.http.outcome }} | installazione browser: ${{ steps.install.outcome }} | browser: ${{ steps.browser.outcome }}"
+          [ "${{ steps.http.outcome }}" = success ] && [ "${{ steps.install.outcome }}" = success ] && [ "${{ steps.browser.outcome }}" = success ] || { echo "::error::Controllo di sicurezza fallito: vedi il riepilogo del run"; exit 1; }
