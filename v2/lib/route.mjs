@@ -3,7 +3,7 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=65";
+import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=66";
 
 export const BROUTER = "https://brouter.de/brouter";
 export const PROFILES = [["fastbike", "Solo asfalto"], ["safety", "Più ciclabili"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
@@ -27,6 +27,37 @@ export function patchProfile(brf) {
   if (!/---context:way/.test(brf) || /lr_tunnel/.test(brf)) return brf;
   return brf.replace(/(---context:way[^\n]*\n)/, "$1assign lr_tunnel = if tunnel=yes then 1 else 0\n");
 }
+/* "Più ciclabili" for a ROAD bike (Rick 18/11/2026: Milano -> Valcava went up a 20% hiking path). The server
+   profile "safety" is a trekking profile: quiet ways first, gravel and paths allowed. There is no safety.brf in
+   PROFILE_SRC, so the tunnel copy never existed and the server profile was used as is. Now "safety" = fastbike
+   (asphalt) tuned for quiet roads: traffic counts fully, paved cycleways and designated bike paths are cheaper than
+   the road (BRouter wants costfactor >= 1), untagged ones cost a little more, gravel/dirt cost like a long detour,
+   and gradients above 10% cost extra. Checked on brouter.de 18/11 (max gradient over 200 m, off-road metres):
+   Milano -> Valcava: server safety 33.7% max with 4.4 km of track and 1.7 km of path/ground -> 17.6%, no path/track;
+   Lecco -> Ghisallo 43.8% (2.9 km of path) -> 11.6%; Bergamo -> Selvino 9.9%, no off-road. */
+export const ROAD_SAFETY_BASE = "fastbike";
+export function roadSafetyProfile(brf) {
+  if (!/---context:way/.test(brf) || /LocaRide road-safety/.test(brf)) return brf;
+  const rules = [
+    [/(assign consider_traffic\s*=\s*)[0-9.]+/, "$1" + "1"],
+    // climbing above 10% costs extra: the road with hairpins beats the 20-40% shortcut (Selvino: 27% -> 10%)
+    [/(assign uphillcost\s*=\s*)0\b/, "$1" + "80"],
+    [/(assign uphillcutoff\s*=\s*)1\.5/, "$1" + "10"],
+    [/(switch\s+or highway=primary highway=primary_link\s+)1\.2/, "$1" + "1.5"],
+    [/(switch\s+highway=cycleway\s+)1\.3/, "$1" + "switch isunpaved 12 switch ispaved 1.0 1.15"],
+    [/(switch tracktype=grade2 )switch isunpaved 10 3/, "$1" + "switch isunpaved 20 6"],
+    [/(switch tracktype=grade3 )10\.0/, "$1" + "25.0"],
+    [/(switch tracktype=grade4 )20\.0/, "$1" + "40.0"],
+    [/(switch tracktype=grade5 )30\.0/, "$1" + "60.0"],
+    [/(switch or bicycle=designated bicycle_road=yes )switch isunpaved 3 1\.2/, "$1" + "switch isunpaved 15 switch ispaved 1.0 1.6"],
+    [/switch ispaved 2\.0 switch isunpaved 15\.0 5\.0/, "switch ispaved 2.0 switch isunpaved 30.0 12.0"]
+  ];
+  let out = brf;
+  for (const [re, to] of rules) { if (!re.test(out)) return null; out = out.replace(re, to); }   // upstream changed: do not guess
+  return out.replace(/(---context:global[^\n]*\n)/, "$1# LocaRide road-safety (v2/lib/route.mjs roadSafetyProfile)\n");
+}
+/* the server profile when the custom upload fails */
+export function serverProfile(p) { return p === "safety" ? ROAD_SAFETY_BASE : p; }
 const CYCLE = /(^| )highway=cycleway( |$)|(^| )cycleway(:both|:right|:left)?=(lane|track|opposite_lane|opposite_track)( |$)/;
 const TUNNEL = /(^| )tunnel=(yes|building_passage|avalanche_protector)( |$)/;
 

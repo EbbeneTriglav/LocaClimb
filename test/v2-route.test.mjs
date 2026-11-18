@@ -184,3 +184,25 @@ test("BRouter profile with the tunnel rule: one line after the way context, once
   assert.equal(profileSrcUrl("fastbike"), "https://raw.githubusercontent.com/abrensch/brouter/master/misc/profiles2/fastbike.brf");
   assert.ok(PROFILES.some(([k]) => k === "safety"), "«Più ciclabili»");
 });
+
+import { roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "../v2/lib/route.mjs";
+import { readFileSync as readBrf } from "node:fs";
+test("«Più ciclabili» for a road bike: fastbike tuned, never the server trekking profile (Rick 18/11/2026, Valcava on a trail)", () => {
+  // test/fixtures/brouter-fastbike.brf: BRouter misc/profiles2/fastbike.brf (MIT) as of 18/11/2026
+  const base = readBrf(new URL("./fixtures/brouter-fastbike.brf", import.meta.url), "utf8");
+  const p = roadSafetyProfile(base);
+  assert.ok(p, "every rule found its line in the upstream profile");
+  assert.match(p, /assign consider_traffic\s*=\s*1\s/);
+  assert.match(p, /assign uphillcost\s*=\s*80\s/);
+  assert.match(p, /assign uphillcutoff\s*=\s*10\s/);
+  assert.match(p, /highway=cycleway\s+switch isunpaved 12 switch ispaved 1\.0 1\.15/);
+  assert.match(p, /switch ispaved 2\.0 switch isunpaved 30\.0 12\.0/, "an untagged path costs 12x: a detour of many km before a trail");
+  assert.ok(!/switch ispaved 2\.0 switch isunpaved 15\.0 5\.0/.test(p));
+  for (const m of p.matchAll(/switch isunpaved \d+ switch ispaved ([0-9.]+) ([0-9.]+)/g)) assert.ok(+m[1] >= 1 && +m[2] >= 1, "BRouter costfactors stay >= 1");
+  assert.equal(roadSafetyProfile(p), p, "idempotent");
+  assert.match(patchProfile(p), /assign lr_tunnel/, "the tunnel rule goes on top");
+  assert.equal(roadSafetyProfile(base.replace("1.3\n", "1.4\n").replace(/highway=cycleway\s+1\.3/, "highway=cycleway 9")), null, "upstream changed: no guessing, the Giro falls back to asphalt");
+  assert.equal(ROAD_SAFETY_BASE, "fastbike");
+  assert.equal(serverProfile("safety"), "fastbike", "fallback: never the server 'safety'");
+  assert.equal(serverProfile("trekking"), "trekking");
+});
