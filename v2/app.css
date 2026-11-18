@@ -587,3 +587,18 @@ body.navon .maplibregl-ctrl-bottom-right { bottom: calc(var(--safe-b, 0px) + 96p
 .updbar span { flex: 1; font-weight: 600; }
 .updbar .btn { height: 38px; }
 @media (min-width: 900px) { .updbar { left: auto; width: 420px; } }
+
+/* ---------- Giro: "Treno + bici" (app.mjs trainHtml) ---------- */
+.trn .trs button { height: auto; min-height: 48px; padding: 6px 12px; border-radius: 12px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; }
+.trn .trs button b { font-family: var(--cond); font-weight: 800; font-size: 15px; text-transform: uppercase; }
+.trn .trs button small { font-size: 12px; opacity: .85; }
+.trn .trs button[aria-pressed="true"] { background: var(--acc); color: var(--acc-tx); border-color: var(--acc); }
+.trcard { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: var(--r); background: var(--s1); border: 1px solid var(--line); margin-bottom: 10px; }
+.trh { display: flex; align-items: center; gap: 10px; }
+.trh > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.trh b { font-family: var(--cond); font-weight: 800; font-size: 17px; text-transform: uppercase; }
+.trh .mu { font-size: 13px; }
+.tri { flex: none; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--g1); color: var(--bg); }
+.trb { margin: 0; } .trb .pill { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 6px; display: inline-block; }
+.trcard .actions { margin: 0; }
+#dlg .opt[aria-pressed="true"] { border-color: var(--acc); }

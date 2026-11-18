@@ -9,6 +9,7 @@
  */
 import { handleMeteo } from "./meteo.js";
 import { handleEvent, handleStats } from "./stats.js";
+import { handleTransit } from "./transit.js";
 
 const FIREBASE_HOST = "locaride-ce1ad.firebaseapp.com";
 
@@ -18,6 +19,7 @@ export default {
     if (url.pathname === "/api/meteo") return handleMeteo(request, ctx); // weather with fallback + cache (cf/meteo.js)
     if (url.pathname === "/api/ev") return handleEvent(request, env, ctx); // anonymous usage counts (cf/stats.js)
     if (url.pathname === "/api/stats") return handleStats(request, env);   // the totals, behind a token
+    if (url.pathname.startsWith("/api/transit/")) return handleTransit(request, env, ctx); // trains for the Giro (cf/transit.js)
     if (url.pathname.startsWith("/__/auth/") || url.pathname.startsWith("/__/firebase/")) {
       const target = new URL(url.pathname + url.search, "https://" + FIREBASE_HOST);
       // keep method, headers, body; do not follow redirects here (the browser must see them)
