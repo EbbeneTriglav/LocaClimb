@@ -5,29 +5,29 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=65";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=65";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=65";
-import { poisNear } from "./lib/poi.mjs?v=65";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=65";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures } from "./lib/route.mjs?v=65";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=65";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=65";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=65";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=65";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=65";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=65";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=65";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=65";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=65";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=65";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=65";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=65";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=65";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=65";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=65";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=65";
-import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=65";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=66";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=66";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=66";
+import { poisNear } from "./lib/poi.mjs?v=66";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=66";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=66";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=66";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=66";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=66";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=66";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=66";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=66";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=66";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=66";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=66";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=66";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=66";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=66";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=66";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=66";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=66";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=66";
+import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=66";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -1209,13 +1209,18 @@ function navFix(p) {
   if (L.off < 60) NAV.last = L.seg;
   navPaint(L, p);
 }
-/* navigation routes: the base profile only. The tunnel-aware custom profile (the Giro's) costs a GitHub fetch and
-   an upload before the first route of a session, ~3 s measured on 14/11/2026, and a navigator needs no tunnel
-   warnings. At most NAV_TIMEOUT_MS: a slow answer is dropped and the rider keeps the old line. */
+/* navigation routes: no new upload. The tunnel-aware custom profile (the Giro's) costs a GitHub fetch and an upload
+   before the first route of a session, ~3 s measured on 14/11/2026: the navigator uses it only if the Giro already
+   uploaded it, else the server profile - for "Più ciclabili" the asphalt one, never the server "safety" (trails, 18/11).
+   At most NAV_TIMEOUT_MS: a slow answer is dropped and the rider keeps the old line. */
+function knownProfile(base) {
+  try { const k = sessionStorage.getItem("lr_brp2_" + base); if (k) return k; } catch { /* private mode */ }
+  return BRP[base] || serverProfile(base);
+}
 async function navRoute(stops, profile) {
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), NAV_TIMEOUT_MS);
   try {
-    const r = parseBrouter(await (await fetch(brouterUrl(stops, profile), { signal: ctl.signal })).json());
+    const r = parseBrouter(await (await fetch(brouterUrl(stops, knownProfile(profile)), { signal: ctl.signal })).json());
     return r && r.track && r.track.length > 1 ? r : null;
   } catch { return null; } finally { clearTimeout(t); }
 }
@@ -1609,11 +1614,15 @@ function calcSoon() { clearTimeout(calcT); calcT = setTimeout(calcRoute, 350); }
 /* the base profile + the tunnel rule (route.mjs patchProfile), uploaded once per session; null = use the base */
 const BRP = {};
 async function customProfile(base) {
-  const key = "lr_brp_" + base;
+  const key = "lr_brp2_" + base;
   try { const k = sessionStorage.getItem(key); if (k) return k; } catch { /* private mode */ }
   if (BRP[base] !== undefined) return BRP[base];
   try {
-    const src = await fetch(profileSrcUrl(base)), brf = src.ok ? patchProfile(await src.text()) : "";
+    // "Più ciclabili" (safety) = fastbike for quiet roads and bike paths, never trails (route.mjs roadSafetyProfile)
+    const road = base === "safety", src = await fetch(profileSrcUrl(road ? ROAD_SAFETY_BASE : base));
+    let brf = src.ok ? await src.text() : "";
+    if (road) brf = roadSafetyProfile(brf) || "";
+    brf = brf ? patchProfile(brf) : "";
     const j = /lr_tunnel/.test(brf) ? await (await fetch(BROUTER + "/profile", { method: "POST", headers: { "Content-Type": "text/plain" }, body: brf })).json() : null;
     BRP[base] = j && !j.error && /^custom_\d+$/.test(j.profileid || "") ? j.profileid : null;
   } catch { BRP[base] = null; }
@@ -1627,8 +1636,9 @@ async function calcRoute() {
   let res = null;
   const cp = await customProfile(G.profile);
   if (cp) { try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, cp))).json()); } catch { res = null; } }
-  if (cp && !res) { try { sessionStorage.removeItem("lr_brp_" + G.profile); } catch { /* private mode */ } BRP[G.profile] = undefined; }
-  if (!res) { try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, G.profile))).json()); } catch { res = null; } if (res) res.noTun = true; }
+  if (cp && !res) { try { sessionStorage.removeItem("lr_brp2_" + G.profile); } catch { /* private mode */ } BRP[G.profile] = undefined; }
+  // no custom profile: the server one. Never the server "safety" (a trekking profile: trails at 20-40%), asphalt instead
+  if (!res) { try { res = parseBrouter(await (await fetch(brouterUrl(G.stops, serverProfile(G.profile)))).json()); } catch { res = null; } if (res) res.noTun = true; }
   if (!res) {
     // BRouter down or no route with this profile: OSRM gives the geometry only (no heights, no surface)
     try {
