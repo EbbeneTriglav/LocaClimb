@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { pickStations, bikeRule, itinView, bikeable, departIso, minuteOfDay, hm, dur, trainFeatures, planUrl, stopsUrl, roadTableUrl, roadKm, guessHours } from "../v2/lib/transit.mjs";
+import { pickStations, bikeRule, itinView, bikeable, departIso, minuteOfDay, hm, dur, trainFeatures, planUrl, stopsUrl, roadTableUrl, roadKm, guessHours, toStation, dayTrip } from "../v2/lib/transit.mjs";
 
 const RULES = JSON.parse(readFileSync(new URL("../data/rail_bike_rules.json", import.meta.url), "utf8"));
 const MILANO = { lat: 45.4642, lon: 9.19 }, STELVIO = { lat: 46.5285, lon: 10.4532 };
@@ -85,4 +85,22 @@ test("road distance decides which stations get a timetable query (Milano -> Stel
   const g = (s, road) => guessHours({ ...s, road });
   assert.ok(g(st[0], null) < g(st[1], null), "in a straight line the Engadin looks better...");
   assert.ok(g(st[1], 60.5) < g(st[0], 55), "...by road and from Milano, Tirano is");
+});
+
+test("toStation: nothing when the ride ends at the station, else road ~1.3x at 20 km/h", () => {
+  const st = { lat: 46.2163, lon: 10.1660 };
+  assert.deepEqual(toStation({ lat: 46.2170, lon: 10.1665 }, st), { km: 0, min: 0 });
+  const r = toStation({ lat: 46.5286, lon: 10.4532 }, st);   // Stelvio -> Tirano, ~41 km straight
+  assert.ok(r.km > 45 && r.km < 60 && r.min === Math.round(r.km / 20 * 60), JSON.stringify(r));
+});
+
+test("dayTrip: first train with the bike after the ride -> home the same day, late, or none", () => {
+  const ready = Date.parse("2026-11-21T15:00:00Z");
+  const back = (dep, arr) => ({ dep, arr, legs: [leg({ dep, arr })] });
+  const ok = dayTrip(ready, [back("2026-11-21T16:08:00Z", "2026-11-21T19:02:00Z"), back("2026-11-21T15:08:00Z", "2026-11-21T18:02:00Z")], RULES);
+  assert.equal(ok.state, "ok"); assert.equal(ok.dep, "2026-11-21T15:08:00Z"); assert.equal(ok.wait, 8);
+  assert.equal(dayTrip(ready, [back("2026-11-21T14:30:00Z", "2026-11-21T17:00:00Z")], RULES).state, "none", "a train before the ride ends does not count");
+  assert.equal(dayTrip(ready, [], RULES).state, "none");
+  const late = dayTrip(ready, [back("2026-11-21T22:30:00Z", "2026-11-22T01:10:00Z")], RULES);
+  assert.equal(late.state, new Date("2026-11-22T01:10:00Z").toDateString() === new Date(ready).toDateString() ? "ok" : "late");
 });

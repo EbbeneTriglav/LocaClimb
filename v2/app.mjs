@@ -5,30 +5,30 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=69";
-import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=69";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=69";
-import { poisNear } from "./lib/poi.mjs?v=69";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=69";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=69";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=69";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=69";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=69";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=69";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=69";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=69";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=69";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=69";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=69";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=69";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=69";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=69";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=69";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=69";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=69";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=69";
-import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=69";
-import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours } from "./lib/transit.mjs?v=69";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=70";
+import { loadIndex, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=70";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=70";
+import { poisNear } from "./lib/poi.mjs?v=70";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=70";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=70";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=70";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=70";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=70";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=70";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=70";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=70";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=70";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=70";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=70";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=70";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=70";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=70";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=70";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=70";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=70";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=70";
+import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=70";
+import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours, toStation, dayTrip, BUFFER_MIN } from "./lib/transit.mjs?v=70";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -1952,12 +1952,46 @@ function trainHtml() {
       <p class="trb"><span class="pill ${tone}"${v.prices[0] ? " data-noi18n" : ""}>${esc(v.prices[0] || { yes: "Bici a bordo", check: "Bici: da verificare", reserve: "Bici con prenotazione", no: "Bici non ammessa" }[v.bike])}</span></p>
       <p class="note small mu" data-noi18n>${esc(v.rule.note || "")}</p>
       ${G.eta && !G.busy ? `<p class="note small" data-noi18n>${esc(tr("In bici dalla stazione: all'arrivo verso le"))} <b>${hm(new Date(Date.parse(v.arr) + (G.eta[G.eta.length - 1] + 5) * 60000).toISOString())}</b></p>` : ""}
+      ${dayHtml()}
       <div class="actions"><button type="button" class="btn" id="trMore">Altri orari e ritorno</button>${v.tickets.map((x) => `<a class="btn pri" href="${esc(x.url)}" target="_blank" rel="noopener" data-noi18n>Biglietto ${esc(x.op)}</a>`).join("")}</div></div>`;
   }
   return `<section class="sec trn" id="gtrain"><h3>Come ci arrivi</h3><div class="sides trs" role="group" aria-label="Come ci arrivi">${tabs}</div>${card}${src}</section>`;
 }
+/* "In giornata?": the ride ends at the last stop; back to the station (estimate unless the ride ends there),
+   then the first train with the bike, ride home included. One search per outward train and ride. */
+function dayPlan() {
+  const o = G.tr && G.tr.sel >= 0 && G.tr.opts[G.tr.sel], it = trainItin();
+  if (!o || !it || !G.eta || G.busy) return null;
+  const last = G.stops[G.stops.length - 1], back = toStation(last, o.st);
+  const rideEnd = Date.parse(itinView(it, TRULES).arr) + (G.eta[G.eta.length - 1] + 5) * 60000;
+  const ready = rideEnd + (back.min + BUFFER_MIN) * 60000;
+  return { o, back, ready, key: o.st.name + "|" + o.pick + "|" + Math.round(ready / 300000) };
+}
+function dayHtml() {
+  const p = dayPlan(); if (!p) return "";
+  const d = G.tr.day && G.tr.day.key === p.key ? G.tr.day : null;
+  const est = p.back.km ? `<p class="note small mu" data-noi18n>${esc(tr("Contati circa"))} ${p.back.km} km ${esc(tr("dall'ultima tappa alla stazione (stima)."))}</p><button type="button" class="linkbtn" id="trClose">Chiudi il giro alla stazione</button>` : "";
+  if (!d || d.busy) return `<div class="trday"><b>In giornata?</b> <span class="mu">Cerco il treno del ritorno…</span></div>`;
+  const r = d.res;
+  if (r.state === "ok") return `<div class="trday ok"><b>✓ In giornata</b><span data-noi18n>${esc(tr("Ritorno"))} ${hm(r.dep)} ${esc(tr("da"))} ${esc(p.o.st.name)} · ${esc(tr("a casa alle"))} ${hm(r.arr)}</span>${est}</div>`;
+  if (r.state === "late") return `<div class="trday warn"><b>⚠ Rientro tardi</b><span data-noi18n>${esc(tr("Il primo treno utile parte alle"))} ${hm(r.dep)}: ${esc(tr("a casa dopo mezzanotte"))} (${hm(r.arr)}).</span>${est}</div>`;
+  return `<div class="trday bad"><b>✗ Non in giornata</b><span data-noi18n>${esc(tr("Nessun treno con la bici dopo le"))} ${hm(new Date(p.ready).toISOString())}. ${esc(tr("Parti prima, accorcia il giro o scegli un'altra stazione."))}</span>${est}</div>`;
+}
+async function dayFetch() {
+  const p = dayPlan(); if (!p || (G.tr.day && G.tr.day.key === p.key)) return;
+  G.tr.day = { key: p.key, busy: true };
+  const j = await fetch(planUrl(p.o.st, G.stops[0], new Date(p.ready).toISOString(), 3, true)).then((r) => r.json()).catch(() => null);
+  if (!G.tr || !G.tr.day || G.tr.day.key !== p.key) return;
+  G.tr.day = { key: p.key, res: dayTrip(p.ready, (j && j.itineraries) || [], TRULES) };
+  if (giroOn()) renderGiro();
+}
 function wireTrain() {
   const go = $("#trGo"); if (go) go.addEventListener("click", trainSearch);
+  dayFetch();
+  const cl = $("#trClose"); if (cl) cl.addEventListener("click", () => {
+    const p = dayPlan(); if (!p || G.stops.length >= MAX_STOPS) return;
+    G.stops.push({ lat: p.o.st.lat, lon: p.o.st.lon, id: null, name: p.o.st.name }); G.res = null; syncMarkers(); calcSoon(); giroChanged();
+  });
   panel.querySelectorAll("[data-tr]").forEach((b) => b.addEventListener("click", () => trainPick(+b.dataset.tr)));
   const mo = $("#trMore"); if (mo) mo.addEventListener("click", trainDialog);
 }
