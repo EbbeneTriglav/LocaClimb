@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=69";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=70";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -23,6 +23,7 @@ export const DICT = {
   "Difficoltà": "Difficulty", "Legenda difficoltà": "Difficulty legend", "Avvicina": "Zoom in", "Allontana": "Zoom out",
   "Mostra e segui la mia posizione": "Show and follow my position", "Nascondi la mia posizione": "Hide my position", "Posizione non consentita: attivala nelle impostazioni del browser": "Location not allowed: turn it on in your browser settings", "Cerco il segnale GPS…": "Looking for GPS signal…", "Posizione non disponibile su questo dispositivo": "Location not available on this device", "Vicino a me": "Near me", "Vicino a me: acqua, bar, salite": "Near me: water, bars, climbs", "Bar e cibo": "Bars and food", "Salite": "Climbs", "Cosa cerchi": "What are you looking for", "Cerco intorno a te…": "Looking around you…", "Niente qui intorno.": "Nothing around here.", "Qui non abbiamo ancora acqua e bar: li aggiungiamo zona per zona.": "No water and bars here yet: we add them area by area.", "Guidami": "Guide me", "Percorso": "Route", "Distanze in linea d'aria. «Naviga» ti guida svolta per svolta sulla strada in bici; «Percorso» la mette nel Giro, pronta per il ciclocomputer.": "Straight-line distances. \"Navigate\" guides you turn by turn on the bike road; \"Route\" puts it in the Ride, ready for your bike computer.", "Chiudi la guida": "Close the guide", "Sei arrivato": "You're there", "Versione classica": "Classic version", "la vecchia app, ancora disponibile per qualche settimana": "the old app, still available for a few weeks",
   "Zona della mappa": "Map area", "Dove cercare": "Where to look", "Cerca in questa zona": "Search this area", "Posizione non disponibile: intorno al centro della mappa": "Location not available: around the map centre",
+  "In giornata?": "Day trip?", "Cerco il treno del ritorno…": "Looking for the train back…", "✓ In giornata": "✓ Day trip OK", "⚠ Rientro tardi": "⚠ Late home", "✗ Non in giornata": "✗ Not in a day", "Chiudi il giro alla stazione": "End the ride at the station", "Contati circa": "Counted about", "dall'ultima tappa alla stazione (stima).": "from the last stop to the station (estimate).", "Ritorno": "Back", "da": "from", "a casa alle": "home at", "Il primo treno utile parte alle": "The first train you can catch leaves at", "a casa dopo mezzanotte": "home after midnight", "Nessun treno con la bici dopo le": "No train with bikes after", "Parti prima, accorcia il giro o scegli un'altra stazione.": "Leave earlier, shorten the ride or pick another station.",
   "Nord in alto": "North up", "Rilievo 3D": "3D relief", "Centra sulla mia posizione": "Center on my position",
   "Acqua e bar": "Water and bars", "Acqua e bar sulla mappa": "Water and bars on the map", "Avvicinati per vedere acqua e bar": "Zoom in to see water and bars",
   "Località": "Places", "Sezioni": "Sections", "Mappa": "Map", "Oggi": "Today", "Giro": "Ride", "Diario": "Diary", "Classica": "Classic",

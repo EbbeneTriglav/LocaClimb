@@ -4,7 +4,7 @@
  * Transitous, HERE as the fallback), already in one shape; whether a bike may ride along comes from
  * data/rail_bike_rules.json, because no timetable says it (Italian feeds leave bikes_allowed empty).
  */
-import { havKm } from "./climb.mjs?v=69";
+import { havKm } from "./climb.mjs?v=70";
 
 export const TRANSIT = "/api/transit";
 export const MIN_KM = 25;          // shorter than this from home to the first stop: no train offered
@@ -105,3 +105,25 @@ export function roadKm(j, n) {
 /* which stations to ask the timetable for: the quickest guess of the day, train (straight line from home at 60 km/h)
    + ride (road km, else straight x1.4, at 18 km/h), in hours */
 export function guessHours(s) { return s.toH / 60 + (s.road != null ? s.road : s.toT * 1.4) / 18; }
+
+/* ---- "In giornata?" (Rick, 19/11/2026): train there, the ride, back to the station, train home the same day ---- */
+export const BUFFER_MIN = 10;   // bike to the platform, ticket, a drink
+
+/* the ride back from the last stop to the station: nothing when the ride ends there (< 1.5 km); otherwise an
+   estimate - road ~1.3 x the straight line at 20 km/h (mostly back down to the valley) - said "stima" in the UI */
+export function toStation(last, st) {
+  const d = havKm(last.lat, last.lon, st.lat, st.lon);
+  if (d < 1.5) return { km: 0, min: 0 };
+  const km = Math.round(d * 1.3);
+  return { km, min: Math.round(km / 20 * 60) };
+}
+
+/* the verdict from the trains searched from `readyMs` (bike allowed, ride home included in the arrival):
+   ok = the first one gets you home the same day; late = only after midnight; none = no train with the bike */
+export function dayTrip(readyMs, backs, rules) {
+  const vs = (backs || []).map((it) => itinView(it, rules)).filter((v) => v.bike !== "no" && Date.parse(v.dep) >= readyMs - 60000)
+    .sort((a, b) => Date.parse(a.dep) - Date.parse(b.dep));
+  if (!vs.length) return { state: "none" };
+  const v = vs[0], sameDay = new Date(v.arr).toDateString() === new Date(readyMs).toDateString();
+  return { state: sameDay ? "ok" : "late", dep: v.dep, arr: v.arr, names: v.names, wait: Math.round((Date.parse(v.dep) - readyMs) / 60000) };
+}
