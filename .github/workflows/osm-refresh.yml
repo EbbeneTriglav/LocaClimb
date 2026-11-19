@@ -38,6 +38,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Baseline - errors already on main (the data gate fails only on NEW ones, 19/11/2026)
+        run: node scripts/validate_data.mjs --save "$RUNNER_TEMP/val_base.json"
 
       - name: Install osmium + pngjs
         run: |
@@ -61,7 +63,7 @@ jobs:
           # With the stale index a build that loses a pass passed Gate 1 (confine-it-fr lost the Bonette, main
           # went red after the commit step rebuilt the index) and a build that restores it could never pass.
           node scripts/build_osm_index.mjs
-          node scripts/validate_data.mjs
+          node scripts/validate_data.mjs --baseline "$RUNNER_TEMP/val_base.json"
           if [ -f test/asset-size.test.mjs ]; then node --test test/asset-size.test.mjs; fi
       - name: Gate 2 - golden set
         id: golden

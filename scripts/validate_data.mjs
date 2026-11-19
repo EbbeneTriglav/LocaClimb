@@ -12,7 +12,7 @@
  * Usage: node scripts/validate_data.mjs
  * Exit code 0 = no errors (warnings are still printed). Exit code 1 = errors found.
  */
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import vm from "node:vm";
 import { dataPath } from "./lib/paths.mjs";
 const STATUS_VALUES = new Set(["open", "seasonal", "closed"]);
@@ -287,9 +287,34 @@ async function main() {
   if (!passNews.__missing) errors.push(...validatePassNews(passNews, "pass_news.json"));
 
   for (const w of warnings) console.warn("WARN  " + w);
-  for (const e of errors) console.error("ERROR " + e);
-  console.log(`\n${errors.length} error(s), ${warnings.length} warning(s).`);
-  if (errors.length > 0) process.exit(1);
+  // --save / --baseline (19/11/2026): the data pipelines gate on NEW errors only. One error already on main
+  // (the Bonette lost by a confine-it-fr build) failed every osm-expand, discover and winter-status run for a
+  // day, including the confine-it-fr rebuild that would have fixed it. test.yml stays strict (no flags).
+  const { save, baseline } = gateArgs(process.argv.slice(2));
+  if (save) {
+    await writeFile(save, JSON.stringify(errors));
+    console.log(`\nbaseline: ${errors.length} error(s) on the data as checked out, saved to ${save}.`);
+    return;
+  }
+  let known = null;
+  if (baseline) { try { known = JSON.parse(await readFile(baseline, "utf8")); } catch { console.warn("WARN  baseline " + baseline + " unreadable: every error counts"); } }
+  const { fresh, old } = splitErrors(errors, known);
+  for (const e of old) console.error("ERROR (already on main, not from this run) " + e);
+  for (const e of fresh) console.error("ERROR " + e);
+  console.log(`\n${errors.length} error(s)${known ? ` (${fresh.length} new, ${old.length} already on main)` : ""}, ${warnings.length} warning(s).`);
+  if (fresh.length > 0) process.exit(1);
+}
+
+/* pure, tested: command-line flags of the data gates */
+export function gateArgs(argv) {
+  const at = (k) => { const i = argv.indexOf(k); return i >= 0 && argv[i + 1] ? argv[i + 1] : null; };
+  return { save: at("--save"), baseline: at("--baseline") };
+}
+/* errors present in the baseline (main before this run) do not fail the gate; without a baseline all do */
+export function splitErrors(errors, known) {
+  if (!Array.isArray(known)) return { fresh: errors.slice(), old: [] };
+  const k = new Set(known);
+  return { fresh: errors.filter((e) => !k.has(e)), old: errors.filter((e) => k.has(e)) };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main();
