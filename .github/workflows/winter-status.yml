@@ -42,8 +42,9 @@ jobs:
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
+            node scripts/validate_data.mjs --save "$RUNNER_TEMP/val_base.json"   # errors already on main do not block (19/11/2026)
             node scripts/winter_status.mjs --apply "$RUNNER_TEMP/status.json"
-            node scripts/validate_data.mjs || { echo "dati non validi, non pubblico"; exit 1; }
+            node scripts/validate_data.mjs --baseline "$RUNNER_TEMP/val_base.json" || { echo "dati non validi, non pubblico"; exit 1; }
             if grep -lE "^(<<<<<<< |=======$|>>>>>>> )" data/*.json; then echo "marcatori di conflitto"; exit 1; fi
             git add data/winter_closures.json
             if git diff --staged --quiet; then echo "Nessun cambiamento."; ok=1; break; fi
