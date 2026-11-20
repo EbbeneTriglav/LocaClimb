@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { changedEntries, filesFor, dirtyTargets } from "../scripts/osm_dirty.mjs";
+import { changedEntries, filesFor, dirtyTargets, repairFirst } from "../scripts/osm_dirty.mjs";
 
 test("climbs_extra: added, moved and removed entries count; untouched ones do not", () => {
   const prev = [{ id: "a", lat: 45, lon: 7 }, { id: "b", lat: 46, lon: 8 }, { id: "c", lat: 44, lon: 6 }];
@@ -60,4 +60,38 @@ test("osm-rotate asks osm_dirty.mjs before its normal choice and Gate 1 rebuilds
     const g = y.slice(y.indexOf("Gate 1"));
     assert.ok(g.indexOf("build_osm_index.mjs") > 0 && g.indexOf("build_osm_index.mjs") < g.indexOf("validate_data.mjs"), f);
   }
+});
+
+test("repair first: a zone that brings back a missing winter_closures pass jumps the queue (Bonette, 20/11)", () => {
+  const zones = [{ id: "confine-it-fr", out: "osm_passes_xb_fr.json" }, { id: "france-est", out: "osm_passes_fr_est.json" },
+    { id: "france-paca", out: "osm_passes_fr_paca.json" }, { id: "switzerland", out: "osm_passes_ch.json" }];
+  const files = {
+    "osm_passes_xb_fr.json": [{ id: "osm-9573882634", lat: 44.33, lon: 6.81 }],
+    "osm_passes_fr_paca.json": [{ id: "osm-9573882634", lat: 44.33, lon: 6.81 }, { id: "osm-5", lat: 44.81, lon: 6.72 }],
+    "osm_passes_fr_est.json": [{ id: "osm-4", lat: 47.97, lon: 7.05 }],
+    "osm_passes_ch.json": [{ id: "osm-6", lat: 46.5730, lon: 8.4155 }]
+  };
+  const closures = { passes: [{ id: "bonette", lat: 44.32052, lon: 6.80746 }, { id: "furka", lat: 46.5725, lon: 8.4150 }] };
+  const dirty = ["france-est", "switzerland", "france-paca", "confine-it-fr"];
+  assert.deepEqual(repairFirst(dirty, closures, files, zones), ["france-paca", "confine-it-fr", "france-est", "switzerland"],
+    "Bonette missing (only the peak, 1,1 km away): its two zones first, in their order; Furka is there");
+  files["osm_passes_xb_fr.json"].push({ id: "osm-301808070", lat: 44.3208, lon: 6.8072 });
+  assert.deepEqual(repairFirst(dirty, closures, files, zones), dirty, "nothing missing: order unchanged");
+  assert.deepEqual(repairFirst(["france-est"], closures, files, zones), ["france-est"], "never adds a zone");
+  assert.deepEqual(repairFirst(dirty, null, files, zones), dirty, "no closures file: unchanged");
+});
+
+test("chain: a good osm-expand relaunches osm-rotate, which then takes only a dirty zone and skips fresh builds", () => {
+  const ex = readFileSync(new URL("../.github/workflows/osm-expand.yml", import.meta.url), "utf8");
+  const rot = readFileSync(new URL("../.github/workflows/osm-rotate.yml", import.meta.url), "utf8");
+  const step = ex.slice(ex.indexOf("Prossima zona sporca subito"));
+  assert.match(ex, /permissions:\n  contents: write\n  actions: write/, "osm-expand may dispatch");
+  assert.match(step, /if: \$\{\{ success\(\) && github\.event\.inputs\.dry_run != 'true' \}\}/, "only after a good, real build");
+  assert.match(step, /gh workflow run osm-rotate\.yml[^\n]*chain_after="\$\{\{ github\.run_id \}\}"/);
+  assert.ok(ex.indexOf("Prossima zona sporca subito") > ex.indexOf("Commit & push"), "after the push");
+  const stop = rot.indexOf('if [ -n "$CHAIN_AFTER" ]'), normal = rot.indexOf("node scripts/osm_priority.mjs --next");
+  assert.ok(stop > rot.indexOf("node scripts/osm_dirty.mjs") && stop < normal, "in a chain: dirty zones only, never the normal round");
+  assert.match(rot, /OK12="\$OK12 \$CHAIN_DONE"/, "the zone just built is never rebuilt at once (an identical file stays 'dirty')");
+  assert.match(rot, /\$OK12 " == \*" \$d "\*/);
+  assert.match(rot, /select\(\(\.databaseId \| tostring\) != /, "the run that called us is not 'busy'");
 });

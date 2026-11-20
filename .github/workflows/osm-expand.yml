@@ -185,6 +185,7 @@ on:
 
 permissions:
   contents: write
+  actions: write      # 20/11/2026: a fine run rilancia osm-rotate in catena (zone sporche una dopo l'altra)
 
 concurrency:
   group: osm-data          # condiviso con osm-refresh e osm-border: serializza chi scrive i manifesti
@@ -360,3 +361,15 @@ jobs:
             echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 5 + 3))
           done
           [ "$ok" = 1 ] || { echo "push fallito dopo 5 tentativi"; exit 1; }
+
+      # 20/11/2026 CATENA (Rick: le Actions devono girare da sole): GitHub fa partire solo ~3 scatti al giorno di
+      # osm-rotate. Finito bene, si rilancia subito osm-rotate in modalita' catena: prende la prossima zona SPORCA
+      # (scripts/osm_dirty.mjs), se c'e'; altrimenti non fa nulla. Un fallimento ferma la catena (ci pensa il cron).
+      - name: Prossima zona sporca subito (osm-rotate in catena)
+        if: ${{ success() && github.event.inputs.dry_run != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TGT: ${{ github.event.inputs.target }}
+        run: |
+          gh workflow run osm-rotate.yml --repo "${{ github.repository }}" -f chain_after="${{ github.run_id }}" -f chain_done="$TGT" \
+            || echo "osm-rotate non rilanciato (non blocca: resta il cron)"

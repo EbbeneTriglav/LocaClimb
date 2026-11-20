@@ -12,6 +12,7 @@
  *   4. a file is dirty when the entry at its last build commit (the file's last commit on main) differs from
  *      the entry now. Content, not dates: a PR committed before a rebuild and merged after it is still caught.
  *      osm_passes.json (Italy) is rebuilt by osm-refresh.yml, not osm-expand: it comes out as "@refresh".
+ * Zones that would bring back a pass of winter_closures.json missing from every file come first (repairFirst).
  * CLI: GH_TOKEN=... GITHUB_REPOSITORY=owner/repo node scripts/osm_dirty.mjs  -> "zone zone @refresh" (or nothing)
  * Any API failure prints nothing (osm-rotate then falls back to its normal choice).
  */
@@ -78,6 +79,21 @@ export function dirtyTargets(entries, files, current, builtWith, zones) {
   return res;
 }
 
+/* repair first (20/11/2026): a pass of winter_closures.json with no climb within 1 km in any region file is a
+   validate error on main (Bonette, 18/11: red for days while osm-rotate rebuilt the dirty zones in commit
+   order, confine-it-fr last). The dirty targets whose file holds a place within NEAR_KM of such a pass come
+   first, in their order; the others keep theirs. Only reorders: it never adds a zone. */
+export function repairFirst(targets, closures, files, zones) {
+  const byOut = new Map(zones.map((z) => [z.out, z.id])), r = Math.PI / 180, fix = new Set();
+  const all = Object.values(files).flat().filter((c) => c && Number.isFinite(c.lat) && Number.isFinite(c.lon));
+  for (const p of (closures && Array.isArray(closures.passes) ? closures.passes : [])) {
+    if (!p || !Number.isFinite(p.lat) || !Number.isFinite(p.lon)) continue;
+    if (all.some((c) => 6371 * Math.hypot((c.lat - p.lat) * r, (c.lon - p.lon) * r * Math.cos(p.lat * r)) <= 1.0)) continue;
+    for (const f of filesFor({ id: null, lat: p.lat, lon: p.lon }, files)) fix.add(f === "osm_passes.json" ? "@refresh" : byOut.get(f));
+  }
+  return [...targets.filter((t) => fix.has(t)), ...targets.filter((t) => !fix.has(t))];
+}
+
 async function main() {
   const repo = process.env.GITHUB_REPOSITORY, token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
   const days = +(process.env.DAYS || 21);
@@ -115,7 +131,9 @@ async function main() {
     const sha = c[0] && c[0].sha;
     built.set(f, sha ? { extra: await raw(sha, "data/climbs_extra.json"), not: await raw(sha, "data/not_climbs.json") } : null);
   }
-  process.stdout.write(dirtyTargets(entries, files, current, (f) => built.get(f), zones).join(" "));
+  let closures = null;
+  try { closures = JSON.parse(readFileSync(dataPath("winter_closures.json"), "utf8")); } catch { /* no reorder */ }
+  process.stdout.write(repairFirst(dirtyTargets(entries, files, current, (f) => built.get(f), zones), closures, files, zones).join(" "));
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

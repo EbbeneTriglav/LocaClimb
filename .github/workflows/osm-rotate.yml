@@ -23,7 +23,20 @@ name: OSM rotate (auto - una zona a giro)
 on:
   schedule:
     - cron: "47 * * * *"   # ogni ora al minuto 47 (UTC): GitHub salta spesso gli scatti "in punto"
-  workflow_dispatch: {}                # per provarlo a mano quando vuoi
+  workflow_dispatch:                   # per provarlo a mano quando vuoi
+    inputs:
+      # 20/11/2026 CATENA: GitHub lancia solo ~3 dei 24 scatti orari al giorno (19-20/11: 21:00, 02:40, 10:35,
+      # 18:52 UTC), quindi 12 zone sporche = 4 giorni. Ora osm-expand, quando finisce bene, rilancia subito
+      # questo workflow con chain_after = il suo run: in modalita' catena si prende SOLO una zona sporca
+      # (niente giro normale) e la catena si ferma da sola quando non ce ne sono piu'.
+      chain_after:
+        description: "(automatico) id del run osm-expand appena finito"
+        required: false
+        default: ""
+      chain_done:
+        description: "(automatico) zona appena costruita da quel run"
+        required: false
+        default: ""
 
 permissions:
   actions: write      # lanciare osm-expand / osm-refresh
@@ -42,6 +55,8 @@ jobs:
       - name: Scegli la prossima zona e lancia osm-expand
         env:
           GH_TOKEN: ${{ github.token }}
+          CHAIN_AFTER: ${{ github.event.inputs.chain_after }}
+          CHAIN_DONE: ${{ github.event.inputs.chain_done }}
         run: |
           # 1) lista dei target dal menu di osm-expand.yml (righe "          - nome")
           mapfile -t TARGETS < <(grep -oE '^          - [a-z][a-z0-9-]+' .github/workflows/osm-expand.yml | sed 's/^ *- //')
@@ -50,7 +65,9 @@ jobs:
 
           # 1b) un osm-expand ancora in corso o in coda: salto lo scatto (la zona scelta adesso sarebbe la
           #     stessa, non ancora finita: verrebbe costruita due volte o cancellata dalla coda osm-data)
-          BUSY=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 20 --json status --jq '[.[] | select(.status != "completed")] | length')
+          #     In catena il run che ci ha lanciato sta ancora chiudendo il suo ultimo step: non conta.
+          CHAIN_AFTER="${CHAIN_AFTER//[^0-9]/}"; CHAIN_DONE="${CHAIN_DONE//[^a-z0-9-]/}"
+          BUSY=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 20 --json status,databaseId --jq "[.[] | select(.status != \"completed\") | select((.databaseId | tostring) != \"${CHAIN_AFTER:-0}\")] | length")
           if [ "${BUSY:-0}" -gt 0 ]; then echo "osm-expand gia' in corso o in coda ($BUSY): salto questo scatto"; exit 0; fi
 
           # 1c) le zone il cui ultimo osm-expand degli ultimi 3 giorni e' fallito (il titolo del run e'
@@ -74,11 +91,17 @@ jobs:
           fi
           FAILED6=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 100 --json displayTitle,conclusion,createdAt \
             --jq '[.[] | select(.displayTitle | startswith("osm-expand ")) | select(.createdAt > (now - 21600 | todate)) | select(.conclusion == "failure") | .displayTitle | ltrimstr("osm-expand ")] | join(" ")' || true)
+          # una zona costruita con successo nelle ultime 12 ore (o quella appena finita, in catena) non si rifa':
+          # se il suo file e' uscito identico non c'e' un commit nuovo e resterebbe "sporca" per sempre (giro a vuoto)
+          OK12=$(gh run list --repo "${{ github.repository }}" --workflow osm-expand.yml --limit 100 --json displayTitle,conclusion,createdAt \
+            --jq '[.[] | select(.displayTitle | startswith("osm-expand ")) | select(.createdAt > (now - 43200 | todate)) | select(.conclusion == "success") | .displayTitle | ltrimstr("osm-expand ")] | join(" ")' || true)
+          OK12="$OK12 $CHAIN_DONE"
           T=""
           for d in $DIRTY; do
             [ "$d" = "@refresh" ] && continue
             [[ " ${TARGETS[*]} " == *" $d "* ]] || continue
             [[ " $FAILED6 " == *" $d "* ]] && { echo "  $d e' fallita da meno di 6 ore: aspetta"; continue; }
+            [[ " $OK12 " == *" $d "* ]] && { echo "  $d e' gia' stata costruita nelle ultime 12 ore: salto"; continue; }
             T="$d"; break
           done
           if [ -n "$T" ]; then
@@ -87,6 +110,8 @@ jobs:
             gh workflow run osm-expand.yml -f target="$T"
             exit 0
           fi
+
+          if [ -n "$CHAIN_AFTER" ]; then echo "Catena: nessuna altra zona sporca, mi fermo (il giro normale resta al cron)"; exit 0; fi
 
           # 2) la zona: coda di priorita', poi mai costruite, poi la piu' vecchia (scripts/osm_priority.mjs)
           IDX=$(( $(date +%s) / 3600 ))
