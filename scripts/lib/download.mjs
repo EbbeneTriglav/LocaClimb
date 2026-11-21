@@ -9,9 +9,21 @@
 export const UA = "LocaRide-osm/1.0 (+https://locaride.app)";
 export const WAITS = [8, 16, 32, 64, 120, 120, 120, 120];   // seconds between attempts (~10 min)
 
-/* the URL plus the osm.fr mirror paths derived from a Geofabrik URL */
+/* Geofabrik's current layout (seen 21/11/2026): every extract sits in its own folder,
+   <parent>/<id>/<id>-latest.osm.pbf. The old <parent>/<id>-latest.osm.pbf answers 301 to a broken path
+   (".../france/alsace/..." without "europe/") and then 404: france-est, the US states and the Italian
+   macro-regions all failed or fell back to osm.fr (whose mixed snapshots then broke osmium export). */
+export function geofabrikFolder(url) {
+  const m = String(url).match(/^(https:\/\/download\.geofabrik\.de\/(?:.+\/)?)([^/]+)-latest\.osm\.pbf$/);
+  if (!m) return null;
+  const [, dir, id] = m;
+  if (dir.endsWith("/" + id + "/")) return null;   // already in the new layout
+  return dir + id + "/" + id + "-latest.osm.pbf";
+}
+
+/* the URL in Geofabrik's current layout first, then the URL as given, then the osm.fr mirror paths */
 export function mirrors(url) {
-  const out = [url], m = String(url).match(/geofabrik\.de\/(.+?)-latest\.osm\.pbf$/);
+  const nu = geofabrikFolder(url), out = nu ? [nu, url] : [url], m = String(url).match(/geofabrik\.de\/(.+?)-latest\.osm\.pbf$/);
   if (m) {
     out.push("https://download.openstreetmap.fr/extracts/" + m[1] + ".osm.pbf");
     const u = "https://download.openstreetmap.fr/extracts/" + m[1].replace(/-/g, "_") + ".osm.pbf";
