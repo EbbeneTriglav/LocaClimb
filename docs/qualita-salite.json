@@ -1,0 +1,2353 @@
+{
+ "date": "2026-11-21",
+ "regions": 154,
+ "searched": 77,
+ "never": [
+  "sweden",
+  "usa-kentucky",
+  "usa-maine",
+  "usa-massachusetts",
+  "canada-british-columbia",
+  "canada-alberta",
+  "canada-quebec",
+  "mexico-nord",
+  "mexico-centro-ovest",
+  "mexico-centro-est",
+  "mexico-sud",
+  "costa-rica",
+  "guatemala",
+  "colombia",
+  "ecuador",
+  "venezuela",
+  "peru",
+  "bolivia",
+  "chile",
+  "argentina",
+  "brazil-sul",
+  "brazil-sudeste",
+  "iceland",
+  "cyprus",
+  "kosovo",
+  "georgia",
+  "armenia",
+  "azores",
+  "reunion",
+  "ukraine-carpazi",
+  "south-africa",
+  "lesotho",
+  "new-zealand",
+  "australia-sud-est",
+  "japan-hokkaido",
+  "japan-tohoku",
+  "japan-chubu",
+  "japan-kansai",
+  "japan-chugoku",
+  "japan-shikoku",
+  "japan-kyushu",
+  "taiwan",
+  "korea-south",
+  "usa-alaska",
+  "usa-hawaii",
+  "usa-arkansas",
+  "usa-alabama",
+  "usa-south-carolina",
+  "usa-maryland",
+  "canada-yukon",
+  "canada-nova-scotia",
+  "canada-newfoundland",
+  "oman-emirati",
+  "thailandia-nord",
+  "vietnam-nord",
+  "malaysia",
+  "filippine-luzon",
+  "indonesia-giava",
+  "india-himalaya",
+  "nepal",
+  "sri-lanka",
+  "kirghizistan",
+  "tagikistan",
+  "kazakistan-almaty",
+  "ruanda",
+  "kenya",
+  "usa-south-dakota",
+  "australia-queensland",
+  "liechtenstein",
+  "isola-di-man",
+  "faroe",
+  "rep-dominicana",
+  "antille-francesi",
+  "turkey-centro",
+  "turkey-oriente",
+  "kanto-ovest",
+  "kanto-nord"
+ ],
+ "totSides": 54979,
+ "totFlagged": 1759,
+ "known": 110,
+ "missing": [
+  {
+   "id": "puianello",
+   "name": "Puianello (Modena)",
+   "lat": 44.4262,
+   "lon": 10.9293,
+   "nearestKm": 2.5,
+   "nearest": "Monte Vallaro",
+   "zone": "er"
+  },
+  {
+   "id": "blockhaus",
+   "name": "Blockhaus",
+   "lat": 42.14876,
+   "lon": 14.11381,
+   "nearestKm": 2,
+   "nearest": "Salita da Torre de' Passeri",
+   "zone": "italy-sud"
+  },
+  {
+   "id": "cari",
+   "name": "Carì",
+   "lat": 46.49332,
+   "lon": 8.82123,
+   "nearestKm": 2.2,
+   "nearest": "Tarnolgio",
+   "zone": "lombardia"
+  },
+  {
+   "id": "puy-de-dome",
+   "name": "Puy de Dôme",
+   "lat": 45.77265,
+   "lon": 2.96441,
+   "nearestKm": 1.2,
+   "nearest": "Col de Ceyssat",
+   "zone": "france-auvergne"
+  },
+  {
+   "id": "la-mozqueta",
+   "name": "Alto de la Mozqueta",
+   "lat": 43.18039,
+   "lon": -5.53524,
+   "nearestKm": 2.9,
+   "nearest": "Cima senza nome",
+   "zone": "spain-nord"
+  },
+  {
+   "id": "monte-lussari",
+   "name": "Monte Lussari",
+   "lat": 46.47977,
+   "lon": 13.5235,
+   "nearestKm": 2.6,
+   "nearest": "Sella Prasnig",
+   "zone": "veneto-fvg"
+  },
+  {
+   "id": "pico-jano",
+   "name": "Pico Jano",
+   "lat": 43.11743,
+   "lon": -4.70002,
+   "nearestKm": 1.7,
+   "nearest": "Dobarganes",
+   "zone": "spain-nord"
+  },
+  {
+   "id": "bola-del-mundo",
+   "name": "Bola del Mundo (Alto de las Guarramillas)",
+   "lat": 40.78469,
+   "lon": -3.97975,
+   "nearestKm": 2.1,
+   "nearest": "Puerto de Navacerrada",
+   "zone": "spain-centro"
+  },
+  {
+   "id": "laguna-negra",
+   "name": "Laguna Negra (Vinuesa)",
+   "lat": 41.99595,
+   "lon": -2.84794,
+   "nearestKm": 1.8,
+   "nearest": "Passo",
+   "zone": "spain-nord"
+  },
+  {
+   "id": "oude-kwaremont",
+   "name": "Oude Kwaremont",
+   "lat": 50.78195,
+   "lon": 3.52604,
+   "nearestKm": 1.9,
+   "nearest": "Knokteberg",
+   "zone": "belgium"
+  },
+  {
+   "id": "molenberg",
+   "name": "Molenberg",
+   "lat": 50.85961,
+   "lon": 3.70296,
+   "nearestKm": 4.2,
+   "nearest": "Wolvenberg",
+   "zone": "belgium"
+  },
+  {
+   "id": "leberg",
+   "name": "Leberg",
+   "lat": 50.82729,
+   "lon": 3.72402,
+   "nearestKm": 2.2,
+   "nearest": "Valkenberg",
+   "zone": "belgium"
+  },
+  {
+   "id": "kanarieberg",
+   "name": "Kanarieberg",
+   "lat": 50.76167,
+   "lon": 3.65214,
+   "nearestKm": 3.4,
+   "nearest": "Colle Ellezelles",
+   "zone": "belgium"
+  },
+  {
+   "id": "steenbeekdries",
+   "name": "Steenbeekdries",
+   "lat": 50.80325,
+   "lon": 3.6131,
+   "nearestKm": 1.5,
+   "nearest": "Taaienberg",
+   "zone": "belgium"
+  },
+  {
+   "id": "mur-de-huy",
+   "name": "Mur de Huy (Chemin des Chapelles)",
+   "lat": 50.51444,
+   "lon": 5.24751,
+   "nearestKm": 5,
+   "nearest": "Côte d'Ereffe",
+   "zone": "belgium"
+  },
+  {
+   "id": "eyserbosweg",
+   "name": "Eyserbosweg",
+   "lat": 50.82852,
+   "lon": 5.92961,
+   "nearestKm": 1.1,
+   "nearest": "Eyserbosweg",
+   "zone": "germany-nrw"
+  },
+  {
+   "id": "fromberg",
+   "name": "Fromberg",
+   "lat": 50.84546,
+   "lon": 5.89085,
+   "nearestKm": 1.8,
+   "nearest": "Keutenberg",
+   "zone": "germany-nrw"
+  },
+  {
+   "id": "gulperberg",
+   "name": "Gulperberg",
+   "lat": 50.81344,
+   "lon": 5.89956,
+   "nearestKm": 3.2,
+   "nearest": "Keutenberg",
+   "zone": "germany-nrw"
+  },
+  {
+   "id": "piani-di-bobbio",
+   "name": "Piani di Bobbio",
+   "lat": 45.9643,
+   "lon": 9.4948,
+   "nearestKm": 1.2,
+   "nearest": "Bocchetta di Pesciola",
+   "zone": "lombardia"
+  },
+  {
+   "id": "penrhys",
+   "name": "Penrhys",
+   "lat": 51.6463,
+   "lon": -3.4402,
+   "nearestKm": 1.7,
+   "nearest": "Salita presso Tylorstown",
+   "zone": "wales"
+  }
+ ],
+ "worst": [
+  {
+   "region": "spain-canarie",
+   "climbs": 117,
+   "sides": 171,
+   "flagged": 15,
+   "rate": 0.088,
+   "flags": {
+    "ripida": 0,
+    "picco": 6,
+    "piatta": 0,
+    "salto": 11,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt2865438x-1781940",
+     "name": "Salita presso San Pedro de Breña Alta",
+     "side": "Da San Pedro de Breña Alta",
+     "flags": [
+      "salto"
+     ],
+     "km": 3.6,
+     "avg": 6.5
+    },
+    {
+     "id": "osm-rt2821175x-1649977",
+     "name": "Cima senza nome",
+     "side": "Da Villa de Arico",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.7,
+     "avg": 13.3
+    },
+    {
+     "id": "osm-rt2833897x-1673240",
+     "name": "Las Abiertas",
+     "side": "Da Las Canales",
+     "flags": [
+      "salto"
+     ],
+     "km": 5.2,
+     "avg": 12
+    },
+    {
+     "id": "osm-rt2870412x-1793391",
+     "name": "Salita presso Tijarafe",
+     "side": "Da Tijarafe",
+     "flags": [
+      "picco"
+     ],
+     "km": 9.8,
+     "avg": 9.2
+    },
+    {
+     "id": "osm-rt2842082x-1644340",
+     "name": "Camino Lomo Viejo",
+     "side": "Da El Sauzal",
+     "flags": [
+      "salto"
+     ],
+     "km": 9.8,
+     "avg": 9.2
+    }
+   ]
+  },
+  {
+   "region": "piemonte-nord",
+   "climbs": 215,
+   "sides": 239,
+   "flagged": 20,
+   "rate": 0.084,
+   "flags": {
+    "ripida": 0,
+    "picco": 5,
+    "piatta": 0,
+    "salto": 19,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4642675x840063",
+     "name": "Morasco",
+     "side": "Versante Sud",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 21.9,
+     "avg": 4.9
+    },
+    {
+     "id": "osm-rt4557620x786153",
+     "name": "Trovinasse",
+     "side": "Da Montestrutto",
+     "flags": [
+      "picco"
+     ],
+     "km": 14.2,
+     "avg": 8.7
+    },
+    {
+     "id": "osm-rt4564527x775323",
+     "name": "Échallogne",
+     "side": "Da Arnad",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.6,
+     "avg": 14.1
+    },
+    {
+     "id": "osm-rt4574084x708687",
+     "name": "Fenêtre",
+     "side": "Da Derby",
+     "flags": [
+      "salto"
+     ],
+     "km": 3.7,
+     "avg": 9
+    },
+    {
+     "id": "osm-rt4545005x767042",
+     "name": "Salita presso Castelnuovo Nigra",
+     "side": "Da Castelnuovo Nigra",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.2,
+     "avg": 9.9
+    }
+   ]
+  },
+  {
+   "region": "veneto-fvg",
+   "climbs": 129,
+   "sides": 146,
+   "flagged": 11,
+   "rate": 0.075,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 11,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4633238x1310329",
+     "name": "Strada del Monte San Simeone",
+     "side": "Da Bordano",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 4.3,
+     "avg": 10
+    },
+    {
+     "id": "osm-rt4644455x1296001",
+     "name": "Salita presso Lauco",
+     "side": "Da Lauco",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.4,
+     "avg": 8.5
+    },
+    {
+     "id": "osm-rt4633138x1342207",
+     "name": "Cima senza nome",
+     "side": "Da Stolvizza",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.5,
+     "avg": 11.3
+    },
+    {
+     "id": "osm-rt4654366x1302614",
+     "name": "Salita presso Zenodis",
+     "side": "Da Paluzza",
+     "flags": [
+      "salto"
+     ],
+     "km": 3.4,
+     "avg": 14.6
+    },
+    {
+     "id": "osm-rt4666639x1111088",
+     "name": "Quadratstraße - Via Quadrat",
+     "side": "Da Parcines",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.9,
+     "avg": 8.2
+    }
+   ]
+  },
+  {
+   "region": "lombardia",
+   "climbs": 275,
+   "sides": 310,
+   "flagged": 22,
+   "rate": 0.071,
+   "flags": {
+    "ripida": 2,
+    "picco": 6,
+    "piatta": 0,
+    "salto": 16,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4590770x989507",
+     "name": "Salita presso Piario",
+     "side": "Da Parre",
+     "flags": [
+      "ripida",
+      "salto"
+     ],
+     "km": 5.3,
+     "avg": 15.2
+    },
+    {
+     "id": "osm-rt4628255x989788",
+     "name": "Le Prese",
+     "side": "Da Sondrio",
+     "flags": [
+      "picco"
+     ],
+     "km": 22,
+     "avg": 5.3
+    },
+    {
+     "id": "osm-rt4628955x934088",
+     "name": "Strada per Cermine",
+     "side": "Da Gordona",
+     "flags": [
+      "picco"
+     ],
+     "km": 9.9,
+     "avg": 10.5
+    },
+    {
+     "id": "osm-rt4606453x1031918",
+     "name": "Salita presso Sellero",
+     "side": "Da Sellero",
+     "flags": [
+      "ripida"
+     ],
+     "km": 4.7,
+     "avg": 19.1
+    },
+    {
+     "id": "osm-rt4627051x930541",
+     "name": "Strada consortile della Val Bodengo",
+     "side": "Da Gordona",
+     "flags": [
+      "picco"
+     ],
+     "km": 11.1,
+     "avg": 7.3
+    }
+   ]
+  },
+  {
+   "region": "usa-oregon",
+   "climbs": 966,
+   "sides": 1241,
+   "flagged": 84,
+   "rate": 0.068,
+   "flags": {
+    "ripida": 2,
+    "picco": 20,
+    "piatta": 10,
+    "salto": 66,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4295346x-12217413",
+     "name": "Hillman Peak",
+     "side": "Versante Sud-Est",
+     "flags": [
+      "piatta"
+     ],
+     "km": 29.5,
+     "avg": 3
+    },
+    {
+     "id": "osm-rt4484979x-11866479",
+     "name": "Desolation Butte",
+     "side": "Versante Nord-Ovest",
+     "flags": [
+      "piatta"
+     ],
+     "km": 29.6,
+     "avg": 3.3
+    },
+    {
+     "id": "osm-rt4437049x-11822887",
+     "name": "Cima senza nome",
+     "side": "Versante Nord-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 3,
+     "avg": 10.5
+    },
+    {
+     "id": "osm-rt4540626x-11771041",
+     "name": "Line Bluff",
+     "side": "Versante Nord-Ovest",
+     "flags": [
+      "piatta"
+     ],
+     "km": 25.9,
+     "avg": 3.4
+    },
+    {
+     "id": "osm-rt4536058x-11732577",
+     "name": "Cima senza nome",
+     "side": "Versante Nord-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.4,
+     "avg": 11.4
+    }
+   ]
+  },
+  {
+   "region": "usa-idaho",
+   "climbs": 1141,
+   "sides": 1383,
+   "flagged": 93,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 3,
+    "picco": 36,
+    "piatta": 3,
+    "salto": 79,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4436842x-11295148",
+     "name": "Cima senza nome",
+     "side": "Versante Ovest",
+     "flags": [
+      "salto"
+     ],
+     "km": 7.3,
+     "avg": 10.7
+    },
+    {
+     "id": "osm-rt4447524x-11332691",
+     "name": "Cima senza nome",
+     "side": "Versante Est",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 6.6,
+     "avg": 10.4
+    },
+    {
+     "id": "osm-rt4425993x-11282571",
+     "name": "Cima senza nome",
+     "side": "Versante Est",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 6.2,
+     "avg": 9.7
+    },
+    {
+     "id": "osm-rt4408647x-11411150",
+     "name": "Cima senza nome",
+     "side": "Versante Est",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 9,
+     "avg": 7.1
+    },
+    {
+     "id": "osm-rt4414629x-11280772",
+     "name": "Cima senza nome",
+     "side": "Versante Sud",
+     "flags": [
+      "ripida",
+      "picco",
+      "salto"
+     ],
+     "km": 1.9,
+     "avg": 17.3
+    }
+   ]
+  },
+  {
+   "region": "usa-tennessee",
+   "climbs": 416,
+   "sides": 491,
+   "flagged": 33,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 0,
+    "picco": 5,
+    "piatta": 0,
+    "salto": 32,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt3527636x-8421800",
+     "name": "Waucheesi Mountain",
+     "side": "Versante Nord-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 5.5,
+     "avg": 10
+    },
+    {
+     "id": "osm-rt3616302x-8223038",
+     "name": "Cima senza nome",
+     "side": "Versante Nord-Ovest",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 3,
+     "avg": 10
+    },
+    {
+     "id": "osm-rt3619371x-8228041",
+     "name": "Daugherty Road",
+     "side": "Versante Sud",
+     "flags": [
+      "salto"
+     ],
+     "km": 3,
+     "avg": 7.6
+    },
+    {
+     "id": "osm-rt3620573x-8226483",
+     "name": "Stone Mountain",
+     "side": "Versante Sud",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.9,
+     "avg": 7.9
+    },
+    {
+     "id": "osm-rt3633977x-8193961",
+     "name": "Cima senza nome",
+     "side": "Versante Nord-Ovest",
+     "flags": [
+      "salto"
+     ],
+     "km": 3,
+     "avg": 7.3
+    }
+   ]
+  },
+  {
+   "region": "piemonte-sud",
+   "climbs": 172,
+   "sides": 180,
+   "flagged": 12,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 12,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4439552x725592",
+     "name": "Salita presso Frise",
+     "side": "Da Pradleves",
+     "flags": [
+      "salto"
+     ],
+     "km": 3.5,
+     "avg": 9.3
+    },
+    {
+     "id": "osm-rt4421968x740394",
+     "name": "Salita presso Entracque",
+     "side": "Da Entracque",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.7,
+     "avg": 11
+    },
+    {
+     "id": "osm-rt4496157x724522",
+     "name": "Serremarchetto",
+     "side": "Versante Nord-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 3,
+     "avg": 4.5
+    },
+    {
+     "id": "osm-rt4426583x757011",
+     "name": "Via Buscaié",
+     "side": "Versante Nord",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.9,
+     "avg": 9.6
+    },
+    {
+     "id": "osm-rt4435356x742770",
+     "name": "Sirol",
+     "side": "Da Roccasparvera",
+     "flags": [
+      "salto"
+     ],
+     "km": 3.3,
+     "avg": 9.3
+    }
+   ]
+  },
+  {
+   "region": "usa-california-nord",
+   "climbs": 1355,
+   "sides": 1730,
+   "flagged": 104,
+   "rate": 0.06,
+   "flags": {
+    "ripida": 10,
+    "picco": 26,
+    "piatta": 20,
+    "salto": 79,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt3603744x-11826703",
+     "name": "Sherman Pass Road",
+     "side": "Versante Est",
+     "flags": [
+      "piatta"
+     ],
+     "km": 27.2,
+     "avg": 3.2
+    },
+    {
+     "id": "osm-rt4047495x-12150126",
+     "name": "Mount Helen",
+     "side": "Versante Nord",
+     "flags": [
+      "piatta"
+     ],
+     "km": 25.7,
+     "avg": 3.4
+    },
+    {
+     "id": "osm-rt3863888x-11991644",
+     "name": "Blue Lakes Road",
+     "side": "Versante Nord-Est",
+     "flags": [
+      "piatta"
+     ],
+     "km": 28,
+     "avg": 2.9
+    },
+    {
+     "id": "osm-rt3863483x-12014128",
+     "name": "Mud Lake Road",
+     "side": "Versante Ovest",
+     "flags": [
+      "piatta"
+     ],
+     "km": 30,
+     "avg": 2.7
+    },
+    {
+     "id": "osm-rt3863483x-12014128",
+     "name": "Mud Lake Road",
+     "side": "Versante Sud-Ovest",
+     "flags": [
+      "piatta"
+     ],
+     "km": 28.7,
+     "avg": 3.1
+    }
+   ]
+  },
+  {
+   "region": "trentino-aa",
+   "climbs": 521,
+   "sides": 597,
+   "flagged": 36,
+   "rate": 0.06,
+   "flags": {
+    "ripida": 0,
+    "picco": 11,
+    "piatta": 4,
+    "salto": 28,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4673400x1092627",
+     "name": "Salita presso Certosa di Senales",
+     "side": "Da Cirlano",
+     "flags": [
+      "picco"
+     ],
+     "km": 13.9,
+     "avg": 8.3
+    },
+    {
+     "id": "osm-rt4669586x1185130",
+     "name": "Colac",
+     "side": "Da Tiso",
+     "flags": [
+      "piatta"
+     ],
+     "km": 28.5,
+     "avg": 2.8
+    },
+    {
+     "id": "osm-rt4646800x1193753",
+     "name": "Davedino",
+     "side": "Da Pieve",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 2.2,
+     "avg": 14.6
+    },
+    {
+     "id": "osm-rt4669944x1190024",
+     "name": "Giogo Piccolo",
+     "side": "Da San Martino in Badia",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.6,
+     "avg": 9.6
+    },
+    {
+     "id": "osm-rt4627276x1160001",
+     "name": "Via Sadole",
+     "side": "Da Ziano di Fiemme",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.6,
+     "avg": 11.7
+    }
+   ]
+  },
+  {
+   "region": "slovenia",
+   "climbs": 364,
+   "sides": 474,
+   "flagged": 28,
+   "rate": 0.059,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 1,
+    "salto": 27,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4649624x1550462",
+     "name": "Salita presso Bojtina",
+     "side": "Da Oplotnica",
+     "flags": [
+      "piatta"
+     ],
+     "km": 27.3,
+     "avg": 3.2
+    },
+    {
+     "id": "osm-rt4663373x1505779",
+     "name": "Cima senza nome",
+     "side": "Da Trbonje",
+     "flags": [
+      "salto"
+     ],
+     "km": 3,
+     "avg": 9.8
+    },
+    {
+     "id": "osm-rt4620588x1392040",
+     "name": "Špic",
+     "side": "Da Hudajužna",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.5,
+     "avg": 8.9
+    },
+    {
+     "id": "osm-rt4607860x1507452",
+     "name": "Dolškov hrib",
+     "side": "Da Zagrad",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.5,
+     "avg": 11.3
+    },
+    {
+     "id": "osm-rt4634438x1471825",
+     "name": "Markova Rovna",
+     "side": "Da Luče",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.3,
+     "avg": 5.6
+    }
+   ]
+  },
+  {
+   "region": "france-aquitaine",
+   "climbs": 120,
+   "sides": 142,
+   "flagged": 8,
+   "rate": 0.056,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 8,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4302090x-91351",
+     "name": "Itzal Herria",
+     "side": "Da Larrau",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 3,
+     "avg": 10.4
+    },
+    {
+     "id": "osm-rt4309369x-114122",
+     "name": "Iraazkiko Lepoa",
+     "side": "Da Estérençuby",
+     "flags": [
+      "salto"
+     ],
+     "km": 3.7,
+     "avg": 8.4
+    },
+    {
+     "id": "osm-rt4311420x-16791",
+     "name": "Chemin du Mousques",
+     "side": "Versante Sud-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.6,
+     "avg": 9.2
+    },
+    {
+     "id": "osm-rt4310565x-122042",
+     "name": "Chemin d'Irei",
+     "side": "Da Saint-Michel",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.9,
+     "avg": 9.4
+    },
+    {
+     "id": "osm-rt4321460x-95221",
+     "name": "Gastelusare",
+     "side": "Da Pagolle",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.7,
+     "avg": 8.8
+    }
+   ]
+  },
+  {
+   "region": "liguria",
+   "climbs": 269,
+   "sides": 361,
+   "flagged": 20,
+   "rate": 0.055,
+   "flags": {
+    "ripida": 0,
+    "picco": 2,
+    "piatta": 0,
+    "salto": 19,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4403101x769855",
+     "name": "Testa delle Collette",
+     "side": "Da Cetta",
+     "flags": [
+      "picco"
+     ],
+     "km": 14.6,
+     "avg": 5.6
+    },
+    {
+     "id": "osm-rt4427119x769020",
+     "name": "Salita presso Vigna",
+     "side": "Da Vigna",
+     "flags": [
+      "salto"
+     ],
+     "km": 4.7,
+     "avg": 12.3
+    },
+    {
+     "id": "osm-rt4427672x745956",
+     "name": "Chiotti",
+     "side": "Da Roaschia",
+     "flags": [
+      "salto"
+     ],
+     "km": 3,
+     "avg": 9.8
+    },
+    {
+     "id": "osm-rt4426583x757011",
+     "name": "Via Buscaié",
+     "side": "Versante Nord",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.9,
+     "avg": 9.6
+    },
+    {
+     "id": "osm-rt4454475x911294",
+     "name": "Ballo della Gallina",
+     "side": "Da Molino Vecchio",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.7,
+     "avg": 10.1
+    }
+   ]
+  },
+  {
+   "region": "bosnia",
+   "climbs": 1076,
+   "sides": 1329,
+   "flagged": 71,
+   "rate": 0.053,
+   "flags": {
+    "ripida": 0,
+    "picco": 10,
+    "piatta": 3,
+    "salto": 67,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt4363826x1822993",
+     "name": "Bobovica",
+     "side": "Da Šabići",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.8,
+     "avg": 9.6
+    },
+    {
+     "id": "osm-rt4430102x1854533",
+     "name": "Konjuh",
+     "side": "Versante Sud-Ovest",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.8,
+     "avg": 7.3
+    },
+    {
+     "id": "osm-rt4419429x1823867",
+     "name": "Kicelj",
+     "side": "Da Rijeka",
+     "flags": [
+      "piatta"
+     ],
+     "km": 27.9,
+     "avg": 3.1
+    },
+    {
+     "id": "osm-rt4416515x1754983",
+     "name": "Salita presso Gornje Pećine",
+     "side": "Da Bukvići",
+     "flags": [
+      "picco"
+     ],
+     "km": 9.2,
+     "avg": 6.9
+    },
+    {
+     "id": "osm-rt4395579x1898624",
+     "name": "Salita presso Barnik",
+     "side": "Da Stop",
+     "flags": [
+      "piatta"
+     ],
+     "km": 25.9,
+     "avg": 3.1
+    }
+   ]
+  },
+  {
+   "region": "usa-new-mexico",
+   "climbs": 507,
+   "sides": 583,
+   "flagged": 31,
+   "rate": 0.053,
+   "flags": {
+    "ripida": 0,
+    "picco": 7,
+    "piatta": 6,
+    "salto": 23,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt3620992x-10546732",
+     "name": "Gallegos Road",
+     "side": "Versante Nord-Ovest",
+     "flags": [
+      "piatta"
+     ],
+     "km": 28.6,
+     "avg": 3.4
+    },
+    {
+     "id": "osm-rt3675473x-10533761",
+     "name": "Cima senza nome",
+     "side": "Versante Sud",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.1,
+     "avg": 6.7
+    },
+    {
+     "id": "osm-rt3669323x-10646273",
+     "name": "Cima senza nome",
+     "side": "Da Tierra Amarilla",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 6.6,
+     "avg": 9.2
+    },
+    {
+     "id": "osm-rt3287357x-10577456",
+     "name": "Benson Ridge Spur-5 Road",
+     "side": "Da High Rolls",
+     "flags": [
+      "piatta"
+     ],
+     "km": 29.9,
+     "avg": 3.4
+    },
+    {
+     "id": "osm-rt3525860x-10754542",
+     "name": "Cima senza nome",
+     "side": "Da Encinal",
+     "flags": [
+      "piatta"
+     ],
+     "km": 27.1,
+     "avg": 3.3
+    }
+   ]
+  }
+ ],
+ "byRegion": [
+  {
+   "region": "er",
+   "climbs": 816,
+   "sides": 1049,
+   "flagged": 29,
+   "rate": 0.028,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 1,
+    "salto": 28,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "toscana-nord",
+   "climbs": 214,
+   "sides": 260,
+   "flagged": 9,
+   "rate": 0.035,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 9,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "toscana-sud",
+   "climbs": 177,
+   "sides": 243,
+   "flagged": 2,
+   "rate": 0.008,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "marche-umbria",
+   "climbs": 424,
+   "sides": 554,
+   "flagged": 12,
+   "rate": 0.022,
+   "flags": {
+    "ripida": 0,
+    "picco": 2,
+    "piatta": 0,
+    "salto": 12,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "liguria",
+   "climbs": 269,
+   "sides": 361,
+   "flagged": 20,
+   "rate": 0.055,
+   "flags": {
+    "ripida": 0,
+    "picco": 2,
+    "piatta": 0,
+    "salto": 19,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "piemonte-sud",
+   "climbs": 172,
+   "sides": 180,
+   "flagged": 12,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 12,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "piemonte-nord",
+   "climbs": 215,
+   "sides": 239,
+   "flagged": 20,
+   "rate": 0.084,
+   "flags": {
+    "ripida": 0,
+    "picco": 5,
+    "piatta": 0,
+    "salto": 19,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "lombardia",
+   "climbs": 275,
+   "sides": 310,
+   "flagged": 22,
+   "rate": 0.071,
+   "flags": {
+    "ripida": 2,
+    "picco": 6,
+    "piatta": 0,
+    "salto": 16,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "trentino-aa",
+   "climbs": 521,
+   "sides": 597,
+   "flagged": 36,
+   "rate": 0.06,
+   "flags": {
+    "ripida": 0,
+    "picco": 11,
+    "piatta": 4,
+    "salto": 28,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "veneto-fvg",
+   "climbs": 129,
+   "sides": 146,
+   "flagged": 11,
+   "rate": 0.075,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 11,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "colli-veneti",
+   "climbs": 9,
+   "sides": 15,
+   "flagged": 1,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 1,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "italy-sud",
+   "climbs": 1847,
+   "sides": 2626,
+   "flagged": 74,
+   "rate": 0.028,
+   "flags": {
+    "ripida": 1,
+    "picco": 5,
+    "piatta": 15,
+    "salto": 58,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "switzerland",
+   "climbs": 959,
+   "sides": 1167,
+   "flagged": 48,
+   "rate": 0.041,
+   "flags": {
+    "ripida": 0,
+    "picco": 23,
+    "piatta": 3,
+    "salto": 30,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "austria",
+   "climbs": 1406,
+   "sides": 1629,
+   "flagged": 15,
+   "rate": 0.009,
+   "flags": {
+    "ripida": 0,
+    "picco": 6,
+    "piatta": 2,
+    "salto": 7,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-rhone-alpes",
+   "climbs": 786,
+   "sides": 1007,
+   "flagged": 32,
+   "rate": 0.032,
+   "flags": {
+    "ripida": 0,
+    "picco": 13,
+    "piatta": 6,
+    "salto": 15,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-paca",
+   "climbs": 374,
+   "sides": 457,
+   "flagged": 10,
+   "rate": 0.022,
+   "flags": {
+    "ripida": 0,
+    "picco": 2,
+    "piatta": 2,
+    "salto": 8,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-midi-pyrenees",
+   "climbs": 275,
+   "sides": 347,
+   "flagged": 13,
+   "rate": 0.037,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 2,
+    "salto": 11,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-auvergne",
+   "climbs": 249,
+   "sides": 350,
+   "flagged": 9,
+   "rate": 0.026,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 5,
+    "salto": 4,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-languedoc",
+   "climbs": 328,
+   "sides": 414,
+   "flagged": 12,
+   "rate": 0.029,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 4,
+    "salto": 8,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-corse",
+   "climbs": 90,
+   "sides": 133,
+   "flagged": 2,
+   "rate": 0.015,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-aquitaine",
+   "climbs": 120,
+   "sides": 142,
+   "flagged": 8,
+   "rate": 0.056,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 8,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-jura",
+   "climbs": 234,
+   "sides": 340,
+   "flagged": 3,
+   "rate": 0.009,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 3,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "france-est",
+   "climbs": 213,
+   "sides": 278,
+   "flagged": 3,
+   "rate": 0.011,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 3,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "spain-nord",
+   "climbs": 1535,
+   "sides": 1913,
+   "flagged": 71,
+   "rate": 0.037,
+   "flags": {
+    "ripida": 3,
+    "picco": 7,
+    "piatta": 3,
+    "salto": 67,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "spain-centro",
+   "climbs": 613,
+   "sides": 764,
+   "flagged": 11,
+   "rate": 0.014,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 1,
+    "salto": 9,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "spain-sud",
+   "climbs": 589,
+   "sides": 758,
+   "flagged": 16,
+   "rate": 0.021,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 2,
+    "salto": 14,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "spain-baleari",
+   "climbs": 15,
+   "sides": 16,
+   "flagged": 1,
+   "rate": 0.063,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 1,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "spain-canarie",
+   "climbs": 117,
+   "sides": 171,
+   "flagged": 15,
+   "rate": 0.088,
+   "flags": {
+    "ripida": 0,
+    "picco": 6,
+    "piatta": 0,
+    "salto": 11,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "portugal",
+   "climbs": 721,
+   "sides": 1214,
+   "flagged": 56,
+   "rate": 0.046,
+   "flags": {
+    "ripida": 0,
+    "picco": 16,
+    "piatta": 10,
+    "salto": 35,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "germany-bayern",
+   "climbs": 190,
+   "sides": 262,
+   "flagged": 3,
+   "rate": 0.011,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 3,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "germany-baden-wuerttemberg",
+   "climbs": 281,
+   "sides": 373,
+   "flagged": 10,
+   "rate": 0.027,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 1,
+    "salto": 9,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "germany-ovest",
+   "climbs": 268,
+   "sides": 432,
+   "flagged": 5,
+   "rate": 0.012,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 5,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "germany-nrw",
+   "climbs": 92,
+   "sides": 134,
+   "flagged": 0,
+   "rate": 0,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 0,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "germany-est",
+   "climbs": 114,
+   "sides": 157,
+   "flagged": 1,
+   "rate": 0.006,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 1,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "slovenia",
+   "climbs": 364,
+   "sides": 474,
+   "flagged": 28,
+   "rate": 0.059,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 1,
+    "salto": 27,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "croatia",
+   "climbs": 389,
+   "sides": 512,
+   "flagged": 13,
+   "rate": 0.025,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 1,
+    "salto": 12,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "romania",
+   "climbs": 782,
+   "sides": 1008,
+   "flagged": 17,
+   "rate": 0.017,
+   "flags": {
+    "ripida": 1,
+    "picco": 0,
+    "piatta": 1,
+    "salto": 16,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "bosnia",
+   "climbs": 1076,
+   "sides": 1329,
+   "flagged": 71,
+   "rate": 0.053,
+   "flags": {
+    "ripida": 0,
+    "picco": 10,
+    "piatta": 3,
+    "salto": 67,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "montenegro-albania-macedonia",
+   "climbs": 1379,
+   "sides": 1670,
+   "flagged": 84,
+   "rate": 0.05,
+   "flags": {
+    "ripida": 2,
+    "picco": 27,
+    "piatta": 3,
+    "salto": 67,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "serbia",
+   "climbs": 1207,
+   "sides": 1560,
+   "flagged": 61,
+   "rate": 0.039,
+   "flags": {
+    "ripida": 1,
+    "picco": 5,
+    "piatta": 2,
+    "salto": 58,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "bulgaria",
+   "climbs": 768,
+   "sides": 917,
+   "flagged": 19,
+   "rate": 0.021,
+   "flags": {
+    "ripida": 0,
+    "picco": 3,
+    "piatta": 1,
+    "salto": 16,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "belgium",
+   "climbs": 30,
+   "sides": 36,
+   "flagged": 0,
+   "rate": 0,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 0,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "czech-republic",
+   "climbs": 425,
+   "sides": 582,
+   "flagged": 3,
+   "rate": 0.005,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 3,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "poland",
+   "climbs": 392,
+   "sides": 482,
+   "flagged": 7,
+   "rate": 0.015,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 7,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "hungary",
+   "climbs": 80,
+   "sides": 88,
+   "flagged": 0,
+   "rate": 0,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 0,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "greece",
+   "climbs": 1692,
+   "sides": 2416,
+   "flagged": 59,
+   "rate": 0.024,
+   "flags": {
+    "ripida": 0,
+    "picco": 7,
+    "piatta": 12,
+    "salto": 42,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "scotland",
+   "climbs": 152,
+   "sides": 192,
+   "flagged": 1,
+   "rate": 0.005,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 1,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "wales",
+   "climbs": 258,
+   "sides": 360,
+   "flagged": 4,
+   "rate": 0.011,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 4,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "england-nord",
+   "climbs": 153,
+   "sides": 236,
+   "flagged": 4,
+   "rate": 0.017,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 4,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "england-sud-ovest",
+   "climbs": 81,
+   "sides": 125,
+   "flagged": 0,
+   "rate": 0,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 0,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "ireland",
+   "climbs": 335,
+   "sides": 453,
+   "flagged": 3,
+   "rate": 0.007,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 3,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "morocco",
+   "climbs": 1100,
+   "sides": 1483,
+   "flagged": 35,
+   "rate": 0.024,
+   "flags": {
+    "ripida": 0,
+    "picco": 3,
+    "piatta": 13,
+    "salto": 21,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "turkey-ovest",
+   "climbs": 3094,
+   "sides": 4316,
+   "flagged": 91,
+   "rate": 0.021,
+   "flags": {
+    "ripida": 3,
+    "picco": 7,
+    "piatta": 14,
+    "salto": 75,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "norway",
+   "climbs": 1491,
+   "sides": 1639,
+   "flagged": 19,
+   "rate": 0.012,
+   "flags": {
+    "ripida": 3,
+    "picco": 6,
+    "piatta": 3,
+    "salto": 14,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "slovakia",
+   "climbs": 286,
+   "sides": 342,
+   "flagged": 0,
+   "rate": 0,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 0,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "andorra",
+   "climbs": 105,
+   "sides": 110,
+   "flagged": 2,
+   "rate": 0.018,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-colorado",
+   "climbs": 618,
+   "sides": 724,
+   "flagged": 31,
+   "rate": 0.043,
+   "flags": {
+    "ripida": 3,
+    "picco": 6,
+    "piatta": 9,
+    "salto": 18,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-california-nord",
+   "climbs": 1355,
+   "sides": 1730,
+   "flagged": 104,
+   "rate": 0.06,
+   "flags": {
+    "ripida": 10,
+    "picco": 26,
+    "piatta": 20,
+    "salto": 79,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-california-sud",
+   "climbs": 493,
+   "sides": 584,
+   "flagged": 20,
+   "rate": 0.034,
+   "flags": {
+    "ripida": 0,
+    "picco": 4,
+    "piatta": 2,
+    "salto": 18,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-utah",
+   "climbs": 216,
+   "sides": 252,
+   "flagged": 1,
+   "rate": 0.004,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 1,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-arizona",
+   "climbs": 250,
+   "sides": 298,
+   "flagged": 12,
+   "rate": 0.04,
+   "flags": {
+    "ripida": 0,
+    "picco": 3,
+    "piatta": 3,
+    "salto": 8,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-new-mexico",
+   "climbs": 507,
+   "sides": 583,
+   "flagged": 31,
+   "rate": 0.053,
+   "flags": {
+    "ripida": 0,
+    "picco": 7,
+    "piatta": 6,
+    "salto": 23,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-nevada",
+   "climbs": 86,
+   "sides": 103,
+   "flagged": 2,
+   "rate": 0.019,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 1,
+    "salto": 1,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-idaho",
+   "climbs": 1141,
+   "sides": 1383,
+   "flagged": 93,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 3,
+    "picco": 36,
+    "piatta": 3,
+    "salto": 79,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-montana",
+   "climbs": 997,
+   "sides": 1169,
+   "flagged": 42,
+   "rate": 0.036,
+   "flags": {
+    "ripida": 1,
+    "picco": 14,
+    "piatta": 1,
+    "salto": 38,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-wyoming",
+   "climbs": 179,
+   "sides": 204,
+   "flagged": 6,
+   "rate": 0.029,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 2,
+    "salto": 4,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-washington",
+   "climbs": 837,
+   "sides": 1048,
+   "flagged": 32,
+   "rate": 0.031,
+   "flags": {
+    "ripida": 0,
+    "picco": 8,
+    "piatta": 9,
+    "salto": 19,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-oregon",
+   "climbs": 966,
+   "sides": 1241,
+   "flagged": 84,
+   "rate": 0.068,
+   "flags": {
+    "ripida": 2,
+    "picco": 20,
+    "piatta": 10,
+    "salto": 66,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-north-carolina",
+   "climbs": 863,
+   "sides": 1017,
+   "flagged": 30,
+   "rate": 0.029,
+   "flags": {
+    "ripida": 0,
+    "picco": 5,
+    "piatta": 3,
+    "salto": 27,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-tennessee",
+   "climbs": 416,
+   "sides": 491,
+   "flagged": 33,
+   "rate": 0.067,
+   "flags": {
+    "ripida": 0,
+    "picco": 5,
+    "piatta": 0,
+    "salto": 32,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-virginia",
+   "climbs": 638,
+   "sides": 782,
+   "flagged": 27,
+   "rate": 0.035,
+   "flags": {
+    "ripida": 1,
+    "picco": 7,
+    "piatta": 0,
+    "salto": 27,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-west-virginia",
+   "climbs": 910,
+   "sides": 1168,
+   "flagged": 58,
+   "rate": 0.05,
+   "flags": {
+    "ripida": 0,
+    "picco": 11,
+    "piatta": 0,
+    "salto": 57,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-vermont",
+   "climbs": 177,
+   "sides": 222,
+   "flagged": 2,
+   "rate": 0.009,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-new-hampshire",
+   "climbs": 189,
+   "sides": 225,
+   "flagged": 2,
+   "rate": 0.009,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-new-york",
+   "climbs": 843,
+   "sides": 1119,
+   "flagged": 17,
+   "rate": 0.015,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 17,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-pennsylvania",
+   "climbs": 760,
+   "sides": 1060,
+   "flagged": 9,
+   "rate": 0.008,
+   "flags": {
+    "ripida": 1,
+    "picco": 3,
+    "piatta": 0,
+    "salto": 9,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-georgia",
+   "climbs": 181,
+   "sides": 208,
+   "flagged": 10,
+   "rate": 0.048,
+   "flags": {
+    "ripida": 1,
+    "picco": 4,
+    "piatta": 0,
+    "salto": 10,
+    "incoerente": 0
+   }
+  }
+ ]
+}

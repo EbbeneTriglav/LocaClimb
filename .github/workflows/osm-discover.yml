@@ -1,4 +1,6 @@
 name: OSM discover (salite senza passo)
+# the run title carries the zones: discover_next.mjs reads the failed jobs to set those zones aside (21/11/2026)
+run-name: osm-discover ${{ inputs.region || inputs.zona || 'italia' }}
 
 # Trova le salite che NON hanno un nodo "passo" in OSM (cime, santuari, paesi in cima,
 # strade senza uscita) come cime della rete stradale asfaltata e le PUBBLICA da sola:
@@ -11,8 +13,8 @@ name: OSM discover (salite senza passo)
 # https://locaride.app/?discover=<regione>). Non tocca curated_overrides.json ne' il golden set.
 #
 # Parte da solo: quando questo file cambia (push) e il 2 di ogni mese, sulle 11 regioni italiane.
-# Le zone del resto d'Europa (scripts/lib/zones.json, discover:true) si lanciano a mano
-# ("europa" o i loro id) finche' non arriva il giro automatico a rotazione.
+# Le zone del resto del mondo (scripts/lib/zones.json, discover:true) le fa osm-discover-rotate.yml,
+# due alla volta. A mano: il menu "zona" (21/11/2026: prima era un testo libero e "svezia" falliva).
 # A mano si puo' lanciare una regione o "tutte". Rilanciare una regione gia' pubblicata e' sicuro:
 # promote_discover.mjs riapplica le stesse scelte (data/discover_<regione>_review.json).
 # 29/10/2026: rilancio di tutte, compresa "er", per il taglio del fondovalle (flatCutBase).
@@ -27,11 +29,173 @@ on:
     - cron: "17 3 2 * *"
   workflow_dispatch:
     inputs:
-      region:
-        description: "italia (le 11 regioni), europa (tutte le zone del catalogo), oppure uno o piu' id separati da virgola (es. er,austria)"
+      zona:
+        description: "Zona da cercare. italia = le 11 regioni italiane, mondo = tutte le zone del catalogo fuori dall Italia"
         required: true
-        type: string
+        type: choice
         default: italia
+        options:
+          - italia
+          - mondo
+          - er
+          - toscana-nord
+          - toscana-sud
+          - marche-umbria
+          - liguria
+          - piemonte-sud
+          - piemonte-nord
+          - lombardia
+          - trentino-aa
+          - veneto-fvg
+          - colli-veneti
+          - italy-sud
+          - switzerland
+          - austria
+          - france-rhone-alpes
+          - france-paca
+          - france-midi-pyrenees
+          - france-auvergne
+          - france-languedoc
+          - france-corse
+          - france-aquitaine
+          - france-jura
+          - france-est
+          - spain-nord
+          - spain-centro
+          - spain-sud
+          - spain-baleari
+          - spain-canarie
+          - portugal
+          - germany-bayern
+          - germany-baden-wuerttemberg
+          - germany-ovest
+          - germany-nrw
+          - germany-est
+          - slovenia
+          - croatia
+          - romania
+          - bosnia
+          - montenegro-albania-macedonia
+          - serbia
+          - bulgaria
+          - belgium
+          - czech-republic
+          - poland
+          - hungary
+          - greece
+          - scotland
+          - wales
+          - england-nord
+          - england-sud-ovest
+          - ireland
+          - morocco
+          - turkey-ovest
+          - norway
+          - sweden
+          - slovakia
+          - andorra
+          - usa-colorado
+          - usa-california-nord
+          - usa-california-sud
+          - usa-utah
+          - usa-arizona
+          - usa-new-mexico
+          - usa-nevada
+          - usa-idaho
+          - usa-montana
+          - usa-wyoming
+          - usa-washington
+          - usa-oregon
+          - usa-north-carolina
+          - usa-tennessee
+          - usa-virginia
+          - usa-west-virginia
+          - usa-vermont
+          - usa-new-hampshire
+          - usa-new-york
+          - usa-pennsylvania
+          - usa-georgia
+          - usa-kentucky
+          - usa-maine
+          - usa-massachusetts
+          - canada-british-columbia
+          - canada-alberta
+          - canada-quebec
+          - mexico-nord
+          - mexico-centro-ovest
+          - mexico-centro-est
+          - mexico-sud
+          - costa-rica
+          - guatemala
+          - colombia
+          - ecuador
+          - venezuela
+          - peru
+          - bolivia
+          - chile
+          - argentina
+          - brazil-sul
+          - brazil-sudeste
+          - iceland
+          - cyprus
+          - kosovo
+          - georgia
+          - armenia
+          - azores
+          - reunion
+          - ukraine-carpazi
+          - south-africa
+          - lesotho
+          - new-zealand
+          - australia-sud-est
+          - japan-hokkaido
+          - japan-tohoku
+          - japan-chubu
+          - japan-kansai
+          - japan-chugoku
+          - japan-shikoku
+          - japan-kyushu
+          - taiwan
+          - korea-south
+          - usa-alaska
+          - usa-hawaii
+          - usa-arkansas
+          - usa-alabama
+          - usa-south-carolina
+          - usa-maryland
+          - canada-yukon
+          - canada-nova-scotia
+          - canada-newfoundland
+          - oman-emirati
+          - thailandia-nord
+          - vietnam-nord
+          - malaysia
+          - filippine-luzon
+          - indonesia-giava
+          - india-himalaya
+          - nepal
+          - sri-lanka
+          - kirghizistan
+          - tagikistan
+          - kazakistan-almaty
+          - ruanda
+          - kenya
+          - usa-south-dakota
+          - australia-queensland
+          - liechtenstein
+          - isola-di-man
+          - faroe
+          - rep-dominicana
+          - antille-francesi
+          - turkey-centro
+          - turkey-oriente
+          - kanto-ovest
+          - kanto-nord
+      region:
+        description: "(facoltativo) piu zone insieme, id separati da virgola: vince sul menu. Lo usa il giro automatico"
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -53,14 +217,14 @@ jobs:
       - name: Elenco regioni
         id: r
         env:
-          ONE: ${{ github.event.inputs.region }}
+          ONE: ${{ github.event.inputs.region || github.event.inputs.zona }}
         run: |
           node -e '
             import("./scripts/lib/discover.mjs").then((m) => {
               const it = m.ITALY_REGIONS, all = Object.keys(m.DISCOVER_REGIONS);
               const one = (process.env.ONE || "italia").trim();
               const list = (one === "italia" || one === "tutte") ? it
-                : one === "europa" ? all.filter((k) => !it.includes(k))
+                : (one === "mondo" || one === "europa") ? all.filter((k) => !it.includes(k))
                 : one.split(",").map((s) => s.trim()).filter(Boolean);
               const bad = list.filter((k) => !m.DISCOVER_REGIONS[k]);
               if (!list.length || bad.length) { console.error("regione sconosciuta: " + bad.join(", ") + " (note: " + all.join(", ") + ")"); process.exit(1); }

@@ -1,0 +1,53 @@
+name: Qualita' ricerca salite (rapporto settimanale)
+
+# Il giro di qualita' della ricerca salite (Rick, 21/11/2026, opzione B):
+#   1. misura   - scripts/discover_quality.mjs confronta quello che la ricerca trova con le salite note
+#                 (data/climbs_extra.json) e segnala i versanti sospetti per regione;
+#   2. rapporto - docs/qualita-salite.md (+ .json per gli agenti), aggiornato qui ogni lunedi';
+#   3. correzione - una PR sull'algoritmo (scripts/lib/discover.mjs / build_osm_passes.mjs), che Rick unisce;
+#   4. ricalcolo - osm-discover-rotate.yml ripassa tutte le zone in circa 2 settimane, il lunedi' dopo
+#                 il rapporto mostra se i segnali sono scesi.
+# Legge solo data/, niente rete e niente DEM: ~1 minuto. Non tocca i dati dell'app.
+on:
+  schedule:
+    - cron: "41 4 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: discover-quality
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test del rapporto
+        run: node --test test/discover-quality.test.mjs
+      - name: Rapporto
+        run: |
+          node scripts/discover_quality.mjs --md "$RUNNER_TEMP/q.md" --json "$RUNNER_TEMP/q.json" > /dev/null
+          cat "$RUNNER_TEMP/q.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit (a prova di conflitto)
+        run: |
+          git config user.name  "locaclimb-bot"
+          git config user.email "locaclimb-bot@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/q.md" docs/qualita-salite.md
+            cp "$RUNNER_TEMP/q.json" docs/qualita-salite.json
+            git add docs/qualita-salite.md docs/qualita-salite.json
+            if git diff --staged --quiet; then echo "Nessuna variazione."; exit 0; fi
+            git commit -m "docs: rapporto qualita' ricerca salite $(date -u +%F)"
+            if git push; then exit 0; fi
+            echo "push preceduto da un altro run, ritento ($attempt)"; sleep $((RANDOM % 15 + 5))
+          done
+          exit 1

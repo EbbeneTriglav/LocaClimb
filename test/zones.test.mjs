@@ -98,3 +98,14 @@ test("Mexico is built in slices (the whole extract ran out of a 6 GB heap, 14/11
   assert.ok(box("mexico-sud")[3] > box("mexico-centro-est")[1], "south overlaps the centre");
   assert.ok(box("mexico-nord")[1] < box("mexico-centro-ovest")[3], "north overlaps the centre");
 });
+
+// 21/11/2026: the zone was a free text and "svezia" failed the plan job; now a menu kept equal to the catalogue.
+test("the osm-discover menu lists italia, mondo, the 11 Italian regions and every other discover region", async () => {
+  const yml = await readFile(new URL("../.github/workflows/osm-discover.yml", import.meta.url), "utf8");
+  const menu = [...yml.matchAll(/^ {10}- ([a-z][a-z0-9-]+)\s*$/gm)].map((m) => m[1]);
+  const rest = Object.keys(DISCOVER_REGIONS).filter((k) => !ITALY_REGIONS.includes(k));
+  assert.deepEqual(menu, ["italia", "mondo", ...ITALY_REGIONS, ...rest]);
+  assert.match(yml, /type: choice/);
+  const rot = await readFile(new URL("../.github/workflows/osm-discover-rotate.yml", import.meta.url), "utf8");
+  assert.match(rot, /-f region="\$NEXT"/, "the rotation passes its zones as text (a choice input refuses a list)");
+});
