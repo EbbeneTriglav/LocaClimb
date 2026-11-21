@@ -48,7 +48,8 @@ jobs:
           for p in $PBFS; do
             f="$RUNNER_TEMP/part.osm.pbf"; n=$(echo "$p" | tr '/' '_')
             ok=0
-            for u in "https://download.geofabrik.de/europe/$p-latest.osm.pbf" "https://download.openstreetmap.fr/extracts/europe/$p.osm.pbf"; do
+            id="${p##*/}"   # Geofabrik layout since 11/2026: <parent>/<id>/<id>-latest.osm.pbf (the old path 404s)
+            for u in "https://download.geofabrik.de/europe/$p/$id-latest.osm.pbf" "https://download.geofabrik.de/europe/$p-latest.osm.pbf" "https://download.openstreetmap.fr/extracts/europe/$p.osm.pbf"; do
               if curl -fsSL --retry 5 --retry-delay 20 -o "$f" "$u"; then ok=1; break; fi
             done
             if [ "$ok" != 1 ]; then echo "ERRORE: download $p"; exit 1; fi
