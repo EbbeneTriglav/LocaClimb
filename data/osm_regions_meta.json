@@ -608,5 +608,15 @@
   "bbox": null,
   "target": "usa-new-york",
   "builtAt": "2026-11-16"
+ },
+ "osm_passes_ua.json": {
+  "bbox": [
+   22.1,
+   47.7,
+   26,
+   49.6
+  ],
+  "target": "ukraine-carpazi",
+  "builtAt": "2026-11-21"
  }
 }
