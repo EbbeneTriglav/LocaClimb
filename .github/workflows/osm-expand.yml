@@ -177,6 +177,28 @@ on:
           - canada-yukon
           - canada-nova-scotia
           - canada-newfoundland
+          # --- mondo, 21/11/2026: Asia, Africa, Caraibi, isole europee ---
+          - oman-emirati
+          - thailandia-nord
+          - vietnam-nord
+          - malaysia
+          - filippine-luzon
+          - indonesia-giava
+          - india-himalaya
+          - nepal
+          - sri-lanka
+          - kirghizistan
+          - tagikistan
+          - kazakistan-almaty
+          - ruanda
+          - kenya
+          - usa-south-dakota
+          - australia-queensland
+          - liechtenstein
+          - isola-di-man
+          - faroe
+          - rep-dominicana
+          - antille-francesi
       dry_run:
         description: "Solo verifica: risolve il target e si ferma"
         required: false
