@@ -623,5 +623,10 @@
   "bbox": null,
   "target": "peru",
   "builtAt": "2026-11-23"
+ },
+ "osm_passes_cl.json": {
+  "bbox": null,
+  "target": "chile",
+  "builtAt": "2026-11-23"
  }
 }
