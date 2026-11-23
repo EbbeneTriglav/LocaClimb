@@ -33,6 +33,7 @@ import { climbFloor } from "./lib/climbfloor.mjs";
 import { fetchWithRetry } from "./lib/download.mjs";
 import { reachable, pickTop } from "./lib/seektop.mjs";
 import { fwdGrade, trimValley, trimParams } from "./lib/walltrim.mjs";
+import { EXTRA_HW, extraBoxes, extractConfigs } from "./lib/extraroads.mjs";
 const { PNG } = createRequire(import.meta.url)("pngjs");
 
 // PBF regions are configurable so the SAME heuristic builds any country.
@@ -623,8 +624,32 @@ async function main() {
       srcPbf = WORK + "/clipped.osm.pbf";
     }
     osmium(["tags-filter", srcPbf, "n/mountain_pass=yes", "n/natural=saddle", "n/natural=peak", "n/place=town", "n/place=village", "n/place=hamlet", ...HW_KEEP.map((h) => "w/highway=" + h), "-o", WORK + "/filtered.osm.pbf", "--overwrite"]);
+    let filteredPbf = WORK + "/filtered.osm.pbf";
+    // forced climbs (climbs_extra.json) whose last km is a track/service road: those classes, only in a
+    // box around each forced climb of this extract (scripts/lib/extraroads.mjs, 22/11/2026)
+    if (!DISC) {
+      let ex = [];
+      try { ex = JSON.parse(await readFile(dataPath("climbs_extra.json"), "utf8")); } catch {}
+      let clip = BBOX;
+      if (!clip) {   // no clip: the union of the extracts' header boxes (Geofabrik writes them)
+        const bx = parts.map((f) => { try { return (String(execFileSync("osmium", ["fileinfo", "-g", "header.boxes", f])).match(/-?[\d.]+/g) || []).map(Number); } catch { return []; } }).filter((b) => b.length === 4);
+        if (bx.length) clip = [Math.min(...bx.map((b) => b[0])), Math.min(...bx.map((b) => b[1])), Math.max(...bx.map((b) => b[2])), Math.max(...bx.map((b) => b[3]))].join(",");
+      }
+      const boxes = extraBoxes(ex, clip);
+      if (boxes.length) try {
+        console.log("  forced climbs: track/service roads in " + boxes.length + " boxes ...");
+        osmium(["tags-filter", srcPbf, ...EXTRA_HW.map((h) => "w/highway=" + h), "-o", WORK + "/xhw.osm.pbf", "--overwrite"]);
+        const cfgs = extractConfigs(boxes, WORK);
+        for (let i = 0; i < cfgs.length; i++) {
+          await writeFile(WORK + "/xbox" + i + ".json", JSON.stringify(cfgs[i]));
+          osmium(["extract", "-c", WORK + "/xbox" + i + ".json", "-s", "simple", WORK + "/xhw.osm.pbf", "--overwrite"]);
+        }
+        osmium(["merge", filteredPbf, ...boxes.map((_, i) => WORK + "/xbox" + i + ".osm.pbf"), "-o", WORK + "/filtered_x.osm.pbf", "--overwrite"]);
+        filteredPbf = WORK + "/filtered_x.osm.pbf";
+      } catch (e) { console.log("  forced climbs: track/service step failed (" + (e && e.message) + "), build goes on without it"); filteredPbf = WORK + "/filtered.osm.pbf"; }
+    }
     console.log("  osmium export ...");
-    osmium(["export", WORK + "/filtered.osm.pbf", "-f", "geojsonseq", "-a", "type,id", "-o", seqFile, "--overwrite"]);
+    osmium(["export", filteredPbf, "-f", "geojsonseq", "-a", "type,id", "-o", seqFile, "--overwrite"]);
   }
 
   console.log("  stream 1/2: pass nodes ...");
