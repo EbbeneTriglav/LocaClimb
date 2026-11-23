@@ -628,5 +628,10 @@
   "bbox": null,
   "target": "chile",
   "builtAt": "2026-11-23"
+ },
+ "osm_passes_us_ky.json": {
+  "bbox": null,
+  "target": "usa-kentucky",
+  "builtAt": "2026-11-23"
  }
 }
