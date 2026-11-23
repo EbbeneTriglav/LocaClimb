@@ -6,8 +6,8 @@
  *   data/curated_overrides.json  their sides rebuilt by the pipeline
  * Region files (1-14 MB, with tracks) are fetched only when a climb of that file is opened.
  */
-import { sameOrigin, newSidesFor } from "./climb.mjs?v=70";
-import { passDifficulty } from "./difficulty.mjs?v=70";
+import { sameOrigin, newSidesFor } from "./climb.mjs?v=71";
+import { passDifficulty } from "./difficulty.mjs?v=71";
 
 const DATA = new URL("../../data/", import.meta.url).href;   // from this file, not the page: the page moved from /v2/ to /
 const cache = new Map();          // region file -> Promise<Map(id -> record)>
@@ -39,6 +39,22 @@ export async function loadIndex() {
   assignCountries(climbs, regions);
   state = { climbs, regions, byId: new Map(climbs.map((c) => [String(c.id), c])) };
   return state;
+}
+
+/* Approved rider proposals read live from Firestore (lib/proposals.mjs, 23/11/2026): they replace the
+   copies of data/osm_passes_user.json (that file is only as fresh as the last import). Full records
+   (sides + track), so opening one needs no region file. Returns how many were added. */
+export function addLive(list) {
+  if (!state || !Array.isArray(list) || !list.length) return 0;
+  const keep = state.climbs.filter((c) => !String(c.id).startsWith("usr-"));
+  for (const c of list) {
+    Object.assign(c, { difficulty: passDifficulty(c.versanti) ?? 0, _full: true, f: null, fs: [], co: [] });
+    c.name = displayName(c); c._n = norm(c.name);
+    c.cc = countryNear(c.lat, c.lon);
+  }
+  state.climbs = keep.concat(list);
+  state.byId = new Map(state.climbs.map((c) => [String(c.id), c]));
+  return list.length;
 }
 
 /* The index lists a pass once per region file it is in (border passes, overlapping zones), and the

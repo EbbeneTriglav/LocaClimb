@@ -197,6 +197,13 @@ export async function myProposals(uid) {
   return out.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 }
 export async function withdrawProposal(id) { const x = init(); if (x) await x.db.collection("proposals").doc(id).delete(); }
+/* approved proposals, readable by anyone (firestore.rules): the app draws them (lib/proposals.mjs) */
+export async function approvedProposals() {
+  const x = init(); if (!x) return [];
+  const qs = await x.db.collection("proposals").where("status", "==", "approved").limit(300).get();
+  const out = []; qs.forEach((d) => out.push({ ...d.data(), id: d.id }));
+  return out;
+}
 export async function pendingProposals() {
   const x = init(); if (!x) return [];
   const qs = await x.db.collection("proposals").where("status", "==", "pending").limit(50).get();
