@@ -633,5 +633,10 @@
   "bbox": null,
   "target": "usa-kentucky",
   "builtAt": "2026-11-23"
+ },
+ "osm_passes_us_ak.json": {
+  "bbox": null,
+  "target": "usa-alaska",
+  "builtAt": "2026-11-23"
  }
 }
