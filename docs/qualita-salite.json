@@ -1,30 +1,15 @@
 {
- "date": "2026-11-21",
+ "date": "2026-11-23",
  "regions": 154,
- "searched": 77,
+ "searched": 92,
  "never": [
-  "sweden",
   "usa-kentucky",
   "usa-maine",
-  "usa-massachusetts",
   "canada-british-columbia",
-  "canada-alberta",
-  "canada-quebec",
-  "mexico-nord",
-  "mexico-centro-ovest",
-  "mexico-centro-est",
-  "mexico-sud",
-  "costa-rica",
-  "guatemala",
   "colombia",
   "ecuador",
-  "venezuela",
   "peru",
   "bolivia",
-  "chile",
-  "argentina",
-  "brazil-sul",
-  "brazil-sudeste",
   "iceland",
   "cyprus",
   "kosovo",
@@ -81,8 +66,8 @@
   "kanto-ovest",
   "kanto-nord"
  ],
- "totSides": 54979,
- "totFlagged": 1759,
+ "totSides": 77111,
+ "totFlagged": 3340,
  "known": 110,
  "missing": [
   {
@@ -102,15 +87,6 @@
    "nearestKm": 2,
    "nearest": "Salita da Torre de' Passeri",
    "zone": "italy-sud"
-  },
-  {
-   "id": "cari",
-   "name": "Carì",
-   "lat": 46.49332,
-   "lon": 8.82123,
-   "nearestKm": 2.2,
-   "nearest": "Tarnolgio",
-   "zone": "lombardia"
   },
   {
    "id": "puy-de-dome",
@@ -268,6 +244,205 @@
  ],
  "worst": [
   {
+   "region": "guatemala",
+   "climbs": 1496,
+   "sides": 2120,
+   "flagged": 340,
+   "rate": 0.16,
+   "flags": {
+    "ripida": 33,
+    "picco": 146,
+    "piatta": 51,
+    "salto": 203,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt1554290x-9157042",
+     "name": "Cima senza nome",
+     "side": "Da Chimbán",
+     "flags": [
+      "picco"
+     ],
+     "km": 25,
+     "avg": 5.7
+    },
+    {
+     "id": "osm-rt1546889x-9156815",
+     "name": "Salita presso El Rancho",
+     "side": "Da Chuxcaj",
+     "flags": [
+      "picco"
+     ],
+     "km": 29.6,
+     "avg": 5.7
+    },
+    {
+     "id": "osm-rt1555188x-9155859",
+     "name": "Cima senza nome",
+     "side": "Da Quilinco",
+     "flags": [
+      "piatta"
+     ],
+     "km": 29.9,
+     "avg": 3.1
+    },
+    {
+     "id": "osm-rt1555188x-9155859",
+     "name": "Cima senza nome",
+     "side": "Da Chimbán",
+     "flags": [
+      "picco"
+     ],
+     "km": 26,
+     "avg": 6.4
+    },
+    {
+     "id": "osm-rt1556618x-9157791",
+     "name": "Los Carrillo",
+     "side": "Da Las Manzanas",
+     "flags": [
+      "piatta"
+     ],
+     "km": 29.9,
+     "avg": 2.8
+    }
+   ]
+  },
+  {
+   "region": "costa-rica",
+   "climbs": 530,
+   "sides": 746,
+   "flagged": 113,
+   "rate": 0.151,
+   "flags": {
+    "ripida": 10,
+    "picco": 39,
+    "piatta": 10,
+    "salto": 80,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt953033x-8371517",
+     "name": "Calle Macho Mora Oeste",
+     "side": "Versante Sud",
+     "flags": [
+      "picco"
+     ],
+     "km": 5.6,
+     "avg": 8.4
+    },
+    {
+     "id": "osm-rt968528x-8387599",
+     "name": "Calle La Esperanza",
+     "side": "Versante Ovest",
+     "flags": [
+      "salto"
+     ],
+     "km": 1.6,
+     "avg": 11.7
+    },
+    {
+     "id": "osm-rt979514x-8398962",
+     "name": "Indio",
+     "side": "Da San Cristobal Nord",
+     "flags": [
+      "picco"
+     ],
+     "km": 7.6,
+     "avg": 8
+    },
+    {
+     "id": "osm-rt979600x-8400651",
+     "name": "Patio de Agua",
+     "side": "Da Patio de Agua",
+     "flags": [
+      "ripida",
+      "salto"
+     ],
+     "km": 2.7,
+     "avg": 15.4
+    },
+    {
+     "id": "osm-rt974447x-8394257",
+     "name": "La Luchita",
+     "side": "Da Monterrey",
+     "flags": [
+      "piatta"
+     ],
+     "km": 27,
+     "avg": 3.4
+    }
+   ]
+  },
+  {
+   "region": "venezuela",
+   "climbs": 853,
+   "sides": 1149,
+   "flagged": 123,
+   "rate": 0.107,
+   "flags": {
+    "ripida": 17,
+    "picco": 42,
+    "piatta": 13,
+    "salto": 83,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt911814x-7049296",
+     "name": "Cima senza nome",
+     "side": "Da Tostós",
+     "flags": [
+      "picco"
+     ],
+     "km": 23.3,
+     "avg": 11.4
+    },
+    {
+     "id": "osm-rt911814x-7049296",
+     "name": "Cima senza nome",
+     "side": "Da Las Mesitas",
+     "flags": [
+      "picco"
+     ],
+     "km": 16.1,
+     "avg": 11.3
+    },
+    {
+     "id": "osm-rt850858x-7107280",
+     "name": "Cima senza nome",
+     "side": "Versante Sud-Ovest",
+     "flags": [
+      "salto"
+     ],
+     "km": 14,
+     "avg": 8.9
+    },
+    {
+     "id": "osm-rt904055x-7081237",
+     "name": "Carretera Piñango - Timotes",
+     "side": "Da Mucuyupú",
+     "flags": [
+      "salto"
+     ],
+     "km": 8.3,
+     "avg": 10.9
+    },
+    {
+     "id": "osm-rt824844x-7188149",
+     "name": "Salita presso Pueblo Encima",
+     "side": "Da Buroquia",
+     "flags": [
+      "picco"
+     ],
+     "km": 16.9,
+     "avg": 11.8
+    }
+   ]
+  },
+  {
    "region": "spain-canarie",
    "climbs": 117,
    "sides": 171,
@@ -397,6 +572,76 @@
      ],
      "km": 2.2,
      "avg": 9.9
+    }
+   ]
+  },
+  {
+   "region": "mexico-sud",
+   "climbs": 2575,
+   "sides": 3569,
+   "flagged": 285,
+   "rate": 0.08,
+   "flags": {
+    "ripida": 5,
+    "picco": 72,
+    "piatta": 19,
+    "salto": 224,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt1518233x-9210511",
+     "name": "Cima senza nome",
+     "side": "Versante Nord-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 2.6,
+     "avg": 7.7
+    },
+    {
+     "id": "osm-rt1518233x-9210511",
+     "name": "Cima senza nome",
+     "side": "Versante Sud-Ovest",
+     "flags": [
+      "ripida",
+      "picco",
+      "salto"
+     ],
+     "km": 2.3,
+     "avg": 22.7
+    },
+    {
+     "id": "osm-rt1613611x-9622099",
+     "name": "Cima senza nome",
+     "side": "Versante Est",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 5.7,
+     "avg": 9.3
+    },
+    {
+     "id": "osm-rt1726154x-9631609",
+     "name": "Cima senza nome",
+     "side": "Da Villa Talea de Castro",
+     "flags": [
+      "picco"
+     ],
+     "km": 29,
+     "avg": 5
+    },
+    {
+     "id": "osm-rt1760622x-10050906",
+     "name": "Cima senza nome",
+     "side": "Versante Sud-Ovest",
+     "flags": [
+      "picco",
+      "salto"
+     ],
+     "km": 7.6,
+     "avg": 7.1
     }
    ]
   },
@@ -805,6 +1050,138 @@
    ]
   },
   {
+   "region": "mexico-nord",
+   "climbs": 961,
+   "sides": 1270,
+   "flagged": 83,
+   "rate": 0.065,
+   "flags": {
+    "ripida": 3,
+    "picco": 22,
+    "piatta": 9,
+    "salto": 68,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt2366003x-10084361",
+     "name": "Salita presso Alamitos de los Díaz",
+     "side": "Da Estación Catorce",
+     "flags": [
+      "picco"
+     ],
+     "km": 20.6,
+     "avg": 5.3
+    },
+    {
+     "id": "osm-rt2368921x-10086958",
+     "name": "Salita presso El Refugio",
+     "side": "Da Estación Catorce",
+     "flags": [
+      "picco"
+     ],
+     "km": 12.2,
+     "avg": 8.8
+    },
+    {
+     "id": "osm-rt2426337x-10599146",
+     "name": "Cima senza nome",
+     "side": "Versante Sud-Est",
+     "flags": [
+      "salto"
+     ],
+     "km": 7,
+     "avg": 5.2
+    },
+    {
+     "id": "osm-rt2268202x-10427479",
+     "name": "Mesa del Venado",
+     "side": "Versante Sud-Est",
+     "flags": [
+      "piatta"
+     ],
+     "km": 29.8,
+     "avg": 3.4
+    },
+    {
+     "id": "osm-rt2300172x-10358560",
+     "name": "Cima senza nome",
+     "side": "Da Mimbres",
+     "flags": [
+      "piatta"
+     ],
+     "km": 28,
+     "avg": 3.2
+    }
+   ]
+  },
+  {
+   "region": "mexico-centro-est",
+   "climbs": 2001,
+   "sides": 2815,
+   "flagged": 173,
+   "rate": 0.061,
+   "flags": {
+    "ripida": 3,
+    "picco": 51,
+    "piatta": 31,
+    "salto": 103,
+    "incoerente": 0
+   },
+   "examples": [
+    {
+     "id": "osm-rt1915162x-9980423",
+     "name": "La puerta - Sultepec",
+     "side": "Versante Sud",
+     "flags": [
+      "piatta"
+     ],
+     "km": 27.9,
+     "avg": 3.1
+    },
+    {
+     "id": "osm-rt1907320x-9968085",
+     "name": "Salita presso Colonia Azteca",
+     "side": "Da San Martín Coapaxtongo",
+     "flags": [
+      "piatta"
+     ],
+     "km": 28.4,
+     "avg": 3.4
+    },
+    {
+     "id": "osm-rt1940120x-9943874",
+     "name": "Calle Emiliano Zapata",
+     "side": "Da San Pedro Huiztizilapan",
+     "flags": [
+      "salto"
+     ],
+     "km": 5.5,
+     "avg": 7.5
+    },
+    {
+     "id": "osm-rt1914997x-9986639",
+     "name": "Salita presso La Peñuela",
+     "side": "Da San Miguel Oxtotilpan",
+     "flags": [
+      "salto"
+     ],
+     "km": 5.3,
+     "avg": 7.9
+    },
+    {
+     "id": "osm-rt2018311x-9872533",
+     "name": "Ramal a El Chico",
+     "side": "Da San José Ocotillos",
+     "flags": [
+      "piatta"
+     ],
+     "km": 25.2,
+     "avg": 3.3
+    }
+   ]
+  },
+  {
    "region": "usa-california-nord",
    "climbs": 1355,
    "sides": 1730,
@@ -867,405 +1244,6 @@
      ],
      "km": 28.7,
      "avg": 3.1
-    }
-   ]
-  },
-  {
-   "region": "trentino-aa",
-   "climbs": 521,
-   "sides": 597,
-   "flagged": 36,
-   "rate": 0.06,
-   "flags": {
-    "ripida": 0,
-    "picco": 11,
-    "piatta": 4,
-    "salto": 28,
-    "incoerente": 0
-   },
-   "examples": [
-    {
-     "id": "osm-rt4673400x1092627",
-     "name": "Salita presso Certosa di Senales",
-     "side": "Da Cirlano",
-     "flags": [
-      "picco"
-     ],
-     "km": 13.9,
-     "avg": 8.3
-    },
-    {
-     "id": "osm-rt4669586x1185130",
-     "name": "Colac",
-     "side": "Da Tiso",
-     "flags": [
-      "piatta"
-     ],
-     "km": 28.5,
-     "avg": 2.8
-    },
-    {
-     "id": "osm-rt4646800x1193753",
-     "name": "Davedino",
-     "side": "Da Pieve",
-     "flags": [
-      "picco",
-      "salto"
-     ],
-     "km": 2.2,
-     "avg": 14.6
-    },
-    {
-     "id": "osm-rt4669944x1190024",
-     "name": "Giogo Piccolo",
-     "side": "Da San Martino in Badia",
-     "flags": [
-      "salto"
-     ],
-     "km": 4.6,
-     "avg": 9.6
-    },
-    {
-     "id": "osm-rt4627276x1160001",
-     "name": "Via Sadole",
-     "side": "Da Ziano di Fiemme",
-     "flags": [
-      "salto"
-     ],
-     "km": 4.6,
-     "avg": 11.7
-    }
-   ]
-  },
-  {
-   "region": "slovenia",
-   "climbs": 364,
-   "sides": 474,
-   "flagged": 28,
-   "rate": 0.059,
-   "flags": {
-    "ripida": 0,
-    "picco": 1,
-    "piatta": 1,
-    "salto": 27,
-    "incoerente": 0
-   },
-   "examples": [
-    {
-     "id": "osm-rt4649624x1550462",
-     "name": "Salita presso Bojtina",
-     "side": "Da Oplotnica",
-     "flags": [
-      "piatta"
-     ],
-     "km": 27.3,
-     "avg": 3.2
-    },
-    {
-     "id": "osm-rt4663373x1505779",
-     "name": "Cima senza nome",
-     "side": "Da Trbonje",
-     "flags": [
-      "salto"
-     ],
-     "km": 3,
-     "avg": 9.8
-    },
-    {
-     "id": "osm-rt4620588x1392040",
-     "name": "Špic",
-     "side": "Da Hudajužna",
-     "flags": [
-      "salto"
-     ],
-     "km": 4.5,
-     "avg": 8.9
-    },
-    {
-     "id": "osm-rt4607860x1507452",
-     "name": "Dolškov hrib",
-     "side": "Da Zagrad",
-     "flags": [
-      "salto"
-     ],
-     "km": 4.5,
-     "avg": 11.3
-    },
-    {
-     "id": "osm-rt4634438x1471825",
-     "name": "Markova Rovna",
-     "side": "Da Luče",
-     "flags": [
-      "salto"
-     ],
-     "km": 4.3,
-     "avg": 5.6
-    }
-   ]
-  },
-  {
-   "region": "france-aquitaine",
-   "climbs": 120,
-   "sides": 142,
-   "flagged": 8,
-   "rate": 0.056,
-   "flags": {
-    "ripida": 0,
-    "picco": 1,
-    "piatta": 0,
-    "salto": 8,
-    "incoerente": 0
-   },
-   "examples": [
-    {
-     "id": "osm-rt4302090x-91351",
-     "name": "Itzal Herria",
-     "side": "Da Larrau",
-     "flags": [
-      "picco",
-      "salto"
-     ],
-     "km": 3,
-     "avg": 10.4
-    },
-    {
-     "id": "osm-rt4309369x-114122",
-     "name": "Iraazkiko Lepoa",
-     "side": "Da Estérençuby",
-     "flags": [
-      "salto"
-     ],
-     "km": 3.7,
-     "avg": 8.4
-    },
-    {
-     "id": "osm-rt4311420x-16791",
-     "name": "Chemin du Mousques",
-     "side": "Versante Sud-Est",
-     "flags": [
-      "salto"
-     ],
-     "km": 1.6,
-     "avg": 9.2
-    },
-    {
-     "id": "osm-rt4310565x-122042",
-     "name": "Chemin d'Irei",
-     "side": "Da Saint-Michel",
-     "flags": [
-      "salto"
-     ],
-     "km": 2.9,
-     "avg": 9.4
-    },
-    {
-     "id": "osm-rt4321460x-95221",
-     "name": "Gastelusare",
-     "side": "Da Pagolle",
-     "flags": [
-      "salto"
-     ],
-     "km": 2.7,
-     "avg": 8.8
-    }
-   ]
-  },
-  {
-   "region": "liguria",
-   "climbs": 269,
-   "sides": 361,
-   "flagged": 20,
-   "rate": 0.055,
-   "flags": {
-    "ripida": 0,
-    "picco": 2,
-    "piatta": 0,
-    "salto": 19,
-    "incoerente": 0
-   },
-   "examples": [
-    {
-     "id": "osm-rt4403101x769855",
-     "name": "Testa delle Collette",
-     "side": "Da Cetta",
-     "flags": [
-      "picco"
-     ],
-     "km": 14.6,
-     "avg": 5.6
-    },
-    {
-     "id": "osm-rt4427119x769020",
-     "name": "Salita presso Vigna",
-     "side": "Da Vigna",
-     "flags": [
-      "salto"
-     ],
-     "km": 4.7,
-     "avg": 12.3
-    },
-    {
-     "id": "osm-rt4427672x745956",
-     "name": "Chiotti",
-     "side": "Da Roaschia",
-     "flags": [
-      "salto"
-     ],
-     "km": 3,
-     "avg": 9.8
-    },
-    {
-     "id": "osm-rt4426583x757011",
-     "name": "Via Buscaié",
-     "side": "Versante Nord",
-     "flags": [
-      "salto"
-     ],
-     "km": 1.9,
-     "avg": 9.6
-    },
-    {
-     "id": "osm-rt4454475x911294",
-     "name": "Ballo della Gallina",
-     "side": "Da Molino Vecchio",
-     "flags": [
-      "salto"
-     ],
-     "km": 1.7,
-     "avg": 10.1
-    }
-   ]
-  },
-  {
-   "region": "bosnia",
-   "climbs": 1076,
-   "sides": 1329,
-   "flagged": 71,
-   "rate": 0.053,
-   "flags": {
-    "ripida": 0,
-    "picco": 10,
-    "piatta": 3,
-    "salto": 67,
-    "incoerente": 0
-   },
-   "examples": [
-    {
-     "id": "osm-rt4363826x1822993",
-     "name": "Bobovica",
-     "side": "Da Šabići",
-     "flags": [
-      "salto"
-     ],
-     "km": 1.8,
-     "avg": 9.6
-    },
-    {
-     "id": "osm-rt4430102x1854533",
-     "name": "Konjuh",
-     "side": "Versante Sud-Ovest",
-     "flags": [
-      "salto"
-     ],
-     "km": 1.8,
-     "avg": 7.3
-    },
-    {
-     "id": "osm-rt4419429x1823867",
-     "name": "Kicelj",
-     "side": "Da Rijeka",
-     "flags": [
-      "piatta"
-     ],
-     "km": 27.9,
-     "avg": 3.1
-    },
-    {
-     "id": "osm-rt4416515x1754983",
-     "name": "Salita presso Gornje Pećine",
-     "side": "Da Bukvići",
-     "flags": [
-      "picco"
-     ],
-     "km": 9.2,
-     "avg": 6.9
-    },
-    {
-     "id": "osm-rt4395579x1898624",
-     "name": "Salita presso Barnik",
-     "side": "Da Stop",
-     "flags": [
-      "piatta"
-     ],
-     "km": 25.9,
-     "avg": 3.1
-    }
-   ]
-  },
-  {
-   "region": "usa-new-mexico",
-   "climbs": 507,
-   "sides": 583,
-   "flagged": 31,
-   "rate": 0.053,
-   "flags": {
-    "ripida": 0,
-    "picco": 7,
-    "piatta": 6,
-    "salto": 23,
-    "incoerente": 0
-   },
-   "examples": [
-    {
-     "id": "osm-rt3620992x-10546732",
-     "name": "Gallegos Road",
-     "side": "Versante Nord-Ovest",
-     "flags": [
-      "piatta"
-     ],
-     "km": 28.6,
-     "avg": 3.4
-    },
-    {
-     "id": "osm-rt3675473x-10533761",
-     "name": "Cima senza nome",
-     "side": "Versante Sud",
-     "flags": [
-      "salto"
-     ],
-     "km": 2.1,
-     "avg": 6.7
-    },
-    {
-     "id": "osm-rt3669323x-10646273",
-     "name": "Cima senza nome",
-     "side": "Da Tierra Amarilla",
-     "flags": [
-      "picco",
-      "salto"
-     ],
-     "km": 6.6,
-     "avg": 9.2
-    },
-    {
-     "id": "osm-rt3287357x-10577456",
-     "name": "Benson Ridge Spur-5 Road",
-     "side": "Da High Rolls",
-     "flags": [
-      "piatta"
-     ],
-     "km": 29.9,
-     "avg": 3.4
-    },
-    {
-     "id": "osm-rt3525860x-10754542",
-     "name": "Cima senza nome",
-     "side": "Da Encinal",
-     "flags": [
-      "piatta"
-     ],
-     "km": 27.1,
-     "avg": 3.3
     }
    ]
   }
@@ -1386,7 +1364,7 @@
   {
    "region": "trentino-aa",
    "climbs": 521,
-   "sides": 597,
+   "sides": 598,
    "flagged": 36,
    "rate": 0.06,
    "flags": {
@@ -2028,6 +2006,20 @@
    }
   },
   {
+   "region": "sweden",
+   "climbs": 194,
+   "sides": 203,
+   "flagged": 11,
+   "rate": 0.054,
+   "flags": {
+    "ripida": 0,
+    "picco": 4,
+    "piatta": 0,
+    "salto": 10,
+    "incoerente": 0
+   }
+  },
+  {
    "region": "slovakia",
    "climbs": 286,
    "sides": 342,
@@ -2346,6 +2338,202 @@
     "picco": 4,
     "piatta": 0,
     "salto": 10,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "usa-massachusetts",
+   "climbs": 56,
+   "sides": 65,
+   "flagged": 0,
+   "rate": 0,
+   "flags": {
+    "ripida": 0,
+    "picco": 0,
+    "piatta": 0,
+    "salto": 0,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "canada-alberta",
+   "climbs": 42,
+   "sides": 48,
+   "flagged": 2,
+   "rate": 0.042,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "canada-quebec",
+   "climbs": 150,
+   "sides": 178,
+   "flagged": 2,
+   "rate": 0.011,
+   "flags": {
+    "ripida": 0,
+    "picco": 1,
+    "piatta": 0,
+    "salto": 2,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "mexico-nord",
+   "climbs": 961,
+   "sides": 1270,
+   "flagged": 83,
+   "rate": 0.065,
+   "flags": {
+    "ripida": 3,
+    "picco": 22,
+    "piatta": 9,
+    "salto": 68,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "mexico-centro-ovest",
+   "climbs": 1790,
+   "sides": 2426,
+   "flagged": 126,
+   "rate": 0.052,
+   "flags": {
+    "ripida": 1,
+    "picco": 11,
+    "piatta": 34,
+    "salto": 87,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "mexico-centro-est",
+   "climbs": 2001,
+   "sides": 2815,
+   "flagged": 173,
+   "rate": 0.061,
+   "flags": {
+    "ripida": 3,
+    "picco": 51,
+    "piatta": 31,
+    "salto": 103,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "mexico-sud",
+   "climbs": 2575,
+   "sides": 3569,
+   "flagged": 285,
+   "rate": 0.08,
+   "flags": {
+    "ripida": 5,
+    "picco": 72,
+    "piatta": 19,
+    "salto": 224,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "costa-rica",
+   "climbs": 530,
+   "sides": 746,
+   "flagged": 113,
+   "rate": 0.151,
+   "flags": {
+    "ripida": 10,
+    "picco": 39,
+    "piatta": 10,
+    "salto": 80,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "guatemala",
+   "climbs": 1496,
+   "sides": 2120,
+   "flagged": 340,
+   "rate": 0.16,
+   "flags": {
+    "ripida": 33,
+    "picco": 146,
+    "piatta": 51,
+    "salto": 203,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "venezuela",
+   "climbs": 853,
+   "sides": 1149,
+   "flagged": 123,
+   "rate": 0.107,
+   "flags": {
+    "ripida": 17,
+    "picco": 42,
+    "piatta": 13,
+    "salto": 83,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "chile",
+   "climbs": 495,
+   "sides": 665,
+   "flagged": 25,
+   "rate": 0.038,
+   "flags": {
+    "ripida": 0,
+    "picco": 7,
+    "piatta": 9,
+    "salto": 13,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "argentina",
+   "climbs": 415,
+   "sides": 503,
+   "flagged": 27,
+   "rate": 0.054,
+   "flags": {
+    "ripida": 2,
+    "picco": 5,
+    "piatta": 7,
+    "salto": 17,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "brazil-sul",
+   "climbs": 1529,
+   "sides": 2200,
+   "flagged": 55,
+   "rate": 0.025,
+   "flags": {
+    "ripida": 0,
+    "picco": 9,
+    "piatta": 0,
+    "salto": 51,
+    "incoerente": 0
+   }
+  },
+  {
+   "region": "brazil-sudeste",
+   "climbs": 3091,
+   "sides": 4174,
+   "flagged": 216,
+   "rate": 0.052,
+   "flags": {
+    "ripida": 5,
+    "picco": 29,
+    "piatta": 7,
+    "salto": 194,
     "incoerente": 0
    }
   }
