@@ -618,5 +618,10 @@
   ],
   "target": "ukraine-carpazi",
   "builtAt": "2026-11-21"
+ },
+ "osm_passes_pe.json": {
+  "bbox": null,
+  "target": "peru",
+  "builtAt": "2026-11-23"
  }
 }
