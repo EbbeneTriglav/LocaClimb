@@ -299,6 +299,10 @@ a { color: var(--acc); }
 /* ---------- il tuo giro ---------- */
 .wp { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tx); color: var(--bg); font: 700 13px/1 var(--cond, sans-serif); border: 2px solid var(--bg); box-shadow: 0 2px 8px rgba(0,0,0,.5); cursor: grab; }
 .wp.a { background: var(--acc); } .wp.z { background: var(--hl); }
+/* via points dragged off the line (Giro, 24/11/2026): small white dots, the handle that follows the mouse lets the line take the press */
+.wp.via { width: 16px; height: 16px; font-size: 0; background: #fff; border: 3px solid var(--bg); }
+.wp.via.hd { pointer-events: none; opacity: .9; }
+.stops .wp.via { width: 24px; height: 24px; font-size: 12px; background: var(--tx); border: 0; }
 .stops { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; }
 .stops li { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--line2); }
 .stops .wp { flex: none; width: 24px; height: 24px; cursor: default; box-shadow: none; }
@@ -616,3 +620,14 @@ body.navon .maplibregl-ctrl-bottom-right { bottom: calc(var(--safe-b, 0px) + 96p
 .trday.warn { border-color: #F2C14E; } .trday.warn b { color: #F2C14E; }
 .trday.bad { border-color: #E5484D; } .trday.bad b { color: #E5484D; }
 .trday .linkbtn { align-self: flex-start; }
+
+/* several days (Giro, 24/11/2026): the list of days and the end-of-day flags on the map */
+.days { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.days li { display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "d n g" "d s g"; column-gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: var(--card, rgba(255,255,255,.04)); }
+.days li b { grid-area: d; font: 700 13px/1.1 var(--cond, sans-serif); text-transform: uppercase; color: var(--acc); }
+.days li span { grid-area: n; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.days li small { grid-area: s; color: var(--mu, #9aa); }
+.days li .ib { grid-area: g; width: auto; min-width: 44px; padding: 0 10px; border-radius: 999px; font-size: 12px; }
+.dayend { padding: 2px 6px; border-radius: 6px; background: var(--acc); color: var(--bg); font: 700 11px/1.2 var(--cond, sans-serif); border: 2px solid var(--bg); box-shadow: 0 2px 6px rgba(0,0,0,.5); }
+.dayend.maplibregl-marker { display: none; }
+body.ingiro .dayend.maplibregl-marker { display: block; }

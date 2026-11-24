@@ -3,7 +3,7 @@
  * Routing is BRouter (same server and profiles as the classic app, js/routebuilder.js), with
  * OSRM as a geometry-only fallback. Nothing here touches the DOM or the map.
  */
-import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=71";
+import { havKm, speedKmh, vamFor, gradeColor, GRADE_STOPS } from "./climb.mjs?v=72";
 
 export const BROUTER = "https://brouter.de/brouter";
 export const PROFILES = [["fastbike", "Solo asfalto"], ["safety", "Più ciclabili"], ["trekking", "Anche sterrato"], ["shortest", "Più corto"]];
@@ -299,6 +299,35 @@ export function surfaceShares(surf) {
   if (!surf) return [];
   const tot = Object.values(surf).reduce((a, b) => a + b, 0) || 1;
   return Object.entries(surf).map(([k, m]) => ({ k, pct: Math.round(m / tot * 100) })).filter((x) => x.pct > 0).sort((a, b) => b.pct - a.pct);
+}
+
+/* ---------------------------------------------------------------- drag the line (Google Maps style, 24/11/2026)
+   Press on the route, drag, release: a new via point there, between the two stops around the pressed spot. */
+const flatD2 = (aLat, aLon, bLat, bLon) => { const x = (bLon - aLon) * Math.cos(aLat * Math.PI / 180); return x * x + (bLat - aLat) ** 2; };
+/* index of the track point nearest to (lat, lon), from index `from` on */
+export function nearestIdx(track, lat, lon, from = 0) {
+  let b = -1, bd = Infinity;
+  for (let i = Math.max(0, from); i < track.length; i++) { const d = flatD2(lat, lon, track[i][0], track[i][1]); if (d < bd) { bd = d; b = i; } }
+  return b;
+}
+/* index of each stop on the track, searched forward (a loop passes near its start twice); a stop takes the FIRST
+   point within 60 m of its nearest one, so an out-and-back does not jump to the way back */
+export function stopIndexes(track, stops) {
+  const out = []; let from = 0;
+  for (let s = 0; s < stops.length; s++) {
+    if (s === stops.length - 1) { out.push(track.length - 1); break; }
+    const k = nearestIdx(track, stops[s].lat, stops[s].lon, from);
+    const lim = Math.max(flatD2(stops[s].lat, stops[s].lon, track[k][0], track[k][1]) * 1.2, (0.06 / 111) ** 2);
+    let f = k; for (let i = from; i < k; i++) if (flatD2(stops[s].lat, stops[s].lon, track[i][0], track[i][1]) <= lim) { f = i; break; }
+    out.push(s === 0 ? 0 : f); from = s === 0 ? 0 : f;
+  }
+  return out;
+}
+/* where a via point pressed at track index k goes in the stop list: right after the last stop at or before k */
+export function insertPos(idx, k) {
+  let p = 1;
+  for (let i = 1; i < idx.length - 1; i++) if (idx[i] <= k) p = i + 1;
+  return Math.min(p, Math.max(1, idx.length - 1));
 }
 
 /* stops <-> "lat,lon,name;..." for the shareable #/giro?p=... link */

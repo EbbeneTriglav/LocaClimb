@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=71";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=72";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -112,6 +112,19 @@ export const DICT = {
   "Il tuo giro": "Your ride", "nessuna tappa": "no stops", "Partenza": "Start", "Arrivo": "Finish", "Sposta su": "Move up", "Sposta giù": "Move down",
   "Togli tappa": "Remove stop", "Tipo di strada": "Road type", "Anche sterrato": "Gravel ok", "Più corto": "Shortest",
   "Calcolo il percorso…": "Calculating the route…", "Percorso non trovato: sposta una tappa su una strada.": "No route found: move a stop onto a road.",
+  "Passaggio": "Via point", "Trascina la linea per passare da un'altra strada.": "Drag the line to take another road.",
+  "Tieni premuto sulla linea e trascina per passare da un'altra strada.": "Hold the line and drag it to take another road.", "Trascina per cambiare il percorso": "Drag to change the route",
+  "Più giorni": "Several days", "Bici e bagagli": "Bike and luggage", "Allenamento": "Fitness", "Cerco i paesi dove fermarsi…": "Looking for towns to stop in…",
+  "Bici leggera": "Light bike", "Bikepacking": "Bikepacking", "Cicloturismo con borse": "Touring with panniers", "Viaggio con tenda": "Camping tour",
+  "Tranquillo": "Easy-going", "Allenato": "Trained", "Sportivo": "Athletic",
+  "borsello e poco altro": "a small bag and little else", "borse da telaio e sella": "frame and saddle bags", "portapacchi e borse laterali": "rack and panniers", "campeggio e cucina": "tent and stove",
+  "poche uscite, ritmo da gita": "few rides, leisure pace", "esco ogni settimana": "I ride every week", "gran fondo, salite lunghe": "gran fondos, long climbs",
+  "GPX del giorno": "Day GPX",
+  "Attività": "Activity", "Bici da strada": "Road bike", "Gravel / MTB": "Gravel / MTB", "Escursione": "Hike", "Cammino": "Long walk", "Corsa / trail": "Run / trail",
+  "Sterrato e strade bianche": "Gravel and dirt roads", "Sentieri": "Trails", "Sentieri e strade": "Trails and roads", "Strade": "Roads",
+  "di corsa": "running", "a piedi": "on foot", "Zaino": "Backpack", "Zainetto": "Daypack", "Zaino da rifugi": "Hut-to-hut pack", "Zaino con tenda": "Pack with tent",
+  "giornata, rientro ogni sera": "day trips, home every night", "sacco lenzuolo, ricambi": "sleeping liner, spare clothes", "tenda, fornellino, cibo": "tent, stove, food",
+  "passeggiate, ritmo lento": "walks, slow pace", "escursioni frequenti": "frequent hikes", "trail, lunghe giornate": "trail runs, long days",
   "Aggiungi almeno un'altra tappa.": "Add at least one more stop.",
   "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda.": "Tap the map to set the start, then the stops. You can also tap a climb, or use «+ Ride» on its page.",
   "in sella": "riding", "quota max": "top", "Profilo del giro": "Ride profile", "Salite sul percorso": "Climbs on the route",
@@ -184,6 +197,12 @@ export const DICT = {
 
 /* dynamic labels: [pattern, replacement] - checked in order, on the whole (trimmed) text */
 export const RULES = [
+  [/^(\d+) kg sulle spalle · circa (.+) ore di cammino al giorno, soste escluse\.$/, "$1 kg on your back · about $2 hours walking a day, stops excluded."],
+  [/^Si fa in un giorno: circa (.+) di cammino con questo assetto\.$/, "One day is enough: about $1 on foot with this set-up."],
+  [/^Giorno (\d+)$/, "Day $1"],
+  [/^GPX del giorno (\d+)$/, "Day $1 GPX"],
+  [/^Si fa in un giorno: circa (.+) in sella con questo assetto\.$/, "One day is enough: about $1 riding with this set-up."],
+  [/^(\d+) kg di bici e bagagli · circa (.+) ore in sella al giorno, soste escluse\.$/, "$1 kg of bike and luggage · about $2 hours riding a day, stops excluded."],
   [/^([\d.,]+) salite qui$/, "$1 climbs here"],
   [/^Difficoltà (\d+)\/10$/, "Difficulty $1/10"],
   [/^difficoltà (\d+|–)\/10$/, "difficulty $1/10"],
