@@ -2158,7 +2158,7 @@ function renderGiro() {
    (OpenStreetMap, Overpass) nearest to the day's hours. The choice is remembered on this device. */
 const TOUR_KEY = "lr_tour";
 const TOUR = (() => { try { return { setup: "bikepacking", fit: "allenato", ...JSON.parse(localStorage.getItem(TOUR_KEY) || "{}") }; } catch { return { setup: "bikepacking", fit: "allenato" }; } })();
-TOUR.places = null; TOUR.pkey = ""; TOUR.mk = [];
+TOUR.places = null; TOUR.pkey = ""; TOUR.mk = []; TOUR.rev = {};
 function tourPlan() {
   const r = G.res; if (!r || r.noEle || !r.track || r.track.length < 2) return null;
   const n = Math.max(300, Math.min(3000, Math.round(r.km * 2)));
@@ -2167,7 +2167,7 @@ function tourPlan() {
   const st = sp.foot ? (FOOT_SETUPS.find((x) => x.k === TOUR.fsetup) || FOOT_SETUPS[1]) : setupOf(TOUR.setup);
   const ft = sp.foot ? (FOOT_FITNESS.find((x) => x.k === TOUR.ffit) || FOOT_FITNESS[1]) : fitnessOf(TOUR.fit);
   const cum = sp.foot ? footMinutes(side, sp.pace, ft.speed, st.kg) : tourMinutes(side, ft, st.kg), budget = ft.h * 60;
-  const cuts = cutDays(cum, budget, TOUR.places || []);
+  const cuts = cutDays(cum, budget, TOUR.places || []).map((c) => (c.name ? c : { ...c, name: TOUR.rev[c.i] || null }));
   const names = G.stops.length ? [stopName(G.stops[0], 0), stopName(G.stops[G.stops.length - 1], G.stops.length - 1)] : [STOP_L[0], STOP_L[1]];
   return { side, cum, budget, st, ft, foot: sp.foot, cuts, days: daySummary(side, cum, cuts, names[0], names[1]) };
 }
@@ -2205,10 +2205,22 @@ function wireTour() {
   // the towns along the route, once per route
   const key = G.res ? G.res.km.toFixed(2) + ":" + G.res.track.length : "";
   if (tp && tp.days.length > 1 && TOUR.pkey !== key) {
-    TOUR.pkey = key; TOUR.places = null;
-    fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: "data=" + encodeURIComponent(placesQuery(tp.side.track)) })
+    TOUR.pkey = key; TOUR.places = null; TOUR.rev = {};
+    fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: "data=" + encodeURIComponent(placesQuery(tp.side.track)), signal: AbortSignal.timeout(20000) })
       .then((r) => r.json()).then((j) => { if (TOUR.pkey !== key) return; TOUR.places = placesOnSide(tp.side.track, j.elements || []); if (giroOn()) renderGiro(); })
       .catch(() => { if (TOUR.pkey !== key) return; TOUR.places = []; if (giroOn()) renderGiro(); });
+  }
+  // a day that still ends nowhere (Overpass busy, or no village in the window): the nearest place by name, from
+  // Photon (OpenStreetMap, komoot) - 24/11/2026: Overpass answered 502 "at capacity" for hours
+  if (tp && TOUR.places != null) {
+    const todo = tp.cuts.filter((c) => !c.name && !(c.i in TOUR.rev)).slice(0, 12);
+    for (const c of todo) {
+      TOUR.rev[c.i] = null;
+      const t = tp.side.track[c.i], k0 = TOUR.pkey;
+      fetch(`https://photon.komoot.io/reverse?lat=${t[0].toFixed(5)}&lon=${t[1].toFixed(5)}&limit=1&osm_tag=place`).then((r) => r.json())
+        .then((j) => { const f = j.features && j.features[0], nm = f && f.properties && f.properties.name; if (!nm || TOUR.pkey !== k0) return; TOUR.rev[c.i] = nm; if (giroOn()) renderGiro(); })
+        .catch(() => {});
+    }
   }
 }
 /* the end of every day but the last on the map: a small numbered flag */
