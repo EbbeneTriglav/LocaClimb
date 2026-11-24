@@ -643,5 +643,10 @@
   "bbox": null,
   "target": "usa-new-mexico",
   "builtAt": "2026-11-24"
+ },
+ "osm_passes_jp_hk.json": {
+  "bbox": null,
+  "target": "japan-hokkaido",
+  "builtAt": "2026-11-24"
  }
 }
