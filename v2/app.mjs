@@ -17,6 +17,7 @@ import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=72";
 import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=72";
 import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, approvedProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=72";
 import { approvedClimbs } from "./lib/proposals.mjs?v=72";
+import { SPORTS, sportOf, FOOT_PROFILES, FOOT_SETUPS, FOOT_FITNESS, footMinutes } from "./lib/sports.mjs?v=72";
 import { SETUPS as TOUR_SETUPS, FITNESS, setupOf, fitnessOf, tourMinutes, cutDays, daySummary, placesOnSide, placesQuery } from "./lib/tour.mjs?v=72";
 import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=72";
 import { loadRegions, regionAt } from "./lib/regions.mjs?v=72";
@@ -487,7 +488,7 @@ function route() {
 
 function setMode(m) {
   if (m !== "giro") S.giroOpen = false;
-  if (m === "giro" && panel.dataset.mode !== "giro") setBase(GIRO_MAP, true);              // building a ride: roads first
+  if (m === "giro" && panel.dataset.mode !== "giro") setBase(sportOf(G.sport).map === "topo" ? "topo" : GIRO_MAP, true);   // building a ride: roads first (paths: the topographic map)
   else if (m !== "giro" && panel.dataset.mode === "giro") setBase(mapPref, true);          // back to the rider's map
   if (m === "climb" || m === "giro") hideInstallCard();          // the card never sits on a climb or a ride
   panel.dataset.mode = m; panel.scrollTop = 0;
@@ -1607,13 +1608,15 @@ loadIndex().then((s) => { _idx = s; });
 
 /* ------------------------------------------------------------------ il tuo giro (route builder) */
 const GIRO_KEY = "lr_v2_giro";
-const G = { stops: [], profile: "fastbike", res: null, side: null, rp: null, risk: [], eta: null, on: [], markers: [], seq: 0, err: "", day: 0, start: "08:00", wx: null, water: null };
-try { const o = JSON.parse(localStorage.getItem(GIRO_KEY) || "null"); if (o && Array.isArray(o.stops)) { G.stops = o.stops.slice(0, MAX_STOPS); G.profile = o.profile || G.profile; } } catch { /* private mode */ }
+const G = { stops: [], sport: "bici", profile: "fastbike", res: null, side: null, rp: null, risk: [], eta: null, on: [], markers: [], seq: 0, err: "", day: 0, start: "08:00", wx: null, water: null };
+try { const o = JSON.parse(localStorage.getItem(GIRO_KEY) || "null"); if (o && Array.isArray(o.stops)) { G.stops = o.stops.slice(0, MAX_STOPS); G.profile = o.profile || G.profile; G.sport = sportOf(o.sport).k; } } catch { /* private mode */ }
 function giroOn() { return panel.dataset.mode === "giro"; }
 function saveGiro() {
-  try { localStorage.setItem(GIRO_KEY, JSON.stringify({ stops: G.stops, profile: G.profile })); } catch { /* private mode */ }
-  if (giroOn()) history.replaceState(null, "", G.stops.length ? "#/giro?p=" + encodeStops(G.stops) : "#/giro");
+  try { localStorage.setItem(GIRO_KEY, JSON.stringify({ stops: G.stops, profile: G.profile, sport: G.sport })); } catch { /* private mode */ }
+  if (giroOn()) history.replaceState(null, "", G.stops.length ? "#/giro?p=" + encodeStops(G.stops) + sportQ() : "#/giro");
 }
+/* the sport in shared links (#/giro?p=...&s=escursione); the road bike is the default and stays out */
+function sportQ() { return G.sport && G.sport !== "bici" ? "&s=" + G.sport : ""; }
 function stopName(s, i) { return s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : s.via ? STOP_L[3] : STOP_L[2] + " " + (i + 1)); }
 function addStop(s) {
   if (G.stops.length >= MAX_STOPS) { toast(`Massimo ${MAX_STOPS} tappe`); return; }
@@ -1630,7 +1633,8 @@ function giroClick(e) {
   else addStop({ lat: e.lngLat.lat, lon: e.lngLat.lng });
 }
 function openGiro(h) {
-  const m = /[?&]p=([^&]+)/.exec(h);
+  const m = /[?&]p=([^&]+)/.exec(h), sq = /[?&]s=([a-z]+)/.exec(h);
+  if (sq && sportOf(sq[1]).k === sq[1] && sq[1] !== G.sport) { G.sport = sq[1]; G.profile = sportOf(sq[1]).profiles[0][0]; G.res = null; }
   if (m) {
     const st = decodeStops(decodeURIComponent(m[1]));
     if (st.length && encodeStops(st) !== encodeStops(G.stops)) {
@@ -1703,6 +1707,11 @@ function syncMarkers() {
   });
 }
 
+/* time along the route: the bike model at the rider's W/kg, or the walking / running model (lib/sports.mjs) */
+function giroEta(side) {
+  const sp = sportOf(G.sport);
+  return sp.foot ? footMinutes(side, sp.pace, 1, 4) : etaMinutes(side, myWkg() || 3);
+}
 let calcT = null;
 function calcSoon() { clearTimeout(calcT); calcT = setTimeout(calcRoute, 350); }
 /* the base profile + the tunnel rule (route.mjs patchProfile), uploaded once per session; null = use the base */
@@ -1728,7 +1737,7 @@ async function calcRoute() {
   if (G.stops.length < 2) { G.res = null; G.side = null; G.rp = null; G.risk = []; paintRoute(); if (giroOn()) renderGiro(); return; }
   G.busy = true; G.err = ""; if (giroOn()) renderGiro();
   let res = null;
-  const cp = await customProfile(G.profile);
+  const cp = FOOT_PROFILES.has(G.profile) ? null : await customProfile(G.profile);   // the tunnel rule is for bikes
   const rst = routeStops();
   if (cp) { try { res = parseBrouter(await (await fetch(brouterUrl(rst, cp))).json()); } catch { res = null; } }
   if (cp && !res) { try { sessionStorage.removeItem("lr_brp2_" + G.profile); } catch { /* private mode */ } BRP[G.profile] = undefined; }
@@ -1748,7 +1757,7 @@ async function calcRoute() {
   applyRoute(res, seq);
 }
 function applyRoute(res, seq) {
-  G.res = res; G.side = asSide(res.track, 300); G.rp = res.noEle ? null : rideProfile(res.track); G.risk = riskyDescents(G.rp, G.stops); G.eta = G.side && !res.noEle ? etaMinutes(G.side, myWkg() || 3) : null;
+  G.res = res; G.side = asSide(res.track, 300); G.rp = res.noEle ? null : rideProfile(res.track); G.risk = riskyDescents(G.rp, G.stops); G.eta = G.side && !res.noEle ? giroEta(G.side) : null;
   G.on = climbsOnRoute(res.track, (_idx && _idx.climbs) || [], 0.25).filter((x) => !G.stops.some((s, i) => i === 0 && Math.abs(s.lat - x.c.lat) < 1e-4)).slice(0, 40);
   G.wx = null; G.water = null;
   paintRoute(); if (giroOn()) { renderGiro(); fitRoute(); }
@@ -1954,6 +1963,7 @@ function tunnelHtml() {
 }
 /* steep, twisty descents of the ride (route.mjs riskyDescents): a tip, never an alarm */
 function riskHtml() {
+  if (sportOf(G.sport).foot) return "";        // fast descents are a bike matter
   if (!G.risk || !G.risk.length) return "";
   return `<section class="sec risk"><h3>Discese impegnative</h3><ul>${G.risk.map((x) => `<li><b>km ${num(x.fromKm, 1)}–${num(x.toKm, 1)}</b>${riskFrom(x) ? ` · ${esc(riskFrom(x))} →` : ""} ${num(x.km, 1)} km al ${num(x.avg, 1)}%, punte ${num(x.max, 0)}%</li>`).join("")}</ul>
     <p class="note small">I freni scaldano: frena a tratti, non tenerli sempre tirati, e rallenta prima delle curve.</p>
@@ -2088,7 +2098,7 @@ function renderGiro() {
     sum = `<div class="strip" data-peek>
         <div><b>${num(r.km, r.km < 100 ? 1 : 0)}</b><span>km</span></div>
         <div><b>${r.gain != null ? "+" + esc(r.gain) : "–"}</b><span>metri</span></div>
-        <div><b>${r.noEle ? "–" : clock(tot)}</b><span>in sella</span></div>
+        <div><b>${r.noEle ? "–" : clock(tot)}</b><span>${sportOf(G.sport).foot ? (sportOf(G.sport).pace === "run" ? "di corsa" : "a piedi") : "in sella"}</span></div>
         <div><b>${sh ? esc(sh.hi) : "–"}</b><span>quota max</span></div></div>`;
     body = `${r.noEle ? `<p class="note small">Percorso di riserva (OSRM): senza quote né fondo.</p>` : ""}
       ${sh ? `<figure class="prof" id="giroProf">${profSvg(sd, 170, 8, "Profilo del giro", G.risk, G.rp ? rideColor : null)}
@@ -2112,7 +2122,8 @@ function renderGiro() {
     ${sum}
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
     ${r && sd ? `<p class="note small mu">${matchMedia("(hover: hover)").matches ? "Trascina la linea per passare da un'altra strada." : "Tieni premuto sulla linea e trascina per passare da un'altra strada."}</p>` : ""}
-    <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
+    <div class="sides sport" role="group" aria-label="Attività">${SPORTS.map((x) => `<button type="button" data-sport="${x.k}" aria-pressed="${G.sport === x.k}">${esc(x.label)}</button>`).join("")}</div>
+    <div class="sides" role="group" aria-label="Tipo di strada">${sportOf(G.sport).profiles.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${trainHtml()}
     ${body}
     <div class="actions">${r ? `<button type="button" class="btn pri" id="gnav">Naviga</button><button type="button" class="btn" id="gsend">Manda al dispositivo</button><button type="button" class="btn" id="gsave">Salva</button><button type="button" class="btn" id="gprop">Proponi salita</button><button type="button" class="btn" id="ggpx">GPX</button><button type="button" class="btn" id="gbook">Road book</button><button type="button" class="btn" id="gshare">Condividi</button>` : ""}${n ? `<button type="button" class="btn" id="gclear">Svuota</button>` : ""}</div>
@@ -2120,6 +2131,11 @@ function renderGiro() {
   panel.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { G.stops.splice(+b.dataset.rm, 1); giroChanged(); }));
   panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => { const [i, d] = b.dataset.mv.split(":").map(Number); const t = G.stops[i]; G.stops[i] = G.stops[i + d]; G.stops[i + d] = t; giroChanged(); }));
   panel.querySelectorAll("[data-prof]").forEach((b) => b.addEventListener("click", () => { G.profile = b.dataset.prof; giroChanged(); }));
+  panel.querySelectorAll("[data-sport]").forEach((b) => b.addEventListener("click", () => {
+    const sp = sportOf(b.dataset.sport); if (sp.k === G.sport) return;
+    G.sport = sp.k; G.profile = sp.profiles[0][0];
+    setBase(sp.map === "topo" ? "topo" : GIRO_MAP, true); giroChanged();
+  }));
   panel.querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => { G.day = +b.dataset.day; G.wx = null; renderGiro(); fillGiroWeather(G.seq); }));
   const gs = $("#gstart"); if (gs) gs.addEventListener("change", () => { G.start = gs.value || "08:00"; paintGiroWeather(); });
   const gg = $("#ggpx"); if (gg) gg.addEventListener("click", () => { const f = giroFile(); if (f) saveFile(f.name, f.text); });
@@ -2147,29 +2163,35 @@ function tourPlan() {
   const r = G.res; if (!r || r.noEle || !r.track || r.track.length < 2) return null;
   const n = Math.max(300, Math.min(3000, Math.round(r.km * 2)));
   const side = asSide(r.track, n); if (!side) return null;
-  const st = setupOf(TOUR.setup), ft = fitnessOf(TOUR.fit), cum = tourMinutes(side, ft, st.kg), budget = ft.h * 60;
+  const sp = sportOf(G.sport);
+  const st = sp.foot ? (FOOT_SETUPS.find((x) => x.k === TOUR.fsetup) || FOOT_SETUPS[1]) : setupOf(TOUR.setup);
+  const ft = sp.foot ? (FOOT_FITNESS.find((x) => x.k === TOUR.ffit) || FOOT_FITNESS[1]) : fitnessOf(TOUR.fit);
+  const cum = sp.foot ? footMinutes(side, sp.pace, ft.speed, st.kg) : tourMinutes(side, ft, st.kg), budget = ft.h * 60;
   const cuts = cutDays(cum, budget, TOUR.places || []);
   const names = G.stops.length ? [stopName(G.stops[0], 0), stopName(G.stops[G.stops.length - 1], G.stops.length - 1)] : [STOP_L[0], STOP_L[1]];
-  return { side, cum, budget, st, ft, cuts, days: daySummary(side, cum, cuts, names[0], names[1]) };
+  return { side, cum, budget, st, ft, foot: sp.foot, cuts, days: daySummary(side, cum, cuts, names[0], names[1]) };
 }
 function tourHtml() {
   const tp = tourPlan(); if (!tp) return "";
   const chip = (g, list, cur) => `<div class="sides" role="group" data-tg="${g}">${list.map((x) => `<button type="button" data-t="${x.k}" aria-pressed="${cur === x.k}" title="${esc(x.note)}">${esc(x.label)}</button>`).join("")}</div>`;
   const one = tp.days.length < 2;
-  const days = one ? `<p class="note">Si fa in un giorno: circa ${clock(tp.cum[tp.cum.length - 1])} in sella con questo assetto.</p>`
+  const days = one ? `<p class="note">Si fa in un giorno: circa ${clock(tp.cum[tp.cum.length - 1])} ${tp.foot ? "di cammino" : "in sella"} con questo assetto.</p>`
     : `<ol class="days">${tp.days.map((d) => `<li><b>Giorno ${d.day}</b><span>${esc(d.from)} → ${esc(d.to)}</span><small>${num(d.km, 0)} km · +${esc(d.up)} m · ${clock(d.min)}</small><button type="button" class="ib sm" data-dgpx="${d.day - 1}" aria-label="GPX del giorno ${d.day}" title="GPX del giorno">GPX</button></li>`).join("")}</ol>
       ${TOUR.places == null ? `<p class="note small mu">Cerco i paesi dove fermarsi…</p>` : ""}`;
   return `<section class="sec" id="gtour"><h3>Più giorni</h3>
-    <p class="note small">Bici e bagagli</p>${chip("setup", TOUR_SETUPS, TOUR.setup)}
+    ${tp.foot ? `<p class="note small">Zaino</p>${chip("fsetup", FOOT_SETUPS, TOUR.fsetup || "rifugi")}
+    <p class="note small">Allenamento</p>${chip("ffit", FOOT_FITNESS, TOUR.ffit || "allenato")}
+    <p class="note small mu">${esc(tp.st.kg)} kg sulle spalle · circa ${String(tp.ft.h).replace(".", ",")} ore di cammino al giorno, soste escluse.</p>`
+    : `<p class="note small">Bici e bagagli</p>${chip("setup", TOUR_SETUPS, TOUR.setup)}
     <p class="note small">Allenamento</p>${chip("fit", FITNESS, TOUR.fit)}
-    <p class="note small mu">${esc(tp.st.kg)} kg di bici e bagagli · circa ${String(tp.ft.h).replace(".", ",")} ore in sella al giorno, soste escluse.</p>
+    <p class="note small mu">${esc(tp.st.kg)} kg di bici e bagagli · circa ${String(tp.ft.h).replace(".", ",")} ore in sella al giorno, soste escluse.</p>`}
     ${days}</section>`;
 }
 function wireTour() {
   const box = $("#gtour"); if (!box) { tourMarks(null); return; }
   box.querySelectorAll("[data-tg] [data-t]").forEach((b) => b.addEventListener("click", () => {
     TOUR[b.parentElement.dataset.tg] = b.dataset.t;
-    try { localStorage.setItem(TOUR_KEY, JSON.stringify({ setup: TOUR.setup, fit: TOUR.fit })); } catch { /* private mode */ }
+    try { localStorage.setItem(TOUR_KEY, JSON.stringify({ setup: TOUR.setup, fit: TOUR.fit, fsetup: TOUR.fsetup, ffit: TOUR.ffit })); } catch { /* private mode */ }
     renderGiro();
   }));
   const tp = tourPlan();
@@ -2430,7 +2452,7 @@ async function postDialog(c, v) {
 }
 
 /* ------------------------------------------------------------------ share the ride: link, image, road book (lib/rideout.mjs) */
-const giroUrl = () => location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops);
+const giroUrl = () => location.origin + location.pathname + "#/giro?p=" + encodeStops(G.stops) + sportQ();
 function rideData() {
   if (!G.res || !G.side) return null;
   const w = G.wx && G.wx.h ? weatherRows() : null;
