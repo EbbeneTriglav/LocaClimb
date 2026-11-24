@@ -405,5 +405,9 @@
  { "id": "gt-cote-de-chambery-le-haut", "name": "Côte de Chambéry-le-Haut", "lat": 45.592, "lon": 5.919, "region": "France", "short": true, "verify": true, "gpm": ["Tour 2023 t18 (4)"], "src": "fr.wikipedia article" },
  { "id": "gt-cote-de-boissieu", "name": "Côte de Boissieu", "lat": 45.40704, "lon": 5.96584, "region": "France", "short": true, "verify": true, "gpm": ["Tour 2023 t18 (4)"], "src": "osm (photon) hamlet" },
  { "id": "gt-cote-d-ivory", "name": "Côte d'Ivory", "lat": 46.9133, "lon": 5.8603, "region": "France", "short": true, "verify": true, "gpm": ["Tour 2023 t19 (3)"], "src": "fr.wikipedia article" },
- { "id": "gt-cote-du-cheval-blanc", "name": "Côte du Cheval Blanc", "lat": 45.12749, "lon": 6.5764, "region": "France", "gpm": ["Tour 2024 t5 (4)"], "src": "osm (photon) saddle" }
+ { "id": "gt-cote-du-cheval-blanc", "name": "Côte du Cheval Blanc", "lat": 45.12749, "lon": 6.5764, "region": "France", "gpm": ["Tour 2024 t5 (4)"], "src": "osm (photon) saddle" },
+ { "id": "gt-les-molunes", "name": "Les Molunes", "lat": 46.34516, "lon": 5.92593, "region": "France", "short": true, "verify": true, "gpm": ["Tour 2017 t8 (1)"], "src": "photon place/village (query a mano)" },
+ { "id": "gt-mur-d-aurec-sur-loire", "name": "Mur d'Aurec-sur-Loire", "lat": 45.36985, "lon": 4.20085, "region": "France", "short": true, "verify": true, "gpm": ["Tour 2019 t9 (1)"], "src": "photon place/village (query a mano)" },
+ { "id": "gt-puerto-de-arnicio", "name": "Puerto de Arnicio", "lat": 43.23084, "lon": -5.36805, "region": "España", "gpm": ["Vuelta 2008 t13 (1)"], "src": "photon mountain_pass/yes (query a mano)" },
+ { "id": "gt-puerto-de-la-llacuna", "name": "Puerto de La Llacuna", "lat": 41.47298, "lon": 1.53461, "region": "España", "short": true, "verify": true, "gpm": ["Vuelta 2021 t7 (1)"], "src": "photon place/village (query a mano)" }
 ]
