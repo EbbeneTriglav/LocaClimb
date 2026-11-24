@@ -7,7 +7,7 @@
  * village or town closest to that time (places from OpenStreetMap along the route), never in the middle of
  * nowhere; the last day takes the remainder unless it is too long. Pure functions, test/v2-tour.test.mjs.
  */
-import { speedKmh, vamFor, havKm } from "./climb.mjs?v=72";
+import { speedKmh, vamFor, havKm } from "./climb.mjs?v=73";
 
 /* set-ups: bike + luggage (kg) */
 export const SETUPS = [

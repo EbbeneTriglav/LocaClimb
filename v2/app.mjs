@@ -5,33 +5,33 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=72";
-import { loadIndex, addLive, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=72";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=72";
-import { poisNear } from "./lib/poi.mjs?v=72";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=72";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, nearestIdx, stopIndexes, insertPos, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=72";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=72";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=72";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=72";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=72";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, approvedProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=72";
-import { approvedClimbs } from "./lib/proposals.mjs?v=72";
-import { SPORTS, sportOf, FOOT_PROFILES, FOOT_SETUPS, FOOT_FITNESS, footMinutes } from "./lib/sports.mjs?v=72";
-import { SETUPS as TOUR_SETUPS, FITNESS, setupOf, fitnessOf, tourMinutes, cutDays, daySummary, placesOnSide, placesQuery } from "./lib/tour.mjs?v=72";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=72";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=72";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=72";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=72";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=72";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=72";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=72";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=72";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=72";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=72";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=72";
-import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=72";
-import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours, toStation, dayTrip, BUFFER_MIN } from "./lib/transit.mjs?v=72";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=73";
+import { loadIndex, addLive, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=73";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=73";
+import { poisNear } from "./lib/poi.mjs?v=73";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=73";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, nearestIdx, stopIndexes, insertPos, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=73";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=73";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=73";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=73";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=73";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, approvedProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=73";
+import { approvedClimbs } from "./lib/proposals.mjs?v=73";
+import { SPORTS, sportOf, FOOT_PROFILES, FOOT_SETUPS, FOOT_FITNESS, footMinutes } from "./lib/sports.mjs?v=73";
+import { SETUPS as TOUR_SETUPS, FITNESS, setupOf, fitnessOf, tourMinutes, cutDays, daySummary, placesOnSide, placesQuery } from "./lib/tour.mjs?v=73";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=73";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=73";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=73";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml, roadbookTourHtml, dayRide } from "./lib/rideout.mjs?v=73";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=73";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=73";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=73";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=73";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=73";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=73";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=73";
+import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=73";
+import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours, toStation, dayTrip, BUFFER_MIN } from "./lib/transit.mjs?v=73";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -151,6 +151,9 @@ function setBase(id, auto = false) {
   const b = basemap(id);
   if (!auto) { mapPref = b.id; try { localStorage.setItem(MAP_KEY, b.id); } catch { /* private mode */ } }
   if (b.id === BASE.id) return;
+  // a shared link (#/giro?...&s=escursione) switches the map while the first style is still loading: a setStyle
+  // then left the map black (24/11/2026). Switch once the first style is in.
+  if (!mapLoaded) { map.once("load", () => setBase(id, auto)); return; }
   BASE = b; map.setStyle(b.style, { diff: false });
 }
 /* main roads over any basemap (lib/maps.mjs trafficLayer), remembered like the basemap */
@@ -2169,7 +2172,11 @@ function tourPlan() {
   const cum = sp.foot ? footMinutes(side, sp.pace, ft.speed, st.kg) : tourMinutes(side, ft, st.kg), budget = ft.h * 60;
   const cuts = cutDays(cum, budget, TOUR.places || []).map((c) => (c.name ? c : { ...c, name: TOUR.rev[c.i] || null }));
   const names = G.stops.length ? [stopName(G.stops[0], 0), stopName(G.stops[G.stops.length - 1], G.stops.length - 1)] : [STOP_L[0], STOP_L[1]];
-  return { side, cum, budget, st, ft, foot: sp.foot, cuts, days: daySummary(side, cum, cuts, names[0], names[1]) };
+  const days = daySummary(side, cum, cuts, names[0], names[1]);
+  // metres up per day from the sampled profile add up a little more than the router's filtered total: scale them to it
+  const upSum = days.reduce((a, x) => a + x.up, 0);
+  if (r.gain > 0 && upSum > 0) days.forEach((x) => { x.up = Math.round(x.up * r.gain / upSum); });
+  return { side, cum, budget, st, ft, foot: sp.foot, cuts, days };
 }
 function tourHtml() {
   const tp = tourPlan(); if (!tp) return "";
@@ -2177,7 +2184,8 @@ function tourHtml() {
   const one = tp.days.length < 2;
   const days = one ? `<p class="note">Si fa in un giorno: circa ${clock(tp.cum[tp.cum.length - 1])} ${tp.foot ? "di cammino" : "in sella"} con questo assetto.</p>`
     : `<ol class="days">${tp.days.map((d) => `<li><b>Giorno ${d.day}</b><span>${esc(d.from)} → ${esc(d.to)}</span><small>${num(d.km, 0)} km · +${esc(d.up)} m · ${clock(d.min)}</small><button type="button" class="ib sm" data-dgpx="${d.day - 1}" aria-label="GPX del giorno ${d.day}" title="GPX del giorno">GPX</button></li>`).join("")}</ol>
-      ${TOUR.places == null ? `<p class="note small mu">Cerco i paesi dove fermarsi…</p>` : ""}`;
+      ${TOUR.places == null ? `<p class="note small mu">Cerco i paesi dove fermarsi…</p>` : ""}
+      <button type="button" class="btn" id="gtbook">Road book di tutti i giorni</button>`;
   return `<section class="sec" id="gtour"><h3>Più giorni</h3>
     ${tp.foot ? `<p class="note small">Zaino</p>${chip("fsetup", FOOT_SETUPS, TOUR.fsetup || "rifugi")}
     <p class="note small">Allenamento</p>${chip("ffit", FOOT_FITNESS, TOUR.ffit || "allenato")}
@@ -2202,25 +2210,51 @@ function wireTour() {
     saveFile(nm.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().replace(/\s+/g, "_") + ".gpx", routeGpx(nm, tr, [{ lat: tr[tr.length - 1][0], lon: tr[tr.length - 1][1], name: d.to, sym: "Lodging" }]));
   }));
   tourMarks(tp && tp.days.length > 1 ? tp : null);
+  const tb = $("#gtbook"); if (tb) tb.addEventListener("click", printRoadbook);
   // the towns along the route, once per route
   const key = G.res ? G.res.km.toFixed(2) + ":" + G.res.track.length : "";
   if (tp && tp.days.length > 1 && TOUR.pkey !== key) {
-    TOUR.pkey = key; TOUR.places = null; TOUR.rev = {};
-    fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: "data=" + encodeURIComponent(placesQuery(tp.side.track)), signal: AbortSignal.timeout(20000) })
+    TOUR.pkey = key; TOUR.places = null; TOUR.rev = {}; TOUR.ph = null;
+    fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: "data=" + encodeURIComponent(placesQuery(tp.side.track)), signal: AbortSignal.timeout(12000) })
       .then((r) => r.json()).then((j) => { if (TOUR.pkey !== key) return; TOUR.places = placesOnSide(tp.side.track, j.elements || []); if (giroOn()) renderGiro(); })
       .catch(() => { if (TOUR.pkey !== key) return; TOUR.places = []; if (giroOn()) renderGiro(); });
   }
-  // a day that still ends nowhere (Overpass busy, or no village in the window): the nearest place by name, from
-  // Photon (OpenStreetMap, komoot) - 24/11/2026: Overpass answered 502 "at capacity" for hours
-  if (tp && TOUR.places != null) {
-    const todo = tp.cuts.filter((c) => !c.name && !(c.i in TOUR.rev)).slice(0, 12);
-    for (const c of todo) {
-      TOUR.rev[c.i] = null;
-      const t = tp.side.track[c.i], k0 = TOUR.pkey;
-      fetch(`https://photon.komoot.io/reverse?lat=${t[0].toFixed(5)}&lon=${t[1].toFixed(5)}&limit=1&osm_tag=place`).then((r) => r.json())
-        .then((j) => { const f = j.features && j.features[0], nm = f && f.properties && f.properties.name; if (!nm || TOUR.pkey !== k0) return; TOUR.rev[c.i] = nm; if (giroOn()) renderGiro(); })
-        .catch(() => {});
-    }
+  // Overpass busy or empty (24/11/2026: 502 "at capacity" for hours): villages and towns near each day's window
+  // from Photon (OpenStreetMap, komoot), 5 points per window; a day end still unnamed gets the nearest place's name
+  if (tp && TOUR.places != null && !TOUR.ph && TOUR.pkey) {
+    TOUR.ph = TOUR.pkey;
+    const k0 = TOUR.pkey, want = tp.cuts.filter((c) => !TOUR.places.some((p) => Math.abs(p.i - c.i) < tp.side.track.length * 0.03)).slice(0, 10);
+    if (!want.length) TOUR.phDone = k0;
+    const pts = [];
+    for (const c of want) { const t = tp.cum[c.i]; for (const f of [-0.12, -0.04, 0.05]) { let i = c.i; while (i > 0 && i < tp.cum.length - 1 && (f < 0 ? tp.cum[i] > t + f * tp.budget : tp.cum[i] < t + f * tp.budget)) i += f < 0 ? -1 : 1; pts.push(tp.side.track[i]); } }
+    // one request at a time (Photon is a free service: a burst of 50 got 429 without CORS headers, 24/11/2026)
+    if (want.length) (async () => {
+      const all = [];
+      for (const t of pts) {
+        if (TOUR.pkey !== k0) return;
+        const r = await fetch(`https://photon.komoot.io/reverse?lat=${t[0].toFixed(5)}&lon=${t[1].toFixed(5)}&limit=3&radius=3&osm_tag=place:village&osm_tag=place:town&osm_tag=place:city`, { signal: AbortSignal.timeout(15000) })
+          .then((x) => x.json()).catch(() => null);
+        for (const f of (r && r.features) || []) all.push({ lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], tags: { name: f.properties.name, place: f.properties.osm_value } });
+        await new Promise((ok) => setTimeout(ok, 150));
+      }
+      if (TOUR.pkey !== k0) return;
+      TOUR.places = TOUR.places.concat(placesOnSide(tp.side.track, all)); TOUR.phDone = k0; if (giroOn()) renderGiro();
+    })();
+  }
+  if (tp && TOUR.places != null && TOUR.phDone === TOUR.pkey) {
+    const todo = tp.cuts.filter((c) => !c.name && !(c.i in TOUR.rev)).slice(0, 12), k0 = TOUR.pkey;
+    todo.forEach((c) => { TOUR.rev[c.i] = null; });
+    if (todo.length) (async () => {
+      for (const c of todo) {
+        const t = tp.side.track[c.i];
+        const j = await fetch(`https://photon.komoot.io/reverse?lat=${t[0].toFixed(5)}&lon=${t[1].toFixed(5)}&limit=1&osm_tag=place`, { signal: AbortSignal.timeout(15000) }).then((r) => r.json()).catch(() => null);
+        const f = j && j.features && j.features[0], nm = f && f.properties && f.properties.name;
+        if (TOUR.pkey !== k0) return;
+        if (nm) TOUR.rev[c.i] = nm;
+        await new Promise((ok) => setTimeout(ok, 150));
+      }
+      if (giroOn()) renderGiro();
+    })();
   }
 }
 /* the end of every day but the last on the map: a small numbered flag */
@@ -2521,6 +2555,8 @@ async function shareImage() {
    dialog opens the road book with a fresh tap. Plain SVG route if the snapshot fails. */
 async function printRoadbook() {
   const d = rideData(); if (!d) return;
+  const tp = tourPlan();
+  if (tp && tp.days.length > 1) return printTourBook(d, tp);
   toast("Preparo il road book…");
   const marks = G.on.map((x, i) => ({ n: i + 1, lat: x.c.lat, lon: x.c.lon })).filter((k) => Number.isFinite(k.lat) && Number.isFinite(k.lon));
   const snap = await snapClimb(d.side, 1200, 900, { base: basemap("chiara"), pitch: 0, terrain: false, pad: { top: 40, bottom: 40, left: 40, right: 40 }, marks,
@@ -2529,6 +2565,29 @@ async function printRoadbook() {
   const html = roadbookHtml(d), url = URL.createObjectURL(new Blob([html], { type: "text/html" })), name = "roadbook_locaride_" + num(d.km, 0) + "km.html";
   openDialog(`<div class="dform shr"><div class="dh"><h2>Road book</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
     <p class="note">Pronto: mappa, salite numerate, profilo, orari e meteo lungo il giro. Da stampare o salvare in PDF.</p>
+    <div class="actions" style="position:static"><button type="button" class="btn pri" id="rbOpen">Apri</button><button type="button" class="btn" id="rbDl">Scarica</button></div></div>`);
+  $("#rbOpen").addEventListener("click", () => { if (!window.open(url, "_blank")) { saveFile(name, html, "text/html"); toast("Road book scaricato: aprilo e stampa"); } });
+  $("#rbDl").addEventListener("click", () => saveFile(name, html, "text/html"));
+  setTimeout(() => URL.revokeObjectURL(url), 600000);
+}
+
+/* several days (24/11/2026): a cover with the days, then one road book per day, each with its own map */
+async function printTourBook(d0, tp) {
+  toast(`Preparo il road book di ${tp.days.length} giorni…`);
+  const d = { ...d0, side: tp.side, eta: tp.cum, start: G.start, date: "",
+    setup: `${tp.st.label} · ${tp.ft.label} · ${tp.st.kg} kg · ~${String(tp.ft.h).replace(".", ",")} h/giorno` };
+  const imgs = [];
+  for (const day of tp.days) {
+    const dr = dayRide(d, day);
+    const marks = dr.climbs.map((c, i) => { const x = G.on.find((o) => o.c.name === c.name); return x ? { n: i + 1, lat: x.c.lat, lon: x.c.lon } : null; }).filter(Boolean);
+    const snap = await snapClimb(dr.side, 1200, 900, { base: basemap("chiara"), pitch: 0, terrain: false, pad: { top: 40, bottom: 40, left: 40, right: 40 }, marks }).catch(() => null);
+    let img = null; if (snap) try { img = snap.toDataURL("image/jpeg", 0.8); } catch { /* tainted canvas: SVG route instead */ }
+    imgs.push(img);
+  }
+  const html = roadbookTourHtml(d, tp.days, imgs), url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+  const name = "roadbook_locaride_" + tp.days.length + "giorni_" + num(d.km, 0) + "km.html";
+  openDialog(`<div class="dform shr"><div class="dh"><h2>Road book</h2><button type="button" class="ib" data-close aria-label="Chiudi">${ICON.close}</button></div>
+    <p class="note">Pronto: ${tp.days.length} giorni, una pagina di riepilogo e per ogni giorno mappa, salite, profilo e orari. Da stampare o salvare in PDF.</p>
     <div class="actions" style="position:static"><button type="button" class="btn pri" id="rbOpen">Apri</button><button type="button" class="btn" id="rbDl">Scarica</button></div></div>`);
   $("#rbOpen").addEventListener("click", () => { if (!window.open(url, "_blank")) { saveFile(name, html, "text/html"); toast("Road book scaricato: aprilo e stampa"); } });
   $("#rbDl").addEventListener("click", () => saveFile(name, html, "text/html"));

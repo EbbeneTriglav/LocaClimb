@@ -4,7 +4,7 @@
  * Transitous, HERE as the fallback), already in one shape; whether a bike may ride along comes from
  * data/rail_bike_rules.json, because no timetable says it (Italian feeds leave bikes_allowed empty).
  */
-import { havKm } from "./climb.mjs?v=72";
+import { havKm } from "./climb.mjs?v=73";
 
 export const TRANSIT = "/api/transit";
 export const MIN_KM = 25;          // shorter than this from home to the first stop: no train offered
