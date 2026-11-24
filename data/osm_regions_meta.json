@@ -648,5 +648,10 @@
   "bbox": null,
   "target": "japan-hokkaido",
   "builtAt": "2026-11-24"
+ },
+ "osm_passes_jp_th.json": {
+  "bbox": null,
+  "target": "japan-tohoku",
+  "builtAt": "2026-11-24"
  }
 }
