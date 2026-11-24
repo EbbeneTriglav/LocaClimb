@@ -11,8 +11,8 @@
  * }
  * The image does not use map tiles on purpose (as v1): no CORS-tainted canvas, nothing to download.
  */
-import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=72";
-import { rideColor, FLAT_COLOR, UP_STOPS, DOWN_STOPS } from "./route.mjs?v=72";
+import { gradeColor, difficultyColor, profileShapes, profileDist, eleAt } from "./climb.mjs?v=73";
+import { rideColor, FLAT_COLOR, UP_STOPS, DOWN_STOPS } from "./route.mjs?v=73";
 
 export const CARD_W = 1080, CARD_H = 1350;   // 4:5, the portrait size Instagram and WhatsApp show whole
 
@@ -21,15 +21,15 @@ const n0 = (x, d = 0, lang = "it") => (x == null || !isFinite(x)) ? "–" : Numb
 export function hm(min) { if (min == null || !isFinite(min)) return "–"; const m = Math.round(min); return Math.floor(m / 60) + ":" + String(m % 60).padStart(2, "0"); }
 
 const TXT = {
-  it: { ride: "Il mio giro", km: "km", m: "metri", time: "in sella", top: "quota max", climbs: "Salite", water: "Acqua", route: "Il percorso", start: "Partenza", end: "Arrivo", hi: "Punto più alto",
+  it: { stages: "Le tappe", day: "Giorno", days: "giorni", tour: "Il viaggio", stage: "Tappa", ride: "Il mio giro", km: "km", m: "metri", time: "in sella", top: "quota max", climbs: "Salite", water: "Acqua", route: "Il percorso", start: "Partenza", end: "Arrivo", hi: "Punto più alto",
     risk: "Discese impegnative", riskTip: "Oltre il 9% con curve strette: i freni scaldano. Frena a tratti, non tenerli sempre tirati, rallenta prima delle curve.", riskNote: "Stima automatica da dati OSM e del terreno: non vede ghiaia, lavori o asfalto bagnato. Non sostituisce la segnaletica né la prudenza.", riskAt: "punte",
     up: "Salita", flat: "Piano", down: "Discesa", when: "Ora", where: "Dove", ele: "Quota", wx: "Meteo", noWater: "Nessun punto acqua mappato entro 100 m: borracce piene.", gap: "tratto più lungo senza acqua", pts: "punti", onProf: "sul profilo: un cerchio grande raggruppa i punti vicini", print: "Stampa o salva PDF",
     est: (w) => `Tempi stimati a ${w} W/kg, soste escluse.`, depart: "partenza", diff: "difficoltà", src: "Dati © OpenStreetMap contributors · quote: modello del terreno · meteo: Open-Meteo" },
-  en: { ride: "My ride", km: "km", m: "metres", time: "riding", top: "highest", climbs: "Climbs", water: "Water", route: "The route", start: "Start", end: "Finish", hi: "Highest point",
+  en: { stages: "The stages", day: "Day", days: "days", tour: "The trip", stage: "Stage", ride: "My ride", km: "km", m: "metres", time: "riding", top: "highest", climbs: "Climbs", water: "Water", route: "The route", start: "Start", end: "Finish", hi: "Highest point",
     risk: "Demanding descents", riskTip: "Steeper than 9% with tight bends: brakes heat up. Brake in bursts, don't drag them, slow down before the bends.", riskNote: "Automatic estimate from OSM and terrain data: it can't see gravel, roadworks or wet tarmac. It doesn't replace road signs or caution.", riskAt: "max",
     up: "Climb", flat: "Flat", down: "Descent", when: "Time", where: "Where", ele: "Elev.", wx: "Weather", noWater: "No water point mapped within 100 m: fill your bottles.", gap: "longest stretch without water", pts: "points", onProf: "on the profile: a big circle groups nearby points", print: "Print or save as PDF",
     est: (w) => `Times estimated at ${w} W/kg, stops excluded.`, depart: "start", diff: "difficulty", src: "Data © OpenStreetMap contributors · elevation: terrain model · weather: Open-Meteo" },
-  es: { ride: "Mi ruta", km: "km", m: "metros", time: "en bici", top: "altitud máx", climbs: "Subidas", water: "Agua", route: "La ruta", start: "Salida", end: "Llegada", hi: "Punto más alto",
+  es: { stages: "Las etapas", day: "Día", days: "días", tour: "El viaje", stage: "Etapa", ride: "Mi ruta", km: "km", m: "metros", time: "en bici", top: "altitud máx", climbs: "Subidas", water: "Agua", route: "La ruta", start: "Salida", end: "Llegada", hi: "Punto más alto",
     risk: "Bajadas exigentes", riskTip: "Más del 9% con curvas cerradas: los frenos se calientan. Frena a intervalos, no los lleves siempre apretados, reduce antes de las curvas.", riskNote: "Estimación automática con datos de OSM y del terreno: no ve grava, obras ni asfalto mojado. No sustituye la señalización ni la prudencia.", riskAt: "máx.",
     up: "Subida", flat: "Llano", down: "Bajada", when: "Hora", where: "Dónde", ele: "Altitud", wx: "Tiempo", noWater: "No hay puntos de agua a menos de 100 m: llena los bidones.", gap: "tramo más largo sin agua", pts: "puntos", onProf: "en el perfil: un círculo grande agrupa los puntos cercanos", print: "Imprimir o guardar en PDF",
     est: (w) => `Tiempos estimados a ${w} W/kg, sin paradas.`, depart: "salida", diff: "dificultad", src: "Datos © colaboradores de OpenStreetMap · altitud: modelo del terreno · tiempo: Open-Meteo" }
@@ -140,7 +140,8 @@ export function labelLanes(xs, gap = 30, lanes = 3) {
 /* road book on paper: the map's two scales (route.mjs rideColor), flat in light grey because white vanishes on paper */
 const FLAT_PAPER = "#CDD3DB";
 export const paperColor = (g) => { const c = rideColor(g); return c === FLAT_COLOR ? FLAT_PAPER : c; };
-export function roadbookHtml(d) {
+/* one ride's road book: the body (stats, map, climbs, profile, the table) - one per day in a tour */
+export function roadbookBody(d) {
   const T = tx(d), L = langOf(d);
   const sh = smoothProfile(d.side, 1000, 190, 6, paperColor), pts = routeShape(d.side.track, 300, 300, 14), gr = sampleGrades(d.side);
   const gAt = (i) => gr[Math.min(gr.length - 1, Math.round(i / Math.max(1, pts.length - 1) * (gr.length - 1)))];   // track and profile differ in length
@@ -166,6 +167,60 @@ export function roadbookHtml(d) {
   const bands = risky.map((r) => `<rect class="rk" x="${+Math.min(1000, r.fromKm / L0 * 1000).toFixed(1)}" y="0" width="${+Math.max(3, (r.toKm - r.fromKm) / L0 * 1000).toFixed(1)}" height="190"/>`).join("");
   const riskBlock = risky.length ? `<div class="risk"><h2>⚠ ${T.risk}</h2><ul>${risky.map((r) => `<li><b>km ${n0(r.fromKm, 1, L)}–${n0(r.toKm, 1, L)}</b>${r.after ? ` · ${esc(r.after)} →` : ""} ${n0(r.km, 1, L)} km · ${n0(r.avg, 1, L)}% · ${T.riskAt} ${n0(r.max, 0, L)}%</li>`).join("")}</ul><p>${esc(T.riskTip)}</p><p class="mu">${esc(T.riskNote)}</p></div>` : "";
   const water = (d.water || []).length ? `${(d.water || []).length} · ${T.gap}: <b>${n0(waterGap(d), 0, L)} km</b> · <span class="wl">●</span> ${esc(T.onProf)}` : esc(T.noWater);
+  return (`<div class="top"><span class="brand"><i></i>LocaRide · Road book</span><span class="mu">${esc(d.date || "")}${d.eta ? ` · ${T.depart} ${esc(d.start)}` : ""}</span></div>
+<h1>${esc(d.title || T.ride)}</h1>
+<div class="stats"><div><b>${n0(d.km, d.km < 100 ? 1 : 0, L)}</b><span>${T.km}</span></div><div><b>${d.gain != null ? "+" + n0(d.gain, 0, L) : "–"}</b><span>${T.m}</span></div><div><b>${hm(d.minutes)}</b><span>${T.time}</span></div><div><b>${sh.hi != null ? n0(sh.hi, 0, L) : "–"}</b><span>${T.top}</span></div></div>
+<div class="fig${okImg(d.mapImg) ? " wide" : ""}">${okImg(d.mapImg) ? `<img class="map" src="${esc(d.mapImg)}" alt="${esc(T.route)}">` : `<svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>`}
+<div><h2 style="margin-top:0">${T.climbs}</h2>${climbList}</div></div>
+<svg class="prof" viewBox="0 0 1000 ${TOPB + 210}" role="img" aria-label="Profilo"><g transform="translate(0 ${TOPB})">${bands}${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></g>${marks}</svg>
+${legend}
+${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
+${riskBlock}
+<h2>${T.route}</h2>
+<table><thead><tr><th style="text-align:right">km</th><th style="text-align:right">${T.when}</th><th>${T.where}</th><th style="text-align:right">${T.ele}</th><th>${d.weather ? T.wx : ""}</th></tr></thead><tbody>${rows}</tbody></table>
+<h2>${T.water}</h2><p>${water}</p>
+<footer><span>${esc(T.src)}</span><span>${d.url ? `<b>${esc(d.url.replace(/^https?:\/\//, "").slice(0, 60))}${d.url.length > 68 ? "…" : ""}</b>` : "locaride.app"}</span></footer>
+`);
+}
+
+
+export function roadbookHtml(d) { return rbPage(d, roadbookBody(d)); }
+
+/* ---------------------------------------------------------------- several days (24/11/2026, Rick: "roadbook su più giorni")
+   d: the whole trip, with side = the tour's evenly sampled side and eta = its cumulative minutes (lib/tour.mjs);
+   day: { day, a, b, from, to, km, up, min } from daySummary. One day = a ride of its own, from km 0 and 08:00. */
+export function dayRide(d, day) {
+  const T = tx(d), n = d.side.elevationProfile.length, step = (d.side.distance_km || 0) / Math.max(1, n - 1);
+  const k0 = day.a * step, k1 = day.b * step, inK = (km) => km >= k0 - 1e-6 && km <= k1 + 1e-6;
+  const tr = d.side.track || [], side = { track: tr.slice(day.a, day.b + 1), elevationProfile: d.side.elevationProfile.slice(day.a, day.b + 1), distance_km: k1 - k0, elevSource: "route" };
+  const end = (i) => (tr[i] ? { lat: tr[i][0], lon: tr[i][1] } : { lat: 0, lon: 0 });
+  return {
+    ...d, title: `${T.day} ${day.day} · ${day.from} → ${day.to}`, km: k1 - k0, gain: day.up, minutes: day.min, side,
+    eta: d.eta ? d.eta.slice(day.a, day.b + 1).map((x) => x - d.eta[day.a]) : null,
+    climbs: (d.climbs || []).filter((c) => inK(c.km)).map((c) => ({ ...c, km: c.km - k0 })),
+    water: (d.water || []).filter((w) => inK(w.km)).map((w) => ({ ...w, km: w.km - k0 })),
+    risky: (d.risky || []).filter((r) => r.fromKm >= k0 - 1e-6 && r.toKm <= k1 + 1e-6).map((r) => ({ ...r, fromKm: r.fromKm - k0, toKm: r.toKm - k0 })),
+    stops: [{ ...end(day.a), name: day.from }, { ...end(day.b), name: day.to }], weather: null, date: "", wkg: null   // times from the trip model (load + fitness), not W/kg
+  };
+}
+
+/* the whole trip: a cover with the days, then one road book per day, each on its own page */
+export function roadbookTourHtml(d, days, mapImgs = []) {
+  const T = tx(d), L = langOf(d);
+  const tot = days.reduce((a, x) => ({ km: a.km + x.km, up: a.up + x.up, min: a.min + x.min }), { km: 0, up: 0, min: 0 });
+  const rows = days.map((x) => `<tr><td><b>${T.day} ${x.day}</b></td><td>${esc(x.from)} → ${esc(x.to)}</td><td class="n">${n0(x.km, 0, L)} km</td><td class="n">+${n0(x.up, 0, L)} m</td><td class="n">${hm(x.min)}</td></tr>`).join("");
+  const cover = `<div class="top"><span class="brand"><i></i>LocaRide · Road book</span><span class="mu">${esc(d.date || "")}</span></div>
+<h1>${esc(d.title || T.tour)}</h1>
+<div class="stats"><div><b>${days.length}</b><span>${T.days}</span></div><div><b>${n0(tot.km, 0, L)}</b><span>${T.km}</span></div><div><b>+${n0(tot.up, 0, L)}</b><span>${T.m}</span></div><div><b>${hm(tot.min)}</b><span>${T.time}</span></div></div>
+${d.setup ? `<p class="mu">${esc(d.setup)}</p>` : ""}
+<h2>${T.stages}</h2>
+<table class="days"><thead><tr><th>${T.stage}</th><th>${T.where}</th><th style="text-align:right">km</th><th style="text-align:right">${T.m}</th><th style="text-align:right">${T.time}</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return rbPage(d, cover + days.map((x, i) => `<section class="day">${roadbookBody({ ...dayRide(d, x), mapImg: mapImgs[i] || null })}</section>`).join(""));
+}
+
+/* the page around one or more road book bodies (head, style, print button, the CSP-hashed script) */
+function rbPage(d, inner) {
+  const T = tx(d), L = langOf(d);
   return `<!doctype html><html lang="${L}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Road book · ${esc(d.title || T.ride)}</title>
 <style>
@@ -207,6 +262,7 @@ tr { break-inside: avoid; }
 footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font-size: 8.5pt; color: #56616D; display: flex; justify-content: space-between; gap: 10px; }
 .leg { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: 9pt; color: #4A5560; margin: 2px 0 6px; }
 .leg b { color: #0B0F14; margin-left: 6px; } .leg .sw i { display: inline-block; width: 18px; height: 8px; border-radius: 4px; margin-right: 3px; vertical-align: 0; border: 1px solid rgba(0,0,0,.25); }
+.day { break-before: page; page-break-before: always; } .days td b { font: 800 12pt "Barlow Condensed", "Arial Narrow", sans-serif; text-transform: uppercase; }
 .prof .rk { fill: rgba(255, 214, 10, .28); stroke: #B08900; stroke-dasharray: 4 4; }
 .risk { border-left: 5px solid #FFD60A; padding: 2px 0 2px 12px; margin-top: 14px; page-break-inside: avoid; }
 .risk h2 { margin-top: 4px; } .risk ul { margin: 4px 0; padding-left: 18px; } .risk p { margin: 4px 0; }
@@ -214,19 +270,7 @@ footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #D5DBE1; font
 @media print { .noprint { display: none; } body { padding: 0; } }
 @media (max-width: 600px) { .fig { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } }
 </style></head><body>
-<div class="top"><span class="brand"><i></i>LocaRide · Road book</span><span class="mu">${esc(d.date || "")}${d.eta ? ` · ${T.depart} ${esc(d.start)}` : ""}</span></div>
-<h1>${esc(d.title || T.ride)}</h1>
-<div class="stats"><div><b>${n0(d.km, d.km < 100 ? 1 : 0, L)}</b><span>${T.km}</span></div><div><b>${d.gain != null ? "+" + n0(d.gain, 0, L) : "–"}</b><span>${T.m}</span></div><div><b>${hm(d.minutes)}</b><span>${T.time}</span></div><div><b>${sh.hi != null ? n0(sh.hi, 0, L) : "–"}</b><span>${T.top}</span></div></div>
-<div class="fig${okImg(d.mapImg) ? " wide" : ""}">${okImg(d.mapImg) ? `<img class="map" src="${esc(d.mapImg)}" alt="${esc(T.route)}">` : `<svg class="map" viewBox="0 0 300 300" role="img" aria-label="${esc(T.route)}">${route}${pts.length ? `<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="7" fill="#fff" stroke="#0B0F14" stroke-width="3"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="6" fill="#0B0F14"/>` : ""}</svg>`}
-<div><h2 style="margin-top:0">${T.climbs}</h2>${climbList}</div></div>
-<svg class="prof" viewBox="0 0 1000 ${TOPB + 210}" role="img" aria-label="Profilo"><g transform="translate(0 ${TOPB})">${bands}${sh.segs.map((s) => `<path d="${s.d}" fill="${s.color}"/>`).join("")}<path d="${sh.line}" fill="none" stroke="#0B0F14" stroke-width="2"/>${drops}<text x="0" y="206">${esc(sh.lo)} m · 0 km</text><text x="1000" y="206" text-anchor="end">${n0(d.km, 0, L)} km</text></g>${marks}</svg>
-${legend}
-${d.eta && d.wkg ? `<p class="mu">${esc(T.est(n0(d.wkg, 1, L)))}</p>` : ""}
-${riskBlock}
-<h2>${T.route}</h2>
-<table><thead><tr><th style="text-align:right">km</th><th style="text-align:right">${T.when}</th><th>${T.where}</th><th style="text-align:right">${T.ele}</th><th>${d.weather ? T.wx : ""}</th></tr></thead><tbody>${rows}</tbody></table>
-<h2>${T.water}</h2><p>${water}</p>
-<footer><span>${esc(T.src)}</span><span>${d.url ? `<b>${esc(d.url.replace(/^https?:\/\//, "").slice(0, 60))}${d.url.length > 68 ? "…" : ""}</b>` : "locaride.app"}</span></footer>
+${inner}
 <button class="noprint" type="button" id="rbPrint">${T.print}</button>
 <script>${RB_SCRIPT}</script>
 </body></html>`;

@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=72";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=73";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -125,6 +125,7 @@ export const DICT = {
   "di corsa": "running", "a piedi": "on foot", "Zaino": "Backpack", "Zainetto": "Daypack", "Zaino da rifugi": "Hut-to-hut pack", "Zaino con tenda": "Pack with tent",
   "giornata, rientro ogni sera": "day trips, home every night", "sacco lenzuolo, ricambi": "sleeping liner, spare clothes", "tenda, fornellino, cibo": "tent, stove, food",
   "passeggiate, ritmo lento": "walks, slow pace", "escursioni frequenti": "frequent hikes", "trail, lunghe giornate": "trail runs, long days",
+  "Road book di tutti i giorni": "Road book for every day",
   "Aggiungi almeno un'altra tappa.": "Add at least one more stop.",
   "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda.": "Tap the map to set the start, then the stops. You can also tap a climb, or use «+ Ride» on its page.",
   "in sella": "riding", "quota max": "top", "Profilo del giro": "Ride profile", "Salite sul percorso": "Climbs on the route",
@@ -197,6 +198,8 @@ export const DICT = {
 
 /* dynamic labels: [pattern, replacement] - checked in order, on the whole (trimmed) text */
 export const RULES = [
+  [/^Preparo il road book di (\d+) giorni…$/, "Preparing the road book for $1 days…"],
+  [/^Pronto: (\d+) giorni, una pagina di riepilogo e per ogni giorno mappa, salite, profilo e orari\. Da stampare o salvare in PDF\.$/, "Ready: $1 days, a summary page and for every day the map, climbs, profile and times. Print it or save it as PDF."],
   [/^(\d+) kg sulle spalle · circa (.+) ore di cammino al giorno, soste escluse\.$/, "$1 kg on your back · about $2 hours walking a day, stops excluded."],
   [/^Si fa in un giorno: circa (.+) di cammino con questo assetto\.$/, "One day is enough: about $1 on foot with this set-up."],
   [/^Giorno (\d+)$/, "Day $1"],

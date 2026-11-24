@@ -138,3 +138,23 @@ test("roadbookHtml: the map's two colour scales on paper, flat in grey, with a l
   assert.ok(!h.includes('fill="#5B8DEF"'), "no old all-blue flat/descent on the profile");
   assert.match(roadbookHtml({ ...D, lang: "es" }), /<b>Bajada<\/b>/);
 });
+
+// several days (24/11/2026): one road book per day after a cover with the days
+test("dayRide: one day as a ride of its own, km and times from zero", async () => {
+  const { dayRide, roadbookTourHtml } = await import("../v2/lib/rideout.mjs");
+  const n = 101, side = { track: Array.from({ length: n }, (_, i) => [45, 9 + i * 0.01]), elevationProfile: Array.from({ length: n }, (_, i) => 300 + i * 5), distance_km: 100 };
+  const d = { title: "Viaggio", lang: "it", km: 100, gain: 500, side, eta: Array.from({ length: n }, (_, i) => i * 4), start: "08:00",
+    climbs: [{ name: "Passo A", km: 30, difficulty: 5 }, { name: "Passo B", km: 70 }], water: [{ km: 55, name: "Fontana" }], risky: [{ fromKm: 80, toKm: 82, km: 2, avg: 9, max: 14 }] };
+  const days = [{ day: 1, a: 0, b: 50, from: "Casa", to: "Borgo", km: 50, up: 250, min: 200 }, { day: 2, a: 50, b: 100, from: "Borgo", to: "Lago", km: 50, up: 250, min: 200 }];
+  const d2 = dayRide(d, days[1]);
+  assert.equal(d2.title, "Giorno 2 · Borgo → Lago");
+  assert.equal(d2.side.elevationProfile.length, 51); assert.equal(d2.side.distance_km, 50);
+  assert.equal(d2.eta[0], 0); assert.equal(d2.eta[50], 200);
+  assert.deepEqual(d2.climbs.map((c) => [c.name, c.km]), [["Passo B", 20]]);
+  assert.deepEqual(d2.water.map((w) => w.km), [5]); assert.equal(d2.risky[0].fromKm, 30);
+  assert.deepEqual(d2.stops.map((s) => s.name), ["Borgo", "Lago"]);
+  const h = roadbookTourHtml(d, days);
+  assert.equal((h.match(/<section class="day">/g) || []).length, 2);
+  assert.match(h, /<table class="days">/); assert.match(h, /Giorno 1<\/b><\/td><td>Casa → Borgo/);
+  assert.equal((h.match(/<script>/g) || []).length, 1, "one script only (CSP hash)");
+});
