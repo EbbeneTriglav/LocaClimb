@@ -5,31 +5,31 @@
  */
 // MapLibre 6 is ESM only (no global): the namespace keeps the maplibregl.Map/Marker/Popup/LngLatBounds calls as they were.
 // The vendor folder is versioned by name; ?v= is only there because every v2 import carries it (test/v2-version).
-import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=71";
-import { loadIndex, addLive, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=71";
-import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=71";
-import { poisNear } from "./lib/poi.mjs?v=71";
-import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=71";
-import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=71";
-import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=71";
-import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=71";
-import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=71";
-import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=71";
-import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, approvedProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=71";
-import { approvedClimbs } from "./lib/proposals.mjs?v=71";
-import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=71";
-import { loadRegions, regionAt } from "./lib/regions.mjs?v=71";
-import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=71";
-import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=71";
-import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=71";
-import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=71";
-import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=71";
-import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=71";
-import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=71";
-import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=71";
-import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=71";
-import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=71";
-import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours, toStation, dayTrip, BUFFER_MIN } from "./lib/transit.mjs?v=71";
+import * as maplibregl from "./vendor/maplibre-gl-6.17.0/maplibre-gl.mjs?v=72";
+import { loadIndex, addLive, search, inBounds, nearby, getClimb, geojson, cleanLabel, isGravel, placeHit, fewTrucks, COUNTRIES, countryNear, diffRange, moveRange, rangeText, DIFF_HI } from "./lib/data.mjs?v=72";
+import { GRADE_STOPS, gradeColor, difficultyColor, num, kmTable, hardestKm, profileShapes, trackWithEle, gpx, positionOnClimb, implausible, sideStats, eleAt, hairpins, climbMinutes, clock, traffic, TRUCKS, alongTrack } from "./lib/climb.mjs?v=72";
+import { poisNear } from "./lib/poi.mjs?v=72";
+import { dayVerdict, advice, clothing, fetchForecast, fetchDaily, hourState, meteoSource } from "./lib/weather.mjs?v=72";
+import { PROFILES, MAX_STOPS, brouterUrl, osrmUrl, parseBrouter, asSide, etaMinutes, climbsOnRoute, routeFeatures, surfaceFeatures, surfaceShares, encodeStops, decodeStops, routeGpx, highestIdx, rideDoc, decodeTrack, rideProfile, rideFeatures, riskyDescents, riskyFeatures, rideColor, UP_STOPS, DOWN_STOPS, BROUTER, nearestIdx, stopIndexes, insertPos, profileSrcUrl, patchProfile, tunnelSummary, tunnelFeatures, roadSafetyProfile, ROAD_SAFETY_BASE, serverProfile } from "./lib/route.mjs?v=72";
+import { getLang, setLang, startI18n, monthsFor, translate } from "./lib/i18n.mjs?v=72";
+import { haloPx, compassOf, headingOf, nextMode, STALE_MS } from "./lib/locate.mjs?v=72";
+import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=72";
+import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=72";
+import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, approvedProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=72";
+import { approvedClimbs } from "./lib/proposals.mjs?v=72";
+import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=72";
+import { loadRegions, regionAt } from "./lib/regions.mjs?v=72";
+import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=72";
+import { CARD_W, CARD_H, MAP_H, drawCard, roadbookHtml } from "./lib/rideout.mjs?v=72";
+import { POST, STORY, drawPost } from "./lib/postcard.mjs?v=72";
+import { loadEvents, upcoming, forClimb, onDay, isoDay, EVENT_TYPES, EVENT_FILTERS, byMonth, eventKm } from "./lib/events.mjs?v=72";
+import { loadClosures, closureFor, closureInfo, blocked, closureTag } from "./lib/closures.mjs?v=72";
+import { GEAR_WKG, CADENCE, SETUPS, setupKey, cleanSet, parts, gearChecks, gearsFor } from "./lib/gears.mjs?v=72";
+import { AXIS_W, yTicks, kmAtX, pointAt, kmNear, lineGradient } from "./lib/profile.mjs?v=72";
+import { loadShade, shadeFor, shadeWord, shadeTone, shadeCauses } from "./lib/shade.mjs?v=72";
+import { maneuvers, cumKm as navCum, gainLeft, locate, upcoming as navNext, fmtDistNav, routeBearing, voiceCue, voiceText, fingerMoved, rerouteDue, rerouteDone, sayReroute, sidesByDistance } from "./lib/nav.mjs?v=72";
+import { allowed as statsAllowed, createSession, addClimb, addSearch, shown, hidden, takeBatch } from "./lib/stats.mjs?v=72";
+import { MIN_KM, stopsUrl, planUrl, departIso, minuteOfDay, hm, dur as trDur, pickStations, itinView, bikeable, trainFeatures, loadBikeRules, roadTableUrl, roadKm, guessHours, toStation, dayTrip, BUFFER_MIN } from "./lib/transit.mjs?v=72";
 
 const LANG = getLang(), LOC = { en: "en-GB", es: "es-ES" }[LANG] || "it-IT";
 globalThis.LR_DEC = LANG === "en" ? "." : ",";   // decimal separator for num() (lib/climb.mjs)
@@ -206,6 +206,7 @@ map.on("load", async () => {
     map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
   }
   map.on("click", giroClick);
+  lineDrag();
   applyFilter();
   route();
 });
@@ -282,7 +283,7 @@ $("#blang").addEventListener("click", () => { setLang(NEXT_LANG); location.reloa
 /* "Oggi" title: an h1 (never auto-translated, h1 holds climb names), so it is written in every language here */
 const OG_TITLE = { it: ["Dove salire oggi", "Dove salire domani", "Dove salire dopodomani"], en: ["Where to climb today", "Where to climb tomorrow", "Where to climb the day after tomorrow"], es: ["Dónde subir hoy", "Dónde subir mañana", "Dónde subir pasado mañana"] };
 /* default names of the ride stops: shown inside name slots (.nm, never auto-translated) and in the road book */
-const STOP_L = { it: ["Partenza", "Arrivo", "Tappa"], en: ["Start", "Finish", "Stop"], es: ["Salida", "Llegada", "Punto"] }[LANG] || ["Partenza", "Arrivo", "Tappa"];
+const STOP_L = { it: ["Partenza", "Arrivo", "Tappa", "Passaggio"], en: ["Start", "Finish", "Stop", "Via point"], es: ["Salida", "Llegada", "Punto", "Punto de paso"] }[LANG] || ["Partenza", "Arrivo", "Tappa", "Passaggio"];
 function ogTitle(day) { return (OG_TITLE[LANG] || OG_TITLE.it)[day] || OG_TITLE.it[0]; }
 $("#b3d").addEventListener("click", (e) => set3d(!S.three, e.currentTarget));
 function set3d(on, btn = $("#b3d")) {
@@ -1612,7 +1613,7 @@ function saveGiro() {
   try { localStorage.setItem(GIRO_KEY, JSON.stringify({ stops: G.stops, profile: G.profile })); } catch { /* private mode */ }
   if (giroOn()) history.replaceState(null, "", G.stops.length ? "#/giro?p=" + encodeStops(G.stops) : "#/giro");
 }
-function stopName(s, i) { return s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : STOP_L[2] + " " + (i + 1)); }
+function stopName(s, i) { return s.name || (i === 0 ? STOP_L[0] : i === G.stops.length - 1 ? STOP_L[1] : s.via ? STOP_L[3] : STOP_L[2] + " " + (i + 1)); }
 function addStop(s) {
   if (G.stops.length >= MAX_STOPS) { toast(`Massimo ${MAX_STOPS} tappe`); return; }
   G.stops.push({ lat: +(+s.lat).toFixed(5), lon: +(+s.lon).toFixed(5), id: s.id || null, name: s.name || null });
@@ -1621,6 +1622,8 @@ function addStop(s) {
 function giroChanged() { if (G.tr && G.tr.key !== trainKey()) G.tr = null; saveGiro(); syncMarkers(); if (giroOn()) renderGiro(); calcSoon(); }
 function giroClick(e) {
   if (!giroOn()) return;
+  if (G.noClick && Date.now() - G.noClick < 400) return;     // the click that ends a line drag
+  if (map.queryRenderedFeatures(e.point, { layers: ["route-line"].filter((l) => map.getLayer(l)) }).length) return;   // the line: drag it
   const f = map.queryRenderedFeatures(e.point, { layers: ["c-dot", "c-glow"].filter((l) => map.getLayer(l)) })[0];
   if (f) { const c = loadIndexSync(f.properties.id); addStop({ lat: c ? c.lat : e.lngLat.lat, lon: c ? c.lon : e.lngLat.lng, id: f.properties.id, name: f.properties.name }); }
   else addStop({ lat: e.lngLat.lat, lon: e.lngLat.lng });
@@ -1638,12 +1641,60 @@ function openGiro(h) {
   if (G.res) fitRoute(); else if (G.stops.length >= 2 && !G.busy) calcSoon();
 }
 
+/* Drag the route itself, Google Maps style (24/11/2026, Rick): press on the line, drag, release = a via point
+   there, between the two stops around the pressed spot (lib/route.mjs stopIndexes + insertPos). Mouse: a handle
+   follows the pointer on the line. Touch: hold the finger on the line ~0.4 s (a quick swipe still pans the map). */
+let LD = null, LH = null, LDT = null;
+function lineDrag() {
+  const hEl = document.createElement("div"); hEl.className = "wp via hd"; hEl.title = "Trascina per cambiare il percorso";
+  const ok = () => giroOn() && G.res && G.res.track && G.res.track.length > 1 && G.stops.length < MAX_STOPS;
+  const start = (ll) => {
+    const tr = G.res.track, k = nearestIdx(tr, ll.lat, ll.lng);
+    const pos = insertPos(stopIndexes(tr, routeStops()), k);
+    const el = document.createElement("div"); el.className = "wp via";
+    LD = { pos, mk: new maplibregl.Marker({ element: el }).setLngLat(ll).addTo(map), moved: false };
+    if (LH) { LH.remove(); LH = null; }
+    map.dragPan.disable(); map.getCanvas().style.cursor = "grabbing";
+  };
+  const move = (e) => { if (!LD) return; LD.mk.setLngLat(e.lngLat); LD.moved = true; };
+  const end = () => {
+    if (!LD) return;
+    const d = LD; LD = null; map.dragPan.enable(); map.getCanvas().style.cursor = "";
+    const p = d.mk.getLngLat(); d.mk.remove();
+    if (!d.moved) return;
+    G.stops.splice(d.pos, 0, { lat: +p.lat.toFixed(5), lon: +p.lng.toFixed(5), id: null, name: null, via: true });
+    G.noClick = Date.now(); giroChanged();
+  };
+  map.on("mousedown", "route-line", (e) => { if (!ok() || e.originalEvent.button) return; e.preventDefault(); start(e.lngLat); });
+  map.on("mousemove", (e) => {
+    if (LD) return move(e);
+    if (!ok()) return;
+    const f = map.queryRenderedFeatures(e.point, { layers: ["route-line"].filter((l) => map.getLayer(l)) })[0];
+    if (!f) { if (LH) { LH.remove(); LH = null; } return; }
+    const t = G.res.track[nearestIdx(G.res.track, e.lngLat.lat, e.lngLat.lng)];
+    if (!LH) LH = new maplibregl.Marker({ element: hEl }).setLngLat([t[1], t[0]]).addTo(map); else LH.setLngLat([t[1], t[0]]);
+  });
+  map.on("mouseup", end);
+  map.on("touchstart", "route-line", (e) => {
+    if (!ok() || (e.originalEvent.touches || []).length > 1) return;
+    const at = e.point;
+    clearTimeout(LDT); LDT = setTimeout(() => { start(map.unproject(at)); try { navigator.vibrate && navigator.vibrate(12); } catch { /* no vibration */ } }, 420);
+    LDT.at = at;
+  });
+  map.on("touchmove", (e) => {
+    if (LD) { e.preventDefault(); return move(e); }
+    if (LDT && LDT.at && Math.hypot(e.point.x - LDT.at.x, e.point.y - LDT.at.y) > 8) { clearTimeout(LDT); LDT = null; }
+  });
+  map.on("touchend", () => { clearTimeout(LDT); LDT = null; end(); });
+  map.on("touchcancel", () => { clearTimeout(LDT); LDT = null; if (LD) { LD.mk.remove(); LD = null; map.dragPan.enable(); } });
+}
+
 /* numbered, draggable stop markers */
 function syncMarkers() {
   G.markers.forEach((m) => m.remove()); G.markers = [];
   G.stops.forEach((s, i) => {
     const el = document.createElement("div");
-    el.className = "wp" + (i === 0 ? " a" : i === G.stops.length - 1 && i ? " z" : "");
+    el.className = "wp" + (i === 0 ? " a" : i === G.stops.length - 1 && i ? " z" : s.via ? " via" : "");
     el.textContent = String(i + 1); el.title = stopName(s, i);
     const mk = new maplibregl.Marker({ element: el, draggable: true }).setLngLat([s.lon, s.lat]).addTo(map);
     mk.on("dragend", () => { const p = mk.getLngLat(); Object.assign(G.stops[i], { lat: +p.lat.toFixed(5), lon: +p.lng.toFixed(5), id: null, name: null }); giroChanged(); });
@@ -2058,6 +2109,7 @@ function renderGiro() {
     <div class="ph" style="padding:4px 0 10px"><h2>Il tuo giro</h2><small>${n ? n + (n === 1 ? " tappa" : " tappe") : "nessuna tappa"}</small></div>
     ${sum}
     ${n ? `<ol class="stops">${stops}</ol>` : ""}
+    ${r && sd ? `<p class="note small mu">${matchMedia("(hover: hover)").matches ? "Trascina la linea per passare da un'altra strada." : "Tieni premuto sulla linea e trascina per passare da un'altra strada."}</p>` : ""}
     <div class="sides" role="group" aria-label="Tipo di strada">${PROFILES.map(([k, l]) => `<button type="button" data-prof="${k}" aria-pressed="${G.profile === k}">${l}</button>`).join("")}</div>
     ${trainHtml()}
     ${body}

@@ -9,7 +9,7 @@
  * Same setting as the classic app (localStorage "locaride_lang"): switch once, both follow.
  * translate() is pure and tested (test/v2-i18n.test.mjs).
  */
-import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=71";
+import { DICT_ES, RULES_ES } from "./i18n_es.mjs?v=72";
 
 export const LANG_KEY = "locaride_lang";
 export const LANGS = ["it", "en", "es"];
@@ -112,6 +112,8 @@ export const DICT = {
   "Il tuo giro": "Your ride", "nessuna tappa": "no stops", "Partenza": "Start", "Arrivo": "Finish", "Sposta su": "Move up", "Sposta giù": "Move down",
   "Togli tappa": "Remove stop", "Tipo di strada": "Road type", "Anche sterrato": "Gravel ok", "Più corto": "Shortest",
   "Calcolo il percorso…": "Calculating the route…", "Percorso non trovato: sposta una tappa su una strada.": "No route found: move a stop onto a road.",
+  "Passaggio": "Via point", "Trascina la linea per passare da un'altra strada.": "Drag the line to take another road.",
+  "Tieni premuto sulla linea e trascina per passare da un'altra strada.": "Hold the line and drag it to take another road.", "Trascina per cambiare il percorso": "Drag to change the route",
   "Aggiungi almeno un'altra tappa.": "Add at least one more stop.",
   "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda.": "Tap the map to set the start, then the stops. You can also tap a climb, or use «+ Ride» on its page.",
   "in sella": "riding", "quota max": "top", "Profilo del giro": "Ride profile", "Salite sul percorso": "Climbs on the route",

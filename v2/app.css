@@ -299,6 +299,10 @@ a { color: var(--acc); }
 /* ---------- il tuo giro ---------- */
 .wp { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tx); color: var(--bg); font: 700 13px/1 var(--cond, sans-serif); border: 2px solid var(--bg); box-shadow: 0 2px 8px rgba(0,0,0,.5); cursor: grab; }
 .wp.a { background: var(--acc); } .wp.z { background: var(--hl); }
+/* via points dragged off the line (Giro, 24/11/2026): small white dots, the handle that follows the mouse lets the line take the press */
+.wp.via { width: 16px; height: 16px; font-size: 0; background: #fff; border: 3px solid var(--bg); }
+.wp.via.hd { pointer-events: none; opacity: .9; }
+.stops .wp.via { width: 24px; height: 24px; font-size: 12px; background: var(--tx); border: 0; }
 .stops { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; }
 .stops li { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--line2); }
 .stops .wp { flex: none; width: 24px; height: 24px; cursor: default; box-shadow: none; }

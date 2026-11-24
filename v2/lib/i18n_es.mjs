@@ -109,6 +109,8 @@ export const DICT_ES = {
   "Il tuo giro": "Tu ruta", "nessuna tappa": "ningún punto", "Partenza": "Salida", "Arrivo": "Llegada", "Sposta su": "Subir", "Sposta giù": "Bajar",
   "Togli tappa": "Quitar punto", "Tipo di strada": "Tipo de carretera", "Anche sterrato": "También tierra", "Più corto": "Más corto",
   "Calcolo il percorso…": "Calculando la ruta…", "Percorso non trovato: sposta una tappa su una strada.": "Ruta no encontrada: mueve un punto a una carretera.",
+  "Passaggio": "Punto de paso", "Trascina la linea per passare da un'altra strada.": "Arrastra la línea para pasar por otra carretera.",
+  "Tieni premuto sulla linea e trascina per passare da un'altra strada.": "Mantén pulsada la línea y arrástrala para pasar por otra carretera.", "Trascina per cambiare il percorso": "Arrastra para cambiar la ruta",
   "Aggiungi almeno un'altra tappa.": "Añade al menos otro punto.",
   "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda.": "Toca el mapa para poner la salida y luego los puntos. También puedes tocar una subida o usar «+ Ruta» en su ficha.",
   "in sella": "en bici", "quota max": "altitud máx", "Profilo del giro": "Perfil de la ruta", "Salite sul percorso": "Subidas en la ruta",
