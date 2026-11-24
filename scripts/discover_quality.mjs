@@ -103,7 +103,9 @@ export function renderMarkdown(rep) {
   L.push("", "Segnali:", ...Object.entries(FLAGS).map(([k, t]) => `- **${k}**: ${t}`));
   L.push("", "## Salite note mancanti (data/climbs_extra.json)", "");
   if (!rep.missing.length) L.push("Nessuna.");
-  for (const m of rep.missing) L.push(`- ${m.name} (${m.id}, ${m.lat}, ${m.lon})${m.zone ? " - zona " + m.zone : ""}: la piu' vicina e' ${m.nearest || "nessuna"}${m.nearestKm != null ? " a " + m.nearestKm + " km" : ""}`);
+  const MAXL = 80;   // the full list is in the .json (23/11/2026: ~800 Grand Tour climbs forced at once)
+  for (const m of rep.missing.slice(0, MAXL)) L.push(`- ${m.name} (${m.id}, ${m.lat}, ${m.lon})${m.zone ? " - zona " + m.zone : ""}: la piu' vicina e' ${m.nearest || "nessuna"}${m.nearestKm != null ? " a " + m.nearestKm + " km" : ""}`);
+  if (rep.missing.length > MAXL) L.push(`- ... e altre ${rep.missing.length - MAXL} (elenco completo in docs/qualita-salite.json)`);
   L.push("", "## Esempi da controllare (2 per regione, le peggiori)", "");
   for (const r of rep.worst) for (const e of r.examples.slice(0, 2)) L.push(`- ${r.region}: ${e.name} - ${e.side} (${e.km} km al ${e.avg}%): ${e.flags.join(", ")} - https://locaride.app/#/s/${encodeURIComponent(e.id)}`);
   L.push("", "## Regioni mai cercate", "", rep.never.length ? rep.never.join(", ") : "Nessuna.", "");
