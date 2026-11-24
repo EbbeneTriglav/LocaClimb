@@ -111,6 +111,12 @@ export const DICT_ES = {
   "Calcolo il percorso…": "Calculando la ruta…", "Percorso non trovato: sposta una tappa su una strada.": "Ruta no encontrada: mueve un punto a una carretera.",
   "Passaggio": "Punto de paso", "Trascina la linea per passare da un'altra strada.": "Arrastra la línea para pasar por otra carretera.",
   "Tieni premuto sulla linea e trascina per passare da un'altra strada.": "Mantén pulsada la línea y arrástrala para pasar por otra carretera.", "Trascina per cambiare il percorso": "Arrastra para cambiar la ruta",
+  "Più giorni": "Varios días", "Bici e bagagli": "Bici y equipaje", "Allenamento": "Forma física", "Cerco i paesi dove fermarsi…": "Buscando pueblos donde parar…",
+  "Bici leggera": "Bici ligera", "Bikepacking": "Bikepacking", "Cicloturismo con borse": "Cicloturismo con alforjas", "Viaggio con tenda": "Viaje con tienda",
+  "Tranquillo": "Tranquilo", "Allenato": "Entrenado", "Sportivo": "Deportista",
+  "borsello e poco altro": "una bolsita y poco más", "borse da telaio e sella": "bolsas de cuadro y sillín", "portapacchi e borse laterali": "portabultos y alforjas", "campeggio e cucina": "acampada y cocina",
+  "poche uscite, ritmo da gita": "pocas salidas, ritmo de paseo", "esco ogni settimana": "salgo cada semana", "gran fondo, salite lunghe": "marchas, puertos largos",
+  "GPX del giorno": "GPX del día",
   "Aggiungi almeno un'altra tappa.": "Añade al menos otro punto.",
   "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda.": "Toca el mapa para poner la salida y luego los puntos. También puedes tocar una subida o usar «+ Ruta» en su ficha.",
   "in sella": "en bici", "quota max": "altitud máx", "Profilo del giro": "Perfil de la ruta", "Salite sul percorso": "Subidas en la ruta",
@@ -195,6 +201,10 @@ export const DICT_ES = {
 
 /* dynamic labels, same patterns and order as RULES in i18n.mjs */
 export const RULES_ES = [
+  [/^Giorno (\d+)$/, "Día $1"],
+  [/^GPX del giorno (\d+)$/, "GPX del día $1"],
+  [/^Si fa in un giorno: circa (.+) in sella con questo assetto\.$/, "Se hace en un día: unas $1 pedaleando con esta configuración."],
+  [/^(\d+) kg di bici e bagagli · circa (.+) ore in sella al giorno, soste escluse\.$/, "$1 kg de bici y equipaje · unas $2 horas pedaleando al día, sin paradas."],
   [/^([\d.,]+) salite qui$/, "$1 subidas aquí"],
   [/^Difficoltà (\d+)\/10$/, "Dificultad $1/10"],
   [/^difficoltà (\d+|–)\/10$/, "dificultad $1/10"],

@@ -17,6 +17,7 @@ import { distKm, nearest, arrowDeg, fmtDist } from "./lib/near.mjs?v=72";
 import { BASEMAPS, basemap, DEFAULT_MAP, GIRO_MAP, notteRoads, CYCLE_SOURCE, cycleLayers, EXPORT_MAP, exportLayer, GLYPHS, TRAFFIC_CLASSES, TRAFFIC_SOURCE, trafficLayer } from "./lib/maps.mjs?v=72";
 import { currentUser, signIn, loadClimbs, diaryStats, bestOf, dur, loadRatings, signInEmail, signUpEmail, resetPassword, authError, submitVote, myVote, recentComments, sendReport, REV_MAX, saveRoute, listRoutes, deleteRoute, whoAmI, sendProposal, myProposals, withdrawProposal, pendingProposals, approvedProposals, reviewProposal, onUser, signOut } from "./lib/diary.mjs?v=72";
 import { approvedClimbs } from "./lib/proposals.mjs?v=72";
+import { SETUPS as TOUR_SETUPS, FITNESS, setupOf, fitnessOf, tourMinutes, cutDays, daySummary, placesOnSide, placesQuery } from "./lib/tour.mjs?v=72";
 import { levelOf, nextLevel, points, facts, proposalProblem, proposalDoc, unflat, GLOBAL_LEVELS, pointsByArea } from "./lib/propose.mjs?v=72";
 import { loadRegions, regionAt } from "./lib/regions.mjs?v=72";
 import { installMode, shouldNudge, countVisit, snooze, SEEN_DAYS, newerRelease, UPDATE_AFTER_MS } from "./lib/install.mjs?v=72";
@@ -2098,6 +2099,7 @@ function renderGiro() {
       ${shares.length ? `<div class="surf">${shares.map((x) => `<span class="${esc(x.k)}">${esc(x.k)} ${x.pct}%</span>`).join("")}</div>` : ""}
       <p class="note small mu">Tempo stimato a ${num(myWkg() || 3)} W/kg${myWkg() ? "" : " (impostalo nella scheda di una salita)"}, soste escluse.</p>
       ${G.on.length ? `<section class="sec"><h3>Salite sul percorso</h3><div class="cards">${G.on.map((x) => `<a class="card" href="#/s/${esc(encodeURIComponent(x.c.id))}" style="text-decoration:none;color:inherit"><span class="badge" style="background:${difficultyColor(x.c.difficulty || 0)}">${x.c.difficulty ? x.c.difficulty + "/10" : "–"}</span><span class="nm">${esc(x.c.name)}</span><span class="mt">km ${num(x.km, 0)}${x.c.elevation ? " · " + esc(x.c.elevation) + " m" : ""}</span></a>`).join("")}</div></section>` : ""}
+      ${tourHtml()}
       ${giroClosuresHtml()}${giroEventsHtml()}
       <section class="sec" id="gwx"><h3>Meteo lungo il giro</h3>
         <div class="when"><div class="sides" role="group" aria-label="Giorno">${["Oggi", "Domani", "Dopodomani"].map((l, i) => `<button type="button" data-day="${i}" aria-pressed="${G.day === i}">${l}</button>`).join("")}</div>
@@ -2129,10 +2131,73 @@ function renderGiro() {
   const gb = $("#gbook"); if (gb) gb.addEventListener("click", printRoadbook);
   const gc = $("#gclear"); if (gc) gc.addEventListener("click", () => { G.title = ""; G.stops = []; G.res = null; G.side = null; G.rp = null; G.risk = []; G.on = []; paintRoute(); giroChanged(); });
   const gp = $("#giroProf"); if (gp) wireProfile(gp, sd, 170, 8);
-  wireTrain();
+  wireTrain(); wireTour();
   if (G.wx) paintGiroWeather();
   if (G.water) paintGiroWater();
   setSheet(S.giroOpen ? S.sheet : "peek", true); S.giroOpen = true;
+}
+
+/* ---------------------------------------------------------------- several days (lib/tour.mjs, 24/11/2026)
+   Set-up (bike + bags) and fitness -> hours a day and speed on every metre; each day ends in the town or village
+   (OpenStreetMap, Overpass) nearest to the day's hours. The choice is remembered on this device. */
+const TOUR_KEY = "lr_tour";
+const TOUR = (() => { try { return { setup: "bikepacking", fit: "allenato", ...JSON.parse(localStorage.getItem(TOUR_KEY) || "{}") }; } catch { return { setup: "bikepacking", fit: "allenato" }; } })();
+TOUR.places = null; TOUR.pkey = ""; TOUR.mk = [];
+function tourPlan() {
+  const r = G.res; if (!r || r.noEle || !r.track || r.track.length < 2) return null;
+  const n = Math.max(300, Math.min(3000, Math.round(r.km * 2)));
+  const side = asSide(r.track, n); if (!side) return null;
+  const st = setupOf(TOUR.setup), ft = fitnessOf(TOUR.fit), cum = tourMinutes(side, ft, st.kg), budget = ft.h * 60;
+  const cuts = cutDays(cum, budget, TOUR.places || []);
+  const names = G.stops.length ? [stopName(G.stops[0], 0), stopName(G.stops[G.stops.length - 1], G.stops.length - 1)] : [STOP_L[0], STOP_L[1]];
+  return { side, cum, budget, st, ft, cuts, days: daySummary(side, cum, cuts, names[0], names[1]) };
+}
+function tourHtml() {
+  const tp = tourPlan(); if (!tp) return "";
+  const chip = (g, list, cur) => `<div class="sides" role="group" data-tg="${g}">${list.map((x) => `<button type="button" data-t="${x.k}" aria-pressed="${cur === x.k}" title="${esc(x.note)}">${esc(x.label)}</button>`).join("")}</div>`;
+  const one = tp.days.length < 2;
+  const days = one ? `<p class="note">Si fa in un giorno: circa ${clock(tp.cum[tp.cum.length - 1])} in sella con questo assetto.</p>`
+    : `<ol class="days">${tp.days.map((d) => `<li><b>Giorno ${d.day}</b><span>${esc(d.from)} → ${esc(d.to)}</span><small>${num(d.km, 0)} km · +${esc(d.up)} m · ${clock(d.min)}</small><button type="button" class="ib sm" data-dgpx="${d.day - 1}" aria-label="GPX del giorno ${d.day}" title="GPX del giorno">GPX</button></li>`).join("")}</ol>
+      ${TOUR.places == null ? `<p class="note small mu">Cerco i paesi dove fermarsi…</p>` : ""}`;
+  return `<section class="sec" id="gtour"><h3>Più giorni</h3>
+    <p class="note small">Bici e bagagli</p>${chip("setup", TOUR_SETUPS, TOUR.setup)}
+    <p class="note small">Allenamento</p>${chip("fit", FITNESS, TOUR.fit)}
+    <p class="note small mu">${esc(tp.st.kg)} kg di bici e bagagli · circa ${String(tp.ft.h).replace(".", ",")} ore in sella al giorno, soste escluse.</p>
+    ${days}</section>`;
+}
+function wireTour() {
+  const box = $("#gtour"); if (!box) { tourMarks(null); return; }
+  box.querySelectorAll("[data-tg] [data-t]").forEach((b) => b.addEventListener("click", () => {
+    TOUR[b.parentElement.dataset.tg] = b.dataset.t;
+    try { localStorage.setItem(TOUR_KEY, JSON.stringify({ setup: TOUR.setup, fit: TOUR.fit })); } catch { /* private mode */ }
+    renderGiro();
+  }));
+  const tp = tourPlan();
+  box.querySelectorAll("[data-dgpx]").forEach((b) => b.addEventListener("click", () => {
+    const d = tp && tp.days[+b.dataset.dgpx]; if (!d) return;
+    const tr = tp.side.track.slice(d.a, d.b + 1).map((t, i) => [t[0], t[1], tp.side.elevationProfile[d.a + i]]);
+    const nm = `${G.title || "Giro"} - giorno ${d.day}`;
+    saveFile(nm.replace(/[^\p{L}\p{N} _-]+/gu, "").trim().replace(/\s+/g, "_") + ".gpx", routeGpx(nm, tr, [{ lat: tr[tr.length - 1][0], lon: tr[tr.length - 1][1], name: d.to, sym: "Lodging" }]));
+  }));
+  tourMarks(tp && tp.days.length > 1 ? tp : null);
+  // the towns along the route, once per route
+  const key = G.res ? G.res.km.toFixed(2) + ":" + G.res.track.length : "";
+  if (tp && tp.days.length > 1 && TOUR.pkey !== key) {
+    TOUR.pkey = key; TOUR.places = null;
+    fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: "data=" + encodeURIComponent(placesQuery(tp.side.track)) })
+      .then((r) => r.json()).then((j) => { if (TOUR.pkey !== key) return; TOUR.places = placesOnSide(tp.side.track, j.elements || []); if (giroOn()) renderGiro(); })
+      .catch(() => { if (TOUR.pkey !== key) return; TOUR.places = []; if (giroOn()) renderGiro(); });
+  }
+}
+/* the end of every day but the last on the map: a small numbered flag */
+function tourMarks(tp) {
+  TOUR.mk.forEach((m) => m.remove()); TOUR.mk = [];
+  if (!tp) return;
+  tp.days.slice(0, -1).forEach((d) => {
+    const el = document.createElement("div"); el.className = "dayend"; el.textContent = "G" + d.day; el.title = "Fine giorno " + d.day + ": " + d.to;
+    const t = tp.side.track[d.b];
+    TOUR.mk.push(new maplibregl.Marker({ element: el }).setLngLat([t[1], t[0]]).addTo(map));
+  });
 }
 
 /* weather at the start, at every climb on the way, at the top and at the finish - at the hour you get there */

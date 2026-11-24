@@ -114,6 +114,12 @@ export const DICT = {
   "Calcolo il percorso…": "Calculating the route…", "Percorso non trovato: sposta una tappa su una strada.": "No route found: move a stop onto a road.",
   "Passaggio": "Via point", "Trascina la linea per passare da un'altra strada.": "Drag the line to take another road.",
   "Tieni premuto sulla linea e trascina per passare da un'altra strada.": "Hold the line and drag it to take another road.", "Trascina per cambiare il percorso": "Drag to change the route",
+  "Più giorni": "Several days", "Bici e bagagli": "Bike and luggage", "Allenamento": "Fitness", "Cerco i paesi dove fermarsi…": "Looking for towns to stop in…",
+  "Bici leggera": "Light bike", "Bikepacking": "Bikepacking", "Cicloturismo con borse": "Touring with panniers", "Viaggio con tenda": "Camping tour",
+  "Tranquillo": "Easy-going", "Allenato": "Trained", "Sportivo": "Athletic",
+  "borsello e poco altro": "a small bag and little else", "borse da telaio e sella": "frame and saddle bags", "portapacchi e borse laterali": "rack and panniers", "campeggio e cucina": "tent and stove",
+  "poche uscite, ritmo da gita": "few rides, leisure pace", "esco ogni settimana": "I ride every week", "gran fondo, salite lunghe": "gran fondos, long climbs",
+  "GPX del giorno": "Day GPX",
   "Aggiungi almeno un'altra tappa.": "Add at least one more stop.",
   "Tocca la mappa per mettere la partenza, poi le tappe. Puoi toccare anche una salita, o usare «+ Giro» nella sua scheda.": "Tap the map to set the start, then the stops. You can also tap a climb, or use «+ Ride» on its page.",
   "in sella": "riding", "quota max": "top", "Profilo del giro": "Ride profile", "Salite sul percorso": "Climbs on the route",
@@ -186,6 +192,10 @@ export const DICT = {
 
 /* dynamic labels: [pattern, replacement] - checked in order, on the whole (trimmed) text */
 export const RULES = [
+  [/^Giorno (\d+)$/, "Day $1"],
+  [/^GPX del giorno (\d+)$/, "Day $1 GPX"],
+  [/^Si fa in un giorno: circa (.+) in sella con questo assetto\.$/, "One day is enough: about $1 riding with this set-up."],
+  [/^(\d+) kg di bici e bagagli · circa (.+) ore in sella al giorno, soste escluse\.$/, "$1 kg of bike and luggage · about $2 hours riding a day, stops excluded."],
   [/^([\d.,]+) salite qui$/, "$1 climbs here"],
   [/^Difficoltà (\d+)\/10$/, "Difficulty $1/10"],
   [/^difficoltà (\d+|–)\/10$/, "difficulty $1/10"],
