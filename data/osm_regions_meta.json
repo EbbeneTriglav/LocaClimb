@@ -638,5 +638,10 @@
   "bbox": null,
   "target": "usa-alaska",
   "builtAt": "2026-11-23"
+ },
+ "osm_passes_us_nm.json": {
+  "bbox": null,
+  "target": "usa-new-mexico",
+  "builtAt": "2026-11-24"
  }
 }
