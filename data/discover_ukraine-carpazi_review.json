@@ -1,0 +1,11 @@
+{
+ "_comment": "Creato in automatico da promote_discover.mjs: si pubblicano i gruppi in 'publish'. Per togliere una salita aggiungi il suo id in 'no'.",
+ "publish": [
+  "nuova",
+  "doppione"
+ ],
+ "ok": [],
+ "no": [],
+ "noAt": [],
+ "okAt": []
+}
